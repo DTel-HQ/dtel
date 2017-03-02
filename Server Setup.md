@@ -18,3 +18,5 @@ If no one picks up your call, maybe try again. We know it's a problem, but we're
 
 ## 4. Wait for your congratulation
 YOU DID IT!!! YAY!!!
+
+Read the [payment](http://discordtel.readthedocs.io/en/latest/Payment/) section for information about how to extend your number.
