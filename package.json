@@ -1,0 +1,20 @@
+{
+  "name": "dtel",
+  "version": "1.0.0",
+  "description": "Lol",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo THERE IS NO TEST COMMAND, JUST START THE APP",
+    "start": "node index"
+  },
+  "keywords": [
+    "discord"
+  ],
+  "author": "austinhuang",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.0.0",
+    "node-schedule": "^1.2.0",
+    "request": "^2.79.0"
+  }
+}
