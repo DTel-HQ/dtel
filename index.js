@@ -10,6 +10,7 @@ var phonebook = JSON.parse(fs.readFileSync("./phonebook.json", "utf8"));
 var fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
 var accounts = JSON.parse(fs.readFileSync("./account.json", "utf8"));
 var support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
+var verified = user_id => bot.guilds.get('269262004852621312').roles.get('269276590322614274').members.map(member => member.id).indexOf(user_id) > -1;
 var request = require("request");
 const bot = new Discord.Client();
 
@@ -85,7 +86,7 @@ bot.on("message", message => {
 		  message.channel.sendEmbed(help);
 		}
 		else if (message.content === ">info") {
-		  message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("DTel Information").setDescription("For command help, use `>help`.").addField("Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to call `*611` using public phone (`>pdial *611`) to get a number. The agent will check your information and assign you a number.").addField("Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called by `>pdial`.").addField("Recharging", "In any server with both DiscordTel and Tatsumaki: Type `t!credit @DiscordTel#0757 <Amount>`. Remember that we'll only receive 80% of your `<Amount>`.\nAfter recharging, dial `*233` to check balance.").addField("Phonebook and setup your registry","`>dial *411`").addField("Invite the bot", "https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997\n\"Embed Links\" is optional, depends on whether you want the bot to show embed links in calls or not.\n\"Ban Members\" is optional, depends on whether you want Discord Bans agents to solve raids or not.").addField("Official Server", "https://discord.gg/RN7pxrB").addField("Detailed Guide", "https://git.io/vDFmz"));
+		  message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("DTel Information").setDescription("For command help, use `>help`.").addField("Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to call `*611` using public phone (`>pdial *611`) to get a number. The agent will check your information and assign you a number.").addField("Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called by `>pdial`.").addField("Recharging", "In any server with both DiscordTel and Tatsumaki: Type `t!credit @DiscordTel#0757 <Amount>`. Remember that we'll only receive 80% of your `<Amount>`.\nAfter recharging, dial `*233` to check balance.").addField("Phonebook and setup your registry","`>dial *411`").addField("Invite the bot", "https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997\n\"Embed Links\" is optional, depends on whether you want the bot to show embed links in calls or not.\n\"Ban Members\" is optional, depends on whether you want Discord Bans agents to solve raids or not.").addField("Official Server", "https://discord.gg/RN7pxrB").addField("Detailed Guide", "http://discordtel.rtfd.io"));
 		}
 		else if (message.content.startsWith(">assign") && support(message.author.id)) {
 			if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
@@ -235,8 +236,16 @@ bot.on("message", message => {
 		}
 		else if (message.content.startsWith(">dial")){
 			var yournumber = message.content.split(" ")[1];
+			if (yournumber === undefined) {
+				message.reply("Damn son, you forgot the number! `>dial <Number>`");
+				return;
+			}
+			yournumber = message.content.split(" ")[1].replace(/a/ig, "2").replace(/b/ig, "2").replace(/c/ig, "2").replace(/d/ig, "3").replace(/e/ig, "3").replace(/f/ig, "3").replace(/g/ig, "4").replace(/h/ig, "4").replace(/i/ig, "4").replace(/j/ig, "5").replace(/k/ig, "5").replace(/l/ig, "5").replace(/m/ig, "6").replace(/n/ig, "6").replace(/o/ig, "6").replace(/p/ig, "7").replace(/q/ig, "7").replace(/r/ig, "7").replace(/s/ig, "7").replace(/t/ig, "8").replace(/u/ig, "8").replace(/v/ig, "8").replace(/w/ig, "9").replace(/x/ig, "9").replace(/y/ig, "9").replace(/z/ig, "9").replace(/-/ig, "").replace("(", "").replace(")", "").replace(" ", "");
 			if (yournumber === "*611") {
-				yournumber ="08006113835";
+				yournumber = "08006113835";
+			}
+			else if (yournumber === "911") {
+				yournumber = "08000000911";
 			}
 			else if (isNaN(yournumber)) {
 				message.reply("Please input the number you want to dial in a number-only format.\n:x: `>dial (0300) 000-0000`\n:white_check_mark: `>dial 03000000000`");
@@ -253,7 +262,16 @@ bot.on("message", message => {
 				message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 				return;
 			}
-			yourchannel = yourchannel.channel;if (mynumber === undefined) {
+			if (yourchannel.year < new Date().getFullYear()) {
+				message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+				return;
+			}
+			else if (yourchannel.year === new Date().getFullYear() && yourchannel.month <= new Date().getMonth()) {
+				message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+				return;
+			}
+			yourchannel = yourchannel.channel;
+			if (mynumber === undefined) {
 				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that has DiscordTel service.");
 				return;
 			}
@@ -319,8 +337,16 @@ bot.on("message", message => {
 		}
 		else if (message.content.startsWith(">pdial")){
 			var yournumber = message.content.split(" ")[1];
+			if (yournumber === undefined) {
+				message.reply("Damn son, you forgot the number! `>pdial <Number>`");
+				return;
+			}
+			yournumber = message.content.split(" ")[1].replace(/a/ig, "2").replace(/b/ig, "2").replace(/c/ig, "2").replace(/d/ig, "3").replace(/e/ig, "3").replace(/f/ig, "3").replace(/g/ig, "4").replace(/h/ig, "4").replace(/i/ig, "4").replace(/j/ig, "5").replace(/k/ig, "5").replace(/l/ig, "5").replace(/m/ig, "6").replace(/n/ig, "6").replace(/o/ig, "6").replace(/p/ig, "7").replace(/q/ig, "7").replace(/r/ig, "7").replace(/s/ig, "7").replace(/t/ig, "8").replace(/u/ig, "8").replace(/v/ig, "8").replace(/w/ig, "9").replace(/x/ig, "9").replace(/y/ig, "9").replace(/z/ig, "9").replace(/-/ig, "").replace("(", "").replace(")", "").replace(" ", "");
 			if (yournumber === "*611") {
 				yournumber ="08006113835";
+			}
+			if (yournumber === "911") {
+				yournumber ="08000000911";
 			}
 			else if (isNaN(yournumber)) {
 				message.reply("Please input the number you want to dial in a number-only format.\n:x: `>dial (0300) 000-0000`\n:white_check_mark: `>dial 03000000000`");
@@ -337,7 +363,16 @@ bot.on("message", message => {
 				message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 				return;
 			}
-			yourchannel = yourchannel.channel;if (mynumber !== undefined) {
+			if (yourchannel.year < new Date().getFullYear()) {
+				message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+				return;
+			}
+			else if (yourchannel.year === new Date().getFullYear() && yourchannel.month <= new Date().getMonth()) {
+				message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+				return;
+			}
+			yourchannel = yourchannel.channel;
+			if (mynumber !== undefined) {
 				if (yournumber === mynumber.number) {
 					message.reply(":thinking: I am wondering why you are calling yourself.");
 					return;
@@ -359,6 +394,7 @@ bot.on("message", message => {
 			});
 			if (yourcall !== undefined) {
 				message.reply(":x: Dialing error: The number you dialed is already in a call.");
+				return;
 			}
 			message.reply(":telephone: Dialing... You are able to `>hangup`.");
 			var call = {from:{channel:mychannel,number:mynumber},to:{channel:yourchannel,number:yournumber},status:false};
@@ -482,6 +518,14 @@ bot.on("message", message => {
 				}
 			},120000);
 		}
+		else if (message.content.startsWith(">ban") && verified(message.author.id)) {
+			if (message.mentions === undefined) {
+				message.reply("MENTION SOMETHING, IDIOT!");
+			}
+			message.mentions.users.array().forEach(function(idiot) {
+				message.guild.ban(idiot, 7);
+			});
+		}
 	}
 	else if (pbstatus !== undefined) {
 		if (mynumber !== undefined) {
@@ -577,14 +621,14 @@ bot.on("message", message => {
 		}
 		else if (pbstatus.status === "3" && message.content === "8" && pbstatus.user === message.author.id && message.guild.member(message.author).hasPermission("MANAGE_GUILD")) {
 			phonebook.splice(myregistry,1);
-			fs.writeFile("./phonebook.json", phonebook, "utf8");
+			fs.writeFile("./phonebook.json", JSON.stringify(phonebook), "utf8");
 			message.reply("**Registry removed!**\n\nWelcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nFor **checking a special number** (\\*000 or #0000), press `4`.\nTo talk to an operator, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
 			fouroneone.splice(fouroneone.indexOf(pbstatus), 1);
 			fouroneone.push({user: message.author.id,status: "0"});
 			fs.writeFile("fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		}
 		else if (pbstatus.status === "0" && message.content === "4" && pbstatus.user === message.author.id) {
-			message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Special Numbers").setDescription("Here are the special numbers. Troll-calling any of these numbers can result in termination of service.").addField("*233", "Account balance and number renewing (Auto)").addField("*411", "The Phonebook (Auto)").addField("*611", "Customer Support").setFooter("To go back to 411 menu, press `9`. To quit 411, press `0`."));
+			message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Special Numbers").setDescription("Here are the special numbers. Troll-calling any of these numbers can result in termination of service.").addField("*233", "Account balance and number renewing (Auto)").addField("*411", "The Phonebook (Auto)").addField("*611", "Customer Support").addField("911", "Discord Bans (Read http://discordtel.readthedocs.io/en/latest/Calling%20911/ for details)").setFooter("To go back to 411 menu, press `9`. To quit 411, press `0`."));
 		}
 		else if (pbstatus.status === "4" && pbstatus.user === message.author.id) {
 			if (isNaN(message.content)) {
@@ -730,7 +774,7 @@ bot.on("message", message => {
 });
 var autoban = JSON.parse(fs.readFileSync("./autoban.json", "utf8"));
 bot.on("guildCreate", guild => {
-	guild.defaultChannel.sendMessage("Hello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, type `>pdial *611`.\n**Warning:** Applying a number requires manual approval by customer support team. Do not use this bot in a testing server, instead use it in the official server in `>info`. Do not troll calling.");
+	guild.defaultChannel.sendMessage("Hello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/en/latest/Server%20Setup/>.\n**Warning:** Applying a number requires manual approval by customer support team. Do not use this bot in a testing server, instead use it in the official server in `>info`. Do not troll calling.");
 	bot.channels.get("282253502779228160").sendMessage(":inbox_tray: Joined "+guild.name+" ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
 });
 bot.on("guildDelete", guild => {
