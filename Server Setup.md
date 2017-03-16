@@ -11,10 +11,10 @@ Numbers are 11-digit. e.g. `0301XXXXXXX`. You can use [this tool](http://word2nu
 
 If you are special enough you might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
 
-## 3. Call *611 using a payphone
-Just type `>pdial *611`. `*611` is a free dial.
+## 3. Run the wizard
+`>wizard`
 
-If no one picks up your call, maybe try again. We know it's a problem, but we're just starting and we don't want to hire *too many* operators. Sorry.
+The wizard is only available to register `0301` numbers. For all other numbers, `>pdial *611`.
 
 ## 4. Wait for your congratulation
 YOU DID IT!!! YAY!!!
