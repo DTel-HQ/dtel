@@ -1,3 +1,6 @@
+# NEW: Win giveaways!
+For an UNlimited time, every random amount of time ranging from 5 to 15 minutes, the bot will give out random amount of credits, ranging from 8 to 200, in #general of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user `>claim` it in 30 seconds, he/she will receive the award. Also, these are tax-free credits which means you can use 100% of them without wasting 20% of Tatsumaki tax.
+
 # Paying for your number or your payphone credit
 You'll need [Tatsumaki](http://tatsumaki.xyz), since we use its credit system. *Because it's more popular.*
 
@@ -22,6 +25,8 @@ Two ways:
 In any server with both Tatsumaki and DiscordTel: Make sure both bots are online, then `t!credit @DiscordTel <Amount>`. Your `<Amount>` is the price *you pay* according to the table above. After that you'll receive a confirmation.
 
 **WARNING: DO NOT TOP-UP WHEN DISCORDTEL IS OFFLINE!!!**
+
+Type `>help` before transactions to see if DiscordTel is online or not. If you did not receive the credits in your DTel account, contact [DiscordTel HQ](https://discord.gg/RN7pxrB).
 
 ## 4. Check balance
 You can `>dial *233` in any channel, even the channel doesn't have DTel service enabled.
