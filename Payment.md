@@ -5,10 +5,10 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 
 ## 0. Payment bots we recognize
 
-| Bot Name  | Tax Rate |
-|-----------|----------|
-| Tatsumaki | 20%      |
-| Mantaro   | 40%      |
+| Bot Name                                         | Tax Rate |
+|--------------------------------------------------|----------|
+| [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
+| [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side.*
 
@@ -30,6 +30,7 @@ For every certified bot, read its documentation to learn how to earn money.
 
 ## 3. Top-Up
 In any server with both the bot and DiscordTel: Make sure both bots are online, then:
+
 * `t!credit @DiscordTel <Amount>` for Tatsumaki
 * `~>transfer @DiscordTel <Amount>` for Mantano
 
