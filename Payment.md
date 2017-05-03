@@ -1,5 +1,5 @@
 # NEW: Win giveaways!
-For an UNlimited time, every random amount of time ranging from 5 to 15 minutes, the bot will give out random amount of credits, ranging from 8 to 200, in #general of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user `>claim` it in 30 seconds, he/she will receive the award. Also, these are tax-free credits which means you can use 100% of them without wasting 20% of Tatsumaki tax.
+For an UNlimited time, every random amount of time ranging from 5 to 15 minutes, the bot will give out random amount of credits, ranging from 8 to 200, in #general of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user `>claim` it in 30 seconds, he/she will receive the award. Also, these are tax-free credits which means you can use 100% of them without wasting any tax.
 
 # Paying for your number or your payphone credit
 
@@ -10,7 +10,7 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 | Tatsumaki | 20%      |
 | Mantaro   | 40%      |
 
-*Side note: Tatsumaki's 20% tax exists on its side, where Mantaro's 40% tax exists on our side.*
+*Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side.*
 
 ### I'm a developer and I want DiscordTel to accept payments from my bot!
 1. Your bot has to be in >1000 servers.
