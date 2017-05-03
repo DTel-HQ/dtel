@@ -32,7 +32,7 @@ For every certified bot, read its documentation to learn how to earn money.
 In any server with both the bot and DiscordTel: Make sure both bots are online, then:
 
 * `t!credit @DiscordTel <Amount>` for Tatsumaki
-* `~>transfer @DiscordTel <Amount>` for Mantano
+* `~>transfer @DiscordTel <Amount>` for Mantaro
 
 Your `<Amount>` is the price *pay by respective bot* according to the table above. After that you'll receive a confirmation.
 
