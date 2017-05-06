@@ -9,6 +9,7 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 |--------------------------------------------------|----------|
 | [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
+| [Hifumi](http://hifumibot.xyz/)                  | 0%       |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side.*
 
@@ -19,10 +20,10 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 
 ## 1. Figure out the tax rate
 
-| Usage                         | Pay by Tatsu | Pay by Mantano | We get |
-|-------------------------------|--------------|----------------|--------|
-| Renew your number for 1 month | 2500         | 3333           | 2000   |
-| 1 message sent using payphone | 10           | 14             | 8      |
+| Usage                         | Pay by Tatsu | Pay by Mantano | Pay by Hifumi | We get |
+|-------------------------------|--------------|----------------|---------------|--------|
+| Renew your number for 1 month | 2500         | 3333           | 2000          | 2000   |
+| 1 message sent using payphone | 10           | 14             | 8             | 8      |
 
 ## 2. Earn money
 
@@ -33,6 +34,7 @@ In any server with both the bot and DiscordTel: Make sure both bots are online, 
 
 * `t!credit @DiscordTel <Amount>` for Tatsumaki
 * `~>transfer @DiscordTel <Amount>` for Mantaro
+* `~transfer <Amount> @DiscordTel` for Hifumi
 
 Your `<Amount>` is the price *pay by respective bot* according to the table above. After that you'll receive a confirmation.
 
