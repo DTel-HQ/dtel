@@ -5,10 +5,11 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 
 ## 0. Payment bots we recognize
 
-| Bot Name                                         | Tax Rate |
-|--------------------------------------------------|----------|
-| [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
-| [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
+| Bot Name                                                  | Tax Rate |
+|-----------------------------------------------------------|----------|
+| [Tatsumaki](http://tatsumaki.xyz)                         | 20%      |
+| [Mantaro](https://github.com/Mantaro/MantaroBot)          | 40%      |
+| [Hifumi](https://bots.discord.pw/bots/227171028072267778) | 0%       |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side.*
 
@@ -19,8 +20,8 @@ For an UNlimited time, every random amount of time ranging from 5 to 15 minutes,
 
 ## 1. Figure out the tax rate
 
-| Usage                         | Pay by Tatsu | Pay by Mantano | We get |
-|-------------------------------|--------------|----------------|--------|
+| Usage                         | Pay by Tatsu | Pay by Mantano | Pay by Hifumi / We get |
+|-------------------------------|--------------|----------------|------------------------|
 | Renew your number for 1 month | 2500         | 3333           | 2000   |
 | 1 message sent using payphone | 10           | 14             | 8      |
 
