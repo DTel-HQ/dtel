@@ -1,5 +1,7 @@
 ## Customer Support Reference
 This is a reference to the commands Customer Support has access to. **Your action is logged in #bot-log.**
+**If** you have any questions on commands that are **not** referenced here, please ask in the staff chat. Thanks.
+Also, **please** only use staff commands *either* in the **staff chat** or in **a direct message to the bot.**
 
 ## Want to work here?
 Unfortunately, getting Customer Support is invite-only at the moment.
@@ -30,3 +32,29 @@ Unfortunately, getting Customer Support is invite-only at the moment.
 `>ninfo <Number>`. This gives you the JSON object of the number, which contains the number's *channel ID* it is assigned to, the number itself, **and** the expiry date (the year and month). You can use the channel ID and number to *assign*, *de-assign*, or *extend* a number.
 
 ![Example ninfo command](http://i.imgur.com/eQoVpIO.png)
+
+## Adding credits
+If you can't run the *extend* command, you can add credits.
+You **can** add credits to yourself, but **DON'T** give them away if there isn't any reason.
+Dos and don'ts:
+
+* Give credits if extend command is disabled - and person has had problems with renewing etc.
+* Give credits to yourself (It's allowed, that's what austinhuang says).
+* Don't give credits if you're giving it away to someone who **hasn't** had any problems with renewing, etc.
+
+## Dealing with troll calls
+*Sometimes* people can be annoying and just try to have fun. That is the case with troll calls.
+**These** are the cases of **what are** and **what are NOT** troll calls:
+
+* People calling, talking about something to wind you up - Troll Call
+* A person calls 611 who doesn't understand what it is - NOT a Troll Call
+* Someone who tries to say impolite/vulgar things to you - Troll Call
+* Someone who is reporting someone that is trolling - NOT a Troll Call
+
+**If** a *troll* call **occurs**, please use the blacklist command on their user ID, in a format like this:
+
+`>blacklist <User ID>`
+You can get the User ID from bot-logs (it's at the end of the line):
+![User ID](http://i.imgur.com/ntxEwAA.png)
+
+If you want **to** understand what is trolling and what is not, please refer to this Wikipedia article on [Internet trolling.](https://en.wikipedia.org/wiki/Internet_troll)
