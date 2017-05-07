@@ -11,7 +11,7 @@ Numbers are 11-digit. e.g. `0301XXXXXXX`. You can use [this tool](http://word2nu
 
 You can get a number with the prefix `0900`. This is a mobile prefix.
 
-Discords with 100+ members might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
+Discords with 100+ members that provide a service might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
 
 ## 3. Run the wizard
 `>wizard`
