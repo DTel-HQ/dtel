@@ -9,12 +9,16 @@ The current normal prefix is `0301`. Before proceeding please think about your p
 
 Numbers are 11-digit. e.g. `0301XXXXXXX`. You can use [this tool](http://word2number.com) to help you get a number.
 
-If you are special enough you might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
+You can get a number with the prefix `0900`. This is a mobile prefix. They can have the same digits as `0301` numbers.
+
+Discords with 100+ members that provide a service might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
 
 ## 3. Run the wizard
 `>wizard`
 
-The wizard is only available to register `0301` numbers. For all other numbers, `>pdial *611`.
+If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the bot.
+
+The wizard is only available to register `0301` and `0900` numbers. For all other numbers, `>pdial *611`.
 
 ## 4. Wait for your congratulation
 YOU DID IT!!! YAY!!!
