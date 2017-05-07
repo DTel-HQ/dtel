@@ -9,7 +9,7 @@ The current normal prefix is `0301`. Before proceeding please think about your p
 
 Numbers are 11-digit. e.g. `0301XXXXXXX`. You can use [this tool](http://word2number.com) to help you get a number.
 
-You can get a number with the prefix `0900`. This is a mobile prefix.
+You can get a number with the prefix `0900`. This is a mobile prefix. They can have the same digits as `0301` numbers.
 
 Discords with 100+ members that provide a service might be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
 
