@@ -57,4 +57,6 @@ Dos and don'ts:
 You can get the User ID from bot-logs (it's at the end of the line):
 ![User ID](http://i.imgur.com/ntxEwAA.png)
 
+**If** you want to un-blacklist someone, run the blacklist command *again*, with the same user ID.
+
 If you want **to** understand what is trolling and what is not, please refer to this Wikipedia article on [Internet trolling.](https://en.wikipedia.org/wiki/Internet_troll)
