@@ -1,5 +1,8 @@
-# Working here?
-This is a work guildline for all operators/Customer Support. **Your action is logged in #bot-log.**
+## Customer Support Reference
+This is a reference to the commands Customer Support has access to. **Your action is logged in #bot-log.**
+
+## Want to work here?
+Unfortunately, getting Customer Support is invite-only at the moment.
 
 ## Assign a number
 1. Assume you picked up the 611 call. Go to #bot-log.
@@ -14,7 +17,8 @@ This is a work guildline for all operators/Customer Support. **Your action is lo
 * Number is not callable;
 * Number is mistakenly assigned;
 * The owner requests a removal;
-* The users of this number abuse the system (Contact austinhuang first).
+* The users of this number abuse the system (Contact austinhuang first);
+* The owner of the number wants it moved to another channel (Make sure you have the channel ID they want it moved to).
 
 ## Extend a number
 `>extend <Number> <# of months>`. Only do it if:
@@ -23,4 +27,6 @@ This is a work guildline for all operators/Customer Support. **Your action is lo
 * When the number is assigned there's less than 10 days left in that month (Extend 1 month).
 
 ## Number info
-`>ninfo <Number>`. Just gives you the JSON object.
+`>ninfo <Number>`. This gives you the JSON object of the number, which contains the number's *channel ID* it is assigned to, the number itself, **and** the expiry date (the year and month). You can use the channel ID and number to *assign*, *de-assign*, or *extend* a number.
+
+![Example ninfo command](http://i.imgur.com/eQoVpIO.png)
