@@ -1,8 +1,8 @@
 # Welcome to DiscordTel!
-Did you just add DiscordTel to your server? Great! Want a number? Sure, just follow these steps...
+Want a number? Sure, just follow these steps... just invite the bot first..!
 
-## 1. Choose a channel
-So we can know which channel you want to enable the DTel service.
+## 1. Invite the bot => choose a channel
+Use the link on the homepage to invite it, then choose a channel to register your number in.
 
 ## 2. Choose a number
 The current normal prefix is `0301`. Before proceeding please think about your preferred number.
