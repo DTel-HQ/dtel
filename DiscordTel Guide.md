@@ -18,13 +18,16 @@ Discords with 100+ members that provide a service might be eligible for `0800`/`
 
 Run the command in your channel you chose earlier.
 
+It will pop up with a message like this (may be different): 
+![registernumber](http://i.imgur.com/zMKAkPr.png)
+
 If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the bot.
 
-The wizard is only available to register `0301` and `0900` numbers. For all other numbers, `>pdial *611`.
+The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please refer to calling Customer Support by running: `>pdial *611`.
 
 ## 4. Wait for your congratulation
 You setup your number!! YAY!!!
-It should popup with a message like this: (note it may not be **exactly** the same message)
-![DMnumbermessage]()
+It should popup with a message that is something like this:
+![message](http://i.imgur.com/vuOzp4d.png)
 
-Read the [payment](http://discordtel.readthedocs.io/en/latest/Payment/) section for information about how to extend your number.
+Read the [Payment](http://discordtel.readthedocs.io/en/latest/Payment/) section for information about how to extend your number.
