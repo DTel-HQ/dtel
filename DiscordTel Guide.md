@@ -1,8 +1,8 @@
 # Welcome to DiscordTel!
-Want a number? Sure, just follow these steps... just invite the bot first..!
+Here's a quick and easy crash course to DiscordTel!
 
 ## 1. Invite the bot => choose a channel
-Use the link on the homepage to invite it, then choose a channel to register your number in.
+Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose a channel to register your number in.
 
 ## 2. Choose a number
 The current normal prefix is `0301`. Before proceeding please think about your preferred number.
@@ -16,11 +16,15 @@ Discords with 100+ members that provide a service might be eligible for `0800`/`
 ## 3. Run the wizard
 `>wizard`
 
+Run the command in your channel you chose earlier.
+
 If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the bot.
 
 The wizard is only available to register `0301` and `0900` numbers. For all other numbers, `>pdial *611`.
 
 ## 4. Wait for your congratulation
-YOU DID IT!!! YAY!!!
+You setup your number!! YAY!!!
+It should popup with a message like this: (note it may not be **exactly** the same message)
+![DMnumbermessage]()
 
 Read the [payment](http://discordtel.readthedocs.io/en/latest/Payment/) section for information about how to extend your number.
