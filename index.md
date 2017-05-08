@@ -6,5 +6,7 @@ Welcome to the documentation of DiscordTel! Please navigate yourself using the l
 
 Find the bot useful? Click [here](https://discordbots.org/bot/224662505157427200) and give us an upvote!
 
+Lazy to navigate and want to jump-start to getting DiscordTel setup? Click [here!](http://discordtel.readthedocs.io/en/latest/DiscordTel%20Guide/)
+
 ## License
 The [source code](https://github.com/austinhuang0131/discordtel) is here only for reviewing purposes. **Please do not rehost this bot.**
