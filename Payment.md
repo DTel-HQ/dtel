@@ -1,5 +1,5 @@
 # NEW: Win giveaways!
-For an UNlimited time, every random amount of time ranging from 5 to 15 minutes, the bot will give out random amount of credits, ranging from 8 to 200, in #general of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user `>claim` it in 30 seconds, he/she will receive the award. Also, these are tax-free credits which means you can use 100% of them without wasting any tax.
+For an unlimited time, every random amount of time ranging from 5 to 15 minutes, the bot will give out a random amount of credits, ranging from 8 to 200 credits, in the channel #general of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user `>claim`s it in 30 seconds, he/she will receive the award. These are tax-free credits which means you can use 100% of them without wasting any tax.
 
 # Paying for your number or your payphone credit
 
@@ -36,7 +36,7 @@ In any server with both the bot and DiscordTel: Make sure both bots are online, 
 * `~>transfer @DiscordTel <Amount>` for Mantaro
 * `~transfer <Amount> @DiscordTel` for Hifumi
 
-Your `<Amount>` is the price *pay by respective bot* according to the table above. After that you'll receive a confirmation.
+Your `<Amount>` is the price *paid by respective bot* according to the table above. After that you'll receive a confirmation.
 
 **WARNING: DO NOT TOP-UP WHEN DISCORDTEL IS OFFLINE!!!**
 
