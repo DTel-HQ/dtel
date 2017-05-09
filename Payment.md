@@ -9,7 +9,7 @@ Every 5 to 15 minutes, DiscordTel will announce that the giveaway is running in 
 |--------------------------------------------------|----------|
 | [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
-| [Hifumi](http://hifumibot.xyz/)                  | 0%       |
+| [Hifumi](http://hifumibot.xyz/)                  | 50%      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax.*
 
