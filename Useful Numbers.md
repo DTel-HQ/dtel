@@ -1,5 +1,5 @@
 # Useful numbers
-Here, we listed some useful numbers. Please do not abuse dialing or you could get blacklisted.
+We have listed some useful numbers that may help you out or may be fun. Please **don't** abuse dialling on these numbers, or you **could** get blacklisted.
 
 ## Emergency
 Use the Customer Service `*611` to report raids, or any *other* problems you have with DiscordTel. Click [here](http://discordtel.readthedocs.io/en/latest/In%20case%20of%20Emergency/) for details.
@@ -11,6 +11,3 @@ Use the Customer Service `*611` to report raids, or any *other* problems you hav
 ## Server Listings
 * Server Central: (0301) 236-8725 [0301-CENTRAL]
 * The Directory: (0301) 00-34357 [0301-00-DHELP]
-
-## News
-* Discord News Service: (0800) 367-6397 [0800-DNS-NEWS]
