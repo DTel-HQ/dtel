@@ -13,6 +13,6 @@ So, ready to *dive* into a world of DiscordTel?
 
 **Come** join us! Read the documentation we have [here.](http://discordtel.readthedocs.io/en/latest/)
 
-**Want** to invite the bot? Click this: [![here](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB) to invite it!
+**Want** to invite the bot? Click this: [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot) to invite it!
 
 **Join** our Discord to claim credits, chat and call other numbers at ease: [![here](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
