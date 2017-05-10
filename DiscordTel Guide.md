@@ -1,11 +1,11 @@
 # Welcome to DiscordTel!
 This guide will assist newcomers in setting up DTel for their server!
 
-## 1. Inviting the bot/Choosing its channel
+## 1. Inviting the bot => Choosing its channel
 Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose/create a channel to register your number in.
 
 ## 2. Choosing a number
-The current normal prefix is `0301` for calling or `0900` for mobile. Before proceeding, please decide your preferred number.
+The current normal prefix is `0301` for a channel number or `0900` for a mobile number. Before proceeding, please decide your preferred number.
 
 Numbers are 11-digits. e.g. `0301XXXXXXX`. If you want to have a word number (e.g. 0301-LETTERS), you can use [this tool](http://word2number.com).
 
@@ -23,7 +23,7 @@ The bot will send a message like this (will be similar, not the same):
 
 If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the DTel bot.
 
-The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please call Customer Support: `>pdial *611`.
+The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please refer to calling Customer Support: `>pdial *611`.
 
 ## 4. Confirmation
 Congratulations! You set up your number.
