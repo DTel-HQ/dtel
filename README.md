@@ -11,7 +11,7 @@ Real Customer Support people *answer* your calls. We're **always** there.
 
 So, ready to *dive* into a world of DiscordTel?
 
-**Come** join us! Read the documentation we have [here.](http://discordtel.readthedocs.io/en/latest/)
+**Come** join us! Read the documentation we have [here.](http://discordtel.readthedocs.io/en/readthedocs/)
 
 **Want** to invite the bot? Click this: [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot) to invite it!
 
