@@ -1,5 +1,5 @@
-# Win credit giveaways!
-Every 5 to 15 minutes, DiscordTel will announce that the giveaway is running in the **#general** chat of [DiscordTel HQ](https://discord.gg/RN7pxrB). Say `>claim` to get a randomized amount of free credits for your account, ranging from 8 to 200 credits! Be quick, the giveaway expires 30 seconds after it is announced. The credits that you win from the giveaway do NOT have any tax, so topping-up your number is easier than using third-party bots, which have tax.
+# Win credits instantly!
+Every 5 to 15 minutes, DiscordTel will announce a free credit giveaway in the **#general** chat of [DiscordTel HQ](https://discord.gg/RN7pxrB). Say `>claim` to get a randomized amount of free credits for your account, ranging from 8 to 200 credits! Be quick, the giveaway expires 30 seconds after it is announced. The credits that you win from the giveaway do NOT have any tax, so topping-up your number is easier than using third-party bots, which have tax.
 
 # How do I renew my number?
 
@@ -9,7 +9,7 @@ Every 5 to 15 minutes, DiscordTel will announce that the giveaway is running in 
 |--------------------------------------------------|----------|
 | [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
-| [Hifumi](http://hifumibot.xyz/)                  | 0%       |
+| [Hifumi](http://hifumibot.xyz/)                  | 50%      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax.*
 
