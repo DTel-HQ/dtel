@@ -23,7 +23,7 @@ Every random amount of time, ranging from 5 to 15 minutes, the bot will give out
 | Usage                         | Pay by Tatsu | Pay by Mantano | Pay by Hifumi | We get |
 |-------------------------------|--------------|----------------|---------------|--------|
 | Renew your number for 1 month | 2500         | 3333           | 2000          | 2000   |
-| 1 message sent using payphone | 10           | 14             | 10            | 8      |
+| 1 message sent using payphone | 10           | 14             | 8             | 8      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax.*
 
