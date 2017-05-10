@@ -9,7 +9,7 @@ Every random amount of time, ranging from 5 to 15 minutes, the bot will give out
 |--------------------------------------------------|----------|
 | [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
-| [Hifumi](http://hifumibot.xyz/)                  | 50%      |
+| [Hifumi](http://hifumibot.xyz/)                  | 0%       |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), whereas Mantaro's 40% tax and Hifumi's 50% tax exists on our side.*
 
