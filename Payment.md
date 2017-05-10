@@ -1,5 +1,5 @@
-# Win credit giveaways!
-Every 5 to 15 minutes, DiscordTel will announce that the giveaway is running in the **#general** chat of [DiscordTel HQ](https://discord.gg/RN7pxrB). Say `>claim` to get a randomized amount of free credits for your account, ranging from 8 to 200 credits! Be quick, the giveaway expires 30 seconds after it is announced. The credits that you win from the giveaway do NOT have any tax, so topping-up your number is easier than using third-party bots, which have tax.
+# Win credit rewards!
+Every random amount of time, ranging from 5 to 15 minutes, the bot will give out a random amount of credits, ranging from 8 to 200 credits, in the #general channel of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user runs the `>claim` command in 30 seconds, he/she will receive the award. These are tax-free credits which means you can use 100% of them without wasting any tax.
 
 # How do I renew my number?
 
@@ -9,7 +9,21 @@ Every 5 to 15 minutes, DiscordTel will announce that the giveaway is running in 
 |--------------------------------------------------|----------|
 | [Tatsumaki](http://tatsumaki.xyz)                | 20%      |
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
-| [Hifumi](http://hifumibot.xyz/)                  | 0%       |
+| [Hifumi](http://hifumibot.xyz/)                  | 50%      |
+
+*Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), whereas Mantaro's 40% tax and Hifumi's 50% tax exists on our side.*
+
+### I'm a developer and I want DiscordTel to accept payments from my bot!
+1. Your bot has to be in over 1000 servers.
+2. Your bot must DM DiscordTel when a transaction to DiscordTel is performed, and the DM **must** include the user's ID and the amount of transaction.
+3. Once you qualify and you have contacted austinhuang#1076, we'll figure out the tax rate based on your currency's rarity (how easy it is to get it, how much you'll get for each command, etc).
+
+## 1. Figure out the tax rate
+
+| Usage                         | Pay by Tatsu | Pay by Mantano | Pay by Hifumi | We get |
+|-------------------------------|--------------|----------------|---------------|--------|
+| Renew your number for 1 month | 2500         | 3333           | 2000          | 2000   |
+| 1 message sent using payphone | 10           | 14             | 10            | 8      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax.*
 
