@@ -1,0 +1,18 @@
+[
+  {"name": "Regular Coffee", "id": 1, "price": 20},
+  {"name": "Regular Espresso", "id": 2, "price": 25},
+  {"name": "Regular Frappe", "id": 3, "price": 25},
+  {"name": "Regular Frappucino", "id": 4, "price": 23},
+  {"name": "Donuts", "id": 5, "price": 20},
+  {"name": "St-Viateur™ Bagels", "id": 6, "price": 30},
+  {"name": "20 Timbits™ in a box", "id": 7, "price": 60},
+  {"name": "12-inch Pepperoni Pizza", "id": 8, "price": 100},
+  {"name": "Pasta w/ Tomato and bacon", "id": 9, "price": 80},
+  {"name": "Fresh-blended Fruit Juice", "id": 10, "price": 15},
+  {"name": "Churros in a box", "id": 11, "price": 30},
+  {"name": "Baguette", "id": 12, "price": 10},
+  {"name": "Dumplings x6", "id": 13, "price": 15},
+  {"name": "REAL STEAK", "id": 14, "price": 100},
+  {"name": "Fried Rice", "id": 15, "price": 60},
+  {"name": "Ramen with Miso soup", "id": 16, "price": 80}
+]

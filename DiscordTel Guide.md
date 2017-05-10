@@ -1,6 +1,8 @@
 # Welcome to DiscordTel!
 Here's a quick and easy crash course to DiscordTel!
 
+7h12 gU1d3 12 n00b fr13nDlY
+
 ## 1. Invite the bot => choose a channel
 Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose a channel to register your number in.
 
