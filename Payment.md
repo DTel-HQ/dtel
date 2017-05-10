@@ -11,8 +11,6 @@ Every random amount of time, ranging from 5 to 15 minutes, the bot will give out
 | [Mantaro](https://github.com/Mantaro/MantaroBot) | 40%      |
 | [Hifumi](http://hifumibot.xyz/)                  | 0%       |
 
-*Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), whereas Mantaro's 40% tax and Hifumi's 50% tax exists on our side.*
-
 ### I'm a developer and I want DiscordTel to accept payments from my bot!
 1. Your bot has to be in over 1000 servers.
 2. Your bot must DM DiscordTel when a transaction to DiscordTel is performed, and the DM **must** include the user's ID and the amount of transaction.
@@ -25,19 +23,7 @@ Every random amount of time, ranging from 5 to 15 minutes, the bot will give out
 | Renew your number for 1 month | 2500         | 3333           | 2000          | 2000   |
 | 1 message sent using payphone | 10           | 14             | 8             | 8      |
 
-*Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax.*
-
-### I'm a developer and I want DiscordTel to accept payments from my bot!
-1. Your bot must be in >1000 servers.
-2. Your bot must be able to DM DiscordTel when a transaction to DiscordTel is performed, and the DM must include the user's ID and the amount paid.
-3. Once you qualify for the guidelines listed above, contact austinhuang#1076 to figure out the tax rate based on your bot currency's rarity.
-
-## 1. Figure out the tax rate
-
-| Usage                         | Pay using Tatsu | Pay using Mantano | Pay using Hifumi | We get |
-|-------------------------------|-----------------|-------------------|------------------|--------|
-| Renew your number for 1 month | 2500            | 3333              | 2000             | 2000   |
-| 1 message sent using payphone | 10              | 14                | 8                | 8      |
+*Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where Mantaro's 40% tax exists on our side. Hifumi currently does not have any tax, although this **may** change in the future.*
 
 ## 2. Earn money
 
@@ -50,7 +36,7 @@ In any server with both the bot and DiscordTel: **Make sure both bots are online
 * `~>transfer @DiscordTel <Amount>` for Mantaro
 * `~transfer <Amount> @DiscordTel` for Hifumi
 
-Your `<Amount>` is the price *pay by respective bot* according to the table above. After you run the command you will receive a confirmation.
+Your `<Amount>` is the price that you are transferring to the bot. After you run the command you will receive a confirmation.
 
 **WARNING: DO NOT TOP-UP WHEN DISCORDTEL IS OFFLINE!**
 
