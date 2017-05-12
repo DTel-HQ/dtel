@@ -27,18 +27,18 @@ Every random amount of time, ranging from 5 to 15 minutes, the bot will give out
 
 ## 2. Earn money
 
-Read your preferred bot's documentation to learn how to earn money.
+Read your preferred bots'/bot's documentation to learn how to earn money.
 
 ## 3. Topping Up
-In any server with both the bot and DiscordTel: **Make sure both bots are online**, then:
+In any server with both your preferred payment bot(s) and DiscordTel: **IF they are ALL online,** run the following commands for the bot(s):
+
+**WARNING: DO NOT TOP-UP WHEN DISCORDTEL IS OFFLINE!**
 
 * `t!credit @DiscordTel <Amount>` for Tatsumaki
 * `~>transfer @DiscordTel <Amount>` for Mantaro
 * `~transfer <Amount> @DiscordTel` for Hifumi
 
 Your `<Amount>` is the price that you are transferring to the bot. After you run the command you will receive a confirmation.
-
-**WARNING: DO NOT TOP-UP WHEN DISCORDTEL IS OFFLINE!**
 
 Type `>help` before you make a transaction to see if DiscordTel is online. If you did not receive the credits in your DTel account, contact [DiscordTel HQ](https://discord.gg/RN7pxrB) or `>dial *611` when DTel comes back online.
 
