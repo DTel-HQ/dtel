@@ -1,4 +1,4 @@
- #Bienvenue à DiscordTel!
+# Bienvenue à DiscordTel!
 Ce guide aidera les nouveaux arrivants à configurer DiscordTel pour leur serveur!
 
 ## 1. Inviter le bot => Choisir ses chaîne
