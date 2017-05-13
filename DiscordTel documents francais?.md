@@ -6,7 +6,7 @@ cliquez [ici](https://discordapp.com/oauth2/authorize?client_id=2246625051574272
 Ensuite, choisissez / créez une chaîne pour registrer votre numéro.
 
 ## 2. choisissant un nombre
-Le préfixe normal actuel est `0301` pour un numéro de canal ou` 0900` pour un numéro de mobile. Avant de procéder, Décidez de votre numéro préféré
+Le préfixe normal actuel est `0301` pour un numéro de canal ou` 0900` pour un numéro de mobile. Avant de procéder, Décidez de votre numéro préféré.
 
 Les chiffres sont à 11 chiffres. par exemple. `0301XXXXXXX`. Vous pouvez composer des chiffres à l'aide de lettres au lieu des chiffres, donc **si** vous souhaitez convertir votre mot à chiffres à 7 chiffres (p. Ex. 0301-LETTERS), 
 vous pouvez utiliser [cet outil](http://word2number.com).
