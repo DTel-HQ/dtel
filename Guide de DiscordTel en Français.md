@@ -10,7 +10,7 @@ Le préfixe normal actuel est `0301` pour un numéro de canal ou `0900` pour un 
 Les chiffres sont à 11 chiffres. par exemple. `0301XXXXXXX`. Vous pouvez composer des chiffres à l'aide de lettres au lieu des chiffres, donc **si** vous souhaitez convertir votre mot à chiffres à 7 chiffres (p. Ex. 0301-LETTERS), 
 vous pouvez utiliser [cet outil](http://word2number.com).
 
-Les serveurs de discorde avec plus de 100 membres qui fournissent un service peuvent être éligibles aux préfixes `0800` /` 0844`. Contactez austinhuang dans le serveur de support.
+Les serveurs de discorde avec plus de 100 membres qui fournissent un service peuvent être éligibles aux préfixes `0800` /` 0844`. Contactez austinhuang#1076 (Français disponisable) dans [le serveur de support](http://discord.io/dtel).
 
 ## 3. Exécuter de l'assistant
 `>wizard`
