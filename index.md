@@ -8,5 +8,9 @@ Find the bot useful? Click [here](https://discordbots.org/bot/224662505157427200
 
 Lazy to navigate and want to jump-start to getting DiscordTel setup? Click [here!](http://discordtel.readthedocs.io/en/readthedocs/DiscordTel%20Guide/)
 
+## Server setup guide in different languages
+* [Français](http://discordtel.readthedocs.io/en/readthedocs/Guide%20de%20DiscordTel%20en%20Fran%C3%A7ais/)
+* [简体中文](http://discordtel.readthedocs.io/en/readthedocs/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88DiscordTel%E6%8C%87%E5%8D%97/)
+
 ## License
 The [source code](https://github.com/austinhuang0131/discordtel) is here only for reviewing purposes. **Please do not rehost this bot.**
