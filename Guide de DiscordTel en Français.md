@@ -19,7 +19,7 @@ Exécutez cette commande dans le canal que vous avez choisi plus tôt.
 
 Si vous voulez un numéro de mobile (préfixe `0900`), exécutez `>wizard` dans un DM (Message direct) avec le bot DTel.
 
-L'assistant n'est disponible que pour enregistrer les numéros 0301 et 0900. Pour tous les autres numéros, veuillez vous référer à Service de la Clientèle: `>pdial *611`. Service en Français est disponisable.
+L'assistant est disponible pour enregistrer les numéros 0301 et 0900 seulement. Pour tous les autres numéros, veuillez vous référer à Service de la Clientèle: `>pdial *611`. Service en Français est disponisable.
 
 ## 4. Confirmation
 Toutes nos félicitations! Vous configurez votre numéro.
