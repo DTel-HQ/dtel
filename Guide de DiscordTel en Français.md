@@ -2,7 +2,7 @@
 Ce guide aidera les nouveaux arrivants à configurer DiscordTel pour leur serveur!
 
 ## 1. Inviter le bot => Choisir ses chaîne
-cliquez [ici](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) Ajouter le bot À votre serveur,
+Cliquez [ici](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) Ajouter le bot À votre serveur,
 Ensuite, choisissez / créez une chaîne pour registrer votre numéro.
 
 ## 2. choisissant un numéro
@@ -30,7 +30,7 @@ Toutes nos félicitations! Vous configurez votre numéro.
 ## 5. Paiement
 Pour continuer votre utilisation de votre numéro, renouveler est nécessaire. Recharger votre compte DiscordTel par les bots suivant:
 
-| Recharger par...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) et [Hifumi](http://hifumibot.xyz/) | Nous recevons |
+| Recharger par...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) ou [Hifumi](http://hifumibot.xyz/) | Nous recevons |
 |-------------------------------------|--------------|----------------|--------|
 | Renouveler votre numéro pour 1 mois | 2500         | 3333           | 2000   |
 
