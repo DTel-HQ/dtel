@@ -9,8 +9,8 @@ You can >dial `*611` if you have any problems or questions about the bot, or if 
 
 So, ready to *dive* into a world of DiscordTel?
 
-Read DiscordTel's documentation by clicking this button: --> [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=readthedocs)](http://discordtel.readthedocs.io/en/readthedocs/?badge=readthedocs)
+**Read** DiscordTel's documentation by *clicking* this button: --> [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=readthedocs)](http://discordtel.readthedocs.io/en/readthedocs/?badge=readthedocs)
 
-Want the bot for yourself? Invite it by clicking here! --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot)
+Want the bot for **yourself?** Invite it by clicking *here!* --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot)
 
-Join our Discord Headquarters to win credits, chat, and call other numbers at ease by clicking here: --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
+Join the DiscordTel Headquarters server to **win credits**, *chat*, and *call* other numbers *at ease* by *clicking here:* --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
