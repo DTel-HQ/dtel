@@ -3,14 +3,14 @@
 
 DiscordTel is a bot for Discord that enables you to set up a custom number and call others using the bot.
 
-The bot acts like a telephone network, but cannot make real-world calls.
+The bot *acts* like a telephone network, but **cannot** make real-world calls. Disappointing...
 
 You can >dial `*611` if you have any problems or questions about the bot, or if there is a problem within your server that involves trollers/spammers.
 
 So, ready to *dive* into a world of DiscordTel?
 
-Read DiscordTel's documentation by clicking this button --> [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=readthedocs)](http://discordtel.readthedocs.io/en/readthedocs/?badge=readthedocs)
+Read DiscordTel's documentation by clicking this button: --> [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=readthedocs)](http://discordtel.readthedocs.io/en/readthedocs/?badge=readthedocs)
 
-Want the bot for yourself? Invite it by clicking here --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot)
+Want the bot for yourself? Invite it by clicking here! --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot)
 
-Join our Discord Headquarters to win credits, chat, and call other numbers at ease by clicking here --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
+Join our Discord Headquarters to win credits, chat, and call other numbers at ease by clicking here: --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
