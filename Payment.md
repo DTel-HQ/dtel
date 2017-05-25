@@ -46,7 +46,15 @@ You can use `>balance` in any channel, even the channel doesn't have DTel servic
 3. Once you qualify and you have contacted austinhuang#1076, we'll figure out the tax rate based on your currency's rarity (how easy it is to get it, how much you'll get for each command, etc).
 
 ## Donation
-$1 CAD = 10 billion DiscordTel credits.
+$1 CAD = 1 billion DiscordTel credits.
+
+### Reference rate
+Actual rate determined by real time currency exchange rate.
+
+* 1 USD = 1348650000 credits
+* 1 Robux = 1/80 USD = 16858125 credits
+* 1 satoshi = 35273 credits, as of May 25 2017
+* 1 Aeroplan mile = 1/138 CAD = 7246376.81 credits
 
 ### Methods
 By gift cards. Currently accept: Steam, Rixty, Roblox, PlayStation, XBOX, virtually everything with a code, not physical card.
