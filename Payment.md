@@ -59,7 +59,7 @@ Actual rate determined by real time currency exchange rate.
 ### Methods
 By gift cards. Currently accept: Steam, Rixty, Roblox, PlayStation, XBOX, virtually everything with a code, not physical card.
 
-For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@icloud.com`.
+For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
 We do not accept direct PayPal donations, however, you can use [this](https://www.paypal.com/us/webapps/mpp/shopping-selection) to donate with PayPal.
 
