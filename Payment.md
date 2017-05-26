@@ -1,5 +1,5 @@
-# Win credit rewards!
-Every random amount of time, ranging from 5 to 15 minutes, the bot will give out a random amount of credits, ranging from 8 to 200 credits, in the #general channel of [DiscordTel HQ](https://discord.gg/RN7pxrB). If a user runs the `>claim` command in 30 seconds, he/she will receive the award. These are tax-free credits which means you can use 100% of them without wasting any tax.
+# Lottery!
+You can type `>lottery <Number of entries>` to enter the lottery. The draw is at Eastern Time 01:00 AM everyday. Each entry cost 5 credits and the money goes into the jackpot.
 
 # How do I renew my number?
 
