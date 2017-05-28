@@ -37,9 +37,9 @@ El bot debe enviar un mensaje como este:
 ## 5. Pago
 Para continuar con el uso de su número, se requiere la renovación. Actualizar su cuenta siguiendo los robots DiscordTel:
 
-| Actualizar por ...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) ou [Hifumi](http://hifumibot.xyz/) | Nous recevons |
+| Actualizar por ...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) ó [Hifumi](http://hifumibot.xyz/) | Nosotros recibemos |
 |-------------------------------------|--------------|----------------|--------|
 | Renovar su número por 1 mes         | 2500         | 3333           | 2000   |
 
-Después de pagar, ejecute `>balance` `>dial*233`, ​​introduzca el mes que necesita para renovar, y eso es todo!
+Después de pagar, ejecute `>balance` `>dial*233`, introduzca el mes que necesita para renovar, y eso es todo!
 
