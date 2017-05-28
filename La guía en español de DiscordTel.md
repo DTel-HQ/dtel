@@ -30,8 +30,7 @@ Para todos los demás números, consulte la atención al cliente:
 `>pdial *611`
 
 ## 4. Confirmación
-¡Felicitaciones! Usted fija su número.
-El bot debe enviar un mensaje como este:
+¡Felicitaciones! Usted fija su número. El bot debe enviar un mensaje como este:
 ![message](http://i.imgur.com/vuOzp4d.png).
 
 ## 5. Pago
@@ -41,5 +40,5 @@ Para continuar con el uso de su número, se requiere la renovación. Actualizar 
 |-------------------------------------|--------------|----------------|--------|
 | Renovar su número por 1 mes         | 2500         | 3333           | 2000   |
 
-Después de pagar, ejecute `>balance` `>dial*233`, introduzca el mes que necesita para renovar, y eso es todo!
+Después de pagar, ejecute `>balance` ó `>dial*233`, introduzca el mes que necesita para renovar, y eso es todo!
 
