@@ -27,8 +27,8 @@ Toutes nos félicitations! Vous configurez votre numéro.
 ## 5. Paiement
 Pour continuer votre utilisation de votre numéro, renouveler est nécessaire. Recharger votre compte DiscordTel par les bots suivant:
 
-| Recharger par...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) ou [Hifumi](http://hifumibot.xyz/) | Nous recevons |
-|-------------------------------------|--------------|----------------|--------|
-| Renouveler votre numéro pour 1 mois | 2500         | 3333           | 2000   |
+| Recharger par...                    | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) | [Hifumi](http://hifumibot.xyz/) | Nous recevons |
+|-------------------------------------|--------------|------|---------|--------|
+| Renouveler votre numéro pour 1 mois | 2500         | 2000 | 3333    | 2000   |
 
 Après payer, exécutez `>balance` ou `>dial *233`, entrez les mois que vous besoin de renouveler, et voilà!
