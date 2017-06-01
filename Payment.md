@@ -15,8 +15,8 @@ You can type `>lottery <Number of entries>` to enter the lottery. The draw is at
 
 | Usage                         | Pay by Tatsu | Pay by Mantano | Pay by Hifumi | We get |
 |-------------------------------|--------------|----------------|---------------|--------|
-| Renew your number for 1 month | 2500         | 3333           | 3333          | 2000   |
-| 1 message sent using payphone | 10           | 14             | 14            | 8      |
+| Renew your number for 1 month | 2500         | 2000           | 3333          | 2000   |
+| 1 message sent using payphone | 10           | 8              | 14            | 8      |
 
 *Side note: Tatsumaki's 20% tax exists on its side ("Amount due after tax" as you see), where others' tax exists on our side.*
 
