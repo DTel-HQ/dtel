@@ -18,8 +18,8 @@
 ## 5. 充值和续约
 为了继续使用您的DTel号码，您需要续约。您可以用以下机器人的代币充值：
 
-| 使用以下机器人充值... | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot)或[Hifumi](http://hifumibot.xyz/) | 我们会收到... |
-|-------------------------------------|--------------|----------------|--------|
-| 续约1个月 | 2500         | 3333           | 2000   |
+| 使用以下机器人充值... | [Tatsumaki](http://tatsumaki.xyz) | [Mantaro](https://github.com/Mantaro/MantaroBot) | [Hifumi](http://hifumibot.xyz/) | 我们会收到... |
+|-------------------------------------|-----|--------|----------------|--------|
+| 续约1个月 | 2500         | 2000 | 3333           | 2000   |
 
 充值完毕后，请输入`>balance`并输入想要续约的月份数。
