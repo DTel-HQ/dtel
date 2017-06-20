@@ -24,7 +24,7 @@ var nsroles = JSON.parse(fs.readFileSync("./ns.json", "utf8"));
 var nsguild = JSON.parse(fs.readFileSync("./nsg.json", "utf8"));
 const bot = new Discord.Client();
 var restify = require('restify');
-var suggestionchannel = "Austin put the id here";
+var suggestionchannel = "326798754348793857";
 var server = restify.createServer({
 	name : "Bot HTTP server"
 });
