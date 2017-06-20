@@ -256,8 +256,8 @@ bot.on("message", message => {
 		  message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("List of Commands").setDescription("For more information, use `>info`.").addField(">dial / >call", "Dial a number using your own number").addField(">pdial / >pcall", "Dial a number using public payphone, 8 credits per message").addField(">rdial / >rcall","Dial a random number in the phonebook").addField(">wizard","Get yourself a number").addField(">order","Get some virtual food").addField(">info", "Display info about applying for a number and user guides").addField(">ns", "NationStates.net commands").addField(">suggest", "Suggest something to be added to the bot"));
 		}
 		else if(message.content.startsWith(">suggest")) {
-			message.reply("Thanks for your suggestion!");
-	    		bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
+			message.reply(":white_check_mark: Thanks for your suggestion!");
+	    		bot.channels.get("326798754348793857").send(":ballot_box: New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
 		}
 		else if (message.content.startsWith(">lottery") && !support(message.author.id)) {
 			if (message.content.split(" ")[1] === undefined) {
