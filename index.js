@@ -24,6 +24,7 @@ var nsroles = JSON.parse(fs.readFileSync("./ns.json", "utf8"));
 var nsguild = JSON.parse(fs.readFileSync("./nsg.json", "utf8"));
 const bot = new Discord.Client();
 var restify = require('restify');
+var suggestionchannel = "Austin put the id here";
 var server = restify.createServer({
 	name : "Bot HTTP server"
 });
@@ -917,6 +918,10 @@ bot.on("message", message => {
 				}
 			},120000);
 		}
+	    else if(message.content.startsWith(">suggest")  {
+		    var suggest = message.content.split(" ").splice(1).join(" ").split("```").join(" ");
+	    	    bot.channels.get(suggestionchannel).send("New suggestion from " + message.author.username + " (" + message.author.id + ") ```\n" + suggest + "```"
+		    
 	}
 	else if (pbstatus !== undefined && !blacklisted(message.author.id) && pbstatus.user === message.author.id) {
 		if (message.content === "0" ) {
