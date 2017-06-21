@@ -1,5 +1,5 @@
-# Customer Support Guidebook
-Welcome to the Customer Support guidebook. Commands that support members have access to are listed in this guidebook. **Your actions are recorded in #bot-log.**
+# Customer Support Guide
+Welcome to the Customer Support guide. Commands that support members have access to are listed in this guidebook. **Your actions are recorded in #bot-log.**
 If you have any questions about commands that are **not** referenced here, you may ask about it in a staff channel on DTel's HQ.
 Staff commands should **only** be used in either the staff channel or in direct messaging with the bot.
 
@@ -52,7 +52,7 @@ Dos and don'ts:
 * Caller begins to say impolite/vulgar things to or about you - Troll Call
 * Caller who is reporting a troller - NOT a Troll Call
 
-If a *troll* call occurs, use the blacklist command on their user ID, in a format like this:
+If a troll call occurs, use the blacklist command on their user ID, in a format like this:
 
 `>blacklist <User ID>`
 You can get the User ID from #bot-logs (it's at the end of the line):
