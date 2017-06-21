@@ -81,7 +81,7 @@ Rate di cambio cambieranno in base alle rate di cambio della moneta reale.
 * 1 USD = 1348650000 crediti DiscordTel
 * 1 Robux = 1/80 USD = 16858125 crediti DiscordTel
 * 1 satoshi = 35273 crediti DiscordTel, dal 25 maggio 2017
-* 1 Aeroplan mile = 1/138 CAD = 7246376.81 crediti DiscordTel
+* 1 miglio Aeroplan = 1/138 CAD = 7246376.81 crediti DiscordTel
 
 Non accettiamo le donazioni PayPal dirette, ma puoi usare [questo](https://www.paypal.com/us/webapps/mpp/shopping-selection) link per fare donazioni con PayPal.  
 
