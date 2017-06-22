@@ -3,7 +3,7 @@
 
 DiscordTel is a bot for Discord that allows you to set up a custom number and call other Discord servers.
 
-The bot acts like a telephone network, but **cannot** make real-world calls.
+The bot acts like a telephone network, but **cannot** make real-world calls. Sorry people.
 
 You can >dial `*611` if you have any problems or questions about the bot, or if there is a problem within your server that involves trollers/spammers.
 
