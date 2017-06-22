@@ -22,12 +22,6 @@ The **only way** to become part of the Customer Support team is to fill out an a
 * The users of this number abuse the system (Contact austinhuang first);
 * The owner of the number wants it moved to another channel (Make sure you have the channel ID they want it moved to).
 
-## Extending a number
-`>extend <Number> <# of months>`. Use this command only if:
-
-* For your own salary (You can extend your own numbers for free, but less than 3 numbers please);
-* When the number is assigned there's less than 10 days left in that month (Extend 1 month).
-
 ## Number info
 `>ninfo <Number>`
 This gives you the JSON object of the number, which contains the number's *channel ID* that it is assigned to, the number itself, and the expiration date (the year and month). You can use the channel ID and number to *assign*, *de-assign*, or *extend* a number.
@@ -35,13 +29,7 @@ This gives you the JSON object of the number, which contains the number's *chann
 ![Example ninfo command](http://i.imgur.com/eQoVpIO.png)
 
 ## Adding credits
-If, for whatever reason, `>extend` is not functional, you may give credits to yourself or a caller.
-You may add credits to yourself as you please, but **DO NOT** give them away without a valid reason.
-Dos and don'ts:
-
-* Give credits if extend command is disabled - and person has had problems with renewing etc.
-* Give credits to yourself (It's allowed, that's what austinhuang says).
-* Don't give credits if you're giving it away to someone who **hasn't** had any problems with renewing, etc.
+RIP `>extend` command. You can now only ~~beg~~ ask Austin for credits, even it's for someone else.
 
 ## Dealing with troll calls
 *Sometimes* people can be annoying and just try to have fun. That is the case with troll calls.
