@@ -3,6 +3,7 @@ You can type `>lottery <Number of entries>` to enter the lottery. The draw is at
 
 # How do I renew my number?
 
+## Payment bots do not work due to a patch in Discord's algorithm disabling bot-to-bot DM's
 ## Payment bots
 
 | Bot Name                                         | Tax Rate |
