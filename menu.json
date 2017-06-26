@@ -14,5 +14,6 @@
   {"name": "Dumplings x6", "id": 13, "price": 15},
   {"name": "REAL STEAK", "id": 14, "price": 100},
   {"name": "Fried Rice", "id": 15, "price": 60},
-  {"name": "Ramen with Miso soup", "id": 16, "price": 80}
+  {"name": "Ramen with Miso soup", "id": 16, "price": 80},
+  {"name": "Trump Quality Steak™", "id": 17, "price": 150}
 ]
