@@ -1,5 +1,8 @@
-// WARNING BEFORE USE:
-// Search "Censored" and replace them with real ones
+/*
+PUT YOUR TOKEN HERE OR NOTHING WILL WORK
+========================*/
+var token = "TOKEN GOES HERE";
+//========================
 
 const Discord = require("discord.js");
 const fs = require("fs");
@@ -39,7 +42,7 @@ bot.on("ready", () => {
 	request.post({
 		url: "https://bots.discordlist.net/api",
 		form: {
-			"token": "Censored",
+			"token": token,
 			"servers": bot.guilds.size.toString()
 		}
 	}, function(error, response, body) {
@@ -49,7 +52,7 @@ bot.on("ready", () => {
 		url: "https://bots.discord.pw/api/bots/224662505157427200/stats",
 		headers: {
 			"content-type": "application/json",
-			"Authorization": "Censored"
+			"Authorization": token
 		},
 		json: {
 			"server_count": bot.guilds.size.toString()
@@ -61,7 +64,7 @@ bot.on("ready", () => {
 		url: "https://discordbots.org/api/bots/224662505157427200/stats",
 		headers: {
 			"content-type": "application/json",
-			"Authorization": "Censored"
+			"Authorization": token
 		},
 		json: {
 			"server_count": bot.guilds.size.toString()
@@ -1530,4 +1533,4 @@ var jackpot = schedule.scheduleJob({hour: 1, minute: 0, second: 0}, function() {
 });
 
 
-bot.login("Censored");
+bot.login(token);
