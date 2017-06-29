@@ -15,4 +15,4 @@ Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/224662
 * [In Italiano](http://discordtel.readthedocs.io/en/readthedocs/Guida%20in%20Italiano%20al%20DiscordTel/) (@ry00000)
 
 ## License
-The [source code](https://github.com/austinhuang0131/discordtel) can be found here, strictly for reviewing purposes. **Please do not rehost DiscordTel in ANY fashion.**
+The [Github repo for source code](https://github.com/austinhuang0131/discordtel) can be found here, mainly for reviewing purposes. Rehost this bot privately under Austin Huang's permission is allowed. Read license [here](https://github.com/austinhuang0131/discordtel/blob/master/LICENSE).
