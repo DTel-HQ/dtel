@@ -1,5 +1,5 @@
 # Lottery!
-You can type `>lottery <Number of entries>` to enter the lottery. The draw is at Eastern Time 01:00 AM everyday. Each entry cost 5 credits and the money goes into the jackpot.
+You can type `>lottery <Number of entries>` to enter the lottery. The draw is at CEST 01:00 AM everyday. Each entry cost 5 credits and the money goes into the jackpot.
 
 # How do I renew my number?
 
@@ -12,18 +12,17 @@ You can use `>balance` in any channel, even the channel doesn't have DTel servic
 Currently we cannot accept any payment bots right now. In the future we may let you, but this is still being decided.
 
 ## Donation
-$1 CAD = 1 billion DiscordTel credits.
+$1 CAD = 1 million DiscordTel credits.
 
 ### Reference rate
 Actual rate determined by real time currency exchange rate.
 
-* 1 USD = 1348650000 credits
-* 1 Robux = 1/80 USD = 16858125 credits
-* 1 satoshi = 35273 credits, as of May 25 2017
-* 1 Aeroplan mile = 1/138 CAD = 7246376.81 credits
+* 1 USD = 1348650 credits
+* 1 Robux = 1/80 USD = 16858 credits. **Only group payouts is accepted**, so you'll need BC/OBC.
+* 1 satoshi = 32 credits, as of June 30 2017
 
 ### Methods
-By gift cards. Currently accept: Steam, Rixty, Roblox, PlayStation, XBOX, virtually everything with a code, not physical card.
+By gift cards. Currently accept everything with a code, not physical card (Unless it can be used online).
 
 For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
