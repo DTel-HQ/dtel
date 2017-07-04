@@ -22,9 +22,11 @@ Actual rate determined by real time currency exchange rate.
 * 1 satoshi = 32 credits, as of June 30 2017
 
 ### Methods
-By gift cards. Currently accept everything with a code, not physical card (Unless it can be used online).
+1. By gift cards. Currently accept everything with a code, not physical card (Unless it can be used online).
 
-For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
+2. For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
+
+3. For credit card holders, you can buy credits [here](http://mtl0131.bigcartel.com/product/discordtel-1-million-credits).
 
 We do not accept direct PayPal donations, however, you can use [this](https://www.paypal.com/us/webapps/mpp/shopping-selection) to donate with PayPal.
 
