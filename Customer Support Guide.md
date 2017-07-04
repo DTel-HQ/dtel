@@ -24,7 +24,7 @@ The **only way** to become part of the Customer Support team is to fill out an a
 
 ## Number info
 `>ninfo <Number>`
-This gives you the JSON object of the number, which contains the number's *channel ID* that it is assigned to, the number itself, and the expiration date (the year and month). You can use the channel ID and number to *assign*, *de-assign*, or *extend* a number.
+This gives you the JSON object of the number, which contains the number's *channel ID* that it is assigned to, the number itself, and the expiration date (the year and month). You can use the channel ID and number to *assign* or *de-assign* a number.
 
 ![Example ninfo command](http://i.imgur.com/eQoVpIO.png)
 
