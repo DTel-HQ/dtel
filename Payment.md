@@ -12,14 +12,7 @@ You can use `>balance` in any channel, even the channel doesn't have DTel servic
 Currently we cannot accept any payment bots right now. In the future we may let you, but this is still being decided.
 
 ## Donation
-$1 CAD = 1 million DiscordTel credits.
-
-### Reference rate
-Actual rate determined by real time currency exchange rate.
-
-* 1 USD = 1348650 credits
-* 1 Robux = 1/80 USD = 16858 credits. **Only group payouts is accepted**, so you'll need BC/OBC.
-* 1 satoshi = 32 credits, as of June 30 2017
+$1 CAD = 1 million DiscordTel credits. See [here](http://discordtel.readthedocs.io/en/readthedocs/Donate/) for details.
 
 ### Methods
 1. By gift cards. Currently accept everything with a code, not physical card (Unless it can be used online).
