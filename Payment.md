@@ -1,27 +1,23 @@
-# Lottery!
+# How do I keep my number running?
+
+## Earn some balance
+### Transfer from Mantaro
+Credits earned from [Mantaro](http://polr.me/mantaro) can be transferred to DiscordTel by typing `~>transfer @DiscordTel (Amount)`. Replace `(Amount)` with actual amount.
+
+### Daily
+You can type `>daily` every day to get 120 credits.
+
+### Lottery!
 You can type `>lottery <Number of entries>` to enter the lottery. The draw is at CEST 01:00 AM everyday. Each entry cost 5 credits and the money goes into the jackpot.
-
-# How do I renew my number?
-
-**Since Discord disabled bot-to-bot DMs,** we cannot use payment bots. To replace them, we have added a `>daily` command so you can earn credits still.
 
 ### Checking your balance
 You can use `>balance` in any channel, even the channel doesn't have DTel service enabled. The server must have DTel installed.
 
 ### I'm a developer and I want DiscordTel to accept payments from my bot!
-Currently we cannot accept any payment bots right now. In the future we may let you, but this is still being decided.
+Please contact austinhuang#1076.
 
 ## Donation
 $1 CAD = 1 million DiscordTel credits. See [here](http://discordtel.readthedocs.io/en/readthedocs/Donate/) for details.
-
-### Methods
-1. By gift cards. Currently accept everything with a code, not physical card (Unless it can be used online).
-
-2. For Canadians, you can also perform an Interac E-Transfer to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
-
-3. For credit card holders, you can buy credits [here](http://mtl0131.bigcartel.com/product/discordtel-1-million-credits).
-
-We do not accept direct PayPal donations, however, you can use [this](https://www.paypal.com/us/webapps/mpp/shopping-selection) to donate with PayPal.
 
 ## Using your balance
 ### Renew your number
