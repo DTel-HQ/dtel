@@ -6,7 +6,7 @@ Wow! How nice to you! I accept several ways to donate:
 ## Credit/Debit card
 You can buy credits [here](http://mtl0131.bigcartel.com).
 
-**WARNING:** We price everything in Canadian Dollars. There is a high chance that your prepaid card won't work (Unless your card is issued in Canada).
+**WARNING:** We price everything in Canadian Dollars. Contact your card company first if you're using a foreign prepaid card.
 
 **Note:** The "shipping" cost is the [Stripe processing fee](https://stripe.com/ca/pricing).
 
