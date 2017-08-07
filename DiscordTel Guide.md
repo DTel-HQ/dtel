@@ -1,31 +1,31 @@
-# Welcome to DiscordTel!
-This guide will assist newcomers in setting up DTel for their server!
+# Willkommen bei DiscordTel!
+Diese Anleitung soll Neulingen dabei helfen, DiscordTel für einen Server aufzusetzen und einzustellen.
 
-## 1. Inviting the bot => Choosing its channel
-Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose/create a channel to register your number in.
+## 1. Den Bot einladen => Den Channel aussuchen
+Klicke [hier](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) um den Bot auf den Server einzuladen, dann wähle oder erstelle einen Channel, dem die DiscordTel-Nummer hinzugefügt werden soll.
 
-## 2. Choosing a number
-The current normal prefix is `0301` for a channel number or `0900` for a mobile number. Before proceeding, please decide your preferred number.
+## 2. Eine Nummer auswählen
+Die allgemeine aktuelle Vorwahl ist `0301` für eine Channelnummer oder `0900` für eine Mobilnummer. Bevor du weitermachst, suche dir eine Nummer aus.
 
-All numbers are 11-digits. e.g. `0301XXXXXXX`. You can dial numbers using letters in place of the digits, so **if** you want to convert your 7-digit word to digits (e.g. 0301-LETTERS), you can use [this tool](http://word2number.com).
+Alle Nummern haben 11 Stellen. z.B. `0301XXXXXXX`. Du kannst Nummern mithile von Buchstaben anstatt von Zahlen wählen, **wenn** du ein 7-stelliges Wort in eine Nummer umwandeln möchtest (z.B. 0301-BCHSTBN) (für Buchstaben), kannst du [dieses Tool](http://word2number.com) benutzen.
 
-Discord servers with 100+ members that provide a service may be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
+Discord-Server mit 100+ Mitgliedern, die einen Service anbieten, können eine `0800`/`0844`-Vorwahl beantragen. Kontaktiere dafür @austinhuang#1076 auf dem Support-Server.
 
-## 3. Running the wizard
+## 3. Den Setup-Wizard ausführen
 `>wizard`
 
-Run this command in the channel you chose earlier.
+Schicke diesen Command in dem DiscordTel-Channel, den du in Schritt 1 ausgewählt hast.
 
-The bot will send a message like this (will be similar, not the same): 
+Der Bot wird die eine ähnliche Nachricht wie diese schicken: 
 ![registernumber](http://i.imgur.com/zMKAkPr.png)
 
-If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the DTel bot.
+Wenn du eine Mobilnummer haben möchtest, (Vorwahl `0900`), schicke `>wizard` in einer PM (Privatnachricht) an den Dtel-Bot.
 
-The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please refer to calling Customer Support: `>pdial *611`.
+Der Setup-Wizard kann nur `0301` und `0900` Nummern registrieren. Für alle anderen Nummern kontaktiere bitte den Kunden-Support: `>pdial *611`.
 
-## 4. Confirmation
-Congratulations! You set up your number.
-The bot should send a message like this:
+## 4. Bestätigung
+Glückwunsch! Du hast nun deine Telefonnummer eingerichtet.
+Der Bot sollte dir nun eine Nachricht wie diese schicken:
 ![message](http://i.imgur.com/vuOzp4d.png)
 
-Read the [Payment](http://discordtel.readthedocs.io/en/latest/Payment/) section for information about how to extend your number.
+Lies den Artikel zur [Bezahlung](http://discordtel.readthedocs.io/en/latest/Payment/), um zu erfahren, wie du deine Nummer erweitern kannst.
