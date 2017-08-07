@@ -1,10 +1,10 @@
-# Customer Support Guide
-Welcome to the Customer Support guide. Commands that support members have access to are listed in this guidebook. **Your actions are recorded in #bot-log.**
-If you have any questions about commands that are **not** referenced here, you may ask about it in a staff channel on DTel's HQ.
-Staff commands should **only** be used in either the staff channel or in direct messaging with the bot.
+# Kundensupport-Anweisungen
+Herzlich Willkommen zum Kundensupport-Guide. Bot-Commands, zu denen Supportmitarbeiter Zugriff haben, werden in diesem Guide erklärt. **Alle Aktionen und Handlungen werden im Channel #bot-log aufgezeichnet!**
+Wenn du Fragen über Commands hast, die **nicht** hier erwähnt werden, kannst du gerne Fragen darüber im Mitarbeiter-Channel auf dem DTel HQ-Server stellen.
+Mitarbeiter-Commands dürfen **nur** im Mitarbeiter-Channel oder im Privatchat mit dem Bot benutzt werden.
 
-## How do I become a Customer Support?
-The **only way** to become part of the Customer Support team is to fill out an application, located [here](https://discordtel.typeform.com/to/cR3ovo). Your application will put into the pool, but will only be looked at once a spot opens. The maximum amount of team members is currently **eighteen (18)**. It may take **weeks or months** for your application to be read. **Asking a staff member to read your application will result in an AUTOMATIC DENIAL.**
+## Wie werde ich Support-Mitarbeiter?
+Der **einzige** to become part of the Customer Support team is to fill out an application, located [here](https://discordtel.typeform.com/to/cR3ovo). Your application will put into the pool, but will only be looked at once a spot opens. The maximum amount of team members is currently **eighteen (18)**. It may take **weeks or months** for your application to be read. **Asking a staff member to read your application will result in an AUTOMATIC DENIAL.**
 
 ## Assigning a number
 1. Assume you picked up the 611 call. Go to #bot-log.
