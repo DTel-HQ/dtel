@@ -47,7 +47,6 @@ Leggete la documentazione del bot che state utilizzando per informazioni sul gua
 
 ***IMPORTANTE: NON RINNOVATE MENTRE DiscordTel è OFFLINE!!!*** I soldi non saranno ricevuti e li perderete!  
 
-* Per Tatsumaki, utilizzate `t!credit @DiscordTel <importo>`  
 * Per Mantaro, utilizzate `~>transfer @DiscordTel <importo>`
 * Per Hifumi, utilizzate `~transfer <importo> @DiscordTel`
 
