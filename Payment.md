@@ -1,6 +1,9 @@
 # How do I keep my number running?
 
 ## Earn some balance
+### Transfer from Discoin system
+Credits earned from [Discoin](http://discoin.disnodeteam.com)-participating bots can be transferred to DiscordTel. See [here](https://github.com/austinhuang0131/Discoin/wiki/Users) for commands and more details. DiscordTel's currency code is `DTS`.
+
 ### Transfer from Mantaro
 Credits earned from [Mantaro](http://polr.me/mantaro) can be transferred to DiscordTel by typing `~>transfer @DiscordTel (Amount)`. Replace `(Amount)` with actual amount.
 
