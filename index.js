@@ -844,11 +844,21 @@ bot.on("message", message => {
 			},120000);
 		}
 		else if (message.content === ">rdial" || message.content === ">rcall"){
-			var yournumber = phonebook[Math.floor(Math.random() * phonebook.length)].number;
-			if (yournumber.startsWith("0500")) {
-				message.reply(":x: Dialing error: Payphone numbers (`05XX` prefix) cannot receive calls.");
-				return;
+			function genNumber(){
+				var yournumber = phonebook[Math.floor(Math.random() * phonebook.length)].number;
+				
+				if(yournumber.startsWith("0800")){
+					console.log(">rdial tried to dial 0800... regenerating number");
+					return genNumber();
+				}
+				if (yournumber.startsWith("0500")) {
+					//message.reply(":x: Dialing error: Payphone numbers (`05XX` prefix) cannot receive calls.");
+					console.log(">rdial tried to dial 0500... regenerating number");
+					return genNumber();
+				}
+				return yournumber;
 			}
+			var yournumber=genNumber();
 			var yourchannel = numbers.find(function(item) {
 				return item.number === yournumber;
 			});
