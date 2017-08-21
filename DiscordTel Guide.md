@@ -23,7 +23,24 @@ If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Messa
 
 The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please refer to calling Customer Support: `>pdial *611`.
 
-## 4. Confirmation
+## 4. Setting up the mailbox
+`>mailbox`
+
+This command provides access to your mailbox. When someone calls you, and you don't pick up or you hangup, the caller has the possibility to leave a message. To use this fuction, you need to set the mailbox up.
+For this, type `>mailbox settings` in the channel with your number assigned, and you will see something similar to this:
+
+![pic](http://i.imgur.com/mv3h3nX.png)
+
+Now, type `>mailbox settings [Your mailbox text]`. With that, you have successfully setup your mailbox!
+
+Once someone leaves a message, you will receive a message, and to read the message, you need to type `>mailbox messages`, which will bring up a message like this: 
+
+![pic](http://i.imgur.com/nba617d.png)
+
+To delete the message, you can type `>mailbox messages [ID] delete`. In the case above, the ID is 6dd7.
+You can also call the person that left the message! For that type `>mailbox messages [ID] callback`
+
+## 5. Confirmation
 Congratulations! You set up your number.
 The bot should send a message like this:
 ![message](http://i.imgur.com/vuOzp4d.png)

@@ -23,6 +23,22 @@ Wenn du eine Mobilnummer haben möchtest, (Vorwahl `0900`), schicke `>wizard` in
 
 Der Setup-Wizard kann nur `0301` und `0900` Nummern registrieren. Für alle anderen Nummern kontaktiere bitte den Kunden-Support: `>pdial *611`.
 
+## 4. Die Mailbox einrichten
+`>mailbox`
+
+Dieser Command lässt dich auf deine Mailbox zugreifen. Wenn dich jemand anruft, du den Anruf aber nicht annimst oder ihn ablehnst, hat der Anrufer die Möglichkeit, eine Nachricht zu hinterlassen. Um diese Funktion zu benutzen, muss die Mailbox aber erstmal eingerichtet werden. Tippe dafür einfach `>mailbox settings` in dem Channel der deiner Nummer zugeordnet ist, und du wirst eine Nachricht wie diese sehen:
+
+![pic](http://i.imgur.com/mv3h3nX.png)
+
+Jetzt tippe `>mailbox settings [Dein Mailbox Text]`. Damit hast du die Mailbox erfolgreich eingerichtet!
+
+Wenn jemand eine Nachricht hinterlässt, wirst du eine Benachrichtigung vom Bot erhalten. Um deine Nachrichten lesen zu können, gib ein: `>mailbox messages`, woraufhin der Bot dir eine Nachricht wie diese schickt:
+
+![pic](http://i.imgur.com/nba617d.png)
+
+Um eine Nachricht zu löschen, tippe `>mailbox messages [ID] delete`, in obigen Beispiel ist die ID 6dd7.
+Du kannst die Person, die die Nachricht hinterlassen hat auch zurückrufen! Dafür schreibe `>mailbox messages [ID] callback`.
+
 ## 4. Bestätigung
 Glückwunsch! Du hast nun deine Telefonnummer eingerichtet.
 Der Bot sollte dir nun eine Nachricht wie diese schicken:
