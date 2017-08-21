@@ -13,15 +13,9 @@ You can buy credits [here](http://mtl0131.bigcartel.com).
 ## [Interac E-Transfer](http://interac.ca/en/interac-e-transfer-consumer.html) (For Canadians only)
 Send your money to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
-## PayPal
+## Bitcoins / Litecoin / Ethereum
 
-Send your money [here](https://www.paypal.me/asaplaysmc1).
-
-**WARNING:** PayPal payments are handled by AsaPlaysMC#9167. Please contact him to receive your credits.
-
-## Bitcoins
-
-Send your money either by address `12tgbn6BoJyQDuRdN5fgA2fi9UKnhxXaCi` or by [Coinbase](http://coinbase.com) (By name: `Austin Huang`, by Email: `austinhuang0131@icloud.com`). Please notify austinhuang#1076 before proceeding or we'll not be able to identify your payment.
+If you have Coinbase, read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`). If you don't, contact austinhuang#1076 and an address will be provided.
 
 # Using non-money credits
 
