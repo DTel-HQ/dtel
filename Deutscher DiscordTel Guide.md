@@ -39,7 +39,7 @@ Wenn jemand eine Nachricht hinterlässt, wirst du eine Benachrichtigung vom Bot 
 Um eine Nachricht zu löschen, tippe `>mailbox messages [ID] delete`, in obigen Beispiel ist die ID 6dd7.
 Du kannst die Person, die die Nachricht hinterlassen hat auch zurückrufen! Dafür schreibe `>mailbox messages [ID] callback`.
 
-## 4. Bestätigung
+## 5. Bestätigung
 Glückwunsch! Du hast nun deine Telefonnummer eingerichtet.
 Der Bot sollte dir nun eine Nachricht wie diese schicken:
 ![message](http://i.imgur.com/vuOzp4d.png)
