@@ -40,7 +40,7 @@ Once someone leaves a message, you will receive a message, and to read the messa
 To delete the message, you can type `>mailbox messages [ID] delete`. In the case above, the ID is 6dd7.
 You can also call the person that left the message! For that type `>mailbox messages [ID] callback`
 
-## 4. Confirmation
+## 5. Confirmation
 Congratulations! You set up your number.
 The bot should send a message like this:
 ![message](http://i.imgur.com/vuOzp4d.png)
