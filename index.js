@@ -320,7 +320,7 @@ bot.on("message", message => {
 				}
 				account.balance += 120;
 				accounts.push(account);
-				bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 50 daily credits!");
+				bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 120 daily credits!");
 				fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 			}
 		}
