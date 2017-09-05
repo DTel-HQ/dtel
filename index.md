@@ -9,11 +9,11 @@ Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/224662
 **How do I set up DiscordTel for my own server?** Click [here](http://discordtel.readthedocs.io/en/readthedocs/DiscordTel%20Guide/) to get started!
 
 ## Start-up Guide in multiple languages
-* [En Français](http://discordtel.readthedocs.io/en/readthedocs/Guide%20de%20DiscordTel%20en%20Fran%C3%A7ais/)
-* [简体中文](http://discordtel.readthedocs.io/en/readthedocs/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88DiscordTel%E6%8C%87%E5%8D%97/)
-* [En Español](http://discordtel.readthedocs.io/en/readthedocs/La%20gu%C3%ADa%20en%20espa%C3%B1ol%20de%20DiscordTel/) (@smartbunny009)
-* [In Italiano](http://discordtel.readthedocs.io/en/readthedocs/Guida%20in%20Italiano%20al%20DiscordTel/) (@ry00000)
-* [Auf Deutsch](http://discordtel.readthedocs.io/en/latest/DiscordTel%20F%C3%BChrer%20auf%20Deutsch/) (@matematrix)
+* [En Français](http://discordtel.readthedocs.io/en/latest/Guide%20de%20DiscordTel%20en%20Fran%C3%A7ais/)
+* [简体中文](http://discordtel.readthedocs.io/en/latest/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88DiscordTel%E6%8C%87%E5%8D%97/)
+* [En Español](http://discordtel.readthedocs.io/en/latest/La%20gu%C3%ADa%20en%20espa%C3%B1ol%20de%20DiscordTel/) (@smartbunny009)
+* [In Italiano](http://discordtel.readthedocs.io/en/latest/Guida%20in%20Italiano%20al%20DiscordTel/) (@ry00000)
+* [Auf Deutsch](http://discordtel.readthedocs.io/en/latest/Deutscher%20DiscordTel%20F%C3%BChrer/) (@matematrix)
 
 ## License
 The [Github repo for source code](https://github.com/austinhuang0131/discordtel) can be found here, mainly for reviewing purposes. Rehost this bot privately under Austin Huang's permission is allowed. Read license [here](https://github.com/austinhuang0131/discordtel/blob/master/LICENSE).
