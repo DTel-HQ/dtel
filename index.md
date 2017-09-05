@@ -13,7 +13,7 @@ Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/224662
 * [简体中文](http://discordtel.readthedocs.io/en/latest/%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%E7%89%88DiscordTel%E6%8C%87%E5%8D%97/)
 * [En Español](http://discordtel.readthedocs.io/en/latest/La%20gu%C3%ADa%20en%20espa%C3%B1ol%20de%20DiscordTel/) (@smartbunny009)
 * [In Italiano](http://discordtel.readthedocs.io/en/latest/Guida%20in%20Italiano%20al%20DiscordTel/) (@ry00000)
-* [Auf Deutsch](http://discordtel.readthedocs.io/en/latest/Deutscher%20DiscordTel%20F%C3%BChrer/) (@matematrix)
+* [Auf Deutsch](http://discordtel.readthedocs.io/en/latest/Deutscher%20DiscordTel%20Guide/) (@matematrix)
 
 ## License
 The [Github repo for source code](https://github.com/austinhuang0131/discordtel) can be found here, mainly for reviewing purposes. Rehost this bot privately under Austin Huang's permission is allowed. Read license [here](https://github.com/austinhuang0131/discordtel/blob/master/LICENSE).
