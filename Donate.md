@@ -4,18 +4,23 @@ Wow! How nice to you! I accept several ways to donate:
 **WARNING:** Please do not pay me in Patreon (Even though I have a Patreon page). I will not be able to receive your money.
 
 ## Credit/Debit card
-You can buy credits [here](http://mtl0131.bigcartel.com).
+You can buy credits...
 
-**WARNING:** We price everything in Canadian Dollars. Contact your card company first if you're using a foreign prepaid card.
+* [here](http://mtl0131.bigcartel.com), if your card can pay in Canadian dollars. $1.33 CAD per 1 million credits.
+* or [here](https://selly.gg/p/e14c86fc), if your card can pay in US dollars. $1.24 USD per 1 million credits. Automatic delivery.
 
-**Note:** The "shipping" cost is the [Stripe processing fee](https://stripe.com/ca/pricing).
+**Note:**
+
+1. For the Canadian one, the "shipping" cost is the [Stripe processing fee](https://stripe.com/ca/pricing).
+2. NO PAYPAL. Perfect Money/Credit/Debit/Prepaid accepted. *Or, if you know where I live, a POS terminal will be available on spot. But I suspect no one knows where I live. Hehehehe.*
 
 ## [Interac E-Transfer](http://interac.ca/en/interac-e-transfer-consumer.html) (For Canadians only)
 Send your money to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
 ## Bitcoins / Litecoin / Ethereum
+[Here](https://selly.gg/p/e14c86fc).
 
-If you have Coinbase, read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`). If you don't, contact austinhuang#1076 and an address will be provided.
+If you have Coinbase, you can avoid that high transaction fee! Read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`).
 
 # Using non-money credits
 
