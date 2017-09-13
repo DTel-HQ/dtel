@@ -3,22 +3,31 @@ Wow! How nice to you! I accept several ways to donate:
 # Using real money
 **WARNING:** Please do not pay me in Patreon (Even though I have a Patreon page). I will not be able to receive your money.
 
-## Credit/Debit card
+**NOW ACCEPTS PAYPAL!**
+
+## Automatic Delivery
 You can buy credits...
 
-* [here](http://mtl0131.bigcartel.com), if your card can pay in Canadian dollars. $1.33 CAD per 1 million credits.
-* or [here](https://selly.gg/p/e14c86fc), if your card can pay in US dollars. $1.24 USD per 1 million credits. Automatic delivery.
+* [here](https://selly.gg/p/a600107c), if you can pay in Canadian dollars. $1.33 CAD per 1 million credits. Accept credit/debit/prepaid cards (Choose Stripe as payment method), PayPal, Bitcoins, Litecoins, and Ethereums.
+* or [here](https://selly.gg/p/e14c86fc), if your card can pay in US dollars. $1.2 USD per 1 million credits. In addition to methods above, you can pay in [Perfect Money](http://perfectmoney.is).
 
 **Note:**
 
 1. For the Canadian one, the "shipping" cost is the [Stripe processing fee](https://stripe.com/ca/pricing).
-2. NO PAYPAL. Perfect Money/Credit/Debit/Prepaid accepted. *Or, if you know where I live, a POS terminal will be available on spot. But I suspect no one knows where I live. Hehehehe.*
+2. They’re delivered automatically upon purchase. So no refund.
 
 ## [Interac E-Transfer](http://interac.ca/en/interac-e-transfer-consumer.html) (For Canadians only)
 Send your money to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
-## Bitcoins / Litecoin / Ethereum
-[Here](https://selly.gg/p/e14c86fc).
+## SEPA Debit (In Euros. Europeans only)
+* Bank Name: `Mistertango` (In Lithuania)
+* Bank Address: `Perkūnkiemio 2`
+* Bank Address City: `Vilnius`
+* BIC: `MIEGLT21`
+* DM me for recipient name
+* Number: `LT93 3510 0000 2542 5673`
+
+## Manually pay in Bitcoins / Litecoin / Ethereum
 
 If you have Coinbase, you can avoid that high transaction fee! Read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`).
 
