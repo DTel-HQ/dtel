@@ -7,7 +7,7 @@ Wow! How nice to you! I accept several ways to donate:
 
 ## Automatic Delivery
 
-<img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/bitcoin.png" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/ether.png" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/litecoin.png" alt="" height="55"/>
+<img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/bitcoin.png" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/ether.png" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/litecoin.png" height="55"/>
 
 ![](https://www.discovernetwork.com/downloads/acceptancemarks_extended.jpg)
 
@@ -19,10 +19,10 @@ You can buy credits...
 
 ...and receive them automatically.
 
-**Note:** [Stripe processing fee](https://stripe.com/ca/pricing)/[PayPal processing fee](https://www.paypal.com/ca/webapps/mpp/paypal-fees) of 2.9% + 30 cents Canadian is included in total price. In case of increase of fees, they will be deducted from total credits once I see it.
+**Note:** [Stripe processing fee](https://stripe.com/ca/pricing)/[PayPal processing fee](https://www.paypal.com/ca/webapps/mpp/paypal-fees) of 2.9% + 30 cents Canadian is included in total price. In case of increase of fees, they will be deducted from total credits once I see it. To avoid PayPal fees, use the manual method below (PayPal balance only).
 
 ## [Interac E-Transfer](http://interac.ca/en/interac-e-transfer-consumer.html) (For Canadians only)
-<img src="http://www.rbcroyalbank.com/products/deposits/_assets-custom/images/interac-email-transfer-logo.png" alt="" width="60"/>
+<img src="http://www.rbcroyalbank.com/products/deposits/_assets-custom/images/interac-email-transfer-logo.png" width="100"/>
 
 Send your money to `austinhuang0131@gmail.com`. Don't forget to DM austinhuang#1076 the secret question and response!
 
@@ -34,7 +34,7 @@ No one has ever tried this before. Don't send more than 5 euros. (I’m not enti
 ## Manually pay in PayPal
 ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png)
 
-[Here](http://paypal.me/discordtel). Please write your name and the item you want in details. If you’re paying with a card, transaction fees will be deducted from total credits.
+[Here](http://paypal.me/discordtel). Please write your name and the item you want in details. **No fee if paying from balance.** If you’re paying with a card, transaction fees will be deducted from total credits.
 
 ## Manually pay in Bitcoins / Litecoin / Ethereum
 ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/bitcoin%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/ether%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/litecoin%402x.png)
