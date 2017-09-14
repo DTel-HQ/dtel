@@ -7,7 +7,7 @@ Wow! How nice to you! I accept several ways to donate:
 
 ## Automatic Delivery
 
-<img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/svg/color/bitcoin.svg" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/svg/color/ether.svg" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/svg/color/litecoin.svg" alt="" height="55"/>
+<img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/bitcoin.png" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/ether.png" alt="" height="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/litecoin.png" alt="" height="55"/>
 
 ![](https://www.discovernetwork.com/downloads/acceptancemarks_extended.jpg)
 
