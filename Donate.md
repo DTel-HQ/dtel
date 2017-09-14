@@ -5,15 +5,9 @@ Wow! How nice to you! I accept several ways to donate:
 # Using real money
 **WARNING:** Please do not pay me in Patreon (Even though I have a Patreon page). I will not be able to receive your money.
 
-![](https://stripe.com/img/about/logos/badge/big.svg) ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png)
-
-![](https://www.discovernetwork.com/downloads/acceptancemarks_extended.jpg)
-
-![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/bitcoin%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/ether%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/litecoin%402x.png)
-
 ## Automatic Delivery
 
-![](https://stripe.com/img/about/logos/badge/big.svg) ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png)
+![](https://stripe.com/img/about/logos/badge/big.svg =x55) ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png)
 
 ![](https://www.discovernetwork.com/downloads/acceptancemarks_extended.jpg)
 
