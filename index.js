@@ -339,7 +339,7 @@ bot.on("message", message => {
 				url: "https://discordbots.org/api/bots/224662505157427200/votes?onlyids=true",
 				headers: {
 					"content-type": "application/json",
-					"Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE1NTc4NDkzNzUxMTk3Njk2MCIsImlhdCI6MTQ5MzQxNTYzMn0.LRbCKNTcaGURc5v05ZdSGbtrX9bCO1yFpXqkMJSWxUk"
+					"Authorization": "Censored"
 				}
 			}, function(error, response, body) {
 				if (!error && response.statusCode === 200) {
