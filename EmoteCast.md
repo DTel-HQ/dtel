@@ -9,7 +9,7 @@ Discord and NightDev can't stop us from enjoying emotes! Simply follow these ste
 We're accepting a limited amount of servers into the program. We'll slowly (And it takes negotiations) register emotes from huge emote servers.
 
 ## List
-Ctrl+F to find emote.
+Ctrl+F to find emote. Last updated: Sept 16 2017
 
 | Code | Image |
 | --- | --- |
