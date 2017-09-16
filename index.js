@@ -691,7 +691,7 @@ bot.on("message", message => {
 			fs.writeFileSync("fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		}
 		else if (message.content === ">dial *411") {if (mynumber === undefined) {
-				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that has DiscordTel service.");
+				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
 				return;
 			}
 			message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nFor **checking a special number** (\\*000 or #0000), press `4`.\nTo talk to an operator, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
@@ -856,7 +856,7 @@ bot.on("message", message => {
 			}
 			yourchannel = yourchannel.channel;
 			if (mynumber === undefined) {
-				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that has DiscordTel service.");
+				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
 				return;
 			}
 			if (mynumber.number === "*611") {
@@ -1074,7 +1074,7 @@ bot.on("message", message => {
 			}
 			yourchannel = yourchannel.channel;
 			if (mynumber === undefined) {
-				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that has DiscordTel service.");
+				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
 				return;
 			}
 			if (mynumber.number === "*611") {
