@@ -2,11 +2,30 @@
 Discord and NightDev can't stop us from enjoying emotes! Simply follow these steps to effectively fuck Night:
 
 1. http://bot.discord.io/dtel, make sure you give External Emoji permission
-2. Type emote code in full, e.g. `:wendysA:` (Note: Message should only contain 1 emoji code)
+2. Type emote code in full, e.g. `Literally :wendysA:` (Note: Message should only contain 1 emoji code. We are working to remove such limitation)
 3. ENJOY THE COMMUNISM OF EMOTES
 
 ## How to get your emotes added
-We're accepting a limited amount of servers into the program. We'll slowly (And it takes negotiations) register emotes from huge emote servers.
+You can pay $1/month/server.
+
+However, if you were a BTTV emote server, or your emotes are considered high quality/well-known,  your fee can be waived. Contact austinhuang#1076 for details.
+
+## Comparing to GameWisp
+### Setup
+* **DTel**: Just have the bot!
+* GameWisp: A Twitch channel, a linked GameWisp account, and a bunch of people who are willing to pay you instead of Discord (Nitro) for emotes.
+
+### Cost
+* **DTel**: In most cases, requires a user (Does not need to be server owner) to pay $1/month for all 50 server emotes listed as EC emotes. Everyone can use EC emotes.
+* GameWisp: 5 GameWisp accounts need to pay the server owner’s GameWisp account a said amount (>=$1) monthly. Exceptions possible.
+
+### Eligibility
+* **DTel**: All members of any server that has DiscordTel invited and properly configured.
+* GameWisp: Either subscribers in your server (Who paid $2/month) or everyone in your server. (Note: Since GameWisp subscribers are added to a subscriber role, it is possible to add everyone to that role, but this isn’t actually following its ToS/purpose.)
+
+### Usage
+* DTel: In channels of servers that has DiscordTel invited and properly configured.
+* **GameWisp**: In all server/DM channels that the user have.
 
 ## List
 Ctrl+F to find emote. Last updated: Sept 16 2017
