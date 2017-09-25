@@ -20,7 +20,7 @@ You can use `>balance` in any channel, even the channel doesn't have DTel servic
 Please contact austinhuang#1076.
 
 ## Donation
-$1 CAD = 1 million DiscordTel credits. See [here](http://discordtel.readthedocs.io/en/readthedocs/Donate/) for details.
+$1 CAD = 1 million DiscordTel credits. See [here](http://discordtel.readthedocs.io/en/latest/Donate/) for details.
 
 ## Using your balance
 ### Renew your number
