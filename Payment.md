@@ -2,13 +2,10 @@
 
 ## Earn some balance
 ### Transfer from Discoin system
-Credits earned from [Discoin](http://discoin.sidetrip.xyz)-participating bots can be transferred to DiscordTel. See [here](https://discoin.gitbooks.io/docs) for commands and more details. DiscordTel's currency code is `DTS`.
-
-### Transfer from Mantaro
-Credits earned from [Mantaro](http://polr.me/mantaro) can be transferred to DiscordTel by typing `~>transfer @DiscordTel (Amount)`. Replace `(Amount)` with actual amount.
+Credits earned from [Discoin](http://discoin.sidetrip.xyz)-participating bots can be transferred to DiscordTel. See [here](https://discoin.gitbooks.io/docs/users-guide.html) for commands and more details. DiscordTel's currency code is `DTS`.
 
 ### Daily
-You can type `>daily` every day to get 120 credits.
+You can type `>daily` every day to get 120 credits. If you upvote our bot [here](https://discordbots.org/bot/224662505157427200) you get 60 more credits every day.
 
 ### Lottery!
 You can type `>lottery <Number of entries>` to enter the lottery. The draw is at CEST 01:00 AM everyday. Each entry cost 5 credits and the money goes into the jackpot.
@@ -17,7 +14,7 @@ You can type `>lottery <Number of entries>` to enter the lottery. The draw is at
 You can use `>balance` in any channel, even the channel doesn't have DTel service enabled. The server must have DTel installed.
 
 ### I'm a developer and I want DiscordTel to accept payments from my bot!
-Please contact austinhuang#1076.
+DiscordTel no longer set up individual integrations. Please apply for Discoin [here](https://austinhuang.typeform.com/to/yABBz5).
 
 ## Donation
 $1 CAD = 1 million DiscordTel credits. See [here](http://discordtel.readthedocs.io/en/latest/Donate/) for details.
