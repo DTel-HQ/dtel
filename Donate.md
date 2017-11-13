@@ -5,12 +5,12 @@ Wow! How nice to you! I accept several ways to donate:
 # Using real money
 **WARNING:** Please do not pay me in Patreon (Even though I have a Patreon page). I will not be able to receive your money.
 
+## Current Donation Rate
+1 Canadian Dollar = 50,000 credits.
+
 ## Automatic Delivery
 
 <img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/bitcoin.png" width="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/ether.png" width="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/litecoin.png" width="55"/>
-
-![](https://www.discovernetwork.com/downloads/acceptancemarks_extended.jpg)
-
 
 You can buy credits...
 
@@ -34,7 +34,7 @@ No one has ever tried this before. Don't send more than 5 euros. (I’m not enti
 ## Manually pay in PayPal
 ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png)
 
-[Here](http://paypal.me/discordtel). Please write your name and the item you want in details. **No fee if paying from balance.** If you’re paying with a card, transaction fees will be deducted from total credits.
+[Here](http://paypal.me/discordtel). Please write your name and the item you want in details. Transaction fees will be deducted from total credits.
 
 ## Manually pay in Bitcoins / Litecoin / Ethereum
 ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/bitcoin%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/ether%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/litecoin%402x.png)
@@ -54,6 +54,8 @@ Roblox only allow group payouts as a method of transferring Robux for Non-BC use
 3. Create a group T-shirt and buy it if you don't have funds in your group.
 4. Give austinhuang#1076 the group URL so we can join your group and receive the Robux.
 5. Once joined, send your Robux to austinhuang0131.
+
+200 Robux = 50000 credits.
 
 ## Gift cards
 We accept any digital gift card with a code to be used online (PaySafeCard, Steam, etc.). We also accept Steam game keys. Please contact austinhuang#1076 for details.
