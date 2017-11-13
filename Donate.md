@@ -37,7 +37,7 @@ No one has ever tried this before. Don't send more than 5 euros. (I’m not enti
 [Here](http://paypal.me/discordtel). Please write your name and the item you want in details. Transaction fees will be deducted from total credits.
 
 ## Manually pay in Bitcoins / Litecoin / Ethereum
-![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/bitcoin%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/ether%402x.png) ![](https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/32/color/litecoin%402x.png)
+Available on request.
 
 If you have Coinbase, you can avoid that high transaction fee! Read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`).
 
