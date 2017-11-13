@@ -14,8 +14,8 @@ Wow! How nice to you! I accept several ways to donate:
 
 You can buy credits...
 
-* [here](https://selly.gg/p/a600107c), if you can pay in Canadian dollars. $1.33 CAD per 1 million credits. Accept credit/debit/prepaid cards (Choose Stripe as payment method), PayPal, Bitcoins, Litecoins, and Ethereums.
-* or [here](https://selly.gg/p/e14c86fc), if your card can pay in US dollars. $1.2 USD per 1 million credits. In addition to methods above, you can pay in [Perfect Money](http://perfectmoney.is).
+* [here](https://selly.gg/p/a600107c), if you can pay in Canadian dollars. Accept credit/debit/prepaid cards (Choose Stripe as payment method), PayPal, Bitcoins, Litecoins, and Ethereums.
+* or [here](https://selly.gg/p/e14c86fc), if your card can pay in US dollars. In addition to methods above, you can pay in [Perfect Money](http://perfectmoney.is).
 
 ...and receive them automatically.
 
