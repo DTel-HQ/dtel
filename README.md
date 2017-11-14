@@ -11,6 +11,6 @@ So, ready to *dive* into the world of DiscordTel?
 
 **Read** DiscordTel's documentation by *clicking* this button: --> [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=latest)](http://discordtel.readthedocs.io/en/latest/?badge=readthedocs)
 
-Want the bot for **yourself?** Invite it by *clicking here!* --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot)
+Want the bot for **yourself?** Invite it by *clicking here!* --> [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot)
 
 Join the DiscordTel Headquarters server to **win credits**, *chat*, and *call* other numbers *at ease* by *clicking here:* --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
