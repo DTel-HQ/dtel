@@ -211,7 +211,7 @@ bot.on("message", message => {
 	request("http://facebook.com");
 	// EmoteCast™
 	if (!message.author.bot && message.content.split(':').length === 3 && !blacklisted(message.author.id) && message.guild.member(bot.user.id).hasPermission("USE_EXTERNAL_EMOJIS") && !message.content.startsWith("<") && !message.content.endsWith(">")) {
-		if (messsage.channel.id === '110373943822540800') {
+		if (message.channel.id === '110373943822540800') {
 			return;
 		}
 		var emote = emotes.find(i => {return i.name === message.content.split(':')[1];});
