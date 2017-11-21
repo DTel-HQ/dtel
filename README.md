@@ -16,4 +16,5 @@ Want the bot for **yourself?** Invite it by *clicking here!* --> [![Get the bot]
 Join the DiscordTel Headquarters server to **win credits**, *chat*, and *call* other numbers *at ease* by *clicking here:* --> [![discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB)
 
 Take a look at our stats **here!:**
+
 [![Discord Bots](https://discordbots.org/api/widget/377609965554237453.png)](https://discordbots.org/bot/377609965554237453)
