@@ -2,6 +2,8 @@
 
 [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot) [![Discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e43f2cd06bca428c8389c8f0378a85bc)](https://www.codacy.com/app/austinhuang0131/discordtel?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=austinhuang0131/discordtel&amp;utm_campaign=Badge_Grade)
 
+![](https://discordbots.org/api/widget/377609965554237453.png)
+
 Welcome to DiscordTel's documentation! Use the navigation bar on the left side of your screen to learn more about the bot.
 
 Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/377609965554237453) to give us an upvote! We would greatly appreciate it!
