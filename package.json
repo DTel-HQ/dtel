@@ -13,8 +13,12 @@
   "author": "austinhuang",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^11.0.0",
-    "node-schedule": "^1.2.0",
-    "request": "^2.79.0"
+    "discord.js": "github:hydrabolt/discord.js#stable",
+    "node-opus": "^0.2.7",
+    "node-schedule": "^1.2.5",
+    "request": "^2.82.0",
+    "restify": "^5.2.0",
+    "sodium": "^2.0.1",
+    "uws": "^8.14.1"
   }
 }
