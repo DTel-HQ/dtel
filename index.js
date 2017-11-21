@@ -18,6 +18,13 @@ var request = require("request");
 var schedule = require('node-schedule');
 var cprefix = "0301"; // Current prefix, `>wizard`
 var award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
+<<<<<<< HEAD
+=======
+var ns = 0;
+var nsroles = JSON.parse(fs.readFileSync("./ns.json", "utf8"));
+var nsguild = JSON.parse(fs.readFileSync("./nsg.json", "utf8"));
+const bot = new Discord.Client({ disableEveryone: true });
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 var restify = require('restify');
 var suggestionchannel = "326798754348793857";
 var server = restify.createServer({
@@ -208,18 +215,25 @@ bot.on("ready", () => {
 });
 
 bot.on("message", message => {
+<<<<<<< HEAD
 	request("http://facebook.com");
 	// EmoteCast™
 	if (!message.author.bot && message.content.split(':').length === 3 && !blacklisted(message.author.id) && message.guild.member(bot.user.id).hasPermission("USE_EXTERNAL_EMOJIS") && !message.content.startsWith("<") && !message.content.endsWith(">")) {
 		if (message.channel.id === '110373943822540800') {
 			return;
 		}
+=======
+	if (!message.author.bot && message.content.split(':').length === 3 && !blacklisted(message.author.id) && message.guild.member(bot.user.id).hasPermission("USE_EXTERNAL_EMOJIS") && !message.content.startsWith("<") && !message.content.endsWith(">")) {
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		var emote = emotes.find(i => {return i.name === message.content.split(':')[1];});
 		if (emote !== undefined) {
 			message.channel.send("<:"+emote.name+":"+emote.id+">");
 		}
 	}
+<<<<<<< HEAD
 	// Command Log
+=======
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 	if (message.content.startsWith(">")) {
 		console.log(message.author.username + "#" + message.author.discriminator + " > " + message.content);
 	}
@@ -257,12 +271,178 @@ bot.on("message", message => {
 			var embed=new Discord.RichEmbed();
 			embed.setTitle("<:GoldPhone:320768431307882497> Call Options");
 			embed.setDescription("`>call forward [number]` *Forward call*");
+<<<<<<< HEAD
 		}
 	}*/
 
 	if (!message.author.bot && call === undefined && pbstatus === undefined && !blacklisted(message.author.id)) {
 		if (message.content === ">help") {
 			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("List of Commands").setDescription("For more information, use `>info`.").addField(">dial / >call", "Dial a number using your own number").addField(">rdial / >rcall","Dial a random number in the phonebook (*411)").addField(">wizard","Get yourself a number").addField(">mailbox", "Check your number's mailbox, plus various settings").addField(">suggest", "Suggest something to be added to the bot").addField(">convert", "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)").addField("Other commands about money", "`>daily`, `>lottery`").addField("You probably know how these commands work", "`>invite`, `>info`"));
+=======
+		}
+	}*/
+
+	if (message.author.id === "213466096718708737" && message.channel.id === "329013929890283541") {
+		var user = message.content.split(" ")[0];
+		var amount = message.content.split(" ")[2].replace("**", "").replace("**", "");
+		var aftertax = parseInt(amount);
+		var theaccount = accounts.find(function(item) {
+			return item.user === user;
+		});
+		if (theaccount === undefined) {
+			theaccount = {user:user,balance:aftertax};
+			accounts.push(theaccount);
+			bot.users.get(user).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		}
+		else {
+			accounts.splice(accounts.indexOf(theaccount), 1);
+			theaccount.balance += aftertax;
+			accounts.push(theaccount);
+		}
+		fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+		bot.users.get(theaccount.user).send(":yen: We've received ¥"+aftertax+" from your Mantaro credit account. You now have ¥"+theaccount.balance+".");
+		bot.channels.get("282253502779228160").send(":yen: Received ¥"+aftertax+" from "+bot.users.get(user).username+" ("+user+") using Mantaro. The user now has ¥"+theaccount.balance+".");
+		message.delete();
+	}
+	else if (message.author.id === "213271889760616449" && message.channel.id === "329013929890283541") {
+		var user = message.content.split(" ")[3];
+		var amount = message.content.split(" ")[6];
+		var aftertax = parseInt(amount);
+		var theaccount = accounts.find(function(item) {
+			return item.user === user;
+		});
+		if (theaccount === undefined) {
+			theaccount = {user:user,balance:aftertax};
+			accounts.push(theaccount);
+			bot.users.get(user).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		}
+		else {
+			accounts.splice(accounts.indexOf(theaccount), 1);
+			theaccount.balance += aftertax;
+			accounts.push(theaccount);
+		}
+		fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+		bot.users.get(theaccount.user).send(":yen: We've received ¥"+aftertax+" from your DueUtil DUT account. You now have ¥"+theaccount.balance+".");
+		bot.channels.get("282253502779228160").send(":yen: Received ¥"+aftertax+" from "+bot.users.get(user).username+" ("+user+") using DueUtil. The user now has ¥"+theaccount.balance+".");
+		message.delete();
+	}
+	else if (message.author.id === "227171028072267778" && message.channel.id === "329013929890283541") {
+		var user = message.content.split(" ")[0];
+		var amount = message.content.split(" ")[2];
+		var aftertax = parseInt(amount) * 3/4;
+		var theaccount = accounts.find(function(item) {
+			return item.user === user;
+		});
+		if (theaccount === undefined) {
+			theaccount = {user:user,balance:aftertax};
+			accounts.push(theaccount);
+			bot.users.get(user).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		}
+		else {
+			accounts.splice(accounts.indexOf(theaccount), 1);
+			theaccount.balance += aftertax;
+			accounts.push(theaccount);
+		}
+		fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+		bot.users.get(theaccount.user).send(":yen: We've received ¥"+aftertax+" (After 25% tax) from your Hifumi credit account. You now have ¥"+theaccount.balance+".");
+		bot.channels.get("282253502779228160").send(":yen: Received ¥"+aftertax+" from "+bot.users.get(user).username+" ("+user+") using Hifumi. The user now has ¥"+theaccount.balance+".");
+		message.delete();
+	}
+	else if (!message.author.bot && myorder !== undefined && myorder.status === 0 && message.channel.id === myorder.channel) {
+		message.channel.fetchMessage(myorder.message).then(msg => {
+			if (message.content === "0") {
+				if (account === undefined) {
+					account = {user:message.author.id,balance:0};
+					accounts.push(account);
+					fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+					message.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+				}
+				if (myorder.order === "") {
+					orders.splice(orders.indexOf(myorder), 1);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					msg.delete();
+					message.reply("Order aborted!");
+				}
+				else if (account.balance < myorder.price) {
+					orders.splice(orders.indexOf(myorder), 1);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					msg.delete();
+					message.reply("The bill is "+myorder.price+" DTel credits. You have insufficient fund, so your order is aborted.");
+				}
+				else {
+					orders.splice(orders.indexOf(myorder), 1);
+					myorder.status = 1;
+					message.delete();
+					orders.push(myorder);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					msg.edit("", {embed:new Discord.RichEmbed().setColor("#6F4E37").setTitle("Here's your bill!").setDescription("Type `yes` to confirm and pay the money, or type `no` to cancel.").addField("Your order", myorder.ordertext).addField("Note", myorder.note).addField("Price", myorder.price + " DTel credits")});
+				}
+			}
+			else if (message.content.startsWith(">note")) {
+				if (myorder.note !== undefined) {
+					message.reply("You already added a note!");
+					message.delete();
+				}
+				else {
+					orders.splice(orders.indexOf(myorder), 1);
+					myorder.note = message.content.replace(">note ", "");
+					message.delete();
+					orders.push(myorder);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					msg.edit("", {embed:new Discord.RichEmbed().setColor("#6F4E37").setTitle("Note added.").setDescription("You may try again.").addField("Your order", myorder.ordertext).addField("Note", myorder.note).addField("Price", myorder.price + " DTel credits").setFooter("Type 0 to finish your order.")});
+				}
+			}
+			else {
+				var menuitem = menu.find(function(item){
+					return item.id === parseInt(message.content);
+				});
+				if (menuitem !== undefined) {
+					orders.splice(orders.indexOf(myorder), 1);
+					myorder.order += message.content + " ";
+					myorder.ordertext += menuitem.name + ", ";
+					myorder.price += menuitem.price;
+					message.delete();
+					orders.push(myorder);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					msg.edit("", {embed:new Discord.RichEmbed().setColor("#6F4E37").setTitle("1 " + menuitem.name + " is successfully added to your order!").addField("Your order", myorder.ordertext).addField("Note", myorder.note).addField("Price", myorder.price + " DTel credits").setFooter("You can `>note <Your note>` to further customize your order.\nType 0 to finish your order.")});
+				}
+				else {
+					message.delete();
+					msg.edit("", {embed:new Discord.RichEmbed().setColor("#C11B17").setTitle("Error: Item \""+message.content+"\" does not exist!").setDescription("You may try again.").addField("Your order", myorder.ordertext).addField("Note", myorder.note).addField("Price", myorder.price + " DTel credits").setFooter("You can `>note <Your note>` to further customize your order.\nType 0 to finish your order.")});
+				}
+			}
+		});
+	}
+	else if (!message.author.bot && myorder !== undefined && myorder.status === 1 && message.channel.id === myorder.channel) {
+		message.channel.fetchMessage(myorder.message).then(msg => {
+			if (message.content === "yes") {
+				accounts.splice(accounts.indexOf(account), 1);
+				account.balance -= myorder.price;
+				accounts.push(account);
+				message.reply("You've paid your order. Your order has been transferred to our kitchen and will be prepared shortly. In the meantime, you can check your order by typing `>order`.");
+				orders.splice(orders.indexOf(myorder), 1);
+				myorder.status = 2;
+				bot.channels.get("310144658552651777").sendEmbed(new Discord.RichEmbed().setColor("#F1C40F").setTitle("New order!").addField("User", message.author.username + "#" + message.author.discriminator).addField("Content", myorder.ordertext).addField("Note", myorder.note)).then(newmsg => {
+					myorder.message = newmsg.id;
+					myorder.user = message.author.id;
+					newmsg.react("\u2705");
+					newmsg.react("\u274c");
+					orders.push(myorder);
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+					bot.channels.get("282253502779228160").send(":fork_and_knife: User "+message.author.username+" paid ¥"+myorder.price+" for a Catering Service order. The user now have ¥"+account.balance+".");
+				});
+			}
+			else if (message.content === "no") {
+				orders.splice(orders.indexOf(myorder), 1);
+				fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+				message.reply("Order aborted!");
+			}
+		});
+	}
+    else if (!message.author.bot && call === undefined && pbstatus === undefined && message.author.id !== "224662505157427200" && !blacklisted(message.author.id)) {
+		if (message.content === ">help") {
+			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("List of Commands").setDescription("For more information, use `>info`.").addField(">dial / >call", "Dial a number using your own number").addField(">pdial / >pcall", "Dial a number using public payphone, 8 credits per message").addField(">rdial / >rcall","Dial a random number in the phonebook (*411)").addField(">wizard","Get yourself a number").addField(">order","Get some virtual food").addField(">mailbox", "Check your number's mailbox, plus various settings").addField(">suggest", "Suggest something to be added to the bot").addField(">convert", "Convert your credits into other bot currency via [Discoin](http://discoin.sidetrip.xyz)").addField("Other commands about money", "`>daily`, `>lottery`").addField("You probably know how these commands work", "`>invite`, `>info`"));
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		}
 		else if(message.content.startsWith(">suggest")) {
 			if (message.content.split(" ")[1] === undefined){
@@ -270,7 +450,7 @@ bot.on("message", message => {
 				return;
 			}
 			message.reply("Thanks for your suggestion!");
-	    	bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
+	    		bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
 		}
 		// Lottery may be removed in the future
 		else if (message.content.startsWith(">lottery") && message.author.id !== "104559847118225408") {
@@ -346,6 +526,7 @@ bot.on("message", message => {
 				message.reply("You already claimed your daily credits!");
 				return;
 			}
+<<<<<<< HEAD
 			
 			request("https://discordbots.org/api/bots/377609965554237453/votes?onlyids=true",{
 				headers: {
@@ -354,6 +535,16 @@ bot.on("message", message => {
 				}
 			}, function(error, response, body) {
 				if (response.statusCode === 200) {
+=======
+			request.get({
+				url: "https://discordbots.org/api/bots/224662505157427200/votes?onlyids=true",
+				headers: {
+					"content-type": "application/json",
+					"Authorization": "Censored"
+				}
+			}, function(error, response, body) {
+				if (!error && response.statusCode === 200) {
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 					body = JSON.parse(body);
 					if (body.indexOf(message.author.id) > -1) {
 						message.reply("Here's your 180 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).");
@@ -370,7 +561,11 @@ bot.on("message", message => {
 						fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 					}
 					else {
+<<<<<<< HEAD
 						message.reply("Here's your 120 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).\n*Get 60 more credits daily by upvoting at <https://discordbots.org/bot/377609965554237453>!*");
+=======
+						message.reply("Here's your 120 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).\n*Get 60 more credits daily by upvoting at <https://discordbots.org/bot/224662505157427200>!*");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 						dailies.push(message.author.id);
 						fs.writeFileSync("./daily.json", JSON.stringify(dailies), "utf8");
 						if (account !== undefined) {
@@ -383,16 +578,78 @@ bot.on("message", message => {
 						bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 120 daily credits!");
 						fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 					}
+<<<<<<< HEAD
 				} else {
 					message.reply("Cannot connect to DiscordBots.org. Try again.");}
+=======
+				}
+				else {message.reply("Cannot connect to DiscordBots.org. Try again.");}
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 			});
 		}
 		else if (message.content === ">info") {
 		    message.reply("check your DM!");
+<<<<<<< HEAD
 		    message.author.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("DTel Information").setDescription("For command help, use `>help`.").addField("Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.").addField("Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. There are some numbers with a prefix of `0900`, which are DM numbers (numbers you can assign in a direct message with the bot), and they act the same as `03XX` numbers, which can *also* have the same digits as `03XX` numbers. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called by `>pdial`.").addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.\nAfter recharging, dial `*233` or `>balance` to check balance.").addField("Phonebook and setup your registry","`>dial *411`").addField("Invite the bot", "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997\n\"Embed Links\" is optional, depends on whether you want the bot to show embed links in calls or not.").addField("Official Server", "https://discord.gg/RN7pxrB").addField("Detailed Guide", "http://discordtel.rtfd.io"));
 		}
 		else if (message.content === ">invite") {
 			message.reply("https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284 All perms are essential");
+=======
+		    message.author.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("DTel Information").setDescription("For command help, use `>help`.").addField("Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.").addField("Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. There are some numbers with a prefix of `0900`, which are DM numbers (numbers you can assign in a direct message with the bot), and they act the same as `03XX` numbers, which can *also* have the same digits as `03XX` numbers. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called by `>pdial`.").addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.\nAfter recharging, dial `*233` or `>balance` to check balance.").addField("Phonebook and setup your registry","`>dial *411`").addField("Invite the bot", "https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997\n\"Embed Links\" is optional, depends on whether you want the bot to show embed links in calls or not.").addField("Official Server", "https://discord.gg/RN7pxrB").addField("Detailed Guide", "http://discordtel.rtfd.io"));
+		}
+		else if (message.content === ">invite") {
+			message.reply("https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=67169284 All perms are essential");
+		}
+		else if (message.content === ">order") {
+			if (myorder !== undefined) {
+				var status = "Awaiting claim";
+				if (myorder.status === 3) {status = "Started preparation";}
+				if (myorder.ordertext === undefined) {
+					message.reply("I FUCKED UP! Please go straight to `>order delete` and report to austinhuang#1076 indicating everything you did in your order.");
+					return;
+				}
+				message.channel.sendEmbed(new Discord.RichEmbed().setColor("#6F4E37").setTitle("You already have an order!").setDescription("You can review your current order, or `>order delete` to withdraw.").addField("Your order", myorder.ordertext).addField("Status", status));
+			}
+			else if (!message.guild) {
+				message.reply("ORDER IN A SERVER!!!!!!");
+			}
+			else if (!message.guild.member(bot.user.id).hasPermission("CREATE_INSTANT_INVITE")) {
+				message.reply("Please inform your admin to grant DiscordTel `Create Instant Invite` permission, as it is needed for the delivery.");
+			}
+			else {
+				message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Discord Catering Service").setColor("#6F4E37").setDescription("This service is provided by [DiscordTel HQ](https://discord.gg/RN7pxrB) and [Café 0131+](https://discord.gg/013MqTM1p1qm52VcZ).").addField("To order...", "A copy of menu is available in your DM.\nTo order, simply enter the menu code.\nYou can `>note <Your note>` to further customize your order.\nAfter finishing your order, type `0` to place the order and pay the bill.").addField("Your order", "<Empty>").addField("Note", "undefined").setFooter("Reminder: Longer your order is, longer the time to fulfill your order.")).then(msg => {
+					orders.push({message: msg.id, user: message.author.id, status: 0, order: "", ordertext: "", price: 0, channel: message.channel.id});
+					fs.writeFileSync("./orders.json", JSON.stringify(orders), "utf8");
+				});
+				var menumsg = new Discord.RichEmbed().setTitle("Our Menu");
+				menu.forEach(function(item) {
+					menumsg = menumsg.addField(item.name, "Order it by entering `" + item.id + "`\nPrice: " + item.price + " DTel credits");
+				});
+				message.author.sendEmbed(menumsg);
+			}
+		}
+		else if (message.content === ">order delete") {
+			if (myorder !== undefined) {
+				if (myorder.message !== undefined) {
+					bot.channels.get("310144658552651777").fetchMessage(myorder.message).then(msg => {if (msg !== undefined) {msg.delete();}});
+				}
+				if (myorder.status > 1) {
+					accounts.splice(accounts.indexOf(account), 1);
+					account.balance += myorder.price;
+					accounts.push(account);
+					fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+					bot.channels.get("282253502779228160").send("User "+message.author.username+" withdrew their order. ¥"+myorder.price+" is refunded.");
+				}
+				orders.splice(orders.indexOf(myorder), 1);
+				message.reply("Order deleted. Money, if applicable, has been refunded to your account.");
+			}
+			else {
+				message.reply("No order found.");
+			}
+		}
+		else if (message.content.startsWith(">order")) {
+			message.reply("Please ONLY type `>order`. You'll get to choose from our menu.");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		}
 		else if (message.content.startsWith(">assign") && support(message.author.id)) {
 			if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
@@ -417,14 +674,22 @@ bot.on("message", message => {
 		}
 		else if (message.content.startsWith(">deassign") && support(message.author.id)) {
 			if (message.content.split(" ")[1] === undefined) {
+<<<<<<< HEAD
 			    message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
+=======
+			    message.reply("WHAT THE F\\*\\*\\* ARE YOU DOING?");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 			    return;
 			}
 			var number = numbers.find(function(item) {
 				return item.number === message.content.split(" ")[1];
 			});
 			if (number === undefined) {
+<<<<<<< HEAD
 			    message.reply("<:oliy:327462998610280448> **This number never even existed *in the first place*.**");
+=======
+			    message.reply("WHAT THE F\\*\\*\\* ARE YOU DOING? THIS NUMBER IS **NOT EVEN REGISTERRED**, YOU BAKA!");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 				return;
 			}
 			var theregistry = phonebook.find(function(item) {
@@ -469,6 +734,7 @@ bot.on("message", message => {
 			}
 
         }
+<<<<<<< HEAD
 		else if (message.content.startsWith(">eregister") && message.author.id === "155784937511976960") {
 				message.guild.emojis.forEach(i => {
 			var dup = emotes.find(d => {return d.name === i.name;});
@@ -498,6 +764,40 @@ bot.on("message", message => {
 		else if (message.content === ">emotes") {
 			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("Global Emotes").setDescription("DiscordTel translates emote codes to actual emotes, therefore bypassing the Global Emotes limitation.").addField("I want my server emotes to be global!", "[Pay me $1 USD per month per server.](http://patreon.com/austinhuang) Exceptions (Fee fully waived) may apply if you were a BTTV server or your emotes are considered high quality/well known.").addField("List of currently available emotes", "[Here](http://discordtel.readthedocs.io/en/latest/EmoteCast/)."));
 		}
+=======
+        else if (message.content.startsWith(">eregister") && message.author.id === "155784937511976960") {
+	        message.guild.emojis.forEach(i => {
+				var dup = emotes.find(d => {return d.name === i.name;});
+				if (dup !== undefined) {
+					message.channel.send(":x: Emote <:"+i.name+":"+i.id+"> is NOT registered due to duplicating name.");
+				}
+				else {
+					message.channel.send(":white_check_mark: Emote <:"+i.name+":"+i.id+"> is registered. `<:"+i.name+":"+i.id+">`");
+					emotes.push({name: i.name, id: i.id});
+					fs.writeFileSync("./emotes.json", JSON.stringify(emotes), "utf8");
+				}
+			});
+        }
+        else if (message.content.startsWith(">eunregister") && message.author.id === "155784937511976960") {
+	        message.guild.emojis.forEach(i => {
+				var dup = emotes.find(d => {return d.name === i.name;});
+				if (dup === undefined) {
+					message.channel.send(":x: Emote <:"+i.name+":"+i.id+"> is NOT registered anyways.");
+				}
+				else {
+					message.channel.send(":white_check_mark: Emote <:"+i.name+":"+i.id+"> is unregistered.");
+					emotes.splice(emotes.indexOf(dup), 1);
+					fs.writeFileSync("./emotes.json", JSON.stringify(emotes), "utf8");
+				}
+			});
+        }
+		else if (message.content === ">eregister") {
+			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("Global Emotes Registration").setDescription("You can use this command to register [EmoteCast™](http://discordtel.readthedocs.io/en/latest/EmoteCast/) slots, which can be used by every server that has DiscordTel.\nIt'll register slots for **all your server emotes**.").addField("Cost", "Emotes that are successfully submitted (That is, not duplicating with names of existing EC emotes) cost 10000 credits each.\nYou can buy credits [here](http://mtl0131.bigcartel.com) or [here](https://selly.gg/p/e14c86fc).").addField("So let's do it?", "If you have enough credits, `>eregister confirm`."));
+		}
+        else if (message.content.startsWith(">eexport")) {
+	        message.channel.sendFile("./emotes.json", "emotes.json", "**Instructions:**\n1. Download the file\n2. Open with text editor and copy its contents\n3. Go to <http://jsonlint.com> and paste the content\nThe content following every `\"name\" :` is the emote name.");
+        }
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		else if (message.content.startsWith(">backdoor") && support(message.author.id)) {
 			if (message.channel.guild) {message.delete();}
 			if (message.content.split(" ")[1] === undefined) {
@@ -571,6 +871,34 @@ bot.on("message", message => {
 			bot.users.get(leaccount.user).send(":money_with_wings: A support member has added ¥"+message.content.split(" ")[2]+" into your account. You now have ¥"+leaccount.balance+".");
 			bot.channels.get("282253502779228160").send(":money_with_wings: Support member "+message.author.username+" added ¥"+message.content.split(" ")[2]+" to <@"+leaccount.user+">.");
 		}
+<<<<<<< HEAD
+=======
+		else if (message.content.startsWith(">discoin") && message.author.id === "155784937511976960") {
+			request({url:"http://discoin.sidetrip.xyz/transactions", headers: {'Authorization': discoin_token}}, function(error, response, body) {
+				if (!error && response.statusCode === 200) {
+					body = JSON.parse(body);
+					body.forEach(t => {
+						var leaccount = accounts.find(function(item) {
+							return item.user === t.user;
+						});
+						if (leaccount === undefined) {
+							leaccount = {user:t.user,balance:t.amount};
+							accounts.push(leaccount);
+							bot.users.get(t.user).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+						}
+						else {
+							accounts.splice(accounts.indexOf(leaccount), 1);
+							leaccount.balance += t.amount;
+							accounts.push(leaccount);
+						}
+						fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+						bot.users.get(t.user).send("You've received ¥"+t.amount+" from Discoin (Transaction ID: "+t.receipt+").\n*You can check all your transactions at <http://discoin.sidetrip.xyz/record>.*");
+						bot.channels.get("282253502779228160").send(":repeat: User __"+bot.users.get(t.user).username+"#"+bot.users.get(t.user).discriminator+"__ ("+t.user+") received ¥"+t.amount+" from Discoin.");
+					});
+				}
+			});
+		}
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		else if (message.content.startsWith(">convert")) {
 			if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
 				message.reply("`>convert <amount> <currency code>`\nCurrency codes have a length of 3 letters. They are available at <http://discoin.sidetrip.xyz/rates>.");
@@ -580,9 +908,15 @@ bot.on("message", message => {
 				message.reply("Insufficient money!");
 				return;
 			}
+<<<<<<< HEAD
 			request.post({url:"http://discoin.sidetrip.xyz/transaction", json: {"user": message.author.id,"amount": parseInt(message.content.split(" ")[1]),"exchangeTo": message.content.split(" ")[2].toUpperCase()}, headers: {'Authorization': process.env.DISCOIN_TOKEN}}, function(error, response, body) {
 				if (error || response.statusCode === 503) {
 					message.reply("API Error (Downtime?)! Please contact The Double-Eyed Bus#6889 or MacDue#4453.");
+=======
+			request.post({url:"http://discoin.sidetrip.xyz/transaction", json: {"user": message.author.id,"amount": parseInt(message.content.split(" ")[1]),"exchangeTo": message.content.split(" ")[2].toUpperCase()}, headers: {'Authorization': discoin_token}}, function(error, response, body) {
+				if (error || response.statusCode === 503) {
+					message.reply("API Error (Downtime?)! Please contact austinhuang#1076 or MacDue#4453.");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 				}
 				else {
 					if (body.status === "approved") {
@@ -641,8 +975,12 @@ bot.on("message", message => {
 			fouroneone.push({user: message.author.id,status: "5"});
 			fs.writeFileSync("fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		}
+<<<<<<< HEAD
 		else if (message.content === ">dial *411" || message.content === ">call *411") {
 			if (mynumber === undefined) {
+=======
+		else if (message.content === ">dial *411" || message.content === ">call *411") {if (mynumber === undefined) {
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
 				return;
 			}
@@ -650,6 +988,7 @@ bot.on("message", message => {
 			fouroneone.push({user: message.author.id,status: "0"});
 			fs.writeFileSync("fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		}
+<<<<<<< HEAD
 		else if (message.content.startsWith(">checkbalance") && bot.guilds.get("281815661317980160").roles.find("name", "Customer Support").members.map(m => m.id).indexOf(message.author.id) > -1) {
 			var id = message.content.split(" ")[1]
 			if (message.content.split(" ")[1] === undefined) {
@@ -670,6 +1009,9 @@ bot.on("message", message => {
 			message.channel.send(":checkered_flag: The user **" + bot.users.get(id).username + "** currently has **`" + thouaccount.balance + "` credits.**");
 		}
 		else if (message.content === ">dial *233" || message.content === ">call *233" || message.content === ">balance") {
+=======
+		else if (message.content === ">dial *233" || message.content === ">call *233" || message.content === ">pdial *233" || message.content === ">pcall *233" || message.content === ">balance") {
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 			if (account === undefined) {
 				account = {user:message.author.id,balance:0};
 				accounts.push(account);
@@ -687,10 +1029,50 @@ bot.on("message", message => {
 			fouroneone.splice(fouroneone.indexOf(pbstatus), 1);
 			fouroneone.push({user: message.author.id,status: "4"});
 			fs.writeFileSync("fouroneone.json", JSON.stringify(fouroneone), "utf8");
+<<<<<<< HEAD
 			
 			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("Current Number Status").setDescription("Type the amount of months you want to renew your number.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/").setFooter("To hang up, press `0`."));
 		}
 		else if(message.content.startsWith(">message")){
+=======
+			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("Current Number Status").setDescription("Type the amount of months you want to renew your number.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/").setFooter("To hang up, press `0`."));
+		}else if(message.content.startsWith(">yelp")){
+			var msg=message;
+			var user=bot.users.find(a=>a.toString()===msg.content.split(" ")[1].replace("!",""));
+			if(!msg.content.split(" ")[1]){
+				var embed=new Discord.RichEmbed();
+				embed.setTitle(":star: Rate your delivery man");
+				embed.setDescription("`>yelp [@tag] [0-5 (whole number)]`");
+				msg.channel.send({embed:embed});
+				return;
+			}
+			if(!user){
+				var embed=new Discord.RichEmbed();
+				embed.setTitle(":question: Couldn't find that person");
+				msg.channel.send({embed:embed});
+				return;
+			}
+			if(!bot.guilds.get("281815661317980160").members.get(user.id).roles.filter(r=>r.name==="Restaurant Worker")){
+				var embed=new Discord.RichEmbed();
+				embed.setTitle(":x: This person isn't a worker");
+				msg.channel.send({embed:embed});
+				return;
+			}
+			try {
+				var rating=parseInt(msg.content.split(" ")[2].split(".")[0]);
+			}catch(e){
+				msg.reply("Invalid rating");
+			}
+			if(!ratings[user.id]){ratings[user.id]=[];}
+			ratings[user.id].push({
+				"user":msg.author.id,
+				"rating":rating
+			});
+			fs.writeFile("ratings.json",JSON.stringify(ratings),function(err){
+				msg.reply((err?err:"Success! Saved."));
+			});
+		} else if(message.content.startsWith(">message")){
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 			var msg=message;
 			if(msg.content.split(" ")[1]!==recentCall[msg.channel.id]){
 				msg.reply(":x: You didn't call this number (`"+msg.content.split(" ")[1]+"`)");
@@ -801,6 +1183,82 @@ bot.on("message", message => {
 				embed.setTitle(":mailbox: Mailbox");
 				embed.setDescription((mailbox.messages.length?"**`"+mailbox.messages.length+"` Messages**\n*View them with `>mailbox messages`*\n\n":"")+"**Mailbox Settings**\n"+Object.keys(mailbox.settings).map((a,b)=>a+" `"+mailbox.settings[a]+"`\n*Change the settings with `>mailbox settings`*"));
 				msg.channel.send({embed:embed});
+<<<<<<< HEAD
+=======
+			}
+		}
+		else if (message.content.startsWith(">vcall")){
+			var msg=message;
+			if(!msg.member.voiceChannel){
+				var embed=new Discord.RichEmbed();
+				embed.setTitle(":x::speaking_head: You need to be in a voice channel for that");
+				embed.setColor("RED");
+				msg.channel.send({embed:embed});
+				return;
+			}
+			if(!msg.member.voiceChannel.joinable){
+				var embed=new Discord.RichEmbed();
+				embed.setTitle(":x: I don't have permission to join");
+				embed.setColor("RED");
+				msg.channel.send({embed:embed});
+				return;
+			}
+			var channel=msg.member.voiceChannel;
+			channel.join().then(connection => {
+			 	var receiver = connection.createReceiver();
+				//receiver.createOpusStream(msg.author)
+				bot.channels.get("348880023719247873").join().then((c)=>{
+					receiver.on('opus',function(a,b){
+						var rate = 48000;
+						var encoder = new opus.OpusEncoder( rate );
+
+						// Encode and decode.
+						var frame_size = rate/100;
+						var encoded = encoder.encode( b, frame_size );
+						var decoded = encoder.decode( encoded, frame_size );
+
+						// or create streams
+						var channels = 2;
+						var opusEncodeStream = new opus.Encoder(rate, channels, frame_size);
+						var opusDecodeStream = new opus.Decoder(rate, channels, frame_size);
+						c.playOpusStream(opusDecodeStream);
+					})
+				})
+
+			});
+		}
+		else if (message.content.startsWith(">dial") || message.content.startsWith(">call")){
+			var yournumber = message.content.split(" ").slice(1).join(" ");
+			callNumber(yournumber,message,call,mynumber);
+		}
+		else if (message.content.startsWith(">pdial") || message.content.startsWith(">pcall")){
+			var yournumber = message.content.split(" ").slice(1).join(" ");
+			if (yournumber === "") {
+				message.reply("Damn son, you forgot the number! `>dial <Number>`");
+				return;
+			}
+			yournumber = message.content.split(" ")[1].replace(/a/ig, "2").replace(/b/ig, "2").replace(/c/ig, "2").replace(/d/ig, "3").replace(/e/ig, "3").replace(/f/ig, "3").replace(/g/ig, "4").replace(/h/ig, "4").replace(/i/ig, "4").replace(/j/ig, "5").replace(/k/ig, "5").replace(/l/ig, "5").replace(/m/ig, "6").replace(/n/ig, "6").replace(/o/ig, "6").replace(/p/ig, "7").replace(/q/ig, "7").replace(/r/ig, "7").replace(/s/ig, "7").replace(/t/ig, "8").replace(/u/ig, "8").replace(/v/ig, "8").replace(/w/ig, "9").replace(/x/ig, "9").replace(/y/ig, "9").replace(/z/ig, "9").replace(/-/ig, "").replace("(", "").replace(")", "").replace(" ", "");
+			if (yournumber === "*611") {
+				yournumber ="08006113835";
+			}
+			if (yournumber === "911") {
+				yournumber ="08000000911";
+			}
+			else if (isNaN(yournumber)) {
+				message.reply("Please input the number you want to dial in a number-only format.\n:x: `>dial (0300) 000-0000`\n:white_check_mark: `>dial 03000000000`");
+				return;
+			}
+			var yourchannel = numbers.find(function(item) {
+				return item.number === yournumber;
+			});
+			if (yourchannel === undefined) {
+				message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
+				return;
+			}
+			if (yourchannel.year < new Date().getFullYear()) {
+				message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+				return;
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 			}
 		}
 		/*else if (message.content.startsWith(">vcall")){
@@ -842,10 +1300,76 @@ bot.on("message", message => {
 				})
 
 			});
+<<<<<<< HEAD
 		}*/
 		else if (message.content.startsWith(">dial") || message.content.startsWith(">call")){
 			var yournumber = message.content.split(" ").slice(1).join(" ");
 			callNumber(yournumber,message,call,mynumber);
+=======
+			if (yourcall !== undefined) {
+				message.reply(":x: Dialing error: The number you dialed is already in a call.");
+				return;
+			}
+			if (yournumber === "08006113835") {
+				bot.channels.get(yourchannel).send("@here");
+			}
+			message.reply(":telephone: Dialing... You are able to `>hangup`.");
+			var call = {from:{channel:mychannel,number:mynumber},to:{channel:yourchannel,number:yournumber},status:false};
+			if (!yournumber.startsWith("08")) {
+				call.charge = true;
+				if (account === undefined) {
+					account = {user:message.author.id,balance:0};
+					accounts.push(account);
+					fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+					message.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+				}
+				if (account.balance === 0) {
+					message.reply(":x: Account error: You have used up your credit. Get some more. Dial `*233` for more information.");
+					return;
+				}
+				else if (account.balance < 80) {
+					message.reply(":warning: You have less than 80 credits ("+account.balance+" credits to be exact), which means you can only send less than 10 messages.");
+				}
+				else {
+					message.reply(":information_source: We'll charge 8 credits for every message sent in this call. You have "+account.balance+" credits, currently.");
+				}
+			}
+			call.time = Date.now();
+			calls.push(call);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			bot.channels.get("282253502779228160").send(":telephone: A **payphone** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
+			bot.channels.get(yourchannel).send("You received a call from `("+mynumber.split("")[0]+mynumber.split("")[1]+mynumber.split("")[2]+mynumber.split("")[3]+") "+mynumber.split("")[4]+mynumber.split("")[5]+mynumber.split("")[6]+"-"+mynumber.split("")[7]+mynumber.split("")[8]+mynumber.split("")[9]+mynumber.split("")[10]+"`. Type `>pickup` or `>hangup`.");
+			setTimeout(function(){
+				call = calls.find(function(item) {
+					return item.from.channel === message.channel.id;
+				});
+				if (call !== undefined) {
+					call = calls.find(function(item) {
+						if (	item.from.channel === message.channel.id) {
+							return item.from.channel === message.channel.id;
+						}
+						else if (item.to.channel === message.channel.id) {
+							return item.to.channel === message.channel.id;
+						}
+						else {return undefined;}
+					});
+					if (call.status === false && call.time <= Date.now() - 120000) {
+						bot.channels.get("282253502779228160").send(":telephone: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is expired.");
+						message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
+						calls.splice(calls.indexOf(call), 1);
+						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
+							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+							return;
+						}
+						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
+						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+						recentCall[call.from.channel]=call.to.number;
+					}
+				}
+			},120000);
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		}
 		else if (message.content === ">rdial" || message.content === ">rcall"){
 			var yournumber = phonebook[Math.floor(Math.random() * phonebook.length)].number;
@@ -1042,7 +1566,11 @@ bot.on("message", message => {
 			fs.writeFileSync("fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		}
 		else if (pbstatus.status === "0" && message.content === "4") {
+<<<<<<< HEAD
 			message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Special Numbers").setDescription("Here are the special numbers. Troll-calling any of these numbers can result in termination of service.").addField("*233", "Account balance and number renewing (Auto)").addField("*411", "The Phonebook (Auto)").addField("*611", "Customer Support").setFooter("To go back to 411 menu, press `9`. To quit 411, press `0`."));
+=======
+			message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Special Numbers").setDescription("Here are the special numbers. Troll-calling any of these numbers can result in termination of service.").addField("*233", "Account balance and number renewing (Auto)").addField("*411", "The Phonebook (Auto)").addField("*611", "Customer Support").addField("911", "Discord Bans (Read http://discordtel.readthedocs.io/en/latest/Calling%20911/ for details)").setFooter("To go back to 411 menu, press `9`. To quit 411, press `0`."));
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		}
 		else if (pbstatus.status === "4" && mynumber !== undefined) {
 			if (isNaN(message.content)) {
@@ -1423,9 +1951,15 @@ bot.on("messageReactionAdd", (reaction, user) => {
 });*/
 bot.on("guildCreate", guild => {
 	if (guild.defaultChannel === undefined) {
+<<<<<<< HEAD
 		guild.owner.send("(Discord removed default channel. So no matter who added DiscordTel, I'm sending this to the owner of server `"+guild.name+"`, which is you!)\n\nHello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
 	} else {
 		guild.defaultChannel.send("Hello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
+=======
+		guild.owner.send("(Discord removed default channel. So no matter who added DiscordTel, I'm sending this to the owner of server `"+guild.name+"`, which is you!)\n\nHello guys, It's **DiscordTel**, the telephone/order solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
+	} else {
+		guild.defaultChannel.send("Hello guys, It's **DiscordTel**, the telephone/order solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 	}
 	bot.channels.get("282253502779228160").send(":inbox_tray: Joined "+guild.name+" ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
 	bot.user.setPresence({game:{name:bot.guilds.array().length+" servers | >help", type: 0}});
@@ -1454,6 +1988,7 @@ bot.on("guildCreate", guild => {
 		console.log("DBotsList returns success: "+ body);
 	});
 });
+<<<<<<< HEAD
 bot.on("guildDelete", guild => {
 	bot.channels.get("282253502779228160").send(":outbox_tray: Left "+guild.name+" ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
 	bot.user.setPresence({game:{name:bot.guilds.array().length+" servers | >help", type: 0}});
@@ -1482,6 +2017,8 @@ bot.on("guildDelete", guild => {
 		console.log("DBotsList returns success: "+ body);
 	});
 });
+=======
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 var jackpot = schedule.scheduleJob({hour: 0, minute: 0, second: 0}, function() {
 	dailies = [];
 	fs.writeFileSync("./daily.json", JSON.stringify(dailies), "utf8");
@@ -1534,7 +2071,11 @@ var wage = schedule.scheduleJob({date: 1, hour: 0, minute: 0, second: 0}, functi
 	});
 });
 setInterval(function(){
+<<<<<<< HEAD
 	request({url:"http://discoin.sidetrip.xyz/transactions", headers: {'Authorization': process.env.DISCOIN_TOKEN}}, function(error, response, body) {
+=======
+	request({url:"http://discoin.sidetrip.xyz/transactions", headers: {'Authorization': discoin_token}}, function(error, response, body) {
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
 		if (!error && response.statusCode === 200) {
 			body = JSON.parse(body);
 			body.forEach(t => {
@@ -1558,4 +2099,8 @@ setInterval(function(){
 		}
 	});
 }, 60000);
+<<<<<<< HEAD
 bot.login(process.env.DISCORD_TOKEN);
+=======
+bot.login("Censored");
+>>>>>>> 2407c596adbb7d64b4bac6168921cb9e899a34dc
