@@ -135,6 +135,14 @@ function callNumber(yournumber,message,call,mynumber){
 		message.reply(":x: **Public guilds are unable to call *611 (the Customer Support hotline).")
 		return;
 	}
+	else if (yournumber === "*611" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "380097608250556434") {
+		message.reply("please fuck off thanks");
+		return;
+	}
+	else if (yournumber === "*611" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "383311783819214858") {
+		message.reply("lol stop i can just keep doing this all day");
+		return;
+	}
 
 	message.reply(":telephone: Dialing... You are able to `>hangup`.");
 	bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
@@ -305,7 +313,7 @@ bot.on("message", message => {
 			message.reply("You've bought "+entries+" entries. The current jackpot is ¥"+award.amount+".");
 			bot.channels.get("282253502779228160").send(":tickets: User "+message.author.username+" paid ¥"+entries * 5+" for the lottery. The user now have ¥"+account.balance+".");
 		}
-    else if (message.content.startsWith(">daily") && bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Manager")) {
+    else if (message.content.startsWith(">daily") && bot.guilds.get('281815661317980160').members.get(message.author.id) && bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Manager")) {
 				 if (dailies.indexOf(message.author.id) > -1) {
 							 message.reply("You already claimed your daily credits!");
 							 return;
@@ -389,10 +397,10 @@ bot.on("message", message => {
 		}
 		else if (message.content === ">info") {
 		    message.reply("check your DM!");
-		    message.author.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("DTel Information").setDescription("For command help, use `>help`.").addField("Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.").addField("Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. There are some numbers with a prefix of `0900`, which are DM numbers (numbers you can assign in a direct message with the bot), and they act the same as `03XX` numbers, which can *also* have the same digits as `03XX` numbers. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called by `>pdial`.").addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.\nAfter recharging, dial `*233` or `>balance` to check balance.").addField("Phonebook and setup your registry","`>dial *411`").addField("Invite the bot", "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997\n\"Embed Links\" is optional, depends on whether you want the bot to show embed links in calls or not.").addField("Official Server", "https://discord.gg/RN7pxrB").addField("Detailed Guide", "http://discordtel.rtfd.io"));
+		    message.author.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("📖 DiscordTel Information").setDescription("For command help, use `>help`.").addField("📞 Getting a number", "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.").addField("✏ Number prefixes", "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. There are some numbers with a prefix of `0900`, which are DM numbers (numbers you can assign in a direct message with the bot), and they act the same as `03XX` numbers, which can *also* have the same digits as `03XX` numbers. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses. Numbers starting with `05XX` are public payphones which can be only called from by `>pdial`.").addField("💰 Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.\nAfter recharging, dial `*233` or `>balance` to check balance.").addField("🔖 Phonebook","To use the phonebook, first dial `*411`. You can check for an existing **11-digit** number by pressing `1`, search the phonebook with **keywords** by pressing `2`. adding/editing/removing your number **from** the phonebook by pressing `3`, and checking a special number by pressing `4`.").addField("📥 Invite the bot", "**Click this button:** [<:dl:382568980218511361>](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284)").addField("📌 Official Server", "https://discord.gg/RN7pxrB").addField("📕 Detailed Guide", "https://discordtel.austinhuang.me/en/latest"));
 		}
 		else if (message.content === ">invite") {
-			message.reply("https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284 All perms are essential");
+			message.reply("https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284\n**All permissions are essential.**");
 		}
 		else if (message.content.startsWith(">assign") && support(message.author.id)) {
 			if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
