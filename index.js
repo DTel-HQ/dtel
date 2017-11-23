@@ -1066,10 +1066,18 @@ bot.on("message", message => {
 			accounts.push(account);
 			fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 			numbers.splice(numbers.indexOf(mynumber), 1);
-			mynumber.month += new Date().getMonth() + 1 + parseInt(message.content);
-			mynumber.year += new Date().getFullYear();
+			if (mynumber.year < new Date().getFullYear()) {
+				mynumber.month += new Date().getMonth() + 1 + parseInt(message.content);
+				mynumber.year = new Date().getFullYear();
+			}
+			else if (mynumber.year === new Date().getFullYear() && mynumber.month <= new Date().getMonth() + 1) {
+				mynumber.month = new Date().getMonth() + 1 + parseInt(message.content);
+			}
+			else {
+				mynumber.month += parseInt(message.content);
+			}
 			if (mynumber.month > 12) {
-				mynumber.month -= mynumber.month + 1 - 12;
+				mynumber.month = mynumber.month - 12;
 				mynumber.year += 1;
 			}
 			numbers.push(mynumber);
