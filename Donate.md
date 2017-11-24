@@ -8,7 +8,7 @@ Wow! How nice to you! I accept several ways to donate:
 ## Current Donation Rate
 1 Canadian Dollar = 50,000 credits.
 
-## Automatic Delivery
+## Method 1
 
 <img src="https://stripe.com/img/about/logos/badge/big.svg" height="55"> ![](https://www.paypalobjects.com/webstatic/mktg/logo/bdg_now_accepting_pp_2line_w.png) <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/bitcoin.png" width="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/ether.png" width="55"/> <img src="https://raw.githubusercontent.com/cjdowner/cryptocurrency-icons/master/128/color/litecoin.png" width="55"/>
 
@@ -20,6 +20,14 @@ You can buy credits...
 ...and receive them automatically.
 
 **Note:** [Stripe processing fee](https://stripe.com/ca/pricing)/[PayPal processing fee](https://www.paypal.com/ca/webapps/mpp/paypal-fees) of 2.9% + 30 cents Canadian is included in total price. In case of increase of fees, they will be deducted from total credits once I see it. To avoid PayPal fees, use the manual method below (PayPal balance only).
+
+## Method 2
+[Pay by Payssion](https://www.payssion.com/checkout/5942a5d395ee858f). Supports local debit methods like:
+
+* AliPay
+* QIWI
+* WeChat Pay
+* Yandex.Money
 
 ## [Interac E-Transfer](http://interac.ca/en/interac-e-transfer-consumer.html) (For Canadians only)
 <img src="http://www.rbcroyalbank.com/products/deposits/_assets-custom/images/interac-email-transfer-logo.png" width="100"/>
@@ -40,9 +48,6 @@ No one has ever tried this before. Don't send more than 5 euros. (I’m not enti
 Available on request.
 
 If you have Coinbase, you can avoid that high transaction fee! Read [this article](https://support.coinbase.com/customer/portal/articles/971437) for details (`austinhuang0131@icloud.com`).
-
-## WeChat Pay (Mainly for Chinese)
-Not actually WeChat Pay, but anyways...Add `austinhuangcenter` as a friend (Should have a bus avatar) and write your Discord username as friend request. Then, send a **transfer**. (**DON'T SEND ME A RED PACKET.** I hate guessing how much you have.)
 
 # Using non-money credits
 
