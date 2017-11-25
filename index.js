@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const util = require("util");
-const bot = new Discord.Client({fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"], disableEveryone: true});
+const bot = new Discord.Client({fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"]});
 require('dotenv').config();
 var numbers = JSON.parse(fs.readFileSync("./numbers.json", "utf8"));
 var dailies = JSON.parse(fs.readFileSync("./daily.json", "utf8"));
@@ -126,21 +126,9 @@ function callNumber(yournumber,message,call,mynumber){
 	}
 	else if (yournumber === "08006113835") {
 		bot.channels.get(yourchannel).send("@here");
-	} 
-	else if (yournumber === "08006113835" && message.channel.guild.id === "373104158703616000") {
-		message.reply("I saved you peeps from getting blacklisted eggs dee :^) ask keanu if u need help with the actual bot");
-		return;
 	}
 	else if (yournumber === "*611" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "267810707574226964" || yournumber === "08006113835" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "267810707574226964") {
 		message.reply(":x: **Public guilds are unable to call *611 (the Customer Support hotline).")
-		return;
-	}
-	else if (yournumber === "*611" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "380097608250556434") {
-		message.reply("please fuck off thanks");
-		return;
-	}
-	else if (yournumber === "*611" && message.channel.guild !== undefined && message.channel !== undefined && message.channel.guild.id === "383311783819214858") {
-		message.reply("lol stop i can just keep doing this all day");
 		return;
 	}
 
