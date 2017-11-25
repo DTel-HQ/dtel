@@ -676,8 +676,8 @@ bot.on("message", message => {
 				message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("Current Account Status").addField("Your Balance",account.balance).addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
 				return;
 			}
-			else if (account.balance < 2000) {
-				message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Current Number Status").setDescription("You have less than 2000 credits which means you cannot renew at all.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
+			else if (account.balance < 500) {
+				message.channel.sendEmbed(new Discord.RichEmbed().setTitle("Current Number Status").setDescription("You have less than 500 credits which means you cannot renew at all.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
 				return;
 			}
 			fouroneone.splice(fouroneone.indexOf(pbstatus), 1);
@@ -1049,7 +1049,7 @@ bot.on("message", message => {
 				message.channel.sendEmbed(new Discord.RichEmbed().setColor("#FF0000").setTitle("HEY! HOW DARE YOU! LUCKILY I PATCHED IT SO YOU CAN NEVER GET FREE CREDITS OUT OF MY OWN POCKET! HAHAHA!!!!!!").setDescription("Type the amount of months you want to renew your number.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.").setFooter("To hang up, press `0`."));
 				return;
 			}
-			if (account.balance < parseInt(message.content) * 2000) {
+			if (account.balance < parseInt(message.content) * 500) {
 				message.channel.sendEmbed(new Discord.RichEmbed().setColor("#FF0000").setTitle("Error: Insufficient fund!").setDescription("Type the amount of months you want to renew your number.").addField("Number", mynumber.number).addField("Expiration",mynumber.year+"/"+mynumber.month).addField("Your Balance",account.balance).addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.").setFooter("To hang up, press `0`."));
 				return;
 			}
@@ -1058,7 +1058,7 @@ bot.on("message", message => {
 				return;
 			}
 			accounts.splice(accounts.indexOf(account), 1);
-			account.balance -= parseInt(message.content) * 2000;
+			account.balance -= parseInt(message.content) * 500;
 			accounts.push(account);
 			fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 			numbers.splice(numbers.indexOf(mynumber), 1);
