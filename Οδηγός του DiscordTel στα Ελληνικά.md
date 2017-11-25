@@ -1,5 +1,5 @@
 # Καλωσήρθατε στο DiscordTel!
-This guide will assist newcomers in setting up DTel for their server!
+Αυτός ο οδηγός προορίζεται για αρχαρίους που θέλουν να χρησιμοποιήσουν το DisordTel στους σέρβερ τους.
 
 ## 1. Προσκαλώντας το μπότ => Διαλέγοντας το κανάλι του
 Κάνε κλίκ [εδώ](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) για να προσκαλέσετε το μπότ στον επιθυμητό σς σέρβερ, και μετά διαλέξτε/δημιουργήστε το κανάλι όπου θα λειτουργέι.
@@ -9,19 +9,19 @@ This guide will assist newcomers in setting up DTel for their server!
 
 Όλοι οι αριθμοί είναι 11ψήφιοι. π.χ. `0301XXXXXXX`.Μπορείτε να καλέσε αριθμούς με γράμματα, για αυτό **εαν** θέλετε να βρείτε τον 7ψηφία λέξη σε νούμερα, (π.χ. 0301-ELLINAS), μπορείτε να χρησιμοποιήσετε [αυτό το εργαλείο](http://word2number.com).
 
-Discord servers with 100+ members that provide a service may be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
+Σέρβερς με 100+ μέλη που παρέχουν κάποια υπηρεσία μπορείνα είναι "δικαιούχοι" `0800`/`0844` προθεμάτων. Επικοινωνήστε μαζί μας [εδώ](https://discord.gg/uw2dfYf).
 
-## 3. Running the wizard
+## 3. Εκτελώντας τον οδηγό έναρξης
 `>wizard`
 
-Run this command in the channel you chose earlier.
+Τρέξτε αυτή την εντολή στο κανάλι που επιλέξατε προηγουμένως.
 
-The bot will send a message like this (will be similar, not the same): 
+To bot θα στείλει ενα μήνυμα **παρόμοιο** (οχι ίδιο): 
 ![registernumber](http://i.imgur.com/zMKAkPr.png)
 
-If you want a mobile number (prefix `0900`), run `>wizard` in a DM (Direct Message) with the DTel bot.
+Εαν θέλετε έναν κινητό αριθμό (πρόθεση `0900`), τρέτξτε το `>wizard` στα DM (Direct Message) με το DTel bot.
 
-The wizard is only available to register `0301` and `0900` numbers. For all other numbers, please refer to calling Customer Support: `>pdial *611`.
+Ο οδηγός ειναι διαθέσιμος μόνο για την καταχώρηση αριθμών `0301` και `0900`. Για τους υπόλοιπους αριθμούς, αναφερθείτε στην Εξυπηρέτηστ Πελατών: `>pdial *611`.
 
 ## 4. Setting up the mailbox
 `>mailbox`
