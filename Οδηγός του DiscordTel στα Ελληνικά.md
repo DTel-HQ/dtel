@@ -1,13 +1,13 @@
-# Welcome to DiscordTel!
+# Καλωσήρθατε στο DiscordTel!
 This guide will assist newcomers in setting up DTel for their server!
 
-## 1. Inviting the bot => Choosing its channel
-Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose/create a channel to register your number in.
+## 1. Προσκαλώντας το μπότ => Διαλέγοντας το κανάλι του
+Κάνε κλίκ [εδώ](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) για να προσκαλέσετε το μπότ στον επιθυμητό σς σέρβερ, και μετά διαλέξτε/δημιουργήστε το κανάλι όπου θα λειτουργέι.
 
 ## 2. Choosing a number
-The current normal prefix is `0301` for a channel number or `0900` for a mobile number. Before proceeding, please decide your preferred number.
+Το πρόθεμα για τους αριθμούς είναι `0301` για έναν αριθμό καναλιού ή `0900` for a mobile number. Before proceeding, please decide your preferred number.
 
-All numbers are 11-digits. e.g. `0301XXXXXXX`. You can dial numbers using letters in place of the digits, so **if** you want to convert your 7-digit word to digits (e.g. 0301-LETTERS), you can use [this tool](http://word2number.com).
+Όλοι οι αριθμοί είναι 11ψήφιοι. π.χ. `0301XXXXXXX`.Μπορείτε να καλέσε αριθμούς με γράμματα, για αυτό **εαν** θέλετε να βρείτε τον 7ψηφία λέξη σε νούμερα, (π.χ. 0301-ELLINAS), μπορείτε να χρησιμοποιήσετε [αυτό το εργαλείο](http://word2number.com).
 
 Discord servers with 100+ members that provide a service may be eligible for `0800`/`0844` prefixes. Contact austinhuang in the support server.
 
