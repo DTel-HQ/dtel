@@ -9,7 +9,7 @@ Die allgemeine aktuelle Vorwahl ist `0301` für eine Channelnummer oder `0900` f
 
 Alle Nummern haben 11 Stellen. z.B. `0301XXXXXXX`. Du kannst Nummern mithile von Buchstaben anstatt von Zahlen wählen, **wenn** du ein 7-stelliges Wort in eine Nummer umwandeln möchtest (z.B. 0301-BCHSTBN) (für Buchstaben), kannst du [dieses Tool](http://word2number.com) benutzen.
 
-Discord-Server mit 100+ Mitgliedern, die einen Service anbieten, können eine `0800`/`0844`-Vorwahl beantragen. Kontaktiere dafür @austinhuang#1076 auf dem Support-Server.
+Discord-Server mit 100+ Mitgliedern, die einen Service anbieten, können eine `0800`/`0844`-Vorwahl beantragen. Kontaktiere dafür @The Double-Eyed Bus#6889 auf dem Support-Server.
 
 ## 3. Den Setup-Wizard ausführen
 `>wizard`
