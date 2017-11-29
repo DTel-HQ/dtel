@@ -13,7 +13,7 @@ Todos los números son de 11 dígitos. e.g. `0301XXXXXXX`. Puede marcar números
 7 dígitos a dígitos (e.g. 0301-LETTERS), puedes usar [esta herramienta](http://word2number.com).
 
 Los servidores de discordia con más de 100 miembros que proporcionan un servicio pueden ser elegibles para `0800/0844` prefijos.
-Contacto austinhuang#1076 en el servidor de soporte.
+Contacto The Double-Eyed Bus#6889 en el servidor de soporte.
 
 ## 3. Ejecución del asistente.
 `>wizard`
