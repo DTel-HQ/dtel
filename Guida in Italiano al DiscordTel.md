@@ -7,7 +7,7 @@ Cliccate [qui](https://discordapp.com/oauth2/authorize?client_id=224662505157427
 ## 2. Scegliere un numero
 Tutti i numeri normali hanno un prefisso di `0301` per un numero di canale, mentre `0900` per i numeri in messaggio diretto.  
 Tutti i numeri sono di 11 cifre (prefisso incluso), per esempio `0301XXXXXXX` è un numero DiscordTel valido. Si possono digitare i numeri utilizzando lettere invece dei numeri, quindi se si vuole incorporare le lettere nel proprio numero, si può usare [questo](http://word2number.com) sito.  
-I server Discord con in eccesso di 100 membri e che provvedono un servizio possono richiedere un numero prefissato con `0800` o `0844`. Contattate `austinhuang#1076` su Discord per ulteriori informazioni.  
+I server Discord con in eccesso di 100 membri e che provvedono un servizio possono richiedere un numero prefissato con `0800` o `0844`. Contattate `The Double-Eyed Bus#6889` su Discord per ulteriori informazioni.  
 
 ## 3. Impostare DiscordTel per l'uso
 Utilizzate il comando `>wizard` nel canale dove DiscordTel deve operare. Assicuratevi che il bot abbia permessi per leggere e mandare i messaggi di testo nel canale.  
