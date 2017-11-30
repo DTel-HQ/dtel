@@ -64,16 +64,16 @@ function callNumber(yournumber,message,call,mynumber){
 		return;
 	}
 	if (yourchannel.year < new Date().getFullYear()) {
-		message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+		message.reply(":x: Dialing error: The number you've dialed has expired. Contact the number owner to renew it.");
 		return;
 	}
 	else if (yourchannel.year === new Date().getFullYear() && yourchannel.month <= new Date().getMonth()) {
-		message.reply(":x: Dialing error: The number you've dialed is expired. Contact the number owner to renew it.");
+		message.reply(":x: Dialing error: The number you've dialed has expired. Contact the number owner to renew it.");
 		return;
 	}
 	yourchannel = yourchannel.channel;
 	if (mynumber === undefined) {
-		message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
+		message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service.");
 		return;
 	}
 	if (mynumber.number === "*611") {
@@ -94,7 +94,7 @@ function callNumber(yournumber,message,call,mynumber){
 	mynumber = mynumber.number;
 	var mychannel = message.channel.id;
 	if (bot.channels.get(yourchannel) === undefined) {
-		message.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the bot, or it left the corresponding server. Please dial `*611` for further instructions.");
+		message.reply(":x: Dialing error: The number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please try randomly dialling again, as alot of servers have been lost due to DiscordTel's deletion by Discord.");
 		return;
 	}
 	var yourcall = calls.find(function(item) {
@@ -853,12 +853,12 @@ bot.on("message", message => {
 				return item.number === yournumber;
 			});
 			if (yourchannel === undefined) {
-				message.reply(":x: Dialing error: Number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please dial `*611` to get the number removed.");
+				message.reply(":x: Dialing error: The number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please try randomly dialling again, as alot of servers have been lost due to DiscordTel's deletion by Discord.");
 				return;
 			}
 			yourchannel = yourchannel.channel;
 			if (mynumber === undefined) {
-				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from channels that have DiscordTel service.");
+				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service.");
 				return;
 			}
 			if (mynumber.number === "*611") {
@@ -871,7 +871,7 @@ bot.on("message", message => {
 			mynumber = mynumber.number;
 			var mychannel = message.channel.id;
 			if (bot.channels.get(yourchannel) === undefined) {
-				message.reply(":x: Dialing error: Number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please dial `*611` to get the number removed.");
+				message.reply(":x: Dialing error: The number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please try randomly dialling again, as alot of servers have been lost due to DiscordTel's deletion by Discord.");
 				return;
 			}
 			var yourcall = calls.find(function(item) {
