@@ -94,7 +94,7 @@ function callNumber(yournumber,message,call,mynumber){
 	mynumber = mynumber.number;
 	var mychannel = message.channel.id;
 	if (bot.channels.get(yourchannel) === undefined) {
-		message.reply(":x: Dialing error: The number `"+yournumber+"` is unavailable to dial. It could be deleted or hidden from the bot. Please try randomly dialling again, as alot of servers have been lost due to DiscordTel's deletion by Discord.");
+		message.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the bot, or it left the corresponding server. Please dial `*611` for further instructions.");
 		return;
 	}
 	var yourcall = calls.find(function(item) {
