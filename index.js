@@ -256,7 +256,7 @@ bot.on("message", message => {
 		}
 	}*/
 
-	if (!message.author.bot && !message.author.id === "377609965554237453" && call === undefined && pbstatus === undefined && !blacklisted(message.author.id)) {
+	if (!message.author.bot && call === undefined && pbstatus === undefined && !blacklisted(message.author.id)) {
 		if (message.content === ">help") {
 			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("List of Commands").setDescription("For more information, use `>info`.").addField(">dial / >call", "Dial a number using your own number").addField(">rdial / >rcall","Dial a random number in the phonebook (*411)").addField(">wizard","Get yourself a number").addField(">mailbox", "Check your number's mailbox, plus various settings").addField(">suggest", "Suggest something to be added to the bot").addField(">convert", "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)").addField("Other commands about money", "`>daily`, `>lottery`").addField("You probably know how these commands work", "`>invite`, `>info`"));
 		}
@@ -929,7 +929,7 @@ bot.on("message", message => {
 			},120000);
 		}
 	}
-	else if (!message.author.bot && !message.author.id === "377609965554237453" && pbstatus !== undefined && !blacklisted(message.author.id) && pbstatus.user === message.author.id) {
+	else if (!message.author.bot && pbstatus !== undefined && !blacklisted(message.author.id) && pbstatus.user === message.author.id) {
 		if (message.content === "0" ) {
 			if (pbstatus.status === "9" || pbstatus.status === "10" || pbstatus.status === "11" || pbstatus.status === "12") {
 				nsguild.splice(nsguild.indexOf(nssetup), 1);
@@ -1137,7 +1137,7 @@ bot.on("message", message => {
 			}
 		}
 	}
-	else if (!message.author.bot && !message.author.id === "377609965554237453" && call !== undefined && !message.author.bot && !blacklisted(message.author.id)) {
+	else if (!message.author.bot && call !== undefined && !message.author.bot && !blacklisted(message.author.id)) {
 		if (call.status === false && message.content === ">pickup" && message.channel.id === call.to.channel) {
 			message.reply(":white_check_mark: You pick up the call.");
 			if (bot.channels.get(call.from.channel) === undefined) {
