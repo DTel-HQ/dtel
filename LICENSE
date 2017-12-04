@@ -1,33 +1,53 @@
-#==========================#
-# Simply:                  #
-# 1. No public rehosts     #
-# 2. Anything else is fine #
-#==========================#
+#======================#
+#      DISCORDTEL      #
+#       LICENSE        #
+#======================#
 
-GENERAL CHATBOT LICENSE
-Written by austinhuang
+## The owners of DiscordTel reserve the right to change the license without prior warning.
 
-* THIS SOFTWARE:
-Discord Telephone System, Copyright (c) 2017 Austin Huang
+LICENSE REVISION 1
+  4 December 2017
 
-This is free software, and you are welcome to redistribute it under
-certain conditions:
-1. Anyone is free to copy, modify, publish, use, compile, or
-distribute this software, either in source code form or as a compiled
-binary, if the purpose of this action remains private and
-non-commercial.
-2. If permission is granted by the owner of this software, the permission
-holder is free to copy, modify, publish, use, compile, sell, or
-distribute this software, either in source code form or as a compiled
-binary, for any purpose, commercial or non-commercial, and by any
-means according to the permission.
-3. The above copyright notice and this permission notice shall be 
-included in all copies or substantial portions of this software.
+Bot coded by Austin Huang
+Original license written by Austin Huang; revision 1 written by Tempestius
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+=================================================================
+=================================================================
+
+### Discord Telephone System
+### The sole owner of DiscordTel is Austin Huang, thereinafter referred to as "the Owner".
+
+
+## Open-source Usage
+
+
+# DiscordTel, thereinafter referred to as "the Bot", is bound to a restricted open-source. 
+Users, thereinafter referred to as "the User", may obtain and edit the Bot's code providing 
+the User's conduct follows the restrictions listed below.
+
+  1. The User is able to copy, modify, publish, use, or compile the Bot and its code 
+  either in its original source code or as a compiled binary, providing the purpose of 
+  obtaining the modified or original code remains for private and non-commercial use only.
+  2. The User is unable to publicly redistribute or sell the Bot or its code without 
+  explicit permission from the sole Owner of the Bot. The Owner reserves the right to
+  revoke any or all of the permissions listed earlier should the User with these
+  permissions use the permissions in a way deemed unacceptable by the Owner.
+  3. The Bot and/or its code may not be rebranded under a name other than DiscordTel for
+  public use providing the permissions in Restriction 2 have been given exclusively by the 
+  Owner, unless the Owner has given explicit permission to publicly rehost the Bot under a
+  different name.
+  
+ 
+## Private Hosting
+
+# The Bot may only be hosted privately for purposes deemed acceptable by the Owner.  
+
+
+THE BOT AND ITS CODE IS PROVIDED ONLY AS IT IS, 
+NOT INCLUDING A WARRANTY OF ANY KIND, EXPRESSED OR IMPLIED, 
+INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, 
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO 
+EVENT SHALL THE AUTHORS OF THE CODE OR LICENSE BE LIABLE FOR 
+ANY CLAIMS, DAMAGES OR OTHER LIABILITIES, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE BOT OR THE USE OR
+OTHER DEALINGS IN THE BOT.
