@@ -18,4 +18,4 @@ Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/377609
 * [Auf Deutsch](http://discordtel.readthedocs.io/en/latest/Deutscher%20DiscordTel%20Guide/) (@matematrix)
 
 ## License
-The [Github repo for source code](https://github.com/austinhuang0131/discordtel) can be found here, mainly for reviewing purposes. Rehost this bot privately under Austin Huang's permission is allowed. Read license [here](https://github.com/austinhuang0131/discordtel/blob/master/LICENSE).
+The [Github repo with the source code](https://github.com/austinhuang0131/discordtel) can be found here, mainly for reviewing purposes. Rehosting this bot privately under Austin Huang's permission is allowed. Read the license [here](https://github.com/austinhuang0131/discordtel/blob/master/LICENSE).
