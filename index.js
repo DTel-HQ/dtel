@@ -395,7 +395,7 @@ bot.on("message", message => {
 			    message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
 			    return;
 			}
-			if (isNaN(message.content.split(" ")[2]) || !message.content.split(" ")[2].startsWith("0301") || !message.content.split(" ")[2].startsWith("0800") || !message.content.split(" ")[2].startsWith("0844")) {
+			if (isNaN(message.content.split(" ")[2]) || !message.content.split(" ")[2].startsWith("0301") && !message.content.split(" ")[2].startsWith("0800") && !message.content.split(" ")[2].startsWith("0844")) {
 			    message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?**");
 			    return;
 			}
@@ -1428,11 +1428,12 @@ bot.on("messageReactionAdd", (reaction, user) => {
 });*/
 bot.on("guildCreate", guild => {
 	if (guild.defaultChannel === undefined) {
-		guild.owner.send("(Discord removed default channel. So no matter who added DiscordTel, I'm sending this to the owner of server `"+guild.name+"`, which is you!)\n\nHello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
+		guild.owner.send("(Discord removed the default channel. So no matter who added DiscordTel, I'm sending this to the owner of server `"+guild.name+"`, which is you!)\n\nHello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
 	} else {
 		guild.defaultChannel.send("Hello guys, It's **DiscordTel**, the telephone solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
 	}
-	bot.channels.get("282253502779228160").send(":inbox_tray: Joined "+guild.name+" ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
+	// doesn't work..? var cleanedguildname = guild.name.replace(new RegExp("/discord.gg/*[abc][0-9]", "g"), "**Invite link censored**").replace(new RegExp("http://*[abc][0-9]", "g"), "**Link censored**");
+	bot.channels.get("282253502779228160").send(":inbox_tray: Joined `"+guild.name+"` ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
 	bot.user.setPresence({game:{name:bot.guilds.array().length+" servers | >help", type: 0}});
 		request.post({
 		url: "https://bots.discord.pw/api/bots/377609965554237453/stats",
@@ -1460,7 +1461,8 @@ bot.on("guildCreate", guild => {
 	});
 });
 bot.on("guildDelete", guild => {
-	bot.channels.get("282253502779228160").send(":outbox_tray: Left "+guild.name+" ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
+	// doesn't work..? var cleanedguildname = guild.name.replace(new RegExp("/discord.gg/*[abc][0-9]", "g"), "**Invite link censored**").replace(new RegExp("http://*[abc][0-9]", "g"), "**Link censored**");
+	bot.channels.get("282253502779228160").send(":outbox_tray: Left `"+guild.name+"` ("+guild.id+"). Currently in "+bot.guilds.array().length+" servers.");
 	bot.user.setPresence({game:{name:bot.guilds.array().length+" servers | >help", type: 0}});
 		request.post({
 		url: "https://bots.discord.pw/api/bots/377609965554237453/stats",
