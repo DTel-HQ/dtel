@@ -17,4 +17,4 @@ Join the DiscordTel Headquarters server to **win credits**, *chat*, and *call* o
 
 Take a look at our stats **here!:**
 
-[![Discord Bots](https://discordbots.org/api/widget/377609965554237453.png)](https://discordbots.org/bot/377609965554237453)
+[![Discord Bots](https://discordbots.org/api/widget/377609965554237453.png)](https://discordbots.org/bot/discordtel)
