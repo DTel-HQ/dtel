@@ -2,7 +2,7 @@
 Questa guida assisterà le persone ad installare DiscordTel nel proprio server Discord.
 
 ## 1. Invita il bot => scegli il canale
-Cliccate [qui](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) per aggiungere il bot al proprio server, poi scegli o crea un canale dedicato alla funzionalità DiscordTel.
+Cliccate [qui](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997) per aggiungere il bot al proprio server, poi scegli o crea un canale dedicato alla funzionalità DiscordTel.
 
 ## 2. Scegliere un numero
 Tutti i numeri normali hanno un prefisso di `0301` per un numero di canale, mentre `0900` per i numeri in messaggio diretto.  
