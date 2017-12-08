@@ -2,7 +2,7 @@
 Ce guide aidera les nouveaux arrivants à configurer DiscordTel pour leur serveur!
 
 ## 1. Inviter le bot => Choisir ses chaîne
-Cliquez [ici](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) Ajouter le bot À votre serveur, Ensuite, choisissez / créez une chaîne pour registrer votre numéro.
+Cliquez [ici](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997) Ajouter le bot À votre serveur, Ensuite, choisissez / créez une chaîne pour registrer votre numéro.
 
 ## 2. Choisir un numéro
 Le préfixe normal actuel est `0301` pour un numéro de canal ou `0900` pour un numéro de mobile. Avant de procéder, Décidez de votre numéro préféré.
