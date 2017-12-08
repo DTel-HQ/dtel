@@ -2,7 +2,7 @@
 本指南将引导初心者在服务器上设置DiscordTel！
 
 ## 1. 邀请机器人并选择频道
-点[此](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997)邀请机器人，之后选择或创建一个频道用来使用您的DTel号码。
+点[此](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997)邀请机器人，之后选择或创建一个频道用来使用您的DTel号码。
 
 ## 2. 选择一个号码
 目前，服务器频道号码的前缀为`0301`，私聊号码的前缀为`0900`。号码为11位，如`0301XXXXXXX`。拨打（`>dial`）时可使用字母代替数字，所以如果您需要在号码中包括字母（如`0301-LETTERS`），请使用[这个工具](http://word2number.com/)。
