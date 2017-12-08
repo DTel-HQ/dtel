@@ -2,7 +2,7 @@
 Esta guía le ayudará los recién llegados en la creación Dtel para su servidor!
 
 ## 1. Invitando al bot => Elegir su canal
-Hacer clic [aquí](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) para agregar el bot a su 
+Hacer clic [aquí](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997) para agregar el bot a su 
 servidor, entonces escoge/crear un canal para registro su número.
 
 ## 2. Elegir un número
