@@ -8,7 +8,7 @@ Welcome to DiscordTel's documentation! Use the navigation bar on the left side o
 
 Enjoy the bot? Help us out by clicking [here](https://discordbots.org/bot/377609965554237453) to give us an upvote! We would greatly appreciate it!
 
-**How do I set up DiscordTel for my own server?** Click [here](http://discordtel.readthedocs.io/en/readthedocs/DiscordTel%20Guide/) to get started!
+**How do I set up DiscordTel for my own server?** Click [here](http://discordtel.readthedocs.io/en/latest/DiscordTel%20Guide/) to get started!
 
 ## Start-up Guide in multiple languages
 * [En Français](http://discordtel.readthedocs.io/en/latest/Guide%20de%20DiscordTel%20en%20Fran%C3%A7ais/)
