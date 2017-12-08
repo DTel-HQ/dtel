@@ -2,7 +2,7 @@
 This guide will assist newcomers in setting up DTel for their server!
 
 ## 1. Inviting the bot => Choosing its channel
-Click [here](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) to add the bot to your server, then choose/create a channel to register your number in.
+Click [here](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997) to add the bot to your server, then choose/create a channel to register your number in.
 
 ## 2. Choosing a number
 The current normal prefix is `0301` for a channel number or `0900` for a mobile number. Before proceeding, please decide your preferred number.
