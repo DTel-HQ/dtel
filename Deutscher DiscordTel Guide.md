@@ -2,7 +2,7 @@
 Diese Anleitung soll Neulingen dabei helfen, DiscordTel für einen Server aufzusetzen und einzustellen.
 
 ## 1. Den Bot einladen => Den Channel aussuchen
-Klicke [hier](https://discordapp.com/oauth2/authorize?client_id=224662505157427200&scope=bot&permissions=84997) um den Bot auf den Server einzuladen, dann wähle oder erstelle einen Channel, dem die DiscordTel-Nummer hinzugefügt werden soll.
+Klicke [hier](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=84997) um den Bot auf den Server einzuladen, dann wähle oder erstelle einen Channel, dem die DiscordTel-Nummer hinzugefügt werden soll.
 
 ## 2. Eine Nummer auswählen
 Die allgemeine aktuelle Vorwahl ist `0301` für eine Channelnummer oder `0900` für eine Mobilnummer. Bevor du weitermachst, suche dir eine Nummer aus.
