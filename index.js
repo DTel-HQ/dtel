@@ -266,7 +266,10 @@ bot.on("message", message => {
 				return;
 			}
 			message.reply("Thanks for your suggestion!");
-	    	bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
+	    	bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```").then((m)=>{
+			m.react("✅");
+			m.react("❌");
+		});
 		}
 		// Lottery may be removed in the future
 		else if (message.content.startsWith(">lottery") && message.author.id !== "104559847118225408") {
