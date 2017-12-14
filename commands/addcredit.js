@@ -1,3 +1,5 @@
+var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+
 exports.run = (bot, message, args) => {
   if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
       message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
