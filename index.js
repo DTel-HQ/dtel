@@ -24,7 +24,7 @@ var server = restify.createServer({
 	name : "Bot HTTP server"
 });
 var ipaddress = process.env.IP || "127.0.0.1";
-var port = process.env.PORT || 41880;
+var port = process.env.PORT || 2000;
 server.listen(port, ipaddress, function () {
 	console.log('%s listening to %s', server.name, server.url);
 });
@@ -43,23 +43,24 @@ fs.readdir("./events/", (err, files) => {
 });
 
 bot.on("message", message => {
-  if (message.author.bot) return;
-  if(message.content.indexOf(">") !== 0) return;
+  if (message.author.bot || blacklisted(message.author.id)) return;
 	if (message.content.startsWith(">")) {
 		console.log(message.author.username + "#" + message.author.discriminator + " > " + message.content);
 	}
 
-  // This is the best way to define args. Trust me.
-  const args = message.content.slice(1).trim().split(/ +/g);
-  const command = args.shift().toLowerCase();
-
-  // The list of if/else is replaced with those simple 2 lines:
-  try {
-    let commandFile = require(`./commands/${command}.js`);
-    commandFile.run(bot, message, args);
-  } catch (err) {
-    console.error(err);
-  }
+	// Call msg?
+	
+	// If the channel is not in a call, is this a command?
+	if (message.content.startsWith(">")) {
+  	const args = message.content.slice(1).trim().split(/ +/g);
+  	const command = args.shift().toLowerCase();
+		try {
+			let commandFile = require(`./commands/${command}.js`);
+			commandFile.run(bot, message, args);
+		} catch (err) {
+			console.error(err);
+		}
+	}
 });
 
 bot.login(process.env.DISCORD_TOKEN);
