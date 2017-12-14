@@ -2,7 +2,7 @@ var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
     support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
 
 exports.run = (bot, message, args) => {
-  if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
+  if (args[1] === undefined || args[2] === undefined) {
       message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
       return;
   }
