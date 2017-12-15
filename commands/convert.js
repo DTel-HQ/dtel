@@ -1,4 +1,5 @@
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
+    request = require("request");
 
 exports.run = (bot, message, args) => {
   var account = accounts.find(item => {return item.user === message.author.id;});
