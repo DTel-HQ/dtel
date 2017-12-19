@@ -1,4 +1,5 @@
-var blacklist = JSON.parse(fs.readFileSync("././blacklist.json", "utf8")),
+var fs = require("fs"),
+    blacklist = JSON.parse(fs.readFileSync("././blacklist.json", "utf8")),
     support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
 
 exports.run = (bot, message, args) => {
