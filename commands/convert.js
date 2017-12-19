@@ -1,4 +1,5 @@
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
+var fs = require("fs"),
+    accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
     request = require("request");
 
 exports.run = (bot, message, args) => {
