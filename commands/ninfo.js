@@ -1,4 +1,5 @@
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
+var fs = require("fs"),
+    accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
     support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
 
 exports.run = (bot, message, args) => {
