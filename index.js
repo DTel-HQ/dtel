@@ -1,29 +1,23 @@
-const Discord = require("discord.js");
-const fs = require("fs");
-const util = require("util");
-const bot = new Discord.Client({fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"]});
+const Discord = require("discord.js"),
+      fs = require("fs"),
+      util = require("util"),
+      bot = new Discord.Client({fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"]}),
+      request = require("request"),
+      schedule = require('node-schedule'),
+      cprefix = "0301",
+			restify = require('restify');
 require('dotenv').config();
-var calls = JSON.parse(fs.readFileSync("./call.json", "utf8"));
-var fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
-var emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8"));
-var support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
-var blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8"));
-var blacklisted = user_id => blacklist.indexOf(user_id) > -1;
-var request = require("request");
-var schedule = require('node-schedule');
-var cprefix = "0301"; // Current prefix, `>wizard`
-var award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
-var restify = require('restify');
-var server = restify.createServer({
-	name : "Bot HTTP server"
-});
-var ipaddress = process.env.IP || "127.0.0.1";
-var port = process.env.PORT || 2000;
-server.listen(port, ipaddress, function () {
+var calls = JSON.parse(fs.readFileSync("./call.json", "utf8")),
+		fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8")),
+		emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8")),
+    blacklist = JSON.arse(fs.readFileSync("./blacklist.json", "utf8")),
+    blacklisted = user_id => blacklist.indexOf(user_id) > -1,
+    award = JSON.parse(fs.readFileSync("./award.json", "utf8")),
+		mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json","utf8")),
+    server = restify.createServer({name: "Bot HTTP server"});
+server.listen(process.env.PORT || 2000, process.env.IP || "127.0.0.1", function () {
 	console.log('%s listening to %s', server.name, server.url);
 });
-
-var mailbox_storage=JSON.parse(fs.readFileSync("./mailbox.json","utf8"));
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
@@ -41,11 +35,264 @@ bot.on("message", message => {
 	if (message.content.startsWith(">")) {
 		console.log(message.author.username + "#" + message.author.discriminator + " > " + message.content);
 	}
-
+	var call = calls.find(function(item) {
+		if (item.from.channel === message.channel.id) {
+			return item.from.channel === message.channel.id;
+		}
+		else if (item.to.channel === message.channel.id) {
+			return item.to.channel === message.channel.id;
+		}
+		else {return undefined;}
+	});
 	// Call msg?
-
+	if (call) {
+		if (call.status === false && message.content === ">pickup" && message.channel.id === call.to.channel) {
+			message.reply(":white_check_mark: You pick up the call.");
+			if (bot.channels.get(call.from.channel) === undefined) {
+				message.reply(":x: The bot has lost permission to send your message to the opposite side, means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
+				calls.splice(calls.indexOf(call), 1);
+				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				return;
+			}
+			bot.channels.get(call.from.channel).send(":heavy_check_mark: The call has been picked up!");
+			calls.splice(calls.indexOf(call), 1);
+			call.status = true;
+			call.time = Date.now();
+			calls.push(call);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			bot.channels.get("282253502779228160").send(":white_check_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is picked up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
+			setTimeout(function(){
+				call = calls.find(function(item) {
+					if (	item.from.channel === message.channel.id) {
+						return item.from.channel === message.channel.id;
+					}
+					else if (item.to.channel === message.channel.id) {
+						return item.to.channel === message.channel.id;
+					}
+					else {return undefined;}
+				});
+				if (call !== undefined) {
+					if (call.time <= Date.now() - 120000) {
+						bot.channels.get(call.from.channel).send(":negative_squared_cross_mark: This call has expired (2 minutes).");
+						calls.splice(calls.indexOf(call), 1);
+						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
+						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
+							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+							return;
+						}
+						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
+						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+						recentCall[call.from.channel]=call.to.number;
+						bot.channels.get("282253502779228160").send(":telephone: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is expired.");
+					}
+				}
+			},120000);
+		}
+		else if (message.content === ">hangup" && message.channel.id === call.to.channel) {
+			message.reply(":negative_squared_cross_mark:  You hung up the call.");
+			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+") on the \"to\" side.");
+			calls.splice(calls.indexOf(call), 1);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			if (bot.channels.get(call.from.channel) !== undefined) {
+				if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
+					bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+					return;
+				}
+				bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
+				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				recentCall[call.from.channel]=call.to.number;
+				/*bot.channels.get(call.from.channel).createCollector(m=>{return (m.content.toLowerCase()==="yes"||m.content.toLowerCase()==="no")&&m.author.id===msg.author.id},{"max":10,"maxMatches":1,"time":20}).on('collect',function(m){
+					switch(m.content){
+						case "yes":
+						msg.reply(JSON.stringify(call.to));
+						bot.channels.get(call.from.channel).send(":question: What message would you like to send?");
+						bot.channels.get(call.from.channel).createCollector(m=>m.author.id===msg.author.id,{"max":10,"maxMatches":1,"time":60}).on('collect',function(m){
+							mailbox_storage.find(a=>a.channel===call.to.channel).messages.push({
+								"id":guid(),
+								"from":call.from
+							})
+						});
+						break;
+						case "no":
+						bot.channels.get(call.from.channel).send("No message will be sent");
+						break;
+						default:
+						bot.channels.get(call.from.channel).send(":question: Error");
+						break;
+					}
+				});*/
+			}
+		}
+		else if (message.content === ">hangup" && message.channel.id === call.from.channel) {
+			message.reply(":negative_squared_cross_mark:  You hung up the call.");
+			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+") on the \"from\" side.");
+			calls.splice(calls.indexOf(call), 1);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			if (bot.channels.get(call.to.channel) !== undefined) {
+				if(!mailbox_storage.find(a=>a.channel===call.from.channel)){
+					bot.channels.get(call.to.channel).send(":x: Call ended; their mailbox isn't setup");
+					return;
+				}
+				bot.channels.get(call.to.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.from.channel).settings.autoreply);
+				bot.channels.get(call.to.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				recentCall[call.to.channel]=call.from.number;
+				/*bot.channels.get(call.to.channel).createCollector(m=>{return (m.content.toLowerCase()==="yes"||m.content.toLowerCase()==="no")&&m.author.id===msg.author.id;},{"max":10,"maxMatches":1,"time":20}).on('collect',function(m){
+					switch(m.content){
+						case "yes":
+						msg.reply(JSON.stringify(call.to));
+						bot.channels.get(call.to.channel).send(":question: What message would you like to send?");
+						bot.channels.get(call.to.channel).createCollector(m=>m.author.id===msg.author.id,{"max":10,"maxMatches":1,"time":60}).on('collect',function(m){
+							mailbox_storage.find(a=>a.channel===call.from.channel).messages.push({
+								"id":guid(),
+								"from":call.to
+							})
+						});
+						break;
+						case "no":
+						bot.channels.get(call.to.channel).send("No message will be sent");
+						break;
+						default:
+						bot.channels.get(call.to.channel).send(":question: Error");
+						break;
+					}
+				});*/
+			}
+		}
+		else if (message.channel.id === call.from.channel && call.status === true) {
+			if (call.to.channel === "281816105289515008" && call.wage === undefined) {
+				call.wage = true;
+			}
+			if (bot.channels.get(call.to.channel) === undefined) {
+				message.reply(":x: The bot has lost permission to send your message to the opposite side, means the bot could be kicked.");
+				calls.splice(calls.indexOf(call), 1);
+				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				return;
+			}
+			if (support(message.author.id)) {
+				bot.channels.get(call.to.channel).send("**" + message.author.tag +"** :arrow_right: <:GoldPhone:320768431307882497> "+message.content);
+				if (message.attachments.size !== 0) {
+					message.attachments.forEach(item => {
+						bot.channels.get(call.to.channel).send("**" + message.author.tag +"** :arrow_right: <:GoldPhone:320768431307882497> "+item.url);
+					});
+				}
+			} else {
+				bot.channels.get(call.to.channel).send("**" + message.author.tag +"** :arrow_right: <:DiscordTelPhone:310817969498226718> "+message.content);
+				if (message.attachments.size !== 0) {
+					message.attachments.forEach(item => {
+						bot.channels.get(call.to.channel).send("**" + message.author.tag +"** :arrow_right: <:DiscordTelPhone:310817969498226718> "+item.url);
+					});
+				}
+			}
+			calls.splice(calls.indexOf(call), 1);
+			call.time = Date.now();
+			calls.push(call);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			if (call.charge === true) {
+				accounts.splice(accounts.indexOf(account), 1);
+				account.balance -= 8;
+				accounts.push(account);
+				if (account.balance === 0) {
+					message.reply(":x: You used up your credits. We're now hanging up your call...");
+					calls.splice(calls.indexOf(call), 1);
+					fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+					bot.channels.get(call.to.channel).send(":x: The caller used up his/her credits. We've hung up your call.");
+					return;
+				}
+			}
+			setTimeout(function(){
+				call = calls.find(function(item) {
+					if (	item.from.channel === message.channel.id) {
+						return item.from.channel === message.channel.id;
+					}
+					else if (item.to.channel === message.channel.id) {
+						return item.to.channel === message.channel.id;
+					}
+					else {return undefined;}
+				});
+				if (call !== undefined) {
+					if (call.time <= Date.now() - 120000) {
+						bot.channels.get("282253502779228160").send(":telephone: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is expired.");
+						bot.channels.get(call.from.channel).send(":negative_squared_cross_mark: This call has expired (2 minutes).");
+						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
+						calls.splice(calls.indexOf(call), 1);
+						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
+							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+							return;
+						}
+						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
+						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+						recentCall[call.from.channel]=call.to.number;
+					}
+				}
+			},120000);
+		}
+		else if (message.channel.id === call.to.channel && call.status === true) {
+			if (call.wage === true && call.to.channel === "281816105289515008") {
+				accounts.splice(accounts.indexOf(account), 1);
+				account.balance += 40;
+				accounts.push(account);
+				message.author.send("You earned a $40 pick-up bonus. Your current balance is $"+account.balance+".");
+				call.wage = false;
+				fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+			}
+			if (bot.channels.get(call.from.channel) === undefined) {
+				message.reply(":x: The bot has lost permission to send your message to the opposite side, means the bot could be kicked.");
+				calls.splice(calls.indexOf(call), 1);
+				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				return;
+			}
+			if (support(message.author.id)) {
+				bot.channels.get(call.from.channel).send("**" + message.author.tag +"** :arrow_right: <:GoldPhone:320768431307882497> "+message.content);
+				if (message.attachments.size !== 0) {
+					message.attachments.forEach(item => {
+						bot.channels.get(call.from.channel).send("**" + message.author.tag +"** :arrow_right: <:GoldPhone:320768431307882497> "+item.url);
+					});
+				}
+			} else {
+				bot.channels.get(call.from.channel).send("**" + message.author.tag +"** :arrow_right: <:DiscordTelPhone:310817969498226718> "+message.content);
+				if (message.attachments.size !== 0) {
+					message.attachments.forEach(item => {
+						bot.channels.get(call.from.channel).send("**" + message.author.tag +"** :arrow_right: <:DiscordTelPhone:310817969498226718> "+item.url);
+					});
+				}
+			}
+			calls.splice(calls.indexOf(call), 1);
+			call.time = Date.now();
+			calls.push(call);
+			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			setTimeout(function(){
+				call = calls.find(function(item) {
+					if (	item.from.channel === message.channel.id) {
+						return item.from.channel === message.channel.id;
+					}
+					else if (item.to.channel === message.channel.id) {
+						return item.to.channel === message.channel.id;
+					}
+					else {return undefined;}
+				});
+				if (call !== undefined) {
+					if (call.time <= Date.now() - 120000) {
+						bot.channels.get("282253502779228160").send(":telephone: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is expired.");
+						bot.channels.get(call.from.channel).send(":negative_squared_cross_mark: This call has expired (2 minutes).");
+						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
+						calls.splice(calls.indexOf(call), 1);
+						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
+							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+							return;
+						}
+						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
+						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+						recentCall[call.from.channel]=call.to.number;
+					}
+				}
+			},120000);
+		}
+	}
 	// If the channel is not in a call, is this a command?
-	if (message.content.startsWith(">")) {
+	else if (message.content.startsWith(">")) {
 	const args = message.content.slice(1).trim().split(/ +/g);
 	const command = args.shift().toLowerCase();
 		try {
