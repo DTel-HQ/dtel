@@ -10,7 +10,7 @@ require('dotenv').config();
 var calls = JSON.parse(fs.readFileSync("./call.json", "utf8")),
     fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8")),
     emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8")),
-    blacklist = JSON.arse(fs.readFileSync("./blacklist.json", "utf8")),
+    blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8")),
     blacklisted = user_id => blacklist.indexOf(user_id) > -1,
     award = JSON.parse(fs.readFileSync("./award.json", "utf8")),
     mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json","utf8")),
