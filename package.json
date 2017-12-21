@@ -11,7 +11,7 @@
     "discord"
   ],
   "author": "austinhuang",
-  "license": "ISC",
+  "license": "BSD-3",
   "dependencies": {
     "discord.js": "github:hydrabolt/discord.js#stable",
     "node-opus": "^0.2.7",
