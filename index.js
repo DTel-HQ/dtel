@@ -47,12 +47,12 @@ bot.on("message", message => {
 	});
 	// Call msg?
 	if (call) {
-		if (call.status === false) {
+		if (!call.status) {
 			const args = message.content.slice(1).trim().split(/ +/g);
 			const command = args.shift().toLowerCase();
 				try {
 					let commandFile = require(`./callcmds/${command}.js`);
-					commandFile.run(bot, message, args);
+					commandFile.run(bot, message, fs, calls, call);
 				} catch (err) {
 					console.error(err);
 				}
@@ -87,18 +87,6 @@ bot.on("message", message => {
 			call.time = Date.now();
 			calls.push(call);
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
-			if (call.charge === true) {
-				accounts.splice(accounts.indexOf(account), 1);
-				account.balance -= 8;
-				accounts.push(account);
-				if (account.balance === 0) {
-					message.reply(":x: You used up your credits. We're now hanging up your call...");
-					calls.splice(calls.indexOf(call), 1);
-					fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
-					bot.channels.get(call.to.channel).send(":x: The caller used up his/her credits. We've hung up your call.");
-					return;
-				}
-			}
 			setTimeout(function(){
 				call = calls.find(function(item) {
 					if (	item.from.channel === message.channel.id) {
@@ -163,7 +151,7 @@ bot.on("message", message => {
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
 			setTimeout(function(){
 				call = calls.find(function(item) {
-					if (	item.from.channel === message.channel.id) {
+					if (item.from.channel === message.channel.id) {
 						return item.from.channel === message.channel.id;
 					}
 					else if (item.to.channel === message.channel.id) {
