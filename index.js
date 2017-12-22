@@ -195,9 +195,9 @@ bot.on("message", message => {
 	// If the channel is not in a call, is this a command?
 	else if (message.content.startsWith(">")) {
 	const args = message.content.slice(1).trim().split(/ +/g);
-	const command = args.shift().toLowerCase();
+	const command = args.shift().toLowerCase().replace("dial", "call");
 		try {
-			let commandFile = require("./commands/"+command.replace("dial", "call")+".js");
+			let commandFile = require(`./callcmds/${command}.js`);
 			commandFile.run(bot, message, args);
 		} catch (err) {
 			console.error(err);
