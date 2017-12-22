@@ -1,7 +1,7 @@
 var fs = require("fs"),
-    accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
+    accounts = JSON.parse(fs.readFileSync("././json/account.json", "utf8")),
     request = require("request"),
-    dailies = JSON.parse(fs.readFileSync("./daily.json", "utf8"));
+    dailies = JSON.parse(fs.readFileSync("././json/daily.json", "utf8"));
 
 exports.run = (bot, message, args) => {
   var account = accounts.find(item => {return item.user === message.author.id;});
@@ -13,7 +13,7 @@ exports.run = (bot, message, args) => {
     if (bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Manager")) {
       daily = 250;
     }
-    else if (bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Custom Support")) {
+    else if (bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Customer Support")) {
       daily = 200;
     }
   }
@@ -45,7 +45,7 @@ exports.run = (bot, message, args) => {
     message.reply("Here's your "+daily+" daily credits! *Tip: You can get 60 more daily credits by upvoting at <https://discordbots.org/bot/377609965554237453>!*");
   }
   dailies.push(message.author.id);
-  fs.writeFileSync("./daily.json", JSON.stringify(dailies), "utf8");
+  fs.writeFileSync("././json/daily.json", JSON.stringify(dailies), "utf8");
   if (account !== undefined) {
         accounts.splice(accounts.indexOf(account), 1);
   } else {
@@ -54,5 +54,5 @@ exports.run = (bot, message, args) => {
   account.balance += daily;
   accounts.push(account);
   bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed "+daily+" daily credits.");
-  fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+  fs.writeFileSync("././json/account.json", JSON.stringify(accounts), "utf8");
 }

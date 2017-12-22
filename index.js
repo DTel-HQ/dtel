@@ -7,15 +7,15 @@ const Discord = require("discord.js"),
       cprefix = "0301",
       restify = require('restify');
 require('dotenv').config();
-var calls = JSON.parse(fs.readFileSync("./call.json", "utf8")),
-    fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8")),
-    emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8")),
-    blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8")),
+var calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8")),
+    fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
+    emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8")),
+    blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8")),
     blacklisted = user_id => blacklist.indexOf(user_id) > -1,
-    gblacklist = JSON.parse(fs.readFileSync("./gblacklist.json", "utf8")),
+    gblacklist = JSON.parse(fs.readFileSync("./json/gblacklist.json", "utf8")),
     gblacklisted = guild_id => gblacklist.indexOf(guild_id) > -1,
-    award = JSON.parse(fs.readFileSync("./award.json", "utf8")),
-    mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json","utf8")),
+    award = JSON.parse(fs.readFileSync("./json/award.json", "utf8")),
+    mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json","utf8")),
     server = restify.createServer({name: "Bot HTTP server"}),
     recentCall = {};
 server.listen(process.env.PORT || 2000, process.env.IP || "127.0.0.1", function () {
@@ -67,7 +67,7 @@ bot.on("message", message => {
 			if (bot.channels.get(call.to.channel) === undefined) {
 				message.reply(":x: The bot has lost permission to send your message to the opposite side, means the bot could be kicked.");
 				calls.splice(calls.indexOf(call), 1);
-				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 				return;
 			}
 			if (support(message.author.id)) {
@@ -88,7 +88,7 @@ bot.on("message", message => {
 			calls.splice(calls.indexOf(call), 1);
 			call.time = Date.now();
 			calls.push(call);
-			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 			setTimeout(function(){
 				call = calls.find(function(item) {
 					if (	item.from.channel === message.channel.id) {
@@ -105,7 +105,7 @@ bot.on("message", message => {
 						bot.channels.get(call.from.channel).send(":negative_squared_cross_mark: This call has expired (2 minutes).");
 						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
 						calls.splice(calls.indexOf(call), 1);
-						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
 							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
 							return;
@@ -124,12 +124,12 @@ bot.on("message", message => {
 				accounts.push(account);
 				message.author.send("You earned a $40 pick-up bonus. Your current balance is $"+account.balance+".");
 				call.wage = false;
-				fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+				fs.writeFileSync("./json/account.json", JSON.stringify(accounts), "utf8");
 			}
 			if (bot.channels.get(call.from.channel) === undefined) {
 				message.reply(":x: The bot has lost permission to send your message to the opposite side, means the bot could be kicked.");
 				calls.splice(calls.indexOf(call), 1);
-				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 				return;
 			}
 			if (support(message.author.id)) {
@@ -150,7 +150,7 @@ bot.on("message", message => {
 			calls.splice(calls.indexOf(call), 1);
 			call.time = Date.now();
 			calls.push(call);
-			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+			fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 			setTimeout(function(){
 				call = calls.find(function(item) {
 					if (item.from.channel === message.channel.id) {
@@ -167,7 +167,7 @@ bot.on("message", message => {
 						bot.channels.get(call.from.channel).send(":negative_squared_cross_mark: This call has expired (2 minutes).");
 						bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
 						calls.splice(calls.indexOf(call), 1);
-						fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+						fs.writeFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 						if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
 							bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
 							return;

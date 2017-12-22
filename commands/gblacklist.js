@@ -1,9 +1,9 @@
 var fs = require("fs"),
     blacklist = JSON.parse(fs.readFileSync("././gblacklist.json", "utf8")),
-    blacklisted = guild => blacklist.indexOf(guild) > -1,
-    support = user => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user) > -1;
-
+    blacklisted = guild => blacklist.indexOf(guild) > -1;
+	
 exports.run = (bot, message, args) => {
+  var support = user => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user) > -1;
   if (!support(message.author.id)) {return;}
   if (message.content.split(" ")[1] === undefined) {
       message.reply("u forgot id :b:");

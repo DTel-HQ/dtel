@@ -1,9 +1,9 @@
 var fs = require("fs"),
-    blacklist = JSON.parse(fs.readFileSync("././blacklist.json", "utf8")),
-    support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
+    blacklist = JSON.parse(fs.readFileSync("././json/blacklist.json", "utf8"));
 
 exports.run = (bot, message, args) => {
-  if (!support(message.author.id)) return;
+  var support = user_id => bot.guilds.get('281815661317980160').roles.get('281815839936741377').members.map(member => member.id).indexOf(user_id) > -1;
+  if (!support(message.author.id)) {return;}
   if (message.content.split(" ")[1] === undefined) {
       message.reply("u forgot id :b:");
       return;
@@ -16,6 +16,6 @@ exports.run = (bot, message, args) => {
     blacklist.push(message.content.split(" ")[1]);
     bot.channels.get("282253502779228160").send(":hammer: User ID `"+message.content.split(" ")[1]+"` is added to blacklist by "+message.author.username+".");
   }
-  fs.writeFileSync("./blacklist.json", JSON.stringify(blacklist), "utf8");
+  fs.writeFileSync("././json/blacklist.json", JSON.stringify(blacklist), "utf8");
   message.reply("Done.");
-}
+};
