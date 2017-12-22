@@ -185,7 +185,7 @@ bot.on("message", message => {
 	const args = message.content.slice(1).trim().split(/ +/g);
 	const command = args.shift().toLowerCase();
 		try {
-			let commandFile = require(`./commands/${command}.js`);
+			let commandFile = require("./commands/"+command.replace("dial", "call")+".js");
 			commandFile.run(bot, message, args);
 		} catch (err) {
 			console.error(err);
