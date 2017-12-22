@@ -11,7 +11,9 @@ var calls = JSON.parse(fs.readFileSync("./call.json", "utf8")),
     fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8")),
     emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8")),
     blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8")),
-    blacklisted = user_id => blacklist.indexOf(user_id) > -1,
+	blacklisted = user_id => blacklist.indexOf(user_id) > -1,
+	gblacklist = JSON.parse(fs.readFileSync("./gblacklist.json", "utf8")),
+    gblacklisted = guild_id => gblacklist.indexOf(guild_id) > -1,
     award = JSON.parse(fs.readFileSync("./award.json", "utf8")),
     mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json","utf8")),
     server = restify.createServer({name: "Bot HTTP server"}),
@@ -29,6 +31,15 @@ fs.readdir("./events/", (err, files) => {
     // super-secret recipe to call events with all their proper arguments *after* the `client` var.
     client.on(eventName, (...args) => eventFunction.run(client, ...args));
   });
+});
+
+bot.on("createGuild", guild => {
+	if (gblacklisted(guild.id)) {
+		console.log("Leaving guild " + guild.name + ", guild is currently blacklisted");
+		bot.channels.get("282253502779228160").send(":boot: Left `"+guild.name+"` ("+guild.id+") after being invited because the guild was blacklisted. Currently still in "+toString(bot.guilds.array().length - 1)+" servers.");
+		guild.leave();
+		return;
+	};
 });
 
 bot.on("message", message => {
