@@ -47,6 +47,9 @@ bot.on("message", message => {
 		}
 		else {return undefined;}
 	});
+	var pbstatus = fouroneone.find(function(item) {
+		return item.user === message.author.id;
+	});
 	// Call msg?
 	if (call) {
 		if (!call.status) {
@@ -179,6 +182,15 @@ bot.on("message", message => {
 				}
 			},120000);
 		}
+	}
+	// If the channel is not in a call, is the user currently using a step-based function?
+	else if (pbstatus) {
+		try {
+			let commandFile = require("./statuses/"+pbstatus.status+".js");
+			commandFile.run(bot, message, args);
+		} catch (err) {
+			console.error(err);
+		}		
 	}
 	// If the channel is not in a call, is this a command?
 	else if (message.content.startsWith(">")) {
