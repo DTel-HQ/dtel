@@ -12,6 +12,8 @@ var calls = JSON.parse(fs.readFileSync("./call.json", "utf8")),
     emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8")),
     blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8")),
     blacklisted = user_id => blacklist.indexOf(user_id) > -1,
+    gblacklist = JSON.parse(fs.readFileSync("./gblacklist.json", "utf8")),
+    gblacklisted = guild_id => gblacklist.indexOf(guild_id) > -1,
     award = JSON.parse(fs.readFileSync("./award.json", "utf8")),
     mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json","utf8")),
     server = restify.createServer({name: "Bot HTTP server"}),
@@ -32,7 +34,7 @@ fs.readdir("./events/", (err, files) => {
 });
 
 bot.on("message", message => {
-  if (message.author.bot || blacklisted(message.author.id)) return;
+  if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
 	if (message.content.startsWith(">")) {
 		console.log(message.author.username + "#" + message.author.discriminator + " > " + message.content);
 	}
