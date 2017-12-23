@@ -17,7 +17,6 @@ var calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8")),
     award = JSON.parse(fs.readFileSync("./json/award.json", "utf8")),
     mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json","utf8")),
     server = restify.createServer({name: "Bot HTTP server"}),
-    recentCall = {};
 server.listen(process.env.PORT || 2000, process.env.IP || "127.0.0.1", function () {
 	console.log('%s listening to %s', server.name, server.url);
 });
@@ -115,7 +114,6 @@ bot.on("message", message => {
 						}
 						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
 						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
-						recentCall[call.from.channel]=call.to.number;
 					}
 				}
 			},120000);
@@ -177,7 +175,6 @@ bot.on("message", message => {
 						}
 						bot.channels.get(call.from.channel).send(":x: "+mailbox_storage.find(a=>a.channel===call.to.channel).settings.autoreply);
 						bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
-						recentCall[call.from.channel]=call.to.number;
 					}
 				}
 			},120000);
