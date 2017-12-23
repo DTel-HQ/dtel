@@ -11,10 +11,10 @@
     "discord"
   ],
   "author": "austinhuang",
-  "license": "BSD-3",
+  "license": "ISC",
   "dependencies": {
     "discord.js": "github:hydrabolt/discord.js#stable",
-    "rand-token": "^0.4.0",
+    "node-opus": "^0.2.7",
     "node-schedule": "^1.2.5",
     "request": "^2.82.0",
     "restify": "^5.2.0",
