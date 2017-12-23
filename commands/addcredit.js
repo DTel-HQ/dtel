@@ -1,14 +1,14 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
-	var support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
 	if (!support(message.author.id)) {
 		message.reply("Stealing money from the bank?");
 		return;
 	}
 	if (args[1] === undefined || args[2] === undefined) {
-		message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
+		message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO constIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
 		return;
 	}
 	if (bot.users.get(message.content.split(" ")[1]) === undefined) {
@@ -31,7 +31,7 @@ module.exports = async(bot, message, args) => {
 		message.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
 		return;
 	}
-	var leaccount = accounts.find(item => item.user === message.content.split(" ")[1]);
+	let leaccount = accounts.find(item => item.user === message.content.split(" ")[1]);
 	if (leaccount === undefined) {
 		leaccount = { user: message.content.split(" ")[1], balance: parseInt(message.content.split(" ")[2]) };
 		accounts.push(leaccount);

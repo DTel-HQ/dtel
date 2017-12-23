@@ -4,27 +4,29 @@ const util = require("util");
 const bot = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
 const prefix = ">";
-var calls = JSON.parse(fs.readFileSync("./call.json", "utf8"));
-var fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
-var emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8"));
-var support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
-var blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8"));
-var blacklisted = user_id => blacklist.indexOf(user_id) > -1;
-var request = require("request");
-var schedule = require("node-schedule");
-var cprefix = "0301"; // Current prefix, `>wizard`
-var award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
-var restify = require("restify");
-var server = restify.createServer({
+const calls = JSON.parse(fs.readFileSync("./call.json", "utf8"));
+const fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
+const emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8"));
+const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+const blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8"));
+const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
+const request = require("request");
+const schedule = require("node-schedule");
+const phonebook = JSON.parse(fs.readFileSync("../phonebook.json", "utf8"));
+const cprefix = "0301"; // Current prefix, `>wizard`
+const award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
+const dailies = JSON.parse(fs.readFileSync("./daily.json", "utf8"));
+const restify = require("restify");
+const server = restify.createServer({
 	name: "Bot HTTP server",
 });
-var ipaddress = process.env.IP || "127.0.0.1";
-var port = process.env.PORT || 2000;
+const ipaddress = process.env.IP || "127.0.0.1";
+const port = process.env.PORT || 2000;
 server.listen(port, ipaddress, () => {
 	console.log("%s listening to %s", server.name, server.url);
 });
 
-var mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json", "utf8"));
+const mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json", "utf8"));
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
@@ -32,8 +34,8 @@ fs.readdir("./events/", (err, files) => {
 	files.forEach(file => {
 		let eventFunction = require(`./events/${file}`);
 		let eventName = file.split(".")[0];
-		// super-secret recipe to call events with all their proper arguments *after* the `client` var.
-		bot.on(eventName, (...args) => eventFunction.run(bot, ...args));
+		// super-secret recipe to call events with all their proper arguments *after* the `client` const.
+		bot.on(eventName, (...args) => eventFunction(bot, ...args));
 	});
 });
 

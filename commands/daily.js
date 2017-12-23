@@ -1,9 +1,10 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 const request = require("request");
+const dailies = JSON.parse(fs.readFileSync("../daily.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
-	var account = accounts.find(item => item.user === message.author.id);
+	let account = accounts.find(item => item.user === message.author.id);
 	if (dailies.indexOf(message.author.id) > -1) {
 		message.reply("You already claimed your daily credits!");
 		return;

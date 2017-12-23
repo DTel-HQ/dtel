@@ -1,10 +1,10 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 const request = require("request");
 const Discord = require("discord.js");
 
 module.exports = async(bot, message, args) => {
-	var account = accounts.find(item => item.user === message.author.id);
+	const account = accounts.find(item => item.user === message.author.id);
 	if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
 		message.reply("`>convert <amount> <currency code>`\nCurrency codes have a length of 3 letters. They are available at <http://discoin.sidetrip.xyz/rates>.");
 		return;
