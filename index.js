@@ -40,6 +40,10 @@ fs.readdir("./events/", (err, files) => {
 });
 
 bot.on("message", async message => {
+	if (message.guild !== undefined && message.guild.available !== true)
+	{
+		return message.reply(":x: This guild is under an outage");
+	}
 	if (message.author.bot || blacklisted(message.author.id)) return;
 	if (message.content.startsWith(prefix)) {
 		console.log(`${message.author.username}#${message.author.discriminator} > ${message.content}`);
