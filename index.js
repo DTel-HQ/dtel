@@ -42,7 +42,8 @@ fs.readdir("./events/", (err, files) => {
 bot.on("message", async message => {
 	if (message.guild !== undefined && message.guild.available !== true)
 	{
-		return message.reply(":x: This guild is under an outage");
+		return;
+		// If you want you can add a console.log or something but I'll leave it at just return
 	}
 	if (message.author.bot || blacklisted(message.author.id)) return;
 	if (message.content.startsWith(prefix)) {
