@@ -20,8 +20,8 @@ exports.run = (bot, msg, args) => {
 					msg.channel.send({embed:{title: ":tools: Mailbox Settings", description: Object.keys(mailbox.settings).map((a,b)=>a+" `"+mailbox.settings[a]+"`\n*Change the settings with `>mailbox settings [setting name] [value]`*")}});
 				} else {
 					if(mailbox.settings[msg.content.split(" ")[2]]){
-						if (!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) {
-							message.reply("You don't have `Manage Server` permission!");
+						if (!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD")) {
+							msg.reply("You don't have `Manage Server` permission!");
 						}
 						else {
 							mailbox.settings[msg.content.split(" ")[2]]=msg.content.replace(">mailbox settings "+msg.content.split(" ")[2]+" ","");
@@ -51,8 +51,8 @@ exports.run = (bot, msg, args) => {
 					var message=mailbox.messages.find(a=>a.id===msg.content.split(" ")[2]);
 					switch(msg.content.split(" ")[3]){
 						case "delete":
-						if (!message.guild.member(message.author).hasPermission("MANAGE_GUILD")) {
-							message.reply("You don't have `Manage Server` permission!");
+						if (!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD")) {
+							msg.reply("You don't have `Manage Server` permission!");
 						}
 						else {
 							mailbox.messages.splice(mailbox.messages.indexOf(message),1);
@@ -64,7 +64,7 @@ exports.run = (bot, msg, args) => {
 						}
 						break;
 						case "callback":
-						msg.reply("`>call "+message.from+"`");
+						msg.reply("`>call "+msg.from+"`");
 						break;
 						default:
 						msg.channel.send({embed:{title: ":question: What would you like to do?", description: "`delete` Delete the message\n`callback` Call the caller back", footer: {text: ">mailbox messages "+msg.content.split(" ")[2]+" <Option>"}}});
