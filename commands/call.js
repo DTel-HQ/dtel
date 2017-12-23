@@ -10,7 +10,7 @@ exports.run = (bot, message, args) => {
 	if (yournumber === "*ROM") {
 		yournumber = "03015050505";
 	}
-	yournumber = yournumber.replace(/a/ig, "2").replace(/b/ig, "2").replace(/c/ig, "2").replace(/d/ig, "3").replace(/e/ig, "3").replace(/f/ig, "3").replace(/g/ig, "4").replace(/h/ig, "4").replace(/i/ig, "4").replace(/j/ig, "5").replace(/k/ig, "5").replace(/l/ig, "5").replace(/m/ig, "6").replace(/n/ig, "6").replace(/o/ig, "6").replace(/p/ig, "7").replace(/q/ig, "7").replace(/r/ig, "7").replace(/s/ig, "7").replace(/t/ig, "8").replace(/u/ig, "8").replace(/v/ig, "8").replace(/w/ig, "9").replace(/x/ig, "9").replace(/y/ig, "9").replace(/z/ig, "9").replace(/-/ig, "").replace("(", "").replace(")", "").replace(" ", "");
+	yournumber = yournumber.replace(/(a|b|c)/ig, "2").replace(/(d|e|f)/ig, "3").replace(/(g|h|i)/ig, "4").replace(/(j|k|l)/ig, "5").replace(/(m|n|o)/ig, "6").replace(/(p|q|r|s)/ig, "7").replace(/(t|u|v)/ig, "8").replace(/(w|x|y|z)/ig, "9").replace(/-/ig, "").replace("(", "").replace(")", "").replace(" ", "");
 	if (yournumber === "*611") {
 		yournumber = "08006113835";
 	}
