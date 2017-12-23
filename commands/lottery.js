@@ -1,6 +1,6 @@
 const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
-	award = JSON.parse(fs.readFileSync("././award.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
+var award = JSON.parse(fs.readFileSync("../json/award.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
@@ -30,7 +30,7 @@ module.exports = async(bot, message, args) => {
 		award.users.push(message.author.id);
 	}
 	award.amount += entries * 5;
-	fs.writeFileSync("./award.json", JSON.stringify(award), "utf8");
+	fs.writeFileSync("../json/award.json", JSON.stringify(award), "utf8");
 	message.reply(`You've bought ${entries} entries. The current jackpot is ¥${award.amount}.`);
 	bot.channels.get("282253502779228160").send(`:tickets: User ${message.author.username} paid ¥${entries * 5} for the lottery. The user now have ¥${account.balance}.`);
 };
