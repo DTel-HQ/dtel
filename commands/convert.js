@@ -1,5 +1,5 @@
 const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 const request = require("request");
 const Discord = require("discord.js");
 
@@ -28,7 +28,7 @@ module.exports = async(bot, message, args) => {
 			accounts.splice(accounts.indexOf(account), 1);
 			account.balance -= parseInt(message.content.split(" ")[1]);
 			accounts.push(account);
-			fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+			fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 			bot.channels.get("282253502779228160").send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
 		} else if (body.status === "error") {
 			message.channel.sendEmbed(new Discord.RichEmbed().setColor("#FF0000").setTitle("Error: Wrong arguments!")

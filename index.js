@@ -3,7 +3,6 @@ const fs = require("fs");
 const util = require("util");
 const bot = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
-const prefix = ">";
 const calls = JSON.parse(fs.readFileSync("./call.json", "utf8"));
 const fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
 const emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8"));
@@ -13,7 +12,6 @@ const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const request = require("request");
 const schedule = require("node-schedule");
 const phonebook = JSON.parse(fs.readFileSync("../phonebook.json", "utf8"));
-const cprefix = "0301"; // Current prefix, `>wizard`
 const award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./daily.json", "utf8"));
 const restify = require("restify");
@@ -40,13 +38,11 @@ fs.readdir("./events/", (err, files) => {
 });
 
 bot.on("message", async message => {
-	if (message.guild !== undefined && message.guild.available !== true)
-	{
-		return;
-		// If you want you can add a console.log or something but I'll leave it at just return
+	if (message.guild !== undefined && message.guild.available !== true) {
+		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
 	if (message.author.bot || blacklisted(message.author.id)) return;
-	if (message.content.startsWith(prefix)) {
+	if (message.content.startsWith(process.env.PREFIX)) {
 		console.log(`${message.author.username}#${message.author.discriminator} > ${message.content}`);
 	}
 
@@ -55,11 +51,11 @@ bot.on("message", async message => {
 		console.log("Call msg placeholder");
 	} else {
 		// If the channel is not in a call, is this a command?
-		if (!message.content.startsWith(prefix)) return;
+		if (!message.content.startsWith(process.env.PREFIX)) return;
 		// If it is, try to run the command
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
-		const command = message.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");
+		const command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
 		let commandFile = require(`./commands/${command}.js`);
 		if (commandFile) {
 			try {

@@ -1,7 +1,7 @@
 const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 const request = require("request");
-const dailies = JSON.parse(fs.readFileSync("../daily.json", "utf8"));
+const dailies = JSON.parse(fs.readFileSync("../json/daily.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	let account = accounts.find(item => item.user === message.author.id);
@@ -42,7 +42,7 @@ module.exports = async(bot, message, args) => {
 		message.reply(`Here's your ${daily} daily credits! *Tip: You can get 60 more daily credits by upvoting at <https://discordbots.org/bot/377609965554237453>!*`);
 	}
 	dailies.push(message.author.id);
-	fs.writeFileSync("./daily.json", JSON.stringify(dailies), "utf8");
+	fs.writeFileSync("../json/daily.json", JSON.stringify(dailies), "utf8");
 	if (account !== undefined) {
 		accounts.splice(accounts.indexOf(account), 1);
 	} else {
@@ -51,5 +51,5 @@ module.exports = async(bot, message, args) => {
 	account.balance += daily;
 	accounts.push(account);
 	bot.channels.get("282253502779228160").send(`:calendar: ${message.author.username}#${message.author.discriminator} (${message.author.id}) claimed ${daily} daily credits.`);
-	fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
+	fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 };

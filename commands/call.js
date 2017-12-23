@@ -1,5 +1,5 @@
-var fs = require("fs"),
-    calls = JSON.parse(fs.readFileSync("././call.json", "utf8"));
+const fs = require("fs");
+var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8"));
     
 exports.run = (bot, message, args) => {
   var yournumber = args[1];
@@ -74,7 +74,7 @@ exports.run = (bot, message, args) => {
 	message.reply(":telephone: Dialing... You are able to `>hangup`.");
 	bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
 	calls.push({from:{channel:mychannel,number:mynumber},to:{channel:yourchannel,number:yournumber},status:false,time:Date.now()});
-	fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+	fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
 	bot.channels.get(yourchannel).send("You received a call from `("+mynumber.split("")[0]+mynumber.split("")[1]+mynumber.split("")[2]+mynumber.split("")[3]+") "+mynumber.split("")[4]+mynumber.split("")[5]+mynumber.split("")[6]+"-"+mynumber.split("")[7]+mynumber.split("")[8]+mynumber.split("")[9]+mynumber.split("")[10]+"`. Type `>pickup` or `>hangup`.");
 	setTimeout(function(){
 		var call = calls.find(function(item) {
@@ -94,7 +94,7 @@ exports.run = (bot, message, args) => {
 				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 				bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
 				calls.splice(calls.indexOf(call), 1);
-				fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
+				fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
 				if(!mailbox_storage.find(a=>a.channel===call.to.channel)){
 					bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
 					return;
