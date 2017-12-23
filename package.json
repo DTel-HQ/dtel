@@ -14,7 +14,7 @@
   "license": "BSD-3",
   "dependencies": {
     "discord.js": "github:hydrabolt/discord.js#stable",
-    "node-opus": "^0.2.7",
+    "rand-token": "^0.4.0",
     "node-schedule": "^1.2.5",
     "request": "^2.82.0",
     "restify": "^5.2.0",
