@@ -1,8 +1,8 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
-	support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
+	var support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
 	if (!support(message.author.id)) {
 		message.reply("Stealing money from the bank?");
 		return;

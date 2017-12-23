@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 module.exports = async(bot, message, args) => {
 	message.channel.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("List of Commands")
 		.setDescription("For more information, use `>info`.")

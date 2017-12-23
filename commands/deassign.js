@@ -1,15 +1,16 @@
-var numbers = JSON.parse(fs.readFileSync("././numbers.json", "utf8")),
-	support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+const fs = require("fs");
+var numbers = JSON.parse(fs.readFileSync("././numbers.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
+	var support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
 	if (!support(message.author.id)) return;
 	if (message.content.split(" ")[1] === undefined) {
-			    message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
-			    return;
+		message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
+		return;
 	}
 	var number = numbers.find(item => item.number === message.content.split(" ")[1]);
 	if (number === undefined) {
-			    message.reply("<:oliy:327462998610280448> **This number never even existed *in the first place*.**");
+		message.reply("<:oliy:327462998610280448> **This number never even existed *in the first place*.**");
 		return;
 	}
 	var theregistry = phonebook.find(item => item.number === message.content.split(" ")[1]);

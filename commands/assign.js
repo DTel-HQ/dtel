@@ -1,19 +1,20 @@
-var numbers = JSON.parse(fs.readFileSync("././numbers.json", "utf8")),
-	support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+const fs = require("fs");
+var numbers = JSON.parse(fs.readFileSync("././numbers.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
+	var support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
 	if (!support(message.author.id)) return;
 	if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
-			    message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
-			    return;
+		message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
+		return;
 	}
 	if (isNaN(message.content.split(" ")[2]) || !message.content.split(" ")[2].startsWith("0301") && !message.content.split(" ")[2].startsWith("0800") && !message.content.split(" ")[2].startsWith("0844")) {
-			    message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?**");
-			    return;
+		message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?**");
+		return;
 	}
 	var number = numbers.find(item => item.channel === message.content.split(" ")[1]);
 	if (number !== undefined) {
-			    message.reply("<:francis:327464171211849728> **This number is already registered!**");
+		message.reply("<:francis:327464171211849728> **This number is already registered!**");
 		return;
 	}
 	numbers.push({ channel: message.content.split(" ")[1], number: message.content.split(" ")[2], year: new Date().getFullYear(), month: new Date().getMonth() + 1 });

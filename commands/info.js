@@ -1,3 +1,5 @@
+const Discord = require("discord.js");
+
 module.exports = async(bot, message, args) => {
 	message.reply("check your DM!");
 	message.author.sendEmbed(new Discord.RichEmbed().setColor("#007FFF").setTitle("📖 DiscordTel Information")

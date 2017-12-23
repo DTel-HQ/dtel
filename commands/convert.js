@@ -1,5 +1,7 @@
-var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8")),
-	request = require("request");
+const fs = require("fs");
+var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+const request = require("request");
+const Discord = require("discord.js")
 
 module.exports = async(bot, message, args) => {
 	var account = accounts.find(item => item.user === message.author.id);
