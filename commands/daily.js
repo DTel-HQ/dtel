@@ -8,6 +8,7 @@ module.exports = async(bot, message, args) => {
 		message.reply("You already claimed your daily credits!");
 		return;
 	}
+	let daily;
 	if (bot.guilds.get("281815661317980160").members.get(message.author.id)) {
 		if (bot.guilds.get("281815661317980160").members.get(message.author.id).roles.find("name", "Manager")) {
 			daily = 250;
