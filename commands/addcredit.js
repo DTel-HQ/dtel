@@ -8,7 +8,7 @@ module.exports = async(bot, message, args) => {
 		return;
 	}
 	if (args[1] === undefined || args[2] === undefined) {
-		message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO constIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
+		message.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
 		return;
 	}
 	if (bot.users.get(message.content.split(" ")[1]) === undefined) {
