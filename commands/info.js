@@ -1,5 +1,3 @@
-const Discord = require("discord.js");
-
 module.exports = async(bot, message, args) => {
   message.reply("check your DM!");
   message.author.send({
