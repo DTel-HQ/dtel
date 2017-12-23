@@ -42,21 +42,19 @@ bot.on("message", async message => {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
 	if (message.author.bot || blacklisted(message.author.id)) return;
-	if (message.content.startsWith(process.env.PREFIX)) {
-		console.log(`${message.author.username}#${message.author.discriminator} > ${message.content}`);
-	}
-
+	// In progress wizard/phonebook session?
+	if (fouroneone.find({ user: message.author.id })) {
+		require("./modules/fourOneOneHandler")(bot, message);
 	// Call msg?
-	if (message.guild.call) {
+	} else if (message.guild.call) {
 		console.log("Call msg placeholder");
-	} else {
-		// If the channel is not in a call, is this a command?
-		if (!message.content.startsWith(process.env.PREFIX)) return;
-		// If it is, try to run the command
+	} else if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
+		console.log(`${message.author.username}#${message.author.discriminator} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		const command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
 		let commandFile = require(`./commands/${command}.js`);
+		// If so, run it
 		if (commandFile) {
 			try {
 				return commandFile(bot, message, args);
