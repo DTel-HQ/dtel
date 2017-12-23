@@ -3,17 +3,18 @@ const fs = require("fs");
 const util = require("util");
 const bot = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
-const calls = JSON.parse(fs.readFileSync("./call.json", "utf8"));
-const fouroneone = JSON.parse(fs.readFileSync("./fouroneone.json", "utf8"));
-const emotes = JSON.parse(fs.readFileSync("./emotes.json", "utf8"));
+const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
+const fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
+const emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8"));
 const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
-const blacklist = JSON.parse(fs.readFileSync("./blacklist.json", "utf8"));
+const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const request = require("request");
 const schedule = require("node-schedule");
-const phonebook = JSON.parse(fs.readFileSync("../phonebook.json", "utf8"));
-const award = JSON.parse(fs.readFileSync("./award.json", "utf8"));
-const dailies = JSON.parse(fs.readFileSync("./daily.json", "utf8"));
+const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
+const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
+const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
+const numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
 const restify = require("restify");
 const server = restify.createServer({
 	name: "Bot HTTP server",
@@ -25,6 +26,25 @@ server.listen(port, ipaddress, () => {
 });
 
 const mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json", "utf8"));
+
+function updateNumbers(){
+	fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
+	numbers = JSON.stringify(numbers);
+}
+
+function removeNumber(numberIndex){
+	numbers.splice(numberIndex, 1)
+}
+
+function removeNumbers(){
+	for (var i in numbers){
+		const number = numbers[i];
+		const now = new Date();
+		if (number.month < now.getMonth() && number.year <= now.getFullYear())
+			removeNumber(i);
+	}
+	updateNumbers();
+}
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
@@ -68,3 +88,8 @@ bot.on("message", async message => {
 });
 
 bot.login(process.env.DISCORD_TOKEN);
+
+// interval to run a check to elimate bad numbers
+setInterval(()=>{
+	removeNumbers();
+}, 1800000)
