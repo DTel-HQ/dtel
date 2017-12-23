@@ -52,7 +52,6 @@ bot.on("message", async message => {
 		// If the channel is not in a call, is this a command?
 		if (!message.content.startsWith(prefix)) return;
 		// If it is, try to run the command
-		if (!message.guild) return;
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		const command = message.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");
