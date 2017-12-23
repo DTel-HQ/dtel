@@ -11,7 +11,7 @@ const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const request = require("request");
 const schedule = require("node-schedule");
-const phonebook = JSON.parse(fs.readFileSync("../phonebook.json", "utf8"));
+const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
 const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
 const restify = require("restify");
