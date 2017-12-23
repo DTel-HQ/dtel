@@ -1,4 +1,4 @@
-const fs = require("fs")
+const fs = require("fs");
 var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 const request = require("request");
 
