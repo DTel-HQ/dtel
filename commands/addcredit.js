@@ -1,5 +1,5 @@
 const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
+var accounts = JSON.parse(fs.readFileSync("././account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
