@@ -71,7 +71,7 @@ module.exports = async(bot, message) => {
 							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have successfully finished the wizard!.",
 						},
 					},
 				});
@@ -121,7 +121,7 @@ module.exports = async(bot, message) => {
 							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have successfully finished the wizard!",
 						},
 					},
 				});
@@ -151,7 +151,7 @@ module.exports = async(bot, message) => {
 				title: ":x: Error",
 				description: "An unknown error has occured.",
 				footer: {
-					text: "Please DM a developer or call customer support.",
+					text: "Please DM a developer (<@115156616256552962> or <@207484517898780672>) or call customer support by `>pdial *611`.",
 				},
 			},
 		});
