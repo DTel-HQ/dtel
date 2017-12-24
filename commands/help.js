@@ -4,8 +4,7 @@ exports.run = (bot, message, args) => {
       color: 3447003,
       author: {
         name: "DiscordTel",
-        icon_url:
-          "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
+        icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
         url: "https://discordtel.austinhuang.me"
       },
       title: "List of Commands",

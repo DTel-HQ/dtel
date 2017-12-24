@@ -5,8 +5,7 @@ module.exports = async(bot, message, args) => {
       color: 3447003,
       author: {
         name: "DiscordTel",
-        icon_url:
-          "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
+        icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
         url: "https://discordtel.austinhuang.me"
       },
       title: "📖 DiscordTel Information",
@@ -34,8 +33,7 @@ module.exports = async(bot, message, args) => {
         },
         {
           name: "📌 Official Server",
-          value:
-            "https://discord.gg/RN7pxrB"
+          value: "https://discord.gg/RN7pxrB"
         }
       ],
       timestamp: new Date(),

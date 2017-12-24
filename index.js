@@ -49,7 +49,7 @@ bot.on("message", async message => {
 	} else if (message.guild.call) {
 		console.log("Call msg placeholder");
 	} else if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
-		console.log(`${message.author.username}#${message.author.discriminator} > ${message.content}`);
+		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		const command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
