@@ -16,7 +16,11 @@ module.exports = async(bot, message, args) => {
 	if (number === "*ROM") {
 		number = "03015050505";
 	}
-	if (number === "*233") {
+	if (number === "*411") {
+		message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
+		fouroneone.push({ user: message.author.id, status: "0" });
+	}
+	else if (number === "*233") {
 		let account = accounts.find(a => a.user === message.author.id);
 		if (!account) {
 			account = { user: message.author.id, balance: 0 };
@@ -32,7 +36,6 @@ module.exports = async(bot, message, args) => {
 				.addField("Expiration", `${mynumber.year}/${mynumber.month}`)
 				.addField("Your Balance", account.balance)
 				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
-			fouroneone.push({ user: message.author.id, status: "0" });
 			return;
 		} else if (!mynumber) {
 			message.channel.sendEmbed(new Discord.RichEmbed()
@@ -51,7 +54,7 @@ module.exports = async(bot, message, args) => {
 				.addField("Your Balance", account.balance)
 				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/")
 				.setFooter("To hang up, press `0`."));
-			ffoDocument.status = "4";
+			fouroneone.push({ user: message.author.id, status: "4" });
 			return;
 		}
 	}
