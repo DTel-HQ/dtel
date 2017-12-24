@@ -15,7 +15,7 @@ exports.run = (bot, message, fs, calls, call) => {
 	call.time = Date.now();
 	calls.push(call);
 	fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-	bot.channels.get("282253502779228160").send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} is picked up by __${message.author.username}#${message.author.discriminator}__ (${message.author.id}).`);
+	bot.channels.get("282253502779228160").send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} is picked up by __${message.author.tag}__ (${message.author.id}).`);
 	setTimeout(() => {
 		call = calls.find(item => {
 			if (item.from.channel === message.channel.id) {
