@@ -29,7 +29,6 @@ const mailbox_storage = JSON.parse(fs.readFileSync("./mailbox.json", "utf8"));
 
 function updateNumbers(){
 	fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
-	numbers = JSON.stringify(numbers);
 }
 
 function removeNumber(numberIndex){
@@ -44,7 +43,7 @@ schedule.scheduleJob({date: 1, hour: 0, minute: 0, second: 0}, function(){
 			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)){
 				// send a notice to the user.
 				var channel = bot.channels.get(number.channel);
-				if (channel != null){ // if the channel is null we will remove them because that means deleted. :(
+				if (!channel){ // if the channel is null we will remove them because that means deleted. :(
 					var message = "Your number is expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 					break;
