@@ -18,7 +18,12 @@ module.exports = async(bot, message) => {
 		realMonth = 0 + realMonth;
 	}
 	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
-	if (ffoDocument.status == 1) {
+	if (ffoDocument.status == 0) {
+		if (message.content == "0") {
+			message.reply(":white_check_mark: You hung up the call.");
+			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		}
+	} else if (ffoDocument.status == 1) {
 		console.log("event 1 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
 	} else if (ffoDocument.status == 2) {
@@ -28,7 +33,12 @@ module.exports = async(bot, message) => {
 		console.log("event 3 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
 	} else if (ffoDocument.status == 4) {
-		console.log("event 4 placeholder");
+		if (message.content == "0") {
+			message.reply(":white_check_mark: You hung up the call.");
+			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		} else {
+			console.log("NEED TO IMPLEMENT 441 FOR RENEWING NUMBER");
+		}
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
 	} else if (ffoDocument.status == 5) {
 		if (message.content === "0") {
@@ -64,16 +74,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number
+							value: number,
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`
+							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
-						}
-					}
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+						},
+					},
 				});
 			}
 		} else {
@@ -114,16 +124,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number
+							value: number,
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`
+							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
-						}
-					}
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+						},
+					},
 				});
 			}
 		} else {
@@ -151,9 +161,9 @@ module.exports = async(bot, message) => {
 				title: ":x: Error",
 				description: "An unknown error has occurred.",
 				footer: {
-					text: "Please DM a developer or call Customer Support by dialling *611."
-				}
-			}
+					text: "Please DM a developer or call Customer Support by dialling *611.",
+				},
+			},
 		});
 	}
 };
