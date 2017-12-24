@@ -1,4 +1,4 @@
-module.exports = async(bot, message, args)=>{
+exports.run = async(bot, message, args)=>{
     // permission check
     if (!message.guild) return;
     if (!message.guild.roles.has("name", "Eval")) return;
