@@ -1,7 +1,7 @@
 const fs = require("fs");
 const d = new Date();
-var fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
-var numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
+var fouroneone = JSON.parse(fs.readFileSync("../json/fouroneone.json", "utf8"));
+var numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8"));
 let nextmonth = d.getMonth() + 1;
 let year = d.getFullYear();
 let realMonth = nextmonth + 1;
@@ -34,7 +34,7 @@ module.exports = async(bot, message) => {
 		if (message.content === "0") {
 			message.reply("Exiting wizard...");
 			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-			fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 			return;
 		}
 		if (message.content.startsWith("0301")) {
@@ -54,9 +54,9 @@ module.exports = async(bot, message) => {
 				message.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			} else {
 				numbers.push({ channel: message.channel.id, number: number, month: nextmonth, year: year });
-				fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
+				fs.writeFileSync("../json/numbers.json", JSON.stringify(numbers), "utf8");
 				fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-				fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+				fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				message.channel.send({
 					embed: {
 						color: 0x007FFF,
@@ -64,16 +64,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number,
+							value: number
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`,
+							value: `${year}/${realMonth}`
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
-						},
-					},
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
+						}
+					}
 				});
 			}
 		} else {
@@ -83,7 +83,7 @@ module.exports = async(bot, message) => {
 		if (message.content === "0") {
 			message.reply("Exiting wizard...");
 			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-			fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 			return;
 		}
 		if (message.content.startsWith("0900")) {
@@ -104,9 +104,9 @@ module.exports = async(bot, message) => {
 				message.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			} else {
 				numbers.push({ channel: message.channel.id, number: number, month: nextmonth, year: year });
-				fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
+				fs.writeFileSync("../json/numbers.json", JSON.stringify(numbers), "utf8");
 				fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-				fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+				fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				message.channel.send({
 					embed: {
 						color: 0x007FFF,
@@ -114,16 +114,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number,
+							value: number
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`,
+							value: `${year}/${realMonth}`
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
-						},
-					},
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
+						}
+					}
 				});
 			}
 		} else {
@@ -151,9 +151,9 @@ module.exports = async(bot, message) => {
 				title: ":x: Error",
 				description: "An unknown error has occurred.",
 				footer: {
-					text: "Please DM a developer or call Customer Support by dialling *611.",
-				},
-			},
+					text: "Please DM a developer or call Customer Support by dialling *611."
+				}
+			}
 		});
 	}
 };

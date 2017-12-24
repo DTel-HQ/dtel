@@ -4,7 +4,7 @@ module.exports = async(bot, message, args) => {
 		return;
 	}
 	message.reply("Thanks for your suggestion!");
-	bot.channels.get("326798754348793857").send(`New suggestion from __${message.author.username}#${message.author.discriminator}__ (${message.author.id}) \`\`\`\n${message.content.split(" ").splice(1).join(" ")
+	bot.channels.get("326798754348793857").send(`New suggestion from __${message.author.tag}__ (${message.author.id}) \`\`\`\n${message.content.split(" ").splice(1).join(" ")
 		.split("```")
 		.join(" ")}\`\`\``);
 };

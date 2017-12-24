@@ -57,7 +57,7 @@ exports.run = (bot, message, args) => {
 		return;
 	}
 	var yourcall = calls.find(function(item) {
-		if (	item.from.number === yournumber) {
+		if (item.from.number === yournumber) {
 			return item.from.number === yournumber;
 		}
 		else if (item.to.number === yournumber) {
@@ -82,7 +82,7 @@ exports.run = (bot, message, args) => {
 		});
 		if (call !== undefined) {
 			call = calls.find(function(item) {
-				if (	item.from.channel === message.channel.id) {
+				if (item.from.channel === message.channel.id) {
 					return item.from.channel === message.channel.id;
 				}
 				else if (item.to.channel === message.channel.id) {
@@ -106,3 +106,4 @@ exports.run = (bot, message, args) => {
 			}
 		}
 	},120000);
+}
