@@ -14,6 +14,7 @@ const schedule = require("node-schedule");
 const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
 const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
+var numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
 const restify = require("restify");
 const server = restify.createServer({
 	name: "Bot HTTP server",
@@ -25,6 +26,36 @@ server.listen(port, ipaddress, () => {
 });
 
 const mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
+
+function updateNumbers(){
+	fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
+}
+
+function removeNumber(numberIndex){
+	numbers.splice(numberIndex, 1);
+}
+
+schedule.scheduleJob({date: 1, hour: 0, minute: 0, second: 0}, function(){
+	const now = new Date();
+	for (var i in numbers){
+		const number = numbers[i];
+		if (number.year <= now.getFullYear() || number.month <= now.getMonth()){
+			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)){
+				// send a notice to the user.
+				var channel = bot.channels.get(number.channel);
+				if (!channel){ // if the channel is null we will remove them because that means deleted. :(
+					var message = "Your number is expired! Pay your monthly fee by typing `>dial *233`!";
+					channel.send(message);
+					break;
+				}
+			}
+			removeNumber(i);
+			// Uncomment if I should log it. I don't think it would be a good idea because it happens every month, so spam. - nubbytm
+			//bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
+		}
+	}
+	updateNumbers();
+});
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
 fs.readdir("./events/", (err, files) => {
