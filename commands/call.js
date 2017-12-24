@@ -6,7 +6,7 @@ var accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 const Discord = require("discord.js");
 
 module.exports = async(bot, message, args) => {
-	let number = args;
+	let number = args[1];
 	let mynumber = numbers.find(n => n.channel === message.channel.id);
 	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
 	if (number === "") {
