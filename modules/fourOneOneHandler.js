@@ -149,9 +149,9 @@ module.exports = async(bot, message) => {
 		message.channel.send({
 			embed: {
 				title: ":x: Error",
-				description: "An unknown error has occured.",
+				description: "An unknown error has occurred.",
 				footer: {
-					text: "Please DM a developer or call customer support.",
+					text: "Please DM a developer or call Customer Support by dialling *611.",
 				},
 			},
 		});
