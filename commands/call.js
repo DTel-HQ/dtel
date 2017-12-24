@@ -8,6 +8,7 @@ const Discord = require("discord.js");
 module.exports = async(bot, message, args) => {
 	let number = args;
 	let mynumber = numbers.find(n => n.channel === message.channel.id);
+	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
 	if (number === "") {
 		message.reply("Damn son, you forgot the number! `>dial <Number>`");
 		return;
@@ -31,9 +32,28 @@ module.exports = async(bot, message, args) => {
 				.addField("Expiration", `${mynumber.year}/${mynumber.month}`)
 				.addField("Your Balance", account.balance)
 				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
+			fouroneone.push({ user: message.author.id, status: "0" });
+			return;
+		} else if (!mynumber) {
+			message.channel.sendEmbed(new Discord.RichEmbed()
+				.setColor("#007FFF")
+				.setTitle("Current Account Status")
+				.addField("Your Balance", account.balance)
+				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
+			return;
+		} else {
+			message.channel.sendEmbed(new Discord.RichEmbed()
+				.setColor("#007FFF")
+				.setTitle("Current Number Status")
+				.setDescription("Type the amount of months you want to renew your number.")
+				.addField("Number", mynumber.number)
+				.addField("Expiration", `${mynumber.year}/${mynumber.month}`)
+				.addField("Your Balance", account.balance)
+				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/")
+				.setFooter("To hang up, press `0`."));
+			ffoDocument.status = "4";
 			return;
 		}
-		fouroneone.push({ user: message.author.id, status: "4" });
 	}
 	number = number.replace(/(a|b|c)/ig, "2").replace(/(d|e|f)/ig, "3").replace(/(g|h|i)/ig, "4")
 		.replace(/(j|k|l)/ig, "5")
