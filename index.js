@@ -43,7 +43,7 @@ bot.on("message", async message => {
 	}
 	if (message.author.bot || blacklisted(message.author.id)) return;
 	// In progress wizard/phonebook session?
-	if (fouroneone.find({ user: message.author.id })) {
+	if (fouroneone.find(i => i.user === message.author.id)) {
 		require("./modules/fourOneOneHandler")(bot, message);
 	// Call msg?
 	} else if (message.guild.call) {
@@ -63,6 +63,11 @@ bot.on("message", async message => {
 			}
 		}
 	}
+});
+
+process.on("unhandledRejection", err => {
+	console.log(err);
+	process.exit(-1);
 });
 
 bot.login(process.env.DISCORD_TOKEN);
