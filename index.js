@@ -9,6 +9,8 @@ const emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8"));
 const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
 const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
+const gblacklist = JSON.parse(fs.readFileSync("./json/gblacklist.json", "utf8"));
+const gblacklisted = user_id => gblacklist.indexOf(user_id) > -1;
 const request = require("request");
 const schedule = require("node-schedule");
 const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
@@ -72,7 +74,7 @@ bot.on("message", async message => {
 	if (message.guild !== undefined && message.guild.available !== true) {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
-	if (message.author.bot || blacklisted(message.author.id)) return;
+	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
 	// In progress wizard/phonebook session?
 	if (fouroneone.find(i => i.user === message.author.id)) {
 		require("./modules/fourOneOneHandler")(bot, message);
