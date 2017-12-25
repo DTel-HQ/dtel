@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const fs = require("fs");
 const util = require("util");
+const mongoose = require("mongoose");
+const database = require("./schemas/database");
 const bot = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["TYPING_START", "GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
 const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
@@ -27,25 +29,32 @@ server.listen(port, ipaddress, () => {
 	console.log("%s listening to %s", server.name, server.url);
 });
 
+database.initialize(process.env.MONGOURL).then(db => {
+	console.log(`Database Loaded!`);
+}).catch(err => {
+	console.log(`Failed to intialize Database`, err);
+	process.exit(1);
+});
+
 const mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 
-function updateNumbers(){
+function updateNumbers() {
 	fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
 }
 
-function removeNumber(numberIndex){
+function removeNumber(numberIndex) {
 	numbers.splice(numberIndex, 1);
 }
 
-schedule.scheduleJob({date: 1, hour: 0, minute: 0, second: 0}, function(){
+schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 	const now = new Date();
-	for (var i in numbers){
+	for (var i in numbers) {
 		const number = numbers[i];
-		if (number.year <= now.getFullYear() || number.month <= now.getMonth()){
-			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)){
+		if (number.year <= now.getFullYear() || number.month <= now.getMonth()) {
+			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)) {
 				// send a notice to the user.
 				var channel = bot.channels.get(number.channel);
-				if (!channel){ // if the channel is null we will remove them because that means deleted. :(
+				if (!channel) { // if the channel is null we will remove them because that means deleted. :(
 					var message = "Your number is expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 					break;
@@ -53,7 +62,7 @@ schedule.scheduleJob({date: 1, hour: 0, minute: 0, second: 0}, function(){
 			}
 			removeNumber(i);
 			// Uncomment if I should log it. I don't think it would be a good idea because it happens every month, so spam. - nubbytm
-			//bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
+			// bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}
 	updateNumbers();
