@@ -1,8 +1,8 @@
 const randtoken = require("rand-token"),
 	fs = require("fs");
-var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8")),
-	numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8")),
-	accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
+var mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8")),
+	numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8")),
+	accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 exports.run = (bot, message, args) => {
 	if (args.length !== 3) {
@@ -22,7 +22,7 @@ exports.run = (bot, message, args) => {
 	accounts.splice(accounts.indexOf(account), 1);
 	account.balance -= 2;
 	accounts.push(account);
-	fs.writeFile("../json/account.json", JSON.stringify(accounts), "utf8");
+	fs.writeFile("./json/account.json", JSON.stringify(accounts), "utf8");
 	var mailbox = mailbox_storage.find(a => a.channel === numbers.find(a => a.number === args[1]).channel);
 	mailbox.messages.push({
 		id: randtoken.generate(8),
@@ -32,7 +32,7 @@ exports.run = (bot, message, args) => {
 	});
 	bot.channels.get(mailbox.channel).send(":mailbox_with_mail: New Message!\n*Check it with `>mailbox messages`*");
 	mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === numbers.find(a => a.number === args[1]).channel))] = mailbox;
-	fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
+	fs.writeFile("./json/mailbox.json", JSON.stringify(mailbox_storage), err => {
 		message.reply(err ? err : "Your message is successfully sent.");
 	});
 };

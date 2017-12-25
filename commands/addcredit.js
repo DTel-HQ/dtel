@@ -1,5 +1,5 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
+var accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
@@ -40,7 +40,7 @@ module.exports = async(bot, message, args) => {
 		leaccount.balance += parseInt(message.content.split(" ")[2]);
 		accounts.push(leaccount);
 	}
-	fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
+	fs.writeFileSync("./json/account.json", JSON.stringify(accounts), "utf8");
 	message.reply("Done.");
 	bot.users.get(leaccount.user).send(`:money_with_wings: A support member has added ¥${message.content.split(" ")[2]} into your account. You now have ¥${leaccount.balance}.`);
 	bot.channels.get("282253502779228160").send(`:money_with_wings: Support member ${message.author.username} added ¥${message.content.split(" ")[2]} to <@${leaccount.user}>.`);

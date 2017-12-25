@@ -1,5 +1,5 @@
 const fs = require("fs");
-var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
+var mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 
 exports.run = (bot, msg, args) => {
 	var mailbox = mailbox_storage.find(a => a.channel === msg.channel.id);
@@ -12,7 +12,7 @@ exports.run = (bot, msg, args) => {
 			messages: [],
 		};
 		mailbox_storage.push(mailbox);
-		fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), "utf8");
+		fs.writeFile("./json/mailbox.json", JSON.stringify(mailbox_storage), "utf8");
 	}
 	switch (msg.content.split(" ")[1]) {
 		case "settings":
@@ -24,9 +24,9 @@ exports.run = (bot, msg, args) => {
 				} else {
 					mailbox.settings[msg.content.split(" ")[2]] = msg.content.replace(`>mailbox settings ${msg.content.split(" ")[2]} `, "");
 					mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === msg.channel.id))] = mailbox;
-					fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
+					fs.writeFile("./json/mailbox.json", JSON.stringify(mailbox_storage), err => {
 						msg.reply(err ? err : "Saved.");
-						mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
+						mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 					});
 				}
 			}
@@ -51,9 +51,9 @@ exports.run = (bot, msg, args) => {
 						} else {
 							mailbox.messages.splice(mailbox.messages.indexOf(message), 1);
 							mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === msg.channel.id))] = mailbox;
-							fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
+							fs.writeFile("./json/mailbox.json", JSON.stringify(mailbox_storage), err => {
 								msg.reply(err ? err : "Deleted!");
-								mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
+								mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 							});
 						}
 						break;

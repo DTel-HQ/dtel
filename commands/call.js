@@ -1,7 +1,7 @@
 const fs = require("fs");
-var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8")),
+var calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8")),
     fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
-    numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8")),
+    numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8")),
     accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
@@ -36,7 +36,7 @@ module.exports = async(bot, message, args) => {
 					{name: "Expiration", value: `${mynumber.year}/${mynumber.month}`},
 					{name: "Your Balance", value: account.balance},
 					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
-				]});
+				]}});
 			return;
 		} else if (!mynumber) {
 			message.channel.send({embed: {
@@ -58,7 +58,7 @@ module.exports = async(bot, message, args) => {
 					{name: "Your Balance", value: account.balance},
 					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
 				], footer: {icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
-					    text: "To hang up, press `0`."}});
+					    text: "To hang up, press `0`."}}});
 			fouroneone.push({ user: message.author.id, status: "4" });
 			return;
 		}
@@ -127,9 +127,9 @@ module.exports = async(bot, message, args) => {
 		bot.channels.get(yourchannel).send("<@&281815839936741377>");
 	}
 	message.reply(":telephone: Dialing... You are able to `>hangup`.");
-	bot.channels.get("282253502779228160").send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${yourchannel} by __${message.author.username}#${message.author.discriminator}__ (${message.author.id}).`);
+	bot.channels.get("282253502779228160").send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${yourchannel} by __${message.tag}__ (${message.author.id}).`);
 	calls.push({ from: { channel: mychannel, number: mynumber }, to: { channel: yourchannel, number: number }, status: false, time: Date.now() });
-	fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
+	fs.readFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 	bot.channels.get(yourchannel).send(`You received a call from \`(${mynumber.split("")[0]}${mynumber.split("")[1]}${mynumber.split("")[2]}${mynumber.split("")[3]}) ${mynumber.split("")[4]}${mynumber.split("")[5]}${mynumber.split("")[6]}-${mynumber.split("")[7]}${mynumber.split("")[8]}${mynumber.split("")[9]}${mynumber.split("")[10]}\`. Type \`>pickup\` or \`>hangup\`.`);
 	setTimeout(() => {
 		var call = calls.find(item => item.from.channel === message.channel.id);
@@ -145,7 +145,7 @@ module.exports = async(bot, message, args) => {
 				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 				bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
 				calls.splice(calls.indexOf(call), 1);
-				fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
+				fs.readFileSync("./json/call.json", JSON.stringify(calls), "utf8");
 				if (!mailbox_storage.find(a => a.channel === call.to.channel)) {
 					bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
 					return;
