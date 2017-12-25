@@ -1,13 +1,13 @@
 const fs = require("fs");
-var accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
-var referrals = JSON.parse(fs.readFileSync("../json/refers.json", "utf8"));
-var referreds = JSON.parse(fs.readFileSync("../json/guilds.json", "utf8"));
+var accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
+var referrals = JSON.parse(fs.readFileSync("./json/refers.json", "utf8"));
+var referreds = JSON.parse(fs.readFileSync("./json/guilds.json", "utf8"));
 
 exports.run = (bot, message, args) => {
 	if (args[1] === undefined) {
 		if (referrals.indexOf(message.author.id) === -1) {
 			referrals.push(message.author.id);
-			fs.writeFile("../json/refers.json", JSON.stringify(referrals), "utf8");
+			fs.writeFile("./json/refers.json", JSON.stringify(referrals), "utf8");
 			message.reply("You're now enrolled as a referrer.");
 		}
 		message.channel.send({ embed: {
@@ -57,6 +57,6 @@ exports.run = (bot, message, args) => {
 		leaccount.balance += 100;
 		accounts.push(leaccount);
 		bot.channels.get("282253502779228160").send(`:new: ${message.author.tag} (${message.author.id}) and ${bot.users.get(args[1]).tag} (${args[1]}) claimed 100 credits of referral bonus.`);
-		fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
+		fs.writeFileSync("./json/account.json", JSON.stringify(accounts), "utf8");
 	}
 };

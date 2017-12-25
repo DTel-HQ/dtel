@@ -1,7 +1,7 @@
 const fs = require("fs");
 const d = new Date();
-var fouroneone = JSON.parse(fs.readFileSync("../json/fouroneone.json", "utf8"));
-var numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8"));
+var fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
+var numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
 let nextmonth = d.getMonth() + 1;
 let year = d.getFullYear();
 let realMonth = nextmonth + 1;
@@ -28,20 +28,20 @@ module.exports = async(bot, message) => {
 	} else if (ffoDocument.status == 1) {
 		console.log("event 1 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 2) {
 		console.log("event 2 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 3) {
 		console.log("event 3 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 4) {
 		if (message.content == "0") {
 			message.reply(":white_check_mark: You hung up the call.");
 			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+			fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		} else {
 			let renewrate = 500;
 			let renewcost;
@@ -53,7 +53,7 @@ module.exports = async(bot, message) => {
 					numberDocument
 					// this almost works but I've got other things I'd want to do lol.
 						.fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-					fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+					fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				} else {
 					message.channel.send(new Discord.RichEmbed()
 						.setColor("#FF0000")
@@ -71,7 +71,7 @@ module.exports = async(bot, message) => {
 		if (message.content === "0") {
 			message.reply("Exiting wizard...");
 			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+			fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 			return;
 		}
 		if (message.content.startsWith("0301")) {
@@ -91,9 +91,9 @@ module.exports = async(bot, message) => {
 				message.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			} else {
 				numbers.push({ channel: message.channel.id, number: number, month: nextmonth, year: year });
-				fs.writeFileSync("../json/numbers.json", JSON.stringify(numbers), "utf8");
+				fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
 				fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-				fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+				fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				message.channel.send({
 					embed: {
 						color: 0x007FFF,
@@ -120,7 +120,7 @@ module.exports = async(bot, message) => {
 		if (message.content === "0") {
 			message.reply("Exiting wizard...");
 			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+			fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 			return;
 		}
 		if (message.content.startsWith("0900")) {
@@ -141,9 +141,9 @@ module.exports = async(bot, message) => {
 				message.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			} else {
 				numbers.push({ channel: message.channel.id, number: number, month: nextmonth, year: year });
-				fs.writeFileSync("../json/numbers.json", JSON.stringify(numbers), "utf8");
+				fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");
 				fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-				fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+				fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				message.channel.send({
 					embed: {
 						color: 0x007FFF,
@@ -169,26 +169,26 @@ module.exports = async(bot, message) => {
 	} else if (ffoDocument.status == 7) {
 		console.log("event 7 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 8) {
 		console.log("event 8 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 9) {
 		console.log("event 9 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 10) {
 		console.log("event 10 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 11) {
 		console.log("event 11 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else {
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
-		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		fs.writeFileSync("./json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		message.channel.send({
 			embed: {
 				title: ":x: Error",
