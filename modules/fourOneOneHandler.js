@@ -5,6 +5,8 @@ var numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8"));
 let nextmonth = d.getMonth() + 1;
 let year = d.getFullYear();
 let realMonth = nextmonth + 1;
+var accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
+const Discord = require("discord.js");
 
 module.exports = async(bot, message) => {
 	if (nextmonth == 12) {
@@ -18,18 +20,53 @@ module.exports = async(bot, message) => {
 		realMonth = 0 + realMonth;
 	}
 	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
-	if (ffoDocument.status == 1) {
+	if (ffoDocument.status == 0) {
+		if (message.content == "0") {
+			message.reply(":white_check_mark: You hung up the call.");
+			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		}
+	} else if (ffoDocument.status == 1) {
 		console.log("event 1 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 2) {
 		console.log("event 2 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 3) {
 		console.log("event 3 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 4) {
-		console.log("event 4 placeholder");
-		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		if (message.content == "0") {
+			message.reply(":white_check_mark: You hung up the call.");
+			fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+			fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+		} else {
+			let renewrate = 500;
+			let renewcost;
+			let account = accounts.find(a => a.user === message.author.id);
+			let numberDocument = numbers.find(n => n.channel === message.channel.id);
+			if (message.content.match(/^[0-9]+$/) != null) {
+				renewcost = renewrate * message.content;
+				if (account && account.balance >= renewcost) {
+					numberDocument
+					// this almost works but I've got other things I'd want to do lol.
+						.fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+					fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
+				} else {
+					message.channel.send(new Discord.RichEmbed()
+						.setColor("#FF0000")
+						.setTitle("Error: Insufficient funds!")
+						.setDescription("Type the amount of months you want to renew your number.")
+						.addField("Number", numberDocument.number)
+						.addField("Expiration", `${numberDocument.year}/${numberDocument.month}`)
+						.addField("Your Balance", account.balance)
+						.addField("Recharging", "See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.")
+						.setFooter("To hang up, press `0`."));
+				}
+			}
+		}
 	} else if (ffoDocument.status == 5) {
 		if (message.content === "0") {
 			message.reply("Exiting wizard...");
@@ -64,16 +101,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number
+							value: number,
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`
+							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
-						}
-					}
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+						},
+					},
 				});
 			}
 		} else {
@@ -114,16 +151,16 @@ module.exports = async(bot, message) => {
 						description: "Here's your service information. Should you have any questions, don't hesitate to dial `*611`.",
 						fields: [{
 							name: "Number",
-							value: number
+							value: number,
 						},
 						{
 							name: "Expiration",
-							value: `${year}/${realMonth}`
+							value: `${year}/${realMonth}`,
 						}],
 						footer: {
-							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard."
-						}
-					}
+							text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+						},
+					},
 				});
 			}
 		} else {
@@ -132,28 +169,34 @@ module.exports = async(bot, message) => {
 	} else if (ffoDocument.status == 7) {
 		console.log("event 7 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 8) {
 		console.log("event 8 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 9) {
 		console.log("event 9 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 10) {
 		console.log("event 10 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else if (ffoDocument.status == 11) {
 		console.log("event 11 placeholder");
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 	} else {
 		fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+		fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 		message.channel.send({
 			embed: {
 				title: ":x: Error",
 				description: "An unknown error has occurred.",
 				footer: {
-					text: "Please DM a developer or call Customer Support by dialling *611."
-				}
-			}
+					text: "Please DM a developer or call Customer Support by dialling *611.",
+				},
+			},
 		});
 	}
 };
