@@ -3,7 +3,7 @@ const numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
-	if (!support(message.author.id)) return;
+	if (!support(message.author.id)) { return; }
 	if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
 		message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
 		return;

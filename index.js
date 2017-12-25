@@ -83,7 +83,7 @@ bot.on("message", async message => {
 	if (message.guild !== undefined && message.guild.available !== true) {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
-	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
+	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) { return; }
 	// In progress wizard/phonebook session?
 	if (fouroneone.find(i => i.user === message.author.id)) {
 		require("./modules/fourOneOneHandler")(bot, message);
