@@ -1,9 +1,8 @@
 const fs = require("fs");
-var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8"));
-var fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
-var numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8"));
-var accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
-const Discord = require("discord.js");
+var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8")),
+    fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
+    numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8")),
+    accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	let number = args[1];
@@ -29,31 +28,37 @@ module.exports = async(bot, message, args) => {
 			message.reply("You don't have an account created... Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 		}
 		if (account.balance < 500) {
-			message.channel.sendEmbed(new Discord.RichEmbed()
-				.setTitle("Current Number Status")
-				.setDescription("You have less than 500 credits which means you cannot renew at all.")
-				.addField("Number", mynumber.number)
-				.addField("Expiration", `${mynumber.year}/${mynumber.month}`)
-				.addField("Your Balance", account.balance)
-				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
+			message.channel.send({embed: {
+				title: "Current Number Status",
+				description: "You have less than 500 credits which means you cannot renew at all.",
+				fields: [
+					{name: "Number", value: mynumber.number},
+					{name: "Expiration", value: `${mynumber.year}/${mynumber.month}`},
+					{name: "Your Balance", value: account.balance},
+					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
+				]});
 			return;
 		} else if (!mynumber) {
-			message.channel.sendEmbed(new Discord.RichEmbed()
-				.setColor("#007FFF")
-				.setTitle("Current Account Status")
-				.addField("Your Balance", account.balance)
-				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/"));
+			message.channel.send({embed: {
+				color: 3447003,
+				title: "Current Account Status",
+				fields: [
+					{name: "Your Balance", value: account.balance},
+					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
+				]}});
 			return;
 		} else {
-			message.channel.sendEmbed(new Discord.RichEmbed()
-				.setColor("#007FFF")
-				.setTitle("Current Number Status")
-				.setDescription("Type the amount of months you want to renew your number.")
-				.addField("Number", mynumber.number)
-				.addField("Expiration", `${mynumber.year}/${mynumber.month}`)
-				.addField("Your Balance", account.balance)
-				.addField("Recharging", "http://discordtel.readthedocs.io/en/latest/Payment/")
-				.setFooter("To hang up, press `0`."));
+			message.channel.send({embed: {
+				color: 3447003,
+				title: "Current Number Status",
+				description: "Type the amount of months you want to renew your number.",
+				fields: [
+					{name: "Number", value: mynumber.number},
+					{name: "Expiration", value: `${mynumber.year}/${mynumber.month}`},
+					{name: "Your Balance", value: account.balance},
+					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
+				], footer: {icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
+					    text: "To hang up, press `0`."}});
 			fouroneone.push({ user: message.author.id, status: "4" });
 			return;
 		}
