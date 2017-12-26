@@ -84,27 +84,35 @@ module.exports = async(bot, message, args) => {
 		message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 		return;
 	} else if (yourchannel.year < new Date().getFullYear()) {
-		message.reply(":x: Dialing error: The number you've dialed has expired. Contact the number owner to renew it.");
+		message.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
 		return;
 	} else if (yourchannel.year === new Date().getFullYear() && yourchannel.month <= new Date().getMonth()) {
-		message.reply(":x: Dialing error: The number you've dialed has expired. Contact the number owner to renew it.");
+		message.reply(`:x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.`);
 		return;
 	}
 	yourchannel = yourchannel.channel;
 	if (mynumber === undefined) {
-		message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service.");
-		return;
+		for(var channie of message.guild.channels) {
+			if(numbers.find(n => n.channel === channie.id)) {
+				message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${channie.id}>.`);
+				return;	
+			} else {
+				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+				return;
+			}
+		}
+
 	}
 	if (number === mynumber.number) {
 		message.reply(":thinking: I am wondering why you are calling yourself.");
 		return;
 	}
 	if (mynumber.year === new Date().getFullYear() && mynumber.month <= new Date().getMonth()) {
-		message.reply(":x: Billing error: Your number is expired. Renew your number by dialing `*233`.");
+		message.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 		return;
 	}
 	if (mynumber.year < new Date().getFullYear()) {
-		message.reply(":x: Billing error: Your number is expired. Renew your number by dialing `*233`.");
+		message.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 		return;
 	}
 	mynumber = mynumber.number;
@@ -126,11 +134,11 @@ module.exports = async(bot, message, args) => {
 	} else if (number === "08006113835") {
 		bot.channels.get(yourchannel).send("<@&281815839936741377>");
 	}
-	message.reply(":telephone: Dialing... You are able to `>hangup`.");
+	message.reply(`:telephone: Dialling ${number}... You are able to \`>hangup\`.`);
 	bot.channels.get("282253502779228160").send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${yourchannel} by __${message.author.username}#${message.author.discriminator}__ (${message.author.id}).`);
 	calls.push({ from: { channel: mychannel, number: mynumber }, to: { channel: yourchannel, number: number }, status: false, time: Date.now() });
 	fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-	bot.channels.get(yourchannel).send(`You received a call from \`(${mynumber.split("")[0]}${mynumber.split("")[1]}${mynumber.split("")[2]}${mynumber.split("")[3]}) ${mynumber.split("")[4]}${mynumber.split("")[5]}${mynumber.split("")[6]}-${mynumber.split("")[7]}${mynumber.split("")[8]}${mynumber.split("")[9]}${mynumber.split("")[10]}\`. Type \`>pickup\` or \`>hangup\`.`);
+	bot.channels.get(yourchannel).send(`There is an incoming call from \`(${mynumber.split("")[0]}${mynumber.split("")[1]}${mynumber.split("")[2]}${mynumber.split("")[3]}) ${mynumber.split("")[4]}${mynumber.split("")[5]}${mynumber.split("")[6]}-${mynumber.split("")[7]}${mynumber.split("")[8]}${mynumber.split("")[9]}${mynumber.split("")[10]}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
 	setTimeout(() => {
 		var call = calls.find(item => item.from.channel === message.channel.id);
 		if (call !== undefined) {
@@ -153,7 +161,7 @@ module.exports = async(bot, message, args) => {
 				bot.channels.get(call.from.channel).send(`:x: ${mailbox_storage.find(a => a.channel === call.to.channel).settings.autoreply}`);
 				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
 				recentCall[call.from.channel] = call.to.number;
-				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} is expired.`);
+				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} has expired.`);
 			}
 		}
 	}, 120000);
