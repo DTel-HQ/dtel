@@ -1,8 +1,8 @@
 const fs = require("fs");
 var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8")),
-    fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
-    numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8")),
-    accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
+	fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
+	numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8")),
+	accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	let number = args[1];
@@ -18,8 +18,7 @@ module.exports = async(bot, message, args) => {
 	if (number === "*411") {
 		message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
 		fouroneone.push({ user: message.author.id, status: "0" });
-	}
-	else if (number === "*233") {
+	} else if (number === "*233") {
 		let account = accounts.find(a => a.user === message.author.id);
 		if (!account) {
 			account = { user: message.author.id, balance: 0 };
@@ -28,37 +27,38 @@ module.exports = async(bot, message, args) => {
 			message.reply("You don't have an account created... Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 		}
 		if (account.balance < 500) {
-			message.channel.send({embed: {
+			message.channel.send({ embed: {
 				title: "Current Number Status",
 				description: "You have less than 500 credits which means you cannot renew at all.",
 				fields: [
-					{name: "Number", value: mynumber.number},
-					{name: "Expiration", value: `${mynumber.year}/${mynumber.month}`},
-					{name: "Your Balance", value: account.balance},
-					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
-				]});
+					{ name: "Number", value: mynumber.number },
+					{ name: "Expiration", value: `${mynumber.year}/${mynumber.month}` },
+					{ name: "Your Balance", value: account.balance },
+					{ name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/" },
+				],
+			} });
 			return;
 		} else if (!mynumber) {
-			message.channel.send({embed: {
+			message.channel.send({ embed: {
 				color: 3447003,
 				title: "Current Account Status",
 				fields: [
-					{name: "Your Balance", value: account.balance},
-					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
-				]}});
+					{ name: "Your Balance", value: account.balance },
+					{ name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/" },
+				] } });
 			return;
 		} else {
-			message.channel.send({embed: {
+			message.channel.send({ embed: {
 				color: 3447003,
 				title: "Current Number Status",
 				description: "Type the amount of months you want to renew your number.",
 				fields: [
-					{name: "Number", value: mynumber.number},
-					{name: "Expiration", value: `${mynumber.year}/${mynumber.month}`},
-					{name: "Your Balance", value: account.balance},
-					{name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/"},
-				], footer: {icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
-					    text: "To hang up, press `0`."}});
+					{ name: "Number", value: mynumber.number },
+					{ name: "Expiration", value: `${mynumber.year}/${mynumber.month}` },
+					{ name: "Your Balance", value: account.balance },
+					{ name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/" },
+				], footer: { icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
+					text: "To hang up, press `0`." } } });
 			fouroneone.push({ user: message.author.id, status: "4" });
 			return;
 		}
@@ -92,16 +92,15 @@ module.exports = async(bot, message, args) => {
 	}
 	yourchannel = yourchannel.channel;
 	if (mynumber === undefined) {
-		for(var channie of message.guild.channels) {
-			if(numbers.find(n => n.channel === channie.id)) {
+		for (var channie of message.guild.channels) {
+			if (numbers.find(n => n.channel === channie.id)) {
 				message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${channie.id}>.`);
-				return;	
+				return;
 			} else {
 				message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 				return;
 			}
 		}
-
 	}
 	if (number === mynumber.number) {
 		message.reply(":thinking: I am wondering why you are calling yourself.");
