@@ -8,7 +8,7 @@ module.exports = async(bot, message, args) => {
 		message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
 		return;
 	}
-  numbers.forEach(n => {also 
+  numbers.forEach(n => {
     if (bot.channels.get(n.channel) !== undefined && n.channel !== "265156286406983680" && n.channel !== "113743192305827841") {
       bot.channels.get(n.channel).send(args[1]);
     }
