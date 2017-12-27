@@ -85,11 +85,19 @@ bot.on("message", async message => {
 	}
 	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
 	// In progress wizard/phonebook session?
-	if (fouroneone.findOne({ _id: message.author.id } !== null)) {
+	let ffoDocument;
+	try {
+		ffoDocument = await fouroneone.findOne({ _id: message.author.id });
+	} catch (err) {
+		ffoDocument = null;
+	}
+
+	if (ffoDocument) {
 		require("./modules/fourOneOneHandler")(bot, message);
 	// Call msg?
 	} else if (message.guild.call) {
-		console.log("Call msg placeholder");
+		// I'm pretty sure we can define message.guild.call globally, so that'll be good
+		require("./modules/callHandler")(bot, message);
 	} else if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
