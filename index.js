@@ -85,7 +85,7 @@ bot.on("message", async message => {
 	}
 	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
 	// In progress wizard/phonebook session?
-	if (fouroneone.find(i => i.user === message.author.id)) {
+	if (fouroneone.findOne({ _id: message.author.id } !== null)) {
 		require("./modules/fourOneOneHandler")(bot, message);
 	// Call msg?
 	} else if (message.guild.call) {

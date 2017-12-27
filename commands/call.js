@@ -1,13 +1,11 @@
 const fs = require("fs");
 var calls = JSON.parse(fs.readFileSync("../json/call.json", "utf8")),
-	fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8")),
 	numbers = JSON.parse(fs.readFileSync("./json/.json", "utf8")),
 	accounts = JSON.parse(fs.readFileSync("./json/account.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
 	let number = args[1];
 	let mynumber = numbers.find(n => n.channel === message.channel.id);
-	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
 	if (number === "") {
 		message.reply("Damn son, you forgot the number! `>dial <Number>`");
 		return;
@@ -17,7 +15,7 @@ module.exports = async(bot, message, args) => {
 	}
 	if (number === "*411") {
 		message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
-		fouroneone.push({ user: message.author.id, status: "0" });
+		await Fouroneone.create(new Fouroneone({ _id: message.author.id, status: 0 }));
 	} else if (number === "*233") {
 		let account = accounts.find(a => a.user === message.author.id);
 		if (!account) {
@@ -59,7 +57,7 @@ module.exports = async(bot, message, args) => {
 					{ name: "How to recharge", value: "http://discordtel.austinhuang.me/en/latest/Payment/" },
 				], footer: { icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
 					text: "To hang up, press `0`." } } });
-			fouroneone.push({ user: message.author.id, status: "4" });
+			await Fouroneone.create(new Fouroneone({ _id: message.author.id, status: 4 }));
 			return;
 		}
 	}
