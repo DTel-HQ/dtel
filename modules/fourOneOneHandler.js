@@ -19,7 +19,7 @@ module.exports = async(bot, message) => {
 	if (realMonth == 1 || realMonth == 2 || realMonth == 3 || realMonth == 4 || realMonth == 5 || realMonth == 6 || realMonth == 7 || realMonth == 8 || realMonth == 9) {
 		realMonth = 0 + realMonth;
 	}
-	let ffoDocument = fouroneone.find(i => i.user === message.author.id);
+	let ffoDocument = await Fouroneone.findOne({ _id: message.author.id });
 	if (ffoDocument.status == 0) {
 		if (message.content == "0") {
 			message.reply(":white_check_mark: You hung up the call.");

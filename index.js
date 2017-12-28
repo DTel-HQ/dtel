@@ -8,7 +8,7 @@ require("dotenv").config();
 const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
 const fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
 const emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8"));
-const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.has(user_id);
 const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const gblacklist = JSON.parse(fs.readFileSync("./json/gblacklist.json", "utf8"));
@@ -87,7 +87,7 @@ bot.on("message", async message => {
 	// In progress wizard/phonebook session?
 	let ffoDocument;
 	try {
-		ffoDocument = await fouroneone.findOne({ _id: message.author.id });
+		ffoDocument = await Fouroneone.findOne({ _id: message.author.id });
 	} catch (err) {
 		ffoDocument = null;
 	}

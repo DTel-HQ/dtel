@@ -10,7 +10,10 @@ module.exports = {
 	globals: {
 		Servers: true,
 		Database: true,
-		Suggestions: true,
+		Fouroneone: true,
+		Calls: true,
+		Numbers: true,
+		Phonebook: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",
