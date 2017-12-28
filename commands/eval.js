@@ -1,4 +1,4 @@
-exports.run = async(bot, message, args) => {
+module.exports = async(bot, message, args) => {
 	// permission check
 	if (!bot.guilds.get("281815661317980160").members.get(message.author.id).hasRole(message.guild.roles.find("name", "Boss"))) return;
 	if (args.length == 1) {
@@ -6,13 +6,12 @@ exports.run = async(bot, message, args) => {
 		return;
 	}
 	// prevent anyone from getting the token
-	const toEval = args.slice(1).join(" ");
-	if (toEval.toLowerCase().contains("token")) {
+	if (args.toLowerCase().contains("token")) {
 		message.channel.send(":x: no u");
 		return;
 	}
 	try {
-		const result = eval(toEval);
+		const result = eval(args);
 		// don't send it if it has the token.
 		if (result.toString().contains(process.env.DISCORD_TOKEN)) {
 			message.channel.send(":x: **DID YOU JUST TRY TO BETRAY OUR SOVIET MOTHERLAND???**");
