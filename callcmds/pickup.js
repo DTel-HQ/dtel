@@ -35,9 +35,9 @@ exports.run = (bot, message, fs, calls, call) => {
 					return;
 				}
 				bot.channels.get(call.from.channel).send(`:x: ${mailbox_storage.find(a => a.channel === call.to.channel).settings.autoreply}`);
-				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message to their inbox? `>message [number] [message]`");
 				recentCall[call.from.channel] = call.to.number;
-				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} is expired.`);
+				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} has expired.`);
 			}
 		}
 	}, 120000);
