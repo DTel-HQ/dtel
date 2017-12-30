@@ -50,6 +50,6 @@ module.exports = async(bot, message, args) => {
 	}
 	account.balance += daily;
 	accounts.push(account);
-	bot.channels.get("282253502779228160").send(`:calendar: ${message.author.username}#${message.author.discriminator} (${message.author.id}) claimed ${daily} daily credits.`);
+	bot.channels.get("282253502779228160").send(`:calendar: ${message.author.tag} (${message.author.id}) claimed ${daily} daily credits.`);
 	fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 };

@@ -16,19 +16,17 @@ exports.run = (bot, message, args) => {
 			description: "To expand DiscordTel's services, I invite you to refer new users into DiscordTel.",
 			fields: [{
 				name: "Oooh, how do I do it?",
-				value: `It's easy. Ask server owners you've invited to type \`>refer ${message.author.id}\`.`,
+				value: `It's easy. Ask server owners you've invited to type \`>refer ${message.author.id}\`.`
 			},
 			{
 				name: "What do I get?",
-				value: "For every referral you've invited, 100 credits will be paid to you and your referral.",
+				value: "For every referral you've invited, 100 credits will be paid to you and your referral."
 			},
 			{
 				name: "Can I cheat?",
-				value: "*smug* No, sweetheart. You'll understand why.",
-			},
-			],
-		},
-		});
+				value: "*smug* No, sweetheart. You'll understand why."
+			}],
+		}});
 	} else if (message.guild.owner.id !== message.author.id) {
 		message.reply("Only server owners can be referrees.");
 	} else if (message.author.id === args[1]) {
@@ -49,7 +47,7 @@ exports.run = (bot, message, args) => {
 		}
 		account.balance += 100;
 		accounts.push(account);
-		bot.users.get(args[1]).send(`Good news! ${message.author.username}#${message.author.discriminator} (${message.author.id}) is now your referral! 100 credits for you!`);
+		bot.users.get(args[1]).send(`Good news! ${message.author.tag} (${message.author.id}) is now your referral! 100 credits for you!`);
 		var leaccount = accounts.find(item => item.user === args[1]);
 		if (leaccount !== undefined) {
 			accounts.splice(accounts.indexOf(leaccount), 1);
@@ -58,7 +56,7 @@ exports.run = (bot, message, args) => {
 		}
 		leaccount.balance += 100;
 		accounts.push(leaccount);
-		bot.channels.get("282253502779228160").send(`:new: ${message.author.username}#${message.author.discriminator} (${message.author.id}) and ${bot.users.get(args[1]).username}#${bot.users.get(args[1]).discriminator} (${args[1]}) claimed 100 credits of referral bonus.`);
-		fs.writeFileSync("../json/./json/account.json", JSON.stringify(accounts), "utf8");
+		bot.channels.get("282253502779228160").send(`:new: ${message.author.tag} (${message.author.id}) and ${bot.users.get(args[1]).tag} (${args[1]}) claimed 100 credits of referral bonus.`);
+		fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 	}
 };

@@ -3,7 +3,7 @@ const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 var award = JSON.parse(fs.readFileSync("../json/award.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
-	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user_id) > -1;
+	const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.has(user_id);
 	var account = accounts.find(item => item.user === message.author.id);
 	if (message.content.split(" ")[1] === undefined) {
 		const myentry = award.users.filter(item => item === message.author.id).length;
