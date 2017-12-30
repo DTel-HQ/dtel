@@ -688,6 +688,11 @@ bot.on("message", message => {
 		}
 		else if(message.content.startsWith(">message")){
 			var msg=message;
+			var maxChar = 1000;
+			if(msg.content.length > maxChar) {
+				msg.reply(":x: This message is way large to fit inside their mailbox.");
+				return;
+			}
 			if(msg.content.split(" ")[1]!==recentCall[msg.channel.id]){
 				msg.reply(":x: You didn't call this number (`"+msg.content.split(" ")[1]+"`)");
 				return;
@@ -753,9 +758,14 @@ bot.on("message", message => {
 				if(!msg.content.split(" ")[2]){
 					var embed=new Discord.RichEmbed();
 					embed.setTitle(":mailbox_with_mail: Messages");
-					embed.setDescription("**`"+mailbox.messages.length+"` Messages**\n\n"+mailbox.messages.map(m=>{
-						return "**ID:** `"+m.id+"`\n**From:** "+m.from+"\n**Message:**```\n"+m.message+"\n```\n\n"
-					}));
+					embed.setDescription("**`"+mailbox.messages.length+"` Messages**");
+					for(var i = 0; i < mailbox.messages.length; i++) {
+						var m = mailbox.messages[mailbox.messages.length - i - 1];
+						embed.addField(`‏`, `**ID**: \`${m.id}\`\n**From**: ${m.from}\n**Message**:\n\`\`\`${m.message}\`\`\``);
+						if (i == 7) {
+							i = mailbox.messages.length; // to prevent spamming the channel too much.
+						}
+					};
 					embed.setFooter("Message options: `>mailbox messages [id]`");
 					msg.channel.send({embed:embed});
 				} else {
