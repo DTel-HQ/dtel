@@ -2,7 +2,7 @@ var fs = require("fs");
 var blacklist = JSON.parse(fs.readFileSync("../json/gblacklist.json", "utf8"));
 var blacklisted = guild => blacklist.indexOf(guild) > -1;
 
-exports.run = (bot, message, args) => {
+module.exports = async(bot, message, args) => {
 	var support = user => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.map(member => member.id).indexOf(user) > -1;
 	if (!support(message.author.id)) return;
 	if (message.content.split(" ")[1] === undefined) {

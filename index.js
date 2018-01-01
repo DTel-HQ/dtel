@@ -18,7 +18,7 @@ const schedule = require("node-schedule");
 const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
 const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
-var numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
+const numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
 const restify = require("restify");
 const server = restify.createServer({
 	name: "Bot HTTP server",
@@ -48,7 +48,7 @@ function removeNumber(numberIndex) {
 
 schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 	const now = new Date();
-	for (var i in numbers) {
+	for (let i in numbers) {
 		const number = numbers[i];
 		if (number.year <= now.getFullYear() || number.month <= now.getMonth()) {
 			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)) {

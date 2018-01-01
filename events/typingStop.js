@@ -10,8 +10,8 @@ module.exports = async(bot, channel, member) => {
 		}
 	}
 	if (callTo) {
-		bot.channels.get(callTo.from.channelID).startTyping(100);
+		bot.channels.get(callTo.from.channelID).stopTyping(true);
 	} else if (callFrom) {
-		bot.channels.get(callFrom.to.channelID).startTyping(100);
+		bot.channels.get(callFrom.to.channelID).stopTyping(true);
 	}
 };

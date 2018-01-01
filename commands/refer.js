@@ -3,7 +3,7 @@ var accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 var referrals = JSON.parse(fs.readFileSync("../json/refers.json", "utf8"));
 var referreds = JSON.parse(fs.readFileSync("../json/guilds.json", "utf8"));
 
-exports.run = (bot, message, args) => {
+module.exports = async(bot, message, args) => {
 	if (args[1] === undefined) {
 		if (referrals.indexOf(message.author.id) === -1) {
 			referrals.push(message.author.id);
@@ -16,17 +16,17 @@ exports.run = (bot, message, args) => {
 			description: "To expand DiscordTel's services, I invite you to refer new users into DiscordTel.",
 			fields: [{
 				name: "Oooh, how do I do it?",
-				value: `It's easy. Ask server owners you've invited to type \`>refer ${message.author.id}\`.`
+				value: `It's easy. Ask server owners you've invited to type \`>refer ${message.author.id}\`.`,
 			},
 			{
 				name: "What do I get?",
-				value: "For every referral you've invited, 100 credits will be paid to you and your referral."
+				value: "For every referral you've invited, 100 credits will be paid to you and your referral.",
 			},
 			{
 				name: "Can I cheat?",
-				value: "*smug* No, sweetheart. You'll understand why."
+				value: "*smug* No, sweetheart. You'll understand why.",
 			}],
-		}});
+		} });
 	} else if (message.guild.owner.id !== message.author.id) {
 		message.reply("Only server owners can be referrees.");
 	} else if (message.author.id === args[1]) {

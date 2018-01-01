@@ -1,6 +1,6 @@
 const request = require("request");
 
-exports.run = async(bot, guild) => {
+module.exports = async(bot, guild) => {
 	const cleanedguildname = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
 	bot.channels.get("282253502779228160").send(`:outbox_tray: Left \`${guild.name}\` (${guild.id}). Currently in ${bot.guilds.array().length} servers.`);
 	bot.user.setPresence({ game: { name: `${bot.guilds.array().length} servers | >help`, type: 0 } });

@@ -50,9 +50,8 @@ module.exports = async(bot, message) => {
 			if (message.content.match(/^[0-9]+$/) != null) {
 				renewcost = renewrate * message.content;
 				if (account && account.balance >= renewcost) {
-					numberDocument
 					// this almost works but I've got other things I'd want to do lol.
-						.fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
+					fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
 					fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				} else {
 					message.channel.send(new Discord.RichEmbed()

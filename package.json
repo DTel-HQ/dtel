@@ -1,0 +1,30 @@
+{
+  "name": "discordtel",
+  "version": "1.0.0",
+  "description": "DiscordTel",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^11.2.1",
+    "dotenv": "^4.0.0",
+    "mongoose": "^4.13.8",
+    "node-schedule": "^1.2.5",
+    "request": "^2.83.0",
+    "restify": "^6.3.4",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo IT WORKS OK"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/austinhuang0131/discordtel.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/austinhuang0131/discordtel/issues"
+  },
+  "homepage": "https://github.com/austinhuang0131/discordtel#readme"
+}

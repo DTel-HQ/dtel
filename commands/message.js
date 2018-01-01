@@ -4,7 +4,7 @@ var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8")
 	numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8")),
 	accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 
-exports.run = (bot, message, args) => {
+module.exports = async(bot, message, args) => {
 	if (args.length !== 3) {
 		message.reply("Correct usage: `>message <Number> <Content>`. 1 message costs 2 credits. Receiving messages is free by using `>mailbox messages`.");
 		return;
