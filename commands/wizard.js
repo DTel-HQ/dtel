@@ -13,7 +13,7 @@ module.exports = async(bot, message, args) => {
 			guildnumber = await Numbers.findOne({ _id: c.id });
 			if (guildnumber) break;
 		} catch (_) {
-			//
+			// Ignore
 		}
 	}
 	if (guildnumber) {
