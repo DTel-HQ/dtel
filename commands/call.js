@@ -136,30 +136,31 @@
 	// calls.push({ from: { channel: mychannel, number: mynumber }, to: { channel: yourchannel, number: number }, status: false, time: Date.now() });
 	// fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
 	// bot.channels.get(yourchannel).send(`There is an incoming call from \`(${mynumber.split("")[0]}${mynumber.split("")[1]}${mynumber.split("")[2]}${mynumber.split("")[3]}) ${mynumber.split("")[4]}${mynumber.split("")[5]}${mynumber.split("")[6]}-${mynumber.split("")[7]}${mynumber.split("")[8]}${mynumber.split("")[9]}${mynumber.split("")[10]}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
-	setTimeout(() => {
-		var call = calls.find(item => item.from.channel === message.channel.id);
-		if (call !== undefined) {
-			call = calls.find(item => {
-				if (item.from.channel === message.channel.id) {
-					return item.from.channel === message.channel.id;
-				} else if (item.to.channel === message.channel.id) {
-					return item.to.channel === message.channel.id;
-				} else { return undefined; }
-			});
-			if (call.status === false && call.time <= Date.now() - 120000) {
-				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-				bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
-				calls.splice(calls.indexOf(call), 1);
-				fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-				if (!mailbox_storage.find(a => a.channel === call.to.channel)) {
-					bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
-					return;
-				}
-				bot.channels.get(call.from.channel).send(`:x: ${mailbox_storage.find(a => a.channel === call.to.channel).settings.autoreply}`);
-				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
-				recentCall[call.from.channel] = call.to.number;
-				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} has expired.`);
-			}
-		}
-	}, 120000);
-};
+	// setTimeout(() => {
+	// 	var call = calls.find(item => item.from.channel === message.channel.id);
+	// 	if (call !== undefined) {
+	// 		call = calls.find(item => {
+	// 			if (item.from.channel === message.channel.id) {
+	// 				return item.from.channel === message.channel.id;
+	// 			} else if (item.to.channel === message.channel.id) {
+	// 				return item.to.channel === message.channel.id;
+	// 			} else { return undefined; }
+	// 		});
+			// if (call.status === false && call.time <= Date.now() - 120000) {
+			// 	message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+			// 	bot.channels.get(call.to.channel).send(":x: This call has expired (2 minutes).");
+			// 	calls.splice(calls.indexOf(call), 1);
+				// fs.readFileSync("../json/call.json", JSON.stringify(calls), "utf8");
+				// if (!mailbox_storage.find(a => a.channel === call.to.channel)) {
+				// 	bot.channels.get(call.from.channel).send(":x: Call ended; their mailbox isn't setup");
+				// 	return;
+				// }
+				// bot.channels.get(call.from.channel).send(`:x: ${mailbox_storage.find(a => a.channel === call.to.channel).settings.autoreply}`);
+				// bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				// recentCall[call.from.channel] = call.to.number;
+				// bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} has expired.`);
+			// }
+		// }
+	// }, 120000);
+// };
+

@@ -171,8 +171,24 @@ module.exports = async(bot, message, args) => {
 					channelID: message.channel.id,
 					number: mynumber.number,
 				},
-			})
+			}), callDocument => {
+				bot.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
+				setTimeout(async() => {
+					callDocument.status = false;
+					await callDocument.save();
+					message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+					bot.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
+					bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
+					let mailbox;
+					try {
+						mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+					} catch (err) {
+						return bot.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+					}
+					bot.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+					bot.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				}, 120000);
+			}
 		);
-		bot.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
 	}
 };

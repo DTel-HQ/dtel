@@ -15,6 +15,7 @@ module.exports = {
 		Numbers: true,
 		Phonebook: true,
 		Accounts: true,
+		Mailbox: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",
