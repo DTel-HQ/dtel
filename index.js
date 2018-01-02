@@ -55,7 +55,7 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 				// send a notice to the user.
 				var channel = bot.channels.get(number.channel);
 				if (channel) {
-					var message = "Your number is expired! Pay your monthly fee by typing `>dial *233`!";
+					var message = "Your number has expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 				}
 			}
