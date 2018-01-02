@@ -19,14 +19,15 @@ const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
 const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
 const numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
-const restify = require("restify");
-const server = restify.createServer({
-	name: "Bot HTTP server",
-});
 const ipaddress = process.env.IP || "127.0.0.1";
+const http = require("http");
 const port = process.env.PORT || 2000;
+const server = http.createServer((req, res) => {
+	res.writeHead(200, { "Content-Type": "text/plain" });
+	res.end("ok");
+});
 server.listen(port, ipaddress, () => {
-	console.log("%s listening to %s", server.name, server.url);
+	console.log(`Bot HTTP Server listeing on ${ipaddress}:${port}`);
 });
 
 database.initialize(process.env.MONGOURL).then(db => {
@@ -58,8 +59,7 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 					var message = "Your number has expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 				}
-			}
-			else removeNumber(i);
+			} else {removeNumber(i);}
 			// bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}

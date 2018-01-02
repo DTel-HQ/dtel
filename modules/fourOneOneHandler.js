@@ -54,7 +54,7 @@ module.exports = async(bot, message) => {
 					fouroneone.splice(fouroneone.indexOf(ffoDocument), 1);
 					fs.writeFileSync("../json/fouroneone.json", JSON.stringify(fouroneone), "utf8");
 				} else {
-					message.channel.send(new Discord.RichEmbed()
+					message.channel.send(new Discord.MessageEmbed()
 						.setColor("#FF0000")
 						.setTitle("Error: Insufficient funds!")
 						.setDescription("Type the amount of months you want to renew your number.")

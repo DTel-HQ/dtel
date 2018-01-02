@@ -1,6 +1,7 @@
 module.exports = async(bot, message, args) => {
 	// permission check
-	if (!bot.guilds.get("281815661317980160").members.get(message.author.id).hasRole(message.guild.roles.find("name", "Boss"))) return;
+	// if (!bot.guilds.get("281815661317980160").members.get(message.author.id).hasRole(message.guild.roles.find("name", "Boss"))) return;
+	if (message.author.id !== "137589790538334208") return;
 	if (args.length == 1) {
 		message.channel.send("You need to actually put an evaluation.");
 		return;
