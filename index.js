@@ -54,14 +54,12 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)) {
 				// send a notice to the user.
 				var channel = bot.channels.get(number.channel);
-				if (!channel) { // if the channel is null we will remove them because that means deleted. :(
+				if (channel) {
 					var message = "Your number is expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
-					break;
 				}
 			}
-			removeNumber(i);
-			// Uncomment if I should log it. I don't think it would be a good idea because it happens every month, so spam. - nubbytm
+			else removeNumber(i);
 			// bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}
