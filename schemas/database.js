@@ -5,6 +5,7 @@ const fouroneoneSchema = require("./fouroneoneSchema");
 const numberSchema = require("./numberSchema");
 const callSchema = require("./callSchema");
 const phonebookSchema = require("./phonebookSchema");
+const accountSchema = require("./accountSchema");
 const addToGlobal = (name, val) => {
 	global[name] = val;
 };
@@ -19,12 +20,14 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		Numbers,
 		Calls,
 		Phonebook,
+		Accounts,
 	] = [
 		mongoose.model("servers", serverSchema),
 		mongoose.model("fouroneone", fouroneoneSchema),
 		mongoose.model("numbers", numberSchema),
 		mongoose.model("calls", callSchema),
 		mongoose.model("phonebook", phonebookSchema),
+		mongoose.model("accounts", accountSchema),
 	];
 	mongoose.connection
 		.on("error", err => reject(err))
@@ -34,12 +37,14 @@ exports.initialize = url => new Promise((resolve, reject) => {
 			addToGlobal("Numbers", Numbers);
 			addToGlobal("Calls", Calls);
 			addToGlobal("Phonebook", Phonebook);
+			addToGlobal("Accounts", Accounts);
 			addToGlobal("Database", {
 				Servers, servers: Servers,
 				Fouroneone, fouroneone: Fouroneone,
 				Numbers, numbers: Numbers,
 				Calls, calls: Calls,
 				Phonebook, phonebook: Phonebook,
+				Accounts, accounts: Accounts,
 				Raw: mongoose.connection,
 			});
 			resolve(global.Database);
