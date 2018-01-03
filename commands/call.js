@@ -39,13 +39,14 @@ module.exports = async(bot, message, args) => {
 			let account;
 			try {
 				account = await Accounts.findOne({ _id: message.author.id });
+				if (!account) throw new Error();
 			} catch (err) {
 				if (err && !account) {
 					account = await Accounts.create(new Accounts({ _id: message.author.id, balance: 0 }));
 					message.reply("You don't have an account created... Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 				}
 			}
-			if (account.balance < 500) {
+			if (account && account.balance < 500) {
 				return message.channel.send({
 					embed: {
 						title: "Current Number Status",
@@ -110,7 +111,73 @@ module.exports = async(bot, message, args) => {
 						},
 					},
 				});
-				// message collector and stuff
+				let collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+				let renewrate = 500;
+				let renewcost;
+				const expiryDate = new Date();
+				expiryDate.setMonth(expiryDate.getMonth() + 1);
+				collector.on("collect", async cmessage => {
+					if (message.content == "0") {
+						message.reply(":white_check_mark: You hung up the call.");
+						return collector.stop();
+					}
+					if (message.content.match(/^[0-9]+$/) != null) {
+						message.channel.send({
+							embed: {
+								color: 3447003,
+								title: "Invalid renewal period",
+								description: "Type the **number** of months you want to renew your number.",
+								fields: [{
+									name: "Number",
+									value: mynumber.number,
+								},
+								{
+									name: "Expiration",
+									value: `${mynumber.year}/${mynumber.month}`,
+								},
+								{
+									name: "Your Balance",
+									value: account.balance,
+								},
+								{
+									name: "How to recharge",
+									value: "http://discordtel.austinhuang.me/en/latest/Payment/",
+								}],
+								footer: {
+									text: "To hang up, press `0`.",
+								},
+							},
+						});
+					}
+					renewcost = renewrate * message.content;
+					if (account && account.balance >= renewcost) {
+
+					} else {
+						message.channel.send({
+							embed: {
+								color: 0xFF0000,
+								title: "Error: Insufficient funds!",
+								description: "Type the amount of months you want to renew your number",
+								fields: [{
+									name: "Number",
+									value: mynumber.number,
+								},
+								{
+									name: "Expiration",
+									value: `${mynumber.year}/${mynumber.month}`,
+								},
+								{
+									name: "Your Balance",
+									value: account.balance,
+								},
+								{
+									name: "How to recharge",
+									value: "http://discordtel.austinhuang.me/en/latest/Payment/",
+								}],
+							},
+						});
+					}
+				});
 			}
 		}
 		toDial = toDial.replace(/(a|b|c)/ig, "2")
