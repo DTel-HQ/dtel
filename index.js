@@ -83,15 +83,15 @@ bot.on("message", async message => {
 	}
 	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
 	// In progress wizard/phonebook session?
-	let ffoDocument;
+	let callDocument;
 	try {
-		ffoDocument = await Fouroneone.findOne({ _id: message.author.id });
+		callDocument = await Calls.findOne({ _id: message.author.id });
 	} catch (err) {
-		ffoDocument = null;
+		callDocument = null;
 	}
 
-	if (ffoDocument) {
-		require("./modules/fourOneOneHandler")(bot, message);
+	if (callDocument) {
+		require("./modules/callHandler")(bot, message, callDocument);
 	// Call msg?
 	} else if (message.guild.call) {
 		// I'm pretty sure we can define message.guild.call globally, so that'll be good
@@ -100,7 +100,8 @@ bot.on("message", async message => {
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
-		const command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
+		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
+		if (command == "dial") command = "call";
 		let commandFile = require(`./commands/${command}.js`);
 		// If so, run it
 		if (commandFile) {

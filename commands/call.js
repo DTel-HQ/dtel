@@ -1,5 +1,5 @@
 const uuidv4 = require("uuid/v4");
-
+// REWRITEN
 module.exports = async(bot, message, args) => {
 	let mynumber;
 	try {

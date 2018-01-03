@@ -1,3 +1,4 @@
+// REWRITTEN
 module.exports = async(bot, message, args) => {
 	let mynumber, guildnumber;
 	try {
@@ -51,7 +52,7 @@ module.exports = async(bot, message, args) => {
 			.replace(/-/ig, "")
 			.replace("(", "")
 			.replace(")", "")
-			.replace(" ", "");
+			.replace(/\s+/g, "");
 		if (number.length !== 11) {
 			cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		} else {
