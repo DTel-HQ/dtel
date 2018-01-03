@@ -59,7 +59,7 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 					var message = "Your number has expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 				}
-			} else {removeNumber(i);}
+			} else { removeNumber(i); }
 			// bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}
@@ -89,20 +89,16 @@ bot.on("message", async message => {
 	} catch (err) {
 		callDocument = null;
 	}
-
-	if (callDocument) {
-		require("./modules/callHandler")(bot, message, callDocument);
-	// Call msg?
-	} else if (message.guild.call) {
-		// I'm pretty sure we can define message.guild.call globally, so that'll be good
-		require("./modules/callHandler")(bot, message);
-	} else if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
+	if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
 		if (command == "dial") command = "call";
 		let commandFile = require(`./commands/${command}.js`);
+		if (callDocument) {
+			commandFile = require(`./callcmds/${command}.js`);
+		}
 		// If so, run it
 		if (commandFile) {
 			try {
@@ -111,6 +107,8 @@ bot.on("message", async message => {
 				console.log(err);
 			}
 		}
+	} else if (callDocument) {
+		require("./modules/callHandler")(bot, message, callDocument);
 	}
 });
 
