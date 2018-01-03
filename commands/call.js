@@ -13,7 +13,7 @@ module.exports = async(bot, message, args) => {
 				numberError = err2;
 				return;
 			}
-			if (!numberError && activeChannel) {
+			if (!numberError && activeChannel && args !== "*233") {
 				return message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${activeChannel._id}>.`);
 			} else {
 				return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
@@ -57,7 +57,7 @@ module.exports = async(bot, message, args) => {
 						},
 						{
 							name: "Expiration",
-							value: `${mynumber.year}/${mynumber.month}`,
+							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
 						},
 						{
 							name: "Your Balance",
@@ -96,7 +96,7 @@ module.exports = async(bot, message, args) => {
 						},
 						{
 							name: "Expiration",
-							value: `${mynumber.year}/${mynumber.month}`,
+							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
 						},
 						{
 							name: "Your Balance",
@@ -114,8 +114,6 @@ module.exports = async(bot, message, args) => {
 				let collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
 				let renewrate = 500;
 				let renewcost;
-				const expiryDate = new Date();
-				expiryDate.setMonth(expiryDate.getMonth() + 1);
 				collector.on("collect", async cmessage => {
 					if (message.content == "0") {
 						message.reply(":white_check_mark: You hung up the call.");
@@ -133,7 +131,7 @@ module.exports = async(bot, message, args) => {
 								},
 								{
 									name: "Expiration",
-									value: `${mynumber.year}/${mynumber.month}`,
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
 								},
 								{
 									name: "Your Balance",
@@ -149,9 +147,41 @@ module.exports = async(bot, message, args) => {
 							},
 						});
 					}
-					renewcost = renewrate * message.content;
+					renewcost = renewrate * parseInt(cmessage.content);
 					if (account && account.balance >= renewcost) {
-
+						const d = new Date(mynumber.expiry);
+						d.setMonth(d.getMonth() + parseInt(cmessage.content));
+						mynumber.expiry = d;
+						account.balance -= renewcost;
+						await account.Save();
+						await mynumber.Save();
+						collector.stop();
+						return message.channel.send({
+							embed: {
+								color: 0x00FF00,
+								title: "Success!",
+								description: `Your number has been renewed for ${cmessage.content} months.`,
+								fields: [{
+									name: "Number",
+									value: mynumber.number,
+								},
+								{
+									name: "Expiration",
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+								},
+								{
+									name: "Your Balance",
+									value: account.balance,
+								},
+								{
+									name: "How to recharge",
+									value: "http://discordtel.austinhuang.me/en/latest/Payment/",
+								}],
+								footer: {
+									text: "You have successfully renewed your number.",
+								},
+							},
+						});
 					} else {
 						message.channel.send({
 							embed: {
@@ -164,7 +194,7 @@ module.exports = async(bot, message, args) => {
 								},
 								{
 									name: "Expiration",
-									value: `${mynumber.year}/${mynumber.month}`,
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
 								},
 								{
 									name: "Your Balance",
