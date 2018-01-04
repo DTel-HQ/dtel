@@ -253,7 +253,10 @@ module.exports = async(bot, message, args) => {
 			return message.reply(":x: Dialing error: The number you dialed is already in a call.");
 		}
 		if (toDial === "08006113835") {
-			bot.channels.get(toDialDocument._id).send("<@&281815839936741377>");
+			let cs = bot.guilds.get("281815661317980160").roles.get("281815839936741377");
+			cs.setMentionable(true);
+			await bot.channels.get(toDialDocument._id).send("<@&281815839936741377>");
+			cs.setMentionable(false);
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
