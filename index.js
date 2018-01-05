@@ -88,7 +88,19 @@ bot.on("message", async message => {
 	if (message.guild !== undefined && message.guild.available !== true) {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
-	if (message.author.bot || blacklisted(message.author.id) || gblacklisted(message.guild.id)) return;
+	let isBlacklisted;
+	try {
+		isBlacklisted = await Blacklist.findOne({ _id: message.author.id });
+		if (!isBlacklisted) throw new Error();
+	} catch (err) {
+		try {
+			isBlacklisted = await Blacklist.findOne({ _id: message.guild.id });
+			if (!isBlacklisted) throw new Error();
+		} catch (err2) {
+			// Ignore error
+		}
+	}
+	if (message.author.bot || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
@@ -103,7 +115,7 @@ bot.on("message", async message => {
 		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
 		if (command == "dial") command = "call";
 		let commandFile = require(`./commands/${command}.js`);
-		if (callDocument) {
+		if (callDocument && callDocument.status) {
 			commandFile = require(`./callcmds/${command}.js`);
 		}
 		// If so, run it
@@ -114,7 +126,7 @@ bot.on("message", async message => {
 				console.log(err);
 			}
 		}
-	} else if (callDocument) {
+	} else if (callDocument && callDocument.status) {
 		require("./modules/callHandler")(bot, message, callDocument);
 	}
 });

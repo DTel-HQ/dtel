@@ -57,7 +57,7 @@ module.exports = async(bot, message, args) => {
 						},
 						{
 							name: "Expiration",
-							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getMonth() + 1}`,
 						},
 						{
 							name: "Your Balance",
@@ -96,7 +96,7 @@ module.exports = async(bot, message, args) => {
 						},
 						{
 							name: "Expiration",
-							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+							value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getMonth() + 1}`,
 						},
 						{
 							name: "Your Balance",
@@ -131,7 +131,7 @@ module.exports = async(bot, message, args) => {
 								},
 								{
 									name: "Expiration",
-									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getMonth() + 1}`,
 								},
 								{
 									name: "Your Balance",
@@ -153,8 +153,8 @@ module.exports = async(bot, message, args) => {
 						d.setMonth(d.getMonth() + parseInt(cmessage.content));
 						mynumber.expiry = d;
 						account.balance -= renewcost;
-						await account.Save();
-						await mynumber.Save();
+						await account.save();
+						await mynumber.save();
 						collector.stop();
 						return message.channel.send({
 							embed: {
@@ -167,7 +167,7 @@ module.exports = async(bot, message, args) => {
 								},
 								{
 									name: "Expiration",
-									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getMonth() + 1}`,
 								},
 								{
 									name: "Your Balance",
@@ -194,7 +194,7 @@ module.exports = async(bot, message, args) => {
 								},
 								{
 									name: "Expiration",
-									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getFullMonth()}`,
+									value: `${new Date(mynumber.expiry).getFullYear()}/${new Date(mynumber.expiry).getMonth() + 1}`,
 								},
 								{
 									name: "Your Balance",
@@ -226,7 +226,7 @@ module.exports = async(bot, message, args) => {
 		try {
 			toDialDocument = await Numbers.findOne({ number: toDial.trim() });
 			// Comment from Vlad: Bad Fix right here
-			if (!toDialDocument) throw new Error();
+			if (!toDialDocument && toDial !== "*411" && toDial !== "*233") throw new Error();
 		} catch (err) {
 			return message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 		}
