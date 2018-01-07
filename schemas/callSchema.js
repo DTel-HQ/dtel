@@ -38,4 +38,8 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: true,
 	},
+	pickedUp: {
+		type: Boolean,
+		default: false,
+	},
 });

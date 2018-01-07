@@ -18,7 +18,7 @@ module.exports = async(client, message, args) => {
 	if (userid === "377609965554237453") {
 		return message.reply("Uh... I am the bank. Are you in debt?");
 	}
-	if (user.client) {
+	if (message.author.bot) {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	}
 	if (userid === message.author.id && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
