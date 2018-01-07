@@ -26,8 +26,10 @@ module.exports = async(client, message, args) => {
 	if (guildBlacklist) {
 		Blacklist.create(new Blacklist({ _id: message.content, type: "guild" }));
 		client.channels.get(process.env.LOGSCHANNEL).send(`:wrench: Guild ID \`${message.content}\` is added to the guild blacklist by ${message.author.username}.`);
+		message.reply("Done");
 	} else if (userBlacklist) {
 		Blacklist.create(new Blacklist({ _id: message.content, type: "user" }));
 		client.channels.get(process.env.LOGSCHANNEL).send(`:hammer: User ID \`${message.content}\` is added to blacklist by ${message.author.username}.`);
+		message.reply("Done");
 	}
 };

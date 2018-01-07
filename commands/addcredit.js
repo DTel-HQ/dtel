@@ -15,13 +15,11 @@ module.exports = async(client, message, args) => {
 	} catch (err) {
 		return message.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
 	}
-	if (userid === "377609965554237453") {
+	if (userid === client.user.id) {
 		return message.reply("Uh... I am the bank. Are you in debt?");
-	}
-	if (message.author.bot) {
+	} else if (message.author.bot) {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
-	}
-	if (userid === message.author.id && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
+	} else if (userid === message.author.id && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
 	}
 	if (support(userid)) {
@@ -29,6 +27,9 @@ module.exports = async(client, message, args) => {
 	}
 	if (isNaN(amount)) {
 		return message.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
+	} else if (amount.includes("-")) {
+		message.reply("Trying to break the bank, are we?");
+		return message.channel.send(`${process.env.PREFIX}blacklist ${message.author.id}`);
 	}
 	let account;
 	try {
