@@ -21,8 +21,7 @@ module.exports = async(client, message, args) => {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (userid === message.author.id && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	}
-	if (support(userid)) {
+	} else if (support(userid) && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
 		return message.reply("**NOPE, NOT TODAY!** <:mmLol:356831697385422848>");
 	}
 	if (isNaN(amount)) {
