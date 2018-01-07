@@ -11,7 +11,7 @@ module.exports = async(client, message, args) => {
 				if (args.startsWith("```js") && args.endsWith("```")) args = args.substring(5, args.length - 3);
 				const asyncEval = (code, returns) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
 				let result = await eval(asyncEval(args, args.includes("return")));
-				if (typeof result !== "string") result = require("util").inspect(result, false, 1);
+				// if (typeof result !== "string") result = require("util").inspect(result, false, 1);
 				let array = [
 					client.token.escapeRegex(),
 					process.env.DISCORD_TOKEN.escapeRegex(),
