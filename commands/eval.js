@@ -21,11 +21,12 @@ module.exports = async(bot, message, args) => {
 					// process.env.DISCOIN_TOKEN.escapeRegex(),
 				];
 				let regex = new RegExp(array.join("|"), "g");
-				result = result.replace(regex, "Tell me one good reason why I should give you my token.");
+				result = result.replace(regex, "DID YOU JUST TRY TO BETRAY OUR SOVIET MOTHERLAND?!?!?!?");
 				if (result.length <= 1980) {
 					message.channel.send({
 						embed: {
 							color: 0x00FF00,
+							title: "Great Success",
 							description: `\`\`\`js\n${result}\`\`\``,
 							footer: {
 								text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
@@ -63,6 +64,7 @@ module.exports = async(bot, message, args) => {
 				message.channel.send({
 					embed: {
 						color: 0xFF0000,
+						title: "Evaluation oof",
 						description: `\`\`\`js\n${err.stack}\`\`\``,
 						footer: {
 							text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
