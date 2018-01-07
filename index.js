@@ -100,7 +100,7 @@ client.on("message", async message => {
 			// Ignore error
 		}
 	}
-	if (message.author.client || isBlacklisted) return;
+	if (message.author.bot || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
