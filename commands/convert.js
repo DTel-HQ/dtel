@@ -3,7 +3,7 @@ const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 const request = require("request");
 const Discord = require("discord.js");
 
-module.exports = async(bot, message, args) => {
+module.exports = async(client, message, args) => {
 	let account = accounts.find(item => item.user === message.author.id);
 	if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
 		message.reply("`>convert <amount> <currency code>`\nCurrency codes have a length of 3 letters. They are available at <http://discoin.sidetrip.xyz/rates>.");
@@ -43,7 +43,7 @@ module.exports = async(bot, message, args) => {
 			account.balance -= parseInt(message.content.split(" ")[1]);
 			accounts.push(account);
 			fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
-			bot.channels.get(process.env.LOGSCHANNEL).send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
+			client.channels.get(process.env.LOGSCHANNEL).send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
 		} else if (body.status === "error") {
 			message.channel.send({ embed: {
 				color: 0xFF0000,

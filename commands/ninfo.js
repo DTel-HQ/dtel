@@ -2,8 +2,8 @@ const fs = require("fs");
 const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 var numbers = JSON.parse(fs.readFileSync("../json/numbers.json"));
 
-module.exports = async(bot, message, args) => {
-	const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+module.exports = async(client, message, args) => {
+	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 	if (!support(message.author.id)) {
 		return;
 	} else if (message.content.split(" ")[1] === undefined) {

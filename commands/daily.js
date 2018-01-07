@@ -3,22 +3,22 @@ const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 const request = require("request");
 const dailies = JSON.parse(fs.readFileSync("../json/daily.json", "utf8"));
 
-module.exports = async(bot, message, args) => {
+module.exports = async(client, message, args) => {
 	let account = accounts.find(item => item.user === message.author.id);
 	if (dailies.indexOf(message.author.id) > -1) {
 		message.reply("You already claimed your daily credits!");
 		return;
 	}
 	let daily;
-	if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id)) {
-		if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Manager")) {
+	if (client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id)) {
+		if (client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Manager")) {
 			daily = 250;
-		} else if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Custom Support")) {
+		} else if (client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Custom Support")) {
 			daily = 200;
 		}
 	}
 	if (daily < 200) {
-		request("https://discordbots.org/api/bots/377609965554237453/votes?onlyids=true", {
+		request("https://discordclients.org/api/bots/377609965554237453/votes?onlyids=true", {
 			headers: {
 				"content-type": "application/json",
 				Authorization: process.env.DBL_ORG_TOKEN,
@@ -50,6 +50,6 @@ module.exports = async(bot, message, args) => {
 	}
 	account.balance += daily;
 	accounts.push(account);
-	bot.channels.get(process.env.LOGSCHANNEL).send(`:calendar: ${message.author.tag} (${message.author.id}) claimed ${daily} daily credits.`);
+	client.channels.get(process.env.LOGSCHANNEL).send(`:calendar: ${message.author.tag} (${message.author.id}) claimed ${daily} daily credits.`);
 	fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 };

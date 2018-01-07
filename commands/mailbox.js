@@ -1,7 +1,7 @@
 const fs = require("fs");
 var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
 
-module.exports = async(bot, msg, args) => {
+module.exports = async(client, msg, args) => {
 	var mailbox = mailbox_storage.find(a => a.channel === msg.channel.id);
 	if (!mailbox) {
 		mailbox = {

@@ -3,12 +3,12 @@ const fs = require("fs");
 const util = require("util");
 const mongoose = require("mongoose");
 const database = require("./schemas/database");
-const bot = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
+const client = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
 const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
 const fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
 const emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8"));
-const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const gblacklist = JSON.parse(fs.readFileSync("./json/gblacklist.json", "utf8"));
@@ -27,7 +27,7 @@ const server = http.createServer((req, res) => {
 	res.end("ok");
 });
 server.listen(port, ipaddress, () => {
-	console.log(`Bot HTTP Server listeing on ${ipaddress}:${port}`);
+	console.log(`client HTTP Server listeing on ${ipaddress}:${port}`);
 });
 
 database.initialize(process.env.MONGOURL).then(db => {
@@ -54,13 +54,13 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 		if (number.year <= now.getFullYear() || number.month <= now.getMonth()) {
 			if (number.month == now.getMonth() || (number.month == 12 && now.getMonth() == 0)) {
 				// send a notice to the user.
-				var channel = bot.channels.get(number.channel);
+				var channel = client.channels.get(number.channel);
 				if (channel) {
 					var message = "Your number has expired! Pay your monthly fee by typing `>dial *233`!";
 					channel.send(message);
 				}
 			} else { removeNumber(i); }
-			// bot.channels.get(process.env.LOGSCHANNEL).send(":closed_book: Number " + number.number + " removed because it expired.")
+			// client.channels.get(process.env.LOGSCHANNEL).send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}
 	updateNumbers();
@@ -80,11 +80,11 @@ fs.readdir("./events/", (err, files) => {
 		let eventFunction = require(`./events/${file}`);
 		let eventName = file.split(".")[0];
 		// super-secret recipe to call events with all their proper arguments *after* the `client` const.
-		bot.on(eventName, (...args) => eventFunction(bot, ...args));
+		client.on(eventName, (...args) => eventFunction(client, ...args));
 	});
 });
 
-bot.on("message", async message => {
+client.on("message", async message => {
 	if (!message.guild && message.guild.available !== true) {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
@@ -100,7 +100,7 @@ bot.on("message", async message => {
 			// Ignore error
 		}
 	}
-	if (message.author.bot || isBlacklisted) return;
+	if (message.author.client || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
@@ -123,13 +123,13 @@ bot.on("message", async message => {
 		// If so, run it
 		if (commandFile) {
 			try {
-				return commandFile(bot, message, args);
+				return commandFile(client, message, args);
 			} catch (err) {
 				console.log(err);
 			}
 		}
 	} else if (callDocument && callDocument.status) {
-		require("./modules/callHandler")(bot, message, callDocument);
+		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
 
@@ -138,4 +138,4 @@ process.on("unhandledRejection", err => {
 	process.exit(-1);
 });
 
-bot.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN);

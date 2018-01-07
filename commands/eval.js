@@ -2,8 +2,8 @@ const Discord = require("discord.js");
 const PastebinAPI = require("pastebin-js");
 const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
 
-module.exports = async(bot, message, args) => {
-	const eval = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
+module.exports = async(client, message, args) => {
+	const eval = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
 	if (eval(message.author.id)) {
 		if (args) {
 			let hrstart = process.hrtime();
@@ -13,7 +13,7 @@ module.exports = async(bot, message, args) => {
 				let result = await eval(asyncEval(args, args.includes("return")));
 				if (typeof result !== "string") result = require("util").inspect(result, false, 1);
 				let array = [
-					bot.token.escapeRegex(),
+					client.token.escapeRegex(),
 					process.env.DISCORD_TOKEN.escapeRegex(),
 					process.env.PASTEBIN_KEY.escapeRegex(),
 					// process.env.DBL_ORG_TOKEN.escapeRegex(),

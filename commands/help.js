@@ -1,4 +1,4 @@
-module.exports = async(bot, message, args) => {
+module.exports = async(client, message, args) => {
 	message.channel.send({
 		embed: {
 			color: 3447003,

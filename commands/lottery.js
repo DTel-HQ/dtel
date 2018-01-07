@@ -2,8 +2,8 @@ const fs = require("fs");
 const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
 var award = JSON.parse(fs.readFileSync("../json/award.json", "utf8"));
 
-module.exports = async(bot, message, args) => {
-	const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+module.exports = async(client, message, args) => {
+	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 	var account = accounts.find(item => item.user === message.author.id);
 	if (message.content.split(" ")[1] === undefined) {
 		const myentry = award.users.filter(item => item === message.author.id).length;
@@ -17,7 +17,7 @@ module.exports = async(bot, message, args) => {
 	if (account === undefined) {
 		account = { user: message.author.id, balance: 0 };
 		accounts.push(account);
-		bot.users.get(message.author.id).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		client.users.get(message.author.id).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 	}
 	if (account.balance < entries * 5) {
 		message.reply("Insufficient fund! 1 Entry costs 5 credits.");
@@ -32,5 +32,5 @@ module.exports = async(bot, message, args) => {
 	award.amount += entries * 5;
 	fs.writeFileSync("../json/award.json", JSON.stringify(award), "utf8");
 	message.reply(`You've bought ${entries} entries. The current jackpot is ¥${award.amount}.`);
-	bot.channels.get(process.env.LOGSCHANNEL).send(`:tickets: User ${message.author.username} paid ¥${entries * 5} for the lottery. The user now have ¥${account.balance}.`);
+	client.channels.get(process.env.LOGSCHANNEL).send(`:tickets: User ${message.author.username} paid ¥${entries * 5} for the lottery. The user now have ¥${account.balance}.`);
 };

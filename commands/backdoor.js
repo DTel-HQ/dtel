@@ -1,6 +1,6 @@
 // OK
-module.exports = async(bot, message, args) => {
-	const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+module.exports = async(client, message, args) => {
+	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 	if (!support(message.author.id)) return;
 
 	if (message.channel.guild) message.delete();
@@ -9,7 +9,7 @@ module.exports = async(bot, message, args) => {
 	}
 	let channel;
 	try {
-		channel = bot.channels.get(args);
+		channel = client.channels.get(args);
 	} catch (err) {
 		return message.author.send("Not a valid channel.");
 	}

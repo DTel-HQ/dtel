@@ -1,5 +1,5 @@
 // REWRITTEN
-module.exports = async(bot, message, args) => {
+module.exports = async(client, message, args) => {
 	let mynumber, guildnumber;
 	try {
 		mynumber = await Numbers.findOne({ _id: message.channel.id });

@@ -1,11 +1,11 @@
-module.exports = async(bot, message, callDocument) => {
-	const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
-	const donators = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.DONATORROLE).members.has(user_id);
+module.exports = async(client, message, callDocument) => {
+	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+	const donators = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.DONATORROLE).members.has(user_id);
 	let sendChannel;
 	if (message.channel.id === callDocument.to.id) {
-		sendChannel = bot.channels.get(callDocument.from.id);
+		sendChannel = client.channels.get(callDocument.from.id);
 	} else if (message.channel.id === callDocument.from.id) {
-		sendChannel = bot.channels.get(callDocument.to.id);
+		sendChannel = client.channels.get(callDocument.to.id);
 	} else {
 		message.reply("Error! Please contact a bot developer.");
 	}

@@ -1,6 +1,6 @@
 const uuidv4 = require("uuid/v4");
 // REWRITEN
-module.exports = async(bot, message, args) => {
+module.exports = async(client, message, args) => {
 	let mynumber;
 	try {
 		mynumber = await Numbers.findOne({ _id: message.channel.id });
@@ -243,8 +243,8 @@ module.exports = async(bot, message, args) => {
 		if (new Date(mynumber.expiry).getFullYear() < new Date().getFullYear() || (new Date(mynumber.expiry).getFullYear() === new Date().getFullYear() && new Date(mynumber.expiry).getMonth() <= new Date().getMonth())) {
 			return message.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 		}
-		if (toDialDocument && !bot.channels.get(toDialDocument._id)) {
-			return message.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the bot, or it left the corresponding server. Please dial `*611` for further instructions.");
+		if (toDialDocument && !client.channels.get(toDialDocument._id)) {
+			return message.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 		}
 		let dialedInCall;
 		try {
@@ -260,14 +260,14 @@ module.exports = async(bot, message, args) => {
 			return message.reply(":x: Dialing error: The number you dialed is already in a call.");
 		}
 		if (toDial === "08006113835") {
-			let cs = bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE);
+			let cs = client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE);
 			cs.setMentionable(true);
-			await bot.channels.get(toDialDocument._id).send("<@&281815839936741377>");
+			await client.channels.get(toDialDocument._id).send("<@&281815839936741377>");
 			cs.setMentionable(false);
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
-		bot.channels.get(process.env.LOGSCHANNEL).send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`);
+		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`);
 		await Calls.create(
 			new Calls({
 				_id: uuidv4(),
@@ -280,21 +280,21 @@ module.exports = async(bot, message, args) => {
 					number: mynumber.number,
 				},
 			}), callDocument => {
-				bot.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
+				client.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
 				setTimeout(async() => {
 					callDocument.status = false;
 					await callDocument.save();
 					message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-					bot.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-					bot.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
+					client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
+					client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
 					let mailbox;
 					try {
 						mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
 					} catch (err) {
-						return bot.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+						return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
 					}
-					bot.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-					bot.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+					client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+					client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
 				}, 120000);
 			}
 		);
