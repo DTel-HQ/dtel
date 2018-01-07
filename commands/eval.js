@@ -3,7 +3,7 @@ const PastebinAPI = require("pastebin-js");
 const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
 
 module.exports = async(bot, message, args) => {
-	const eval = user_id => bot.guilds.get(process.env.SUPPORTSERVER).roles.get(process.env.BOSSROLE).members.has(user_id);
+	const eval = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
 	if (eval(message.author.id)) {
 		if (args) {
 			let hrstart = process.hrtime();
