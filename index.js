@@ -8,7 +8,7 @@ require("dotenv").config();
 const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
 const fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
 const emotes = JSON.parse(fs.readFileSync("./json/emotes.json", "utf8"));
-const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.has(user_id);
+const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 const blacklist = JSON.parse(fs.readFileSync("./json/blacklist.json", "utf8"));
 const blacklisted = user_id => blacklist.indexOf(user_id) > -1;
 const gblacklist = JSON.parse(fs.readFileSync("./json/gblacklist.json", "utf8"));
@@ -60,7 +60,7 @@ schedule.scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
 					channel.send(message);
 				}
 			} else { removeNumber(i); }
-			// bot.channels.get("282253502779228160").send(":closed_book: Number " + number.number + " removed because it expired.")
+			// bot.channels.get(process.env.LOGSCHANNEL).send(":closed_book: Number " + number.number + " removed because it expired.")
 		}
 	}
 	updateNumbers();
@@ -85,7 +85,7 @@ fs.readdir("./events/", (err, files) => {
 });
 
 bot.on("message", async message => {
-	if (message.guild !== undefined && message.guild.available !== true) {
+	if (!message.guild && message.guild.available !== true) {
 		console.log(`Warning, ${message.guild.name} is unavailable. Recommended bot shutdown.`);
 	}
 	let isBlacklisted;
@@ -113,7 +113,9 @@ bot.on("message", async message => {
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
-		if (command == "dial") command = "call";
+		if (command == "dial") {
+			command = "call";
+		}
 		let commandFile = require(`./commands/${command}.js`);
 		if (callDocument && callDocument.status) {
 			commandFile = require(`./callcmds/${command}.js`);

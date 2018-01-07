@@ -15,7 +15,7 @@ module.exports = async(bot, guild) => {
 		}
 	}
 	const cleanedguildname = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
-	bot.channels.get("282253502779228160").send(`:inbox_tray: Joined \`${guild.name}\` (${guild.id}). Currently in ${bot.guilds.size} servers.`);
+	bot.channels.get(process.env.LOGSCHANNEL).send(`:inbox_tray: Joined \`${guild.name}\` (${guild.id}). Currently in ${bot.guilds.size} servers.`);
 	bot.user.setPresence({ game: { name: `${bot.guilds.size} servers | >help`, type: 0 } });
 	request.post({
 		url: "https://bots.discord.pw/api/bots/377609965554237453/stats",

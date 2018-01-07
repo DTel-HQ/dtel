@@ -15,7 +15,7 @@ exports.run = (bot, message, fs, calls, call) => {
 	call.time = Date.now();
 	calls.push(call);
 	fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-	bot.channels.get("282253502779228160").send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} was picked up by __${message.author.tag}__ (${message.author.id}).`);
+	bot.channels.get(process.env.LOGSCHANNEL).send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} was picked up by __${message.author.tag}__ (${message.author.id}).`);
 	setTimeout(() => {
 		call = calls.find(item => {
 			if (item.from.channel === message.channel.id) {
@@ -37,7 +37,7 @@ exports.run = (bot, message, fs, calls, call) => {
 				bot.channels.get(call.from.channel).send(`:x: ${mailbox_storage.find(a => a.channel === call.to.channel).settings.autoreply}`);
 				bot.channels.get(call.from.channel).send(":question: Would you like to leave a message? `>message [number] [message]`");
 				recentCall[call.from.channel] = call.to.number;
-				bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} is expired.`);
+				bot.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${call.from.channel} and channel ${call.to.channel} is expired.`);
 			}
 		}
 	}, 120000);

@@ -2,7 +2,7 @@
 module.exports = async(bot, message, args) => {
 	let channel = args.substring(0, args.indexOf(" ")).trim();
 	let number = args.substring(args.indexOf(" ") + 1).trim();
-	// const support = user_id => bot.guilds.get("281815661317980160").roles.get("281815839936741377").members.has(user_id);
+	// const support = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 	const support = user_id => message.author.id === user_id;
 	if (!support(message.author.id)) return;
 	if (!args) {
@@ -45,5 +45,5 @@ module.exports = async(bot, message, args) => {
 	expiryDate.setMonth(expiryDate.getMonth() + 1);
 	let numberDocument = await Numbers.create(new Numbers({ _id: channel, number: number, expiry: expiryDate }));
 	message.reply("Done. Now turn back to your client!");
-	bot.channels.get("282253502779228160").send(`:green_book: Number \`${numberDocument.number}\` is assigned to channel ${numberDocument._id} by ${message.author.tag}.`);
+	bot.channels.get(process.env.LOGSCHANNEL).send(`:green_book: Number \`${numberDocument.number}\` is assigned to channel ${numberDocument._id} by ${message.author.tag}.`);
 };

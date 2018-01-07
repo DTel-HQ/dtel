@@ -43,7 +43,7 @@ module.exports = async(bot, message, args) => {
 			account.balance -= parseInt(message.content.split(" ")[1]);
 			accounts.push(account);
 			fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
-			bot.channels.get("282253502779228160").send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
+			bot.channels.get(process.env.LOGSCHANNEL).send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
 		} else if (body.status === "error") {
 			message.channel.send({ embed: {
 				color: 0xFF0000,

@@ -56,7 +56,7 @@ module.exports = async(bot, message, args) => {
 		}
 		leaccount.balance += 100;
 		accounts.push(leaccount);
-		bot.channels.get("282253502779228160").send(`:new: ${message.author.tag} (${message.author.id}) and ${bot.users.get(args[1]).tag} (${args[1]}) claimed 100 credits of referral bonus.`);
+		bot.channels.get(process.env.LOGSCHANNEL).send(`:new: ${message.author.tag} (${message.author.id}) and ${bot.users.get(args[1]).tag} (${args[1]}) claimed 100 credits of referral bonus.`);
 		fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 	}
 };

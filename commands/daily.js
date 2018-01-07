@@ -10,10 +10,10 @@ module.exports = async(bot, message, args) => {
 		return;
 	}
 	let daily;
-	if (bot.guilds.get("281815661317980160").members.get(message.author.id)) {
-		if (bot.guilds.get("281815661317980160").members.get(message.author.id).roles.find("name", "Manager")) {
+	if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id)) {
+		if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Manager")) {
 			daily = 250;
-		} else if (bot.guilds.get("281815661317980160").members.get(message.author.id).roles.find("name", "Custom Support")) {
+		} else if (bot.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Custom Support")) {
 			daily = 200;
 		}
 	}
@@ -50,6 +50,6 @@ module.exports = async(bot, message, args) => {
 	}
 	account.balance += daily;
 	accounts.push(account);
-	bot.channels.get("282253502779228160").send(`:calendar: ${message.author.tag} (${message.author.id}) claimed ${daily} daily credits.`);
+	bot.channels.get(process.env.LOGSCHANNEL).send(`:calendar: ${message.author.tag} (${message.author.id}) claimed ${daily} daily credits.`);
 	fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
 };

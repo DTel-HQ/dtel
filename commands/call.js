@@ -4,28 +4,35 @@ module.exports = async(bot, message, args) => {
 	let mynumber;
 	try {
 		mynumber = await Numbers.findOne({ _id: message.channel.id });
+		if (!mynumber) throw new Error();
 	} catch (err) {
-		message.guild.channels.forEach(async c => {
+		for (const c of message.guild.channels.values()) {
 			let activeChannel, numberError;
 			try {
 				activeChannel = await Numbers.findOne({ _id: c.id });
+				if (!activeChannel) throw new Error();
 			} catch (err2) {
 				numberError = err2;
 				return;
 			}
 			if (!numberError && activeChannel && args !== "*233") {
 				return message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${activeChannel._id}>.`);
-			} else {
+			} else if (!mynumber) {
 				return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+			} else {
+				return message.reply(":x: Unknown Error!");
 			}
-		});
+		}
 	}
 	let toDial = args;
+	if (!mynumber) {
+		return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+	}
 	if (toDial) {
 		if (toDial && toDial.trim().toLowerCase() === "*rom") toDial = "03015050505";
 		if (toDial === mynumber.number) return message.reply(":thinking: Why are you trying to call yourself?");
 		if (toDial === "*611") {
-			if (message.guild.id === "281815661317980160") {
+			if (message.guild.id === process.env.SUPPORTGUILD) {
 				message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 			} else {
 				toDial = "08006113835";
@@ -253,14 +260,14 @@ module.exports = async(bot, message, args) => {
 			return message.reply(":x: Dialing error: The number you dialed is already in a call.");
 		}
 		if (toDial === "08006113835") {
-			let cs = bot.guilds.get("281815661317980160").roles.get("281815839936741377");
+			let cs = bot.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE);
 			cs.setMentionable(true);
 			await bot.channels.get(toDialDocument._id).send("<@&281815839936741377>");
 			cs.setMentionable(false);
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
-		bot.channels.get("282253502779228160").send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`);
+		bot.channels.get(process.env.LOGSCHANNEL).send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`);
 		await Calls.create(
 			new Calls({
 				_id: uuidv4(),
@@ -279,7 +286,7 @@ module.exports = async(bot, message, args) => {
 					await callDocument.save();
 					message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 					bot.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-					bot.channels.get("282253502779228160").send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
+					bot.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
 					let mailbox;
 					try {
 						mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
@@ -291,5 +298,7 @@ module.exports = async(bot, message, args) => {
 				}, 120000);
 			}
 		);
+	} else {
+		message.reply("Please specify a number to call");
 	}
 };

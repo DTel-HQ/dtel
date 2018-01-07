@@ -2,7 +2,7 @@ const fs = require("fs");
 const numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8"));
 
 module.exports = async(bot, message, args) => {
-  const boss = user_id => bot.guilds.get("281815661317980160").roles.find("name","Boss").members.map(member => member.id).indexOf(user_id) > -1;
+  const boss = user_id => bot.guilds.get(process.env.SUPPORTGUILD).roles.find("name","Boss").members.map(member => member.id).indexOf(user_id) > -1;
 	if (!boss(message.author.id)) return;
 	if (message.content.split(" ")[1] === undefined) {
 		message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
