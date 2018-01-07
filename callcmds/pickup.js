@@ -1,7 +1,7 @@
 const fs = require("fs");
 var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json"));
 
-exports.run = (client, message, fs, calls, call) => {
+module.exports = async(client, message, fs, calls, call) => {
 	message.reply(":white_check_mark: You pick up the call.");
 	if (client.channels.get(call.from.channel) === undefined) {
 		message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");

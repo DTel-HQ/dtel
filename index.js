@@ -104,9 +104,14 @@ client.on("message", async message => {
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
-		callDocument = await Calls.findOne({ _id: message.author.id });
+		callDocument = await Calls.findOne({ to: { _id: message.channel.id } });
+		if (!callDocument) throw new Error();
 	} catch (err) {
-		callDocument = null;
+		try {
+			callDocument = await Calls.findOne({ from: { _id: message.channel.id } });
+		} catch (err2) {
+			callDocument = null;
+		}
 	}
 	if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
 		console.log(`${message.author.tag} > ${message.content}`);
