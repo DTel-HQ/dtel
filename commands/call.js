@@ -91,7 +91,7 @@ module.exports = async(client, message, args) => {
 					},
 				});
 			} else {
-				message.channel.send({
+				let mainEmbed = message.channel.send({
 					embed: {
 						color: 3447003,
 						title: "Current Number Status",
@@ -126,7 +126,8 @@ module.exports = async(client, message, args) => {
 						return collector.stop();
 					}
 					if (message.content.match(/^[0-9]+$/) != null) {
-						message.channel.send({
+						cmessage.delete();
+						mainEmbed.edit({
 							embed: {
 								color: 3447003,
 								title: "Invalid renewal period",
@@ -162,7 +163,8 @@ module.exports = async(client, message, args) => {
 						await account.save();
 						await mynumber.save();
 						collector.stop();
-						return message.channel.send({
+						cmessage.delete()
+						return mainEmbed.send({
 							embed: {
 								color: 0x00FF00,
 								title: "Success!",
