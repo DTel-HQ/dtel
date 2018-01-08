@@ -122,6 +122,7 @@ module.exports = async(client, message, args) => {
 				let renewcost;
 				collector.on("collect", async cmessage => {
 					if (message.content == "0") {
+						mainEmbed.delete();
 						message.reply(":white_check_mark: You hung up the call.");
 						return collector.stop();
 					}
@@ -163,7 +164,7 @@ module.exports = async(client, message, args) => {
 						await account.save();
 						await mynumber.save();
 						collector.stop();
-						cmessage.delete()
+						cmessage.delete();
 						return mainEmbed.send({
 							embed: {
 								color: 0x00FF00,
@@ -269,7 +270,7 @@ module.exports = async(client, message, args) => {
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
 		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`);
-		await Calls.create(
+		let callDocument = await Calls.create(
 			new Calls({
 				_id: uuidv4(),
 				to: {
@@ -280,25 +281,24 @@ module.exports = async(client, message, args) => {
 					channelID: message.channel.id,
 					number: mynumber.number,
 				},
-			}), callDocument => {
-				client.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
-				setTimeout(async() => {
-					callDocument.status = false;
-					await callDocument.save();
-					message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-					client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-					client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
-					let mailbox;
-					try {
-						mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
-					} catch (err) {
-						return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
-					}
-					client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-					client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
-				}, 120000);
-			}
+			})
 		);
+		client.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
+		await setTimeout(async() => {
+			callDocument.status = false;
+			await callDocument.save();
+			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+			client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
+			client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
+			let mailbox;
+			try {
+				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+			} catch (err) {
+				return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+			}
+			client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+			client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");
 	}

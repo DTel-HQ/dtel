@@ -37,7 +37,7 @@ module.exports = async(client, message, args) => {
 	} catch (err) {
 		account = await Accounts.create(new Accounts({ _id: message.author.id, balance: 0 }));
 	}
-	account.balance += amount;
+	account.balance += parseInt(amount);
 	await account.save();
 	message.reply("Done.");
 	client.users.get(userid).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);

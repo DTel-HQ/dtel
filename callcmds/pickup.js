@@ -1,21 +1,21 @@
-const fs = require("fs");
-var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json"));
+// const fs = require("fs");
+// var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json"));
 
-module.exports = async(client, message, fs, calls, call) => {
-	message.reply(":white_check_mark: You pick up the call.");
-	if (client.channels.get(call.from.channel) === undefined) {
-		message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
-		calls.splice(calls.indexOf(call), 1);
-		fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-		return;
-	}
-	client.channels.get(call.from.channel).send(":heavy_check_mark: The other side picked up!");
-	calls.splice(calls.indexOf(call), 1);
-	call.status = true;
-	call.time = Date.now();
-	calls.push(call);
-	fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
-	client.channels.get(process.env.LOGSCHANNEL).send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} was picked up by __${message.author.tag}__ (${message.author.id}).`);
+// module.exports = async(client, message, fs, calls, call) => {
+// 	message.reply(":white_check_mark: You pick up the call.");
+// 	if (client.channels.get(call.from.channel) === undefined) {
+// 		message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
+// 		calls.splice(calls.indexOf(call), 1);
+// 		fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
+// 		return;
+	// }
+	// client.channels.get(call.from.channel).send(":heavy_check_mark: The other side picked up!");
+	// calls.splice(calls.indexOf(call), 1);
+	// call.status = true;
+	// call.time = Date.now();
+	// calls.push(call);
+	// fs.writeFileSync("../json/call.json", JSON.stringify(calls), "utf8");
+	// client.channels.get(process.env.LOGSCHANNEL).send(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} was picked up by __${message.author.tag}__ (${message.author.id}).`);
 	setTimeout(() => {
 		call = calls.find(item => {
 			if (item.from.channel === message.channel.id) {
