@@ -121,9 +121,18 @@ client.on("message", async message => {
 		if (command == "dial") {
 			command = "call";
 		}
-		let commandFile = require(`./commands/${command}.js`);
+		let commandFile;
+		try {
+			commandFile = require(`./commands/${command}.js`);
+		} catch (err) {
+			// Ignore
+		}
 		if (callDocument && callDocument.status) {
-			commandFile = require(`./callcmds/${command}.js`);
+			try {
+				commandFile = require(`./callcmds/${command}.js`);
+			} catch (err) {
+				// Ignore
+			}
 		}
 		// If so, run it
 		if (commandFile) {
