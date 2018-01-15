@@ -35,10 +35,10 @@ module.exports = async(client, message, args) => {
 		}
 		if (message.channel.type === "dm") {
 			if (!message.content.startsWith("0900")) {
-				cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
+				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 			}
 		} else if (!message.content.startsWith("0301")) {
-			cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
 		}
 		cmessage.content = cmessage.content.toLowerCase();
 		let number = cmessage.content.replace(/(a|b|c)/ig, "2")
