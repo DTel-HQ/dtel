@@ -3,15 +3,15 @@ const PastebinAPI = require("pastebin-js");
 const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
 
 module.exports = async(client, message, args) => {
-	const eval = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
-	if (eval(message.author.id)) {
+	const canEval = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
+	if (canEval(message.author.id)) {
 		if (args) {
 			let hrstart = process.hrtime();
 			try {
 				if (args.startsWith("```js") && args.endsWith("```")) args = args.substring(5, args.length - 3);
 				const asyncEval = (code, returns) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
 				let result = await eval(asyncEval(args, args.includes("return")));
-				// if (typeof result !== "string") result = require("util").inspect(result, false, 1);
+				if (typeof result !== "string") result = require("util").inspect(result, false, 1);
 				let array = [
 					client.token.escapeRegex(),
 					process.env.DISCORD_TOKEN.escapeRegex(),
