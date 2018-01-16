@@ -157,9 +157,9 @@ client.on("message", async message => {
 	}
 });
 
-process.on("unhandledRejection", err => {
-	console.log(err);
-	process.exit(-1);
-});
+// process.on("unhandledRejection", err => {
+// 	console.log(err);
+// 	process.exit(-1);
+// });
 
 client.login(process.env.TOKEN);
