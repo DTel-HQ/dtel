@@ -156,7 +156,7 @@ client.on("message", async message => {
 			}
 			// If so, run it
 		}
-	} else if (callDocument && callDocument.status && callDocument.pickedup) {
+	} else if (callDocument && callDocument.status && callDocument.pickedUp) {
 		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
