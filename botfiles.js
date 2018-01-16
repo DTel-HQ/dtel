@@ -106,7 +106,7 @@ client.on("message", async message => {
 		console.log(`no doc there`);
 		try {
 			console.log("2nd try start")
-			callDocument = await Calls.findOne({ channelID: { _id: message.channel.id } });
+			callDocument = await Calls.findOne({ from: { channelID: message.channel.id } });
 			if (callDocument) console.log(callDocument);
 			if (!callDocument) throw new Error();
 			if (!callDocument) console.log("no call doc 2nd err");
