@@ -113,6 +113,7 @@ client.on("message", async message => {
 			callDocument = null;
 		}
 	}
+	console.log(callDocument);
 	if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
