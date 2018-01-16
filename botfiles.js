@@ -99,11 +99,11 @@ client.on("message", async message => {
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
-		callDocument = await Calls.findOne({ to: { _id: message.channel.id } });
+		callDocument = await Calls.findOne({ to: { channelID: message.channel.id } });
 		if (!callDocument) throw new Error();
 	} catch (err) {
 		try {
-			callDocument = await Calls.findOne({ from: { _id: message.channel.id } });
+			callDocument = await Calls.findOne({ channelID: { _id: message.channel.id } });
 		} catch (err2) {
 			callDocument = null;
 		}
@@ -134,7 +134,7 @@ client.on("message", async message => {
 		} else {
 			try {
 				commandFile = require(`./commands/${command}.js`);
-				console.log("ran normcmd");				
+				console.log("ran normcmd");
 			} catch (err) {
 				console.log(`norm cmds err: ${err}`);
 			}
