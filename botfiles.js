@@ -121,13 +121,13 @@ client.on("message", async message => {
 			try {
 				commandFile = require(`./callcmds/${command}.js`);
 			} catch (err) {
-				// Ignore
+				console.log(`call cmds err: ${err}`);
 			}
 		} else {
 			try {
 				commandFile = require(`./commands/${command}.js`);
 			} catch (err) {
-				// Ignore
+				console.log(`norm cmds err: ${err}`);
 			}
 		}
 		// If so, run it
