@@ -290,7 +290,7 @@ module.exports = async(client, message, args) => {
 			await callDocument.save();
 			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 			client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-			client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channel} has expired.`);
+			client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
 			let mailbox;
 			try {
 				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
