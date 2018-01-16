@@ -100,13 +100,15 @@ client.on("message", async message => {
 	let callDocument;
 	try {
 		callDocument = await Calls.findOne({ to: { channelID: message.channel.id } });
-		if (!callDocument) throw new Error(); console.log("no call doc err");
+		if (!callDocument) throw new Error();
+		if (!callDocument) console.log("no call doc err");
 		if (callDocument) console.log(callDocument);
 	} catch (err) {
 		try {
 			callDocument = await Calls.findOne({ channelID: { _id: message.channel.id } });
 			if (callDocument) console.log(callDocument);
-			if (!callDocument) throw new Error(); console.log("no call doc 2nd err");
+			if (!callDocument) throw new Error();
+			if (!callDocument) console.log("no call doc 2nd err");
 		} catch (err2) {
 			callDocument = null;
 		}
