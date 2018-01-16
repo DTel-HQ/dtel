@@ -133,7 +133,7 @@ client.on("message", async message => {
 		// If so, run it
 		if (commandFile) {
 			try {
-				return commandFile(client, message, args);
+				return commandFile(client, message, args, callDocument);
 			} catch (err) {
 				console.log(err);
 			}
