@@ -64,7 +64,7 @@ Object.assign(String.prototype, {
 });
 
 client.on("ready", () => {
-	client.user.setActivity(`${client.guilds.size}`);
+	client.user.setActivity(`${`memes`}`);
 });
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
@@ -77,6 +77,7 @@ fs.readdir("./events/", (err, files) => {
 		client.on(eventName, (...args) => eventFunction(client, ...args));
 	});
 });
+
 
 client.on("message", async message => {
 	if (!message.guild && message.guild.available !== true) {
