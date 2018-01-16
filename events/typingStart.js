@@ -1,10 +1,10 @@
 module.exports = async(client, channel, member) => {
 	let callTo, callFrom;
 	try {
-		callTo = await Calls.findOne({ to: { channelID: channel.id } });
+		callTo = await Calls.findOne({ "to.channelID": channel.id });
 	} catch (err) {
 		try {
-			callFrom = await Calls.findOne({ from: { channelID: channel.id } });
+			callFrom = await Calls.findOne({ "from.channelID": channel.id });
 		} catch (err2) {
 			return null;
 		}

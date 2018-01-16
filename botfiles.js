@@ -167,10 +167,12 @@ client.on("message", async message => {
 // });
 
 client.on("typingStart", async(channel, member) => {
+	console.log("typingStart");
 	require("./events/typingStart")(client, channel, member);
 });
 
 client.on("typingStop", async(channel, member) => {
+	console.log("typingStop");	
 	require("./events/typingStop")(client, channel, member);
 });
 
