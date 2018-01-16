@@ -26,6 +26,6 @@ module.exports = async(client, message, callDocument) => {
 		}
 		fromChannel.send(`:x: ${(await Mailbox.findOne({ _id: callDocument.from._id })).settings.autoreply}`);
 		fromChannel.send(":question: Would you like to leave a message? `>message [number] [message]`");
-		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${fromChannel._id} and channel ${toChannel._id} is expired.`);
+		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${fromChannel.id} and channel ${toChannel.id} is expired.`);
 	}, 120010);
 };
