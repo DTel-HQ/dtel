@@ -1,4 +1,4 @@
-module.exports = async(client, message, args, callDocument) => {
+module.exports = async(client, message, callDocument) => {
 	callDocument.pickedUp = true;
 	await callDocument.save();
 	message.reply(":white_check_mark: You pick up the call.");

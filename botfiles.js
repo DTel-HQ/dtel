@@ -123,20 +123,27 @@ client.on("message", async message => {
 			} catch (err) {
 				console.log(`call cmds err: ${err}`);
 			}
+			if (commandFile) {
+				try {
+					return commandFile(client, message, callDocument);
+				} catch (err) {
+					console.log(err);
+				}
+			}
 		} else {
 			try {
 				commandFile = require(`./commands/${command}.js`);
 			} catch (err) {
 				console.log(`norm cmds err: ${err}`);
 			}
-		}
-		// If so, run it
-		if (commandFile) {
-			try {
-				return commandFile(client, message, args, callDocument);
-			} catch (err) {
-				console.log(err);
+			if (commandFile) {
+				try {
+					return commandFile(client, message, args);
+				} catch (err) {
+					console.log(err);
+				}
 			}
+			// If so, run it
 		}
 	} else if (callDocument && callDocument.status && callDocument.pickedup) {
 		require("./modules/callHandler")(client, message, callDocument);
