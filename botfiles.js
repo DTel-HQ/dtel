@@ -117,14 +117,15 @@ client.on("message", async message => {
 			command = "call";
 		}
 		let commandFile;
-		try {
-			commandFile = require(`./commands/${command}.js`);
-		} catch (err) {
-			// Ignore
-		}
 		if (callDocument && callDocument.status) {
 			try {
 				commandFile = require(`./callcmds/${command}.js`);
+			} catch (err) {
+				// Ignore
+			}
+		} else {
+			try {
+				commandFile = require(`./commands/${command}.js`);
 			} catch (err) {
 				// Ignore
 			}
