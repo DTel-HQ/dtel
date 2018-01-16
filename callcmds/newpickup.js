@@ -1,4 +1,5 @@
 module.exports = async(client, message, callDocument) => {
+	console.log("ran");
 	callDocument.pickedUp = true;
 	await callDocument.save();
 	message.reply(":white_check_mark: You pick up the call.");

@@ -120,6 +120,7 @@ client.on("message", async message => {
 		if (callDocument && callDocument.status) {
 			try {
 				commandFile = require(`./callcmds/${command}.js`);
+				console.log("ran callcmd");
 			} catch (err) {
 				console.log(`call cmds err: ${err}`);
 			}
@@ -133,6 +134,7 @@ client.on("message", async message => {
 		} else {
 			try {
 				commandFile = require(`./commands/${command}.js`);
+				console.log("ran normcmd");				
 			} catch (err) {
 				console.log(`norm cmds err: ${err}`);
 			}
