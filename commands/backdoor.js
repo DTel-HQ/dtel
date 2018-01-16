@@ -14,10 +14,14 @@ module.exports = async(client, message, args) => {
 		return message.author.send("Not a valid channel.");
 	}
 	if (channel) {
-		channel.createInvite({
-			maxAge: 0,
-		}).then(invite => {
-			message.author.send(invite.url);
-		});
+		try {
+			channel.createInvite({
+				maxAge: 0,
+			}).then(invite => {
+				message.author.send(invite.url);
+			});
+		} catch (err) {
+			message.reply("Privilege is too low.");
+		}
 	}
 };
