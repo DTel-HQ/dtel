@@ -1,4 +1,5 @@
 module.exports = async(client, message, callDocument) => {
+	console.log("call handler start")
 	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
 	const donators = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.DONATORROLE).members.has(user_id);
 	let sendChannel;
