@@ -99,21 +99,22 @@ client.on("message", async message => {
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
+		console.log("try start");
 		callDocument = await Calls.findOne({ to: { channelID: message.channel.id } });
 		if (!callDocument) throw new Error();
-		if (!callDocument) console.log("no call doc err");
-		if (callDocument) console.log(callDocument);
 	} catch (err) {
+		console.log(`no doc there`);
 		try {
+			console.log("2nd try start")
 			callDocument = await Calls.findOne({ channelID: { _id: message.channel.id } });
 			if (callDocument) console.log(callDocument);
 			if (!callDocument) throw new Error();
 			if (!callDocument) console.log("no call doc 2nd err");
 		} catch (err2) {
+			console.log("errored again, no call doc :(")
 			callDocument = null;
 		}
 	}
-	console.log(callDocument);
 	if (message.content.startsWith(process.env.PREFIX)) { // If it starts with a the prefix, check if its a command
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
