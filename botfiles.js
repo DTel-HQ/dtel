@@ -101,9 +101,11 @@ client.on("message", async message => {
 	try {
 		callDocument = await Calls.findOne({ to: { channelID: message.channel.id } });
 		if (!callDocument) throw new Error();
+		if (callDocument) console.log(callDocument);
 	} catch (err) {
 		try {
 			callDocument = await Calls.findOne({ channelID: { _id: message.channel.id } });
+			if (callDocument) console.log(callDocument);
 		} catch (err2) {
 			callDocument = null;
 		}
