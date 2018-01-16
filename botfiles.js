@@ -68,15 +68,15 @@ client.on("ready", () => {
 });
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
-fs.readdir("./events/", (err, files) => {
-	if (err) return console.error(err);
-	files.forEach(file => {
-		let eventFunction = require(`./events/${file}`);
-		let eventName = file.split(".")[0];
-		// super-secret recipe to call events with all their proper arguments *after* the `client` const.
-		client.on(eventName, (...args) => eventFunction(client, ...args));
-	});
-});
+// fs.readdir("./events/", (err, files) => {
+// 	if (err) return console.error(err);
+// 	files.forEach(file => {
+// 		let eventFunction = require(`./events/${file}`);
+// 		let eventName = file.split(".")[0];
+// 		// super-secret recipe to call events with all their proper arguments *after* the `client` const.
+// 		client.on(eventName, (...args) => eventFunction(client, ...args));
+// 	});
+// });
 
 
 client.on("message", async message => {
@@ -165,5 +165,13 @@ client.on("message", async message => {
 // 	console.log(err);
 // 	process.exit(-1);
 // });
+
+client.on("typingStart", async(channel, member) => {
+	require("./events/typingStart")(client, channel, member);
+});
+
+client.on("typingStop", async(channel, member) => {
+	require("./events/typingStop")(client, channel, member);
+});
 
 client.login(process.env.TOKEN);
