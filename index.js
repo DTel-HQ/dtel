@@ -1,24 +1,54 @@
-// First, the uptime-o-tron
 require("dotenv").config();
-const ipaddress = process.env.IP || "127.0.0.1";
-const http = require("http");
-const port = process.env.PORT || 2000;
-const server = http.createServer((req, res) => {
-	res.writeHead(200, { "Content-Type": "text/plain" });
-	res.end("👌");
-});
-server.listen(port, ipaddress, () => {
-	console.log(`Bot HTTP Server listeing on ${ipaddress}:${port}`);
-});
+process.setMaxListeners(0);
 
-// Then, the sharder
+const Sharder = require("./Sharding/Sharder");
 
-const { ShardingManager } = require("discord.js");
-const manager = new ShardingManager(`${__dirname}/botfiles.js`, { totalShards: 2, token: process.env.DISCORD_TOKEN });
+(async() => {
+	const sharder = await new Sharder(process.env.DISCORD_TOKEN, 2);
+	sharder.cluster.on("online", worker => {
+		console.log(`[SHARDING] Worker ${worker.id} launched`);
+	});
+	sharder.ready = 0;
+	sharder.finished = 0;
+	sharder.IPC.on("ready", async() => {
+		sharder.ready++;
+		if (sharder.ready === sharder.count) {
+			console.log("[SHARDING] All shards connected.");
+		}
+	});
 
-manager.spawn();
-manager.on("shardCreate", shard => console.log(`Successfully launched shard ${shard.id}`));
 
-process.on("message", d => {
-	console.log(`Process`, d);
-});
+	let shardFinished = () => {
+		if (sharder.finished > -1) sharder.finished++;
+		if (sharder.finished === sharder.count) {
+			console.log(`DTel 611, how can I help you today?`);
+			sharder.finished = -1;
+		}
+	};
+
+	// Shard has finished all work
+	sharder.IPC.on("finished", shardFinished);
+
+	// Shard requests changes to gulid cache
+	sharder.IPC.on("guilds", async msg => {
+		let guilds = msg.latest;
+		if (!guilds) guilds = [];
+		for (let guild of guilds) {
+			sharder.guilds.set(guild, parseInt(msg.shard));
+		}
+		if (msg.remove) {
+			for (let guild of msg.remove) {
+				sharder.guilds.delete(guild);
+			}
+		}
+	});
+
+	// Shard requests JavaScript code to be executed
+	sharder.IPC.on("eval", async(msg, callback) => {
+		const promises = [];
+		sharder.shards.forEach(shard => promises.push(shard.eval(msg)));
+		callback(await Promise.all(promises));
+	});
+
+	sharder.spawn();
+})();

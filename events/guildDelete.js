@@ -1,31 +1,29 @@
-const request = require("request");
+const snekfetch = require("snekfetch");
 
-module.exports = async(bot, guild) => {
-	const cleanedguildname = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
-	bot.channels.get(process.env.LOGSCHANNEL).send(`:outbox_tray: Left \`${guild.name}\` (${guild.id}). Currently in ${bot.guilds.array().length} servers.`);
-	bot.user.setPresence({ game: { name: `${bot.guilds.array().length} servers | >help`, type: 0 } });
-	request.post({
-		url: "https://bots.discord.pw/api/bots/377609965554237453/stats",
-		headers: {
-			"content-type": "application/json",
-			Authorization: process.env.BOTS_PW_TOKEN,
-		},
-		json: {
-			server_count: bot.guilds.size.toString(),
-		},
-	}, (error, response, body) => {
-		console.log(`DBots returns success: ${body}`);
-	});
-	request.post({
-		url: "https://discordbots.org/api/bots/377609965554237453/stats",
-		headers: {
-			"content-type": "application/json",
-			Authorization: process.env.DBL_ORG_TOKEN,
-		},
-		json: {
-			server_count: bot.guilds.size.toString(),
-		},
-	}, (error, response, body) => {
-		console.log(`DBotsList returns success: ${body}`);
-	});
+module.exports = async(client, guild) => {
+	const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	try {
+		await client.api.channels(process.env.LOGSCHANNEL).messages.post({
+			data: {
+				content: `:outbox_tray: Left \`${censorship}\` (${guild.id}). Currently in ${client.guilds.size} servers on shard **${client.shard.id}**.`,
+			},
+		});
+	} catch (err) {
+		console.log(`[Shard ${client.shard.id}] Failed to post leave message for leaving guild`, err);
+	}
+	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
+	if (process.env.BOTS_PW_TOKEN) {
+		try {
+			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+				.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+				.set(`Content-Type`, "application/json")
+				.send({
+					shard_id: client.shard.id,
+					shard_count: client.shard.count,
+					server_count: client.guilds.size,
+				});
+		} catch (err) {
+			console.log(`[Shard ${client.shard.id}] Failed to post to DBots`, err);
+		}
+	}
 };

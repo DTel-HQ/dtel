@@ -1,4 +1,6 @@
+const MessageBuilder = require("../modules/MessageBuilder");
 const uuidv4 = require("uuid/v4");
+
 // REWRITEN
 module.exports = async(client, message, args) => {
 	let mynumber;
@@ -234,7 +236,7 @@ module.exports = async(client, message, args) => {
 		let toDialDocument;
 		try {
 			toDialDocument = await Numbers.findOne({ number: toDial.trim() });
-			// Comment from Vlad: Bad Fix right here
+			// Comment from Vlad: China™ fix right here
 			if (!toDialDocument && toDial !== "*411" && toDial !== "*233") throw new Error();
 		} catch (err) {
 			return message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
@@ -250,22 +252,44 @@ module.exports = async(client, message, args) => {
 		}
 		let dialedInCall;
 		try {
-			dialedInCall = await Calls.findOne({ to: { channelID: toDialDocument._id } });
+			dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
+			if (!dialedInCall) throw new Error();
 		} catch (err) {
 			try {
-				dialedInCall = await Calls.findOne({ from: { channelID: toDialDocument._id } });
+				dialedInCall = await Calls.findOne({ "from.channelID": toDialDocument._id });
+				if (!dialedInCall) throw new Error();
 			} catch (err2) {
-				return null;
+				// Ignore
 			}
 		}
 		if (dialedInCall) {
 			return message.reply(":x: Dialing error: The number you dialed is already in a call.");
 		}
 		if (toDial === "08006113835") {
-			let cs = client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE);
-			cs.setMentionable(true);
-			await client.channels.get(toDialDocument._id).send("<@&281815839936741377>");
-			cs.setMentionable(false);
+			let guild = client.guilds.get(process.env.SUPPORTGUILD);
+			if (guild) {
+				let customerSupport = guild.roles.get(process.env.SUPPORTROLE);
+				customerSupport.setMentionable(true);
+				await client.channels.get(toDialDocument._id).send(client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).toString());
+				customerSupport.setMentionable(false);
+			} else {
+				// Everything past this is Vlad's fault. Blame him if it borks
+				try {
+					await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
+						data: {
+							mentionable: true,
+						},
+					});
+					await client.api.channels(toDialDocument._id).messages.post(MessageBuilder({ content: `<@&${process.env.SUPPORTROLE}>` }));
+					await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
+						data: {
+							mentionable: false,
+						},
+					});
+				} catch (err) {
+					// Ignore
+				}
+			}
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
@@ -283,8 +307,9 @@ module.exports = async(client, message, args) => {
 				},
 			})
 		);
-		client.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
-		await setTimeout(async() => {
+		client.channels.get(toDialDocument._id).send(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
+		setTimeout(async() => {
+			callDocument = await Calls.findOne({ _id: callDocument._id });
 			if (callDocument.pickedUp) return;
 			callDocument.status = false;
 			await callDocument.save();

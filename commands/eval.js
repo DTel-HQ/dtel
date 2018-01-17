@@ -3,7 +3,16 @@ const PastebinAPI = require("pastebin-js");
 const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
 
 module.exports = async(client, message, args) => {
-	const canEval = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.BOSSROLE).members.has(user_id);
+	const canEval = async user => {
+		try {
+			const member = await client.api.guilds(process.env.SUPPORTGUILD).members(user).get();
+			if (member.roles.includes(process.env.BOSSROLE)) return true;
+			return false;
+		} catch (err) {
+			console.log(err);
+			return false;
+		}
+	};
 	if (canEval(message.author.id)) {
 		if (args) {
 			let hrstart = process.hrtime();

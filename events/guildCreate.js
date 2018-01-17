@@ -1,44 +1,49 @@
-const request = require("request");
+const snekfetch = require("snekfetch");
 
-module.exports = async(bot, guild) => {
-	if (guild.defaultChannel === undefined) {
-		guild.owner.send(`(Discord removed the default channel. So no matter who added DiscordTel, I'm sending this to the owner of the server \`${guild.name}\`, which is you!)\n\nHello guys, it's **DiscordTel**, the telephone solution for Discord! To learn more, type \`>info\`. To get command help, type \`>help\`. To get a number, read <http://discordtel.rtfd.io/> and then type \`>wizard\` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*`);
-	} else {
-		guild.defaultChannel.send("Hello guys, it's **DiscordTel**, the telephone :telephone: solution for Discord! To learn more, type `>info`. To get command help, type `>help`. To get a number, read <http://discordtel.rtfd.io/> and then type `>wizard` in the channel you wish to enable the service.\n**Warning:** No troll calls. You are required to read the documentation. To keep your number available you need to renew your number which is instructed at <http://discordtel.readthedocs.io/en/latest/Payment/>.\n*ToS Compliance: <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>*");
+module.exports = async(client, guild) => {
+	await guild.members.fetch();
+	let canDMOwner = true;
+	const ownerMessage = [
+		`Hello, I'm **DiscordTel**, the telephone solution for Discord, and I've been added to \`${guild}\`, a server you own!`,
+		`To learn more, type \`${process.env.PREFIX}info\`. To get command help, type \`${process.env.PREFIX}help\``,
+		`To get a number, please read **<http://discordtel.rtfd.io/>** and then type \`${process.env.PREFIX}wizard\` in the channel you wish to enable this service.`,
+		`:warning: No troll calls. You are required to read the documentation.`,
+		`To keep your number available you need to renew your number which is instructed at **<http://discordtel.readthedocs.io/en/latest/Payment/>**.`,
+		`**ToS Compliance:** <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>`,
+	].join("\n");
+	try {
+		await guild.owner.send(ownerMessage);
+	} catch (err) {
+		canDMOwner = false;
+		console.log(`The bloody OWNER doesn't have bot dms on!`);
 	}
-	// added check to make sure embed links permission is given to the bot.
-	if (!guild.me.hasPermission("EMBED_LINKS")) {
-		if (guild.defaultChannel === undefined) {
-			guild.owner.send("I don't seem to have permission in your server to use embeds. This may cause issues with DiscordTel, so please make sure I have the `Embed Links` permission.");
-		} else {
-			guild.defaultChannel.send("I was recently added to this server, but I don't have `Embed Links` permission, which may cause issues with DiscordTel.");
+	if (!guild.me.permissions.has("EMBED_LINK") && canDMOwner) {
+		guild.owner.send("I don't seem to have the `Embed Links` permission in your server. This may cause issues with DiscordTel, so please make sure I have that permission.");
+	}
+
+	const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	try {
+		await client.api.channels(process.env.LOGSCHANNEL).messages.post({
+			data: {
+				content: `:inbox_tray: Joined \`${censorship}\` (${guild.id}). Currently in ${client.guilds.size} servers on shard **${client.shard.id}**.`,
+			},
+		});
+	} catch (err) {
+		console.log(`[Shard ${client.shard.id}] Failed to post join message for leaving guild`, err);
+	}
+	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
+	if (process.env.BOTS_PW_TOKEN) {
+		try {
+			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+				.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+				.set(`Content-Type`, "application/json")
+				.send({
+					shard_id: client.shard.id,
+					shard_count: client.shard.count,
+					server_count: client.guilds.size,
+				});
+		} catch (err) {
+			console.log(`[Shard ${client.shard.id}] Failed to post to DBots`, err);
 		}
 	}
-	const cleanedguildname = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
-	bot.channels.get(process.env.LOGSCHANNEL).send(`:inbox_tray: Joined \`${guild.name}\` (${guild.id}). Currently in ${bot.guilds.size} servers.`);
-	bot.user.setPresence({ game: { name: `${bot.guilds.size} servers | >help`, type: 0 } });
-	request.post({
-		url: "https://bots.discord.pw/api/bots/377609965554237453/stats",
-		headers: {
-			"content-type": "application/json",
-			Authorization: process.env.BOTS_PW_TOKEN,
-		},
-		json: {
-			server_count: bot.guilds.size.toString(),
-		},
-	}, (error, response, body) => {
-		console.log(`DBots returns success: ${body}`);
-	});
-	request.post({
-		url: "https://discordbots.org/api/bots/377609965554237453/stats",
-		headers: {
-			"content-type": "application/json",
-			Authorization: process.env.DBL_ORG_TOKEN,
-		},
-		json: {
-			server_count: bot.guilds.size.toString(),
-		},
-	}, (error, response, body) => {
-		console.log(`DBotsList returns success: ${body}`);
-	});
 };

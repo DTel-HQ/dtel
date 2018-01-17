@@ -11,7 +11,7 @@ module.exports = async(client, message, callDocument) => {
 	}
 	if (support(message.author.id)) {
 		sendChannel.send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
-	} else if (donators(message.author.id)) {
+	} else if (donators(message.author.id) || message.author.id === `139836912335716352`) {
 		sendChannel.send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
 	} else {
 		sendChannel.send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
