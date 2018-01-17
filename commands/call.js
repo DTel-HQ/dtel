@@ -285,21 +285,20 @@ module.exports = async(client, message, args) => {
 		);
 		client.channels.get(toDialDocument._id).send(`There is an incoming call from \`(${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`);
 		await setTimeout(async() => {
-			if (!callDocument.pickedUp) {
-				callDocument.status = false;
-				await callDocument.save();
-				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-				client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-				client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
-				let mailbox;
-				try {
-					mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
-				} catch (err) {
-					return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
-				}
-				client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-				client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+			if (callDocument.pickedUp) return;
+			callDocument.status = false;
+			await callDocument.save();
+			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+			client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
+			client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
+			let mailbox;
+			try {
+				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+			} catch (err) {
+				return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
 			}
+			client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+			client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
 		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");

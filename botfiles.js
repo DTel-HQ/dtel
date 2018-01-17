@@ -68,15 +68,15 @@ client.on("ready", () => {
 });
 
 // This loop reads the /events/ folder and attaches each event file to the appropriate event.
-// fs.readdir("./events/", (err, files) => {
-// 	if (err) return console.error(err);
-// 	files.forEach(file => {
-// 		let eventFunction = require(`./events/${file}`);
-// 		let eventName = file.split(".")[0];
-// 		// super-secret recipe to call events with all their proper arguments *after* the `client` const.
-// 		client.on(eventName, (...args) => eventFunction(client, ...args));
-// 	});
-// });
+fs.readdir("./events/", (err, files) => {
+	if (err) return console.error(err);
+	files.forEach(file => {
+		let eventFunction = require(`./events/${file}`);
+		let eventName = file.split(".")[0];
+		// super-secret recipe to call events with all their proper arguments *after* the `client` const (completely broken, require events manually).
+		client.on(eventName, (...args) => eventFunction(client, ...args));
+	});
+});
 
 
 client.on("message", async message => {
@@ -99,13 +99,10 @@ client.on("message", async message => {
 	// In progress wizard/phonebook session?
 	let callDocument;
 	try {
-		console.log("try start");
-		// callDocument = await Calls.findOne({ to: { channelID: message.channel.id } });
 		callDocument = await Calls.findOne({ "to.channelID": message.channel.id });
 		if (!callDocument) throw new Error();
 	} catch (err) {
 		try {
-			// callDocument = await Calls.findOne({{ from: { channelID: message.channel.id } }});
 			callDocument = await Calls.findOne({ "from.channelID": message.channel.id });
 			if (!callDocument) throw new Error();
 		} catch (err2) {
@@ -121,6 +118,7 @@ client.on("message", async message => {
 			command = "call";
 		}
 		let commandFile;
+		// Is there a call?
 		if (callDocument && callDocument.status) {
 			try {
 				commandFile = require(`./callcmds/${command}.js`);
@@ -128,28 +126,20 @@ client.on("message", async message => {
 			} catch (err) {
 				console.log(`call cmds err: ${err}`);
 			}
-			if (commandFile) {
-				try {
-					return commandFile(client, message, callDocument);
-				} catch (err) {
-					console.log(err);
-				}
-			}
 		} else {
 			try {
 				commandFile = require(`./commands/${command}.js`);
-				console.log("ran normcmd");
 			} catch (err) {
-				console.log(`norm cmds err: ${err}`);
+				// Ignore
 			}
-			if (commandFile) {
-				try {
-					return commandFile(client, message, args);
-				} catch (err) {
-					console.log(err);
-				}
+		}
+		// If so, run it
+		if (commandFile) {
+			try {
+				return commandFile(client, message, args, callDocument);
+			} catch (err) {
+				console.log(err);
 			}
-			// If so, run it
 		}
 	} else if (callDocument && callDocument.status && callDocument.pickedUp) {
 		require("./modules/callHandler")(client, message, callDocument);
@@ -161,14 +151,14 @@ client.on("message", async message => {
 // 	process.exit(-1);
 // });
 
-client.on("typingStart", async(channel, member) => {
-	console.log("typingStart");
-	require("./events/typingStart")(client, channel, member);
-});
+// client.on("typingStart", async(channel, member) => {
+// 	console.log("typingStart");
+// 	require("./events/typingStart")(client, channel, member);
+// });
 
-client.on("typingStop", async(channel, member) => {
-	console.log("typingStop");	
-	require("./events/typingStop")(client, channel, member);
-});
+// client.on("typingStop", async(channel, member) => {
+// 	console.log("typingStop");
+// 	require("./events/typingStop")(client, channel, member);
+// });
 
 client.login(process.env.TOKEN);

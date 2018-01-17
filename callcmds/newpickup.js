@@ -1,4 +1,4 @@
-module.exports = async(client, message, callDocument) => {
+module.exports = async(client, message, args, callDocument) => {
 	console.log("ran");
 	callDocument.pickedUp = true;
 	await callDocument.save();
