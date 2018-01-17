@@ -3,7 +3,7 @@ const fs = require("fs");
 const util = require("util");
 const mongoose = require("mongoose");
 const database = require("./schemas/database");
-const client = new Discord.Client({ fetchAllMembers: true, disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
+const client = new Discord.Client({ disableEveryone: true, fetchAllMembers: true, disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_CREATE", "CHANNEL_DELETE", "CHANNEL_UPDATE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "USER_UPDATE", "USER_NOTE_UPDATE", "USER_SETTINGS_UPDATE", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE", "VOICE_SERVER_UPDATE"] });
 require("dotenv").config();
 const calls = JSON.parse(fs.readFileSync("./json/call.json", "utf8"));
 const fouroneone = JSON.parse(fs.readFileSync("./json/fouroneone.json", "utf8"));
@@ -19,6 +19,7 @@ const phonebook = JSON.parse(fs.readFileSync("./json/phonebook.json", "utf8"));
 const award = JSON.parse(fs.readFileSync("./json/award.json", "utf8"));
 const dailies = JSON.parse(fs.readFileSync("./json/daily.json", "utf8"));
 const numbers = JSON.parse(fs.readFileSync("./json/numbers.json", "utf8"));
+const mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 
 database.initialize(process.env.MONGOURL).then(db => {
 	console.log(`Database Loaded!`);
@@ -27,7 +28,6 @@ database.initialize(process.env.MONGOURL).then(db => {
 	process.exit(1);
 });
 
-const mailbox_storage = JSON.parse(fs.readFileSync("./json/mailbox.json", "utf8"));
 
 function updateNumbers() {
 	fs.writeFileSync("./json/numbers.json", JSON.stringify(numbers), "utf8");

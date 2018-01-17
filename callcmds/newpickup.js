@@ -17,15 +17,16 @@ module.exports = async(client, message, args, callDocument) => {
 	}
 	fromChannel.send(":heavy_check_mark: The other side picked up!");
 	client.channels.get(process.env.LOGSCHANNEL).send(`:white_check_mark: The call between channel ${toChannel._id} and channel ${fromChannel._id}} was picked up by __${message.author.tag}__ (${message.author.id}).`);
-	await setTimeout(async() => {
-		if (callDocument.status == false) {
-			fromChannel.send(":negative_squared_cross_mark: This call has expired (2 minutes).");
-		}
-		if (!await Mailbox.findOne({ _id: callDocument.to._id })) {
-			return fromChannel.send(":x: The call ended.");
-		}
-		fromChannel.send(`:x: ${(await Mailbox.findOne({ _id: callDocument.from._id })).settings.autoreply}`);
-		fromChannel.send(":question: Would you like to leave a message? `>message [number] [message]`");
-		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${fromChannel.id} and channel ${toChannel.id} is expired.`);
-	}, 120010);
+	// await setTimeout(async() => {
+	// 	if (!)
+	// 	if (callDocument.status == false) {
+	// 		fromChannel.send(":negative_squared_cross_mark: This call has expired (2 minutes).");
+	// 	}
+	// 	if (!await Mailbox.findOne({ _id: callDocument.to._id })) {
+	// 		return fromChannel.send(":x: The call ended.");
+	// 	}
+	// 	fromChannel.send(`:x: ${(await Mailbox.findOne({ _id: callDocument.from._id })).settings.autoreply}`);
+	// 	fromChannel.send(":question: Would you like to leave a message? `>message [number] [message]`");
+	// 	client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${fromChannel.id} and channel ${toChannel.id} is expired.`);
+	// }, 120010);
 };
