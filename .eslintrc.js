@@ -17,6 +17,7 @@ module.exports = {
 		Accounts: true,
 		Mailbox: true,
 		Blacklist: true,
+		OldCalls: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",

@@ -8,6 +8,7 @@ const phonebookSchema = require("./phonebookSchema");
 const accountSchema = require("./accountSchema");
 const mailboxSchema = require("./mailboxSchema");
 const blacklistSchema = require("./blacklistSchema");
+const oldCallSchema = require("./oldCallSchema");
 const addToGlobal = (name, val) => {
 	global[name] = val;
 };
@@ -25,6 +26,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		Accounts,
 		Mailbox,
 		Blacklist,
+		OldCalls,
 	] = [
 		mongoose.model("servers", serverSchema),
 		mongoose.model("fouroneone", fouroneoneSchema),
@@ -34,6 +36,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		mongoose.model("accounts", accountSchema),
 		mongoose.model("mailbox", mailboxSchema),
 		mongoose.model("blacklist", blacklistSchema),
+		mongoose.model("oldCalls", oldCallSchema),
 	];
 	mongoose.connection
 		.on("error", err => reject(err))
@@ -45,6 +48,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 			addToGlobal("Phonebook", Phonebook);
 			addToGlobal("Accounts", Accounts);
 			addToGlobal("Blacklist", Blacklist);
+			addToGlobal("OldCalls", OldCalls);
 			addToGlobal("Database", {
 				Servers, servers: Servers,
 				Fouroneone, fouroneone: Fouroneone,
@@ -54,6 +58,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 				Accounts, accounts: Accounts,
 				Mailbox, mailbox: Mailbox,
 				Blacklist, blacklist: Blacklist,
+				OldCalls, oldCalls: OldCalls,
 				Raw: mongoose.connection,
 			});
 			resolve(global.Database);
