@@ -42,10 +42,10 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
-	messages: new mongoose.Schema({
+	messages: [new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
 		content: String,
-	}),
+	})],
 });

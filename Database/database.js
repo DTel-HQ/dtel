@@ -23,7 +23,6 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		Mailbox,
 		Blacklist,
 		OldCalls,
-		CallMessages,
 	] = [
 		mongoose.model("numbers", numberSchema),
 		mongoose.model("calls", callSchema),
@@ -32,7 +31,6 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		mongoose.model("mailbox", mailboxSchema),
 		mongoose.model("blacklist", blacklistSchema),
 		mongoose.model("oldCalls", oldCallSchema),
-		mongoose.model("CallMessages", callSchema),
 	];
 	mongoose.connection
 		.on("error", err => reject(err))
@@ -52,7 +50,6 @@ exports.initialize = url => new Promise((resolve, reject) => {
 				Mailbox, mailbox: Mailbox,
 				Blacklist, blacklist: Blacklist,
 				OldCalls, oldCalls: OldCalls,
-				CallMessages, callMessages: CallMessages,
 				Raw: mongoose.connection,
 			});
 			resolve(global.Database);

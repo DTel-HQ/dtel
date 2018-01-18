@@ -41,10 +41,10 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		sent = send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
 	}
-	callDocument.messages.create(new CallMessages({
+	callDocument.messages.push({
 		bmessage: sent.id,
 		umessage: message.id,
 		creator: message.author.id,
 		content: message.content,
-	}));
+	});
 };
