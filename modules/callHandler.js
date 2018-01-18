@@ -29,7 +29,7 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		message.reply("Error! Please contact a bot developer.");
 	}
-	let send = content => client.channels(sendChannel).messages.post(MessageBuilder({
+	let send = content => client.api.channels(sendChannel).messages.post(MessageBuilder({
 		content,
 	}));
 	if (support(message.author.id)) {
