@@ -1,3 +1,5 @@
+const MessageBuilder = require("../modules/MessageBuilder");
+
 module.exports = async(client, message, args, callDocument) => {
 	if (callDocument.pickedUp) return;
 	callDocument.pickedUp = true;
@@ -5,8 +7,8 @@ module.exports = async(client, message, args, callDocument) => {
 	message.reply(":white_check_mark: You pick up the call.");
 	let toChannel, fromChannel;
 	try {
-		toChannel = client.channels.get(callDocument.to.channelID);
-		fromChannel = client.channels.get(callDocument.from.channelID);
+		toChannel = client.api.channels(callDocument.to.channelID).get();
+		fromChannel = client.api.channels(callDocument.from.channelID).get();
 	} catch (err) {
 		// Ignore
 	}
@@ -16,5 +18,8 @@ module.exports = async(client, message, args, callDocument) => {
 		return message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
 	}
 	fromChannel.send(":heavy_check_mark: The other side picked up!");
-	client.channels.get(process.env.LOGSCHANNEL).send(`:white_check_mark: The call between channel ${toChannel._id} and channel ${fromChannel._id}} was picked up by __${message.author.tag}__ (${message.author.id}).`);
+	let send = content => client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+		content,
+	}));
+	send(`:white_check_mark: The call between channel ${toChannel.id} and channel ${fromChannel.id}} was picked up by __${message.author.tag}__ (${message.author.id}).`);
 };
