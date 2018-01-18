@@ -58,6 +58,10 @@ client.on("typingStop", (...args) => {
 	require("./events/typingStop")(client, ...args);
 });
 
+client.on("messageUpdate", async(oldMessage, newMessage) => {
+	require("./events/messageUpdate")(client, oldMessage, newMessage);
+});
+
 client.on("message", async message => {
 	let isBlacklisted;
 	try {

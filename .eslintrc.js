@@ -18,6 +18,7 @@ module.exports = {
 		Mailbox: true,
 		Blacklist: true,
 		OldCalls: true,
+		CallMessages: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",

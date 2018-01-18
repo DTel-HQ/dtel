@@ -33,11 +33,18 @@ module.exports = async(client, message, callDocument) => {
 	let send = content => client.api.channels(sendChannel).messages.post(MessageBuilder({
 		content,
 	}));
+	let sent;
 	if (support(message.author.id)) {
-		send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
+		sent = send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
 	} else if (donators(message.author.id) || message.author.id === `139836912335716352`) {
-		send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
+		sent = send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
 	} else {
-		send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
+		sent = send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
 	}
+	callDocument.messages.create(new CallMessages({
+		bmessage: sent.id,
+		umessage: message.id,
+		creator: message.author.id,
+		content: message.content,
+	}));
 };
