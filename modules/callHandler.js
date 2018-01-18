@@ -29,6 +29,7 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		message.reply("Error! Please contact a bot developer.");
 	}
+	message.content = message.content.replace(/@(everyone|here)/g, `@­$1`);
 	let send = content => client.api.channels(sendChannel).messages.post(MessageBuilder({
 		content,
 	}));
