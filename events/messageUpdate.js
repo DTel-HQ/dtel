@@ -7,7 +7,6 @@ module.exports = async(client, oldMessage, newMessage) => {
 			if (member.roles.includes(process.env.SUPPORTROLE)) return true;
 			return false;
 		} catch (err) {
-			console.log(err);
 			return false;
 		}
 	};
@@ -17,7 +16,6 @@ module.exports = async(client, oldMessage, newMessage) => {
 			if (member.roles.includes(process.env.DONATORROLE)) return true;
 			return false;
 		} catch (err) {
-			console.log(err);
 			return false;
 		}
 	};
@@ -45,8 +43,8 @@ module.exports = async(client, oldMessage, newMessage) => {
 		messageToEdit = callDocument.messages.findOne({ umessage: oldMessage.id });
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
-		newMessage.reply(`:x: Error! This should not have happened. An error occured in the "messageUpdate" event. \n \`\`\`js\n${err}\`\`\``);
-		console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err}`);
+		newMessage.reply(`:x: Error! This should not have happened. An error occured in the "messageUpdate" event. \n \`\`\`js\n${err.stack}\`\`\``);
+		console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
 	}
 	let toSend;
 	if (support(oldMessage.author.id)) {
