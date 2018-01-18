@@ -41,7 +41,7 @@ module.exports = async(client, oldMessage, newMessage) => {
 	}
 	let messageToEdit;
 	try {
-		messageToEdit = callDocument.messages.findOne({ umessage: oldMessage.id });
+		messageToEdit = callDocument.messages.find(m => m.umessage === oldMessage.id);
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
 		newMessage.reply(`:x: Error! This should not have happened. An error occured in the "messageUpdate" event. \n \`\`\`js\n${err.stack}\`\`\``);
