@@ -7,8 +7,8 @@ module.exports = async(client, message, args, callDocument) => {
 	message.reply(":white_check_mark: You pick up the call.");
 	let toChannel, fromChannel;
 	try {
-		toChannel = client.api.channels(callDocument.to.channelID).get();
-		fromChannel = client.api.channels(callDocument.from.channelID).get();
+		toChannel = await client.api.channels(callDocument.to.channelID).get();
+		fromChannel = await client.api.channels(callDocument.from.channelID).get();
 	} catch (err) {
 		// Ignore
 	}

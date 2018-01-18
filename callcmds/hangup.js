@@ -3,9 +3,9 @@ const MessageBuilder = require("../modules/MessageBuilder");
 module.exports = async(client, message, args, callDocument) => {
 	let toSend;
 	if (callDocument.to.channelID === message.channel.id) {
-		toSend = client.api.channels(callDocument.from.channelID).get();
+		toSend = await client.api.channels(callDocument.from.channelID).get();
 	} else {
-		toSend = client.api.channels(callDocument.to.channelID).get();
+		toSend = await client.api.channels(callDocument.to.channelID).get();
 	}
 	let send = content => client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
 		content,

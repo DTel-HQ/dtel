@@ -1,6 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, oldMessage, newMessage) => {
+	if (oldMessage.author.id === client.user.id) return;
 	const support = async user => {
 		try {
 			const member = await client.api.guilds(process.env.SUPPORTGUILD).members(user).get();
@@ -34,9 +35,9 @@ module.exports = async(client, oldMessage, newMessage) => {
 	if (!callDocument) return;
 	let editChannel;
 	if (callDocument.to.channelID === oldMessage.channel.id) {
-		editChannel = client.api.channels(callDocument.from.channelID).get();
+		editChannel = await client.api.channels(callDocument.from.channelID).get();
 	} else {
-		editChannel = client.api.channels(callDocument.to.channelID).get();
+		editChannel = await client.api.channels(callDocument.to.channelID).get();
 	}
 	let messageToEdit;
 	try {
@@ -55,7 +56,7 @@ module.exports = async(client, oldMessage, newMessage) => {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${newMessage.content}`;
 	}
 	try {
-		let toEdit = await client.api.channels(editChannel.id).messages(messageToEdit.umessage).patch(MessageBuilder({
+		let toEdit = await client.api.channels(editChannel.id).messages(messageToEdit.bmessage).patch(MessageBuilder({
 			content: toSend,
 		}));
 	} catch (err) {
