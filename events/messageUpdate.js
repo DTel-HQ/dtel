@@ -35,9 +35,9 @@ module.exports = async(client, oldMessage, newMessage) => {
 	if (!callDocument) return;
 	let editChannel;
 	if (callDocument.to.channelID === oldMessage.channel.id) {
-		editChannel = await client.api.channels(callDocument.from.channelID).get();
+		editChannel = client.api.channels(callDocument.from.channelID);
 	} else {
-		editChannel = await client.api.channels(callDocument.to.channelID).get();
+		editChannel = client.api.channels(callDocument.to.channelID);
 	}
 	let messageToEdit;
 	try {
@@ -48,15 +48,15 @@ module.exports = async(client, oldMessage, newMessage) => {
 		console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
 	}
 	let toSend;
-	if (support(oldMessage.author.id)) {
+	if (await support(oldMessage.author.id)) {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: :telephone_receiver: ${newMessage.content}`;
-	} else if (donators(oldMessage.author.id) || oldMessage.author.id === `139836912335716352`) {
+	} else if (await donators(oldMessage.author.id) || oldMessage.author.id === `139836912335716352`) {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${newMessage.content}`;
 	} else {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${newMessage.content}`;
 	}
 	try {
-		let toEdit = await client.api.channels(editChannel.id).messages(messageToEdit.bmessage).patch(MessageBuilder({
+		let toEdit = await editChannel.messages(messageToEdit.bmessage).patch(MessageBuilder({
 			content: toSend,
 		}));
 	} catch (err) {

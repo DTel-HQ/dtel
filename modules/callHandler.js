@@ -34,17 +34,17 @@ module.exports = async(client, message, callDocument) => {
 		content,
 	}));
 	let sent;
-	if (support(message.author.id)) {
-		sent = send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
-	} else if (donators(message.author.id) || message.author.id === `139836912335716352`) {
-		sent = send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
+	if (await support(message.author.id)) {
+		sent = await send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
+	} else if (await donators(message.author.id) || message.author.id === `139836912335716352`) {
+		sent = await send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
 	} else {
-		sent = send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
+		sent = await send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
 	}
 	callDocument.messages.push({
 		bmessage: sent.id,
 		umessage: message.id,
 		creator: message.author.id,
-		content: message.content,
 	});
+	await callDocument.save();
 };

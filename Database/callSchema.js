@@ -46,6 +46,5 @@ module.exports = new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
-		content: String,
 	})],
 });
