@@ -133,7 +133,7 @@ function callNumber(yournumber,message,call,mynumber){
 	}
 
 	message.reply(":telephone: Dialing... You are able to `>hangup`.");
-	bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
+	bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.tag+"__ ("+message.author.id+").");
 	calls.push({from:{channel:mychannel,number:mynumber},to:{channel:yourchannel,number:yournumber},status:false,time:Date.now()});
 	fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
 	bot.channels.get(yourchannel).send("You received a call from `("+mynumber.split("")[0]+mynumber.split("")[1]+mynumber.split("")[2]+mynumber.split("")[3]+") "+mynumber.split("")[4]+mynumber.split("")[5]+mynumber.split("")[6]+"-"+mynumber.split("")[7]+mynumber.split("")[8]+mynumber.split("")[9]+mynumber.split("")[10]+"`. Type `>pickup` or `>hangup`.");
@@ -217,7 +217,7 @@ bot.on("message", message => {
 	}
 	// Command Log
 	if (message.content.startsWith(">")) {
-		console.log(message.author.username + "#" + message.author.discriminator + " > " + message.content);
+		console.log(message.author.tag + " > " + message.content);
 	}
 	var account = accounts.find(function(item) {
 		return item.user === message.author.id;
@@ -266,7 +266,7 @@ bot.on("message", message => {
 				return;
 			}
 			message.reply("Thanks for your suggestion!");
-	    	bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.username + "#" + message.author.discriminator + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
+	    	bot.channels.get("326798754348793857").send("New suggestion from __" + message.author.tag + "__ (" + message.author.id + ") ```\n" + message.content.split(" ").splice(1).join(" ").split("```").join(" ") + "```");
 		}
 		// Lottery may be removed in the future
 		else if (message.content.startsWith(">lottery") && message.author.id !== "104559847118225408") {
@@ -316,7 +316,7 @@ bot.on("message", message => {
 				 }
 				 account.balance += 250;
 				 accounts.push(account);
-				 bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 250 daily credits!");
+				 bot.channels.get("282253502779228160").send(":calendar: "+message.author.tag+" ("+message.author.id+") claimed 250 daily credits!");
 				 fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 		}
     else if (message.content.startsWith(">daily") && bot.guilds.get('281815661317980160').members.get(message.author.id) && bot.guilds.get('281815661317980160').members.get(message.author.id).roles.find("name","Customer Support")) {
@@ -334,7 +334,7 @@ bot.on("message", message => {
 				 }
 				 account.balance += 200;
 				 accounts.push(account);
-				 bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 200 daily credits!");
+				 bot.channels.get("282253502779228160").send(":calendar: "+message.author.tag+" ("+message.author.id+") claimed 200 daily credits!");
 				 fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 		}
 		else if (message.content.startsWith(">daily")) {
@@ -362,7 +362,7 @@ bot.on("message", message => {
 						}
 						account.balance += 180;
 						accounts.push(account);
-						bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 180 daily credits!");
+						bot.channels.get("282253502779228160").send(":calendar: "+message.author.tag+" ("+message.author.id+") claimed 180 daily credits!");
 						fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 					}
 					else {
@@ -376,7 +376,7 @@ bot.on("message", message => {
 						}
 						account.balance += 120;
 						accounts.push(account);
-						bot.channels.get("282253502779228160").send(":calendar: "+message.author.username+"#"+message.author.discriminator+" ("+message.author.id+") claimed 120 daily credits!");
+						bot.channels.get("282253502779228160").send(":calendar: "+message.author.tag+" ("+message.author.id+") claimed 120 daily credits!");
 						fs.writeFileSync("./account.json", JSON.stringify(accounts), "utf8");
 					}
 				} else {
@@ -904,7 +904,7 @@ bot.on("message", message => {
 				return;
 			}
  			message.reply(":telephone: Dialing `"+yournumber+"`... You are able to `>hangup`.");
-			bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
+			bot.channels.get("282253502779228160").send(":telephone: A **normal** call is established between channel "+message.channel.id+" and channel "+yourchannel+" by __"+message.author.tag+"__ ("+message.author.id+").");
 			calls.push({from:{channel:mychannel,number:mynumber},to:{channel:yourchannel,number:yournumber},status:false,time:Date.now()});
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
 			bot.channels.get(yourchannel).send("You received a call from `("+mynumber.split("")[0]+mynumber.split("")[1]+mynumber.split("")[2]+mynumber.split("")[3]+") "+mynumber.split("")[4]+mynumber.split("")[5]+mynumber.split("")[6]+"-"+mynumber.split("")[7]+mynumber.split("")[8]+mynumber.split("")[9]+mynumber.split("")[10]+"`. Type `>pickup` or `>hangup`.");
@@ -1162,7 +1162,7 @@ bot.on("message", message => {
 			call.time = Date.now();
 			calls.push(call);
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
-			bot.channels.get("282253502779228160").send(":white_check_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is picked up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+").");
+			bot.channels.get("282253502779228160").send(":white_check_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is picked up by __"+message.author.tag+"__ ("+message.author.id+").");
 			setTimeout(function(){
 				call = calls.find(function(item) {
 					if (	item.from.channel === message.channel.id) {
@@ -1193,7 +1193,7 @@ bot.on("message", message => {
 		}
 		else if (message.content === ">hangup" && message.channel.id === call.to.channel) {
 			message.reply(":negative_squared_cross_mark:  You hung up the call.");
-			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+") on the \"to\" side.");
+			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.tag+"__ ("+message.author.id+") on the \"to\" side.");
 			calls.splice(calls.indexOf(call), 1);
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
 			if (bot.channels.get(call.from.channel) !== undefined) {
@@ -1228,7 +1228,7 @@ bot.on("message", message => {
 		}
 		else if (message.content === ">hangup" && message.channel.id === call.from.channel) {
 			message.reply(":negative_squared_cross_mark:  You hung up the call.");
-			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.username+"#"+message.author.discriminator+"__ ("+message.author.id+") on the \"from\" side.");
+			bot.channels.get("282253502779228160").send(":negative_squared_cross_mark: The call between channel "+call.from.channel+" and channel "+call.to.channel+" is hung up by __"+message.author.tag+"__ ("+message.author.id+") on the \"from\" side.");
 			calls.splice(calls.indexOf(call), 1);
 			fs.writeFileSync("./call.json", JSON.stringify(calls), "utf8");
 			if (bot.channels.get(call.to.channel) !== undefined) {
