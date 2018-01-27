@@ -14,10 +14,10 @@ module.exports = async(client, msg, suffix) => {
 		// 	}));
 		// }
 
-		let channel = await client.api.channels(n.channel).get();
+		let channel = await client.api.channels(n._id).get();
 		if (channel) {
 			try {
-				await client.api.channels(n.channel).messages.post(MessageBuilder({
+				await client.api.channels(n._id).messages.post(MessageBuilder({
 					content: suffix,
 				}));
 			} catch (error) {
