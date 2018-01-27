@@ -1,26 +1,8 @@
 const MessageBuilder = require("../modules/MessageBuilder");
+const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, message, callDocument) => {
-	const support = async user => {
-		try {
-			const member = await client.api.guilds(process.env.SUPPORTGUILD).members(user).get();
-			if (member.roles.includes(process.env.SUPPORTROLE)) return true;
-			return false;
-		} catch (err) {
-			console.log(err);
-			return false;
-		}
-	};
-	const donators = async user => {
-		try {
-			const member = await client.api.guilds(process.env.SUPPORTGUILD).members(user).get();
-			if (member.roles.includes(process.env.DONATORROLE)) return true;
-			return false;
-		} catch (err) {
-			console.log(err);
-			return false;
-		}
-	};
+	let perms = await permCheck(client, message.author.id);
 	let sendChannel;
 	if (message.channel.id === callDocument.to.channelID) {
 		sendChannel = callDocument.from.channelID;
@@ -34,9 +16,9 @@ module.exports = async(client, message, callDocument) => {
 		content,
 	}));
 	let sent;
-	if (await support(message.author.id)) {
+	if (perms.support) {
 		sent = await send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
-	} else if (await donators(message.author.id) || message.author.id === `139836912335716352`) {
+	} else if (perms.donator || message.author.id === `139836912335716352`) {
 		sent = await send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
 	} else {
 		sent = await send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);

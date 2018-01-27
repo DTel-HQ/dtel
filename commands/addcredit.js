@@ -1,9 +1,10 @@
-// REWRITTEN
+const permCheck = require("../modules/permChecker");
+
 module.exports = async(client, message, args) => {
-	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
+	const perms = await permCheck(client, message.author.id);
 	let userid = args.substring(0, args.indexOf(" ")).trim();
 	let amount = args.substring(args.indexOf(" ") + 1).trim();
-	if (!support(message.author.id)) {
+	if (!perms.support) {
 		return message.reply("Stealing money from the bank?");
 	}
 	if (!userid || !amount) {
@@ -19,9 +20,9 @@ module.exports = async(client, message, args) => {
 		return message.reply("Uh... I am the bank. Are you in debt?");
 	} else if (message.author.bot) {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
-	} else if (userid === message.author.id && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
+	} else if (userid === message.author.id && !perms.boss) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	} else if (support(userid) && !client.guilds.get(process.env.SUPPORTGUILD).members.get(message.author.id).roles.find("name", "Boss")) {
+	} else if (perms.support && !perms.boss) {
 		return message.reply("**NOPE, NOT TODAY!** <:mmLol:356831697385422848>");
 	}
 	if (isNaN(amount)) {

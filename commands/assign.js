@@ -1,10 +1,10 @@
-// REWRITTEN
+const permCheck = require("../modules/permChecker");
+
 module.exports = async(client, message, args) => {
 	let channel = args.substring(0, args.indexOf(" ")).trim();
 	let number = args.substring(args.indexOf(" ") + 1).trim();
-	// const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
-	const support = user_id => message.author.id === user_id;
-	if (!support(message.author.id)) return;
+	let perms = await permCheck(client, message.author.id);
+	if (!perms.support) return;
 	if (!args) {
 		return message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
 	}
@@ -21,7 +21,7 @@ module.exports = async(client, message, args) => {
 		.replace(")", "")
 		.replace(/\s+/g, "");
 	if (isNaN(number) || (!number.startsWith("0301") && !number.startsWith("0800") && !number.startsWith("0900")) || number.length !== 11) {
-		return message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?**");
+		return message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?** Course not, you dumbass");
 	}
 	let foundNumber;
 	try {
@@ -30,7 +30,7 @@ module.exports = async(client, message, args) => {
 		// Ignore
 	}
 	if (foundNumber) {
-		return message.reply("<:francis:327464171211849728> **This number is already registered!**");
+		return message.reply("<:francis:327464171211849728> **This number is already registered:tm:!**");
 	}
 	let foundChannel;
 	try {

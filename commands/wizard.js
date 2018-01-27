@@ -58,7 +58,7 @@ module.exports = async(client, message, args) => {
 		} else {
 			const expiryDate = new Date();
 			expiryDate.setMonth(expiryDate.getMonth() + 1);
-			let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
+			let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate, guild: message.guild.id }));
 			collector.stop();
 			message.channel.send({
 				embed: {

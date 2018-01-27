@@ -1,19 +1,11 @@
 const Discord = require("discord.js");
 const PastebinAPI = require("pastebin-js");
 const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
+const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, message, args) => {
-	const canEval = async user => {
-		try {
-			const member = await client.api.guilds(process.env.SUPPORTGUILD).members(user).get();
-			if (member.roles.includes(process.env.BOSSROLE)) return true;
-			return false;
-		} catch (err) {
-			console.log(err);
-			return false;
-		}
-	};
-	if (canEval(message.author.id)) {
+	const perms = await permCheck(client, message.author.id);
+	if (perms.boss) {
 		if (args) {
 			let hrstart = process.hrtime();
 			try {

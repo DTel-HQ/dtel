@@ -42,6 +42,48 @@ module.exports = async(client, message, args) => {
 		if (toDial === "*411") {
 			message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `0` then dial `*611`.\nTo exit 411 service, press `0`.");
 			// open collector and do things
+			let collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+			collector.on("collect", async cmsg => {
+				if (parseInt(cmsg.content)) {
+					switch (cmsg.content) {
+						case "1": {
+							cmsg.reply("Input a number.");
+							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+							collector2.on("collect", async c2msg => {
+								let toResolve = cmsg.content;
+								toResolve = toResolve.replace(/(a|b|c)/ig, "2")
+									.replace(/(d|e|f)/ig, "3")
+									.replace(/(g|h|i)/ig, "4")
+									.replace(/(j|k|l)/ig, "5")
+									.replace(/(m|n|o)/ig, "6")
+									.replace(/(p|q|r|s)/ig, "7")
+									.replace(/(t|u|v)/ig, "8")
+									.replace(/(w|x|y|z)/ig, "9")
+									.replace(/-/ig, "")
+									.replace("(", "")
+									.replace(")", "")
+									.replace(/\s+/g, "");
+								if (isNaN(c2msg.content) && c2msg.content.length == 11) {
+									let resolved;
+									try {
+										resolved = await Numbers.findOne({ number: toResolve });
+
+										if (!resolved) throw new Error();
+									} catch (err) {
+										cmsg.reply("This number does not exist. It's probably available for registration!\nYou can type another number to check, type `9` to go back to the main menu, or type `0` to quit 411.");
+									}
+								} else {
+									message.reply("That doesn't look like a valid number to me! Enter a valid number or press 0 to exit.");
+								}
+							});
+						}
+					}
+				} else {
+					message.reply("That doesn't look like a number to me! Enter a value or press 0 to exit.");
+				}
+			});
+
+			return;
 		}
 		if (toDial === "*233") {
 			let account;
@@ -300,10 +342,12 @@ module.exports = async(client, message, args) => {
 				to: {
 					channelID: toDialDocument._id,
 					number: toDialDocument.number,
+					guild: toDialDocument.guild,
 				},
 				from: {
 					channelID: message.channel.id,
 					number: mynumber.number,
+					guild: message.guild.id,
 				},
 			})
 		);
