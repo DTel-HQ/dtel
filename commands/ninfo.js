@@ -3,16 +3,15 @@ const permCheck = require("../modules/permChecker");
 module.exports = async(client, msg, suffix) => {
 	let perms = await permCheck(client, msg.guild);
 	if (!perms.support) return;
-	if (!suffix) return msg.reply("<:b1nzyhyperban:356830174660132864> **Input thy channel id, *valid this time!* **");
+	if (!suffix) return msg.reply("<:b1nzyhyperban:356830174660132864> **Input thy channel id, \\*valid this time!\\***");
 	let channel;
-	if (msg.content.length >= 17 && msg.content.length <= 19) {
+	if (/\d{17,19}/.test(suffix)) {
 		try {
-			channel = client.api.channels(suffix).get();
-			if (!channel) throw new Error();
+			channel = await client.api.channels(suffix).get();
 		} catch (err) {
 			return msg.reply("Not a valid channel.");
 		}
-	} else if (!msg.content.length == 11) {
+	} else if (suffix.length !== 11) {
 		return msg.reply("Not a valid number.");
 	}
 	let result;
@@ -32,6 +31,40 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 	if (result) {
-		msg.reply(`\`\`\`json\n${JSON.stringify(result)}\`\`\``);
+		const fields = [];
+		if (channel) {
+			fields.push({
+				name: `Channel ID and Name`,
+				value: `ID: \`${channel.id}\`\nName: ${channel.name}`,
+				inline: true,
+			});
+			try {
+				const guild = await client.api.guilds(channel.guild_id).get();
+				console.log(guild);
+			} catch (err) {
+				//
+			}
+		} else {
+			try {
+				// get the channel
+				// get the guild
+			} catch (err) {
+				// shut the fuck up
+			}
+		}
+
+		fields.push({
+			name: `Expires at`,
+			value: `${new Date(result.expiry).toISOString()}`,
+			inline: true,
+		});
+
+		msg.channel.send({
+			embed: {
+				color: 0x3669FA,
+				title: `Information for __${result.number}__`,
+				fields,
+			},
+		});
 	}
 };
