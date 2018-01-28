@@ -1,7 +1,7 @@
 const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(client, msg.guild);
+	let perms = await permCheck(client, msg.author.id);
 	if (!perms.support) return;
 	if (!suffix) return msg.reply("<:b1nzyhyperban:356830174660132864> **Input thy channel id, \\*valid this time!\\***");
 	let channel;
