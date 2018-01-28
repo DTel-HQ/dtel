@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "cluster": "^0.7.7",
+    "dblposter": "^1.0.3",
     "discord.js": "github:hydrabolt/discord.js",
     "dotenv": "^4.0.0",
     "mongoose": "^4.13.9",

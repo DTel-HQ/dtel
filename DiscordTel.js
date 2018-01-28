@@ -7,9 +7,12 @@ Object.assign(String.prototype, {
 
 const process = require("process");
 const ProcessAsPromised = require("process-as-promised");
+const dbl = require("dblposter");
+
 const { Client } = require("discord.js");
 const { readFileSync } = require("fs");
 const { scheduleJob } = require("node-schedule");
+
 const database = require("./Database/database");
 const ShardUtil = require("./modules/ShardUtil");
 const MessageBuilder = require("./modules/MessageBuilder");
@@ -19,8 +22,10 @@ const client = new Client({
 	shardId: Number(process.env.SHARD_ID),
 	shardCount: Number(process.env.SHARD_COUNT),
 	disableEveryone: true,
-	// disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE"],
+	disabledEvents: ["GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "VOICE_STATE_UPDATE"],
 });
+
+client.IPC = new ProcessAsPromised();
 
 client.shard = new ShardUtil(client);
 
@@ -114,7 +119,7 @@ client.on("typingStop", (...args) => {
 	require("./events/typingStop")(client, ...args);
 });
 
-client.on("messageUpdate", async(oldMessage, newMessage) => {
+client.on("messageUpdate", (oldMessage, newMessage) => {
 	require("./events/messageUpdate")(client, oldMessage, newMessage);
 });
 
@@ -182,6 +187,11 @@ client.on("message", async message => {
 		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
+
+if (process.env.DBL_ORG_TOKEN) {
+	const dblPoster = new dbl();
+	dblPoster.bind(client);
+}
 
 // TODO: Use dblposter.bind
 client.login(process.env.CLIENT_TOKEN);
