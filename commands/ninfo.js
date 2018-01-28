@@ -40,9 +40,18 @@ module.exports = async(client, msg, suffix) => {
 			});
 			try {
 				const guild = await client.api.guilds(channel.guild_id).get();
-				console.log(guild);
+				const owner = await client.users.fetch(guild.owner_id);
+				fields.push({
+					name: `Guild Owner`,
+					value: `ID: \`${owner.id}\`\nName: ${owner.username}#${owner.discriminator}`,
+					inline: true,
+				});
 			} catch (err) {
-				//
+				fields.push({
+					name: `Error at getting guild info`,
+					value: `${err.message}`,
+					inline: true,
+				});
 			}
 		} else {
 			try {
@@ -55,7 +64,8 @@ module.exports = async(client, msg, suffix) => {
 
 		fields.push({
 			name: `Expires at`,
-			value: `${new Date(result.expiry).toISOString()}`,
+			value: `${new Date(result.expiry).toISOString().split("T")
+				.join(" ")}`,
 			inline: true,
 		});
 
