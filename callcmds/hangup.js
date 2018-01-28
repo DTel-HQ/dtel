@@ -12,7 +12,9 @@ module.exports = async(client, message, args, callDocument) => {
 	}));
 	message.reply(":negative_squared_cross_mark:  You hung up the call.");
 	send(`:negative_squared_cross_mark: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} was hung up by __${message.author.tag}__ (${message.author.id}) on the "from" side.`);
-	await toSend.post(":x: The call was hung up.");
+	await toSend.post(MessageBuilder({
+		content: ":x: The other side ended the call..",
+	}));
 	// Stop typing... somehow.
 	// TODO: IPC this
 	await OldCalls.create(new OldCalls(callDocument));

@@ -1,36 +1,42 @@
-const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
-var award = JSON.parse(fs.readFileSync("../json/award.json", "utf8"));
+const permCheck = require("../modules/permChecker");
+const MessageBuilder = require("../modules/MessageBuilder");
 
-module.exports = async(client, message, args) => {
-	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
-	var account = accounts.find(item => item.user === message.author.id);
-	if (message.content.split(" ")[1] === undefined) {
-		const myentry = award.users.filter(item => item === message.author.id).length;
-		message.reply(`You have ${myentry} entries. The current jackpot is ¥${award.amount}.\nTo buy lotteries: \`>lottery <Amount of entries>\`. 1 entry costs 5 credits.`);
-		return;
-	} else if (isNaN(parseInt(message.content.split(" ")[1]))) {
-		message.reply("Not a number!\n`>lottery <Amount of entries>`. 1 Entry costs 5 credits.");
-		return;
-	} else if (parseInt(message.content.split(" ")[1]) < 0) { message.reply("Get some help."); return; }
-	const entries = parseInt(message.content.split(" ")[1]);
-	if (account === undefined) {
-		account = { user: message.author.id, balance: 0 };
-		accounts.push(account);
-		client.users.get(message.author.id).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+module.exports = async(client, msg, suffix) => {
+	let perms = permCheck(client, msg.author.id);
+	let account;
+	try {
+		account = await Accounts.findOne({ _id: msg.author.id });
+		if (!account) throw new Error();
+	} catch (err) {
+		msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		account = await Accounts.create(new Accounts({
+			_id: msg.author.id,
+		}));
 	}
-	if (account.balance < entries * 5) {
-		message.reply("Insufficient fund! 1 Entry costs 5 credits.");
-		return;
+	let activeLottery;
+	try {
+		activeLottery = await Lottery.findOne({ status: true });
+		if (!activeLottery) throw new Error();
+	} catch (err) {
+		return msg.reply("There doesn't seem to be an active lottery right now, please try again later.");
 	}
-	accounts.splice(accounts.indexOf(account), 1);
-	account.balance -= entries * 5;
-	accounts.push(account);
-	for (let i = 0; i < entries; i++) {
-		award.users.push(message.author.id);
+	if (!suffix && activeLottery) {
+		let userentries = activeLottery.entries.filter(e => e === msg.author.id);
+		return msg.reply(`You have ${userentries.count} entries. The current jackpot is ¥${activeLottery.jackpot}.\nTo enter type: \`>lottery <Amount of entries>\`. 1 entry costs 5 credits.`);
+	} else if (isNaN(parseInt(suffix))) {
+		return msg.reply("Not a number!\n`>lottery <Amount of entries>`. 1 Entry costs 5 credits.");
 	}
-	award.amount += entries * 5;
-	fs.writeFileSync("../json/award.json", JSON.stringify(award), "utf8");
-	message.reply(`You've bought ${entries} entries. The current jackpot is ¥${award.amount}.`);
-	client.channels.get(process.env.LOGSCHANNEL).send(`:tickets: User ${message.author.username} paid ¥${entries * 5} for the lottery. The user now have ¥${account.balance}.`);
+	let toBuy = parseInt(suffix);
+	if (account.balance < toBuy * 5) {
+		return msg.reply("Insufficient funds! 1 Entry costs 5 credits.");
+	}
+	account.balance -= toBuy * 5;
+	await account.save();
+	for (let i = 0; i < toBuy; i++) activeLottery.entries.push(msg.author.id);
+	activeLottery.jackpot += toBuy * 5;
+	await activeLottery.save();
+	msg.reply(`You've bought ${toBuy} entries. The current jackpot is ¥${activeLottery.jackpot}.`);
+	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+		content: `:tickets: User **${msg.author.tag}** paid ¥${toBuy * 5} for the lottery. The they now have ¥${account.balance}.`,
+	}));
 };

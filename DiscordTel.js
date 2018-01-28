@@ -12,12 +12,13 @@ const { readFileSync } = require("fs");
 const { scheduleJob } = require("node-schedule");
 const database = require("./Database/database");
 const ShardUtil = require("./modules/ShardUtil");
+const MessageBuilder = require("./modules/MessageBuilder");
+const uuidv4 = require("uuid/v4");
 
 const client = new Client({
 	shardId: Number(process.env.SHARD_ID),
 	shardCount: Number(process.env.SHARD_COUNT),
 	disableEveryone: true,
-	fetchAllMembers: true,
 	// disabledEvents: ["GUILD_MEMBER_ADD", "GUILD_MEMBER_REMOVE", "GUILD_ROLE_CREATE", "GUILD_ROLE_DELETE", "GUILD_ROLE_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "PRESENCE_UPDATE", "VOICE_STATE_UPDATE"],
 });
 
@@ -32,9 +33,64 @@ database.initialize(process.env.MONGOURL).then(() => {
 	process.exit(1);
 });
 
-// TODO: Rhys needs to update this
-Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, () => {
-	// TODO: do tis
+Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, async() => {
+	let allNumbers = await Numbers.find({ });
+	let today = new Date();
+	for (let n of allNumbers) {
+		let exp = new Date(n.expiry);
+		if ((today.getMonth() > exp.getMonth() && today.getFullYear() > exp.getFullYear()) || (today.getMonth() > exp.getMonth() && today.getFullYear() == exp.getFullYear())) {
+			n.expired = true;
+			await n.save();
+		}
+	}
+});
+
+Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => {
+	// I'll start with daily.
+	let allAccounts = await Numbers.find({ });
+	for (let a of allAccounts) {
+		a.dailyClaimed = false;
+		await a.save();
+	}
+	// Then lottery.
+	let currentlottery;
+	try {
+		currentlottery = await Lottery.findOne({ status: true });
+		if (!currentlottery) throw new Error();
+	} catch (err) {
+		let devs = ["137589790538334208", "139836912335716352", "156110624718454784", "115156616256552962", "207484517898780672"];
+		await client.users.fetch();
+		return devs.forEach(d => {
+			client.users.get(d).send("Yo, there's something wrong with the lottery.");
+		});
+	}
+	if (currentlottery) {
+		let winner = currentlottery.entries[Math.floor(Math.random() * currentlottery.entries.length)];
+		await client.users.fetch();
+		let winneracc;
+		try {
+			winneracc = await Accounts.findOne({ _id: winner });
+			if (!winneracc) throw new Error();
+		} catch (err) {
+			client.users.get(winner).send("You've just won the lottery, but you don't have an account! Creating one for you.");
+			winneracc = await Accounts.create(new Accounts({
+				_id: winner,
+			}));
+		}
+		if (winneracc) {
+			winneracc.balance += currentlottery.jackpot;
+			currentlottery.status = false;
+			await currentlottery.save();
+			await winneracc.save();
+			await Lottery.create(new Lottery({
+				_id: uuidv4(),
+			}));
+			client.users.get(winner).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
+		}
+	}
+	await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+		content: `:white_check_mark: The lottery and daily credits have been reset!`,
+	}));
 });
 
 client.once("ready", () => {

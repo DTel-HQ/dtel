@@ -7,13 +7,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
 	let allNumbers = await Numbers.find({});
 	for (let n of allNumbers) {
-		// let channel = await client.api.channels(n.channel);
-		// if (channel.get()) {
-		// 	n.messages.post(MessageBuilder({
-		// 		content: suffix,
-		// 	}));
-		// }
-
 		let channel = await client.api.channels(n._id).get();
 		if (channel) {
 			try {

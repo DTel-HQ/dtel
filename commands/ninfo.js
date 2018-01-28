@@ -1,19 +1,37 @@
-const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
-var numbers = JSON.parse(fs.readFileSync("../json/numbers.json"));
+const permCheck = require("../modules/permChecker");
 
-module.exports = async(client, message, args) => {
-	const support = user_id => client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).members.has(user_id);
-	if (!support(message.author.id)) {
-		return;
-	} else if (message.content.split(" ")[1] === undefined) {
-		message.reply("<:b1nzyhyperban:356830174660132864> **Input thy channel id, *valid this time!* **");
-		return;
+module.exports = async(client, msg, suffix) => {
+	let perms = await permCheck(client, msg.guild);
+	if (!perms.support) return;
+	if (!suffix) return msg.reply("<:b1nzyhyperban:356830174660132864> **Input thy channel id, *valid this time!* **");
+	let channel;
+	if (msg.content.length >= 17 && msg.content.length <= 19) {
+		try {
+			channel = client.api.channels(suffix).get();
+			if (!channel) throw new Error();
+		} catch (err) {
+			return msg.reply("Not a valid channel.");
+		}
+	} else if (!msg.content.length == 11) {
+		return msg.reply("Not a valid number.");
 	}
-	const lenumber = numbers.find(item => item.number === message.content.split(" ")[1]);
-	if (lenumber === undefined) {
-		message.reply("Not a valid number.");
-		return;
+	let result;
+	if (channel) {
+		try {
+			result = await Numbers.findOne({ _id: suffix });
+			if (!result) throw new Error();
+		} catch (err) {
+			return msg.reply("There is no number associated with this channel");
+		}
+	} else {
+		try {
+			result = await Numbers.findOne({ number: suffix });
+			if (!result) throw new Error();
+		} catch (err) {
+			return msg.reply("This number is not assigned");
+		}
 	}
-	message.reply(`\`\`\`json\n${JSON.stringify(lenumber)}\n\`\`\``);
+	if (result) {
+		msg.reply(`\`\`\`json\n${JSON.stringify(result)}\`\`\``);
+	}
 };

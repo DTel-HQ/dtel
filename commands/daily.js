@@ -40,6 +40,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	if (toGive) {
 		account.balance += toGive;
+		account.dailyClaimed = true;
 		await account.save();
 		await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
 			content: `:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`,

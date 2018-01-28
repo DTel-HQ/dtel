@@ -7,6 +7,7 @@ const accountSchema = require("./accountSchema");
 const mailboxSchema = require("./mailboxSchema");
 const blacklistSchema = require("./blacklistSchema");
 const oldCallSchema = require("./oldCallSchema");
+const lotterySchema = require("./lotterySchema");
 const addToGlobal = (name, val) => {
 	global[name] = val;
 };
@@ -23,6 +24,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		Mailbox,
 		Blacklist,
 		OldCalls,
+		Lottery,
 	] = [
 		mongoose.model("numbers", numberSchema),
 		mongoose.model("calls", callSchema),
@@ -31,6 +33,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 		mongoose.model("mailbox", mailboxSchema),
 		mongoose.model("blacklist", blacklistSchema),
 		mongoose.model("oldCalls", oldCallSchema),
+		mongoose.model("lottery", lotterySchema),
 	];
 	mongoose.connection
 		.on("error", err => reject(err))
@@ -41,7 +44,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 			addToGlobal("Accounts", Accounts);
 			addToGlobal("Blacklist", Blacklist);
 			addToGlobal("OldCalls", OldCalls);
-			addToGlobal("CallMessages", callSchema);
+			addToGlobal("Lottery", Lottery);
 			addToGlobal("Database", {
 				Numbers, numbers: Numbers,
 				Calls, calls: Calls,
@@ -50,6 +53,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 				Mailbox, mailbox: Mailbox,
 				Blacklist, blacklist: Blacklist,
 				OldCalls, oldCalls: OldCalls,
+				Lottery, lottery: Lottery,
 				Raw: mongoose.connection,
 			});
 			resolve(global.Database);

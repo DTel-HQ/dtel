@@ -5,9 +5,7 @@ module.exports = async(client, message, args) => {
 	let number = args.substring(args.indexOf(" ") + 1).trim();
 	let perms = await permCheck(client, message.author.id);
 	if (!perms.support) return;
-	if (!args) {
-		return message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
-	}
+	if (!args) return message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
 	number = number.replace(/(a|b|c)/ig, "2")
 		.replace(/(d|e|f)/ig, "3")
 		.replace(/(g|h|i)/ig, "4")

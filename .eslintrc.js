@@ -10,7 +10,6 @@ module.exports = {
 	globals: {
 		Servers: true,
 		Database: true,
-		Fouroneone: true,
 		Calls: true,
 		Numbers: true,
 		Phonebook: true,
@@ -19,6 +18,7 @@ module.exports = {
 		Blacklist: true,
 		OldCalls: true,
 		CallMessages: true,
+		Lottery: true
 	},
 	rules: {
 		"no-compare-neg-zero": "error",

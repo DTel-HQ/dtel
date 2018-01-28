@@ -204,6 +204,7 @@ module.exports = async(client, message, args) => {
 						const d = new Date(mynumber.expiry);
 						d.setMonth(d.getMonth() + parseInt(cmessage.content));
 						mynumber.expiry = d;
+						mynumber.expired = false;
 						account.balance -= renewcost;
 						await account.save();
 						await mynumber.save();
@@ -283,10 +284,10 @@ module.exports = async(client, message, args) => {
 		} catch (err) {
 			return message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 		}
-		if (toDialDocument && (new Date(toDialDocument.expiry).getFullYear() < new Date().getFullYear() || (new Date(toDialDocument.expiry).getFullYear() === new Date().getFullYear() && new Date(toDialDocument.expiry).getMonth() <= new Date().getMonth()))) {
+		if (toDialDocument.expired) {
 			return message.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
 		}
-		if (new Date(mynumber.expiry).getFullYear() < new Date().getFullYear() || (new Date(mynumber.expiry).getFullYear() === new Date().getFullYear() && new Date(mynumber.expiry).getMonth() <= new Date().getMonth())) {
+		if (mynumber.expired) {
 			return message.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 		}
 		if (toDialDocument && !client.channels.get(toDialDocument._id)) {
