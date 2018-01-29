@@ -8,7 +8,6 @@ Object.assign(String.prototype, {
 const process = require("process");
 const ProcessAsPromised = require("process-as-promised");
 const dbl = require("dblposter");
-const env = require("dotenv");
 
 const { Client } = require("discord.js");
 const { readFileSync } = require("fs");
