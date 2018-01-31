@@ -3,7 +3,8 @@ const permCheck = require("../modules/permChecker");
 module.exports = async(client, message, args) => {
 	let userid = args.substring(0, args.indexOf(" ")).trim();
 	let amount = args.substring(args.indexOf(" ") + 1).trim();
-	if (!perms.support) {
+	const sperms = await permCheck(client, message.author.id);
+	if (!sperms.support) {
 		return message.reply("Stealing money from the bank?");
 	}
 	if (!userid || !amount) {
@@ -15,7 +16,7 @@ module.exports = async(client, message, args) => {
 	} catch (err) {
 		return message.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
 	}
-	const perms = await permCheck(client, user.id);
+	const perms = await permCheck(client, userid);
 	if (userid === client.user.id) {
 		return message.reply("Uh... I am the bank. Are you in debt?");
 	} else if (message.author.bot) {
