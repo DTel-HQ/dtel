@@ -16,10 +16,6 @@ module.exports = new mongoose.Schema({
 			type: String,
 			required: true,
 		},
-		guild: {
-			type: String,
-			required: true,
-		},
 	}),
 	// From the number who called
 	from: new mongoose.Schema({
@@ -28,10 +24,6 @@ module.exports = new mongoose.Schema({
 			required: true,
 		},
 		number: {
-			type: String,
-			required: true,
-		},
-		guild: {
 			type: String,
 			required: true,
 		},
