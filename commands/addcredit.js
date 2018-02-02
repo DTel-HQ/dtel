@@ -12,7 +12,7 @@ module.exports = async(client, message, args) => {
 	}
 	let user;
 	try {
-		user = client.users.fetch(userid);
+		user = await client.users.fetch(userid);
 	} catch (err) {
 		return message.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
 	}
