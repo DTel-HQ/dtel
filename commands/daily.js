@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 	let perms = await permCheck(client, msg.author.id);
 	let toGive = 120;
 	if (perms.boss) {
-		toGive = 250;
+		toGive = 300;
 	} else if (perms.support) {
 		toGive = 200;
 	}
@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		if (snekres) {
 			if (snekres.body.includes(msg.author.id)) {
 				if (perms.support) {
-					toGive = 190;
+					toGive = 260;
 				} else {
 					toGive = 180;
 				}
@@ -45,6 +45,11 @@ module.exports = async(client, msg, suffix) => {
 		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
 			content: `:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`,
 		}));
+		if (toGive == 120) {
+			msg.reply("Here's your 120 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).\nGet 60 more credits daily by upvoting at https://discordbots.org/bot/377609965554237453!");
+		} else if (toGive >= 180) {
+			msg.reply("Here's your 190 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).\nRemember to keep upvoting us at https://discordbots.org/bot/377609965554237453!");
+		}
 	} else {
 		msg.reply("Catastrophic Failure");
 	}
