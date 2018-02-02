@@ -45,8 +45,7 @@ module.exports = async(client, message, args) => {
 				},
 				{
 					name: ">convert",
-					value:
-            "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)",
+					value: "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)",
 				},
 				{
 					name: ">daily",
