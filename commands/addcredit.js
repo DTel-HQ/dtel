@@ -1,4 +1,5 @@
 const permCheck = require("../modules/permChecker");
+const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args) => {
 	let userid = args.substring(0, args.indexOf(" ")).trim();
@@ -43,5 +44,7 @@ module.exports = async(client, message, args) => {
 	await account.save();
 	message.reply("Done.");
 	client.users.get(userid).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);
-	client.channels.get(process.env.LOGSCHANNEL).send(`:money_with_wings: Support member **${message.author.tag}** added ¥${amount} to **${user.tag}** (${userid}).`);
+	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+		content: `:money_with_wings: Support member **${message.author.tag}** added ¥${amount} to **${user.tag}** (${userid}).`,
+	}));
 };
