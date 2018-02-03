@@ -71,7 +71,6 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 	}
 	if (currentlottery) {
 		let winner = currentlottery.entries[Math.floor(Math.random() * currentlottery.entries.length)];
-		await client.users.fetch();
 		let winneracc;
 		try {
 			winneracc = await Accounts.findOne({ _id: winner });
@@ -84,13 +83,13 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 		}
 		if (winneracc) {
 			winneracc.balance += currentlottery.jackpot;
-			currentlottery.status = false;
+			currentlottery.active = false;
 			await currentlottery.save();
 			await winneracc.save();
 			await Lottery.create(new Lottery({
 				_id: uuidv4(),
 			}));
-			client.users.get(winner).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
+			await client.users.fetch(winner).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
 		}
 	}
 	await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
