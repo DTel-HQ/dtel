@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply("There doesn't seem to be an active lottery right now, please try again later.");
 	}
 	if (!suffix && activeLottery) {
-		let userentries = activeLottery.entries.filter(e => e === msg.author.id);
+		let userentries = activeLottery.entered.filter(e => e === msg.author.id);
 		return msg.reply(`You have ${userentries.count} entries. The current jackpot is ¥${activeLottery.jackpot}.\nTo enter type: \`>lottery <Amount of entries>\`. 1 entry costs 5 credits.`);
 	} else if (isNaN(parseInt(suffix))) {
 		return msg.reply("Not a number!\n`>lottery <Amount of entries>`. 1 Entry costs 5 credits.");
@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	account.balance -= toBuy * 5;
 	await account.save();
-	for (let i = 0; i < toBuy; i++) activeLottery.entries.push(msg.author.id);
+	for (let i = 0; i < toBuy; i++) activeLottery.entered.push(msg.author.id);
 	activeLottery.jackpot += toBuy * 5;
 	await activeLottery.save();
 	msg.reply(`You've bought ${toBuy} entries. The current jackpot is ¥${activeLottery.jackpot}.`);
