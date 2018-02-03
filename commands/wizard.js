@@ -50,11 +50,14 @@ module.exports = async(client, message, args) => {
 			if (!number.startsWith("0900")) {
 				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 			}
+			if (number.length) {
+				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
+			}
 		} else if (!number.startsWith("0301")) {
+			if (number.length !== 11) {
+				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
+			}
 			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
-		}
-		if (number.length !== 11) {
-			cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		} else {
 			const expiryDate = new Date();
 			expiryDate.setMonth(expiryDate.getMonth() + 1);
