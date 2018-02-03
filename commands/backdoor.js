@@ -9,16 +9,20 @@ module.exports = async(client, message, args) => {
 	}
 	let channel;
 	try {
-		channel = client.channels.get(args);
+		channel = client.api.channels(args).get();
 	} catch (err) {
 		return message.author.send("Not a valid channel.");
 	}
 	if (channel) {
 		try {
-			channel.createInvite({
-				maxAge: 0,
+			client.api.channels(channel).invites.post({
+				data: {
+					max_uses: 1,
+					temporary: true,
+				},
+				reason: `Customer Support Agent ${message.author.tag} ran backdoor.`,
 			}).then(invite => {
-				message.author.send(invite.url);
+				message.author.send(`https://discord.gg/${invite.code}`);
 			});
 		} catch (err) {
 			message.reply("Privilege is too low.");

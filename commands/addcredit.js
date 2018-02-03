@@ -43,7 +43,7 @@ module.exports = async(client, message, args) => {
 	account.balance += parseInt(amount);
 	await account.save();
 	message.reply("Done.");
-	client.users.get(userid).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);
+	await client.users.fetch(userid).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);
 	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
 		content: `:money_with_wings: Support member **${message.author.tag}** added ¥${amount} to **${user.tag}** (${userid}).`,
 	}));
