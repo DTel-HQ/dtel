@@ -88,6 +88,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			await winneracc.save();
 			await Lottery.create(new Lottery({
 				_id: uuidv4(),
+				entries: [],
 			}));
 			await client.users.fetch(winner).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
 		}
