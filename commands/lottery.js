@@ -15,7 +15,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let activeLottery;
 	try {
-		activeLottery = await Lottery.findOne({ status: true });
+		activeLottery = await Lottery.findOne({ active: true });
 		if (!activeLottery) throw new Error();
 	} catch (err) {
 		return msg.reply("There doesn't seem to be an active lottery right now, please try again later.");
