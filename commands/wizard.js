@@ -29,17 +29,6 @@ module.exports = async(client, message, args) => {
 
 	let collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
 	collector.on("collect", async cmessage => {
-		if (cmessage.content === "0") {
-			cmessage.reply("Exiting wizard...");
-			return collector.stop();
-		}
-		if (message.channel.type === "dm") {
-			if (!message.content.startsWith("0900")) {
-				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
-			}
-		} else if (!message.content.startsWith("0301")) {
-			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
-		}
 		cmessage.content = cmessage.content.toLowerCase();
 		let number = cmessage.content.replace(/(a|b|c)/ig, "2")
 			.replace(/(d|e|f)/ig, "3")
@@ -53,6 +42,17 @@ module.exports = async(client, message, args) => {
 			.replace("(", "")
 			.replace(")", "")
 			.replace(/\s+/g, "");
+		if (cmessage.content === "0") {
+			cmessage.reply("Exiting wizard...");
+			return collector.stop();
+		}
+		if (message.channel.type === "dm") {
+			if (!number.startsWith("0900")) {
+				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
+			}
+		} else if (!number.startsWith("0301")) {
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+		}
 		if (number.length !== 11) {
 			cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		} else {
