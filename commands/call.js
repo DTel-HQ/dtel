@@ -34,7 +34,7 @@ module.exports = async(client, message, args) => {
 		if (toDial === mynumber.number) return message.reply(":thinking: Why are you trying to call yourself?");
 		if (toDial === "*611") {
 			if (message.guild.id === process.env.SUPPORTGUILD) {
-				message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
+				return message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 			} else {
 				toDial = "08006113835";
 			}
