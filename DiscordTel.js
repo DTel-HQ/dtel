@@ -52,7 +52,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => {
 	// I'll start with daily.
-	let allAccounts = await Numbers.find({ });
+	let allAccounts = await Accounts.find({ });
 	for (let a of allAccounts) {
 		a.dailyClaimed = false;
 		await a.save();
@@ -60,14 +60,13 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 	// Then lottery.
 	let currentlottery;
 	try {
-		currentlottery = await Lottery.findOne({ status: true });
+		currentlottery = await Lottery.findOne({ active: true });
 		if (!currentlottery) throw new Error();
 	} catch (err) {
 		let devs = ["137589790538334208", "139836912335716352", "156110624718454784", "115156616256552962", "207484517898780672"];
-		await client.users.fetch();
-		return devs.forEach(d => {
-			client.users.get(d).send("Yo, there's something wrong with the lottery.");
-		});
+		for (let d of devs) {
+			await client.users.fetch(d).send("Yo, there's something wrong with the lottery.");
+		}
 	}
 	if (currentlottery) {
 		let winner = currentlottery.entries[Math.floor(Math.random() * currentlottery.entries.length)];
@@ -76,7 +75,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			winneracc = await Accounts.findOne({ _id: winner });
 			if (!winneracc) throw new Error();
 		} catch (err) {
-			client.users.get(winner).send("You've just won the lottery, but you don't have an account! Creating one for you.");
+			await client.users.fetch(winner).send("You've just won the lottery, but you don't have an account! Creating one for you.");
 			winneracc = await Accounts.create(new Accounts({
 				_id: winner,
 			}));
