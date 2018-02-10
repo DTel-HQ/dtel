@@ -16,8 +16,7 @@ module.exports = new mongoose.Schema({
 			type: String,
 			required: true,
 		},
-		usePushEach: true,
-	}),
+	}, { usePushEach: true }),
 	// From the number who called
 	from: new mongoose.Schema({
 		channelID: {
@@ -28,8 +27,7 @@ module.exports = new mongoose.Schema({
 			type: String,
 			required: true,
 		},
-		usePushEach: true,
-	}),
+	}, { usePushEach: true }),
 	// Start time
 	time: {
 		type: Date,
@@ -48,7 +46,5 @@ module.exports = new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
-		usePushEach: true,
-	})],
-	usePushEach: true,
-});
+	}, { usePushEach: true })],
+}, { usePushEach: true });
