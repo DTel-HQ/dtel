@@ -8,12 +8,10 @@ Object.assign(String.prototype, {
 const process = require("process");
 const ProcessAsPromised = require("process-as-promised");
 const dbl = require("dblposter");
-const dblPoster = new dbl(process.env.DBL_ORG_TOKEN);
 
 const { Client } = require("discord.js");
 const { readFileSync } = require("fs");
 const { scheduleJob } = require("node-schedule");
-const { get } = require("snekfetch");
 
 const database = require("./Database/database");
 const ShardUtil = require("./modules/ShardUtil");
@@ -98,30 +96,6 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 		content: `:white_check_mark: The lottery and daily credits have been reset!`,
 	}));
 });
-
-// Discoin grabber
-setInterval(async() => {
-	let snekres;
-	try {
-		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
-	} catch (err) {
-		// Ignore for now
-	}
-	if (snekres) {
-		for (let t of snekres.body) {
-			if (!t.type) {
-				let account;
-				try {
-					account = await Accounts.findOne({ _id: t.id });
-				} catch (err) {
-					account = await Accounts.create(new Accounts({
-
-					}));
-				}
-			}
-		}
-	}
-}, 300000);
 
 client.once("ready", () => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
@@ -214,7 +188,9 @@ client.on("message", async message => {
 });
 
 if (process.env.DBL_ORG_TOKEN) {
+	const dblPoster = new dbl();
 	dblPoster.bind(client);
 }
 
+// TODO: Use dblposter.bind
 client.login(process.env.CLIENT_TOKEN);
