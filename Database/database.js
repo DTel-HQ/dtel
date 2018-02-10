@@ -14,6 +14,7 @@ const addToGlobal = (name, val) => {
 exports.initialize = url => new Promise((resolve, reject) => {
 	mongoose.connect(url, {
 		useMongoClient: true,
+		usePushEach: true,
 		promiseLibrary: global.Promise,
 	});
 	const [

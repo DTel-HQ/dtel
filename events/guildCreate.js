@@ -1,7 +1,6 @@
 const snekfetch = require("snekfetch");
 
 module.exports = async(client, guild) => {
-	await guild.members.fetch();
 	let canDMOwner = true;
 	const ownerMessage = [
 		`Hello, I'm **DiscordTel**, the telephone solution for Discord, and I've been added to \`${guild}\`, a server you own!`,
@@ -12,7 +11,7 @@ module.exports = async(client, guild) => {
 		`**ToS Compliance:** <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>`,
 	].join("\n");
 	try {
-		await guild.owner.send(ownerMessage);
+		await guild.members.fetch(guild.owner.id).send(ownerMessage);
 	} catch (err) {
 		canDMOwner = false;
 		console.log(`The bloody OWNER doesn't have bot dms on!`);
