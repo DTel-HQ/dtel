@@ -5,4 +5,5 @@ module.exports = new mongoose.Schema({
 	jackpot: { type: Number, default: 0 },
 	entered: [String],
 	active: { type: Boolean, default: true },
+	usePushEach: true,
 });

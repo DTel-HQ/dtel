@@ -16,6 +16,7 @@ module.exports = new mongoose.Schema({
 			type: String,
 			required: true,
 		},
+		usePushEach: true,
 	}),
 	// From the number who called
 	from: new mongoose.Schema({
@@ -27,6 +28,7 @@ module.exports = new mongoose.Schema({
 			type: String,
 			required: true,
 		},
+		usePushEach: true,
 	}),
 	// Start time
 	time: {
@@ -46,5 +48,7 @@ module.exports = new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
+		usePushEach: true,
 	})],
+	usePushEach: true,
 });
