@@ -39,10 +39,10 @@ module.exports = async(client, msg, args) => {
 			if (!msg.content.split(" ")[2]) {
 				msg.channel.send({ embed: { title: `:mailbox_with_mail: You have ${mailbox.messages.length} messages.`, fields: mailbox.messages.map(m => ({ name: `ID "${m.id}" from ${m.from}`, value: m.message })), footer: { text: "Message options: `>mailbox messages [id]`" } } });
 			} else {
-				if (!mailbox.messages.find(a => a.id === msg.content.split(" ")[2])) {
-					msg.channel.send({ embed: { title: ":question: I can't find that" } });
-					return;
-				}
+				// if (!mailbox.messages.find(a => a.id === msg.content.split(" ")[2])) {
+				// 	msg.channel.send({ embed: { title: ":question: I can't find that" } });
+				// 	return;
+				// }
 				var message = mailbox.messages.find(a => a.id === msg.content.split(" ")[2]);
 				switch (msg.content.split(" ")[3]) {
 					case "delete":
@@ -66,6 +66,6 @@ module.exports = async(client, msg, args) => {
 			}
 			break;
 		default:
-			msg.channel.send({ embed: { title: ":mailbox: Mailbox", description: `${mailbox.messages.length ? `**\`${mailbox.messages.length}\` Messages**\n*View them with \`>mailbox messages\`*\n\n` : ""}**Mailbox Settings**\n${Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings\`*`)}` } });
+			msg.chxannel.send({ embed: { title: ":mailbox: Mailbox", description: `${mailbox.messages.length ? `**\`${mailbox.messages.length}\` Messages**\n*View them with \`>mailbox messages\`*\n\n` : ""}**Mailbox Settings**\n${Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings\`*`)}` } });
 	}
 };

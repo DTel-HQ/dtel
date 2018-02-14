@@ -85,7 +85,54 @@ module.exports = async(client, msg, args) => {
 						},
 					},
 				});
+			} else {
+				let message = mailbox.messages.find(m => m.id === args.split("")[2]);
+				if (!message) {
+					return message.reply({
+						embed: {
+							title: ":question: I can't find that",
+						},
+					});
+				} else {
+					switch (args.split(" ")[2]) {
+						case "delete": {
+							if (!msg.member.hasPermission("MANAGE_GUILD")) {
+								return msg.reply("You don't have `Manage Server` permission!");
+							} else {
+								mailbox.messages.splice(mailbox.messages.indexOf(message));
+								await mailbox.save();
+								msg.reply({
+									embed: {
+										color: 0x00FF00,
+										title: ":white_check_mark: Success!",
+										description: "Successfully removed message.",
+									},
+								});
+								break;
+							}
+						}
+						case "callback": {
+							msg.channel.send(`>call ${message.from}`);
+							break;
+						}
+						default: {
+							msg.channel.send({
+								embed: {
+									title: ":question: What would you like to do?",
+									description: "`delete` Delete the message\n`callback` Call the caller back",
+									footer: {
+										text: `>mailbox messages ${args.split(" ")[1]} <Option>`,
+									},
+								},
+							});
+						}
+					}
+				}
 			}
+			break;
+		}
+		default: {
+			msg.channel.send({ embed: { title: ":mailbox: Mailbox", description: `${mailbox.messages.length ? `**\`${mailbox.messages.length}\` Messages**\n*View them with \`>mailbox messages\`*\n\n` : ""}**Mailbox Settings**\n${Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings\`*`)}` } });
 		}
 	}
 };

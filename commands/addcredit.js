@@ -31,7 +31,7 @@ module.exports = async(client, message, args) => {
 		return message.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
 	} else if (amount.includes("-")) {
 		message.reply("Trying to break the bank, are we?");
-		return message.channel.send(`${process.env.PREFIX}blacklist ${message.author.id}`);
+		return message.channel.send(`${process.env.PREFIX}­bla­ckl­is­t ­${message.author.id}`);
 	}
 	let account;
 	try {
