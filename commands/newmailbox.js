@@ -17,13 +17,13 @@ module.exports = async(client, msg, args) => {
 						title: ":tools: Mailbox Settings",
 						description: `**Autoreply**\n\`${mailbox.settings.autoreply}\``,
 						footer: {
-							text: `Change these settings with ">mailbox settings [setting name] [value]`,
+							text: `Change these settings with ">mailbox settings [setting name]`,
 						},
 					},
 				});
 			} else if (args.split(" ")[1].toLowerCase() === "autoreply") {
 				let collector = msg.channel.createMessageCollector(newmsg => newmsg.author.id === msg.author.id);
-				let automsg = msg.channel.send({
+				let automsg = await msg.channel.send({
 					embed: {
 						color: 0x0000FF,
 						title: ":tools: Mailbox Autoreply",
