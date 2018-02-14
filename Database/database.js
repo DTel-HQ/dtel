@@ -42,6 +42,7 @@ exports.initialize = url => new Promise((resolve, reject) => {
 			addToGlobal("Calls", Calls);
 			addToGlobal("Phonebook", Phonebook);
 			addToGlobal("Accounts", Accounts);
+			addToGlobal("Mailbox", Mailbox);
 			addToGlobal("Blacklist", Blacklist);
 			addToGlobal("OldCalls", OldCalls);
 			addToGlobal("Lottery", Lottery);
