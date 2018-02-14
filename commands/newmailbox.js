@@ -10,7 +10,7 @@ module.exports = async(client, msg, args) => {
 	}
 	switch (args.split(" ")[0]) {
 		case "settings": {
-			if (!args.split(" ")[1].toLowerCase()) {
+			if (!args.split(" ")[1]) {
 				msg.channel.send({
 					embed: {
 						color: 0x0000FF,
