@@ -10,7 +10,7 @@ module.exports = async(client, msg, args) => {
 	}
 	switch (args.split(" ")[0]) {
 		case "settings": {
-			if (!args.split(" ")[1]) {
+			if (!args.split(" ")[1].toLowerCase()) {
 				msg.channel.send({
 					embed: {
 						color: 0x0000FF,
@@ -21,8 +21,40 @@ module.exports = async(client, msg, args) => {
 						},
 					},
 				});
-			} else if (mailbox.settings.(args.split("")[1])) {
-
+			} else if (args.split(" ")[1].toLowerCase() === "autoreply") {
+				let collector = msg.channel.createMessageCollector(newmsg => newmsg.author.id === msg.author.id);
+				let automsg = msg.channel.send({
+					embed: {
+						color: 0x0000FF,
+						title: ":tools: Mailbox Autoreply",
+						description: "Please type a new autoreply.",
+						footer: {
+							text: "Type 0 to exit",
+						},
+					},
+				});
+				collector.on("collect", async cmsg => {
+					if (cmsg.content === "0") {
+						automsg.edit({
+							embed: {
+								color: 0xFF0000,
+								description: "Exiting Settings",
+							},
+						});
+						await collector.stop();
+					} else {
+						mailbox.settings.autoreply = cmsg.content;
+						await mailbox.save();
+						await collector.stop();
+						automsg.edit({
+							embed: {
+								color: 0x00FF00,
+								title: ":white_check_mark: Success!",
+								description: "Successfully updated autoreply.",
+							},
+						});
+					}
+				});
 			}
 			break;
 		}
