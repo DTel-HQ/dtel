@@ -35,6 +35,7 @@ module.exports = async(client, msg, args) => {
 				});
 				collector.on("collect", async cmsg => {
 					if (cmsg.content === "0") {
+						await cmsg.delete();
 						automsg.edit({
 							embed: {
 								color: 0xFF0000,
@@ -46,6 +47,7 @@ module.exports = async(client, msg, args) => {
 						mailbox.settings.autoreply = cmsg.content;
 						await mailbox.save();
 						await collector.stop();
+						await cmsg.delete();
 						automsg.edit({
 							embed: {
 								color: 0x00FF00,
@@ -132,7 +134,19 @@ module.exports = async(client, msg, args) => {
 			break;
 		}
 		default: {
-			msg.channel.send({ embed: { title: ":mailbox: Mailbox", description: `${mailbox.messages.length ? `**\`${mailbox.messages.length}\` Messages**\n*View them with \`>mailbox messages\`*\n\n` : ""}**Mailbox Settings**\n${Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings\`*`)}` } });
+			msg.channel.send({
+				embed: {
+					title: ":mailbox: Mailbox",
+					description: `**${mailbox.messages.length}** Messages\n`,
+					fields: [{
+						name: "Mailbox Settings",
+						value: `${mailbox.settings.autoreply}`,
+					}],
+					footer: {
+						text: `Change the settings with ">mailbox settings"`,
+					},
+				},
+			});
 		}
 	}
 };
