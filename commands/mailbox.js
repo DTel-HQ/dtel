@@ -1,71 +1,152 @@
-const fs = require("fs");
-var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
-
 module.exports = async(client, msg, args) => {
-	var mailbox = mailbox_storage.find(a => a.channel === msg.channel.id);
-	if (!mailbox) {
-		mailbox = {
-			channel: msg.channel.id,
-			settings: {
-				autoreply: "Sorry I am unavailable, leave a message",
-			},
-			messages: [],
-		};
-		mailbox_storage.push(mailbox);
-		fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), "utf8");
+	let mailbox;
+	try {
+		mailbox = await Mailbox.findOne({ _id: msg.channel.id });
+		if (!mailbox) throw new Error();
+	} catch (err) {
+		mailbox = await Mailbox.create({
+			_id: msg.channel.id,
+		});
 	}
-	switch (msg.content.split(" ")[1]) {
-		case "settings":
-			if (!msg.content.split(" ")[2]) {
-				msg.channel.send({ embed: { title: ":tools: Mailbox Settings", description: Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings [setting name] [value]\`*`) } });
-			} else if (mailbox.settings[msg.content.split(" ")[2]]) {
-				if (!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD")) {
-					msg.reply("You don't have `Manage Server` permission!");
-				} else {
-					mailbox.settings[msg.content.split(" ")[2]] = msg.content.replace(`>mailbox settings ${msg.content.split(" ")[2]} `, "");
-					mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === msg.channel.id))] = mailbox;
-					fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
-						msg.reply(err ? err : "Saved.");
-						mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
-					});
-				}
+	switch (args.split(" ")[0]) {
+		case "settings": {
+			if (!args.split(" ")[1]) {
+				msg.channel.send({
+					embed: {
+						color: 0x0000FF,
+						title: ":tools: Mailbox Settings",
+						description: `**Autoreply**\n\`${mailbox.settings.autoreply}\``,
+						footer: {
+							text: `Change these settings with ">mailbox settings [setting name]`,
+						},
+					},
+				});
+			} else if (args.split(" ")[1].toLowerCase() === "autoreply") {
+				let collector = msg.channel.createMessageCollector(newmsg => newmsg.author.id === msg.author.id);
+				let automsg = await msg.channel.send({
+					embed: {
+						color: 0x0000FF,
+						title: ":tools: Mailbox Autoreply",
+						description: "Please type a new autoreply.",
+						footer: {
+							text: "Type 0 to exit",
+						},
+					},
+				});
+				collector.on("collect", async cmsg => {
+					if (cmsg.content === "0") {
+						await cmsg.delete();
+						automsg.edit({
+							embed: {
+								color: 0xFF0000,
+								description: "Exiting Settings",
+							},
+						});
+						await collector.stop();
+					} else {
+						mailbox.settings.autoreply = cmsg.content;
+						await mailbox.save();
+						await collector.stop();
+						await cmsg.delete();
+						automsg.edit({
+							embed: {
+								color: 0x00FF00,
+								title: ":white_check_mark: Success!",
+								description: "Successfully updated autoreply.",
+							},
+						});
+					}
+				});
 			}
 			break;
-		case "messages":
+		}
+		case "messages": {
 			if (!mailbox.messages) {
-				msg.channel.send({ embed: { title: ":mailbox_with_no_mail: No messages!" } });
-				return;
+				return msg.channel.send({
+					embed: {
+						color: 0x00FF00,
+						title: ":mailbox_with_no_mail: No messages!",
+					},
+				});
 			}
-			if (!msg.content.split(" ")[2]) {
-				msg.channel.send({ embed: { title: `:mailbox_with_mail: You have ${mailbox.messages.length} messages.`, fields: mailbox.messages.map(m => ({ name: `ID "${m.id}" from ${m.from}`, value: m.message })), footer: { text: "Message options: `>mailbox messages [id]`" } } });
+			let embedFields = [];
+			for (let m of mailbox.messages) {
+				embedFields.push({
+					name: `ID: "${m._id}" from ${m.from}`,
+					value: m.content,
+				});
+			}
+			if (!args.split(" ")[1]) {
+				return msg.channel.send({
+					embed: {
+						color: 0x0000FF,
+						title: `:mailbox_with_mail: You have ${mailbox.messages.length} messages.`,
+						fields: embedFields,
+						footer: {
+							text: "Message options: `>mailbox messages [id]`",
+						},
+					},
+				});
 			} else {
-				// if (!mailbox.messages.find(a => a.id === msg.content.split(" ")[2])) {
-				// 	msg.channel.send({ embed: { title: ":question: I can't find that" } });
-				// 	return;
-				// }
-				var message = mailbox.messages.find(a => a.id === msg.content.split(" ")[2]);
-				switch (msg.content.split(" ")[3]) {
-					case "delete":
-						if (!msg.guild.member(msg.author).hasPermission("MANAGE_GUILD")) {
-							msg.reply("You don't have `Manage Server` permission!");
-						} else {
-							mailbox.messages.splice(mailbox.messages.indexOf(message), 1);
-							mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === msg.channel.id))] = mailbox;
-							fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
-								msg.reply(err ? err : "Deleted!");
-								mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8"));
+				let message = mailbox.messages.find(m => m.id === args.split("")[2]);
+				if (!message) {
+					return message.reply({
+						embed: {
+							title: ":question: I can't find that",
+						},
+					});
+				} else {
+					switch (args.split(" ")[2]) {
+						case "delete": {
+							if (!msg.member.hasPermission("MANAGE_GUILD")) {
+								return msg.reply("You don't have `Manage Server` permission!");
+							} else {
+								mailbox.messages.splice(mailbox.messages.indexOf(message));
+								await mailbox.save();
+								msg.reply({
+									embed: {
+										color: 0x00FF00,
+										title: ":white_check_mark: Success!",
+										description: "Successfully removed message.",
+									},
+								});
+								break;
+							}
+						}
+						case "callback": {
+							msg.channel.send(`>call ${message.from}`);
+							break;
+						}
+						default: {
+							msg.channel.send({
+								embed: {
+									title: ":question: What would you like to do?",
+									description: "`delete` Delete the message\n`callback` Call the caller back",
+									footer: {
+										text: `>mailbox messages ${args.split(" ")[1]} <Option>`,
+									},
+								},
 							});
 						}
-						break;
-					case "callback":
-						msg.reply(`\`>call ${msg.from}\``);
-						break;
-					default:
-						msg.channel.send({ embed: { title: ":question: What would you like to do?", description: "`delete` Delete the message\n`callback` Call the caller back", footer: { text: `>mailbox messages ${msg.content.split(" ")[2]} <Option>` } } });
+					}
 				}
 			}
 			break;
-		default:
-			msg.chxannel.send({ embed: { title: ":mailbox: Mailbox", description: `${mailbox.messages.length ? `**\`${mailbox.messages.length}\` Messages**\n*View them with \`>mailbox messages\`*\n\n` : ""}**Mailbox Settings**\n${Object.keys(mailbox.settings).map((a, b) => `${a} \`${mailbox.settings[a]}\`\n*Change the settings with \`>mailbox settings\`*`)}` } });
+		}
+		default: {
+			msg.channel.send({
+				embed: {
+					title: ":mailbox: Mailbox",
+					description: `**${mailbox.messages.length}** Messages\n`,
+					fields: [{
+						name: "Mailbox Settings",
+						value: `${mailbox.settings.autoreply}`,
+					}],
+					footer: {
+						text: `Change the settings with ">mailbox settings"`,
+					},
+				},
+			});
+		}
 	}
 };

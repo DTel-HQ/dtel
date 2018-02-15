@@ -1,91 +1,112 @@
-const fs = require("fs");
-const accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
-const request = require("request");
-const Discord = require("discord.js");
+const { post } = require("snekfetch");
+const MessageBuilder = require("../modules/MessageBuilder");
 
-module.exports = async(client, message, args) => {
-	let account = accounts.find(item => item.user === message.author.id);
-	if (message.content.split(" ")[1] === undefined || message.content.split(" ")[2] === undefined) {
-		message.reply("`>convert <amount> <currency code>`\nCurrency codes have a length of 3 letters. They are available at <http://discoin.sidetrip.xyz/rates>.");
-		return;
+module.exports = async(client, msg, suffix) => {
+	let amount = suffix.substring(0, suffix.indexOf(" ")).trim();
+	let currency = suffix.substring(suffix.indexOf(" ") + 1).trim().toUpperCase();
+	let account;
+	try {
+		account = await Accounts.findOne({ _id: msg.author.id });
+	} catch (err) {
+		await Accounts.create(new Accounts({
+			_id: msg.author.id,
+		}));
 	}
-	if (account === undefined) {
-		account = { user: message.author.id, balance: 0 };
+	if (account.balance < parseInt(amount)) {
+		return msg.reply(`Insufficient balance! You have ${account.balance} credits.`);
 	}
-	if (account.balance < parseInt(message.content.split(" ")[1])) {
-		message.reply(`Insufficient balance! You have ${account.balance} credits.`);
-		return;
+	if (isNaN(amount)) {
+		return msg.reply("That's not a number!");
 	}
-	request.post({ url: "http://discoin.sidetrip.xyz/transaction", json: { user: message.author.id, amount: parseInt(message.content.split(" ")[1]), exchangeTo: message.content.split(" ")[2].toUpperCase() }, headers: { Authorization: process.env.DISCOIN_TOKEN } }, (error, response, body) => {
-		if (error || response.statusCode === 503) {
-			message.reply("API Error (Downtime?)! Please contact MacDue#4453.");
-		} else if (body.status === "approved") {
-			message.channel.send({ embed: {
-				color: 0x32CD32,
-				title: "Success!",
-				description: "Please keep this receipt.",
-				fields: [
-					{
-						name: "Amount",
-						value: `${message.content.split(" ")[1]} DTS **=>** ${body.resultAmount} ${message.content.split(" ")[2].toUpperCase()}`,
-					},
-					{
-						name: "Receipt ID",
-						value: body.receipt,
-					},
-					{
-						name: `Daily Per-User Limit left for currency ${message.content.split(" ")[2].toUpperCase()}`,
-						value: `${body.limitNow} Discoins`,
-					},
-				],
-			} });
-			accounts.splice(accounts.indexOf(account), 1);
-			account.balance -= parseInt(message.content.split(" ")[1]);
-			accounts.push(account);
-			fs.writeFileSync("../json/account.json", JSON.stringify(accounts), "utf8");
-			client.channels.get(process.env.LOGSCHANNEL).send(`:repeat: User ${message.author.username} requested a Discoin transaction of ¥${message.content.split(" ")[1]}.`);
-		} else if (body.status === "error") {
-			message.channel.send({ embed: {
-				color: 0xFF0000,
-				title: "Error: Wrong arguments!",
-				description: "You probably typed something wrong in the command. Correct them and try again.",
-				fields: [
-					{
+	let snekres;
+	try {
+		snekres = await post("http://discoin.sidetrip.xyz/transaction").set({
+			Authorization: process.env.DISCOIN_TOKEN,
+			"Content-Type": "application/json",
+		}).send({
+			user: msg.author.id,
+			amount: parseInt(amount),
+			exchangeTo: currency,
+		});
+	} catch (err) {
+		if (err.status === 503) {
+			return msg.reply("API Error (Downtime?)! Please contact MacDue#4453.");
+		} else if (err.body.status === "error") {
+			return msg.channel.send({
+				embed: {
+					color: 0xFF0000,
+					title: "Error: Wrong arguments!",
+					description: "You probably typed something wrong in the command. Correct them and try again.",
+					fields: [{
 						name: "Reason",
-						value: body.reason,
+						value: err.body.reason,
+					}],
+				},
+			});
+		} else if (err.body.status === "declined") {
+			if (err.body.reason === "per-user limit exceeded") {
+				return msg.channel.send({
+					color: 0xFF0000,
+					title: "Transaction declined!",
+					description: "You reached the daily per-user limit.",
+					fields: [{
+						name: `Daily Per-User Limit to currency ${err.body.currency}`,
+						value: `${err.body.limit} Discoins`,
+					}],
+				});
+			} else if (err.body.reason === "total limit exceeded") {
+				return msg.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Transaction declined!",
+						description: "You reached the daily per-user limit.",
+						fields: [{
+							name: `Daily Per-User Limit to currency ${err.body.currency}`,
+							value: `${err.body.limit} Discoins`,
+						}],
 					},
-				],
-			} });
-		} else if (body.status === "declined" && body.reason === "per-user limit exceeded") {
-			message.channel.send({ embed: {
-				color: 0xFF0000,
-				title: "Transaction declined!",
-				description: "You reached the daily per-user limit.",
-				fields: [
-					{
-						name: `Daily Per-User Limit to currency ${body.currency}`,
-						value: `${body.limit} Discoins`,
+				});
+			} else if (err.body.reason === "verify required") {
+				return msg.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Transaction declined!",
+						description: "You're not verified. Please verify yourself at http://discoin.sidetrip.xyz/verify.",
 					},
-				],
-			} });
-		} else if (body.status === "declined" && body.reason === "total limit exceeded") {
-			message.channel.send({ embed: {
-				color: 0xFF0000,
-				title: "Transaction declined!",
-				description: "You reached the daily per-user limit.",
-				fields: [
-					{
-						name: `Daily Per-User Limit to currency ${body.currency}`,
-						value: `${body.limit} Discoins`,
+				});
+			} else if (!snekres.body.status === "approved") {
+				return msg.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Unexpected Error!",
+						description: `\`\`\`${err.body}\`\`\``,
 					},
-				],
-			} });
-		} else if (body.status === "declined" && body.reason === "verify required") {
-			message.channel.send({ embed: {
-				color: 0xFF0000,
-				title: "Transaction declined!",
-				description: "You're not verified. Please verify yourself at http://discoin.sidetrip.xyz/verify.",
-			} });
+				});
+			}
 		}
+	}
+	msg.channel.send({
+		embed: {
+			color: 0x32CD32,
+			title: "Success!",
+			description: "Please keep this receipt.",
+			fields: [{
+				name: "Amount",
+				value: `${amount} DTS **=>** ${snekres.body.resultAmount} ${currency}`,
+			},
+			{
+				name: "Receipt ID",
+				value: snekres.body.receipt,
+			},
+			{
+				name: `Daily Per-User Limit left for currency ${currency}`,
+				value: `${snekres.body.limitNow} Discoins`,
+			}],
+		},
 	});
+	account.balance -= parseInt(amount);
+	await account.save();
+	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+		content: `:repeat: User ${msg.author.tag} requested a Discoin transaction of ¥${amount}`,
+	}));
 };
