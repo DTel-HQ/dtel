@@ -2,7 +2,7 @@ const permCheck = require("../modules/permChecker");
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(msg.author.id);
+	let perms = await permCheck(client, msg.author.id);
 	if (!perms.support) return;
 
 	if (!suffix) return msg.reply("You forgot the strike id!");

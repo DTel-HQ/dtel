@@ -3,7 +3,7 @@ const MessageBuilder = require("../modules/MessageBuilder");
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(msg.author.id);
+	let perms = await permCheck(client, msg.author.id);
 	if (!perms.support) return;
 
 	let id = suffix.substring(0, suffix.indexOf("|")).trim();
@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 	let toStrikePerms;
-	if (type == "user") toStrikePerms = await permCheck(id);
+	if (type == "user") toStrikePerms = await permCheck(client, id);
 	if (toStrikePerms.support || toStrikePerms.boss) return msg.reply("I'd rather you didn't strike a staff member.");
 
 	await Strikes.create(new Strikes({
