@@ -51,8 +51,7 @@ module.exports = async(client, message, args) => {
 					switch (cmsg.content) {
 						case "0": {
 							await collector.stop();
-							message.reply("Exiting *411.");
-							break;
+							return message.reply("Exiting *411.");
 						}
 						case "1": {
 							await collector.stop();
@@ -91,6 +90,7 @@ module.exports = async(client, message, args) => {
 										}
 										message.channel.send({
 											embed: {
+												color: 0x00FF00,
 												title: `This number exists!`,
 												fields: [{
 													name: `Number`,
@@ -100,6 +100,9 @@ module.exports = async(client, message, args) => {
 													name: `Description`,
 													value: phonebook.description,
 												}],
+												footer: {
+													text: "You can type another query to check, type `9` to back to main menu, or type `0` to quit 411.",
+												},
 											},
 										});
 									}
