@@ -45,6 +45,7 @@ module.exports = async(client, message, args) => {
 				message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `5`.\nTo exit 411 service, press `0`.");
 				collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
 			};
+			mainMenu();
 			collector.on("collect", async cmsg => {
 				if (parseInt(cmsg.content)) {
 					switch (cmsg.content) {

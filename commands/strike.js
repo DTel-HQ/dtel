@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 		type = "user";
 	} catch (err) {
 		try {
-			resolved = await client.api.guilds(id).fetch();
+			resolved = await client.api.guilds(id).get();
 			type = "guild";
 		} catch (err2) {
 			return msg.reply("The specified ID could not be resolved!");
@@ -40,10 +40,10 @@ module.exports = async(client, msg, suffix) => {
 
 
 	let allStrikes = await Strikes.find({ offender: id });
-	if (allStrikes.size >= 3) {
+	if (allStrikes.length >= 3) {
 		Blacklist.create(new Blacklist({ _id: id, type }));
 		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.size}`,
+			content: `:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.length}`,
 		}));
 		return msg.channel.send({
 			embed: {
@@ -51,7 +51,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `:white_check_mark: Success!`,
 				description: `ID: ${id} has been striked with the reason: ${reason}`,
 				footer: {
-					text: `They now have ${allStrikes.size} strikes. They have been blacklisted.`,
+					text: `They now have ${allStrikes.length} strikes. They have been blacklisted.`,
 				},
 			},
 		});
@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 			title: `:white_check_mark: Success!`,
 			description: `ID: ${id} has been striked with the reason: ${reason}`,
 			footer: {
-				text: `They now have ${allStrikes.size} strikes.`,
+				text: `They now have ${allStrikes.length} strikes.`,
 			},
 		},
 	});
