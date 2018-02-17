@@ -161,6 +161,7 @@ client.on("message", async message => {
 			// Ignore error
 		}
 	}
+	if (isBlacklisted === message.author.id || isBlacklisted === message.guild.id) isBlacklisted = true;
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;

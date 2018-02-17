@@ -1,38 +1,57 @@
-const randtoken = require("rand-token"),
-	fs = require("fs");
-var mailbox_storage = JSON.parse(fs.readFileSync("../json/mailbox.json", "utf8")),
-	numbers = JSON.parse(fs.readFileSync("../json/numbers.json", "utf8")),
-	accounts = JSON.parse(fs.readFileSync("../json/account.json", "utf8"));
+const randomstring = require("randomstring");
+const MessageBuilder = require("../modules/MessageBuilder");
 
-module.exports = async(client, message, args) => {
-	if (args.length !== 3) {
-		message.reply("Correct usage: `>message <Number> <Content>`. 1 message costs 2 credits. Receiving messages is free by using `>mailbox messages`.");
-		return;
+module.exports = async(client, msg, args) => {
+	let number = args.substring(0, args.indexOf(" ")).trim();
+	let content = args.substring(args.indexOf(" ") + 1).trim();
+	if (!args) {
+		return msg.reply("Correct usage: `>message <Number> <Content>`. 1 message costs 2 credits. Receiving messages is free by using `>mailbox messages`.");
 	}
-	var account = accounts.find(item => item.user === message.author.id);
-	if (account === undefined) {
-		account = { user: message.author.id, balance: 0 };
-		accounts.push(account);
-		client.users.get(message.author.id).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+	let account;
+	try {
+		account = await Accounts.findOne({ _id: args });
+		if (!account) throw new Error();
+	} catch (err) {
+		await Accounts.create(new Accounts({
+			_id: msg.author.id,
+		}));
+		await client.users.fetch(msg.author.id).send("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 	}
 	if (account.balance < 2) {
-		message.reply("Insufficient fund! 1 message costs 2 credits.");
-		return;
+		return msg.reply("Insufficient funds! 1 message costs 2 credits.");
 	}
-	accounts.splice(accounts.indexOf(account), 1);
 	account.balance -= 2;
-	accounts.push(account);
-	fs.writeFile("../json/account.json", JSON.stringify(accounts), "utf8");
-	var mailbox = mailbox_storage.find(a => a.channel === numbers.find(a => a.number === args[1]).channel);
+	await account.save();
+
+	let toNumberDoc;
+	try {
+		toNumberDoc = await Numbers.findOne({ number: number });
+		if (!toNumberDoc) throw new Error();
+	} catch (err) {
+		return msg.reply("This number does not exist.");
+	}
+	let fromNumberDoc;
+	try {
+		fromNumberDoc = await Numbers.findOne({ _id: msg.channel.id });
+		if (!fromNumberDoc) throw new Error();
+	} catch (err) {
+		return msg.reply("You dont have a number in this channel!");
+	}
+	let mailbox;
+	try {
+		mailbox = await Mailbox.findOne({ _id: toNumberDoc._id });
+		if (!mailbox) throw new Error();
+	} catch (err) {
+		return msg.reply("This number does not have their mailbox set up.");
+	}
 	mailbox.messages.push({
-		id: randtoken.generate(8),
-		from: numbers.find(a => a.channel === message.channel.id).number,
-		message: message.content.replace(`>message ${args[1]} `, ""),
-		callback: true,
+		_id: randomstring.generate({ length: "8", charset: "alphanumeric" }),
+		from: fromNumberDoc.number,
+		content: content,
 	});
-	client.channels.get(mailbox.channel).send(":mailbox_with_mail: New Message!\n*Check it with `>mailbox messages`*");
-	mailbox_storage[mailbox_storage.indexOf(mailbox_storage.find(a => a.channel === numbers.find(a => a.number === args[1]).channel))] = mailbox;
-	fs.writeFile("../json/mailbox.json", JSON.stringify(mailbox_storage), err => {
-		message.reply(err ? err : "Your message is successfully sent.");
-	});
+	await mailbox.save();
+	client.api.channels(mailbox._id).messages.post(MessageBuilder({
+		content,
+	}));
+	msg.reply("Your message was successfully sent.");
 };

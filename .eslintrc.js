@@ -18,7 +18,8 @@ module.exports = {
 		Blacklist: true,
 		OldCalls: true,
 		CallMessages: true,
-		Lottery: true
+		Lottery: true,
+		Strikes: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",

@@ -1,4 +1,5 @@
 const permCheck = require("../modules/permChecker");
+const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args) => {
 	let perms = await permCheck(client, message.author.id);
@@ -6,32 +7,38 @@ module.exports = async(client, message, args) => {
 	if (!args) return message.reply("u forgot id :b:");
 	let document, guildBlacklist, userBlacklist;
 	try {
-		document = await Blacklist.findOne({ _id: message.author.id });
+		document = await Blacklist.findOne({ _id: args });
 		if (!document) throw new Error();
 	} catch (err) {
-		// Ignore error
+		//
 	}
 	if (document) {
-		client.channels.get(process.env.LOGSCHANNEL).send(`:wrench: Guild ID \`${message.content}\` is removed from guild blacklist by ${message.author.username}.`);
 		await document.remove();
+		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+			content: `:wrench: Guild ID \`${args}\` is removed from blacklist by ${message.author.username}.`,
+		}));
 	} else {
 		try {
-			guildBlacklist = client.guilds.get(message.content);
+			guildBlacklist = client.api.guilds(args).get();
 		} catch (err) {
 			try {
-				userBlacklist = client.users.get(message.content);
+				userBlacklist = await client.users.fetch(args);
 			} catch (err2) {
-				message.reply("Invalid ID");
+				return message.reply("Invalid ID");
 			}
 		}
 	}
 	if (guildBlacklist) {
-		Blacklist.create(new Blacklist({ _id: message.content, type: "guild" }));
-		client.channels.get(process.env.LOGSCHANNEL).send(`:wrench: Guild ID \`${message.content}\` is added to the guild blacklist by ${message.author.username}.`);
+		Blacklist.create(new Blacklist({ _id: args, type: "guild" }));
+		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+			content: `:hammer: Guild ID \`${args}\` is added to the blacklist by ${message.author.username}.`,
+		}));
 		message.reply("Done");
 	} else if (userBlacklist) {
-		Blacklist.create(new Blacklist({ _id: message.content, type: "user" }));
-		client.channels.get(process.env.LOGSCHANNEL).send(`:hammer: User ID \`${message.content}\` is added to blacklist by ${message.author.username}.`);
+		Blacklist.create(new Blacklist({ _id: args, type: "user" }));
+		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+			content: `:hammer: User ID \`${args}\` is added to the blacklist by ${message.author.username}.`,
+		}));
 		message.reply("Done");
 	}
 };
