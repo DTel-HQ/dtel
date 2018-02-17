@@ -55,10 +55,25 @@ module.exports = async(client, msg, suffix) => {
 			}
 		} else {
 			try {
-				// get the channel
-				// get the guild
+				channel = await client.api.channels(result._id).get();
+				const guild = await client.api.guilds(channel.guild_id);
+				const owner = await client.users.fetch(guild.owner_id);
+				fields.push({
+					name: `Channel ID and Name`,
+					value: `ID: \`${channel.id}\`\nName: ${channel.name}`,
+					inline: true,
+				});
+				fields.push({
+					name: `Guild Owner`,
+					value: `ID: \`${owner.id}\`\nName: ${owner.username}#${owner.discriminator}`,
+					inline: true,
+				});
 			} catch (err) {
-				// shut the fuck up
+				fields.push({
+					name: `Error at getting channel and guild info`,
+					value: `${err.message}`,
+					inline: true,
+				});
 			}
 		}
 

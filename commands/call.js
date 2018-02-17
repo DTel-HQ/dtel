@@ -137,7 +137,7 @@ module.exports = async(client, message, args) => {
 								if (!resolved) {
 									message.reply("Could not find any numbers in the phonebook matching your query.\n\nYou can type another query to check, type `9` to back to main menu, or type `0` to quit 411.");
 								}
-								let embedFields;
+								let embedFields = [];
 								resolved.forEach(r => {
 									embedFields.push({
 										name: r._id,

@@ -50,7 +50,7 @@ module.exports = async(client, msg, args) => {
 		content: content,
 	});
 	await mailbox.save();
-	client.api.channels(mailbox._id).messages.post(MessageBuilder({
+	await client.api.channels(mailbox._id).messages.post(MessageBuilder({
 		content,
 	}));
 	msg.reply("Your message was successfully sent.");
