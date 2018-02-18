@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let allStrikes = await Strikes.find({ offender: suffix });
-	if (allStrikes.size == 0) return msg.reply("No strikes associated with this ID were found.");
+	if (allStrikes.size == 0 || !allStrikes) return msg.reply("No strikes associated with this ID were found.");
 	let fields = [];
 	for (const s of allStrikes) {
 		fields.push({

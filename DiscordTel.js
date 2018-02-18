@@ -209,7 +209,7 @@ client.on("message", async message => {
 				console.log(err);
 			}
 		}
-	} else if (callDocument && callDocument.status && callDocument.pickedUp) {
+	} else if (callDocument && callDocument.status && callDocument.pickedUp && !message.author.bot) {
 		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
