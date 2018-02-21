@@ -15,7 +15,7 @@ module.exports = async(client, message, args) => {
 	if (document) {
 		await document.remove();
 		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:wrench: Guild ID \`${args}\` is removed from blacklist by ${message.author.username}.`,
+			content: `:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`,
 		}));
 	} else {
 		try {

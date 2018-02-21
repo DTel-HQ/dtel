@@ -7,6 +7,7 @@ module.exports = async(client, channel, member) => {
 	} catch (err) {
 		try {
 			callFrom = await Calls.findOne({ "from.channelID": channel.id });
+			if (!callFrom) throw new Error();
 		} catch (err2) {
 			return null;
 		}

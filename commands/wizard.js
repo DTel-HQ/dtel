@@ -39,10 +39,11 @@ module.exports = async(client, message, args) => {
 			.replace(/(t|u|v)/ig, "8")
 			.replace(/(w|x|y|z)/ig, "9")
 			.replace(/-/ig, "")
+			.replace("-", "")
 			.replace("(", "")
 			.replace(")", "")
 			.replace(/\s+/g, "");
-		if (cmessage.content === "0") {
+		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
 		}
@@ -60,7 +61,7 @@ module.exports = async(client, message, args) => {
 		} else {
 			const expiryDate = new Date();
 			expiryDate.setMonth(expiryDate.getMonth() + 1);
-			let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate, guild: message.guild.id }));
+			let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
 			collector.stop();
 			message.channel.send({
 				embed: {

@@ -196,6 +196,7 @@ module.exports = async(client, message, args) => {
 								} catch (err) {
 									pbentry = await Phonebook.create(new Phonebook({
 										_id: mynumber.number,
+										channel: mynumber._id,
 									}));
 								}
 								pbentry.description = c2msg.content;
@@ -539,6 +540,7 @@ module.exports = async(client, message, args) => {
 			let mailbox;
 			try {
 				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+				if (!mailbox) throw new Error();
 			} catch (err) {
 				return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
 			}

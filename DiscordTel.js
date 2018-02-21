@@ -50,6 +50,15 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 			await n.save();
 		}
 	}
+	let phonebookAll = await Phonebook.find({ });
+	for (const i of phonebookAll) {
+		let channel;
+		try {
+			channel = await client.api.channels().get();
+		} catch (err) {
+			await Phonebook.findOne({ channel: i.channel }).remove();
+		}
+	}
 });
 
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => {
@@ -149,19 +158,20 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 });
 
 client.on("message", async message => {
-	let isBlacklisted;
+	let isBlacklisted, entry;
 	try {
-		isBlacklisted = await Blacklist.findOne({ _id: message.author.id });
-		if (!isBlacklisted) throw new Error();
+		entry = await Blacklist.findOne({ _id: message.author.id });
+		if (!entry) throw new Error();
+		isBlacklisted = true;
 	} catch (err) {
 		try {
-			isBlacklisted = await Blacklist.findOne({ _id: message.guild.id });
-			if (!isBlacklisted) throw new Error();
+			entry = await Blacklist.findOne({ _id: message.guild.id });
+			if (!entry) throw new Error();
+			isBlacklisted = true;
 		} catch (err2) {
 			// Ignore error
 		}
 	}
-	if (isBlacklisted === message.author.id || isBlacklisted === message.guild.id) isBlacklisted = true;
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;
