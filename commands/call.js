@@ -342,7 +342,7 @@ module.exports = async(client, message, args) => {
 						message.reply(":white_check_mark: You hung up the call.");
 						return collector.stop();
 					}
-					if (message.content.match(/^[0-9]+$/) != null) {
+					if (message.content.match(/^[0-9]+$/) != null || message.content.contains("-")) {
 						cmessage.delete();
 						mainEmbed.edit({
 							embed: {
