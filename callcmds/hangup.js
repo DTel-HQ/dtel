@@ -1,7 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args, callDocument) => {
-	if (!callDocument) return console.log("wtf no calldoc");
+	if (!callDocument) return console.log("wtf no calldoc", callDocument);
 	let toSend;
 	if (callDocument.to.channelID === message.channel.id) {
 		toSend = client.api.channels(callDocument.from.channelID).messages;
