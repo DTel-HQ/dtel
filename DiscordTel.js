@@ -183,7 +183,7 @@ client.on("message", async message => {
 			callDocument = await Calls.findOne({ "from.channelID": message.channel.id });
 			if (!callDocument) throw new Error();
 		} catch (err2) {
-			callDocument = null;
+			callDocument = undefined;
 		}
 	}
 	// If it starts with a the prefix, check if its a command
@@ -200,9 +200,8 @@ client.on("message", async message => {
 		if (callDocument && callDocument.status) {
 			try {
 				commandFile = require(`./callcmds/${command}.js`);
-				console.log("ran callcmd");
 			} catch (err) {
-				console.log(`call cmds err: ${err}`);
+				// Ignore
 			}
 		} else {
 			try {
