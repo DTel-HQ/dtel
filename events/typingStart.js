@@ -13,8 +13,18 @@ module.exports = async(client, channel, member) => {
 		}
 	}
 	if (callTo) {
-		client.channels.get(callTo.from.channelID).startTyping(100);
+		try {
+			const fetched = await client.api.channels(callTo.from.channelID).get();
+			client.IPC.send("startTyping", { typings: [{ channel: fetched.id, guild: fetched.guild_id }] });
+		} catch (err) {
+			console.log(err);
+		}
 	} else if (callFrom) {
-		client.channels.get(callFrom.to.channelID).startTyping(100);
+		try {
+			const fetched = await client.api.channels(callFrom.to.channelID).get();
+			client.IPC.send("startTyping", { typings: [{ channel: fetched.id, guild: fetched.guild_id }] });
+		} catch (err) {
+			console.log(err);
+		}
 	}
 };

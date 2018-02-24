@@ -235,6 +235,10 @@ client.IPC.on("stopTyping", async data => {
 	await client.channels.get(data.channel).stopTyping(true);
 });
 
+client.IPC.on("startTyping", async data => {
+	await client.channels.get(data.channel).startTyping(100);
+});
+
 client.login(process.env.CLIENT_TOKEN).then(() => {
 	client.IPC.send("ready", { id: client.shard.id });
 });
