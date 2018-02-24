@@ -7,6 +7,7 @@ Object.assign(String.prototype, {
 
 const process = require("process");
 const ProcessAsPromised = require("process-as-promised");
+const uuidv4 = require("uuid/v4");
 const dbl = require("dblposter");
 const dblPoster = new dbl(process.env.DBL_ORG_TOKEN);
 
@@ -18,7 +19,7 @@ const { get } = require("snekfetch");
 const database = require("./Database/database");
 const ShardUtil = require("./modules/ShardUtil");
 const MessageBuilder = require("./modules/MessageBuilder");
-const uuidv4 = require("uuid/v4");
+const permCheck = require("./modules/permChecker");
 
 const client = new Client({
 	shardId: Number(process.env.SHARD_ID),
@@ -121,8 +122,18 @@ setInterval(async() => {
 					account = await Accounts.findOne({ _id: t.id });
 				} catch (err) {
 					account = await Accounts.create(new Accounts({
-
+						_id: t.id,
 					}));
+				}
+				account.balance += t.amount;
+				await account.save();
+				await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
+					content: `:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`,
+				}));
+				try {
+					(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
+				} catch (err) {
+					return;
 				}
 			}
 		}
@@ -156,18 +167,21 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 });
 
 client.on("message", async message => {
+	let perms = await permCheck(client, message.author.id);
 	let isBlacklisted, entry;
-	try {
-		entry = await Blacklist.findOne({ _id: message.author.id });
-		if (!entry) throw new Error();
-		isBlacklisted = true;
-	} catch (err) {
+	if (!perms.boss) {
 		try {
-			entry = await Blacklist.findOne({ _id: message.guild.id });
+			entry = await Blacklist.findOne({ _id: message.author.id });
 			if (!entry) throw new Error();
 			isBlacklisted = true;
-		} catch (err2) {
-			// Ignore error
+		} catch (err) {
+			try {
+				entry = await Blacklist.findOne({ _id: message.guild.id });
+				if (!entry) throw new Error();
+				isBlacklisted = true;
+			} catch (err2) {
+				// Ignore error
+			}
 		}
 	}
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;

@@ -6,6 +6,7 @@ module.exports = async(client, message, args) => {
 	if (!perms.support) return;
 	if (!args) return message.reply("u forgot id :b:");
 	if (args === message.guild.id || args === message.author.id) return message.reply(`you dumb :b:oi, don't blacklist yourself!`);
+	if (args === process.env.SUPPORTGUILD) return message.reply("No thank you.");
 	let document, guildBlacklist, userBlacklist;
 	try {
 		document = await Blacklist.findOne({ _id: args });
