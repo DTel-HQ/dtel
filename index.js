@@ -57,5 +57,12 @@ const Sharder = require("./Sharding/Sharder");
 		});
 	});
 
+	sharder.IPC.on("startTyping", async data => {
+		data.typings.forEach(typingData => {
+			const shard = sharder.guilds.get(typingData.guild);
+			if (shard) sharder.IPC.send("startTyping", typingData, shard);
+		});
+	});
+
 	sharder.spawn();
 })();
