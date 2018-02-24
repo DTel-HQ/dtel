@@ -245,12 +245,12 @@ client.IPC.on("eval", async(msg, callback) => {
 	callback(result);
 });
 
-client.IPC.on("stopTyping", async data => {
-	await client.channels.get(data.channel).stopTyping(true);
-});
-
 client.IPC.on("startTyping", async data => {
 	await client.channels.get(data.channel).startTyping(100);
+});
+
+client.IPC.on("stopTyping", async data => {
+	await client.channels.get(data.channel).stopTyping(true);
 });
 
 client.login(process.env.CLIENT_TOKEN).then(() => {
