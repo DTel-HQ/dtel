@@ -28,10 +28,7 @@ const client = new Client({
 });
 
 client.IPC = new ProcessAsPromised();
-
 client.shard = new ShardUtil(client);
-
-const emotes = JSON.parse(readFileSync("./json/emotes.json", "utf8"));
 
 database.initialize(process.env.MONGOURL).then(() => {
 	console.log("Database initialized!");
@@ -41,29 +38,29 @@ database.initialize(process.env.MONGOURL).then(() => {
 });
 
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, async() => {
-	let allNumbers = await Numbers.find({ });
+	let allNumbers = await Numbers.find({});
 	let today = new Date();
 	for (let n of allNumbers) {
 		let exp = new Date(n.expiry);
-		if ((today.getMonth() > exp.getMonth() && today.getFullYear() > exp.getFullYear()) || (today.getMonth() > exp.getMonth() && today.getFullYear() == exp.getFullYear())) {
+		if (today.getMonth() > exp.getMonth() && (today.getFullYear() > exp.getFullYear() || today.getFullYear() === exp.getFullYear())) {
 			n.expired = true;
 			await n.save();
 		}
 	}
-	let phonebookAll = await Phonebook.find({ });
+	let phonebookAll = await Phonebook.find({});
 	for (const i of phonebookAll) {
 		let channel;
 		try {
-			channel = await client.api.channels().get();
+			channel = await client.api.channels(i.channel).get();
 		} catch (err) {
-			await Phonebook.findOne({ channel: i.channel }).remove();
+			await i.remove();
 		}
 	}
 });
 
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => {
 	// I'll start with daily.
-	let allAccounts = await Accounts.find({ });
+	let allAccounts = await Accounts.find({});
 	for (let a of allAccounts) {
 		a.dailyClaimed = false;
 		await a.save();
@@ -76,7 +73,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 	} catch (err) {
 		let devs = ["137589790538334208", "139836912335716352", "156110624718454784", "115156616256552962", "207484517898780672"];
 		for (let d of devs) {
-			await client.users.fetch(d).send("Yo, there's something wrong with the lottery.");
+			(await client.users.fetch(d)).send("Yo, there's something wrong with the lottery.");
 		}
 	}
 	if (currentlottery) {
@@ -86,7 +83,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			winneracc = await Accounts.findOne({ _id: winner });
 			if (!winneracc) throw new Error();
 		} catch (err) {
-			await client.users.fetch(winner).send("You've just won the lottery, but you don't have an account! Creating one for you.");
+			(await client.users.fetch(winner)).send("You've just won the lottery, but you don't have an account! Creating one for you.");
 			winneracc = await Accounts.create(new Accounts({
 				_id: winner,
 			}));
@@ -100,7 +97,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 				_id: uuidv4(),
 				entered: [],
 			}));
-			await client.users.fetch(winner).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
+			(await client.users.fetch(winner)).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
 		}
 	}
 	await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
@@ -135,6 +132,7 @@ setInterval(async() => {
 client.once("ready", () => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
 	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
+	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 });
 
 client.on("guildCreate", guild => {
@@ -227,4 +225,13 @@ if (process.env.DBL_ORG_TOKEN) {
 	dblPoster.bind(client);
 }
 
-client.login(process.env.CLIENT_TOKEN);
+client.IPC.on("eval", async(msg, callback) => {
+	let result = client._eval(msg);
+	if (result instanceof Map) result = Array.from(result.entries());
+	callback(result);
+});
+
+
+client.login(process.env.CLIENT_TOKEN).then(() => {
+	client.IPC.send("ready", { id: client.shard.id });
+});

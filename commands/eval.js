@@ -16,7 +16,6 @@ module.exports = async(client, message, args) => {
 				let array = [
 					client.token.escapeRegex(),
 					process.env.DISCORD_TOKEN.escapeRegex(),
-					process.env.PASTEBIN_KEY.escapeRegex(),
 					// process.env.DBL_ORG_TOKEN.escapeRegex(),
 					// process.env.BOTS_PW_TOKEN.escapeRegex(),
 					// process.env.DISCOIN_TOKEN.escapeRegex(),
