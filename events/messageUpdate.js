@@ -44,7 +44,7 @@ module.exports = async(client, oldMessage, newMessage) => {
 			content: toSend,
 		}));
 	} catch (err) {
-		await client.api.channels(editChannel.id).messages.post(MessageBuilder({
+		await client.api.channels((await editChannel.get()).id).messages.post(MessageBuilder({
 			content: `[EDITED]: ${toSend}`,
 		}));
 	}

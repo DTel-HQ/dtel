@@ -4,7 +4,7 @@ process.setMaxListeners(0);
 const Sharder = require("./Sharding/Sharder");
 
 (async() => {
-	const sharder = await new Sharder(process.env.DISCORD_TOKEN, 1);
+	const sharder = await new Sharder(process.env.DISCORD_TOKEN, 2);
 	sharder.cluster.on("online", worker => {
 		console.log(`[SHARDING] Worker ${worker.id} launched`);
 	});
@@ -48,6 +48,13 @@ const Sharder = require("./Sharding/Sharder");
 		const promises = [];
 		sharder.shards.forEach(shard => promises.push(shard.eval(msg)));
 		callback(await Promise.all(promises));
+	});
+
+	sharder.IPC.on("stopTyping", async data => {
+		data.hangups.forEach(hangupData => {
+			const shard = sharder.guilds.get(hangupData.guild);
+			if (shard) sharder.IPC.send("stopTyping", hangupData, shard);
+		});
 	});
 
 	sharder.spawn();

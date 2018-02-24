@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+mongoose.pluralize(null);
 const numberSchema = require("./numberSchema");
 const callSchema = require("./callSchema");
 const phonebookSchema = require("./phonebookSchema");
@@ -14,7 +15,6 @@ const addToGlobal = (name, val) => {
 };
 exports.initialize = url => new Promise((resolve, reject) => {
 	mongoose.connect(url, {
-		useMongoClient: true,
 		promiseLibrary: global.Promise,
 	});
 	const [

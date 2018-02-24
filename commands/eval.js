@@ -1,4 +1,3 @@
-const Discord = require("discord.js");
 const permCheck = require("../modules/permChecker");
 const { post } = require("snekfetch");
 
@@ -61,6 +60,16 @@ module.exports = async(client, message, args) => {
 							},
 						});
 					}
+					return message.channel.send({
+						embed: {
+							color: 0x3669FA,
+							title: `The eval results were too large!`,
+							description: `So I uploaded them to Hastebin! https://hastebin.com/${res.body.key}`,
+							footer: {
+								text: "Sorry for the inconvenience.",
+							},
+						},
+					});
 				}
 			} catch (err) {
 				message.channel.send({

@@ -48,6 +48,7 @@ module.exports = async(client, message, args) => {
 			mainMenu();
 			collector.on("collect", async cmsg => {
 				if (parseInt(cmsg.content)) {
+					console.log(typeof cmsg.content);
 					switch (cmsg.content) {
 						case "0": {
 							await collector.stop();

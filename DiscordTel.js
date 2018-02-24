@@ -231,7 +231,14 @@ client.IPC.on("eval", async(msg, callback) => {
 	callback(result);
 });
 
+client.IPC.on("stopTyping", async data => {
+	await client.channels.get(data.channel).stopTyping(true);
+});
 
 client.login(process.env.CLIENT_TOKEN).then(() => {
 	client.IPC.send("ready", { id: client.shard.id });
+});
+
+process.on("unhandledRejection", (_, promise) => {
+	console.log(require("util").inspect(promise, null, 2));
 });
