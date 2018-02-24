@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
-const PastebinAPI = require("pastebin-js");
-const pastebin = new PastebinAPI(process.env.PASTEBIN_KEY);
 const permCheck = require("../modules/permChecker");
+const { post } = require("snekfetch");
 
 module.exports = async(client, message, args) => {
 	const perms = await permCheck(client, message.author.id);
@@ -47,18 +46,21 @@ module.exports = async(client, message, args) => {
 					}
 					time = `${today.getUTCHours()}:${today.getUTCMinutes()}:${today.getUTCSeconds()}`;
 					today = `${dd}/${mm}/${yyyy}`;
-					pastebin.createPaste(result, `Eval results: ${time} ${today}`, "javascript", 1, "1W").then(data => {
-						message.channel.send({
+					let res;
+					try {
+						res = await post("https://hastebin.com/documents").send(`// Eval results: ${time} ${today}\n\n${result}`);
+					} catch (err) {
+						return message.channel.send({
 							embed: {
-								color: 0x3669FA,
-								title: `The eval results were too large!`,
-								description: `So I uploaded them to Pastebin! ${data}`,
+								color: 0xFF0000,
+								title: ":x: Error!",
+								description: `An unexpected error occurred while uploading to Hastebin.\`\`\`js\n${err.stack}\`\`\``,
 								footer: {
-									text: "Sorry for the inconvenience.",
+									text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
 								},
 							},
 						});
-					});
+					}
 				}
 			} catch (err) {
 				message.channel.send({
