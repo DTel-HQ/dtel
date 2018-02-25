@@ -15,7 +15,6 @@ module.exports = async(client, message, args) => {
 				if (!activeChannel) throw new Error();
 			} catch (err2) {
 				numberError = err2;
-				return;
 			}
 		}
 		if (!numberError && activeChannel && args !== "*233" && args !== "*411") {
