@@ -9,12 +9,14 @@ module.exports = async(client, message, args) => {
 	if (mynumber) {
 		return message.reply(":x: Error: You already have a number in this channel. If you wish to edit or remove your number, dial `*611`.");
 	}
-	for (const c of message.guild.channels.values()) {
-		try {
-			guildnumber = await Numbers.findOne({ _id: c.id });
-			if (guildnumber) break;
-		} catch (_) {
-			// Ignore
+	if (!message.channel.type === "dm") {
+		for (const c of message.guild.channels.values()) {
+			try {
+				guildnumber = await Numbers.findOne({ _id: c.id });
+				if (guildnumber) break;
+			} catch (_) {
+				// Ignore
+			}
 		}
 	}
 	if (guildnumber) {
