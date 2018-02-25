@@ -7,6 +7,7 @@ module.exports = async(client, msg, suffix) => {
 		mynumber = await Numbers.findOne({ _id: msg.channel.id });
 		if (!mynumber) throw new Error();
 	} catch (err) {
+		if (msg.channel.type === "dm") return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 		let activeChannel, numberError;
 		for (const c of msg.guild.channels.values()) {
 			try {

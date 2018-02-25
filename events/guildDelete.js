@@ -1,7 +1,7 @@
 const snekfetch = require("snekfetch");
 
 module.exports = async(client, guild) => {
-	const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	const censorship = guild.name.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
 	try {
 		await client.api.channels(process.env.LOGSCHANNEL).messages.post({
 			data: {

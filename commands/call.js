@@ -8,6 +8,7 @@ module.exports = async(client, message, args) => {
 		mynumber = await Numbers.findOne({ _id: message.channel.id });
 		if (!mynumber) throw new Error();
 	} catch (err) {
+		if (message.channel.type === "dm") return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 		let activeChannel, numberError;
 		for (const c of message.guild.channels.values()) {
 			try {
@@ -187,7 +188,10 @@ module.exports = async(client, message, args) => {
 								await collector2.stop();
 								return message.reply("Exiting Phonebook.");
 							}
-
+							if (!c2msg.content) {
+								message.reply("You didn't put a description!");
+								message.reply(`Please type a new description or:\n- Press \`8\` to remove your number from the registry and go back to the main menu;\n- Press \`9\` to back to 411 menu;\n- Press \`0\` to quit 411.`);
+							}
 							let pbentry;
 							try {
 								pbentry = await Phonebook.findOne({ _id: mynumber.number });
@@ -195,9 +199,11 @@ module.exports = async(client, message, args) => {
 								pbentry = await Phonebook.create(new Phonebook({
 									_id: mynumber.number,
 									channel: mynumber._id,
+									description: "The owner has not set a description.",
 								}));
 							}
-							pbentry.description = c2msg.content;
+							const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
+							pbentry.description = censorship;
 							await pbentry.save();
 							message.reply("**Registry edited!**");
 							return mainMenu();
