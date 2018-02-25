@@ -519,12 +519,10 @@ module.exports = async(client, message, args) => {
 				to: {
 					channelID: toDialDocument._id,
 					number: toDialDocument.number,
-					guild: toDialDocument.guild,
 				},
 				from: {
 					channelID: message.channel.id,
 					number: mynumber.number,
-					guild: message.guild.id,
 				},
 			})
 		);
