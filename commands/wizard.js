@@ -44,6 +44,7 @@ module.exports = async(client, message, args) => {
 			.replace("(", "")
 			.replace(")", "")
 			.replace(/\s+/g, "");
+		console.log(number)
 		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
