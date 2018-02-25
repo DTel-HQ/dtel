@@ -44,7 +44,6 @@ module.exports = async(client, message, args) => {
 			.replace("(", "")
 			.replace(")", "")
 			.replace(/\s+/g, "");
-		console.log(number)
 		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
@@ -60,29 +59,28 @@ module.exports = async(client, message, args) => {
 			cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
 		} else if (number.length !== 11) {
 			cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
-		} else {
-			const expiryDate = new Date();
-			expiryDate.setMonth(expiryDate.getMonth() + 1);
-			let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
-			collector.stop();
-			message.channel.send({
-				embed: {
-					color: 0x007FFF,
-					title: "Done!",
-					description: "Here's your service information. Should you have any inquiries, don't hesitate to dial `*611`.",
-					fields: [{
-						name: "Number",
-						value: number,
-					},
-					{
-						name: "Expiration",
-						value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
-					}],
-					footer: {
-						text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
-					},
-				},
-			});
 		}
+		const expiryDate = new Date();
+		expiryDate.setMonth(expiryDate.getMonth() + 1);
+		let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
+		collector.stop();
+		message.channel.send({
+			embed: {
+				color: 0x007FFF,
+				title: "Done!",
+				description: "Here's your service information. Should you have any inquiries, don't hesitate to dial `*611`.",
+				fields: [{
+					name: "Number",
+					value: number,
+				},
+				{
+					name: "Expiration",
+					value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
+				}],
+				footer: {
+					text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+				},
+			},
+		});
 	});
 };
