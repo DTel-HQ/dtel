@@ -41,11 +41,11 @@ module.exports = async(client, message, args) => {
 		}
 		if (toDial === "*411") {
 			let collector;
-			let mainMenu = () => {
-				message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nTo talk to a Customer Support, press `5`.\nTo exit 411 service, press `0`.");
-				collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+			let mainMenu = async() => {
+				message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nFor **checking a special number** (\\*000 or #0000), press `4`.\nTo talk to a Customer Support, press `5`.\nTo exit 411 service, press `0`.");
+				collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id, { time: 600000 });
 			};
-			mainMenu();
+			await mainMenu();
 			collector.on("collect", async cmsg => {
 				switch (cmsg.content) {
 					case "0": {
@@ -55,7 +55,7 @@ module.exports = async(client, message, args) => {
 					case "1": {
 						await collector.stop();
 						cmsg.reply("Input a number.");
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id, { time: 600000 });
 						collector2.on("collect", async c2msg => {
 							let toResolve = c2msg.content;
 							toResolve = toResolve.replace(/(a|b|c)/ig, "2")
@@ -70,13 +70,13 @@ module.exports = async(client, message, args) => {
 								.replace("(", "")
 								.replace(")", "")
 								.replace(/\s+/g, "");
-							if (!isNaN(c2msg.content) && c2msg.content.length == 11) {
+							if (!isNaN(toResolve) && toResolve.length == 11) {
 								let resolved, phonebook;
 								try {
 									resolved = await Numbers.findOne({ number: toResolve });
 									if (!resolved) throw new Error();
 								} catch (err) {
-									cmsg.reply("This number does not exist. It's probably available for registration!\nYou can type another number to check, type `9` to go back to the main menu, or type `0` to quit 411.");
+									return cmsg.reply("This number does not exist. It's probably available for registration!\nYou can type another number to check, type `9` to go back to the main menu, or type `0` to quit 411.");
 								}
 								if (resolved) {
 									try {
@@ -105,11 +105,12 @@ module.exports = async(client, message, args) => {
 										},
 									});
 								}
-							} else if (cmsg.content === "9") {
+							} else if (c2msg.content === "9") {
 								await collector2.stop();
 								await mainMenu();
 							} else if (c2msg.content === "0") {
 								await collector2.stop();
+								return c2msg.reply(`Exiting menu`);
 							} else {
 								message.reply("That doesn't look like a valid number to me! Enter a valid number or press 0 to exit.");
 							}
@@ -118,16 +119,17 @@ module.exports = async(client, message, args) => {
 					}
 					case "2": {
 						await collector.stop();
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id);
+						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
+						cmsg.reply("Input a query. Type `9` to back to main menu, or type `0` to quit 411.");
 						collector2.on("collect", async c2msg => {
-							await collector.stop();
 							if (!c2msg.content) return message.reply("You need to give me something to search!");
 
 							if (c2msg.content === "9") {
-								collector2.stop();
+								await collector2.stop();
 								await mainMenu();
+								return;
 							} else if (c2msg.content === "0") {
-								collector.stop();
+								await collector2.stop();
 								return message.reply("Exiting phonebook.");
 							}
 							let resolved;
@@ -168,7 +170,7 @@ module.exports = async(client, message, args) => {
 						}
 						message.reply(`Please type a new description or:\n- Press \`8\` to remove your number from the registry and go back to the main menu;\n- Press \`9\` to back to 411 menu;\n- Press \`0\` to quit 411.`);
 
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id);
+						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
 						collector2.on("collect", async c2msg => {
 							if (c2msg.content === "8") {
 								await collector2.stop();
@@ -233,7 +235,7 @@ module.exports = async(client, message, args) => {
 								},
 							},
 						});
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id);
+						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
 						collector2.on("collect", async c2msg => {
 							if (c2msg.content === "9") {
 								await collector2.stop();
@@ -276,7 +278,7 @@ module.exports = async(client, message, args) => {
 						description: "You have less than 500 credits which means you cannot renew your number.",
 						fields: [{
 							name: "Number",
-							value: mynumber.number,
+							value: `${mynumber.number}`,
 						},
 						{
 							name: "Expiration",
@@ -284,7 +286,7 @@ module.exports = async(client, message, args) => {
 						},
 						{
 							name: "Your Balance",
-							value: account.balance,
+							value: `${account.balance}`,
 						},
 						{
 							name: "How to recharge",
@@ -299,7 +301,7 @@ module.exports = async(client, message, args) => {
 						title: "Current Account Status",
 						fields: [{
 							name: "Your Balance",
-							value: account.balance,
+							value: `${account.balance}`,
 						},
 						{
 							name: "How to recharge",
@@ -308,7 +310,7 @@ module.exports = async(client, message, args) => {
 					},
 				});
 			} else {
-				let mainEmbed = message.channel.send({
+				let mainEmbed = await message.channel.send({
 					embed: {
 						color: 3447003,
 						title: "Current Number Status",
@@ -323,7 +325,7 @@ module.exports = async(client, message, args) => {
 						},
 						{
 							name: "Your Balance",
-							value: account.balance,
+							value: `${account.balance}`,
 						},
 						{
 							name: "How to recharge",
@@ -338,14 +340,14 @@ module.exports = async(client, message, args) => {
 				let renewrate = 500;
 				let renewcost;
 				collector.on("collect", async cmessage => {
-					if (message.content == "0") {
+					if (cmessage.content == "0") {
 						mainEmbed.delete();
-						message.reply(":white_check_mark: You hung up the call.");
+						cmessage.reply(":white_check_mark: You hung up the call.");
 						return collector.stop();
 					}
-					if (message.content.match(/^[0-9]+$/) != null || message.content.contains("-")) {
+					if (cmessage.content.match(/^[0-9]+$/) != null || cmessage.content.includes("-")) {
 						cmessage.delete();
-						mainEmbed.edit({
+						mainEmbed = await mainEmbed.edit({
 							embed: {
 								color: 3447003,
 								title: "Invalid renewal period",
@@ -360,7 +362,7 @@ module.exports = async(client, message, args) => {
 								},
 								{
 									name: "Your Balance",
-									value: account.balance,
+									value: `${account.balance}`,
 								},
 								{
 									name: "How to recharge",
@@ -383,7 +385,7 @@ module.exports = async(client, message, args) => {
 						await mynumber.save();
 						collector.stop();
 						cmessage.delete();
-						return mainEmbed.send({
+						return mainEmbed.edit({
 							embed: {
 								color: 0x00FF00,
 								title: "Success!",
@@ -398,7 +400,7 @@ module.exports = async(client, message, args) => {
 								},
 								{
 									name: "Your Balance",
-									value: account.balance,
+									value: `${account.balance}`,
 								},
 								{
 									name: "How to recharge",
@@ -410,7 +412,7 @@ module.exports = async(client, message, args) => {
 							},
 						});
 					} else {
-						message.channel.send({
+						cmessage.channel.send({
 							embed: {
 								color: 0xFF0000,
 								title: "Error: Insufficient funds!",
@@ -425,7 +427,7 @@ module.exports = async(client, message, args) => {
 								},
 								{
 									name: "Your Balance",
-									value: account.balance,
+									value: `${account.balance}`,
 								},
 								{
 									name: "How to recharge",

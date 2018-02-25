@@ -8,6 +8,7 @@ Object.assign(String.prototype, {
 const process = require("process");
 const ProcessAsPromised = require("process-as-promised");
 const uuidv4 = require("uuid/v4");
+const reload = require("require-reload")(require);
 const dbl = require("dblposter");
 const dblPoster = new dbl(process.env.DBL_ORG_TOKEN);
 
@@ -29,6 +30,7 @@ const client = new Client({
 
 client.IPC = new ProcessAsPromised();
 client.shard = new ShardUtil(client);
+client.setMaxListeners(0);
 
 database.initialize(process.env.MONGOURL).then(() => {
 	console.log("Database initialized!");
@@ -219,13 +221,13 @@ client.on("message", async message => {
 		// Is there a call?
 		if (callDocument && callDocument.status) {
 			try {
-				commandFile = require(`./callcmds/${command}.js`);
+				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
 				// Ignore
 			}
 		} else {
 			try {
-				commandFile = require(`./commands/${command}.js`);
+				commandFile = reload(`./commands/${command}.js`);
 			} catch (err) {
 				// Ignore
 			}
