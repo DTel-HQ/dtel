@@ -14,7 +14,6 @@ module.exports = async(client, msg, suffix) => {
 				if (!activeChannel) throw new Error();
 			} catch (err2) {
 				numberError = err2;
-				return;
 			}
 		}
 		if (!numberError && activeChannel && suffix !== "*233" && suffix !== "*411") {
