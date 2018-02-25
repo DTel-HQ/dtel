@@ -6,11 +6,11 @@ Object.assign(String.prototype, {
 });
 
 const process = require("process");
+process.setMaxListeners(0);
 const ProcessAsPromised = require("process-as-promised");
 const uuidv4 = require("uuid/v4");
 const reload = require("require-reload")(require);
 const dbl = require("dblposter");
-const dblPoster = new dbl(process.env.DBL_ORG_TOKEN);
 
 const { Client } = require("discord.js");
 const { scheduleJob } = require("node-schedule");
@@ -25,12 +25,20 @@ const client = new Client({
 	shardId: Number(process.env.SHARD_ID),
 	shardCount: Number(process.env.SHARD_COUNT),
 	disableEveryone: true,
-	disabledEvents: ["GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_REMOVE_ALL", "VOICE_STATE_UPDATE"],
+	disabledEvents: ["WEBHOOKS_UPDATE", "GUILD_BAN_ADD", "GUILD_BAN_REMOVE", "CHANNEL_PINS_UPDATE", "MESSAGE_DELETE_BULK", "MESSAGE_DELETE", "MESSAGE_REACTION_REMOVE", "MESSAGE_REACTION_ADD", "MESSAGE_REACTION_REMOVE_ALL", "VOICE_STATE_UPDATE", "PRESENCE_UPDATE"],
+	ws: {
+		compress: true,
+	},
 });
+const dblPoster = new dbl(process.env.DBL_ORG_TOKEN, client);
 
 client.IPC = new ProcessAsPromised();
 client.shard = new ShardUtil(client);
 client.setMaxListeners(0);
+client.blacklist = {
+	guilds: [],
+	users: [],
+};
 
 database.initialize(process.env.MONGOURL).then(() => {
 	console.log("Database initialized!");
@@ -150,10 +158,28 @@ setInterval(async() => {
 	}
 }, 300000);
 
-client.once("ready", () => {
+client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
 	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
+	const blacklisted = await Blacklist.find({});
+	for (const blacklist of blacklisted) {
+		switch (blacklist.type) {
+			case "user": {
+				client.blacklist.users.push(blacklist._id);
+				break;
+			}
+			case "guilds": {
+				client.blacklist.guilds.push(blacklist._id);
+			}
+		}
+	}
+	// if (client.channels.has("281815661863501824")) {
+	// 	client.channels.get("281815661863501824").join().then(connection => {
+	// 		// TODO
+	// 		connection.play("https://www.youtube.com/watch?v=66tQR7koR_Q");
+	// 	});
+	// }
 });
 
 client.on("guildCreate", guild => {
@@ -177,23 +203,8 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 });
 
 client.on("message", async message => {
-	let perms = await permCheck(client, message.author.id);
-	let isBlacklisted, entry;
-	if (!perms.boss) {
-		try {
-			entry = await Blacklist.findOne({ _id: message.author.id });
-			if (!entry) throw new Error();
-			isBlacklisted = true;
-		} catch (err) {
-			try {
-				entry = await Blacklist.findOne({ _id: message.guild.id });
-				if (!entry) throw new Error();
-				isBlacklisted = true;
-			} catch (err2) {
-				// Ignore error
-			}
-		}
-	}
+	let isBlacklisted;
+	if (client.blacklist.users.includes(message.author.id) || client.blacklist.guilds.includes(message.guild.id)) isBlacklisted = true;
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;
 	// In progress wizard/phonebook session?
 	let callDocument;
@@ -246,7 +257,7 @@ client.on("message", async message => {
 });
 
 if (process.env.DBL_ORG_TOKEN) {
-	dblPoster.bind(client);
+	dblPoster.bind();
 }
 
 client.IPC.on("eval", async(msg, callback) => {
