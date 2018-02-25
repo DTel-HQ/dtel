@@ -8,8 +8,8 @@ module.exports = async(client, message, args) => {
 		mynumber = await Numbers.findOne({ _id: message.channel.id });
 		if (!mynumber) throw new Error();
 	} catch (err) {
+		let activeChannel, numberError;
 		for (const c of message.guild.channels.values()) {
-			let activeChannel, numberError;
 			try {
 				activeChannel = await Numbers.findOne({ _id: c.id });
 				if (!activeChannel) throw new Error();
@@ -17,13 +17,13 @@ module.exports = async(client, message, args) => {
 				numberError = err2;
 				return;
 			}
-			if (!numberError && activeChannel && args !== "*233") {
-				return message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${activeChannel._id}>.`);
-			} else if (!mynumber) {
-				return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
-			} else {
-				return message.reply(":x: Unknown Error!");
-			}
+		}
+		if (!numberError && activeChannel && args !== "*233" && args !== "*411") {
+			return message.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service, such as <#${activeChannel._id}>.`);
+		} else if (!mynumber) {
+			return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+		} else {
+			return message.reply(":x: Unknown Error!");
 		}
 	}
 	let toDial = args;
@@ -48,7 +48,6 @@ module.exports = async(client, message, args) => {
 			mainMenu();
 			collector.on("collect", async cmsg => {
 				if (parseInt(cmsg.content)) {
-					console.log(typeof cmsg.content);
 					switch (cmsg.content) {
 						case "0": {
 							await collector.stop();

@@ -11,7 +11,7 @@ module.exports = async(client, guild) => {
 		`**ToS Compliance:** <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>`,
 	].join("\n");
 	try {
-		await guild.members.fetch(guild.owner.id).send(ownerMessage);
+		(await guild.members.fetch(guild.owner.id)).send(ownerMessage);
 	} catch (err) {
 		canDMOwner = false;
 		console.log(`The bloody OWNER doesn't have bot dms on!`);
@@ -20,7 +20,8 @@ module.exports = async(client, guild) => {
 		guild.owner.send("I don't seem to have the `Embed Links` permission in your server. This may cause issues with DiscordTel, so please make sure I have that permission.");
 	}
 
-	const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	// const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	const censorship = guild.name.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
 	try {
 		await client.api.channels(process.env.LOGSCHANNEL).messages.post({
 			data: {

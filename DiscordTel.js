@@ -12,7 +12,6 @@ const dbl = require("dblposter");
 const dblPoster = new dbl(process.env.DBL_ORG_TOKEN);
 
 const { Client } = require("discord.js");
-const { readFileSync } = require("fs");
 const { scheduleJob } = require("node-schedule");
 const { get } = require("snekfetch");
 
@@ -97,9 +96,18 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			await Lottery.create(new Lottery({
 				_id: uuidv4(),
 				entered: [],
+				jackpot: 0,
+				active: true,
 			}));
 			(await client.users.fetch(winner)).send(`You've won the lottery! The jackpot amount has been added to your account. You now have \`${winneracc.balance}\``);
 		}
+	} else {
+		await Lottery.create(new Lottery({
+			_id: uuidv4(),
+			entered: [],
+			jackpot: 0,
+			active: true,
+		}));
 	}
 	await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
 		content: `:white_check_mark: The lottery and daily credits have been reset!`,
