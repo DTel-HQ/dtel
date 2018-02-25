@@ -533,7 +533,7 @@ module.exports = async(client, message, args) => {
 		}));
 		setTimeout(async() => {
 			callDocument = await Calls.findOne({ _id: callDocument._id });
-			if (callDocument.pickedUp) return;
+			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
 			callDocument.status = false;
 			await callDocument.save();
 			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
