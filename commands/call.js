@@ -45,7 +45,7 @@ module.exports = async(client, message, args) => {
 				collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
 			};
 			mainMenu();
-			collector.on("collect", async cmsg => {
+			return collector.on("collect", async cmsg => {
 				if (parseInt(cmsg.content)) {
 					switch (cmsg.content) {
 						case "0": {
@@ -162,7 +162,7 @@ module.exports = async(client, message, args) => {
 						}
 						case "3": {
 							await collector.stop();
-							if (!message.author.hasPermission("MANAGE_SERVER")) {
+							if (!message.member.hasPermission("MANAGE_SERVER")) {
 								message.reply("**You don't have the `Manage Server` permission.**");
 								return mainMenu();
 							}
