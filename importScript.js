@@ -54,14 +54,14 @@ process.once("go", async() => {
 
 	const numbers = require("./toImport/numbers.json");
 	for (let i of numbers) {
-		let date = new Date(), now = new Date;
+		let date = new Date(), now = new Date();
 		date.setMonth(i.month);
 		date.setFullYear(i.year);
 		await Numbers.create(new Numbers({
 			_id: i.channel,
 			number: i.number,
 			expiry: date,
-			expired: now.getFullYear() !== date.getFullYear() && date.getMonth() !== now.getMonth(),
+			expired: false,
 		})).catch(err => {
 			console.log(`DUPLICATE MUUUH. ${i.channel} ${i.number}`, err.message);
 			dupes.push({
