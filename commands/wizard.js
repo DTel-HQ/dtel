@@ -48,27 +48,26 @@ module.exports = async(client, message, args) => {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
 		}
-		if (!parseInt(number)) cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
+		if (!parseInt(number)) return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 		if (message.channel.type === "dm") {
 			if (!number.startsWith("0900")) {
-				cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
+				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 			}
 			if (number.length !== 11) {
-				cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit.");
+				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			}
 		} else if (!number.startsWith("0301")) {
-			cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
 		} else if (number.length !== 11) {
-			cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
 		}
 		let exists;
 		try {
 			exists = await Numbers.findOne({ number: number });
 			if (!exists) throw new Error();
 		} catch (err) {
-			// Ignore
+			return message.reply("This number is already registered. Please enter another number");
 		}
-		if (exists) message.reply("This number is already registered.");
 		const expiryDate = new Date();
 		expiryDate.setMonth(expiryDate.getMonth() + 1);
 		let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
