@@ -14,18 +14,26 @@ module.exports = async(client, message, args) => {
 		return message.author.send("Not a valid channel.");
 	}
 	if (channel) {
+		let number;
 		try {
-			client.api.channels(channel).invites.post({
-				data: {
-					max_uses: 1,
-					temporary: true,
-				},
-				reason: `Customer Support Agent ${message.author.tag} ran backdoor.`,
-			}).then(invite => {
-				message.author.send(`https://discord.gg/${invite.code}`);
-			});
+			number = await Numbers.findOne({ _id: args });
 		} catch (err) {
-			message.reply("Privilege is too low.");
+			return message.reply("There is no number associated with this channel. Contact your boss if this is urgent.");
+		}
+		if (number) {
+			try {
+				client.api.channels(args).invites.post({
+					data: {
+						max_uses: 1,
+						temporary: true,
+					},
+					reason: `Customer Support Agent ${message.author.tag} ran backdoor.`,
+				}).then(invite => {
+					message.author.send(`https://discord.gg/${invite.code}`);
+				});
+			} catch (err) {
+				message.reply("Privilege is too low.");
+			}
 		}
 	}
 };

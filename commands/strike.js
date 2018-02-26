@@ -6,24 +6,31 @@ module.exports = async(client, msg, suffix) => {
 	let perms = await permCheck(client, msg.author.id);
 	if (!perms.support) return;
 
-	let id = suffix.substring(0, suffix.indexOf("|")).trim();
+	let id;
+	if (msg.mentions.users.first()) {
+		id = msg.mentions.users.first().id;
+	} else {
+		id = suffix.substring(0, suffix.indexOf("|")).trim();
+	}
 	let reason = suffix.substring(suffix.indexOf("|") + 1).trim();
 
-	if (!reason) reason == "No reason";
 	if (!id) {
 		return msg.reply("You forgot a paramater! Synthax: `>strike [offender id] | [reason]`");
 	}
+	if (!reason) reason == "No reason";
 
 	let resolved, type;
-	try {
-		resolved = await client.users.fetch(id);
-		type = "user";
-	} catch (err) {
+	if (!msg.mentions.users.first()) {
 		try {
-			resolved = await client.api.guilds(id).get();
-			type = "guild";
-		} catch (err2) {
-			return msg.reply("The specified ID could not be resolved!");
+			if (msg.mentions.users.first()) { resolved = await client.users.fetch(id); }
+			type = "user";
+		} catch (err) {
+			try {
+				resolved = await client.api.guilds(id).get();
+				type = "guild";
+			} catch (err2) {
+				return msg.reply("The specified ID could not be resolved!");
+			}
 		}
 	}
 	let toStrikePerms;
@@ -43,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 	if (allStrikes.length >= 3) {
 		Blacklist.create(new Blacklist({ _id: id, type }));
 		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.length}`,
+			content: `:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.size}`,
 		}));
 		return msg.channel.send({
 			embed: {
@@ -51,7 +58,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `:white_check_mark: Success!`,
 				description: `ID: ${id} has been striked with the reason: ${reason}`,
 				footer: {
-					text: `They now have ${allStrikes.length} strikes. They have been blacklisted.`,
+					text: `They now have ${allStrikes.size} strikes. They have been blacklisted.`,
 				},
 			},
 		});
@@ -62,7 +69,7 @@ module.exports = async(client, msg, suffix) => {
 			title: `:white_check_mark: Success!`,
 			description: `ID: ${id} has been striked with the reason: ${reason}`,
 			footer: {
-				text: `They now have ${allStrikes.length} strikes.`,
+				text: `They now have ${allStrikes.size} strikes.`,
 			},
 		},
 	});
