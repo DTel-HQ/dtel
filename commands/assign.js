@@ -33,6 +33,7 @@ module.exports = async(client, message, args) => {
 	let foundChannel;
 	try {
 		foundChannel = await Numbers.findOne({ _id: channel });
+		if (!foundChannel) throw new Error();
 	} catch (err) {
 		// Ignore
 	}
