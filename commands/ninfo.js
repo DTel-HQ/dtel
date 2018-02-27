@@ -54,7 +54,9 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			try {
 				channel = await client.api.channels(result._id).get();
+				console.log(channel | "no channel")
 				const guild = await client.api.guilds(channel.guild_id);
+				console.log(guild | "no guild")
 				const owner = await client.users.fetch(guild.owner_id);
 				fields.push({
 					name: `Channel ID and Name`,
