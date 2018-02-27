@@ -512,7 +512,7 @@ module.exports = async(client, message, args) => {
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
-		await client.apiSend(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL)
+		await client.apiSend(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
 		let callDocument = await Calls.create(
 			new Calls({
 				_id: uuidv4(),

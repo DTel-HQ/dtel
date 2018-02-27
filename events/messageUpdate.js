@@ -27,7 +27,7 @@ module.exports = async(client, oldMessage, newMessage) => {
 		messageToEdit = callDocument.messages.find(m => m.umessage === oldMessage.id);
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
-		newMessage.reply(`:x: Error! This should not have happened. An error occured in the "messageUpdate" event. \n \`\`\`js\n${err.stack}\`\`\``);
+		// Ignore
 		console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
 	}
 	let toSend;

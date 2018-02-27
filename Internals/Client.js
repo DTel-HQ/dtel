@@ -43,7 +43,7 @@ module.exports = class client extends Client {
 			return err;
 		}
 
-		await this.api.channels(channel).messages.post({
+		return this.api.channels(channel).messages.post({
 			data: {
 				content,
 			},
@@ -68,7 +68,7 @@ module.exports = class client extends Client {
 			return err;
 		}
 
-		await this.api.channels(channel).messages(message).patch({
+		return this.api.channels(channel).messages(message).patch({
 			data: {
 				content,
 			},
