@@ -1,8 +1,4 @@
-const permCheck = require("../modules/permChecker");
-const MessageBuilder = require("../modules/MessageBuilder");
-
 module.exports = async(client, msg, suffix) => {
-	let perms = permCheck(client, msg.author.id);
 	let account;
 	try {
 		account = await Accounts.findOne({ _id: msg.author.id });
@@ -36,7 +32,5 @@ module.exports = async(client, msg, suffix) => {
 	activeLottery.jackpot += toBuy * 5;
 	await activeLottery.save();
 	msg.reply(`You've bought ${toBuy} entries. The current jackpot is ¥${activeLottery.jackpot}.`);
-	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content: `:tickets: User **${msg.author.tag}** paid ¥${toBuy * 5} for the lottery. The they now have ¥${account.balance}.`,
-	}));
+	client.apiSend(`:tickets: User **${msg.author.tag}** paid ¥${toBuy * 5} for the lottery. The they now have ¥${account.balance}.`, process.env.LOGSCHANNEL);
 };

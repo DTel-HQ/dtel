@@ -1,8 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
-const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, message, callDocument) => {
-	let perms = await permCheck(client, message.author.id);
+	let perms = await client.permCheck(message.author.id);
 	let sendChannel;
 	if (message.channel.id === callDocument.to.channelID) {
 		sendChannel = callDocument.from.channelID;
@@ -12,16 +11,13 @@ module.exports = async(client, message, callDocument) => {
 		message.reply("Error! Please contact a bot developer.");
 	}
 	message.content = message.content.replace(/@(everyone|here)/g, `@­$1`);
-	let send = content => client.api.channels(sendChannel).messages.post(MessageBuilder({
-		content,
-	}));
 	let sent;
 	if (perms.support) {
-		sent = await send(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`);
+		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`, sendChannel);
 	} else if (perms.donator || message.author.id === `139836912335716352`) {
-		sent = await send(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`);
+		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`, sendChannel);
 	} else {
-		sent = await send(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`);
+		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`, sendChannel);
 	}
 	callDocument.messages.push({
 		bmessage: sent.id,

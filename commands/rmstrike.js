@@ -1,8 +1,7 @@
-const permCheck = require("../modules/permChecker");
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(client, msg.author.id);
+	let perms = await client.permCheck(msg.author.id);
 	if (!perms.support) return;
 
 	if (!suffix) return msg.reply("You forgot the strike id!");
@@ -40,9 +39,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 			},
 		});
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:wrench: ID \`${suffix}\` has strike removed by ${msg.author.username}. They have been removed from the blacklist.`,
-		}));
+		await client.apiSend(`:wrench: ID \`${suffix}\` has strike removed by ${msg.author.username}. They have been removed from the blacklist.`, process.env.LOGSCHANNEL);
 	} else {
 		msg.channel.send({
 			embed: {
@@ -54,8 +51,6 @@ module.exports = async(client, msg, suffix) => {
 				},
 			},
 		});
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:wrench: ID \`${suffix}\` has strike removed by ${msg.author.username}.`,
-		}));
+		await client.apiSend(`:wrench: ID \`${suffix}\` has strike removed by ${msg.author.username}.`, process.env.LOGSCHANNEL);
 	}
 };

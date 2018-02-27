@@ -1,8 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
-const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, message, args) => {
-	let perms = await permCheck(client, message.author.id);
+	let perms = await client.permCheck(message.author.id);
 	if (!perms.support) return;
 	if (!args) {
 		return message.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
@@ -30,8 +29,6 @@ module.exports = async(client, message, args) => {
 		//
 	}
 	message.reply(`<:blobsad:386228996486070272> This number's been deassigned.. R.I.P \`${number.number}\`.`);
-	await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content: `:closed_book: Number \`${number.number}\` is DE-assigned from channel ${number._id} by ${message.author.username}.`,
-	}));
+	await client.apiSend(`:closed_book: Number \`${number.number}\` is DE-assigned from channel ${number._id} by ${message.author.username}.`, process.env.LOGSCHANNEL);
 	await number.remove();
 };

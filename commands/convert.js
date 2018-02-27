@@ -106,7 +106,5 @@ module.exports = async(client, msg, suffix) => {
 	});
 	account.balance -= parseInt(amount);
 	await account.save();
-	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content: `:repeat: User ${msg.author.tag} requested a Discoin transaction of ¥${amount}`,
-	}));
+	await client.apiSend(`:repeat: User ${msg.author.tag} requested a Discoin transaction of ¥${amount}`, process.env.LOGSCHANNEL);
 };

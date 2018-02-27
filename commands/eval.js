@@ -1,8 +1,7 @@
-const permCheck = require("../modules/permChecker");
 const { post } = require("snekfetch");
 
 module.exports = async(client, message, args) => {
-	const perms = await permCheck(client, message.author.id);
+	const perms = await client.permCheck(message.author.id);
 	if (perms.boss) {
 		if (args) {
 			let hrstart = process.hrtime();

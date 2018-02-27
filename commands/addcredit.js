@@ -1,10 +1,9 @@
-const permCheck = require("../modules/permChecker");
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args) => {
 	let userid = args.substring(0, args.indexOf(" ")).trim();
 	let amount = args.substring(args.indexOf(" ") + 1).trim();
-	const sperms = await permCheck(client, message.author.id);
+	const sperms = await client.permCheck(message.author.id);
 	if (!sperms.support) {
 		return message.reply("Stealing money from the bank?");
 	}
@@ -17,7 +16,7 @@ module.exports = async(client, message, args) => {
 	} catch (err) {
 		return message.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
 	}
-	const perms = await permCheck(client, userid);
+	const perms = await client.permCheck(userid);
 	if (userid === client.user.id) {
 		return message.reply("Uh... I am the bank. Are you in debt?");
 	} else if (message.author.bot) {
@@ -43,8 +42,6 @@ module.exports = async(client, message, args) => {
 	account.balance += parseInt(amount);
 	await account.save();
 	message.reply("Done.");
-	await client.users.fetch(userid).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);
-	client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content: `:money_with_wings: Support member **${message.author.tag}** added ¥${amount} to **${user.tag}** (${userid}).`,
-	}));
+	await (client.users.fetch(userid)).send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`);
+	await client.apiSend(`:money_with_wings: Support member **${message.author.tag}** added ¥${amount} to **${user.tag}** (${userid}).`, process.env.LOGSCHANNEL);
 };

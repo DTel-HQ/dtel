@@ -4,18 +4,13 @@ module.exports = async(client, message, args, callDocument) => {
 	if (!callDocument) return console.log("wtf no calldoc", callDocument);
 	let toSend;
 	if (callDocument.to.channelID === message.channel.id) {
-		toSend = client.api.channels(callDocument.from.channelID).messages;
+		toSend = callDocument.from.channelID;
 	} else {
-		toSend = client.api.channels(callDocument.to.channelID).messages;
+		toSend = callDocument.to.channelID;
 	}
-	let send = content => client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content,
-	}));
 	message.reply(":negative_squared_cross_mark: You hung up the call.");
-	send(`:negative_squared_cross_mark: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} was hung up by __${message.author.tag}__ (${message.author.id}) on the "from" side.`);
-	await toSend.post(MessageBuilder({
-		content: ":x: The other side ended the call.",
-	}));
+	await client.apiSend(`:negative_squared_cross_mark: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} was hung up by __${message.author.tag}__ (${message.author.id}) on the "from" side.`, process.env.LOGSCHANNEL);
+	await client.apiSend(":x: The other side ended the call.", toSend);
 	let hangups = [];
 	try {
 		const fromChannel = await client.api.channels(callDocument.from.channelID).get();

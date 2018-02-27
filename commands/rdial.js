@@ -84,7 +84,7 @@ module.exports = async(client, msg, suffix) => {
 						mentionable: true,
 					},
 				});
-				await client.api.channels(toDialDocument._id).messages.post(MessageBuilder({ content: `<@&${process.env.SUPPORTROLE}>` }));
+				await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
 				await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
 					data: {
 						mentionable: false,
@@ -110,9 +110,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		})
 	);
-	client.api.channels(toDialDocument._id).messages.post(MessageBuilder({
-		content: `There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`,
-	}));
+	await client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 	setTimeout(async() => {
 		callDocument = await Calls.findOne({ _id: callDocument._id });
 		if (callDocument.pickedUp) return;

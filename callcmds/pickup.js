@@ -17,11 +17,6 @@ module.exports = async(client, message, args, callDocument) => {
 		await callDocument.save();
 		return message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
 	}
-	client.api.channels(callDocument.from.channelID).messages.post(MessageBuilder({
-		content: ":heavy_check_mark: The other side picked up!",
-	}));
-	let send = content => client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content,
-	}));
-	send(`:white_check_mark: The call between channel ${toChannel.id} and channel ${fromChannel.id}} was picked up by __${message.author.tag}__ (${message.author.id}).`);
+	await client.apiSend(":heavy_check_mark: The other side picked up!", callDocument.from.channelID);
+	await client.apiSend(`:white_check_mark: The call between channel ${toChannel.id} and channel ${fromChannel.id}} was picked up by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
 };

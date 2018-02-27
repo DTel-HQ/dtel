@@ -1,9 +1,7 @@
-const permCheck = require("../modules/permChecker");
-
 module.exports = async(client, message, args) => {
 	let channel = args.substring(0, args.indexOf(" ")).trim();
 	let number = args.substring(args.indexOf(" ") + 1).trim();
-	let perms = await permCheck(client, message.author.id);
+	let perms = await client.permCheck(message.author.id);
 	if (!perms.support) return;
 	if (!args) return message.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!**");
 	number = number.replace(/(a|b|c)/ig, "2")

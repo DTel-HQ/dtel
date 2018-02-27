@@ -7,19 +7,15 @@ Object.assign(String.prototype, {
 
 const process = require("process");
 process.setMaxListeners(0);
-const ProcessAsPromised = require("process-as-promised");
 const uuidv4 = require("uuid/v4");
 const reload = require("require-reload")(require);
 const dbl = require("dblposter");
 
-const { Client } = require("discord.js");
+const Client = require("./Internals/Client.js");
 const { scheduleJob } = require("node-schedule");
 const { get } = require("snekfetch");
 
 const database = require("./Database/database");
-const ShardUtil = require("./modules/ShardUtil");
-const MessageBuilder = require("./modules/MessageBuilder");
-const permCheck = require("./modules/permChecker");
 
 const client = new Client({
 	shardId: Number(process.env.SHARD_ID),
@@ -29,16 +25,9 @@ const client = new Client({
 	ws: {
 		compress: true,
 	},
+	maxListeners: 0,
 });
 const dblPoster = new dbl(process.env.DBL_ORG_TOKEN, client);
-
-client.IPC = new ProcessAsPromised();
-client.shard = new ShardUtil(client);
-client.setMaxListeners(0);
-client.blacklist = {
-	guilds: [],
-	users: [],
-};
 
 database.initialize(process.env.MONGOURL).then(() => {
 	console.log("Database initialized!");
@@ -119,9 +108,8 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			active: true,
 		}));
 	}
-	await client.api.channels.get(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-		content: `:white_check_mark: The lottery and daily credits have been reset!`,
-	}));
+
+	await client.apiSend(`:white_check_mark: The lottery and daily credits have been reset!`, process.env.LOGSCHANNEL);
 });
 
 // Discoin grabber
@@ -145,9 +133,8 @@ setInterval(async() => {
 				}
 				account.balance += t.amount;
 				await account.save();
-				await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-					content: `:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`,
-				}));
+
+				await client.apiSend(`:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`, process.env.LOGSCHANNEL);
 				try {
 					(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
 				} catch (err) {

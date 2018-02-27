@@ -1,9 +1,8 @@
 const MessageBuilder = require("../modules/MessageBuilder");
-const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, oldMessage, newMessage) => {
 	if (oldMessage.author.id === client.user.id) return;
-	let perms = await permCheck(client, oldMessage.author.id);
+	let perms = await client.permCheck(oldMessage.author.id);
 	let callDocument;
 	try {
 		callDocument = await Calls.findOne({ "to.channelID": oldMessage.channel.id });
@@ -19,9 +18,9 @@ module.exports = async(client, oldMessage, newMessage) => {
 	if (!callDocument) return;
 	let editChannel;
 	if (callDocument.to.channelID === oldMessage.channel.id) {
-		editChannel = client.api.channels(callDocument.from.channelID);
+		editChannel = callDocument.from.channelID;
 	} else {
-		editChannel = client.api.channels(callDocument.to.channelID);
+		editChannel = callDocument.to.channelID;
 	}
 	let messageToEdit;
 	try {
@@ -40,12 +39,8 @@ module.exports = async(client, oldMessage, newMessage) => {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${newMessage.content}`;
 	}
 	try {
-		await editChannel.messages(messageToEdit.bmessage).patch(MessageBuilder({
-			content: toSend,
-		}));
+		client.apiEdit(toSend, editChannel, messageToEdit.bmessage);
 	} catch (err) {
-		await client.api.channels((await editChannel.get()).id).messages.post(MessageBuilder({
-			content: `[EDITED]: ${toSend}`,
-		}));
+		await client.apiSend(`[EDITED]: ${toSend}`, editChannel);
 	}
 };

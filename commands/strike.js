@@ -1,9 +1,8 @@
-const permCheck = require("../modules/permChecker");
 const MessageBuilder = require("../modules/MessageBuilder");
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(client, msg.author.id);
+	let perms = await client.permCheck(msg.author.id);
 	if (!perms.support) return;
 
 	let id;
@@ -34,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 	let toStrikePerms;
-	if (type == "user") toStrikePerms = await permCheck(client, id);
+	if (type == "user") toStrikePerms = await client.permCheck(id);
 	if (toStrikePerms.support || toStrikePerms.boss) return msg.reply("I'd rather you didn't strike a staff member.");
 
 	await Strikes.create(new Strikes({
@@ -49,9 +48,7 @@ module.exports = async(client, msg, suffix) => {
 	let allStrikes = await Strikes.find({ offender: id });
 	if (allStrikes.length >= 3) {
 		Blacklist.create(new Blacklist({ _id: id, type }));
-		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.size}`,
-		}));
+		await client.apiSend(`:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.size}`, process.env.LOGSCHANNEL);
 		return msg.channel.send({
 			embed: {
 				color: 0x00FF00,

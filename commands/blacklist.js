@@ -1,8 +1,7 @@
-const permCheck = require("../modules/permChecker");
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args) => {
-	let perms = await permCheck(client, message.author.id);
+	let perms = await client.permCheck(message.author.id);
 	if (!perms.support) return;
 	if (!args) return message.reply("u forgot id :b:");
 	if (args === message.guild.id || args === message.author.id) return message.reply(`you dumb :b:oi, don't blacklist yourself!`);
@@ -16,9 +15,7 @@ module.exports = async(client, message, args) => {
 	}
 	if (document) {
 		await document.remove();
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`,
-		}));
+		await client.apiSend(`:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply(`done! now stop blocklisting yourself!`);
 	} else {
 		try {
@@ -33,15 +30,11 @@ module.exports = async(client, message, args) => {
 	}
 	if (guildBlacklist) {
 		Blacklist.create(new Blacklist({ _id: args, type: "guild" }));
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:hammer: Guild ID \`${args}\` is added to the blacklist by ${message.author.username}.`,
-		}));
+		await client.apiSend(`:hammer: Guild ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done");
 	} else if (userBlacklist) {
 		Blacklist.create(new Blacklist({ _id: args, type: "user" }));
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:hammer: User ID \`${args}\` is added to the blacklist by ${message.author.username}.`,
-		}));
+		await client.apiSend(`:hammer: User ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done");
 	}
 };

@@ -1,7 +1,5 @@
-const permCheck = require("../modules/permChecker");
-
 module.exports = async(client, message, args) => {
-	let perms = await permCheck(client, message.author.id);
+	let perms = await client.permCheck(message.author.id);
 	if (!perms.support) return;
 	if (message.channel.guild) message.delete();
 	if (!args) {

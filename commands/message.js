@@ -1,5 +1,4 @@
 const randomstring = require("randomstring");
-const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, msg, args) => {
 	let number = args.substring(0, args.indexOf(" ")).trim();
@@ -50,8 +49,6 @@ module.exports = async(client, msg, args) => {
 		content: content,
 	});
 	await mailbox.save();
-	await client.api.channels(mailbox._id).messages.post(MessageBuilder({
-		content,
-	}));
+	await client.apiSend(content, mailbox._id);
 	msg.reply("Your message was successfully sent.");
 };

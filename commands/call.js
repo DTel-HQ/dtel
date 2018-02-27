@@ -499,7 +499,7 @@ module.exports = async(client, message, args) => {
 							mentionable: true,
 						},
 					});
-					await client.api.channels(toDialDocument._id).messages.post(MessageBuilder({ content: `<@&${process.env.SUPPORTROLE}>` }));
+					await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
 					await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
 						data: {
 							mentionable: false,
@@ -512,9 +512,7 @@ module.exports = async(client, message, args) => {
 		}
 		// Error checking and utils finished! Let's actually start calling.
 		message.reply(`:telephone: Dialling ${toDial}... You are able to \`>hangup\`.`);
-		client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`,
-		}));
+		await client.apiSend(`:telephone: A **normal** call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL)
 		let callDocument = await Calls.create(
 			new Calls({
 				_id: uuidv4(),
@@ -528,17 +526,15 @@ module.exports = async(client, message, args) => {
 				},
 			})
 		);
-		client.api.channels(toDialDocument._id).messages.post(MessageBuilder({
-			content: `There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`,
-		}));
+		client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 		setTimeout(async() => {
 			callDocument = await Calls.findOne({ _id: callDocument._id });
 			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
 			callDocument.status = false;
 			await callDocument.save();
 			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-			client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-			client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
+			client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
+			client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
 			let mailbox;
 			try {
 				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });

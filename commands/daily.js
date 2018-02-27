@@ -1,6 +1,4 @@
 const { get } = require("snekfetch");
-const MessageBuilder = require("../modules/MessageBuilder");
-const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, msg, suffix) => {
 	let account;
@@ -14,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	if (account.dailyClaimed) {
 		return msg.reply("You already claimed your daily credits!");
 	}
-	let perms = await permCheck(client, msg.author.id);
+	let perms = await client.permCheck(msg.author.id);
 	let toGive = 120;
 	if (perms.boss) {
 		toGive = 300;
@@ -42,9 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		account.balance += toGive;
 		account.dailyClaimed = true;
 		await account.save();
-		await client.api.channels(process.env.LOGSCHANNEL).messages.post(MessageBuilder({
-			content: `:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`,
-		}));
+		await client.apiSend(`:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`, process.env.LOGSCHANNEL);
 		if (toGive == 120) {
 			msg.reply("Here's your 120 credits! You can claim again after 01:00 CET (Approx. 23:00 UTC in summer, 00:00 UTC in winter).\nGet 60 more credits daily by upvoting at https://discordbots.org/bot/377609965554237453 !");
 		} else if (toGive >= 180) {

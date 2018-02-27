@@ -1,8 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
-const permCheck = require("../modules/permChecker");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await permCheck(client, msg.author.id);
+	let perms = await client.permCheck(msg.author.id);
 	if (!perms.boss) return;
 	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
 	let allNumbers = await Numbers.find({});
@@ -10,9 +9,7 @@ module.exports = async(client, msg, suffix) => {
 		let channel = await client.api.channels(n._id).get();
 		if (channel) {
 			try {
-				await client.api.channels(n._id).messages.post(MessageBuilder({
-					content: suffix,
-				}));
+				await client.apiSend(suffix, n._id);
 			} catch (error) {
 				console.log(error);
 			}
