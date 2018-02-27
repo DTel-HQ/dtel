@@ -32,9 +32,9 @@ module.exports = async(client, oldMessage, newMessage) => {
 	}
 	let toSend;
 	if (perms.donator || oldMessage.author.id === `139836912335716352`) {
-		toSend = `**${oldMessage.author.tag}** :arrow_right: :telephone_receiver: ${newMessage.content}`;
-	} else if (perms.support) {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${newMessage.content}`;
+	} else if (perms.support) {
+		toSend = `**${oldMessage.author.tag}** :arrow_right: :telephone_receiver: ${newMessage.content}`;
 	} else {
 		toSend = `**${oldMessage.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${newMessage.content}`;
 	}
