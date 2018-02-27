@@ -12,13 +12,14 @@ module.exports = async(client, message, callDocument) => {
 	}
 	message.content = message.content.replace(/@(everyone|here)/g, `@­$1`);
 	let sent;
-	if (perms.support) {
+	if (perms.donator || message.author.id === `139836912335716352`) {
 		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: :telephone_receiver: ${message.content}`, sendChannel);
-	} else if (perms.donator || message.author.id === `139836912335716352`) {
+	} else if (perms.support) {
 		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: <:GoldPhone:320768431307882497> ${message.content}`, sendChannel);
 	} else {
 		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`, sendChannel);
 	}
+	console.log(sent)
 	callDocument.messages.push({
 		bmessage: sent.id,
 		umessage: message.id,

@@ -33,7 +33,7 @@ module.exports = async(client, message, args) => {
 		if (toDial && toDial.trim().toLowerCase() === "*rom") toDial = "03015050505";
 		if (toDial === mynumber.number) return message.reply(":thinking: Why are you trying to call yourself?");
 		if (toDial === "*611") {
-			if (!message.channel.type === "dm" && message.guild.id === process.env.SUPPORTGUILD) {
+			if (message.channel.type !== "dm" && message.guild.id == process.env.SUPPORTGUILD) {
 				return message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 			} else {
 				toDial = "08006113835";
