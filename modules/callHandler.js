@@ -1,6 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, callDocument) => {
+	console.log(message.channel.name)
 	let perms = await client.permCheck(message.author.id);
 	let sendChannel;
 	if (message.channel.id === callDocument.to.channelID) {
