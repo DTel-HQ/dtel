@@ -1,5 +1,5 @@
 const { Client } = require("discord.js");
-const ShardUtil = require("./modules/ShardUtil");
+const ShardUtil = require("../modules/ShardUtil");
 const ProcessAsPromised = require("process-as-promised");
 
 module.exports = class client extends Client {
