@@ -8,7 +8,7 @@ module.exports = async(client, msg, args) => {
 	}
 	let account;
 	try {
-		account = await Accounts.findOne({ _id: args });
+		account = await Accounts.findOne({ _id: msg.author.id });
 		if (!account) throw new Error();
 	} catch (err) {
 		await Accounts.create(new Accounts({
