@@ -49,6 +49,6 @@ module.exports = async(client, msg, args) => {
 		content: content,
 	});
 	await mailbox.save();
-	await client.apiSend(content, mailbox._id);
+	await client.apiSend(`You have a new message. To check it, run \`>mailbox messages\``, mailbox._id);
 	msg.reply("Your message was successfully sent.");
 };
