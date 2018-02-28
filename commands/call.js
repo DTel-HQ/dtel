@@ -345,7 +345,7 @@ module.exports = async(client, message, args) => {
 						cmessage.reply(":white_check_mark: You hung up the call.");
 						return collector.stop();
 					}
-					if (cmessage.content.match(/^[0-9]+$/) != null || cmessage.content.includes("-")) {
+					if (!cmessage.content.match(/^[0-9]+$/) || cmessage.content.includes("-")) {
 						cmessage.delete();
 						mainEmbed = await mainEmbed.edit({
 							embed: {
@@ -373,6 +373,7 @@ module.exports = async(client, message, args) => {
 								},
 							},
 						});
+						return;
 					}
 					renewcost = renewrate * parseInt(cmessage.content);
 					if (account && account.balance >= renewcost) {
