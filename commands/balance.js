@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 				title: "Current Account Status",
 				fields: [{
 					name: "Your Balance",
-					value: account.balance,
+					value: `${account.balance}`,
 				},
 				{
 					name: "Recharging",
