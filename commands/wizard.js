@@ -64,7 +64,7 @@ module.exports = async(client, message, args) => {
 		let exists;
 		try {
 			exists = await Numbers.findOne({ number: number });
-			if (!exists) throw new Error();
+			if (exists) throw new Error();
 		} catch (err) {
 			return message.reply("This number is already registered. Please enter another number");
 		}
