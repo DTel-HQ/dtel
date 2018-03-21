@@ -216,8 +216,8 @@ client.on("message", async message => {
 		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
 		if (command == "dial") {
 			command = "call";
-		} else if (command == "rdial") {
-			command = "rcall";
+		} else if (command == "rcall") {
+			command = "rdial";
 		}
 		let commandFile;
 		// Is there a call?
