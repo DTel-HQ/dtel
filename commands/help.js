@@ -36,16 +36,8 @@ module.exports = async(client, message, args) => {
             "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)",
 				},
 				{
-					name: ">refer",
-					value: "DiscordTel's referral program",
-				},
-				{
 					name: ">mailbox",
 					value: "Read your mailbox messages, plus various settings",
-				},
-				{
-					name: ">convert",
-					value: "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)",
 				},
 				{
 					name: ">daily",
