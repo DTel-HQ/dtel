@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 		toGive = 200;
 	}
 	if (!toGive) {
-		let snekres;
+		/*let snekres;
 		try {
 			snekres = await get("https://discordbots.org/api/bots/377609965554237453/votes?onlyids=true").set({ "content-type": "application/json", Authorization: process.env.DBL_ORG_TOKEN });
 		} catch (err) {
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 					toGive = 180;
 				}
 			}
-		}
+		}*/
 	}
 	if (toGive) {
 		account.balance += toGive;
