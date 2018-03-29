@@ -35,6 +35,7 @@ module.exports = new mongoose.Schema({
 	},
 	// Last message timestamp
 	timestamp: Number,
+
 	// Call is active
 	status: {
 		type: Boolean,
@@ -43,5 +44,10 @@ module.exports = new mongoose.Schema({
 	pickedUp: {
 		type: Boolean,
 		default: false,
+	},
+	messages: [new mongoose.Schema({
+		umessage: String,
+		bmessage: String,
+		creator: String,
 	}, { usePushEach: true })],
 }, { usePushEach: true });
