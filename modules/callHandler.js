@@ -25,4 +25,10 @@ module.exports = async(client, message, callDocument) => {
 		creator: message.author.id,
 	});
 	await callDocument.save();
+	setTimeout(async() => {
+		let newcallDocument = await Calls.findOne({ _id: callDocument._id });
+		if (!newcallDocument) return;
+		if (newcallDocument.messages.last() !== callDocument.messages.last()) return;
+
+	});
 };
