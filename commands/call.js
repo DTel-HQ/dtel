@@ -1,4 +1,3 @@
-const MessageBuilder = require("../modules/MessageBuilder");
 const uuidv4 = require("uuid/v4");
 
 // REWRITEN
@@ -542,10 +541,10 @@ module.exports = async(client, message, args) => {
 				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
 				if (!mailbox) throw new Error();
 			} catch (err) {
-				return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+				return client.apiSend(":x: Call ended; their mailbox isn't setup", callDocument.from.channelID);
 			}
-			client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-			client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+			await client.apiSend(`:x: ${mailbox.settings.autoreply}`, callDocument.from.channelID);
+			await client.apiSend(":question: Would you like to leave a message? `>message [number] [message]`", callDocument.from.channelID);
 			await OldCalls.create(new OldCalls(callDocument));
 			await callDocument.remove();
 		}, 120000);
