@@ -33,7 +33,6 @@ module.exports = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
-
 	// Call is active
 	status: {
 		type: Boolean,
