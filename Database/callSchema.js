@@ -33,6 +33,7 @@ module.exports = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+	// Last message timestamp
 	timestamp: Number,
 	// Call is active
 	status: {
