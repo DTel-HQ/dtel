@@ -21,6 +21,7 @@ module.exports = async(client, guild) => {
 	}
 
 	// const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
+	// eslint-disable-next-line no-useless-escape
 	const censorship = guild.name.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
 	try {
 		await client.apiSend(`:inbox_tray: Joined \`${censorship}\` (${guild.id}). Currently in ${client.guilds.size} servers on shard **${client.shard.id}**.`, process.env.LOGSCHANNEL);

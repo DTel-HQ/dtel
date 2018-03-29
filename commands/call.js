@@ -204,6 +204,7 @@ module.exports = async(client, message, args) => {
 									description: "The owner has not set a description.",
 								}));
 							}
+							// eslint-disable-next-line no-useless-escape
 							const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
 							pbentry.description = censorship;
 							await pbentry.save();

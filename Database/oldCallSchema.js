@@ -46,5 +46,9 @@ module.exports = new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
+		time: {
+			type: Date,
+			default: Date.now,
+		},
 	}, { usePushEach: true })],
 }, { usePushEach: true });
