@@ -33,6 +33,16 @@ module.exports = new mongoose.Schema({
 		type: Date,
 		default: Date.now,
 	},
+<<<<<<< HEAD
+<<<<<<< HEAD
+=======
+	timestamp: Number,
+>>>>>>> parent of 3e64daf... Update callSchema.js
+=======
+	// Last message timestamp
+	timestamp: Number,
+
+>>>>>>> 2a9eaec9a098774c98f1126a985805b65b887d82
 	// Call is active
 	status: {
 		type: Boolean,

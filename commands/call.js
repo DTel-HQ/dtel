@@ -530,23 +530,30 @@ module.exports = async(client, message, args) => {
 		client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 		setTimeout(async() => {
 			callDocument = await Calls.findOne({ _id: callDocument._id });
-			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
-			callDocument.status = false;
-			await callDocument.save();
-			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-			client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
-			client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
-			let mailbox;
-			try {
-				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
-				if (!mailbox) throw new Error();
-			} catch (err) {
-				return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+			if (callDocument && !callDocument.pickedUp) {
+				callDocument.status = false;
+				await callDocument.save();
+				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+				client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
+				client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
+				let mailbox;
+				try {
+					mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+					if (!mailbox) throw new Error();
+				} catch (err) {
+					return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+				}
+				client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+				client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				await OldCalls.create(new OldCalls(callDocument));
+				await callDocument.remove();
 			}
-			client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-			client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
-			await OldCalls.create(new OldCalls(callDocument));
-			await callDocument.remove();
+			else if (callDocument && callDocument.pickedUp && callDocument.timestamp < Date.now() - 120000) {
+				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+				client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
+				client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
+				await callDocument.remove();
+			}
 		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");
