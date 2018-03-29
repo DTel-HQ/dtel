@@ -19,6 +19,10 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		sent = await client.apiSend(`**${message.author.tag}** :arrow_right: <:DiscordTelPhone:310817969498226718> ${message.content}`, sendChannel);
 	}
-	callDocument.timestamp = message.createdTimestamp;
+	callDocument.messages.push({
+		bmessage: sent.id,
+		umessage: message.id,
+		creator: message.author.id,
+	});
 	await callDocument.save();
 };
