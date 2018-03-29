@@ -3,7 +3,6 @@ const MessageBuilder = require("../modules/MessageBuilder");
 module.exports = async(client, message, args, callDocument) => {
 	if (callDocument.pickedUp) return;
 	callDocument.pickedUp = true;
-	callDocument.timestamp = message.createdTimestamp;
 	await callDocument.save();
 	message.reply(":white_check_mark: You pick up the call.");
 	let toChannel, fromChannel;
