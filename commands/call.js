@@ -188,27 +188,24 @@ module.exports = async(client, message, args) => {
 							} else if (c2msg.content === "0") {
 								await collector2.stop();
 								return message.reply("Exiting Phonebook.");
+							} else {
+								let pbentry;
+								try {
+									pbentry = await Phonebook.findOne({ _id: mynumber.number });
+								} catch (err) {
+									pbentry = await Phonebook.create(new Phonebook({
+										_id: mynumber.number,
+										channel: mynumber._id,
+										description: "The owner has not set a description.",
+									}));
+								}
+								// eslint-disable-next-line no-useless-escape
+								const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
+								pbentry.description = censorship;
+								await pbentry.save();
+								message.reply("**Registry edited!**");
+								return mainMenu();
 							}
-							if (!c2msg.content) {
-								message.reply("You didn't put a description!");
-								message.reply(`Please type a new description or:\n- Press \`8\` to remove your number from the registry and go back to the main menu;\n- Press \`9\` to back to 411 menu;\n- Press \`0\` to quit 411.`);
-							}
-							let pbentry;
-							try {
-								pbentry = await Phonebook.findOne({ _id: mynumber.number });
-							} catch (err) {
-								pbentry = await Phonebook.create(new Phonebook({
-									_id: mynumber.number,
-									channel: mynumber._id,
-									description: "The owner has not set a description.",
-								}));
-							}
-							// eslint-disable-next-line no-useless-escape
-							const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
-							pbentry.description = censorship;
-							await pbentry.save();
-							message.reply("**Registry edited!**");
-							return mainMenu();
 						});
 						break;
 					}
