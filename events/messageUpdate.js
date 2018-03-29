@@ -26,11 +26,10 @@ module.exports = async(client, oldMessage, newMessage) => {
 	let messageToEdit;
 	try {
 		messageToEdit = callDocument.messages.find(m => m.umessage === oldMessage.id);
-		console.log(messageToEdit)
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
 		// Ignore
-		console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
+		// console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
 	}
 	let toSend;
 	if (perms.donator || oldMessage.author.id === `139836912335716352`) {
