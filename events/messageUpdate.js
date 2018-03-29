@@ -22,9 +22,11 @@ module.exports = async(client, oldMessage, newMessage) => {
 	} else {
 		editChannel = callDocument.to.channelID;
 	}
+	if (newMessage === "") return;
 	let messageToEdit;
 	try {
 		messageToEdit = callDocument.messages.find(m => m.umessage === oldMessage.id);
+		console.log(messageToEdit)
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
 		// Ignore
