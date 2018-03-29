@@ -31,9 +31,9 @@ module.exports = async(client, msg, suffix) => {
 	let phonebookAll, preDial, toDial;
 	try {
 		phonebookAll = await Phonebook.find({});
-		preDial = phonebookAll.entries[Math.floor(Math.random() * phonebookAll.length)];
+		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
 		if (!preDial) throw new Error();
-		toDial = preDial.number;
+		toDial = preDial._id;
 	} catch (err) {
 		return msg.reply("Could not find a number to call.");
 	}
