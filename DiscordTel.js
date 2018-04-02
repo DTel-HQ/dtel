@@ -117,7 +117,7 @@ setInterval(async() => {
 		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
 	} catch (err) {
 		// Notifies Discoin HQ
-		(await client.channels.fetch("348832329525100554")).send("Yo, there might be something wrong with the Discoin API.");
+		await client.apiSend("Yo, there might be something wrong with the Discoin API.", "348832329525100554");
 	}
 	if (snekres) {
 		for (let t of snekres.body) {
