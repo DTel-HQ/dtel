@@ -30,7 +30,10 @@ module.exports = async(client, guild) => {
 					shard_id: client.shard.id,
 					shard_count: client.shard.count,
 					server_count: client.guilds.size,
-				});
+				})
+				.then(r => { if (!r.body.includes("sun")) {
+					client.user.setActivity(`${r.body} servers | ${process.env.PREFIX}help`);
+				}});
 		} catch (err) {
 			console.log(`[Shard ${client.shard.id}] Failed to post to private glitch server`, err);
 		}
