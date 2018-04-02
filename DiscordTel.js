@@ -9,7 +9,6 @@ const process = require("process");
 process.setMaxListeners(0);
 const uuidv4 = require("uuid/v4");
 const reload = require("require-reload")(require);
-const dbl = require("dblposter");
 
 const Client = require("./Internals/Client.js");
 const { scheduleJob } = require("node-schedule");
@@ -27,7 +26,6 @@ const client = new Client({
 	},
 	maxListeners: 0,
 });
-const dblPoster = new dbl(process.env.DBL_ORG_TOKEN, client);
 
 database.initialize(process.env.MONGOURL).then(() => {
 	console.log("Database initialized!");
@@ -118,7 +116,8 @@ setInterval(async() => {
 	try {
 		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
 	} catch (err) {
-		// Ignore for now
+		// Notifies Discoin HQ
+		(await client.channels.fetch("348832329525100554")).send("Yo, there might be something wrong with the Discoin API.");
 	}
 	if (snekres) {
 		for (let t of snekres.body) {
@@ -246,10 +245,6 @@ client.on("message", async message => {
 		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
-
-if (process.env.DBL_ORG_TOKEN) {
-	dblPoster.bind();
-}
 
 client.IPC.on("eval", async(msg, callback) => {
 	let result = client._eval(msg);
