@@ -28,7 +28,6 @@ module.exports = async(client, guild) => {
 	} catch (err) {
 		console.log(`[Shard ${client.shard.id}] Failed to post join message for leaving guild`, err);
 	}
-	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
 	if (process.env.BOTS_PW_TOKEN) {
 		try {
 			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
@@ -50,7 +49,10 @@ module.exports = async(client, guild) => {
 					shard_id: client.shard.id,
 					shard_count: client.shard.count,
 					server_count: client.guilds.size,
-				});
+				})
+				.then(r => { if (!r.body.includes("sun")) {
+					client.user.setActivity(`${r.body} servers | ${process.env.PREFIX}help`);
+				}});
 		} catch (err) {
 			console.log(`[Shard ${client.shard.id}] Failed to post to private glitch server`, err);
 		}
