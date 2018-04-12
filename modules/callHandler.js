@@ -29,7 +29,7 @@ module.exports = async(client, message, callDocument) => {
 	setTimeout(async() => {
 		let newcallDocument = await Calls.findOne({ _id: callDocument._id });
 		if (!newcallDocument) return;
-		if (new Date(newcallDocument.messages[newcallDocument.messages.length - 1].time).now - new Date(callDocument.messages[callDocument.messages.length - 1].time).now <= 120000) return;
+		if (newcallDocument.messages[newcallDocument.messages.length - 1].time - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
 		newcallDocument.status = false;
 		await newcallDocument.save();
 		message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
