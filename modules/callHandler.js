@@ -23,12 +23,13 @@ module.exports = async(client, message, callDocument) => {
 		bmessage: sent.id,
 		umessage: message.id,
 		creator: message.author.id,
+		time: message.createdTimestamp
 	});
 	await callDocument.save();
 	setTimeout(async() => {
 		let newcallDocument = await Calls.findOne({ _id: callDocument._id });
 		if (!newcallDocument) return;
-		if (new Date(newcallDocument.messages[newcallDocument.messages.length - 1].time).now - new Date(callDocument.messages[callDocument.messages.length - 1].time).now !== 0) return;
+		if (Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
 
 		newcallDocument.status = false;
 		await newcallDocument.save();
@@ -37,5 +38,5 @@ module.exports = async(client, message, callDocument) => {
 		client.apiSend(`:telephone: The call between channel ${newcallDocument.from.channelID} and channel ${newcallDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
 		await OldCalls.create(new OldCalls(callDocument));
 		await newcallDocument.remove();
-	}, 20000);
+	}, 120000);
 };
