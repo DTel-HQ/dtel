@@ -15,7 +15,7 @@ module.exports = async(client, oldMessage, newMessage) => {
 			return;
 		}
 	}
-	if (!callDocument && callDocument.pickedUp === false) return;
+	if (!callDocument && callDocument.status === false) return;
 	let editChannel;
 	if (callDocument.to.channelID === oldMessage.channel.id) {
 		editChannel = callDocument.from.channelID;
