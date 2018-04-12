@@ -528,8 +528,6 @@ module.exports = async(client, message, args) => {
 		setTimeout(async() => {
 			callDocument = await Calls.findOne({ _id: callDocument._id });
 			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
-			callDocument.status = false;
-			await callDocument.save();
 			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 			client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
 			client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
