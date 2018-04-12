@@ -51,9 +51,6 @@ module.exports = new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
 		creator: String,
-		time: {
-			type: Date,
-			default: new Date(),
-		},
+		time: Number
 	}, { usePushEach: true })],
 }, { usePushEach: true });
