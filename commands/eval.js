@@ -1,4 +1,5 @@
-const { post } = require("snekfetch");
+const { post } = require("snekfetch"),
+      code = 1;
 
 module.exports = async(client, message, args) => {
 	const perms = await client.permCheck(message.author.id);
@@ -101,7 +102,7 @@ module.exports = async(client, message, args) => {
 				title: ":x: Error",
 				description: "You do not have permission to execute this command.",
 				footer: {
-					text: "DTelHell",
+					text: "Don't try me!",
 				},
 			},
 		});
