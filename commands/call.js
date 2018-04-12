@@ -454,7 +454,7 @@ module.exports = async(client, message, args) => {
 		try {
 			toDialDocument = await Numbers.findOne({ number: toDial.trim() });
 			// Comment from Vlad: China™ fix right here
-			if (!toDialDocument && toDial !== "*411" && toDial !== "*233") throw new Error();
+			if (!toDialDocument && toDial !== "*411" && toDial !== "*233" && toDial.trim().toLowerCase() !== "*rom") throw new Error();
 		} catch (err) {
 			return message.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 		}
