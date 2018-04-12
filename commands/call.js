@@ -541,7 +541,7 @@ module.exports = async(client, message, args) => {
 			await client.apiSend(`:x: ${mailbox.settings.autoreply}`, callDocument.from.channelID);
 			await client.apiSend(":question: Would you like to leave a message? `>message [number] [message]`", callDocument.from.channelID);
 			await OldCalls.create(new OldCalls(callDocument));
-			await callDocument.remove();
+			callDocument.remove();
 		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");
