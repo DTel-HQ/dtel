@@ -14,6 +14,7 @@ module.exports = async(client, message, args, callDocument) => {
 	}
 	if (!toChannel || !fromChannel) {
 		callDocument.status = false;
+		callDocument.now = Date.now;
 		await callDocument.save();
 		return message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
 	}
