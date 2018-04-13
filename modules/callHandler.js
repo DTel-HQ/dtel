@@ -27,11 +27,13 @@ module.exports = async(client, message, callDocument) => {
 	});
 	await callDocument.save();
 	setTimeout(async() => {
-		if (Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
+		let newcallDocument = await Calls.findOne({ _id: callDocument._id });
+		if (!newcallDocument) return;
+		else if (Date.now() - newcallDocument.messages[callDocument.messages.length - 1].time <= 115000) return;
 		message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 		client.apiSend(":x: This call has expired (2 minutes).", newcallDocument.to.channelID);
 		client.apiSend(`:telephone: The call between channel ${newcallDocument.from.channelID} and channel ${newcallDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
-		callDocument.remove();
-		await OldCalls.create(new OldCalls(callDocument));
+		await newcallDocument.remove();
+		await OldCalls.create(new OldCalls(newcallDocument));
 	}, 120000);
 };
