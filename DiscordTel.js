@@ -113,6 +113,14 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 // Temporary solution of expiring calls
 setInterval(async() => {
 	let allCalls = Calls.find({});
+	for (let c of allCalls) {
+		if (Date.now() - c.messages[c.messages.length - 1].time >= 120000) {
+			client.apiSend(":negative_squared_cross_mark: This call has expired (2 minutes). \*", c.to.channelID);
+			client.apiSend(":x: This call has expired (2 minutes). \*", c.to.channelID);
+			client.apiSend(`:telephone: The call between channel ${c.from.channelID} and channel ${c.to.channelID} has expired. \*`, process.env.LOGSCHANNEL);
+			await c.remove();
+		}
+	}
 }, 300000);
 
 // Discoin grabber
