@@ -110,11 +110,6 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 	await client.apiSend(`:white_check_mark: The lottery and daily credits have been reset!`, process.env.LOGSCHANNEL);
 });
 
-// Temporary solution of expiring calls
-setInterval(async() => {
-	let allCalls = Calls.find({});
-}, 300000);
-
 // Discoin grabber
 setInterval(async() => {
 	let snekres;
