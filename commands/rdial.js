@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	let phonebookAll, preDial, toDial;
 	try {
 		phonebookAll = await Phonebook.find({});
-		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
+		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)].filter(p => Numbers.findOne({ number: p._id}));
 		if (!preDial) throw new Error();
 		toDial = preDial._id;
 	} catch (err) {
@@ -44,12 +44,14 @@ module.exports = async(client, msg, suffix) => {
 		if (!toDialDocument) throw new Error();
 	} catch (err) {
 		return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
+		await preDial.remove();
 	}
 	if (mynumber.expired) {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
 	if (toDialDocument && !client.api.channels(toDialDocument._id).get()) {
 		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
+		await preDial.remove();
 	}
 	let dialedInCall;
 	try {
