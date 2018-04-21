@@ -10,7 +10,6 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		message.reply("Error! Please contact a bot developer.");
 	}
-	clearInterval();
 	message.content = message.content.replace(/@(everyone|here)/g, `@­$1`);
 	let sent;
 	if (perms.donator || message.author.id === `139836912335716352`) {
@@ -27,8 +26,8 @@ module.exports = async(client, message, callDocument) => {
 		time: message.createdTimestamp
 	});
 	await callDocument.save();
-	setInterval(() => {
-		if (Calls.findOne({ _id: callDocument._id }) === null || Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) clearInterval();
+	var rem = setInterval(() => {
+		if (Calls.findOne({ _id: callDocument._id }) === null || Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) clearInterval(rem);
 		else {
 			client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.from.channelID);
 			client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.to.channelID);
