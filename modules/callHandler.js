@@ -10,6 +10,7 @@ module.exports = async(client, message, callDocument) => {
 	} else {
 		message.reply("Error! Please contact a bot developer.");
 	}
+	clearInterval();
 	message.content = message.content.replace(/@(everyone|here)/g, `@­$1`);
 	let sent;
 	if (perms.donator || message.author.id === `139836912335716352`) {
@@ -26,14 +27,10 @@ module.exports = async(client, message, callDocument) => {
 		time: message.createdTimestamp
 	});
 	await callDocument.save();
-	setTimeout(async() => {
-		let newcallDocument = await Calls.findOne({ _id: callDocument._id });
-		if (!newcallDocument) return;
-		else if (Date.now() - newcallDocument.messages[callDocument.messages.length - 1].time <= 115000) return;
-		message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-		client.apiSend(":x: This call has expired (2 minutes).", newcallDocument.to.channelID);
-		client.apiSend(`:telephone: The call between channel ${newcallDocument.from.channelID} and channel ${newcallDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
-		await newcallDocument.remove();
-		await OldCalls.create(new OldCalls(newcallDocument));
-	}, 120000);
+	setInterval(async() => {
+		if (!callDocument) return;
+		else if (Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
+		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.from.channelID);
+		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.to.channelID);
+	}, 300000);
 };

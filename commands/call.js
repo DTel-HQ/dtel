@@ -530,6 +530,7 @@ module.exports = async(client, message, args) => {
 			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
 			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 			client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
+			await callDocument.remove();
 			client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
 			let mailbox;
 			try {
@@ -541,7 +542,6 @@ module.exports = async(client, message, args) => {
 			await client.apiSend(`:x: ${mailbox.settings.autoreply}`, callDocument.from.channelID);
 			await client.apiSend(":question: Would you like to leave a message? `>message [number] [message]`", callDocument.from.channelID);
 			await OldCalls.create(new OldCalls(callDocument));
-			callDocument.remove();
 		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");
