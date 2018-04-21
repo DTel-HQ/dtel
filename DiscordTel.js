@@ -44,15 +44,6 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 			await n.save();
 		}
 	}
-	let phonebookAll = await Phonebook.find({});
-	for (const i of phonebookAll) {
-		let channel;
-		try {
-			channel = await client.api.channels(i.channel).get();
-		} catch (err) {
-			await i.remove();
-		}
-	}
 });
 
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => {
@@ -106,8 +97,19 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 			active: true,
 		}));
 	}
-
 	await client.apiSend(`:white_check_mark: The lottery and daily credits have been reset!`, process.env.LOGSCHANNEL);
+	// Cleaning phonebook
+	let phonebookAll = await Phonebook.find({});
+	for (const i of phonebookAll) {
+		let channel;
+		let number;
+		try {
+			channel = await client.api.channels(i.channel).get();
+			number = await Numbers.find({ number: i._id });
+		} catch (err) {
+			await i.remove();
+		}
+	}
 });
 
 // Discoin grabber
