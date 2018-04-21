@@ -27,7 +27,7 @@ module.exports = async(client, message, callDocument) => {
 		time: message.createdTimestamp
 	});
 	await callDocument.save();
-	setInterval(async() => {
+	setInterval(() => {
 		if (Calls.findOne({ _id: callDocument._id }) === null || Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
 		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.from.channelID);
 		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.to.channelID);
