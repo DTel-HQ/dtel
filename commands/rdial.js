@@ -30,8 +30,8 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let phonebookAll, preDial, toDial;
 	try {
-		phonebookAll = await Phonebook.find({});
-		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)].filter(p => Numbers.findOne({ number: p._id}));
+		phonebookAll = await Phonebook.find({}).filter(p => Numbers.findOne({ number: p._id}) !== null);
+		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
 		if (!preDial) throw new Error();
 		toDial = preDial._id;
 	} catch (err) {
