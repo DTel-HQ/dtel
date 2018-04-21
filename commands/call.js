@@ -526,22 +526,21 @@ module.exports = async(client, message, args) => {
 		);
 		client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 		setTimeout(async() => {
-			callDocument = await Calls.findOne({ _id: callDocument._id });
-			if (!callDocument || (callDocument && callDocument.pickedUp)) return;
-			message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-			client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
-			await callDocument.remove();
-			client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
-			let mailbox;
-			try {
-				mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
-				if (!mailbox) throw new Error();
-			} catch (err) {
-				return client.apiSend(":x: Call ended; their mailbox isn't setup", callDocument.from.channelID);
+			if (Calls.findOne({ _id: callDocument._id }) !== null && !callDocument.pickedUp)) {
+				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+				client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
+				await callDocument.remove();
+				client.apiSend(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`, process.env.LOGSCHANNEL);
+				let mailbox;
+				try {
+					mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+					if (!mailbox) throw new Error();
+				} catch (err) {
+					return client.apiSend(":x: Call ended; their mailbox hasn't been set up.", callDocument.from.channelID);
+				}
+				await client.apiSend(`:x: ${mailbox.settings.autoreply} \n:question: Would you like to leave a message? \`>message ${callDocument.to.number} [message]\``, callDocument.from.channelID);
+				await OldCalls.create(new OldCalls(callDocument));
 			}
-			await client.apiSend(`:x: ${mailbox.settings.autoreply}`, callDocument.from.channelID);
-			await client.apiSend(":question: Would you like to leave a message? `>message [number] [message]`", callDocument.from.channelID);
-			await OldCalls.create(new OldCalls(callDocument));
 		}, 120000);
 	} else {
 		message.reply("Please specify a number to call");
