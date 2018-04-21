@@ -30,7 +30,7 @@ module.exports = async(client, message, callDocument) => {
 	setInterval(async() => {
 		if (!callDocument) return;
 		else if (Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
-		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.from.channelID);
-		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.to.channelID);
+		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.from.channelID);
+		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", callDocument.to.channelID);
 	}, 300000);
 };
