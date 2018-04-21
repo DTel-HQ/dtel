@@ -1,6 +1,5 @@
 const uuidv4 = require("uuid/v4");
 
-// REWRITEN
 module.exports = async(client, message, args) => {
 	let mynumber;
 	try {
@@ -30,6 +29,18 @@ module.exports = async(client, message, args) => {
 		return message.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 	} else if (toDial) {
 		if (toDial && toDial.trim().toLowerCase() === "*rom") toDial = "03015050505";
+		toDial = toDial.replace(/(a|b|c)/ig, "2")
+			.replace(/(d|e|f)/ig, "3")
+			.replace(/(g|h|i)/ig, "4")
+			.replace(/(j|k|l)/ig, "5")
+			.replace(/(m|n|o)/ig, "6")
+			.replace(/(p|q|r|s)/ig, "7")
+			.replace(/(t|u|v)/ig, "8")
+			.replace(/(w|x|y|z)/ig, "9")
+			.replace(/-/ig, "")
+			.replace("(", "")
+			.replace(")", "")
+			.replace(/\s+/g, "");
 		if (toDial === mynumber.number) return message.reply(":thinking: Why are you trying to call yourself?");
 		if (toDial === "*611") {
 			if (message.channel.type !== "dm" && message.guild.id == process.env.SUPPORTGUILD) {
@@ -437,18 +448,6 @@ module.exports = async(client, message, args) => {
 				});
 			}
 		}
-		toDial = toDial.replace(/(a|b|c)/ig, "2")
-			.replace(/(d|e|f)/ig, "3")
-			.replace(/(g|h|i)/ig, "4")
-			.replace(/(j|k|l)/ig, "5")
-			.replace(/(m|n|o)/ig, "6")
-			.replace(/(p|q|r|s)/ig, "7")
-			.replace(/(t|u|v)/ig, "8")
-			.replace(/(w|x|y|z)/ig, "9")
-			.replace(/-/ig, "")
-			.replace("(", "")
-			.replace(")", "")
-			.replace(/\s+/g, "");
 		if (toDial === "*411" || toDial === "*233") return;
 		let toDialDocument;
 		try {
