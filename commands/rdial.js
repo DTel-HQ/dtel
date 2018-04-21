@@ -39,14 +39,11 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let toDialDocument;
 	try {
-		toDialDocument = await Numbers.findOne({ number: toDial.trim() });
+		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		// Comment from Vlad: China™ fix right here
 		if (!toDialDocument) throw new Error();
 	} catch (err) {
 		return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
-	}
-	if (toDialDocument.expired) {
-		return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
 	}
 	if (mynumber.expired) {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
@@ -110,6 +107,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		})
 	);
+	await msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
 	await client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 	setTimeout(async() => {
 		callDocument = await Calls.findOne({ _id: callDocument._id });
