@@ -1,7 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
-function findNumber() {
+async function findNumber() {
 	let phonebookAll, preDial, toDial, toDialDocument;
 	phonebookAll = await Phonebook.find({});
 	preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
