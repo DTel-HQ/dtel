@@ -1,6 +1,17 @@
 const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
+function findNumber() {
+	let phonebookAll, preDial, toDial, toDialDocument;
+	phonebookAll = await Phonebook.find({});
+	preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
+	if (!preDial) throw new Error();
+	toDial = preDial._id;
+	toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
+	if (!toDialDocument) return findNumber();
+	else return toDialDocument;
+}
+
 module.exports = async(client, msg, suffix) => {
 	let mynumber;
 	try {
@@ -28,23 +39,10 @@ module.exports = async(client, msg, suffix) => {
 	if (!mynumber) {
 		return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 	}
-	let phonebookAll, preDial, toDial;
 	try {
-		phonebookAll = await Phonebook.find({});
-		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
-		if (!preDial) throw new Error();
-		toDial = preDial._id;
+		findNumber();
 	} catch (err) {
 		return msg.reply("Could not find a number to call.");
-	}
-	let toDialDocument;
-	try {
-		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
-		// Comment from Vlad: China™ fix right here
-		if (!toDialDocument) throw new Error();
-	} catch (err) {
-		return msg.reply(":x: Dialing error: Requested number `"+toDial.trim()+"` does not exist. Call `*411` to check numbers.");
-		await preDial.remove();
 	}
 	if (mynumber.expired) {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
