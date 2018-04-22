@@ -31,7 +31,6 @@ module.exports = async(client, msg, suffix) => {
 	let phonebookAll, preDial, toDial;
 	try {
 		phonebookAll = await Phonebook.find({});
-		phonebookAll = phonebookAll.filter(p => await Numbers.findOne({ number: p._id}) !== null);
 		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
 		if (!preDial) throw new Error();
 		toDial = preDial._id;
@@ -44,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 		// Comment from Vlad: China™ fix right here
 		if (!toDialDocument) throw new Error();
 	} catch (err) {
-		return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
+		return msg.reply(":x: Dialing error: Requested number `"+toDial.trim()+"` does not exist. Call `*411` to check numbers.");
 		await preDial.remove();
 	}
 	if (mynumber.expired) {
