@@ -19,11 +19,11 @@ module.exports = async(client, message, args, callDocument) => {
 	}
 	await client.apiSend(":heavy_check_mark: The other side picked up!", callDocument.from.channelID);
 	await client.apiSend(`:white_check_mark: The call between channel ${toChannel.id} and channel ${fromChannel.id}} was picked up by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
-	setInterval(async() => {
-		if (!callDocument) return;
-		else if (Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) return;
-		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.from.channelID);
-		client.apiSend(":bulb: Reminder: You still have an ongoing call. You can type `>hangup` to end it.", newcallDocument.to.channelID);
+	var rem = setInterval(() => {
+		if (await Calls.findOne({ _id: callDocument._id }) === null || Date.now() - callDocument.messages[callDocument.messages.length - 1].time <= 120000) clearInterval(rem);
+		else {
+			client.apiSend(":bulb: Reminder: You still have an ongoing call ("+callDocument._id+"). You can type `>hangup` to end it.", callDocument.from.channelID);
+			client.apiSend(":bulb: Reminder: You still have an ongoing call ("+callDocument._id+"). You can type `>hangup` to end it.", callDocument.to.channelID);
+		}
 	}, 300000);
-
 };
