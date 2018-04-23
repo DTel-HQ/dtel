@@ -225,13 +225,31 @@ client.on("message", async message => {
 			try {
 				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
-				// Ignore
+				message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
+						},
+					},
+				});
 			}
 		} else {
 			try {
 				commandFile = reload(`./commands/${command}.js`);
 			} catch (err) {
-				// Ignore
+				message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
+						},
+					},
+				});
 			}
 		}
 		// If so, run it
@@ -239,7 +257,16 @@ client.on("message", async message => {
 			try {
 				return commandFile(client, message, args, callDocument);
 			} catch (err) {
-				console.log(err);
+				message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
+						},
+					},
+				});
 			}
 		}
 	} else if (callDocument && callDocument.status && callDocument.pickedUp && !message.author.bot) {
