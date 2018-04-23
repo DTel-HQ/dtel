@@ -2,7 +2,7 @@ const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
 module.exports = async(client, msg, suffix) => {
-	async function findNumber() {
+	async function findNumber(msg) {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
 		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
@@ -10,13 +10,14 @@ module.exports = async(client, msg, suffix) => {
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		if (!client.api.channels(toDialDocument._id).get()) await preDial.remove();
-		if (!toDialDocument || toDialDocument.number === "08006113835") return findNumber();
+		if (!toDialDocument || toDial === "08006113835") return findNumber();
 		else if (!client.api.channels(toDialDocument._id).get()) {
 			await preDial.remove();
 			return findNumber();
 		}
 		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
 		if (dialedInCall) return findNumber();
+		if (!toDialDocument) msg.reply("Issue arose!");
 		return toDialDocument;
 	}
 	let mynumber;
@@ -49,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
 	try {
-		findNumber().then(async(toDialDocument) => {
+		findNumber(msg).then(async(toDialDocument) => {
 			let callDocument = Calls.create(
 				new Calls({
 					_id: uuidv4(),
