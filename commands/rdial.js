@@ -2,13 +2,14 @@ const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
 async function findNumber() {
-	let phonebookAll, preDial, toDial, toDialDocument;
+	let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 	phonebookAll = await Phonebook.find({});
 	preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
 	if (!preDial) throw new Error();
 	toDial = preDial._id;
 	toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
-	if (!toDialDocument) findNumber();
+	dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
+	if (!toDialDocument || dialedInCall) findNumber();
 	else return toDialDocument;
 }
 
@@ -39,32 +40,18 @@ module.exports = async(client, msg, suffix) => {
 	if (!mynumber) {
 		return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
 	}
-	try {
-		findNumber();
-	} catch (err) {
-		return msg.reply("Could not find a number to call.");
-	}
 	if (mynumber.expired) {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
+	}
+	let toDialDocument;
+	try {
+		toDialDocument = findNumber();
+	} catch (err) {
+		return msg.reply("Could not find a number to call.");
 	}
 	if (toDialDocument && !client.api.channels(toDialDocument._id).get()) {
 		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 		await preDial.remove();
-	}
-	let dialedInCall;
-	try {
-		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
-		if (!dialedInCall) throw new Error();
-	} catch (err) {
-		try {
-			dialedInCall = await Calls.findOne({ "from.channelID": toDialDocument._id });
-			if (!dialedInCall) throw new Error();
-		} catch (err2) {
-			// Ignore
-		}
-	}
-	if (dialedInCall) {
-		return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
 	}
 	if (toDial === "08006113835") {
 		let guild = client.guilds.get(process.env.SUPPORTGUILD);
