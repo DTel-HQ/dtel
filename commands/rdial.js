@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
-		if (!toDialDocument || dialedInCall) findNumber();
+		if (!toDialDocument || dialedInCall || !client.api.channels(toDialDocument._id).get() || toDialDocument.number === "08006113835") findNumber();
 		else return toDialDocument;
 	}
 	let mynumber;
@@ -42,77 +42,47 @@ module.exports = async(client, msg, suffix) => {
 	if (mynumber.expired) {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
-	let toDialDocument;
 	try {
-		findNumber().then(a => toDialDocument = a);
+		findNumber().then(toDialDocument => {
+			let callDocument = await Calls.create(
+				new Calls({
+					_id: uuidv4(),
+					to: {
+						channelID: toDialDocument._id,
+						number: toDialDocument.number,
+						guild: toDialDocument.guild,
+					},
+					from: {
+						channelID: msg.channel.id,
+						number: mynumber.number,
+						guild: msg.guild.id,
+					},
+				})
+			);
+			await msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
+			await client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
+			setTimeout(async() => {
+				callDocument = await Calls.findOne({ _id: callDocument._id });
+				if (callDocument.pickedUp) return;
+				callDocument.status = false;
+				await callDocument.save();
+				msg.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
+				client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
+				client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
+				let mailbox;
+				try {
+					mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
+					if (!mailbox) throw new Error();
+				} catch (err) {
+					return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
+				}
+				client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
+				client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
+				await OldCalls.create(new OldCalls(callDocument));
+				await callDocument.remove();
+			}, 120000);
+		});
 	} catch (err) {
 		return msg.reply("Could not find a number to call.");
 	}
-	if (toDialDocument && !client.api.channels(toDialDocument._id).get()) {
-		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
-		await preDial.remove();
-	}
-	if (toDial === "08006113835") {
-		let guild = client.guilds.get(process.env.SUPPORTGUILD);
-		if (guild) {
-			let customerSupport = guild.roles.get(process.env.SUPPORTROLE);
-			customerSupport.setMentionable(true);
-			await client.channels.get(toDialDocument._id).send(client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).toString());
-			customerSupport.setMentionable(false);
-		} else {
-			// Everything past this is Vlad's fault. Blame him if it borks
-			try {
-				await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
-					data: {
-						mentionable: true,
-					},
-				});
-				await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
-				await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
-					data: {
-						mentionable: false,
-					},
-				});
-			} catch (err) {
-				// Ignore
-			}
-		}
-	}
-	let callDocument = await Calls.create(
-		new Calls({
-			_id: uuidv4(),
-			to: {
-				channelID: toDialDocument._id,
-				number: toDialDocument.number,
-				guild: toDialDocument.guild,
-			},
-			from: {
-				channelID: msg.channel.id,
-				number: mynumber.number,
-				guild: msg.guild.id,
-			},
-		})
-	);
-	await msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
-	await client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
-	setTimeout(async() => {
-		callDocument = await Calls.findOne({ _id: callDocument._id });
-		if (callDocument.pickedUp) return;
-		callDocument.status = false;
-		await callDocument.save();
-		msg.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
-		client.channels.get(callDocument.to.channelID).send(":x: This call has expired (2 minutes).");
-		client.channels.get(process.env.LOGSCHANNEL).send(`:telephone: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} has expired.`);
-		let mailbox;
-		try {
-			mailbox = await Mailbox.findOne({ _id: toDialDocument._id });
-			if (!mailbox) throw new Error();
-		} catch (err) {
-			return client.channels.get(callDocument.from.channelID).send(":x: Call ended; their mailbox isn't setup");
-		}
-		client.channels.get(callDocument.from.channelID).send(`:x: ${mailbox.settings.autoreply}`);
-		client.channels.get(callDocument.from.channelID).send(":question: Would you like to leave a message? `>message [number] [message]`");
-		await OldCalls.create(new OldCalls(callDocument));
-		await callDocument.remove();
-	}, 120000);
 };
