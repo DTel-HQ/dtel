@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
 		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
-		if (!preDial) throw new Error();
+		if (!preDial) findNumber();
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
