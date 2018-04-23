@@ -2,7 +2,6 @@ const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
 module.exports = async(client, msg, suffix) => {
-	process.on("unhandledRejection", (p, r) => msg.reply(p+", loc: "+r));
 	async function findNumber() {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
