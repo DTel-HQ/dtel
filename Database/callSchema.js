@@ -42,6 +42,11 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	// 5-min Reminder check
+	lastReminder: {
+		type: Number,
+		default: Date.now()
+	},
 	messages: [new mongoose.Schema({
 		umessage: String,
 		bmessage: String,
