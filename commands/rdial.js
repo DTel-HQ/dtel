@@ -8,7 +8,7 @@ async function findNumber() {
 	if (!preDial) throw new Error();
 	toDial = preDial._id;
 	toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
-	if (!toDialDocument) return findNumber();
+	if (!toDialDocument) findNumber();
 	else return toDialDocument;
 }
 
