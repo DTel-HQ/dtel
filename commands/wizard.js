@@ -26,7 +26,8 @@ module.exports = async(client, message, args) => {
 	} else if (!message.member.hasPermission("MANAGE_GUILD")) {
 		return message.reply("Self-assign wizard can only be run with a member that has Manage Server permission.");
 	} else {
-		message.reply(`Please read the following before proceeding.\n\`\`\`diff\n+ By going through the wizard you'll enable DiscordTel service in THIS channel.\n- You are required to read and fully understand the documentation, including important payment information which is required to renew your number. The documentation is available at http://discordtel.rtfd.io.\n+ Your usage in the current calendar month is free.\n- Any abuse on our system will cause termination of service.\n+ This wizard cannot register 0800/0844 numbers. For registration on special numbers, dial *611.\n\`\`\`\nPlease enter the number you wish to enable in <#${message.channel.id}>. The number must start with \`${process.env.CPREFIX}\` followed by another 7 digits. Type \`0\` to quit the wizard.`);
+		let prefix = (client.shard.id + 1).toString();
+		message.reply(`Please read the following before proceeding.\n\`\`\`diff\n+ By going through the wizard you'll enable DiscordTel service in THIS channel.\n- You are required to read and fully understand the documentation, including important payment information which is required to renew your number. The documentation is available at http://discordtel.rtfd.io.\n+ Your usage in the current calendar month is free.\n- Any abuse on our system will cause termination of service.\n+ This wizard cannot register 0800/0844 numbers. For registration on special numbers, dial *611.\n\`\`\`\nPlease enter the number you wish to enable in <#${message.channel.id}>. The number must start with \`030${prefix}\` followed by another 7 digits. Type \`0\` to quit the wizard.`);
 	}
 
 	let collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
@@ -43,7 +44,8 @@ module.exports = async(client, message, args) => {
 			.replace(/-/ig, "")
 			.replace("(", "")
 			.replace(")", "")
-			.replace(/\s+/g, "");
+			.replace(/\s+/g, ""),
+		    prefix = (client.shard.id + 1).toString();
 		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
@@ -56,17 +58,17 @@ module.exports = async(client, message, args) => {
 			if (number.length !== 11) {
 				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			}
-		} else if (!number.startsWith("0301")) {
-			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+		} else if (!number.startsWith("030"+prefix)) {
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `030"+prefix+"` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		} else if (number.length !== 11) {
-			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0301` followed by 7 digits (11 digits altogether). Type `0` to quit");
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `030"+prefix+"` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		}
 		let exists;
 		try {
 			exists = await Numbers.findOne({ number: number });
 			if (exists) throw new Error();
 		} catch (err) {
-			return message.reply("This number is already registered. Please enter another number");
+			return message.reply("This number is already registered. Please enter another number.");
 		}
 		const expiryDate = new Date();
 		expiryDate.setMonth(expiryDate.getMonth() + 1);
