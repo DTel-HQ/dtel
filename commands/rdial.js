@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
 		if (dialedInCall) return findNumber();
-		if (!toDialDocument) msg.reply("Issue arose!");
+		process.on("unhandledRejection", (p, r) => msg.reply(p+", loc: "+r));
 		return toDialDocument;
 	}
 	let mynumber;
