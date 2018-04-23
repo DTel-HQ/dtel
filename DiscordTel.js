@@ -14,6 +14,7 @@ const Client = require("./Internals/Client.js");
 const { scheduleJob } = require("node-schedule");
 const { get } = require("snekfetch");
 
+const fs = require("fs");
 const database = require("./Database/database");
 
 const client = new Client({
@@ -240,7 +241,7 @@ client.on("message", async message => {
 			try {
 				commandFile = reload(`./commands/${command}.js`);
 			} catch (err) {
-				message.channel.send({
+				if (fs.existsSync(`./commands/${command}.js`)) message.channel.send({
 					embed: {
 						color: 0xFF0000,
 						title: "Catastrophic oof",
@@ -257,7 +258,7 @@ client.on("message", async message => {
 			try {
 				return commandFile(client, message, args, callDocument);
 			} catch (err) {
-				message.channel.send({
+				if (fs.existsSync(`./commands/${command}.js`)) message.channel.send({
 					embed: {
 						color: 0xFF0000,
 						title: "Catastrophic oof",
