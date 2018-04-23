@@ -2,12 +2,6 @@ const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
 module.exports = async(client, msg, suffix) => {
-	process.on('uncaughtException', (err) => {
-		msg.reply(`Caught exception: \n\`\`\`js\n${err}\n\`\`\``);
-	});
-	process.on('unhandledRejection', (p, err) => {
-		msg.reply(`Caught rejection @ ${p}: \n\`\`\`js\n${err}\n\`\`\``);
-	});
 	async function findNumber() {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
@@ -16,6 +10,7 @@ module.exports = async(client, msg, suffix) => {
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
+		if (!client.api.channels(toDialDocument._id).get()) await preDial.remove();
 		if (!toDialDocument || dialedInCall || !client.api.channels(toDialDocument._id).get() || toDialDocument.number === "08006113835") findNumber();
 		else return toDialDocument;
 	}
