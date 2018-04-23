@@ -1,19 +1,18 @@
 const MessageBuilder = require("../modules/MessageBuilder.js");
 const uuidv4 = require("uuid/v4");
 
-async function findNumber() {
-	let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
-	phonebookAll = await Phonebook.find({});
-	preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
-	if (!preDial) throw new Error();
-	toDial = preDial._id;
-	toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
-	dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
-	if (!toDialDocument || dialedInCall) findNumber();
-	else return toDialDocument;
-}
-
 module.exports = async(client, msg, suffix) => {
+	async function findNumber() {
+		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
+		phonebookAll = await Phonebook.find({});
+		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
+		if (!preDial) throw new Error();
+		toDial = preDial._id;
+		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
+		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
+		if (!toDialDocument || dialedInCall) findNumber();
+		else return toDialDocument;
+	}
 	let mynumber;
 	try {
 		mynumber = await Numbers.findOne({ _id: msg.channel.id });
