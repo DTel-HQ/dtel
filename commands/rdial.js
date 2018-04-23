@@ -6,13 +6,14 @@ module.exports = async(client, msg, suffix) => {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
 		preDial = phonebookAll[Math.floor(Math.random() * phonebookAll.length)];
-		if (!preDial) return findNumber();
+		if (!preDial) throw new Error();
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
-		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
 		if (!client.api.channels(toDialDocument._id).get()) await preDial.remove();
-		if (!toDialDocument || dialedInCall || !client.api.channels(toDialDocument._id).get() || toDialDocument.number === "08006113835") findNumber();
-		else return toDialDocument;
+		if (!toDialDocument || !client.api.channels(toDialDocument._id).get() || toDialDocument.number === "08006113835") return findNumber();
+		dialedInCall = await Calls.findOne({ "to.channelID": toDialDocument._id });
+		if (dialedInCall) return findNumber();
+		return toDialDocument;
 	}
 	let mynumber;
 	try {
