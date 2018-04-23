@@ -43,8 +43,8 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
 	try {
-		findNumber().then(async (toDialDocument) => {
-			let callDocument = await Calls.create(
+		findNumber().then((toDialDocument) => {
+			let callDocument = Calls.create(
 				new Calls({
 					_id: uuidv4(),
 					to: {
@@ -59,8 +59,8 @@ module.exports = async(client, msg, suffix) => {
 					},
 				})
 			);
-			await msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
-			await client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
+			msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
+			client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 			setTimeout(async() => {
 				callDocument = await Calls.findOne({ _id: callDocument._id });
 				if (callDocument.pickedUp) return;
