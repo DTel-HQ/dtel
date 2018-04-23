@@ -525,9 +525,8 @@ module.exports = async(client, message, args) => {
 		);
 		client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 		setTimeout(async() => {
-			let call;
-			call = await Calls.findOne({ _id: callDocument._id })
-			if (call && !call.pickedUp) {
+			callDocument = await Calls.findOne({ _id: callDocument._id })
+			if (callDocument && !callDocument.pickedUp) {
 				message.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
 				client.apiSend(":x: This call has expired (2 minutes).", callDocument.to.channelID);
 				await callDocument.remove();
