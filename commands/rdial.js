@@ -5,6 +5,9 @@ module.exports = async(client, msg, suffix) => {
 	process.on('uncaughtException', (err) => {
 		msg.reply(`Caught exception: \n\`\`\`js\n${err}\n\`\`\``);
 	});
+	process.on('unhandledRejection', (p, err) => {
+		msg.reply(`Caught rejection @ ${p}: \n\`\`\`js\n${err}\n\`\`\``);
+	});
 	async function findNumber() {
 		let phonebookAll, preDial, toDial, toDialDocument, dialedInCall;
 		phonebookAll = await Phonebook.find({});
