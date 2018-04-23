@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
 	try {
-		findNumber().then(toDialDocument => {
+		findNumber().then(async (toDialDocument) => {
 			let callDocument = await Calls.create(
 				new Calls({
 					_id: uuidv4(),
