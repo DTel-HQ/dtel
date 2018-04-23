@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let toDialDocument;
 	try {
-		toDialDocument = findNumber();
+		findNumber().then(a => toDialDocument = a);
 	} catch (err) {
 		return msg.reply("Could not find a number to call.");
 	}
