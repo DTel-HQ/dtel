@@ -8,7 +8,6 @@ module.exports = async(client, guild) => {
 	} catch (err) {
 		console.log(`[Shard ${client.shard.id}] Failed to post leave message for leaving guild`, err);
 	}
-	client.user.setActivity(`${client.guilds.size} servers on shard ${client.shard.id} | ${process.env.PREFIX}help`);
 	if (process.env.BOTS_PW_TOKEN) {
 		try {
 			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
