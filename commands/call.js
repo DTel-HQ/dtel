@@ -482,29 +482,10 @@ module.exports = async(client, message, args) => {
 			return message.reply(":x: Dialing error: The number you dialed is already in a call.");
 		}
 		if (toDial === "08006113835") {
-			let guild = client.guilds.get(process.env.SUPPORTGUILD);
-			if (guild) {
-				let customerSupport = guild.roles.get(process.env.SUPPORTROLE);
-				customerSupport.setMentionable(true);
-				await client.channels.get(toDialDocument._id).send(client.guilds.get(process.env.SUPPORTGUILD).roles.get(process.env.SUPPORTROLE).toString());
-				customerSupport.setMentionable(false);
-			} else {
-				// Everything past this is Vlad's fault. Blame him if it borks
-				try {
-					await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
-						data: {
-							mentionable: true,
-						},
-					});
-					await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
-					await client.api.guilds(process.env.SUPPORTGUILD).roles(process.env.SUPPORTROLE).patch({
-						data: {
-							mentionable: false,
-						},
-					});
-				} catch (err) {
-					// Ignore
-				}
+			try {
+				await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
+			} catch (err) {
+				// Ignore
 			}
 		}
 		// Error checking and utils finished! Let's actually start calling.
