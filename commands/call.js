@@ -212,6 +212,7 @@ module.exports = async(client, message, args) => {
 								pbentry.description = censorship;
 								await pbentry.save();
 								message.reply("**Registry edited!**");
+								await collector2.stop();
 								return mainMenu();
 							}
 						});
