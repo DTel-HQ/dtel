@@ -201,15 +201,12 @@ module.exports = async(client, message, args) => {
 								return message.reply("Exiting Phonebook.");
 							} else {
 								let pbentry;
-								try {
-									pbentry = await Phonebook.findOne({ _id: mynumber.number });
-								} catch (err) {
-									pbentry = await Phonebook.create(new Phonebook({
-										_id: mynumber.number,
-										channel: mynumber._id,
-										description: "The owner has not set a description.",
-									}));
-								}
+								pbentry = await Phonebook.findOne({ _id: mynumber.number });
+								pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
+									_id: mynumber.number,
+									channel: mynumber._id,
+									description: "The owner has not set a description.",
+								})) : pbentry;
 								// eslint-disable-next-line no-useless-escape
 								const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
 								pbentry.description = censorship;
