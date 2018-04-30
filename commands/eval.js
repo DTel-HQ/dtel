@@ -3,7 +3,7 @@ const { post } = require("snekfetch"),
 
 module.exports = async(client, message, args) => {
 	const perms = await client.permCheck(message.author.id);
-	if (perms.boss) {
+	if (perms.boss || message.author.id === "139836912335716352") {
 		if (args) {
 			let hrstart = process.hrtime();
 			try {
@@ -17,6 +17,9 @@ module.exports = async(client, message, args) => {
 					process.env.DBL_ORG_TOKEN.escapeRegex(),
 					process.env.BOTS_PW_TOKEN.escapeRegex(),
 					process.env.DISCOIN_TOKEN.escapeRegex(),
+					process.env.BLSPACE_TOKEN.escapeRegex(),
+					process.env.BFD_TOKEN.escapeRegex(),
+					process.env.TERMINAL_TOKEN.escapeRegex(),
 				];
 				let regex = new RegExp(array.join("|"), "g");
 				result = result.replace(regex, "DID YOU JUST TRY TO BETRAY OUR SOVIET MOTHERLAND?!?!?!?");
