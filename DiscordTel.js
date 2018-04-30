@@ -146,6 +146,30 @@ setInterval(async() => {
 	}
 }, 300000);
 
+// Guild count updater
+setInterval(async() => {
+	try {
+		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+		.then(r => {
+			let c = r.body.stats.reduce((a, b) => a.server_count + b.server_count);
+			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
+			post(`https://botsfordiscord.com/api/v1/${client.user.id}`)
+				.set(`Authorization`, process.env.BFD_TOKEN)
+				.send({count: c});
+			post(`https://botlist.space/api/bots/${client.user.id}`)
+				.set(`Authorization`, process.env.BLSPACE_TOKEN)
+				.send({server_count: c});
+			post(`https://ls.terminal.ink/api/v1/bots/${client.user.id}`)
+				.set(`Authorization`, process.env.TERMINAL_TOKEN)
+				.send({count: c});
+		});
+	}
+	catch(e) {
+		client.user.setActivity(`${process.env.PREFIX}help`);
+	}
+}, 300000);
+
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
 	try {
@@ -159,28 +183,6 @@ client.once("ready", async() => {
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
 	}
-	setInterval(async() => {
-		try {
-			await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-			.then(r => {
-				let c = r.body.stats.reduce((a, b) => a.server_count + b.server_count);
-				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
-				post(`https://botsfordiscord.com/api/v1/${client.user.id}`)
-					.set(`Authorization`, process.env.BFD_TOKEN)
-					.send({count: c});
-				post(`https://botlist.space/api/bots/${client.user.id}`)
-					.set(`Authorization`, process.env.BLSPACE_TOKEN)
-					.send({server_count: c});
-				post(`https://ls.terminal.ink/api/v1/bots/${client.user.id}`)
-					.set(`Authorization`, process.env.TERMINAL_TOKEN)
-					.send({count: c});
-			});
-		}
-		catch(e) {
-			client.user.setActivity(`${process.env.PREFIX}help`);
-		}
-	}, 300000);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
