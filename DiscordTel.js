@@ -159,7 +159,7 @@ client.once("ready", async() => {
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
 	}
-	setInterval(() => {
+	setInterval(async() => {
 		try {
 			await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
