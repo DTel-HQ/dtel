@@ -126,10 +126,10 @@ setInterval(async() => {
 			if (!t.type) {
 				let account;
 				try {
-					account = await Accounts.findOne({ _id: t.id });
+					account = await Accounts.findOne({ _id: t.user });
 				} catch (err) {
 					account = await Accounts.create(new Accounts({
-						_id: t.id,
+						_id: t.user,
 					}));
 				}
 				account.balance += t.amount;
@@ -144,10 +144,8 @@ setInterval(async() => {
 			}
 		}
 	}
-}, 300000);
 
 // Guild count updater
-setInterval(async() => {
 	try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
