@@ -227,8 +227,9 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 
 client.on("message", async message => {
 	let isBlacklisted;
-	if (message.channel.type !== "dm") {
-		if (client.blacklist.users.includes(message.author.id) || client.blacklist.guilds.includes(message.guild.id)) isBlacklisted = true;
+	if (client.blacklist.users.includes(message.author.id)) isBlacklisted = true;
+	else if (message.channel.type !== "dm") {
+		if (client.blacklist.guilds.includes(message.guild.id)) isBlacklisted = true;
 	}
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;
 	// In progress wizard/phonebook session?
