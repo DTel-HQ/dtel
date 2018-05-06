@@ -153,13 +153,16 @@ setInterval(async() => {
 			let c = r.body.stats.reduce((a, b) => a.server_count + b.server_count);
 			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
 			post(`https://botsfordiscord.com/api/v1/${client.user.id}`)
+				.set(`Content-Type`, "application/json")
 				.set(`Authorization`, process.env.BFD_TOKEN)
 				.send({count: c});
 			post(`https://botlist.space/api/bots/${client.user.id}`)
 				.set(`Authorization`, process.env.BLSPACE_TOKEN)
+				.set(`Content-Type`, "application/json")
 				.send({server_count: c});
 			post(`https://ls.terminal.ink/api/v1/bots/${client.user.id}`)
 				.set(`Authorization`, process.env.TERMINAL_TOKEN)
+				.set(`Content-Type`, "application/json")
 				.send({count: c});
 		});
 	}
