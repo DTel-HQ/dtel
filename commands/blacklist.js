@@ -30,10 +30,12 @@ module.exports = async(client, message, args) => {
 	}
 	if (guildBlacklist) {
 		Blacklist.create(new Blacklist({ _id: args, type: "guild" }));
+		client.blacklist.guilds.push(blacklist._id);
 		await client.apiSend(`:hammer: Guild ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done");
 	} else if (userBlacklist) {
 		Blacklist.create(new Blacklist({ _id: args, type: "user" }));
+		client.blacklist.users.push(blacklist._id);
 		await client.apiSend(`:hammer: User ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done");
 	}
