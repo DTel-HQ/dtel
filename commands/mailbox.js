@@ -76,60 +76,39 @@ module.exports = async(client, msg, args) => {
 					value: m.content,
 				});
 			}
-			if (!args.split(" ")[1]) {
-				return msg.channel.send({
+			return msg.channel.send({
+				embed: {
+					color: 0x0000FF,
+					title: `:mailbox_with_mail: You have ${mailbox.messages.length} messages.`,
+					fields: embedFields,
+					footer: {
+						text: "Delete a message: `>mailbox delete [id]`.",
+					},
+				},
+			});
+			break;
+		}
+		case "delete": {
+			let message = mailbox.messages.find(m => m.id === args.split("")[2]);
+			if (!message) {
+				return message.reply({
 					embed: {
-						color: 0x0000FF,
-						title: `:mailbox_with_mail: You have ${mailbox.messages.length} messages.`,
-						fields: embedFields,
-						footer: {
-							text: "Message options: `>mailbox messages [id]`",
-						},
+						title: ":question: I can't find that",
 					},
 				});
+			}
+			if (!msg.member.hasPermission("MANAGE_GUILD")) {
+				return msg.reply("You don't have `Manage Server` permission!");
 			} else {
-				let message = mailbox.messages.find(m => m.id === args.split("")[2]);
-				if (!message) {
-					return message.reply({
-						embed: {
-							title: ":question: I can't find that",
-						},
-					});
-				} else {
-					switch (args.split(" ")[2]) {
-						case "delete": {
-							if (!msg.member.hasPermission("MANAGE_GUILD")) {
-								return msg.reply("You don't have `Manage Server` permission!");
-							} else {
-								mailbox.messages.splice(mailbox.messages.indexOf(message));
-								await mailbox.save();
-								msg.reply({
-									embed: {
-										color: 0x00FF00,
-										title: ":white_check_mark: Success!",
-										description: "Successfully removed message.",
-									},
-								});
-								break;
-							}
-						}
-						case "callback": {
-							msg.channel.send(`>call ${message.from}`);
-							break;
-						}
-						default: {
-							msg.channel.send({
-								embed: {
-									title: ":question: What would you like to do?",
-									description: "`delete` Delete the message\n`callback` Call the caller back",
-									footer: {
-										text: `>mailbox messages ${args.split(" ")[1]} <Option>`,
-									},
-								},
-							});
-						}
-					}
-				}
+				mailbox.messages.splice(mailbox.messages.indexOf(message));
+				await mailbox.save();
+				msg.reply({
+					embed: {
+						color: 0x00FF00,
+						title: ":white_check_mark: Success!",
+						description: "Successfully removed message.",
+					},
+				});
 			}
 			break;
 		}
