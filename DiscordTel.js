@@ -177,7 +177,7 @@ client.once("ready", async() => {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 		.then(r => {
-			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a.server_count + b.server_count);
+			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
 			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
 		});
 	}
