@@ -152,7 +152,7 @@ setInterval(async() => {
 		.then(r => {
 			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
 			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
-			post(`https://botsfordiscord.com/api/v1/${client.user.id}`)
+			post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
 				.set(`Content-Type`, "application/json")
 				.set(`Authorization`, process.env.BFD_TOKEN)
 				.send({count: c});
