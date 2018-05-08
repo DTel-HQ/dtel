@@ -89,7 +89,7 @@ module.exports = async(client, msg, args) => {
 			break;
 		}
 		case "delete": {
-			let message = await mailbox.messages.findOne({_id: args.split("")[2]});
+			let message = await mailbox.messages.find(m => m._id === args.split("")[2]);
 			if (!message) {
 				return msg.channel.send({
 					embed: {
