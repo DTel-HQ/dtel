@@ -116,9 +116,9 @@ module.exports = async(client, msg, args) => {
 			msg.channel.send({
 				embed: {
 					title: ":mailbox: Mailbox",
-					description: `**${mailbox.messages.length}** Messages\n`,
+					description: `You have **${mailbox.messages.length}** messages.\nCheck them with \`>mailbox messages\`.`,
 					fields: [{
-						name: "Mailbox Settings",
+						name: "Mailbox Autoreply",
 						value: `${mailbox.settings.autoreply}`,
 					}],
 					footer: {
