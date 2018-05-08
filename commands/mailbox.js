@@ -91,7 +91,7 @@ module.exports = async(client, msg, args) => {
 		case "delete": {
 			let message = mailbox.messages.find(m => m.id === args.split("")[2]);
 			if (!message) {
-				return message.reply({
+				return msg.channel.send({
 					embed: {
 						title: ":question: I can't find that",
 					},
@@ -102,7 +102,7 @@ module.exports = async(client, msg, args) => {
 			} else {
 				mailbox.messages.splice(mailbox.messages.indexOf(message));
 				await mailbox.save();
-				msg.reply({
+				msg.channel.send({
 					embed: {
 						color: 0x00FF00,
 						title: ":white_check_mark: Success!",
