@@ -9,12 +9,12 @@ module.exports = async(client, msg, suffix) => {
 	if (msg.mentions.users.first()) {
 		id = msg.mentions.users.first().id;
 	} else {
-		id = suffix.substring(0, suffix.indexOf("|")).trim();
+		id = msg.content.split(" ")[1].trim();
 	}
-	let reason = suffix.substring(suffix.indexOf("|") + 1).trim();
+	let reason = msg.content.split(" ").slice(2).join(" ");
 
 	if (!id) {
-		return msg.reply("You forgot a paramater! Synthax: `>strike [offender id] | [reason]`");
+		return msg.reply("You forgot a paramater! Syntax: `>strike [offender id] [reason, spaces allowed]`");
 	}
 	if (!reason) reason == "No reason";
 
