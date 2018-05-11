@@ -146,25 +146,9 @@ setInterval(async() => {
 	}
 }, 300000);
 
-// Guild count updater
-setInterval(async() => {
-	try {
-		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-		.then(r => {
-			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-			if (isNaN(c)) return client.user.setActivity(`${process.env.PREFIX}help`);
-			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
-		});
-	}
-	catch(e) {
-		client.user.setActivity(`${process.env.PREFIX}help`);
-	}
-}, 1800000);
-
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
-	try {
+	/*try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 		.then(r => {
@@ -193,7 +177,7 @@ client.once("ready", async() => {
 	}
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
-	}
+	}*/
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
