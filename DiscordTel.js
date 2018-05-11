@@ -151,6 +151,23 @@ setInterval(async() => {
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 		.then(r => {
 			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+			if (isNaN(c)) return client.user.setActivity(`${process.env.PREFIX}help`);
+			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
+		});
+	}
+	catch(e) {
+		client.user.setActivity(`${process.env.PREFIX}help`);
+	}
+}, 1800000);
+
+client.once("ready", async() => {
+	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
+	try {
+		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+		.then(r => {
+			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+			if (isNaN(c)) return client.user.setActivity(`${process.env.PREFIX}help`);
 			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
 			try {
 				post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
@@ -170,22 +187,6 @@ setInterval(async() => {
 					.set(`Content-Type`, "application/json")
 					.send({count: c});
 			} catch(e) {client.apiSend("DUK post server count not working\n```js"+e+"```", "377945714166202368")}
-
-		});
-	}
-	catch(e) {
-		client.user.setActivity(`${process.env.PREFIX}help`);
-	}
-}, 1800000);
-
-client.once("ready", async() => {
-	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
-	try {
-		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-		.then(r => {
-			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
 		});
 	}
 	catch(e) {
