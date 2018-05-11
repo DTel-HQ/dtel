@@ -178,6 +178,7 @@ client.once("ready", async() => {
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
 	}*/
+	client.user.setActivity(`${process.env.PREFIX}help`);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
