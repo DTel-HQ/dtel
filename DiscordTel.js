@@ -117,7 +117,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 setInterval(async() => {
 	let snekres;
 	try {
-		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
+		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
 	} catch (err) {
 		await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err+"\n```", "348832329525100554");
 	}
