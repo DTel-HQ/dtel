@@ -148,7 +148,7 @@ setInterval(async() => {
 
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
-	/*try {
+	try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 		.then(r => {
@@ -177,7 +177,7 @@ client.once("ready", async() => {
 	}
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
-	}*/
+	}
 	client.user.setActivity(`${process.env.PREFIX}help`);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
