@@ -176,7 +176,7 @@ setInterval(async() => {
 	catch(e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
 	}
-}, 300000);
+}, 1800000);
 
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
