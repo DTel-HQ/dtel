@@ -144,8 +144,10 @@ setInterval(async() => {
 			}
 		}
 	}
+}, 300000);
 
 // Guild count updater
+setInterval(async() => {
 	try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
