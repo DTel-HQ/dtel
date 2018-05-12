@@ -113,41 +113,42 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 	}
 });
 
-// Discoin grabber
-setInterval(async() => {
-	let snekres;
-	try {
-		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
-	} catch (err) {
-		await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err+"\n```", "348832329525100554");
-	}
-	if (snekres) {
-		for (let t of snekres.body) {
-			if (!t.type) {
-				let account;
-				try {
-					account = await Accounts.findOne({ _id: t.user });
-				} catch (err) {
-					account = await Accounts.create(new Accounts({
-						_id: t.user,
-					}));
-				}
-				account.balance += t.amount;
-				await account.save();
-
-				await client.apiSend(`:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`, process.env.LOGSCHANNEL);
-				try {
-					(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
-				} catch (err) {
-					return;
-				}
-			}
-		}
-	}
-}, 300000);
-
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
+	if (process.env.SHARD_ID === 0) {
+		// Discoin grabber only works on shard 0
+		setInterval(async() => {
+			let snekres;
+			try {
+				snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
+			} catch (err) {
+				await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err+"\n```", "348832329525100554");
+			}
+			if (snekres) {
+				for (let t of snekres.body) {
+					if (!t.type) {
+						let account;
+						try {
+							account = await Accounts.findOne({ _id: t.user });
+						} catch (err) {
+							account = await Accounts.create(new Accounts({
+								_id: t.user,
+							}));
+						}
+						account.balance += t.amount;
+						await account.save();
+
+						await client.apiSend(`:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`, process.env.LOGSCHANNEL);
+						try {
+							(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
+						} catch (err) {
+							return;
+						}
+					}
+				}
+			}
+		}, 300000);
+	}
 	try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
