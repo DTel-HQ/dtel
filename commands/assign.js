@@ -16,7 +16,7 @@ module.exports = async(client, message, args) => {
 		.replace("(", "")
 		.replace(")", "")
 		.replace(/\s+/g, "");
-	if (isNaN(number) || (!number.startsWith("0301") && !number.startsWith("0800") && !number.startsWith("0900")) || number.length !== 11) {
+	if (isNaN(number) || !/^0(30|900)/.test(number) || number.length !== 11) {
 		return message.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?** Course not, you dumbass");
 	}
 	let foundNumber;
