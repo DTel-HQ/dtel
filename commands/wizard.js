@@ -74,6 +74,7 @@ module.exports = async(client, message, args) => {
 		expiryDate.setMonth(expiryDate.getMonth() + 1);
 		let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
 		await collector.stop();
+		client.apiSend(`:blue_book: Number \`${numberDocument.number}\` is self-assigned to channel ${numberDocument._id} by ${message.author.tag}.`, process.env.LOGSCHANNEL);
 		message.channel.send({
 			embed: {
 				color: 0x007FFF,
