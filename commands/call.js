@@ -45,6 +45,8 @@ module.exports = async(client, message, args) => {
 		if (toDial === "*611") {
 			if (message.channel.type !== "dm" && message.guild.id == process.env.SUPPORTGUILD) {
 				return message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
+			} else if (message.channel.type !== "dm" && message.guild.id == '294619824842080257') {
+				return message.reply(":x: <@133411883863506944> said you can't dial *611 from here. Please call from somewhere else or join the support server by doing `>info`.");
 			} else {
 				toDial = "08006113835";
 			}
