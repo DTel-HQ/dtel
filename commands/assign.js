@@ -42,5 +42,5 @@ module.exports = async(client, message, args) => {
 	expiryDate.setMonth(expiryDate.getMonth() + 1);
 	let numberDocument = await Numbers.create(new Numbers({ _id: channel, number: number, expiry: expiryDate }));
 	message.reply("Done. Now turn back to your client!");
-	client.channels.get(process.env.LOGSCHANNEL).send(`:green_book: Number \`${numberDocument.number}\` is assigned to channel ${numberDocument._id} by ${message.author.tag}.`);
+	client.apiSend(`:green_book: Number \`${numberDocument.number}\` is assigned to channel ${numberDocument._id} by ${message.author.tag}.`, process.env.LOGSCHANNEL);
 };
