@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let snekres;
 	try {
-		snekres = await post("http://discoin.sidetrip.xyz/transaction").set({
+		snekres = await post("https://discoin.sidetrip.xyz/transaction").set({
 			Authorization: process.env.DISCOIN_TOKEN,
 			"Content-Type": "application/json",
 		}).send({
