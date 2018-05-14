@@ -54,217 +54,217 @@ module.exports = async(client, message, args) => {
 			let mainMenu = async() => {
 				message.reply("Welcome to DiscordTel 411.\nFor **checking an existing __11-digit__ number**, press `1`.\nFor **searching the yellowbook by query**, press `2`.\nFor **adding/editing/removing number registry**, press `3`.\nFor **checking a special number** (\\*000 or #0000), press `4`.\nTo talk to a Customer Support, press `5`.\nTo exit 411 service, press `0`.");
 				collector = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id, { time: 600000 });
-			};
-			await mainMenu();
-			collector.on("collect", async cmsg => {
-				switch (cmsg.content) {
-					case "0": {
-						await collector.stop();
-						return message.reply("Exiting *411.");
-					}
-					case "1": {
-						await collector.stop();
-						cmsg.reply("Input a number.");
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id, { time: 600000 });
-						collector2.on("collect", async c2msg => {
-							let toResolve = c2msg.content;
-							toResolve = toResolve.replace(/(a|b|c)/ig, "2")
-								.replace(/(d|e|f)/ig, "3")
-								.replace(/(g|h|i)/ig, "4")
-								.replace(/(j|k|l)/ig, "5")
-								.replace(/(m|n|o)/ig, "6")
-								.replace(/(p|q|r|s)/ig, "7")
-								.replace(/(t|u|v)/ig, "8")
-								.replace(/(w|x|y|z)/ig, "9")
-								.replace(/-/ig, "")
-								.replace("(", "")
-								.replace(")", "")
-								.replace(/\s+/g, "");
-							if (!isNaN(toResolve) && toResolve.length == 11) {
-								let resolved, phonebook;
+				collector.on("collect", async cmsg => {
+					switch (cmsg.content) {
+						case "0": {
+							await collector.stop();
+							return message.reply("Exiting *411.");
+						}
+						case "1": {
+							await collector.stop();
+							cmsg.reply("Input a number.");
+							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id, { time: 600000 });
+							collector2.on("collect", async c2msg => {
+								let toResolve = c2msg.content;
+								toResolve = toResolve.replace(/(a|b|c)/ig, "2")
+									.replace(/(d|e|f)/ig, "3")
+									.replace(/(g|h|i)/ig, "4")
+									.replace(/(j|k|l)/ig, "5")
+									.replace(/(m|n|o)/ig, "6")
+									.replace(/(p|q|r|s)/ig, "7")
+									.replace(/(t|u|v)/ig, "8")
+									.replace(/(w|x|y|z)/ig, "9")
+									.replace(/-/ig, "")
+									.replace("(", "")
+									.replace(")", "")
+									.replace(/\s+/g, "");
+								if (!isNaN(toResolve) && toResolve.length == 11) {
+									let resolved, phonebook;
+									try {
+										resolved = await Numbers.findOne({ number: toResolve });
+										if (!resolved) throw new Error();
+									} catch (err) {
+										return cmsg.reply("This number does not exist. It's probably available for registration!\nYou can type another number to check, type `9` to go back to the main menu, or type `0` to quit 411.");
+									}
+									if (resolved) {
+										try {
+											phonebook = await Phonebook.findOne({ _id: toResolve });
+											if (!phonebook.description) throw new Error();
+										} catch (err) {
+											phonebook = {
+												description: "The owner has not set a description",
+											};
+										}
+										message.channel.send({
+											embed: {
+												color: 0x00FF00,
+												title: `This number exists!`,
+												fields: [{
+													name: `Number`,
+													value: toResolve,
+												},
+												{
+													name: `Description`,
+													value: phonebook.description,
+												}],
+												footer: {
+													text: "You can type another query to check, type `9` to back to main menu, or type `0` to quit 411.",
+												},
+											},
+										});
+									}
+								} else if (c2msg.content === "9") {
+									await collector2.stop();
+									await mainMenu();
+								} else if (c2msg.content === "0") {
+									await collector2.stop();
+									return c2msg.reply(`Exiting menu`);
+								} else {
+									message.reply("That doesn't look like a valid number to me! Enter a valid number or press 0 to exit.");
+								}
+							});
+							break;
+						}
+						case "2": {
+							await collector.stop();
+							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
+							cmsg.reply("Input a query. Type `9` to back to main menu, or type `0` to quit 411.");
+							collector2.on("collect", async c2msg => {
+								if (!c2msg.content) return message.reply("You need to give me something to search!");
+
+								if (c2msg.content === "9") {
+									await collector2.stop();
+									await mainMenu();
+									return;
+								} else if (c2msg.content === "0") {
+									await collector2.stop();
+									return message.reply("Exiting phonebook.");
+								}
+								let resolved;
 								try {
-									resolved = await Numbers.findOne({ number: toResolve });
+									resolved = await Phonebook.find({ description: c2msg.content });
 									if (!resolved) throw new Error();
 								} catch (err) {
-									return cmsg.reply("This number does not exist. It's probably available for registration!\nYou can type another number to check, type `9` to go back to the main menu, or type `0` to quit 411.");
+									resolved = undefined;
 								}
-								if (resolved) {
-									try {
-										phonebook = await Phonebook.findOne({ _id: toResolve });
-										if (!phonebook.description) throw new Error();
-									} catch (err) {
-										phonebook = {
-											description: "The owner has not set a description",
-										};
-									}
-									message.channel.send({
-										embed: {
-											color: 0x00FF00,
-											title: `This number exists!`,
-											fields: [{
-												name: `Number`,
-												value: toResolve,
-											},
-											{
-												name: `Description`,
-												value: phonebook.description,
-											}],
-											footer: {
-												text: "You can type another query to check, type `9` to back to main menu, or type `0` to quit 411.",
-											},
-										},
+								if (!resolved) {
+									message.reply("Could not find any numbers in the phonebook matching your query.\n\nYou can type another query to check, type `9` to back to main menu, or type `0` to quit 411.");
+								}
+								let embedFields = [];
+								resolved.forEach(r => {
+									embedFields.push({
+										name: r._id,
+										value: r.description,
 									});
-								}
-							} else if (c2msg.content === "9") {
-								await collector2.stop();
-								await mainMenu();
-							} else if (c2msg.content === "0") {
-								await collector2.stop();
-								return c2msg.reply(`Exiting menu`);
-							} else {
-								message.reply("That doesn't look like a valid number to me! Enter a valid number or press 0 to exit.");
-							}
-						});
-						break;
-					}
-					case "2": {
-						await collector.stop();
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
-						cmsg.reply("Input a query. Type `9` to back to main menu, or type `0` to quit 411.");
-						collector2.on("collect", async c2msg => {
-							if (!c2msg.content) return message.reply("You need to give me something to search!");
-
-							if (c2msg.content === "9") {
-								await collector2.stop();
-								await mainMenu();
-								return;
-							} else if (c2msg.content === "0") {
-								await collector2.stop();
-								return message.reply("Exiting phonebook.");
-							}
-							let resolved;
-							try {
-								resolved = await Phonebook.find({ description: c2msg.content });
-								if (!resolved) throw new Error();
-							} catch (err) {
-								resolved = undefined;
-							}
-							if (!resolved) {
-								message.reply("Could not find any numbers in the phonebook matching your query.\n\nYou can type another query to check, type `9` to back to main menu, or type `0` to quit 411.");
-							}
-							let embedFields = [];
-							resolved.forEach(r => {
-								embedFields.push({
-									name: r._id,
-									value: r.description,
+								});
+								message.channel.send({
+									embed: {
+										color: 0x0000FF,
+										title: "Search Result",
+										fields: embedFields,
+										footer: {
+											text: "You can type another query to check, type `9` to back to main menu, or type `0` to quit 411.",
+										},
+									},
 								});
 							});
+							break;
+						}
+						case "3": {
+							await collector.stop();
+							if (!message.member.hasPermission("MANAGE_SERVER")) {
+								message.reply("**You don't have the `Manage Server` permission.**");
+								return mainMenu();
+							}
+							message.reply(`Please type a new description or:\n- Press \`8\` to remove your number from the registry and go back to the main menu;\n- Press \`9\` to back to 411 menu;\n- Press \`0\` to quit 411.`);
+
+							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
+							collector2.on("collect", async c2msg => {
+								if (c2msg.content === "8") {
+									await collector2.stop();
+									let pbentry;
+									try {
+										pbentry = await Phonebook.findOne({ _id: mynumber.number });
+										if (!pbentry) throw new Error();
+									} catch (err) {
+										message.reply("You are not in the phonebook!");
+										mainMenu();
+									}
+									await pbentry.remove();
+								} else if (c2msg.content === "9") {
+									await collector2.stop();
+									await mainMenu();
+								} else if (c2msg.content === "0") {
+									await collector2.stop();
+									return message.reply("Exiting Phonebook.");
+								} else {
+									let pbentry;
+									pbentry = await Phonebook.findOne({ _id: mynumber.number });
+									pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
+										_id: mynumber.number,
+										channel: mynumber._id,
+										description: "The owner has not set a description.",
+									})) : pbentry;
+									// eslint-disable-next-line no-useless-escape
+									const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
+									pbentry.description = censorship;
+									await pbentry.save();
+									message.reply("**Registry edited!**");
+									await collector2.stop();
+									await mainMenu();
+								}
+							});
+							break;
+						}
+						case "4": {
+							await collector.stop();
 							message.channel.send({
 								embed: {
-									color: 0x0000FF,
-									title: "Search Result",
-									fields: embedFields,
+									title: "Special Numbers",
+									description: "Here are the special numbers. Troll-calling any of these numbers can result in termination of service.",
+									fields: [{
+										name: "*233",
+										value: "Account balance and number renewing (Auto)",
+									},
+									{
+										name: "*411",
+										value: "The Phonebook (Auto)",
+									},
+									{
+										name: "*611",
+										value: "Customer Support",
+									}],
 									footer: {
-										text: "You can type another query to check, type `9` to back to main menu, or type `0` to quit 411.",
+										text: "To go back to the 411 main menu, press `9`. To quit 411, press `0`",
 									},
 								},
 							});
-						});
-						break;
-					}
-					case "3": {
-						await collector.stop();
-						if (!message.member.hasPermission("MANAGE_SERVER")) {
-							message.reply("**You don't have the `Manage Server` permission.**");
-							return mainMenu();
-						}
-						message.reply(`Please type a new description or:\n- Press \`8\` to remove your number from the registry and go back to the main menu;\n- Press \`9\` to back to 411 menu;\n- Press \`0\` to quit 411.`);
-
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
-						collector2.on("collect", async c2msg => {
-							if (c2msg.content === "8") {
-								await collector2.stop();
-								let pbentry;
-								try {
-									pbentry = await Phonebook.findOne({ _id: mynumber.number });
-									if (!pbentry) throw new Error();
-								} catch (err) {
-									message.reply("You are not in the phonebook!");
+							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
+							collector2.on("collect", async c2msg => {
+								if (c2msg.content === "9") {
+									await collector2.stop();
 									await mainMenu();
+								} else if (c2msg.content === "0") {
+									await collector2.stop();
+									return message.reply("Exiting phonebook.");
+								} else {
+									message.reply("Please note that you are in a phonebook session. Press 0 to exit or press 9 to go back to the main menu.");
 								}
-								await pbentry.remove();
-							} else if (c2msg.content === "9") {
-								await collector2.stop();
-								await mainMenu();
-							} else if (c2msg.content === "0") {
-								await collector2.stop();
-								return message.reply("Exiting Phonebook.");
-							} else {
-								let pbentry;
-								pbentry = await Phonebook.findOne({ _id: mynumber.number });
-								pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
-									_id: mynumber.number,
-									channel: mynumber._id,
-									description: "The owner has not set a description.",
-								})) : pbentry;
-								// eslint-disable-next-line no-useless-escape
-								const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
-								pbentry.description = censorship;
-								await pbentry.save();
-								message.reply("**Registry edited!**");
-								await collector2.stop();
-								await mainMenu();
-							}
-						});
-						break;
+							});
+							break;
+						}
+						case "5": {
+							await collector.stop();
+							message.channel.send(">call *611");
+							break;
+						}
+						default: {
+							message.reply("Invalid option. Press 0 to exit.");
+						}
 					}
-					case "4": {
-						await collector.stop();
-						message.channel.send({
-							embed: {
-								title: "Special Numbers",
-								description: "Here are the special numbers. Troll-calling any of these numbers can result in termination of service.",
-								fields: [{
-									name: "*233",
-									value: "Account balance and number renewing (Auto)",
-								},
-								{
-									name: "*411",
-									value: "The Phonebook (Auto)",
-								},
-								{
-									name: "*611",
-									value: "Customer Support",
-								}],
-								footer: {
-									text: "To go back to the 411 main menu, press `9`. To quit 411, press `0`",
-								},
-							},
-						});
-						let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
-						collector2.on("collect", async c2msg => {
-							if (c2msg.content === "9") {
-								await collector2.stop();
-								await mainMenu();
-							} else if (c2msg.content === "0") {
-								await collector2.stop();
-								return message.reply("Exiting phonebook.");
-							} else {
-								message.reply("Please note that you are in a phonebook session. Press 0 to exit or press 9 to go back to the main menu.");
-							}
-						});
-						break;
-					}
-					case "5": {
-						await collector.stop();
-						message.channel.send(">call *611");
-						break;
-					}
-					default: {
-						message.reply("Invalid option. Press 0 to exit.");
-					}
-				}
-			});
+				});
+			};
+			mainMenu();
 		}
 		if (toDial === "*233") {
 			let account;
