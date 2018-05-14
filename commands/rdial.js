@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		if (toDialDocument && !client.api.channels(toDialDocument._id).get()) await preDial.remove();
-		if (!toDialDocument || toDial === "08006113835" || !client.api.channels(toDialDocument._id).get()) return findNumber();
+		if (!toDialDocument || toDial === "08006113835" || toDialDocument._id === msg.channel.id|| !client.api.channels(toDialDocument._id).get()) return findNumber();
 		else if (!client.api.channels(toDialDocument._id).get()) {
 			await preDial.remove();
 			return findNumber();
