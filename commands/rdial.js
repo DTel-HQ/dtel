@@ -65,7 +65,7 @@ module.exports = async(client, msg, suffix) => {
 					},
 				})
 			);
-			client.apiSend(`:telephone: A random call is established between channel ${message.channel.id} and channel ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
+			client.apiSend(`:telephone: A random call is established between channel ${msg.channel.id} and channel ${toDialDocument._id} by __${msg.author.tag}__ (${msg.author.id}).`, process.env.LOGSCHANNEL);
 			msg.reply(`:telephone: Dialing \`${toDialDocument.number}\`...  You are able to \`>hangup\`.`);
 			client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 			setTimeout(async() => {
