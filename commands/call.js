@@ -190,12 +190,12 @@ module.exports = async(client, message, args) => {
 									if (!pbentry) throw new Error();
 								} catch (err) {
 									message.reply("You are not in the phonebook!");
-									return mainMenu();
+									await mainMenu();
 								}
 								await pbentry.remove();
 							} else if (c2msg.content === "9") {
 								await collector2.stop();
-								return mainMenu();
+								await mainMenu();
 							} else if (c2msg.content === "0") {
 								await collector2.stop();
 								return message.reply("Exiting Phonebook.");
@@ -213,7 +213,7 @@ module.exports = async(client, message, args) => {
 								await pbentry.save();
 								message.reply("**Registry edited!**");
 								await collector2.stop();
-								return mainMenu();
+								await mainMenu();
 							}
 						});
 						break;
@@ -245,7 +245,7 @@ module.exports = async(client, message, args) => {
 						collector2.on("collect", async c2msg => {
 							if (c2msg.content === "9") {
 								await collector2.stop();
-								return mainMenu();
+								await mainMenu();
 							} else if (c2msg.content === "0") {
 								await collector2.stop();
 								return message.reply("Exiting phonebook.");
