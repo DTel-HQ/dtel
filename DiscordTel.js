@@ -168,12 +168,6 @@ client.once("ready", async() => {
 					.set(`Content-Type`, "application/json")
 					.send({server_count: c});
 			} catch(e) {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368")}
-			try {
-				post(`https://ls.terminal.ink/api/v1/bots/${client.user.id}`)
-					.set(`Authorization`, process.env.TERMINAL_TOKEN)
-					.set(`Content-Type`, "application/json")
-					.send({count: c});
-			} catch(e) {client.apiSend("DUK post server count not working\n```js"+e+"```", "377945714166202368")}
 		});
 	}
 	catch(e) {
