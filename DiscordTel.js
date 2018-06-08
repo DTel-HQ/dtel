@@ -66,21 +66,17 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 		}
 	}
 	if (currentlottery) {
-		let winner = currentlottery.entries[Math.floor(Math.random() * currentlottery.entries.length)];
+		let winner = currentlottery.entered[Math.floor(Math.random() * currentlottery.entered.length)];
 		let winneracc;
 		try {
 			winneracc = await Accounts.findOne({ _id: winner });
 			if (!winneracc) throw new Error();
 		} catch (err) {
-			(await client.users.fetch(winner)).send("You've just won the lottery, but you don't have an account! Creating one for you.");
-			winneracc = await Accounts.create(new Accounts({
-				_id: winner,
-			}));
+			// You can't buy a lotto ticket without an account
 		}
 		if (winneracc) {
 			winneracc.balance += currentlottery.jackpot;
-			currentlottery.active = false;
-			await currentlottery.save();
+			await currentlottery.remove();
 			await winneracc.save();
 			await Lottery.create(new Lottery({
 				_id: uuidv4(),
