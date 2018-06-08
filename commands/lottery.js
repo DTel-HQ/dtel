@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	if (!suffix && activeLottery) {
 		let userentries = activeLottery.entered.filter(e => e === msg.author.id);
-		return msg.reply(`You have ${userentries.size} entries. The current jackpot is ¥${activeLottery.jackpot}.\nTo enter type: \`>lottery <Amount of entries>\`. 1 entry costs 5 credits.`);
+		return msg.reply(`You have ${userentries.length} entries. The current jackpot is ¥${activeLottery.jackpot}.\nTo enter type: \`>lottery <Amount of entries>\`. 1 entry costs 5 credits.`);
 	} else if (isNaN(parseInt(suffix))) {
 		return msg.reply("Not a number!\n`>lottery <Amount of entries>`. 1 Entry costs 5 credits.");
 	}
