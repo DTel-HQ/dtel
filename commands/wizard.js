@@ -44,7 +44,8 @@ module.exports = async(client, message, args) => {
 			.replace(/-/ig, "")
 			.replace("(", "")
 			.replace(")", "")
-			.replace(/\s+/g, ""),
+			.replace(/\s+/g, "")
+			.replace(/[^\d]+/g, ""),
 		    prefix = (client.shard.id + 1).toString();
 		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
