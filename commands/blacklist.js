@@ -16,7 +16,7 @@ module.exports = async(client, message, args) => {
 	if (document) {
 		await document.remove();
 		await client.apiSend(`:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
-		message.reply(`done! now stop blocklisting yourself!`);
+		message.reply(`Done!`);
 	} else {
 		try {
 			guildBlacklist = await client.api.guilds(args).get();
@@ -24,19 +24,13 @@ module.exports = async(client, message, args) => {
 			try {
 				userBlacklist = await client.users.fetch(args);
 			} catch (err2) {
-				return message.reply("Invalid ID");
+				return message.reply("Invalid ID!");
 			}
 		}
-	}
-	if (guildBlacklist) {
-		Blacklist.create(new Blacklist({ _id: args, type: "guild" }));
+		let a = guildBlacklist ? "Guild" : "User";
+		Blacklist.create(new Blacklist({ _id: args, type: a.toLowerCase() }));
 		client.blacklist.guilds.push(blacklist._id);
-		await client.apiSend(`:hammer: Guild ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
-		message.reply("Done");
-	} else if (userBlacklist) {
-		Blacklist.create(new Blacklist({ _id: args, type: "user" }));
-		client.blacklist.users.push(blacklist._id);
-		await client.apiSend(`:hammer: User ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
-		message.reply("Done");
+		await client.apiSend(`:hammer: ${a} ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
+		message.reply("Done.");
 	}
 };
