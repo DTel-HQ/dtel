@@ -6,7 +6,7 @@ module.exports = async(client, message, args) => {
 	if (!args) return message.reply("u forgot id :b:");
 	if (args === message.guild.id || args === message.author.id) return message.reply(`you dumb :b:oi, don't blacklist yourself!`);
 	if (args === process.env.SUPPORTGUILD) return message.reply("No thank you.");
-	let document, guildBlacklist, userBlacklist;
+	let document;
 	try {
 		document = await Blacklist.findOne({ _id: args });
 		if (!document) throw new Error();
@@ -18,6 +18,7 @@ module.exports = async(client, message, args) => {
 		await client.apiSend(`:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply(`Done!`);
 	} else {
+		let guildBlacklist, userBlacklist;
 		try {
 			guildBlacklist = await client.api.guilds(args).get();
 		} catch (err) {
@@ -29,7 +30,7 @@ module.exports = async(client, message, args) => {
 		}
 		let a = guildBlacklist ? "Guild" : "User";
 		Blacklist.create(new Blacklist({ _id: args, type: a.toLowerCase() }));
-		client.blacklist.guilds.push(blacklist._id);
+		client.blacklist[a + "s"].push(blacklist._id);
 		await client.apiSend(`:hammer: ${a} ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done.");
 	}
