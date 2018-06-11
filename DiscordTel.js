@@ -150,8 +150,8 @@ client.once("ready", async() => {
 		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 		.then(r => {
 			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-			if (isNaN(c)) return client.user.setActivity(`${process.env.PREFIX}help`);
-			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`);
+			if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
+			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
 			try {
 				post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
 					.set(`Content-Type`, "application/json")
