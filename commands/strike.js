@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let resolved, type;
 	try {
-		if (msg.mentions.users.first()) { resolved = await client.users.fetch(id); }
+		resolved = await client.users.fetch(id);
 		type = "user";
 	} catch (err) {
 		try {
