@@ -19,7 +19,7 @@ module.exports = async(client, message, args) => {
 	const perms = await client.permCheck(userid);
 	if (userid === client.user.id) {
 		return message.reply("Uh... I am the bank. Are you in debt?");
-	} else if (message.author.bot) {
+	} else if (message.author.bot || user.bot) {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (userid === message.author.id && !perms.boss) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
