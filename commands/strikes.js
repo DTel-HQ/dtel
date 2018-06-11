@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 			inline: true,
 		});
 	}
-	if (allStrikes.size == 1) {
+	if (allStrikes.length == 1) {
 		return msg.channel.send({
 			embed: {
 				color: 0x00FF00,
@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 				fields,
 			},
 		});
-	} else if (allStrikes.size == 3) {
+	} else if (allStrikes.length == 3) {
 		msg.channel.send({
 			embed: {
 				color: 0x00FF00,
