@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	}
-	msg.channel.send({
+	else msg.channel.send({
 		embed: {
 			color: 0x00FF00,
 			title: `Here are the strikes for ${suffix}`,
