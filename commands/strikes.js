@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 			embed: {
 				color: 0x00FF00,
 				title: `Here are the strikes for ${suffix}`,
-				description: `They currently have ${allStrikes.size} strike`,
+				description: `They currently have ${allStrikes.length} strike`,
 				fields,
 			},
 		});
@@ -34,10 +34,10 @@ module.exports = async(client, msg, suffix) => {
 			embed: {
 				color: 0x00FF00,
 				title: `Here are the strikes for ${suffix}`,
-				description: `They currently have ${allStrikes.size} strikes`,
+				description: `They currently have ${allStrikes.length} strikes`,
 				fields,
 				footer: {
-					text: `This user may be on the blacklist.`,
+					text: `This user should be on the blacklist.`,
 				},
 			},
 		});
@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 		embed: {
 			color: 0x00FF00,
 			title: `Here are the strikes for ${suffix}`,
-			description: `They currently have ${allStrikes.size} strikes`,
+			description: `They currently have ${allStrikes.length} strikes`,
 			fields,
 		},
 	});
