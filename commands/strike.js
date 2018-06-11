@@ -58,7 +58,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	}
-	msg.channel.send({
+	else msg.channel.send({
 		embed: {
 			color: 0x00FF00,
 			title: `:white_check_mark: Success!`,
@@ -68,4 +68,5 @@ module.exports = async(client, msg, suffix) => {
 			},
 		},
 	});
+	if (type == "user"){(await client.users.fetch(id)).send(`You've been striked due to the following reason:\n\`\`\`\n${reason}\n\`\`\`\nPlease refrain from abusing the bot, as you will be blacklisted once you get 3 strikes. You currently have ${allStrikes.length} strikes.`);}
 };
