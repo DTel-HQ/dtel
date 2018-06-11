@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 	let allStrikes = await Strikes.find({ offender: id });
 	if (allStrikes.length >= 3) {
 		Blacklist.create(new Blacklist({ _id: id, type }));
-		await client.apiSend(`:hammer: ID \`${id}\` is striked by ${msg.author.username}. They now have ${allStrikes.size}`, process.env.LOGSCHANNEL);
+		await client.apiSend(`:hammer: ID \`${id}\` is striked by ${msg.author.username}. (3 Strikes)`, process.env.LOGSCHANNEL);
 		return msg.channel.send({
 			embed: {
 				color: 0x00FF00,
