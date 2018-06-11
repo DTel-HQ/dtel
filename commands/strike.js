@@ -55,7 +55,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `:white_check_mark: Success!`,
 				description: `ID: ${id} has been striked with the reason: ${reason}`,
 				footer: {
-					text: `They now have ${allStrikes.size} strikes. They have been blacklisted.`,
+					text: `They now have ${allStrikes.length} strikes. They have been blacklisted.`,
 				},
 			},
 		});
@@ -66,7 +66,7 @@ module.exports = async(client, msg, suffix) => {
 			title: `:white_check_mark: Success!`,
 			description: `ID: ${id} has been striked with the reason: ${reason}`,
 			footer: {
-				text: `They now have ${allStrikes.size} strikes.`,
+				text: `They now have ${allStrikes.length} strikes.`,
 			},
 		},
 	});
