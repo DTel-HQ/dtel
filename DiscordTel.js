@@ -145,31 +145,32 @@ client.once("ready", async() => {
 			}
 		}, 300000);
 	}
-	try {
-		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-		.then(r => {
-			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-			if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
-			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
-			try {
-				post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
-					.set(`Content-Type`, "application/json")
-					.set(`Authorization`, process.env.BFD_TOKEN)
-					.send({count: c});
-			} catch(e) {client.apiSend("BFD post server count not working\n```js"+e+"```", "377945714166202368")}
-			try {
-				post(`https://botlist.space/api/bots/${client.user.id}`)
-					.set(`Authorization`, process.env.BLSPACE_TOKEN)
-					.set(`Content-Type`, "application/json")
-					.send({server_count: c});
-			} catch(e) {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368")}
-		});
-	}
-	catch(e) {
-		client.user.setActivity(`${process.env.PREFIX}help`);
-	}
-	client.user.setActivity(`${process.env.PREFIX}help`);
+	setInterval(async() => {
+		try {
+			await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+			.then(r => {
+				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
+				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
+				try {
+					post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
+						.set(`Content-Type`, "application/json")
+						.set(`Authorization`, process.env.BFD_TOKEN)
+						.send({count: c});
+				} catch(e) {client.apiSend("BFD post server count not working\n```js"+e+"```", "377945714166202368")}
+				try {
+					post(`https://botlist.space/api/bots/${client.user.id}`)
+						.set(`Authorization`, process.env.BLSPACE_TOKEN)
+						.set(`Content-Type`, "application/json")
+						.send({server_count: c});
+				} catch(e) {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368")}
+			});
+		}
+		catch(e) {
+			client.user.setActivity(`${process.env.PREFIX}help`);
+		}
+	}, 3600000);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
