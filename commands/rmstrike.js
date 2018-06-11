@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 				title: ":white_check_mark: Success!",
 				description: `Strike ID: \`${suffix}\` has been removed.`,
 				footer: {
-					text: `They now have ${allStrikes.size} strikes. They have been removed from the blacklist.`,
+					text: `They now have ${allStrikes.length} strikes. They have been removed from the blacklist.`,
 				},
 			},
 		});
