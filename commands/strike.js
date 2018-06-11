@@ -19,17 +19,15 @@ module.exports = async(client, msg, suffix) => {
 	if (!reason) reason == "No reason";
 
 	let resolved, type;
-	if (!msg.mentions.users.first()) {
+	try {
+		if (msg.mentions.users.first()) { resolved = await client.users.fetch(id); }
+		type = "user";
+	} catch (err) {
 		try {
-			if (msg.mentions.users.first()) { resolved = await client.users.fetch(id); }
-			type = "user";
-		} catch (err) {
-			try {
-				resolved = await client.api.guilds(id).get();
-				type = "guild";
-			} catch (err2) {
-				return msg.reply("The specified ID could not be resolved!");
-			}
+			resolved = await client.api.guilds(id).get();
+			type = "guild";
+		} catch (err2) {
+			return msg.reply("The specified ID could not be resolved!");
 		}
 	}
 	let toStrikePerms;
