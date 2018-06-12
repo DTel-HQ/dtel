@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	let id;
 	if (msg.mentions.users.first()) {
 		id = msg.mentions.users.first().id;
-	} else {
+	} else if (msg.content.split(" ").length > 1) {
 		id = msg.content.split(" ")[1].trim();
 	}
 	let reason = msg.content.split(" ").slice(2).join(" ");
