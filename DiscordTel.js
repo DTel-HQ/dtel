@@ -312,6 +312,10 @@ client.login(process.env.CLIENT_TOKEN).then(() => {
 	client.IPC.send("ready", { id: client.shard.id });
 });
 
+client.on("disconnect", () => {client.login(process.env.CLIENT_TOKEN).then(() => {
+	client.IPC.send("ready", { id: client.shard.id });
+});});
+
 process.on("unhandledRejection", (_, promise) => {
 	console.log(require("util").inspect(promise, null, 2));
 });
