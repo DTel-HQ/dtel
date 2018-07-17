@@ -112,11 +112,27 @@ module.exports = async(client, msg, args) => {
 			}
 			break;
 		}
+		case "clear": {
+			if (!msg.member.hasPermission("MANAGE_GUILD")) {
+				return msg.reply("You don't have `Manage Server` permission!");
+			} else {
+				mailbox.messages = [];
+				await mailbox.save();
+				msg.channel.send({
+					embed: {
+						color: 0x00FF00,
+						title: ":white_check_mark: Success!",
+						description: "Successfully removed all message.",
+					},
+				});
+			}
+			break;
+		}
 		default: {
 			msg.channel.send({
 				embed: {
 					title: ":mailbox: Mailbox",
-					description: `You have **${mailbox.messages.length}** messages.\nCheck them with \`>mailbox messages\`.`,
+					description: `You have **${mailbox.messages.length}** messages.\nCheck them with \`>mailbox messages\`.\nOr you can delete all your messages with \`>mailbox clear\`.`,
 					fields: [{
 						name: "Mailbox Autoreply",
 						value: `${mailbox.settings.autoreply}`,
