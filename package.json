@@ -16,7 +16,8 @@
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
     "uuid": "^3.2.1",
-    "zlib-sync": "^0.1.4"
+    "zlib-sync": "^0.1.4",
+    "snekfetch": "3.6.4"
   },
   "devDependencies": {},
   "scripts": {

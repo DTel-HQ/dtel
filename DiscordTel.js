@@ -108,69 +108,65 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 		}
 	}
 });
+	
+Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
+	let snekres;
+	try {
+		snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
+	} catch (err) {
+		await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err.stack+"\n```", "348832329525100554");
+	}
+	if (snekres) {
+		for (let t of snekres.body) {
+			if (!t.type) {
+				let account;
+				try {
+					account = await Accounts.findOne({ _id: t.user });
+				} catch (err) {
+					account = await Accounts.create(new Accounts({
+						_id: t.user,
+					}));
+				}
+				account.balance += t.amount;
+				await account.save();
+
+				await client.apiSend(`:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`, process.env.LOGSCHANNEL);
+				try {
+					(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
+				} catch (err) {
+					return;
+				}
+			}
+		}
+	}
+	try {
+		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+		.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+		.then(r => {
+			let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+			if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
+			client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
+			post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
+				.set(`Content-Type`, "application/json")
+				.set(`Authorization`, process.env.BFD_TOKEN)
+				.send({count: c})
+				.then(r => {})
+				.catch(e => {client.apiSend("BFD post server count not working\n```js"+e+"```", "377945714166202368");});
+			post(`https://botlist.space/api/bots/${client.user.id}`)
+				.set(`Authorization`, process.env.BLSPACE_TOKEN)
+				.set(`Content-Type`, "application/json")
+				.send({server_count: c})
+				.then(r => {})
+				.catch(e => {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368");});
+		});
+	}
+	catch(e) {
+		client.user.setActivity(`${process.env.PREFIX}help`);
+	}
+});
 
 client.once("ready", async() => {
 	console.log(`[Shard ${process.env.SHARD_ID}] READY! REPORTING FOR DUTY!`);
-	if (process.env.SHARD_ID === 0) {
-		// Discoin grabber only works on shard 0
-		setInterval(async() => {
-			let snekres;
-			try {
-				snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
-			} catch (err) {
-				await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err+"\n```", "348832329525100554");
-			}
-			if (snekres) {
-				for (let t of snekres.body) {
-					if (!t.type) {
-						let account;
-						try {
-							account = await Accounts.findOne({ _id: t.user });
-						} catch (err) {
-							account = await Accounts.create(new Accounts({
-								_id: t.user,
-							}));
-						}
-						account.balance += t.amount;
-						await account.save();
-
-						await client.apiSend(`:repeat: User ${(await client.users.fetch(t.user)).username || `invalid-user#0001`} (${t.user}) received ¥${t.amount} from Discoin.`, process.env.LOGSCHANNEL);
-						try {
-							(await client.users.fetch(t.user)).send(`You've received ¥${t.amount} from Discoin (Transaction ID: ${t.receipt}).\nYou can check all your transactions at http://discoin.sidetrip.xyz/record.`);
-						} catch (err) {
-							return;
-						}
-					}
-				}
-			}
-		}, 300000);
-	}
-	setInterval(async() => {
-		try {
-			await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-			.then(r => {
-				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
-				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
-				try {
-					post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
-						.set(`Content-Type`, "application/json")
-						.set(`Authorization`, process.env.BFD_TOKEN)
-						.send({count: c});
-				} catch(e) {client.apiSend("BFD post server count not working\n```js"+e+"```", "377945714166202368")}
-				try {
-					post(`https://botlist.space/api/bots/${client.user.id}`)
-						.set(`Authorization`, process.env.BLSPACE_TOKEN)
-						.set(`Content-Type`, "application/json")
-						.send({server_count: c});
-				} catch(e) {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368")}
-			});
-		}
-		catch(e) {
-			client.user.setActivity(`${process.env.PREFIX}help`);
-		}
-	}, 3600000);
 	client.IPC.send("guilds", { latest: Array.from(client.guilds.keys()), shard: client.shard.id });
 	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
@@ -315,6 +311,10 @@ client.IPC.on("stopTyping", async data => {
 client.login(process.env.CLIENT_TOKEN).then(() => {
 	client.IPC.send("ready", { id: client.shard.id });
 });
+
+client.on("disconnect", () => {client.login(process.env.CLIENT_TOKEN).then(() => {
+	client.IPC.send("ready", { id: client.shard.id });
+});});
 
 process.on("unhandledRejection", (_, promise) => {
 	console.log(require("util").inspect(promise, null, 2));
