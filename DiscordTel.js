@@ -116,9 +116,9 @@ client.once("ready", async() => {
 		setInterval(async() => {
 			let snekres;
 			try {
-				snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
+				snekres = await get("http://discoin.sidetrip.xyz/transactions").set({ "Authorization": process.env.DISCOIN_TOKEN, "Content-Type": "application/json" });
 			} catch (err) {
-				await client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${err}\n\`\`\``, "348832329525100554");
+				await client.apiSend("Yo, there might be something wrong with the Discoin API.\n```\n"+err+"\n```", "348832329525100554");
 			}
 			if (snekres) {
 				for (let t of snekres.body) {
@@ -148,25 +148,26 @@ client.once("ready", async() => {
 	setInterval(async() => {
 		try {
 			await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-				.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-				.then(r => {
-					let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-					if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
-					client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
-					try {
-						post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
-							.set(`Content-Type`, "application/json")
-							.set(`Authorization`, process.env.BFD_TOKEN)
-							.send({ count: c });
-					} catch (e) { client.apiSend(`BFD post server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); }
-					try {
-						post(`https://botlist.space/api/bots/${client.user.id}`)
-							.set(`Authorization`, process.env.BLSPACE_TOKEN)
-							.set(`Content-Type`, "application/json")
-							.send({ server_count: c });
-					} catch (e) { client.apiSend(`BLS post server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); }
-				});
-		} catch (e) {
+			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+			.then(r => {
+				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, {type: "LISTENING"});
+				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, {type: "WATCHING"});
+				try {
+					post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
+						.set(`Content-Type`, "application/json")
+						.set(`Authorization`, process.env.BFD_TOKEN)
+						.send({count: c});
+				} catch(e) {client.apiSend("BFD post server count not working\n```js"+e+"```", "377945714166202368")}
+				try {
+					post(`https://botlist.space/api/bots/${client.user.id}`)
+						.set(`Authorization`, process.env.BLSPACE_TOKEN)
+						.set(`Content-Type`, "application/json")
+						.send({server_count: c});
+				} catch(e) {client.apiSend("BLS post server count not working\n```js"+e+"```", "377945714166202368")}
+			});
+		}
+		catch(e) {
 			client.user.setActivity(`${process.env.PREFIX}help`);
 		}
 	}, 3600000);
@@ -213,9 +214,8 @@ client.on("messageUpdate", (oldMessage, newMessage) => {
 
 client.on("message", async message => {
 	let isBlacklisted;
-	if (client.blacklist.users.includes(message.author.id)) {
-		isBlacklisted = true;
-	} else if (message.channel.type !== "dm") {
+	if (client.blacklist.users.includes(message.author.id)) isBlacklisted = true;
+	else if (message.channel.type !== "dm") {
 		if (client.blacklist.guilds.includes(message.guild.id)) isBlacklisted = true;
 	}
 	if ((message.author.bot && message.author.id !== client.user.id) || isBlacklisted) return;
@@ -249,35 +249,31 @@ client.on("message", async message => {
 			try {
 				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
-				if (fs.existsSync(`./callcmds/${command}.js`)) {
-					message.channel.send({
-						embed: {
-							color: 0xFF0000,
-							title: "Catastrophic oof",
-							description: `\`\`\`js\n${err.stack}\`\`\``,
-							footer: {
-								text: "Please `>dial *611` to report this error to the devs.",
-							},
+				if (fs.existsSync(`./callcmds/${command}.js`)) message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
 						},
-					});
-				}
+					},
+				});
 			}
 		} else {
 			try {
 				commandFile = reload(`./commands/${command}.js`);
 			} catch (err) {
-				if (fs.existsSync(`./commands/${command}.js`)) {
-					message.channel.send({
-						embed: {
-							color: 0xFF0000,
-							title: "Catastrophic oof",
-							description: `\`\`\`js\n${err.stack}\`\`\``,
-							footer: {
-								text: "Please `>dial *611` to report this error to the devs.",
-							},
+				if (fs.existsSync(`./commands/${command}.js`)) message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
 						},
-					});
-				}
+					},
+				});
 			}
 		}
 		// If so, run it
@@ -285,18 +281,16 @@ client.on("message", async message => {
 			try {
 				return commandFile(client, message, args, callDocument);
 			} catch (err) {
-				if (fs.existsSync(`./commands/${command}.js`)) {
-					message.channel.send({
-						embed: {
-							color: 0xFF0000,
-							title: "Catastrophic oof",
-							description: `\`\`\`js\n${err.stack}\`\`\``,
-							footer: {
-								text: "Please `>dial *611` to report this error to the devs.",
-							},
+				if (fs.existsSync(`./commands/${command}.js`)) message.channel.send({
+					embed: {
+						color: 0xFF0000,
+						title: "Catastrophic oof",
+						description: `\`\`\`js\n${err.stack}\`\`\``,
+						footer: {
+							text: "Please `>dial *611` to report this error to the devs.",
 						},
-					});
-				}
+					},
+				});
 			}
 		}
 	} else if (callDocument && callDocument.status && callDocument.pickedUp && !message.author.bot) {

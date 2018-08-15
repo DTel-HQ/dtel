@@ -1,4 +1,5 @@
-const { post } = require("snekfetch");
+const { post } = require("snekfetch"),
+      code = 2;
 
 module.exports = async(client, message, args) => {
 	const perms = await client.permCheck(message.author.id);

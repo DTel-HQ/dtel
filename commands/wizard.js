@@ -34,19 +34,19 @@ module.exports = async(client, message, args) => {
 	collector.on("collect", async cmessage => {
 		cmessage.content = cmessage.content.toLowerCase();
 		let number = cmessage.content.replace(/(a|b|c)/ig, "2")
-				.replace(/(d|e|f)/ig, "3")
-				.replace(/(g|h|i)/ig, "4")
-				.replace(/(j|k|l)/ig, "5")
-				.replace(/(m|n|o)/ig, "6")
-				.replace(/(p|q|r|s)/ig, "7")
-				.replace(/(t|u|v)/ig, "8")
-				.replace(/(w|x|y|z)/ig, "9")
-				.replace(/-/ig, "")
-				.replace("(", "")
-				.replace(")", "")
-				.replace(/\s+/g, "")
-				.replace(/[^\d]+/g, ""),
-			prefix = (client.shard.id + 1).toString();
+			.replace(/(d|e|f)/ig, "3")
+			.replace(/(g|h|i)/ig, "4")
+			.replace(/(j|k|l)/ig, "5")
+			.replace(/(m|n|o)/ig, "6")
+			.replace(/(p|q|r|s)/ig, "7")
+			.replace(/(t|u|v)/ig, "8")
+			.replace(/(w|x|y|z)/ig, "9")
+			.replace(/-/ig, "")
+			.replace("(", "")
+			.replace(")", "")
+			.replace(/\s+/g, "")
+			.replace(/[^\d]+/g, ""),
+		    prefix = (client.shard.id + 1).toString();
 		if (number === "0") {
 			cmessage.reply("Exiting wizard...");
 			return collector.stop();
@@ -59,10 +59,10 @@ module.exports = async(client, message, args) => {
 			if (number.length !== 11) {
 				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			}
-		} else if (!number.startsWith(`030${prefix}`)) {
-			return cmessage.reply(`I don't understand. Please retype the number. The number **must** start with \`030${prefix}\` followed by 7 digits (11 digits altogether). Type \`0\` to quit.`);
+		} else if (!number.startsWith("030"+prefix)) {
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `030"+prefix+"` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		} else if (number.length !== 11) {
-			return cmessage.reply(`I don't understand. Please retype the number. The number **must** start with \`030${prefix}\` followed by 7 digits (11 digits altogether). Type \`0\` to quit.`);
+			return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `030"+prefix+"` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 		}
 		let exists;
 		try {
