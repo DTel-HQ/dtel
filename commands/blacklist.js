@@ -30,7 +30,7 @@ module.exports = async(client, message, args) => {
 		}
 		let a = guildBlacklist ? "Guild" : "User";
 		Blacklist.create(new Blacklist({ _id: args, type: a.toLowerCase() }));
-		client.blacklist[a.toLowerCase() + "s"].push(args);
+		client.blacklist[`${a.toLowerCase()}s`].push(args);
 		await client.apiSend(`:hammer: ${a} ID \`${args}\` is added to the blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply("Done.");
 	}

@@ -23,16 +23,15 @@ module.exports = async(client, message, callDocument) => {
 		bmessage: sent.id,
 		umessage: message.id,
 		creator: message.author.id,
-		time: message.createdTimestamp
+		time: message.createdTimestamp,
 	});
 	callDocument.lastReminder = Date.now();
 	await callDocument.save();
-	var rem = setInterval(async() => {
+	let rem = setInterval(async() => {
 		callDocument = await Calls.findOne({ _id: callDocument._id });
-		if (!callDocument || Date.now() - callDocument.lastReminder < 299999) clearInterval(rem);
-		else {
-			client.apiSend(":bulb: Reminder: You still have an ongoing call ("+callDocument._id+"). You can type `>hangup` to end it.", callDocument.from.channelID);
-			client.apiSend(":bulb: Reminder: You still have an ongoing call ("+callDocument._id+"). You can type `>hangup` to end it.", callDocument.to.channelID);
+		if (!callDocument || Date.now() - callDocument.lastReminder < 299999) { clearInterval(rem); } else {
+			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${callDocument._id}). You can type \`>hangup\` to end it.`, callDocument.from.channelID);
+			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${callDocument._id}). You can type \`>hangup\` to end it.`, callDocument.to.channelID);
 			callDocument.lastReminder = Date.now();
 			await callDocument.save();
 		}

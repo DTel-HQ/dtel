@@ -10,8 +10,9 @@ module.exports = async(client, msg, suffix) => {
 		toDial = preDial._id;
 		toDialDocument = await Numbers.findOne({ number: toDial.trim(), expired: false });
 		if (toDialDocument && !client.api.channels(toDialDocument._id).get()) await preDial.remove();
-		if (!toDialDocument || toDial === "08006113835" || toDialDocument._id === msg.channel.id|| !client.api.channels(toDialDocument._id).get()) return findNumber();
-		else if (!client.api.channels(toDialDocument._id).get()) {
+		if (!toDialDocument || toDial === "08006113835" || toDialDocument._id === msg.channel.id || !client.api.channels(toDialDocument._id).get()) {
+			return findNumber();
+		} else if (!client.api.channels(toDialDocument._id).get()) {
 			await preDial.remove();
 			return findNumber();
 		}
@@ -49,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 	}
 	try {
-		findNumber().then(async(toDialDocument) => {
+		findNumber().then(async toDialDocument => {
 			let callDocument = Calls.create(
 				new Calls({
 					_id: uuidv4(),

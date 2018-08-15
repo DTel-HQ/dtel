@@ -112,6 +112,7 @@ module.exports = {
 		"unicode-bom": "error",
 		"arrow-body-style": "error",
 		"arrow-parens": ["error", "as-needed"],
+		"no-var": "error",
 		"arrow-spacing": "error",
 		"no-duplicate-imports": "error",
 		"no-useless-computed-key": "error",

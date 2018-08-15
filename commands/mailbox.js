@@ -86,7 +86,6 @@ module.exports = async(client, msg, args) => {
 					},
 				},
 			});
-			break;
 		}
 		case "delete": {
 			let message = mailbox.messages.find(m => m._id === args.split(" ")[1]);

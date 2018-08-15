@@ -57,16 +57,17 @@ module.exports = async(client, msg, suffix) => {
 				},
 			},
 		});
-	}
-	else msg.channel.send({
-		embed: {
-			color: 0x00FF00,
-			title: `:white_check_mark: Success!`,
-			description: `ID: ${id} has been striked with the reason: ${reason}`,
-			footer: {
-				text: `They now have ${allStrikes.length} strikes.`,
+	} else {
+		msg.channel.send({
+			embed: {
+				color: 0x00FF00,
+				title: `:white_check_mark: Success!`,
+				description: `ID: ${id} has been striked with the reason: ${reason}`,
+				footer: {
+					text: `They now have ${allStrikes.length} strikes.`,
+				},
 			},
-		},
-	});
-	if (type == "user"){(await client.users.fetch(id)).send(`You've been striked due to the following reason:\n\`\`\`\n${reason}\n\`\`\`\nPlease refrain from abusing the bot, as you will be blacklisted once you get 3 strikes. You currently have ${allStrikes.length} strikes.`);}
+		});
+	}
+	if (type == "user") { (await client.users.fetch(id)).send(`You've been striked due to the following reason:\n\`\`\`\n${reason}\n\`\`\`\nPlease refrain from abusing the bot, as you will be blacklisted once you get 3 strikes. You currently have ${allStrikes.length} strikes.`); }
 };
