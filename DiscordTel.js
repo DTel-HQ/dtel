@@ -48,18 +48,15 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 });
 
 scheduleJob("*/5 * * * *", async() => {
-	let blacklisted = await Blacklist.find({});
-	client.blacklist = {};
-	client.blacklist.users = [];
-	client.blacklist.guild = [];
+	const blacklisted = await Blacklist.find({});
 	for (const blacklist of blacklisted) {
 		switch (blacklist.type) {
 			case "user": {
-				client.blacklist.users.push(blacklist._id);
+				if (!client.blacklist.users.includes(blacklist._id)) client.blacklist.users.push(blacklist._id);
 				break;
 			}
-			case "guilds": {
-				client.blacklist.guilds.push(blacklist._id);
+			case "guild": {
+				if (!client.blacklist.guilds.includes(blacklist._id)) client.blacklist.guilds.push(blacklist._id);
 			}
 		}
 	}
