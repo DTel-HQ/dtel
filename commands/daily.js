@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	account.balance += toGive;
 	account.dailyClaimed = true;
+	msg.reply(`Here's your ${toGive} credits!`);
 	await account.save();
 	await client.apiSend(`:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`, process.env.LOGSCHANNEL);
-	msg.reply(`Here's your ${toGive} credits!`);
 };
