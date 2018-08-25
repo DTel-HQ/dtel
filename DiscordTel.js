@@ -12,7 +12,7 @@ const reload = require("require-reload")(require);
 
 const Client = require("./Internals/Client.js");
 const { scheduleJob } = require("node-schedule");
-const { get, post } = require("snekfetch");
+const { get } = require("snekfetch");
 
 const fs = require("fs");
 const database = require("./Database/database");
@@ -161,16 +161,11 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
-				post(`https://botsfordiscord.com/api/v1/bots/${client.user.id}`)
-					.set(`Content-Type`, "application/json")
-					.set(`Authorization`, process.env.BFD_TOKEN)
-					.send({ count: c })
-					.catch(e => { client.apiSend(`BFD post server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
-				post(`https://botlist.space/api/bots/${client.user.id}`)
+				get(`https://hill-playroom.glitch.me/dtel`)
 					.set(`Authorization`, process.env.BLSPACE_TOKEN)
 					.set(`Content-Type`, "application/json")
-					.send({ server_count: c })
-					.catch(e => { client.apiSend(`BLS post server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
+					.send({ count: c })
+					.catch(e => { client.apiSend(`Glitch server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
 			});
 	} catch (e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
