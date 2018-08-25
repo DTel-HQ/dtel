@@ -13,12 +13,9 @@ module.exports = async(client, message, args) => {
 				let array = [
 					client.token.escapeRegex(),
 					process.env.DISCORD_TOKEN.escapeRegex(),
-					process.env.DBL_ORG_TOKEN.escapeRegex(),
 					process.env.BOTS_PW_TOKEN.escapeRegex(),
 					process.env.DISCOIN_TOKEN.escapeRegex(),
 					process.env.BLSPACE_TOKEN.escapeRegex(),
-					process.env.BFD_TOKEN.escapeRegex(),
-					process.env.TERMINAL_TOKEN.escapeRegex(),
 				];
 				let regex = new RegExp(array.join("|"), "g");
 				result = result.replace(regex, "DID YOU JUST TRY TO BETRAY OUR SOVIET MOTHERLAND?!?!?!?");
