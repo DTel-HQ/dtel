@@ -164,7 +164,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				get(`https://hill-playroom.glitch.me/dtel`)
 					.set(`Authorization`, process.env.BLSPACE_TOKEN)
 					.set(`Content-Type`, "application/json")
-					.send({ count: c })
+					.set(`count`, c.toString())
 					.catch(e => { client.apiSend(`Glitch server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
 			});
 	} catch (e) {
