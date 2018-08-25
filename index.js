@@ -4,7 +4,7 @@ process.setMaxListeners(0);
 const Sharder = require("./Sharding/Sharder");
 
 (async() => {
-	const sharder = await new Sharder(process.env.DISCORD_TOKEN, 2);
+	const sharder = await new Sharder(process.env.DISCORD_TOKEN, process.env.SHARD_COUNT);
 	sharder.cluster.on("online", worker => {
 		console.log(`[SHARDING] Worker ${worker.id} launched`);
 	});
