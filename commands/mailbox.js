@@ -35,7 +35,6 @@ module.exports = async(client, msg, args) => {
 				});
 				collector.on("collect", async cmsg => {
 					if (cmsg.content === "0") {
-						await cmsg.delete();
 						automsg.edit({
 							embed: {
 								color: 0xFF0000,
@@ -47,7 +46,6 @@ module.exports = async(client, msg, args) => {
 						mailbox.settings.autoreply = cmsg.content;
 						await mailbox.save();
 						await collector.stop();
-						await cmsg.delete();
 						automsg.edit({
 							embed: {
 								color: 0x00FF00,
