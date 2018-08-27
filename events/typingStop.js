@@ -19,7 +19,7 @@ module.exports = async(client, channel, member) => {
 		} catch (err) {
 			console.log(err);
 		}
-	} else if (callFrom && callTo.pickedUp && !callTo.onHold) {
+	} else if (callFrom && callFrom.pickedUp && !callFrom.onHold) {
 		try {
 			const fetched = await client.api.channels(callFrom.to.channelID).get();
 			client.IPC.send("stopTyping", { hangups: [{ channel: fetched.id, guild: fetched.guild_id }] });
