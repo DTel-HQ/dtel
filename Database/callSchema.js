@@ -42,6 +42,10 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	onHold: {
+		type: Boolean,
+		default: false,
+	},
 	// 5-min Reminder check
 	lastReminder: {
 		type: Number,
