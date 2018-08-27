@@ -93,8 +93,8 @@ module.exports = async (client, message, args, callDocument) => {
     }
     // Error checking and utils finished! Let's actually start calling.
     message.reply(`:arrow_right: The other side has been transferred to \`${toDial}\`.`);
-    await client.apiSend(`:arrow_right: A call in channel ${message.channel.id} has been transferred from channel ${callDocument._id} to ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
-    let toSend, toChange;
+    await client.apiSend(`:arrow_right: A call in channel ${message.channel.id} has been transferred to ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
+    let toSend;
     callDocument.pickedUp = false;
     callDocument.onHold = false;
     if (callDocument.to.channelID === message.channel.id) {
