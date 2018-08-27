@@ -56,13 +56,11 @@ module.exports = async(client, msg, suffix) => {
 					_id: uuidv4(),
 					to: {
 						channelID: toDialDocument._id,
-						number: toDialDocument.number,
-						guild: toDialDocument.guild,
+						number: toDialDocument.number
 					},
 					from: {
 						channelID: msg.channel.id,
-						number: mynumber.number,
-						guild: msg.guild.id,
+						number: mynumber.number
 					},
 				})
 			);
