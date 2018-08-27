@@ -39,8 +39,8 @@ module.exports = new mongoose.Schema({
 		default: true,
 	},
 	pickedUp: {
-		type: Boolean,
-		default: false,
+		type: String,
+		default: "",
 	},
 	onHold: {
 		type: Boolean,
