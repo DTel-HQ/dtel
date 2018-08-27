@@ -76,15 +76,18 @@ module.exports = async(client, message, args, callDocument) => {
   message.reply(`:arrow_right: The other side has been transferred to \`${toDial}\`.`);
   await client.apiSend(`:arrow_right: A call in channel ${message.channel.id} has been transferred from channel ${callDocument._id} to ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
   let toSend, toChange;
+  callDocument.pickedUp = false;
+  callDocument.onHold = false;
   if (callDocument.to.channelID === message.channel.id) {
     toSend = callDocument.from.channelID;
+    await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.to.number}\`) from \`${callDocument.from.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
     callDocument.to = {channelID: toDialDocument._id, number: toDialDocument.number};
   } else {
     toSend = callDocument.to.channelID;
+    await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.from.number}\`) from \`${callDocument.to.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
     callDocument.from = {channelID: toDialDocument._id, number: toDialDocument.number};
   }
   await client.apiSend(`:arrow_right: Your call has been transferred to \`${toDial}\`, awaiting pickup. You are able to \`>hangup\`.`, toSend);
-  
   await callDocument.save();
 		setTimeout(async() => {
 			callDocument = await Calls.findOne({ _id: callDocument._id });
