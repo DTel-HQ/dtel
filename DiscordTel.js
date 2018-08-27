@@ -303,7 +303,7 @@ client.on("message", async message => {
 				}
 			}
 		}
-	} else if (callDocument && callDocument.status && callDocument.pickedUp && !message.author.bot) {
+	} else if (callDocument && callDocument.status && callDocument.pickedUp && !callDocument.onHold && !message.author.bot) {
 		require("./modules/callHandler")(client, message, callDocument);
 	}
 });
