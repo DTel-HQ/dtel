@@ -38,11 +38,11 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: true,
 	},
-	pickedUp: {
+	onHold: {
 		type: String,
 		default: "",
 	},
-	onHold: {
+	pickedUp: {
 		type: Boolean,
 		default: false,
 	},
