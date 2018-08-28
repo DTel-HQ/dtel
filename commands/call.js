@@ -180,22 +180,22 @@ module.exports = async(client, message, args) => {
 
 							let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id === message.author.id, { time: 600000 });
 							collector2.on("collect", async c2msg => {
+								await collector2.stop();
 								if (c2msg.content === "8") {
-									await collector2.stop();
 									let pbentry;
 									try {
 										pbentry = await Phonebook.findOne({ _id: mynumber.number });
 										if (!pbentry) throw new Error();
+										message.reply("Entry removed!");
+										mainMenu();
 									} catch (err) {
 										message.reply("You are not in the phonebook!");
 										mainMenu();
 									}
 									await pbentry.remove();
 								} else if (c2msg.content === "9") {
-									await collector2.stop();
 									await mainMenu();
 								} else if (c2msg.content === "0") {
-									await collector2.stop();
 									return message.reply("Exiting Phonebook.");
 								} else {
 									let pbentry;
@@ -210,7 +210,6 @@ module.exports = async(client, message, args) => {
 									pbentry.description = censorship;
 									await pbentry.save();
 									message.reply("**Registry edited!**");
-									await collector2.stop();
 									await mainMenu();
 								}
 							});
