@@ -1,7 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args, callDocument) => {
-	if (callDocument.pickedUp || message.channel.id === callDocument.from.channelID) return;
+	if (callDocument.pickedUp || (message.channel.id === callDocument.from.channelID && !callDocument.transfer)) return;
 	let toChannel, fromChannel;
 	try {
 		toChannel = await client.api.channels(callDocument.to.channelID).get();
