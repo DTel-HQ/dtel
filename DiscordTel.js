@@ -248,8 +248,45 @@ client.on("message", async message => {
 			command = "rdial";
 		}
 		let commandFile;
-		// Is there a call?
-		if (callDocument && callDocument.status) {
+		// Is there a call on hold?
+		if (callDocument && callDocument.status && callDocument.onHold) {
+			if (command === "call" || command === "rdial") return message.reply("You can't call someone else during a hold.");
+			try {
+				commandFile = reload(`./callcmds/${command}.js`);
+			} catch (err) {
+				if (fs.existsSync(`./callcmds/${command}.js`)) {
+					message.channel.send({
+						embed: {
+							color: 0xFF0000,
+							title: "Catastrophic oof",
+							description: `\`\`\`js\n${err.stack}\`\`\``,
+							footer: {
+								text: "Please `>dial *611` to report this error to the devs.",
+							},
+						},
+					});
+				}
+				else {
+					try {
+						commandFile = reload(`./callcmds/${command}.js`);
+					} catch (err) {
+						if (fs.existsSync(`./callcmds/${command}.js`)) {
+							message.channel.send({
+								embed: {
+									color: 0xFF0000,
+									title: "Catastrophic oof",
+									description: `\`\`\`js\n${err.stack}\`\`\``,
+									footer: {
+										text: "Please `>dial *611` to report this error to the devs.",
+									},
+								},
+							});
+						}
+					}
+				}
+			}
+		} else if (callDocument && callDocument.status) {
+			// not on hold?
 			try {
 				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
