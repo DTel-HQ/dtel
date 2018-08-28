@@ -84,13 +84,19 @@ module.exports = async(client, message, args) => {
 				fields: [{
 					name: "Number",
 					value: number,
+					inline: true,
 				},
 				{
 					name: "Expiration",
 					value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
+					inline: true,
+				},
+				{
+					name: "Remember...",
+					value: "To receive random calls (`>rdial`s), you must register in the phonebook (*411). To do so, dial *411 and press 3. ",
 				}],
 				footer: {
-					text: "You can register in the phonebook (*411) to receive random calls. To do so, dial *411 and press 3. You have finished the wizard.",
+					text: "You have finished the wizard.",
 				},
 			},
 		});
