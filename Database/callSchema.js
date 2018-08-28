@@ -38,6 +38,11 @@ module.exports = new mongoose.Schema({
 		type: Boolean,
 		default: true,
 	},
+	// The call has been transferred (Deals with from-side pickup issue)
+	transfer: {
+		type: Boolean,
+		default: false,
+	},
 	onHold: {
 		type: String,
 		default: "",
