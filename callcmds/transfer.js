@@ -101,7 +101,7 @@ module.exports = async (client, message, args, callDocument) => {
         toSend = callDocument.from.channelID;
         await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.to.number}\`) from \`${callDocument.from.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
     } else {
-        callDocument.from = {channelID: callDocument.to._id, number: callDocument.to.number};
+        callDocument.from = {channelID: callDocument.to.channelId, number: callDocument.to.number};
         toSend = callDocument.to.channelID;
         await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.from.number}\`) from \`${callDocument.to.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
     }
