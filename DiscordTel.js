@@ -268,9 +268,9 @@ client.on("message", async message => {
 				}
 				else {
 					try {
-						commandFile = reload(`./callcmds/${command}.js`);
+						commandFile = reload(`./commands/${command}.js`);
 					} catch (err) {
-						if (fs.existsSync(`./callcmds/${command}.js`)) {
+						if (fs.existsSync(`./commands/${command}.js`)) {
 							message.channel.send({
 								embed: {
 									color: 0xFF0000,
