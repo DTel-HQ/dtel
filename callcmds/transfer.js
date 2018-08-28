@@ -96,10 +96,11 @@ module.exports = async (client, message, args, callDocument) => {
     await client.apiSend(`:arrow_right: A call in channel ${message.channel.id} has been transferred to ${toDialDocument._id} by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
     callDocument.pickedUp = false;
     callDocument.onHold = "";
-    await client.apiSend(`:arrow_right: Your call has been transferred to \`${toDial}\`, awaiting pickup. You are able to \`>hangup\`.`, callDocument.from._id);
     if (callDocument.to.channelID === message.channel.id) {
+        await client.apiSend(`:arrow_right: Your call has been transferred to \`${toDial}\`, awaiting pickup. You are able to \`>hangup\`.`, callDocument.from.channelID);
         await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.to.number}\`) from \`${callDocument.from.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
     } else {
+        await client.apiSend(`:arrow_right: Your call has been transferred to \`${toDial}\`, awaiting pickup. You are able to \`>hangup\`.`, callDocument.to.channelID);
         await client.apiSend(`There is an incoming call (**Transferred** from \`${callDocument.from.number}\`) from \`${callDocument.to.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
         callDocument.from = callDocument.to;
     }
