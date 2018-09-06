@@ -9,6 +9,7 @@ module.exports = async(client, msg, suffix) => {
 				_id: msg.author.id,
 			}));
 			msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+			account = await Accounts.findOne({ _id: msg.author.id });
 		}
 		msg.channel.send({
 			embed: {
