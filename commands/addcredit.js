@@ -23,8 +23,6 @@ module.exports = async(client, message, args) => {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (userid === message.author.id && !perms.boss) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	} else if (perms.support && !perms.boss) {
-		return message.reply("**NOPE, NOT TODAY!** <:mmLol:356831697385422848>");
 	}
 	if (isNaN(amount)) {
 		return message.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
