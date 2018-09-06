@@ -69,7 +69,7 @@ module.exports = async(client, msg, suffix) => {
 			client.apiSend(`There is an incoming call from \`${mynumber.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDocument._id);
 			setTimeout(async() => {
 				callDocument = await Calls.findOne({ _id: callDocument._id });
-				if (callDocument.pickedUp) return;
+				if (!callDocument || callDocument.pickedUp) return;
 				callDocument.status = false;
 				await callDocument.save();
 				msg.reply(":negative_squared_cross_mark: This call has expired (2 minutes).");
