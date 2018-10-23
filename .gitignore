@@ -1,7 +1,6 @@
 node_modules/
 .DS_Store
 DB/
-.env
-json/fouroneone.json
-json/fouroneone.json
-json/numbers.json
+Logs/
+Configuration/auth.js
+rethinkdb.exe

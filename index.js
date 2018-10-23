@@ -1,68 +1,36 @@
-require("dotenv").config();
-process.setMaxListeners(0);
+const { createLogger, format, transports } = require("winston");
+const DailyRotateFile = require("winston-daily-rotate-file");
 
-const Sharder = require("./Sharding/Sharder");
+const config = require("./Configuration/config.js");
 
-(async() => {
-	const sharder = await new Sharder(process.env.DISCORD_TOKEN, process.env.SHARD_COUNT);
-	sharder.cluster.on("online", worker => {
-		console.log(`[SHARDING] Worker ${worker.id} launched`);
-	});
-	sharder.ready = 0;
-	sharder.finished = 0;
-	sharder.IPC.on("ready", async() => {
-		sharder.ready++;
-		if (sharder.ready === sharder.count) {
-			console.log("[SHARDING] All shards connected.");
-		}
-	});
+const { ShardingManager } = require("discord.js");
+const sharder = new ShardingManager("DiscordTel.js", {
+	totalShards: Number(config.shardCount),
+	respawn: true,
+	token: require("./Configuration/auth.js").discord.token,
+});
 
+const winston = global.winston = createLogger({
+	transports: [
+		new transports.Console({
+			colorize: true,
+		}),
+		new DailyRotateFile({
+			filename: "./Logs/Winston-Log-%DATE%-ShardingManager.log",
+			datePattern: "YYY-MM-DD-HH",
+			zippedArchive: true,
+			maxFiles: "14d",
+			maxSize: "20m",
+		}),
+	],
+	exitOnError: false,
+	format: format.combine(
+		format.colorize(),
+		format.timestamp(),
+		format.printf(info => `${info.level}: [Shard Master] ${info.message} [${info.timestamp}]`)
+	),
+});
 
-	let shardFinished = () => {
-		if (sharder.finished > -1) sharder.finished++;
-		if (sharder.finished === sharder.count) {
-			console.log(`DTel 611, how can I help you today?`);
-			sharder.finished = -1;
-		}
-	};
+sharder.on("shardCreate", shard => winston.info(`[Sharder] Spawned Shard ID: ${shard.id}`));
 
-	// Shard has finished all work
-	sharder.IPC.on("finished", shardFinished);
-
-	// Shard requests changes to gulid cache
-	sharder.IPC.on("guilds", async msg => {
-		let guilds = msg.latest;
-		if (!guilds) guilds = [];
-		for (let guild of guilds) {
-			sharder.guilds.set(guild, parseInt(msg.shard));
-		}
-		if (msg.remove) {
-			for (let guild of msg.remove) {
-				sharder.guilds.delete(guild);
-			}
-		}
-	});
-
-	// Shard requests JavaScript code to be executed
-	sharder.IPC.on("eval", async(msg, callback) => {
-		const promises = [];
-		sharder.shards.forEach(shard => promises.push(shard.eval(msg)));
-		callback(await Promise.all(promises));
-	});
-
-	sharder.IPC.on("stopTyping", async data => {
-		data.hangups.forEach(hangupData => {
-			const shard = sharder.guilds.get(hangupData.guild);
-			if (shard) sharder.IPC.send("stopTyping", hangupData, shard);
-		});
-	});
-
-	sharder.IPC.on("startTyping", async data => {
-		data.typings.forEach(typingData => {
-			const shard = sharder.guilds.get(typingData.guild);
-			if (shard) sharder.IPC.send("startTyping", typingData, shard);
-		});
-	});
-
-	sharder.spawn();
-})();
+sharder.spawn();
