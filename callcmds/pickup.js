@@ -21,7 +21,7 @@ module.exports = async(client, message, args, callDocument) => {
 			return message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
 		}
 	}
-	await client.apiSend(`:white_check_mark: The call between channel ${fromChannel.id} and channel ${toChannel.id}} was picked up by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
+	await client.apiSend(`:white_check_mark: The call between channel ${fromChannel.id} and channel ${toChannel.id} was picked up by __${message.author.tag}__ (${message.author.id}).`, process.env.LOGSCHANNEL);
 	callDocument.lastReminder = Date.now();
 	callDocument.pickedUp = true;
 	await callDocument.save();
