@@ -162,10 +162,20 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
 				get(`https://hill-playroom.glitch.me/dtel`)
-					.set(`Authorization`, process.env.BLSPACE_TOKEN)
-					.set(`Content-Type`, "application/json")
-					.set(`count`, c.toString())
-					.catch(e => { client.apiSend(`Glitch server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
+				.set(`Authorization`, process.env.BLSPACE_TOKEN)
+				.set(`Content-Type`, "application/json")
+				.set(`count`, c.toString())
+				.then(r => {
+					Object.keys(r.body).map(v => {
+						await Accounts.update({_id: v}, {"$inc": {"balance": r.body[v]}});
+						try {
+							(await client.users.fetch(v)).send(`You've received ¥${r.body[v]} from voting for us on bot listings!`);
+						} catch (err) {
+							return;
+						}
+					});
+				})
+				.catch(e => { client.apiSend(`Glitch server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
 			});
 	} catch (e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
