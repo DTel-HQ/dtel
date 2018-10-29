@@ -165,7 +165,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				.set(`Authorization`, process.env.BLSPACE_TOKEN)
 				.set(`Content-Type`, "application/json")
 				.set(`count`, c.toString())
-				.then(r => {
+				.then(async r => {
 					Object.keys(r.body).map(v => {
 						await Accounts.update({_id: v}, {"$inc": {"balance": r.body[v]}});
 						try {
