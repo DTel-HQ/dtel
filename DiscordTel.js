@@ -166,8 +166,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				.set(`Content-Type`, "application/json")
 				.set(`count`, c.toString())
 				.then(r => {
-					console.log(r.body);
-					Object.keys(r.body).forEach(v => {
+					Object.keys(JSON.parse(r.body.toString())).forEach(v => {
 						Accounts.update({_id: v}, {"$inc": {"balance": r.body[v]}});
 						try {
 							(client.users.fetch(v)).send(`You've received ¥${r.body[v]} from voting for us on bot listings!`);
