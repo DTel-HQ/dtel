@@ -157,7 +157,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 	try {
 		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
 			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
-			.then(r => {
+			.then(async r => {
 				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
@@ -165,8 +165,8 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				.set(`Authorization`, process.env.BLSPACE_TOKEN)
 				.set(`Content-Type`, "application/json")
 				.set(`count`, c.toString())
-				.then(r => {
-					Object.keys(JSON.parse(r.body.toString())).forEach(v => {
+				.then(async r => {
+					Object.keys(JSON.parse(r.body.toString())).forEach(async v => {
 						Accounts.update({_id: v}, {"$inc": {"balance": r.body[v]}});
 						try {
 							(client.users.fetch(v)).send(`You've received ¥${r.body[v]} from voting for us on bot listings!`);
