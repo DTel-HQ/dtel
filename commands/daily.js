@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	account.balance += toGive;
 	account.dailyClaimed = true;
-	msg.reply(`Here's your ${toGive} credits!`);
+	msg.reply(`Here's your ${toGive} credits!\n\nYou can now also vote for DiscordTel on various bot listings to get up to 80 more credits per day! See https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings for details.`);
 	await account.save();
 	await client.apiSend(`:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`, process.env.LOGSCHANNEL);
 };
