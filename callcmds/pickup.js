@@ -14,7 +14,7 @@ module.exports = async(client, message, args, callDocument) => {
 		return message.reply(":x: The bot has lost permission to send your message to the opposite side. This means the bot could be kicked. Please report this situation to *611, as it could be a troll call.");
 	}
 	try {
-		await client.apiSend(":heavy_check_mark: The other side picked up!\n\n**New!** You can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`!", callDocument.from.channelID);
+		await client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", callDocument.from.channelID);
 	} catch (e) {
 		if (e.message === "Missing Permissions") {
 			await callDocument.remove();
