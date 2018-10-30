@@ -167,7 +167,16 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 				.set(`count`, c.toString())
 				.then(async r => {
 					Object.keys(JSON.parse(r.body.toString())).forEach(async v => {
-						Accounts.update({_id: v}, {"$inc": {"balance": JSON.parse(r.body.toString())[v]}});
+						let account;
+						try {
+							account = await Accounts.findOne({ _id: v });
+						} catch (err) {
+							account = await Accounts.create(new Accounts({
+								_id: v,
+							}));
+						}
+						account.balance += JSON.parse(r.body.toString())[v];
+						await account.save();
 						await client.apiSend(`:ballot_box: User ${(await client.users.fetch(v)).username || `invalid-user#0001`} (${v}) received ¥${JSON.parse(r.body.toString())[v]} from voting.`, process.env.LOGSCHANNEL);
 						try {
 							(await client.users.fetch(v)).send(`You've received ¥${JSON.parse(r.body.toString())[v]} from voting for us on bot listings!`);
