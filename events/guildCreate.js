@@ -4,11 +4,12 @@ module.exports = async(client, guild) => {
 	let canDMOwner = true;
 	const ownerMessage = [
 		`Hello, I'm **DiscordTel**, the telephone solution for Discord, and I've been added to \`${guild}\`, a server you own!`,
+		`I'm a **roleplay** bot that only works within Discord! This means **I CANNOT CALL REAL NUMBERS!**`,
 		`To learn more, type \`${process.env.PREFIX}info\`. To get command help, type \`${process.env.PREFIX}help\``,
-		`To get a number, please read **<http://discordtel.rtfd.io/>** and then type \`${process.env.PREFIX}wizard\` in the channel you wish to enable this service.`,
+		`To get a number, type \`${process.env.PREFIX}wizard\` in the channel you wish to enable this service in.`,
 		`:warning: No troll calls. You are required to read the documentation.`,
-		`To keep your number available you need to renew your number which is instructed at **<http://discordtel.readthedocs.io/en/latest/Payment/>**.`,
-		`**ToS Compliance:** <http://discordtel.readthedocs.io/en/latest/ToS%20Compliance/>`,
+		`To keep your number available you need to renew your number which is instructed at **<https://discordtel.austinhuang.me/en/latest/Payment/>**.`,
+		`**ToS Compliance:** <https://discordtel.austinhuang.me/en/latest/ToS%20Compliance/>`,
 	].join("\n");
 	try {
 		(await guild.members.fetch(guild.owner.id)).send(ownerMessage);
