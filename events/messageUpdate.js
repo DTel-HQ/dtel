@@ -1,7 +1,7 @@
 const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, oldMessage, newMessage) => {
-	if (oldMessage.author.id === client.user.id) return;
+	if (oldMessage.author.id === client.user.id || oldMessage.author.bot) return;
 	let perms = await client.permCheck(oldMessage.author.id);
 	let callDocument;
 	try {
@@ -29,7 +29,6 @@ module.exports = async(client, oldMessage, newMessage) => {
 		if (!messageToEdit) throw new Error();
 	} catch (err) {
 		// Ignore
-		// console.log(`[Shard ${client.shard.id}] Error occured in the messageUpdate event.\n ${err.stack}`);
 	}
 	let toSend;
 	if (perms.donator || oldMessage.author.id === `139836912335716352`) {
