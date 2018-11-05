@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Recharging",
-					value: "http://discordtel.readthedocs.io/en/latest/Payment/",
+					value: "https://discordtel.austinhuang.me/en/latest/Payment/",
 				},
 				{
 					name: "Vote for free credits!",
