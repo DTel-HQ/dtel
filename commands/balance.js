@@ -22,7 +22,11 @@ module.exports = async(client, msg, suffix) => {
 				{
 					name: "Recharging",
 					value: "http://discordtel.readthedocs.io/en/latest/Payment/",
-				}],
+				},
+					 {
+						 name: "Vote for free credits!",
+						 velue: "You can vote for DiscordTel on various bot listings for **40~80 more credits every day**! See [here](https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings) for a list of voting sites!"
+					 }],
 			},
 		});
 	} else {
