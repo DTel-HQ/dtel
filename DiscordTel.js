@@ -155,10 +155,11 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 		}
 	}
 	try {
-		await get(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-			.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+		await get(`https://discordbots.org/api/bots/${client.user.id}/stats`)
+			.set(`Authorization`, process.env.BOTS_ORG_TOKEN)
 			.then(async r => {
-				let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+				//let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
+				let c = r.server_count;
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
 				get(`https://hill-playroom.glitch.me/dtel`)
