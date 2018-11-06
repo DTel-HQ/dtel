@@ -31,8 +31,8 @@ module.exports = async(client, guild) => {
 	}
 	if (process.env.BOTS_PW_TOKEN) {
 		try {
-			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
-				.set(`Authorization`, process.env.BOTS_PW_TOKEN)
+			await snekfetch.post(`https://discordbots.org/api/bots/${client.user.id}/stats`)
+				.set(`Authorization`, process.env.BOTS_ORG_TOKEN)
 				.set(`Content-Type`, "application/json")
 				.send({
 					shard_id: client.shard.id,
@@ -40,7 +40,7 @@ module.exports = async(client, guild) => {
 					server_count: client.guilds.size,
 				});
 		} catch (err) {
-			console.log(`[Shard ${client.shard.id}] Failed to post to DBots`, err);
+			console.log(`[Shard ${client.shard.id}] Failed to post to DBL`, err);
 		}
 	}
 };
