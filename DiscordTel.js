@@ -159,7 +159,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 			.set(`Authorization`, process.env.BOTS_ORG_TOKEN)
 			.then(async r => {
 				//let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
-				let c = r.server_count;
+				let c = r.body.server_count;
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
 				get(`https://hill-playroom.glitch.me/dtel`)
