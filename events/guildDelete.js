@@ -10,7 +10,7 @@ module.exports = async(client, guild) => {
 	}
 	if (process.env.BOTS_PW_TOKEN) {
 		try {
-			await snekfetch.post(`https://bots.discord.pw/api/bots/${client.user.id}/stats`)
+			await snekfetch.post(`https://discordbots.org/api/bots/${client.user.id}/stats`)
 				.set(`Authorization`, process.env.BOTS_PW_TOKEN)
 				.set(`Content-Type`, "application/json")
 				.send({
