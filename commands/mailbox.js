@@ -22,6 +22,9 @@ module.exports = async(client, msg, args) => {
 					},
 				});
 			} else if (args.split(" ")[1].toLowerCase() === "autoreply") {
+				if (!msg.member.hasPermission("MANAGE_GUILD")) {
+				return msg.reply("You don't have `Manage Server` permission!");
+			}
 				let collector = msg.channel.createMessageCollector(newmsg => newmsg.author.id === msg.author.id);
 				let automsg = await msg.channel.send({
 					embed: {
