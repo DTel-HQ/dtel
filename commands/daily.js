@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply("You already claimed your daily credits!\n\nYou can vote for DiscordTel on various bot listings to get **40~80 more credits every day**! See https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings for a list of voting sites.");
 	}
 	let perms = await client.permCheck(msg.author.id);
-	let toGive = 120;
+	let toGive = 80;
 	if (perms.boss) {
 		toGive = 300;
 	} else if (perms.support) {
@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	account.balance += toGive;
 	account.dailyClaimed = true;
-	msg.reply(`Here's your ${toGive} credits!\n\nYou can vote for DiscordTel on various bot listings to get **40~80 more credits every day**! See https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings for a list of voting sites.`);
+	msg.reply(`Here's your ${toGive} credits!\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings for a list of voting sites.`);
 	await account.save();
 	await client.apiSend(`:calendar: ${msg.author.tag} (${msg.author.id}) claimed ${toGive} daily credits.`, process.env.LOGSCHANNEL);
 };
