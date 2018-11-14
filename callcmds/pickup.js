@@ -25,7 +25,7 @@ module.exports = async(client, message, args, callDocument) => {
 	callDocument.lastReminder = Date.now();
 	callDocument.pickedUp = true;
 	await callDocument.save();
-	message.reply(":white_check_mark: You pick up the call.\n\n**New!** You can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`!");
+	message.reply(":white_check_mark: You pick up the call.\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`!");
 	var rem = setInterval(async() => {
 		callDocument = await Calls.findOne({ _id: callDocument._id });
 		if (!callDocument || Date.now() - callDocument.lastReminder < 299999) { clearInterval(rem); } else {
