@@ -33,7 +33,7 @@ module.exports = async(client, message, args) => {
 				 value: "The documentation is located at https://discordtel.austinhuang.me. **Please read it** as it contains important information regarding the use of this bot."
 				},
 				{name: "Payment",
-				 value: "**Your number must be renewed for every month of usage.** The number will cost **500** in-bot credits per month, after 1 month of free period. You must type `>dial *411` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**"
+				 value: "**Your number must be renewed for every month of usage.** The number will cost **500** in-bot credits per month, after 1 month of free period. You must type `>dial *233` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**"
 				},
 				{name: "You're registering a number in DM!",
 				 value: "...which means all calls to the number will show up as direct messages. Just to let you know."
@@ -57,7 +57,7 @@ module.exports = async(client, message, args) => {
 				 value: "The documentation is located at https://discordtel.austinhuang.me. **Please read it** as it contains important information regarding the use of this bot."
 				},
 				{name: "Payment",
-				 value: "**Your number must be renewed for every month of usage.** The number will cost **500** in-bot credits per month, after 1 month of free period. You must type `>dial *411` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**"
+				 value: "**Your number must be renewed for every month of usage.** The number will cost **500** in-bot credits per month, after 1 month of free period. You must type `>dial *233` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**"
 				},
 				{name: "I'm ready!",
 				 value: `Please enter the number you wish to enable in <#${message.channel.id}>. The number must start with \`030${prefix}\` followed by another 7 digits. Type \`0\` to quit the wizard.`
