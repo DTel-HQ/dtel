@@ -1,6 +1,7 @@
 const snekfetch = require("snekfetch");
 
 module.exports = async(client, guild) => {
+	/*
 	let canDMOwner = true;
 	const ownerMessage = [
 		`Hello, I'm **DiscordTel**, the telephone solution for Discord, and I've been added to \`${guild}\`, a server you own!`,
@@ -19,7 +20,8 @@ module.exports = async(client, guild) => {
 	}
 	if (!guild.me.permissions.has("EMBED_LINK") && canDMOwner) {
 		guild.owner.send("I don't seem to have the `Embed Links` permission in your server. This may cause issues with DiscordTel, so please make sure I have that permission.");
-	}
+	}*/
+	
 
 	// const censorship = guild.name.replace(/discord\.(gg|io|me|li)\/([0-9]|[a-z])*/g, "**Invite link censored**");
 	// eslint-disable-next-line no-useless-escape
