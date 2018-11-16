@@ -158,7 +158,6 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 		await get(`https://discordbots.org/api/bots/${client.user.id}/stats`)
 			.set(`Authorization`, process.env.BOTS_ORG_TOKEN)
 			.then(async r => {
-				//let c = r.body.stats.map(s => s.server_count).reduce((a, b) => a + b);
 				let c = r.body.server_count;
 				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
 				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
@@ -187,6 +186,20 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob("*/5 * * * *", async() => {
 					});
 				})
 				.catch(e => { client.apiSend(`Glitch server count not working\n\`\`\`js${e}\`\`\``, "377945714166202368"); });
+			});
+	} catch (e) {
+		client.user.setActivity(`${process.env.PREFIX}help`);
+	}
+});
+
+Number(process.env.SHARD_ID) !== 0 && scheduleJob("*/15 * * * *", async() => {
+	try {
+		await get(`https://discordbots.org/api/bots/${client.user.id}/stats`)
+			.set(`Authorization`, process.env.BOTS_ORG_TOKEN)
+			.then(async r => {
+				let c = r.body.server_count;
+				if (isNaN(c)) client.user.setActivity(`${process.env.PREFIX}help`, { type: "LISTENING" });
+				client.user.setActivity(`${c} servers | ${process.env.PREFIX}help`, { type: "WATCHING" });
 			});
 	} catch (e) {
 		client.user.setActivity(`${process.env.PREFIX}help`);
