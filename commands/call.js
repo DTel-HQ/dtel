@@ -46,6 +46,7 @@ module.exports = async(client, message, args) => {
 			if (message.channel.type !== "dm" && message.guild.id == process.env.SUPPORTGUILD) {
 				return message.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 			} else {
+				message.channel.send("Please wait out the call to give Customer Support agents time to respond.");
 				toDial = "08006113835";
 			}
 		}
