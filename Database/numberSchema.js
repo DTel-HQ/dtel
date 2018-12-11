@@ -6,5 +6,5 @@ module.exports = new mongoose.Schema({
 	expiry: { type: Date, required: true },
 	expired: { type: Boolean, default: false },
 	callerId: String,
-	callerIdExpiry: Date,
+	premiumExpiry: Date, // Premium number expiry
 }, { usePushEach: true });
