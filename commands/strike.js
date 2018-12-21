@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	let toStrikePerms;
 	if (type == "user") toStrikePerms = await client.permCheck(id);
-	if (toStrikePerms.support || toStrikePerms.boss) return msg.reply("I'd rather you didn't strike a staff member.");
+	if ((toStrikePerms.support && !perms.boss) || toStrikePerms.boss) return msg.reply("I'd rather you didn't strike a staff member.");
 
 	await Strikes.create(new Strikes({
 		_id: randomstring.generate({ length: "8", charset: "alphanumeric" }),

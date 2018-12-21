@@ -12,7 +12,11 @@ module.exports = async(client, msg, suffix) => {
 	} catch (err) {
 		return msg.reply("That strike doesn't exist!");
 	}
-
+	
+	if (msg.author.id === strikeDoc.offender) {
+		return msg.reply("Thought you'd get away with that?");
+	}
+	
 	await strikeDoc.remove();
 	let allStrikes = await Strikes.find({ offender: strikeDoc.offender });
 
