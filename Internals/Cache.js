@@ -15,10 +15,19 @@ module.exports = class Cache extends require("discord.js").Collection {
 			throw new Error(`Could not create\n${e}`);
 		}
 		return new modelFound({
-			options,
 			r: this.r,
 			table: this.table,
 			cached,
+		});
+	}
+	newGet(key) {
+		let res = this.get(key);
+		if (res == null) return res;
+		return new modelFound({
+			cache: this,
+			r: this.r,
+			table: this.table,
+			cached: res,
 		});
 	}
 };

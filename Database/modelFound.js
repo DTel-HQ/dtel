@@ -2,17 +2,16 @@ module.exports = class modelFound {
 	constructor(options) {
 		this.table = options.table;
 		this.r = options.r;
-		this.result = options.result;
 		this.cached = options.cached;
-
-		return this.cached;
+		this.cache = options.cache;
+		for (let i of Object.keys(this.cached)) this[i] = this.cached[i];
 	}
 
 	async delete() {
-		delete this.cached;
+		this.cache.delete(this.id);
 		let res;
 		try {
-			res = await this.result.remove();
+			res = await r.table(this.table).get(this.id).delete();
 		} catch (err) {
 			throw new Error(`Could not remove document\n${res}`);
 		}

@@ -1,22 +1,23 @@
 const { Structures } = require("discord.js");
 
-module.exports = async() => {
+module.exports = () => {
 	Structures.extend("User", User => {
 		class DTelUser extends User {
-			getPerms() {
+			async getPerms() {
 				let toRet = {
 					boss: false,
 					support: false,
 					donator: false,
 				};
-				this.client.api.guilds(config.supportGuild).members(this.id).get()
+				return this.client.api.guilds(config.supportGuild).members(this.id).get()
 					.then(member => {
-						if (member.roles.includes(process.env.BOSSROLE)) toRet.boss = true;
-						if (member.roles.includes(process.env.SUPPORTROLE)) toRet.support = true;
-						if (member.roles.includes(process.env.DONATORROLE)) toRet.donator = true;
+						if (config.maintainers.includes(this.id)) toRet = { boss: true, support: true, donator: true };
+						if (member.roles.includes(config.bossRole)) toRet.boss = true;
+						if (member.roles.includes(config.supportRole)) toRet.support = true;
+						if (member.roles.includes(config.donatorRole)) toRet.donator = true;
+						return toRet;
 					})
-					.catch(() => new Error("Could not find member."));
-				return toRet;
+					.catch(() => toRet);
 			}
 		}
 		return DTelUser;

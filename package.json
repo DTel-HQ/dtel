@@ -20,12 +20,13 @@
   },
   "homepage": "https://github.com/austinhuang0131/discordtel#readme",
   "dependencies": {
-    "chainfetch": "^1.1.0",
+    "chainfetch": "^1.2.2",
     "clear-require": "^2.0.0",
     "discord.js": "github:discordjs/discord.js",
-    "fs-nextra": "^0.3.7",
+    "fs-nextra": "^0.3.8",
     "rethinkdbdash": "^2.3.31",
+    "uuid": "^3.3.2",
     "winston": "^3.1.0",
-    "winston-daily-rotate-file": "^3.3.2"
+    "winston-daily-rotate-file": "^3.5.1"
   }
 }

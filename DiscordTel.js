@@ -31,7 +31,7 @@ const winston = global.winston = createLogger({
 			colorize: true,
 		}),
 		new DailyRotateFile({
-			filename: `./Logs/Winston-Log-%DATE%-Shard${process.env.SHARD_ID}.log`,
+			filename: `./Logs/Winston-Log-%DATE%-Shard${client.shard.id}.log`,
 			datePattern: "YYY-MM-DD-HH",
 			zippedArchive: true,
 			maxFiles: "14d",
@@ -42,7 +42,7 @@ const winston = global.winston = createLogger({
 	format: format.combine(
 		format.colorize(),
 		format.timestamp(),
-		format.printf(info => `${info.level}: [Shard ${process.env.SHARD_ID}] ${info.message} [${info.timestamp}]`)
+		format.printf(info => `${info.level}: [Shard ${client.shard.id}] ${info.message} [${info.timestamp}]`)
 		// format.simple(),
 	),
 });
@@ -58,9 +58,9 @@ const reload = global.reload = path => new Promise((res, rej) => {
 	}
 });
 
-client.login(process.env.TOKEN).catch(() => {
+client.login().catch(() => {
 	let interval = setInterval(() => {
-		client.login(process.env.TOKEN)
+		client.login()
 			.then(() => {
 				clearInterval(interval);
 			})
@@ -70,7 +70,7 @@ client.login(process.env.TOKEN).catch(() => {
 	}, 300000);
 });
 
-client.on("disconnect", () => client.login(process.env.TOKEN));
+client.on("disconnect", () => client.login());
 
 Object.assign(String.prototype, {
 	escapeRegex() {
@@ -79,3 +79,4 @@ Object.assign(String.prototype, {
 	},
 });
 
+if (config.devMode) process.on("unhandledRejection", e => winston.error(e.stack));

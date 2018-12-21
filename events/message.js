@@ -24,6 +24,7 @@ module.exports = async msg => {
 	if (!cmdFile) return;
 
 	if (cmdFile) {
+		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag} => ${msg.content}`);
 		try {
 			await cmdFile(client, msg, suffix);
 		} catch (err) {
