@@ -118,7 +118,7 @@ module.exports = async(client, message, args) => {
 			if (c2msg.content.length > 1024) return message.reply("Phonebook description can only be maximum 1024 characters long.");
 			if (c2msg.content.toLowerCase() !== "skip") {
 				let pbentry;
-				pbentry = await Phonebook.findOne({ _id: mynumber.number });
+				pbentry = await Phonebook.findOne({ _id: number });
 				pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
 					_id: number,
 					channel: message.channel.id,
