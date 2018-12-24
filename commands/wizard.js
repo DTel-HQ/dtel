@@ -120,8 +120,8 @@ module.exports = async(client, message, args) => {
 				let pbentry;
 				pbentry = await Phonebook.findOne({ _id: mynumber.number });
 				pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
-					_id: mynumber.number,
-					channel: mynumber._id,
+					_id: number,
+					channel: message.channel.id,
 					description: "The owner has not set a description.",
 				})) : pbentry;
 				// eslint-disable-next-line no-useless-escape
