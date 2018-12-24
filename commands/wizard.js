@@ -88,7 +88,7 @@ module.exports = async(client, message, args) => {
 			return collector.stop();
 		}
 		if (!parseInt(number)) return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
-		if (message.channel.type === "dm") {
+		if (cmessage.channel.type === "dm") {
 			if (!number.startsWith("0900")) {
 				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 			}
@@ -105,36 +105,83 @@ module.exports = async(client, message, args) => {
 			exists = await Numbers.findOne({ number: number });
 			if (exists) throw new Error();
 		} catch (err) {
-			return message.reply("This number is already registered. Please enter another number.");
+			return cmessage.reply("This number is already registered. Please enter another number.");
 		}
 		const expiryDate = new Date();
 		expiryDate.setMonth(expiryDate.getMonth() + 1);
 		let numberDocument = await Numbers.create(new Numbers({ _id: message.channel.id, number: number, expiry: expiryDate }));
 		await collector.stop();
 		client.apiSend(`:blue_book: Number \`${numberDocument.number}\` is self-assigned to channel ${numberDocument._id} by ${message.author.tag}.`, process.env.LOGSCHANNEL);
-		message.channel.send({
-			embed: {
-				color: 0x007FFF,
-				title: "Done!",
-				description: "Here's your service information. Should you have any inquiries, don't hesitate to dial `*611`.",
-				fields: [{
-					name: "Number",
-					value: number,
-					inline: true,
-				},
-				{
-					name: "Expiration",
-					value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
-					inline: true,
-				},
-				{
-					name: "Remember...",
-					value: "To receive random calls (`>rdial`s), you must register in the phonebook (*411). To do so, dial *411 and press 3. ",
-				}],
-				footer: {
-					text: "You have finished the wizard.",
-				},
-			},
+		cmessage.reply("You can also set a description for your number in the Phonebook (`>dial *411`), which will enable your number to be randomly called by others (`>rdial`). If you want to set one, enter a description for your number, otherwise type `skip`.");
+		let collector2 = message.channel.createMessageCollector(newmsg => newmsg.author.id == message.author.id);
+		collector2.on("collect", async c2msg => {
+			if (c2msg.content.length > 1024) return message.reply("Phonebook description can only be maximum 1024 characters long.");
+			if (c2msg.content.toLowerCase() !== "skip") {
+				let pbentry;
+				pbentry = await Phonebook.findOne({ _id: mynumber.number });
+				pbentry = pbentry === null ? await Phonebook.create(new Phonebook({
+					_id: mynumber.number,
+					channel: mynumber._id,
+					description: "The owner has not set a description.",
+				})) : pbentry;
+				// eslint-disable-next-line no-useless-escape
+				const censorship = c2msg.content.replace(/(\*|\`|\_|\~)/, "\\$1").replace(/@(everyone|here)/g, "@\u200b$1");
+				pbentry.description = censorship;
+				await pbentry.save();
+				await collector2.stop();
+				message.channel.send({
+					embed: {
+						color: 0x007FFF,
+						title: "Done!",
+						description: "Here's your service information. Should you have any inquiries, don't hesitate to dial `*611`.",
+						fields: [{
+							name: "Number",
+							value: number,
+							inline: true,
+						},
+						{
+							name: "Expiration",
+							value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
+							inline: true,
+						},
+						{
+							name: "Phonebook Description",
+							value: censorship,
+							inline: true,
+						}],
+						footer: {
+							text: "You have finished the wizard.",
+						},
+					},
+				});
+			}
+			else {
+				await collector2.stop();
+				message.channel.send({
+					embed: {
+						color: 0x007FFF,
+						title: "Done!",
+						description: "Here's your service information. Should you have any inquiries, don't hesitate to dial `*611`.",
+						fields: [{
+							name: "Number",
+							value: number,
+							inline: true,
+						},
+						{
+							name: "Expiration",
+							value: `${expiryDate.getFullYear()}/${expiryDate.getMonth() + 1}`,
+							inline: true,
+						},
+						{
+							name: "Remember...",
+							value: "To receive random calls (`>rdial`s), you must register in the phonebook (*411). To do so, dial *411 and press 3. ",
+						}],
+						footer: {
+							text: "You have finished the wizard.",
+						},
+					},
+				});
+			}
 		});
 	});
 };
