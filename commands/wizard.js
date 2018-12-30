@@ -9,19 +9,7 @@ module.exports = async(client, message, args) => {
 	if (mynumber) {
 		return message.reply(":x: Error: You already have a number in this channel. If you wish to edit or remove your number, dial `*611`.");
 	}
-	if (!message.channel.type === "dm") {
-		for (const c of message.guild.channels.values()) {
-			try {
-				guildnumber = await Numbers.findOne({ _id: c.id });
-				if (guildnumber) break;
-			} catch (_) {
-				// Ignore
-			}
-		}
-	}
-	if (guildnumber) {
-		return message.reply(":x: Error: You already have a number in this guild. If you wish to edit, remove your number or add another number, dial `*611`.");
-	} else if (!message.guild) {
+	if (message.channel.type === "dm") {
 		message.channel.send({embed: {
 			color: 0x007FFF,
 			title: "Before proceeding, please read the following information.",
@@ -92,7 +80,7 @@ module.exports = async(client, message, args) => {
 			if (!number.startsWith("0900")) {
 				return cmessage.reply("I don't understand. Please retype the number. The number **must** start with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit");
 			}
-			if (number.length !== 11) {
+			else if (number.length !== 11) {
 				return cmessage.reply("I don't understand. Please retype the number. Make sure the number starts with `0900` followed by 7 digits (11 digits altogether). Type `0` to quit.");
 			}
 		} else if (!number.startsWith(`030${prefix}`)) {
