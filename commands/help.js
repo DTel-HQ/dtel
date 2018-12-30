@@ -1,10 +1,11 @@
 module.exports = async(client, message, args) => {
+	let avatarURL = await client.user.displayAvatarURL();
 	message.channel.send({
 		embed: {
 			color: 3447003,
 			author: {
 				name: "DiscordTel",
-				icon_url: "https://github.com/austinhuang0131/discordtel/raw/rewrite/discordtel.png",
+				icon_url: avatarURL,
 				url: "https://discordtel.austinhuang.me",
 			},
 			title: "List of Commands",
