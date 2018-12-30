@@ -481,7 +481,7 @@ module.exports = async(client, message, args) => {
 		if (toDial === "08006113835") {
 			try {
 				await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
-				message.channel.send("Please wait out the call to give Customer Support agents time to respond.");
+				message.channel.send("Please wait out the call to give Customer Support agents time to respond. If no one responds, don't call consecutively.");
 			} catch (err) {
 				// Ignore
 			}
