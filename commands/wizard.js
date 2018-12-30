@@ -27,7 +27,7 @@ module.exports = async(client, message, args) => {
 				 value: "...which means all calls to the number will show up as direct messages. Just to let you know."
 				},
 				{name: "I'm ready!",
-				 value: `Please enter the number you wish to enable in <#${message.channel.id}>. The number must start with \`030${prefix}\` followed by another 7 digits. Type \`0\` to quit the wizard.`
+				 value: `Please enter the number you wish to enable in <#${message.channel.id}>. The number must start with \`0900\` followed by another 7 digits. Type \`0\` to quit the wizard.`
 				}
 			]
 		}});	} else if (!message.member.hasPermission("MANAGE_GUILD")) {
