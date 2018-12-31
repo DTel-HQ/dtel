@@ -142,7 +142,7 @@ module.exports = async(client, message, args) => {
 								}
 								let resolved;
 								try {
-									resolved = await Phonebook.find({ description: c2msg.content });
+									resolved = await Phonebook.find({ description: { "$regex": c2msg.content, "$options": "i" } });
 									if (!resolved) throw new Error();
 								} catch (err) {
 									resolved = undefined;
