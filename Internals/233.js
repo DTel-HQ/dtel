@@ -65,7 +65,7 @@ module.exports = async(msg, myNumber) => {
 				cmsg.reply(":white_check_mark: You hung up the call.");
 				return collector.stop();
 			}
-			if (isNaN(cmsg.content) || cmsg.content.includes("-")) {
+			if (!cmsg.match(/[^0-9]/)?) {
 				cmsg.delete();
 				mainEmbed = await mainEmbed.edit({
 					embed: {
