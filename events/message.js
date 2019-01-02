@@ -19,6 +19,7 @@ module.exports = async msg => {
 
 	if (msg.author.bot || !msg.content.startsWith(prefix)) return;
 
+	if (config.aliasCommands[cmd]) cmd = config.aliasCommands[cmd];
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (!cmdFile) return;

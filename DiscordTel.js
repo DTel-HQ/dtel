@@ -6,6 +6,7 @@ const config = global.config = require("./Configuration/config.js");
 
 const { Collection } = require("discord.js");
 const { readdir } = require("fs-nextra");
+const { scheduleJob } = require("node-schedule");
 
 (async() => {
 	await require("./Database/init")()
@@ -71,6 +72,40 @@ client.login().catch(() => {
 });
 
 client.on("disconnect", () => client.login());
+
+Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 0 }, async() => { // does this work?
+	// daily
+	r.table("Accounts").update({daily: false}).run(conn, (err, cursor) => {
+		if (err) winston.info(`[RethinkDB] Couldn't update dailies claimed: ${err}`);
+	});
+	// lottery
+	let lottery = r.table("Lottery");
+	r.table("Lottery").delete(); // instantly clear the entries
+	r.table("Accounts").update({entries: 0}).run(conn, (err, cursor) => {
+		if (err) winston.info(`[RethinkDB] Couldn't update entry count on accounts: ${err}`);
+	});
+	if (lottery[0]) {
+		let lastEntry = lottery[lottery.length - 1];
+		let winningNumber = Math.floor(Math.random() * lastEntry.id) + 1; // + 1, because tickets start at 1
+		let winnerID;
+		for (let entry in entries) {
+			if (entry.id >= winningNumber) { // find winner
+				winnerID = entry.userID;
+				break;
+			}
+		}
+		let balance = await r.table("Accounts").get(winnerID).balance;
+		balance += lastEntry.jackpot;
+		r.table("Accounts").get(winnerID).update({balance: balance}).run(conn, async (err, cursor) => {
+			if (err) {
+				winston.info(`[RethinkDB] Couldn't update balance of the lottery winner, ${winnerID}, to ${balance}: ${err}`);
+			} else {
+				let user = await client.users.fetch(winnderID);
+				user.send(`CONGRATS! You won the jackpot of ${lastEntry.jackpot} credits.`);
+			}
+		});
+	}
+});
 
 Object.assign(String.prototype, {
 	escapeRegex() {
