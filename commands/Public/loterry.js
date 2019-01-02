@@ -1,8 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-  // example db: [{lastTicketNumnber: 2, accID: 9046847608923563}, {lastTicketNumnber: 62, accID: 7454370436503}]
-  // Go through each until >= jackpot#
-  // Instantly take&clear every 24h
-
   let lottery = r.table("Lottery");
   let jackpot,
       totalEntries;
@@ -22,11 +18,17 @@ module.exports = async(client, msg, suffix) => {
         winston.info(`[RethinkDB] Couldn't add entries to account ${msg.author.id}: ${err}`);
       });
     }
-    let chance = (entries / currentNumber) * 100;
+    let chance;
+    if (currentNumber == 0) {
+      chance = 0
+    } else {
+      chance = (entries / currentNumber) * 100;
+    }
     msg.reply(`The current jackpot is ${jackpot} credits.
               \nYou have ${entries} entries.
-              \nYour chance to win is: ${chance}%`);
-  } else if (!isNaN(suffix[0])) {
+              \nYour chance to win is: ${chance}%
+              \nType \`>lottery [amount]\` to buy entries for 5 credits each.`);
+  } else if (!suffix[0].match(/[^0-9]/)) {
     let tickets = suffix[0];
     let cost = tickets * config.lotteryCost;
     let balance = await r.table("Accounts").get(msg.author.id).balance;
@@ -59,6 +61,6 @@ module.exports = async(client, msg, suffix) => {
       });
     }
   } else {
-    // WRONG SUFFIX
+    msg.reply("What did you just input? Type: `>lottery [amount]`");
   }
 };
