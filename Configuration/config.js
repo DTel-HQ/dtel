@@ -12,7 +12,7 @@ module.exports = {
 	bossRole: "398980867864920064",
 	managerRole: "284443515516354560",
 	supportRole: "398980993593376769",
-	donatorRole: "",
+	donatorRole: "324578460183822337",
 
 	aliasNumbers: [
 		"*611", " 08006113835", //why like this
@@ -29,6 +29,11 @@ module.exports = {
 	applyLink: "https://discordtel.typeform.com/to/cR3ovo",
 	suggestLink: "https://feedback.austinhuang.me/",
 
+	dailies: {
+		boss: 300,
+		support: 200,
+		default: 80,
+	},
 	renewCost: 500,
 	lotteryCost: 5,
 };
