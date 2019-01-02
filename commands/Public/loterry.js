@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
     msg.reply(`The current jackpot is ${jackpot} credits.
               \nYou have ${entries} entries.
               \nYour chance to win is: ${chance}%
-              \nType \`>lottery [amount]\` to buy entries for 5 credits each.`);
+              \nType \`>lottery [amount]\` to buy entries for ${config.lotteryCost} credits each.`);
   } else if (!suffix[0].match(/[^0-9]/)) {
     let tickets = suffix[0];
     let cost = tickets * config.lotteryCost;
