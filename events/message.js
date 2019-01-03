@@ -3,7 +3,8 @@ module.exports = async msg => {
 
 	let call = await Calls.find(c => c.to.channelID == msg.channel.id || c.from.channelID == msg.author.id);
 
-	let blacklisted = await Blacklist.get(msg.author.id) || await Blacklist.get(msg.guild.id);
+	let blacklisted = await Blacklist.get(msg.author.id);
+	if (!blacklisted && msg.guild) blacklisted = await Blacklist.get(msg.guild.id);
 	if (blacklisted) return;
 
 	const cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");

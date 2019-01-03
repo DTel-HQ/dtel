@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!toDialDoc) return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
-	if (toDialDoc.blocked && toDialDoc.blocked.has(myNumber.id)) return msg.reply(":no_entry_sign: The number you have called could not be reached.");
+	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.reply(":no_entry_sign: That number can't be reached.");
 
 	try {
 		await client.api.channels(toDialDoc.channel).get();
@@ -65,7 +65,7 @@ module.exports = async(client, msg, suffix) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	await client.apiSend(`:telephone: A call has been established between channel ${msg.channel.id} and channel ${toDialDoc.id} by __${msg.author.tag}__ (${msg.author.id}).`, config.logsChannel);
+	await client.apiSend(`:telephone: A call has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by __${msg.author.tag}__ (${msg.author.id}).`, config.logsChannel);
 	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:

@@ -13,23 +13,26 @@ module.exports = async(client, msg, suffix) => {
 			.default(null);
 	}
 
-	// Number deletion
-	if (!number) {
-		msg.reply("**Number could not be found.**");
-	} else {
-		number.delete();
-		msg.reply("**Number is gone, pay your respects.**");
-	}
+	r.table("Numbers").get(toDeassign).delete()
+		.then(async result => {
+			if (result.deleted == 0) {
+				r.table("Numbers").filter({ channel: toDeassign }).delete()
+					.then(async result => {
+						if (result.deleted == 0) {
+							return msg.reply("Number could not be found");
+						}
+					});
+			}
+		});
+
+	msg.reply("Number is gone, pay your respects");
+	client.apiSend(`:closed_book: Number \`${number.id}\` has been deassigned from channel ${number.channel} by ${msg.author.tag}.`, config.logsChannel);
 
 	// phonebook deletion
-	return r.table("Numbers").get(toDeassign).delete()
-		.catch(async _ => {
-			r.table("Numbers")
-				.getAll(toDeassign, { index: "channel" })
-				.nth(0)
-				.default(null)
-				.delete()
-				.catch(() => null);
+	return r.table("Phonebook").get(toDeassign).delete()
+		.then(async result => {
+			if (result.deleted == 0) {
+				r.table("Phonebook").filter({ channel: toDeassign }).delete();
+			}
 		});
 };
-

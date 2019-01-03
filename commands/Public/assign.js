@@ -36,6 +36,5 @@ module.exports = async(client, msg, suffix) => {
 	let newNumber = await r.table("Numbers").insert(numberDoc);
 
 	msg.reply("Done. Now turn back to your client!");
-	client.apiSend(`:green_book: Number \`${newNumber}\` is assigned to channel ${numberDoc.id} by ${msg.author.tag}.`, config.logsChannel);
+	client.apiSend(`:green_book: Number \`${numberDoc.id}\` is assigned to channel ${numberDoc.channel} by ${msg.author.tag}.`, config.logsChannel);
 };
-

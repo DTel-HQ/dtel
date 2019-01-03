@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 		if (!user) return;
 
-		let account = await r.table("Accounts").get(msg.author.id).default(null);
+		let account = await r.table("Accounts").get(user.id).default(null);
 		if (!account) return msg.reply("This user does not have an account.");
 
 		msg.reply(`:checkered_flag: The user **${user.username}** currently has \`${account.balance}\` credits.`);

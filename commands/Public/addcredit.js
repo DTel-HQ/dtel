@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (user.id === msg.author.id && !(await msg.author.getPerms()).boss) {
 		return msg.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	} else if ((await user.getPerms()).support) {
+	} else if ((await user.getPerms()).support && !(await msg.author.getPerms()).boss) {
 		return msg.reply("You thought we didn't think of that, didn't you! (You can't give to support members)");
 	}
 
@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 
 	amount = Number(amount);
 
-	let account = await r.table("Accounts").get(msg.author.id).default(null);
+	let account = await r.table("Accounts").get(user.id).default(null);
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
@@ -43,8 +43,11 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
-	msg.reply("Done.");
+	await r.table("Accounts").get(user.id).update({ balance: account.balance }).then(result => {
+		msg.reply("Done.");
+	}).catch(err => {
+		winston.info(`[RethinkDB] Could not update balance of user ${user.id}: ${err}`);
+	});
 
 	user.send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`).catch(() => null);
 	await client.apiSend(`:money_with_wings: Support member **${msg.author.tag}** added ¥${amount} to **${user.tag}** (${user.id}).`, config.logsChannel);
