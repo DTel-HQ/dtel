@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (user.id === msg.author.id && !(await msg.author.getPerms()).boss) {
 		return msg.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	} else if (!(await user.getPerms()).support) {
+	} else if ((await user.getPerms()).support) {
 		return msg.reply("You thought we didn't think of that, didn't you! (You can't give to support members)");
 	}
 

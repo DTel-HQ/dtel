@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
     let entries = await r.table("Accounts").get(msg.author.id).entries;
     if (isNaN(entries)) {
       entries = 0;
-      r.table("Accounts").get(msg.author.id).update({entries: 0}).run(conn, (err, cursor) => {
+      r.table("Accounts").get(msg.author.id).update({ entries: 0 }).run(conn, (err, cursor) => {
         winston.info(`[RethinkDB] Couldn't add entries to account ${msg.author.id}: ${err}`);
       });
     }

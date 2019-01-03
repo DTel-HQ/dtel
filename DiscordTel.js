@@ -98,7 +98,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ hour: 0, minute: 0, second: 
 		balance += lastEntry.jackpot;
 		r.table("Accounts").get(winnerID).update({balance: balance}).run(conn, async (err, cursor) => {
 			if (err) {
-				winston.info(`[RethinkDB] Couldn't update balance of the lottery winner, ${winnerID}, to ${balance}: ${err}`);
+				winston.info(`[RethinkDB] Couldn't update balance of the lottery winner, ${winnerID} by +${lastEntry.jackpot}: ${err}`);
 			} else {
 				let user = await client.users.fetch(winnderID);
 				user.send(`CONGRATS! You won the jackpot of ${lastEntry.jackpot} credits.`);

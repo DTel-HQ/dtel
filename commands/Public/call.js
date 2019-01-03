@@ -34,6 +34,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!toDialDoc) return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
+	if (toDialDoc.blocked && toDialDoc.blocked.has(myNumber.id)) return msg.reply(":no_entry_sign: The number you have called could not be reached.");
 
 	try {
 		await client.api.channels(toDialDoc.channel).get();
