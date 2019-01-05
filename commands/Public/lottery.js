@@ -63,7 +63,7 @@ module.exports = async(client, msg, suffix) => {
 				ownedTickets += userEntries[i].tickets;
 			}
 			msg.reply(`You have bought ${tickets} tickets.\nThe current jackpot is ${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
-			client.log(`:tickets: Someone just bought ${tickets} lottery tickets.`);
+			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);
 		}
 	} else {
 		msg.reply("What did you just input? Type: `>lottery [amount]` or `>lottery` to see your current entries.");

@@ -39,6 +39,11 @@ module.exports = async(client, msg, suffix) => {
 		channel: channelID,
 		expiry: expiryDate,
 	};
+
+	if (channel.type == 'text') {
+		numberDoc.guild = channel.guild.id;
+	}
+
 	let newNumber = await r.table("Numbers").insert(numberDoc);
 
 	msg.reply("Done. Now turn back to your client!");

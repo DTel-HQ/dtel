@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 					title: "DiscordTel Maintainer Announcement",
 					description: suffix,
 					footer: {
-						text: `Sent by ${msg.author.tag}`,
+						text: `Sent by ${msg.author.tag} (${msg.author.id})`,
 					},
 				},
 			}, n.channel).catch(() => null);
