@@ -65,7 +65,7 @@ module.exports = async(client, msg, suffix) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	await client.apiSend(`:telephone: A call has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by __${msg.author.tag}__ (${msg.author.id}).`, config.logsChannel);
+	await client.log(`:telephone: A call has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by __${msg.author.tag}__ (${msg.author.id}).`);
 	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
@@ -77,7 +77,7 @@ module.exports = async(client, msg, suffix) => {
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
 		callDoc.remove();
 
-		client.apiSend(`:telephone: The call between channel ${callDoc.from.channel} and channel ${callDoc.to.channel} was not picked up.`, config.logsChannel);
+		client.log(`:telephone: The call between channel ${callDoc.from.channel} and channel ${callDoc.to.channel} was not picked up.`);
 
 		r.table("OldCalls").create(callDoc);
 

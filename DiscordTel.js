@@ -48,6 +48,24 @@ const winston = global.winston = createLogger({
 	),
 });
 
+client.log = async msg => {
+	let date = new Date();
+	let times = [
+		await date.getHours(),
+		await date.getMinutes(),
+		await date.getSeconds(),
+	];
+
+	for (let i in times) {
+		times[i] = times[i] < 10 ? `0${times[i]}` : times[i];
+	}
+
+	msg = `[${times[0]}:${times[1]}:${times[2]}]	${msg}`;
+
+	await client.apiSend(msg, config.logsChannel);
+	return true;
+};
+
 const reload = global.reload = path => new Promise((res, rej) => {
 	clear(path);
 	try {
@@ -104,7 +122,7 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 	let user = await client.users.fetch(winnerID);
 
 	user.send(`CONGRATS! You won the jackpot of ${lastEntry.jackpot} credits.`);
-	client.apiSend(`:white_check_mark: The lottery and dailies have been reset.`, config.logsChannel);
+	client.log(`:white_check_mark: The lottery and dailies have been reset.`);
 });
 
 Object.assign(String.prototype, {

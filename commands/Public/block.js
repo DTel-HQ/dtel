@@ -15,7 +15,7 @@ module.exports = async(client, msg, suffix) => {
 	} else if (!toBlock) {
 		msg.reply("To block a number from calling you: `>block [number]`");
 		// only 11numb long 030* and 0900 numbers allowed
-	} else if (!toBlock.match(/^0[39]0[0-9]{8}$/)) {
+	} else if (!toBlock.match(/^0[39]0\d{8}$/)) {
 		msg.reply("Incorrect number. You can't block special numbers. Please report any abuse by calling `*611`");
 	} else {
 		let number = await r.table("Numbers").get(toBlock);
@@ -32,10 +32,12 @@ module.exports = async(client, msg, suffix) => {
 					.default(null)
 					.update({ blocked: blocked });
 				msg.reply(`${toBlock} has been unblocked.`);
+				await client.log(`:name_badge: Number \`${toBlock}\` has been unblocked by number \`${myNumber.id}\`.`);
 			} else {
 				blocked.push(toBlock);
 				await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
 				msg.reply(`${toBlock} has been blocked, please report any abuse by calling \`*611\``);
+				await client.log(`:no_entry: Number \`${toBlock}\` has been blocked by number \`${myNumber.id}\`.`);
 			}
 		}
 	}

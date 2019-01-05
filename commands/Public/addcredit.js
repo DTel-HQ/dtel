@@ -47,5 +47,5 @@ module.exports = async(client, msg, suffix) => {
 	msg.reply("Done.");
 
 	user.send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`).catch(() => null);
-	await client.apiSend(`:money_with_wings: Support member **${msg.author.tag}** added ¥${amount} to **${user.tag}** (${user.id}).`, config.logsChannel);
+	await client.log(`:money_with_wings: Support member **${msg.author.tag}** added ¥${amount} to **${user.tag}** (${user.id}).`);
 };

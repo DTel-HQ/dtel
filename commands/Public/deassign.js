@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	msg.reply("Number is gone, pay your respects");
-	client.apiSend(`:closed_book: Number \`${number.id}\` has been deassigned from channel ${number.channel} by ${msg.author.tag}.`, config.logsChannel);
+	client.log(`:closed_book: Number \`${number.id}\` has been deassigned from channel ${number.channel} by ${msg.author.tag}.`);
 
 	// phonebook deletion
 	result = await r.table("Phonebook").get(toDeassign).delete();
