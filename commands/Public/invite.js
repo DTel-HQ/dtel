@@ -1,15 +1,15 @@
 module.exports = async(client, msg, suffix) => {
 	msg.channel.send({
 		embed: {
-			color: 0x808080,
+			color: 0x3498DB,
 			fields: [
 				{
-					name: `[Server invite](${config.guildInvite})`,
-					value: "This is our Support Server.",
+					name: "Join our support server!",
+					value: `${config.guildInvite}`,
 				},
 				{
-					name: `[Bot invite](${config.guildInvite})`,
-					value: "All permissions are essential",
+					name: "Invite discordtel!",
+					value: `All permissions are essential.\n${config.botInvite}`,
 				},
 			],
 		},
