@@ -6,9 +6,10 @@ module.exports = async(client, msg, suffix) => {
 	let channel, number;
 
 	if (/\d{11}/.test(suffix)) {
-		number = await r.table("Numbers").get(suffix);
-		if (!number) return msg.reply("Not a valid number.");
-		suffix = number.channel;
+		number = client.replaceNumber(suffix);
+		let numberDoc = await r.table("Numbers").get(number);
+		if (!numberDoc) return msg.reply("Not a valid number.");
+		suffix = numberDoc.channel;
 	}
 	channel = await client.api.channels(suffix).get()
 		.catch(() => { msg.author.send("Not a valid channel."); return null; });

@@ -1,12 +1,14 @@
 module.exports = async(client, msg, suffix) => {
 	// Help users a bit by removing spaces & '-'
-	let toBlock = await suffix.replace(/[-\s]/g, "");
+	let toBlock = client.replaceNumber(suffix);
 	let myNumber = await r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
 		.nth(0)
 		.default(null);
 
 	if (!myNumber) return msg.reply("This channel doesn't have a number.");
+
+	if (!myNumber.id == toBlock) return msg.reply("Please report yourself by calling *611. (don't block yourself)");
 
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 

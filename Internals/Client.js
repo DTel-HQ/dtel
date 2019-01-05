@@ -35,4 +35,22 @@ module.exports = class DTelClient extends require("discord.js").Client {
 			.replace(")", "")
 			.replace(/\s+/g, "");
 	}
+
+	async log(msg) {
+		let date = new Date();
+		let times = [
+			await date.getHours(),
+			await date.getMinutes(),
+			await date.getSeconds(),
+		];
+
+		for (let i in times) {
+			times[i] = times[i] < 10 ? `0${times[i]}` : times[i];
+		}
+
+		msg = `[${times[0]}:${times[1]}:${times[2]}]	${msg}`;
+
+		await client.apiSend(msg, config.logsChannel);
+		return true;
+	}
 };

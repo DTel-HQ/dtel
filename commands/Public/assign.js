@@ -40,7 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		expiry: expiryDate,
 	};
 
-	if (channel.type == 'text') {
+	if (channel.type == "text") {
 		numberDoc.guild = channel.guild.id;
 	}
 
