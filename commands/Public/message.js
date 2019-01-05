@@ -12,6 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	message = message.join(" ");
 
 	if (!message) return msg.reply("<:Monocle:366036726449438731> I can't seem to find a message to send.");
+	if (message.length > 400) return msg.reply(":page_with_curl: don't you think this is a bit too much to read?");
 
 	let fromNumberDoc = await r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
