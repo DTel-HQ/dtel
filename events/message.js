@@ -8,6 +8,7 @@ module.exports = async msg => {
 	if (blacklisted) return;
 
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");
+	cmd = cmd.replace(/dial/g, "call");
 	const suffix = msg.content.split(" ").splice(1).join(" ")
 		.trim();
 
@@ -20,7 +21,6 @@ module.exports = async msg => {
 
 	if (msg.author.bot || !msg.content.startsWith(prefix)) return;
 
-	if (config.aliasCommands[cmd]) cmd = config.aliasCommands[cmd];
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (!cmdFile) return;
