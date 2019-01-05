@@ -17,8 +17,8 @@ module.exports = async(client, msg, suffix) => {
 		.then(async result => {
 			if (result.deleted == 0) {
 				r.table("Numbers").filter({ channel: toDeassign }).delete()
-					.then(async result => {
-						if (result.deleted == 0) {
+					.then(async res2 => {
+						if (res2.deleted == 0) {
 							return msg.reply("Number could not be found");
 						}
 					});

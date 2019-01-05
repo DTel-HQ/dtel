@@ -43,11 +43,13 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	await r.table("Accounts").get(user.id).update({ balance: account.balance }).then(result => {
-		msg.reply("Done.");
-	}).catch(err => {
-		winston.info(`[RethinkDB] Could not update balance of user ${user.id}: ${err}`);
-	});
+	await r.table("Accounts").get(user.id).update({ balance: account.balance })
+		.then(result => {
+			msg.reply("Done.");
+		})
+		.catch(err => {
+			winston.info(`[RethinkDB] Could not update balance of user ${user.id}: ${err}`);
+		});
 
 	user.send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`).catch(() => null);
 	await client.apiSend(`:money_with_wings: Support member **${msg.author.tag}** added ¥${amount} to **${user.tag}** (${user.id}).`, config.logsChannel);

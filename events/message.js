@@ -7,7 +7,7 @@ module.exports = async msg => {
 	if (!blacklisted && msg.guild) blacklisted = await Blacklist.get(msg.guild.id);
 	if (blacklisted) return;
 
-	const cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");
+	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "");
 	const suffix = msg.content.split(" ").splice(1).join(" ")
 		.trim();
 

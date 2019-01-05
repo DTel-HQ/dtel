@@ -15,7 +15,8 @@ module.exports = {
 	donatorRole: "324578460183822337",
 
 	aliasNumbers: [
-		"*611", " 08006113835", //why like this
+		// why like this
+		"*611", " 08006113835",
 	],
 	aliasCommands: {
 		dial: "call",

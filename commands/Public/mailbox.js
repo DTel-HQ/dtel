@@ -1,3 +1,3 @@
 module.exports = async(client, msg, suffix) => {
-	//Make a scrollable embed out of this.
+	// Make a scrollable embed out of this.
 };

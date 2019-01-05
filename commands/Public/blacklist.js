@@ -22,8 +22,9 @@ module.exports = async(client, msg, suffix) => {
 	}
 	if (!toBlacklist) {
 		toBlacklist = await client.api.guilds(suffix).get()
-			.catch((err) => {return msg.reply("Invalid ID!")});
+			.catch(_ => null);
 	}
+	if (!toBlacklist) return msg.reply("Invalid ID!");
 
 	if ((msg.guild && suffix === msg.guild.id) || suffix === msg.author.id) return msg.reply(`you dumb :b:oi, don't blacklist yourself!`);
 	let user = await client.users.fetch(suffix);

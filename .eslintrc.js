@@ -22,6 +22,7 @@ module.exports = {
 		"no-template-curly-in-string": "error",
 		"no-unsafe-negation": "error",
 		"accessor-pairs": "warn",
+		"max-nested-callbacks": ["error", "all", { "max": 0 }],
 		"curly": ["error", "multi-line", "consistent"],
 		"dot-location": ["error", "property"],
 		"dot-notation": "error",

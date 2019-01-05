@@ -73,36 +73,40 @@ client.login().catch(() => {
 
 client.on("disconnect", () => client.login());
 
-Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, async() => { // does this work?
+// does this work?
+Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, async() => {
 	// daily
-	r.table("Accounts").update({daily: false}).catch(err => {
+	r.table("Accounts").update({ daily: false }).catch(err => {
 		winston.info(`[RethinkDB] Couldn't update dailies claimed: ${err}`);
 	});
 
 	// lottery
 	let unsortedLottery = await r.table("Lottery");
-	r.table("Lottery").delete().catch(err => { // instantly clear the entries
+	// instantly clear the entries
+	r.table("Lottery").delete().catch(err => {
 		winston.info(`Couldn't clear lottery: ${err}`);
 	});
 
 	if (unsortedLottery.length > 0) {
-		comp = (a, b) => {
-	    if (a.id < b.id) {
-	      return -1;
-	    }
-	    if (a.id > b.id) {
-	      return 1;
-	    }
-	    return 0;
-	  }
+		const comp = (a, b) => {
+			if (a.id < b.id) {
+				return -1;
+			}
+			if (a.id > b.id) {
+				return 1;
+			}
+			return 0;
+		};
 		let lottery = await unsortedLottery.sort(comp);
 
 		let lastEntry = lottery[lottery.length - 1];
-		let winningNumber = Math.round(Math.random() * lastEntry.id) + 1; // + 1, because tickets start at 1
-		console.log(winningNumber)
+		// + 1, because tickets start at 1
+		let winningNumber = Math.round(Math.random() * lastEntry.id) + 1;
+		console.log(winningNumber);
 		let winnerID;
 		for (let i in lottery) {
-			if (lottery[i].number >= winningNumber) { // find winner
+			// find winner
+			if (lottery[i].number >= winningNumber) {
 				winnerID = lottery[i].userID;
 				console.log(`Winning Number: ${winningNumber}, winning ID: ${lottery[i].id}, winning person: ${winnerID}`);
 				break;
@@ -111,12 +115,14 @@ Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0,
 		let account = await r.table("Accounts").get(winnerID).default(null);
 		let balance = account.balance;
 		balance += lastEntry.jackpot;
-		r.table("Accounts").get(winnerID).update({balance: balance}).then(async result => {
-			let user = await client.users.fetch(winnerID);
-			user.send(`CONGRATS! You won the jackpot of ${lastEntry.jackpot} credits.`);
-		}).catch(async err => {
-			winston.info(`[RethinkDB] Couldn't update balance of the lottery winner, ${winnerID} by +${lastEntry.jackpot}: ${err}`);
-		});
+		r.table("Accounts").get(winnerID).update({ balance: balance })
+			.then(async result => {
+				let user = await client.users.fetch(winnerID);
+				user.send(`CONGRATS! You won the jackpot of ${lastEntry.jackpot} credits.`);
+			})
+			.catch(async err => {
+				winston.info(`[RethinkDB] Couldn't update balance of the lottery winner, ${winnerID} by +${lastEntry.jackpot}: ${err}`);
+			});
 	}
 	client.apiSend(`:white_check_mark: The lottery and dailies have been reset.`, config.logsChannel);
 });
