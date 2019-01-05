@@ -33,4 +33,5 @@ module.exports = {
 	},
 	renewCost: 500,
 	lotteryCost: 5,
+	messageCost: 2,
 };

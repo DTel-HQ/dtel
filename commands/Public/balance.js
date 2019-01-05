@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!account) {
 			account = { id: msg.author.id, balance: 0 };
 			await r.table("Accounts").insert(account);
-			return msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+			msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 		}
 
 		msg.channel.send({
