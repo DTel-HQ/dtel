@@ -1,33 +1,28 @@
 module.exports = async(client, msg, suffix) => {
-	const comp = (a, b) => {
-		if (a.id < b.id) {
-			return -1;
-		}
-		if (a.id > b.id) {
-			return 1;
-		}
-		return 0;
-	};
-	let lottery = {};
-	let unsortedLottery = await r.table("Lottery");
-	let id, jackpot, currentNumber, sortedLottery, index, totalEntries;
-	if (unsortedLottery.length < 1) {
-		id = 0;
-		jackpot = 0;
-		currentNumber = 0;
-	} else {
-		sortedLottery = await unsortedLottery.sort(comp);
-		index = sortedLottery.length - 1;
-		lottery = sortedLottery[index];
-		id = lottery.id;
-		jackpot = lottery.jackpot;
-		currentNumber = lottery.number;
-	}
+	let lottery = await r.table("Lottery");
+
+	// Check if they have an account
 	let account = await r.table("Accounts").get(msg.author.id).default(null);
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
-		return msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+		msg.reply("You don't have an account created...Creating an account for you! Please also read for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+	}
+
+	let id, jackpot, currentNumber, index, totalEntries, lastEntry;
+
+	// Sort entries based on ID
+	if (lottery.length < 1) {
+		id = 0;
+		jackpot = 0;
+		currentNumber = 0;
+	} else {
+		await lottery.sort((a, b) => a.id < b.id ? -1 : 1);
+		index = lottery.length - 1;
+		lastEntry = lottery[index];
+		id = lastEntry.id;
+		jackpot = lastEntry.jackpot;
+		currentNumber = lastEntry.number;
 	}
 
 	if (!suffix) {
@@ -51,37 +46,26 @@ module.exports = async(client, msg, suffix) => {
 			msg.reply(`This isn't a charity, get enough money first.`);
 		} else {
 			balance -= cost;
-			r.table("Accounts").get(msg.author.id).update({ balance: balance })
-				.then(async result => {
-					let newNumber = currentNumber + tickets;
-					let newJackpot = jackpot + cost;
-					let newID = id + 1;
-					r.table("Lottery").insert({
-						id: newID,
-						userID: msg.author.id,
-						jackpot: newJackpot,
-						number: newNumber,
-						tickets: tickets,
-					}).then(async res2 => {
-						let ownedTickets = 0;
-						let userEntries = await r.table("Lottery").filter({ userID: msg.author.id });
-						for (let i in userEntries) {
-							ownedTickets += userEntries[i].tickets;
-						}
-						msg.reply(`You have bought ${tickets} entries.\nThe current jackpot is ${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
-						client.apiSend(`:tickets: Someone just bought ${tickets} lottery tickets.`, config.logsChannel);
-					})
-						.catch(async err => {
-							winston.info(`[RethinkDB] Couldn't add ${tickets} entries for user ${msg.author.id}: ${err}`);
-							msg.reply("Something went wrong, please contact a dev.");
-						});
-				})
-				.catch(async err => {
-					winston.info(`[RethinkDB] Couldn't complete lottery transaction of user ${msg.author.id}: ${err}`);
-					return msg.reply("Something went wrong, try again later.");
-				});
+			await r.table("Accounts").get(msg.author.id).update({ balance: balance });
+			let newNumber = currentNumber + tickets;
+			let newJackpot = jackpot + cost;
+			let newID = id + 1;
+			await r.table("Lottery").insert({
+				id: newID,
+				userID: msg.author.id,
+				jackpot: newJackpot,
+				number: newNumber,
+				tickets: tickets,
+			});
+			let ownedTickets = 0;
+			let userEntries = await r.table("Lottery").filter({ userID: msg.author.id });
+			for (let i in userEntries) {
+				ownedTickets += userEntries[i].tickets;
+			}
+			msg.reply(`You have bought ${tickets} entries.\nThe current jackpot is ${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
+			client.apiSend(`:tickets: Someone just bought ${tickets} lottery tickets.`, config.logsChannel);
 		}
 	} else {
-		msg.reply("What did you just input? Type: `>lottery [amount]`");
+		msg.reply("What did you just input? Type: `>lottery [amount]` or `>lottery` to see your current entries.");
 	}
 };

@@ -12,10 +12,12 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!(await msg.author.getPerms()).support) return;
 
-	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!** Syntax: `>assign (channelid) (number)`");
+	if (!await client.channels.get(channel)) return msg.reply("<:Monocle:366036726449438731> **That channel is nowhere to be found.** Syntax: `>assign (channel ID) (number)` ");
+
+	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!** Syntax: `>assign (channel ID) (number)`");
 	number = client.replaceNumber(number);
 
-	if (isNaN(number) || !/^0(30|900|8)/.test(number) || number.length !== 11) {
+	if (!/^0(900|30\d|8(00|44))\d{7}$/.test(number)) {
 		return msg.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?** Course not, you dumbass");
 	}
 

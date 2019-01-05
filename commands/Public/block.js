@@ -8,25 +8,6 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!myNumber) return msg.reply("This channel doesn't have a number.");
 
-	let blocked = myNumber.blocked || [];
-	let index = blocked.indexOf(toBlock);
-	if (index > -1) {
-		let newBlocked = myNumber.blocked.splice(index);
-		return r.table("Numbers")
-			.getAll(msg.channel.id, { index: "channel" })
-			.nth(0)
-			.default(null)
-			.update({ blocked: newBlocked })
-			.then(result => {
-				if (result.replaced != 1) {
-					winston.info(`[RethinkDB] Couldn't update blocked on number ${myNumber.id}}`);
-					msg.reply("Something went wrong, please try again later.");
-				} else {
-					msg.reply(`Succesfully unblocked ${toBlock}`);
-				}
-			});
-	}
-
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 
 	if (!perm) {
@@ -37,21 +18,25 @@ module.exports = async(client, msg, suffix) => {
 	} else if (!toBlock.match(/^0[39]0[0-9]{8}$/)) {
 		msg.reply("Incorrect number. You can't block special numbers. Please report any abuse by calling `*611`");
 	} else {
-		let number = r.table("Numbers").get(toBlock);
+		let number = await r.table("Numbers").get(toBlock);
 		if (!number) {
 			msg.reply("That number could not be found.");
 		} else {
-			blocked = myNumber.blocked || [];
-			blocked.push(toBlock);
-			r.table("Numbers").get(myNumber.id).update({ blocked: blocked })
-				.then(result => {
-					if (result.replaced != 1) {
-						winston.info(`[RethinkDB] Couldn't update blocked on number ${myNumber.id}}`);
-						msg.reply("Something went wrong, please try again later.");
-					} else {
-						msg.reply(`Succesfully blocked ${toBlock}`);
-					}
-				});
+			let blocked = myNumber.blocked || [];
+			let index = blocked.indexOf(toBlock);
+			if (index > -1) {
+				blocked.splice(index);
+				await r.table("Numbers")
+					.getAll(msg.channel.id, { index: "channel" })
+					.nth(0)
+					.default(null)
+					.update({ blocked: blocked });
+				msg.reply(`${toBlock} has been unblocked.`);
+			} else {
+				blocked.push(toBlock);
+				await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
+				msg.reply(`${toBlock} has been blocked, please report any abuse by calling \`*611\``);
+			}
 		}
 	}
 };
