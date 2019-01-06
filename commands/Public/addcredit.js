@@ -51,6 +51,6 @@ module.exports = async(client, msg, suffix) => {
 
 	if (neg) amount = String(amount).substr(1);
 
-	user.send(`:money_with_wings: A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.`).catch(() => null);
-	await client.log(`:money_with_wings: Support member **${msg.author.tag}** ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} **${user.tag}** (${user.id}).`);
+	user.send(`:yen: A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.`).catch(() => null);
+	await client.log(`:yen: Support member **${msg.author.tag}** ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} **${user.tag}** (${user.id}).`);
 };
