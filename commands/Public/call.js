@@ -17,12 +17,12 @@ module.exports = async(client, msg, suffix, rcall) => {
 	toDial = client.replaceNumber(toDial);
 
 	if (toDial == myNumber.id) return msg.reply(":thinking: Why are you trying to call yourself?");
-	if (config.aliasNumbers.includes(toDial)) {
-		if (toDial == "*611" && msg.guild && msg.guild.id === process.env.SUPPORTGUILD) {
+	if (config.aliasNumbers[toDial]) {
+		toDial = config.aliasNumbers[toDial];
+		if (toDial == "08006113835" && msg.guild && msg.guild.id === process.env.SUPPORTGUILD) {
 			csCall = true;
 			return msg.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 		}
-		toDial = config.aliasNumbers.find(n => n.id == toDial);
 	}
 
 	if (toDial == "*411") return require("../../Internals/411.js")();

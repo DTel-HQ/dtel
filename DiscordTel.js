@@ -76,9 +76,7 @@ client.on("disconnect", () => client.login());
 // does this work?
 Number(process.env.SHARD_ID) === 0 && scheduleJob({ date: 1, hour: 0, minute: 0, second: 0 }, async() => {
 	// Daily reset
-	r.table("Accounts").update({ daily: false }).catch(err => {
-		winston.info(`[RethinkDB] Couldn't update dailies claimed: ${err}`);
-	});
+	await r.table("Accounts").update({ daily: false });
 
 	// Lottery winner & reset
 	let lottery = await r.table("Lottery");

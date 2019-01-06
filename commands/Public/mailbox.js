@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = async(client, msg, suffix) => {
 	let numberDoc = r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
@@ -84,10 +86,164 @@ module.exports = async(client, msg, suffix) => {
 			msg.channel.send("Mailbox deletion aborted.");
 		}
 	} else {
-		let messages = mailbox.messages;
-		if (!messages) return msg.reply("You don't have any messages");
+		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
+		if (!messages[0]) return msg.reply("You don't have any messages.");
 
-		let pages = messages / 5;
-		let page = 1;
+		let messagesPage = async page => {
+			let pages = Math.ceil(messages.length / 5);
+
+			while (!messages[(page - 1) * 5]) {
+				page -= 1;
+			}
+
+			let embed = new MessageEmbed()
+				.setColor(3447003)
+				.setTitle(`:mailbox: You have ${messages.length} messages.`)
+				.setFooter(`Page ${page}/${pages}. Enter an ID to see actions.`);
+
+			let startingIndex = (page - 1) * 5;
+
+			for (let i = startingIndex; i < startingIndex + 5; i++) {
+				if (!messages[i]) break;
+				let m = messages[i];
+				let date = Date(m.date);
+				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}\n${date}`);
+			}
+			embed.addField("𛲡",
+				`:x: to exit.\
+				${page != 1 ? "\n:arrow_left: go to the previous page." : ""}\
+				${page < pages ? "\n:arrow_right: go to the next page." : ""}\
+				${perm ? "\n:fire: to delete all messages. (on all pages)" : ""}`
+			);
+
+			let reactions = ["❌", "⬅", "➡"];
+			if (perm) reactions.push("🔥");
+
+			let reactionFilter = ["❌"];
+			if (page != 1) reactionFilter.push("⬅");
+			if (page < pages) reactionFilter.push("➡");
+			if (perm) reactionFilter.push("🔥");
+
+			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send(embed);
+
+			if (!omsg.reactions.first()) {
+				for (let i in reactions) {
+					await omsg.react(reactions[i]);
+				}
+			}
+
+			const reactionCollector = omsg.createReactionCollector(
+				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,
+				{
+					time: 2 * 60 * 1000,
+					max: 1,
+				}
+			);
+
+			const messageCollector = msg.channel.createMessageCollector(
+				m => (m.author.id == msg.author.id && messages.filter(message => message.id == m.content).length > 0) || m.content.startsWith(`${config.prefix}mailbox`),
+				{
+					time: 2 * 60 * 1000,
+				}
+			);
+
+			reactionCollector.on("collect", async reaction => {
+				messageCollector.stop("Reaction collector went off");
+				switch (reaction.emoji.name) {
+					case "❌":
+						omsg.delete();
+						break;
+					case "⬅":
+						page -= 1;
+						messagesPage(page);
+						break;
+					case "➡":
+						page += 1;
+						messagesPage(page);
+						break;
+					case "🔥":
+						omsg.delete();
+						await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
+						msg.reply("🔥 A fire got rid of all your messages!");
+						break;
+				}
+			});
+
+			messageCollector.on("collect", async m => {
+				omsg.delete();
+				reactionCollector.stop("Message collector went off.");
+				if (m.content.startsWith(`${config.prefix}mailbox`)) {
+					messageCollector.stop("User initiated another mailbox");
+				} else {
+					messageCollector.stop("Collected");
+					m.delete();
+					messagePage(m.content, page);
+				}
+			});
+		};
+
+		let messagePage = async(id, page) => {
+			let message = messages.filter(m => m.id == id)[0];
+			if (!message) msg.reply("Something went wrong");
+
+			let embed = new MessageEmbed()
+				.setColor(3447003)
+				.setTitle(`:mailbox: Viewing message.`);
+
+			let date = Date(message.date);
+			embed.addField(`ID \`${message.id}\` from ${message.number}`, `${message.message}\n${date}`);
+
+			embed.addField("𛲡",
+				`:x: to exit.\
+				\n:arrow_left: to return to messages.\
+				${perm ? "\n:wastebasket: to delete this message." : ""}\
+				\n:bell: to report this message.`
+			);
+
+			let reactions = ["❌", "⬅", "🗑", "🔔"];
+			let reactionFilter = ["❌", "⬅", "🔔"];
+			if (perm) reactionFilter.push("🗑");
+
+			omsg = await msg.channel.send(embed);
+
+			for (let i in reactions) {
+				await omsg.react(reactions[i]);
+			}
+
+			collector = await omsg.awaitReactions(
+				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,
+				{
+					time: 2 * 60 * 1000,
+					max: 1,
+				}
+			);
+
+			collected = collector.first();
+			if (!collected) return;
+			let index;
+
+			switch (collected.emoji.name) {
+				case "❌":
+					omsg.delete();
+					break;
+				case "⬅":
+					await omsg.delete();
+					omsg = null;
+					messagesPage(page);
+					break;
+				case "🗑":
+					index = messages.map(m => m.id).indexOf(id);
+					messages.splice(index, 1);
+					await r.table("Mailbox").get(msg.channel.id).update({ messages: messages });
+					await omsg.delete();
+					omsg = null;
+					messagesPage(page);
+					break;
+				case "🔔":
+					require("./call.js")(client, msg, "*611");
+			}
+		};
+
+		messagesPage(1);
 	}
 };

@@ -14,10 +14,9 @@ module.exports = {
 	supportRole: "398980993593376769",
 	donatorRole: "324578460183822337",
 
-	aliasNumbers: [
-		// why like this
-		"*611", " 08006113835",
-	],
+	aliasNumbers: {
+		"*611": "08006113835",
+	},
 
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284",
 	guildInvite: "https://discord.gg/RN7pxrB",

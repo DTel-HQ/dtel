@@ -1,7 +1,7 @@
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
-	let time = new Date();
+	let time = new Date().getTime();
 
 	if (!suffix) return msg.reply("How do you send nothing to no one? Syntax: `>mesasge [number] [message]`");
 
@@ -50,13 +50,13 @@ module.exports = async(client, msg, suffix) => {
 		number: fromNumberDoc.id,
 		user: msg.author.id,
 		message: message,
-		timeStamp: time,
+		time: time,
 	};
 
 	let messages = mailbox.messages || [];
 	messages.push(messageDoc);
 
 	await r.table("Mailbox").get(toNumberDoc.channel).update({ messages: messages });
-	client.apiSend(`You received a message. Check it by running \`>mailbox messages\``, mailbox.id);
+	client.apiSend(`You received a message. Check it using \`>mailbox\``, mailbox.id);
 	msg.reply("Your message arrived safely.");
 };
