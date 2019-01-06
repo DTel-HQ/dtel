@@ -22,17 +22,12 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	} else {
-		let user;
-		try {
-			user = msg.mentions.users.first();
-			if (!user) user = await client.users.fetch(suffix);
-			if (!user) throw new Error();
-		} catch (_) {
-			return msg.reply("This user could not be found.");
-		}
-		if (!user) return;
+		let userID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix;
+		let user = await client.users.fetch(userID)
+			.catch(_ => null);
+		if (!user) return msg.reply("That user could not be found.");
 
-		let account = await r.table("Accounts").get(user.id).default(null);
+		let account = await r.table("Accounts").get(userID);
 		if (!account) return msg.reply("This user does not have an account.");
 
 		msg.reply(`:checkered_flag: The user **${user.username}** currently has \`${account.balance}\` credits.`);
