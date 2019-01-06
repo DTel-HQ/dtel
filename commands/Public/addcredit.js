@@ -29,10 +29,11 @@ module.exports = async(client, msg, suffix) => {
 	// Check for invalid input
 	if (isNaN(amount)) {
 		return msg.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
-	} else if (amount.match(/[^0-9]/g)) {
+	} else if (!/^-?\d*$/.test(amount)) {
 		return msg.reply("Trying to break the bank, are we?");
 	}
 
+	let neg = amount.startsWith("-");
 	amount = Number(amount);
 
 	let account = await r.table("Accounts").get(user.id).default(null);
@@ -43,9 +44,13 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
+	if (account.balance < 0) return msg.reply("Thought we'd let you make someone bankrupt?!");
+
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
 	msg.reply("Done.");
 
-	user.send(`:money_with_wings: A support member has added ¥${amount} into your account. You now have ¥${account.balance}.`).catch(() => null);
-	await client.log(`:money_with_wings: Support member **${msg.author.tag}** added ¥${amount} to **${user.tag}** (${user.id}).`);
+	if (neg) amount = String(amount).substr(1);
+
+	user.send(`:money_with_wings: A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.`).catch(() => null);
+	await client.log(`:money_with_wings: Support member **${msg.author.tag}** ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} **${user.tag}** (${user.id}).`);
 };

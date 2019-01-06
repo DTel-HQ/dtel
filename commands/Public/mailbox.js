@@ -89,6 +89,8 @@ module.exports = async(client, msg, suffix) => {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
 		if (!messages[0]) return msg.reply("You don't have any messages.");
 
+		// To show all messages
+
 		let messagesPage = async page => {
 			let pages = Math.ceil(messages.length / 5);
 
@@ -101,6 +103,7 @@ module.exports = async(client, msg, suffix) => {
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
 				.setFooter(`Page ${page}/${pages}. Enter an ID to see actions.`);
 
+			// Display the right messages
 			let startingIndex = (page - 1) * 5;
 
 			for (let i = startingIndex; i < startingIndex + 5; i++) {
@@ -116,6 +119,7 @@ module.exports = async(client, msg, suffix) => {
 				${perm ? "\n:fire: to delete all messages. (on all pages)" : ""}`
 			);
 
+			// Action reactions
 			let reactions = ["❌", "⬅", "➡"];
 			if (perm) reactions.push("🔥");
 
@@ -124,6 +128,7 @@ module.exports = async(client, msg, suffix) => {
 			if (page < pages) reactionFilter.push("➡");
 			if (perm) reactionFilter.push("🔥");
 
+			// Edit existing message or send a new one
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send(embed);
 
 			if (!omsg.reactions.first()) {
@@ -182,6 +187,8 @@ module.exports = async(client, msg, suffix) => {
 			});
 		};
 
+		// To show a single message with its actions.
+
 		let messagePage = async(id, page) => {
 			let message = messages.filter(m => m.id == id)[0];
 			if (!message) msg.reply("Something went wrong");
@@ -200,6 +207,7 @@ module.exports = async(client, msg, suffix) => {
 				\n:bell: to report this message.`
 			);
 
+			// Action reactions
 			let reactions = ["❌", "⬅", "🗑", "🔔"];
 			let reactionFilter = ["❌", "⬅", "🔔"];
 			if (perm) reactionFilter.push("🗑");
