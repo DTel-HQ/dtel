@@ -21,7 +21,7 @@ module.exports = {
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284",
 	guildInvite: "https://discord.gg/RN7pxrB",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
-	siteLink: "https://discordtel.readthedocs.io",
+	siteLink: "https://discordtel.austinhuang.me",
 	applyLink: "https://discordtel.typeform.com/to/cR3ovo",
 	suggestLink: "https://feedback.austinhuang.me/",
 

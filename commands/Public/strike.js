@@ -1,6 +1,7 @@
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
+	// perms needed later on
 	let perms = await msg.author.getPerms();
 	if (!perms.support) return;
 

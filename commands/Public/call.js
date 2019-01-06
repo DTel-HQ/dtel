@@ -14,13 +14,13 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let toDial = suffix;
 	if (!toDial) return msg.reply("Please specify a number to call");
 
-	toDial = client.replaceNumber(toDial);
+	toDial = await client.replaceNumber(toDial);
 
 	if (toDial == myNumber.id) return msg.reply(":thinking: Why are you trying to call yourself?");
 	if (config.aliasNumbers[toDial]) {
 		toDial = config.aliasNumbers[toDial];
-		if (toDial == "08006113835" && msg.guild && msg.guild.id === process.env.SUPPORTGUILD) {
-			csCall = true;
+		if (toDial == "08006113835")	csCall = true;
+		if (toDial == "08006113835" && msg.guild && msg.guild.id === config.supportGuild) {
 			return msg.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 		}
 	}
@@ -47,7 +47,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (activeCall) return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
 
 	if (csCall) {
-		await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDoc._id);
+		await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
 		msg.channel.send("Please wait out the call to give Customer Support agents time to respond, otherwise you could be punished.");
 	}
 
