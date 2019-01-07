@@ -6,6 +6,7 @@ module.exports = class Cache extends require("discord.js").Collection {
 		this.table = table;
 		this.r = r;
 	}
+
 	async create(options) {
 		let result, cached;
 		try {
@@ -20,6 +21,7 @@ module.exports = class Cache extends require("discord.js").Collection {
 			cached,
 		});
 	}
+
 	newGet(key) {
 		let res = this.get(key);
 		if (res == null) return res;
@@ -29,5 +31,23 @@ module.exports = class Cache extends require("discord.js").Collection {
 			table: this.table,
 			cached: res,
 		});
+	}
+
+	async update(obj) {
+		let res, cached;
+		res = await this.r.table(this.table).update(obj);
+		cached = this.set(obj.id, obj);
+		return res || new modelFound({
+			cache: this,
+			r: this.r,
+			table: this.table,
+			cached: res,
+		});
+	}
+
+	async newClear() {
+		await this.r.table(this.table).delete();
+		await this.clear();
+		return true;
 	}
 };

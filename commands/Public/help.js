@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 		embed: {
 			color: 3447003,
 			author: {
-				name: "DiscordTel",
+				name: client.user.username,
 				icon_url: avatarURL,
 				url: "https://discordtel.austinhuang.me",
 			},

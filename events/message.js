@@ -1,7 +1,9 @@
 module.exports = async msg => {
+	if (msg.author.bot) return;
+
 	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : config.prefix;
 
-	let call = await Calls.find(c => c.to.channelID == msg.channel.id || c.from.channelID == msg.author.id);
+	let call = await Calls.find(c => c.to.channel == msg.channel.id || c.from.channel == msg.channel.id);
 
 	let blacklisted = await Blacklist.get(msg.author.id);
 	if (!blacklisted && msg.guild) blacklisted = await Blacklist.get(msg.guild.id);
@@ -13,13 +15,13 @@ module.exports = async msg => {
 		.trim();
 
 	let cmdFile;
-	if (call && !msg.content.startsWith(prefix) && !call.hold) {
-		require("../Internals/callHandler.js")(cmd, suffix, msg);
-	} else if (call && msg.content.startsWith(prefix) && !call.hold) {
+	if (call && !msg.content.startsWith(prefix) && !call.onHold) {
+		return require("../Internals/callHandler.js")(cmd, msg, suffix);
+	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
 	}
 
-	if (msg.author.bot || !msg.content.startsWith(prefix)) return;
+	if (!msg.content.startsWith(prefix)) return;
 
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
