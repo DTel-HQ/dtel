@@ -59,7 +59,7 @@ module.exports = async(client, msg, suffix) => {
 			title: "Succesfully set-up this channel's mailbox",
 			description: `**Description:** ${description}`,
 			footer: {
-				text: "You can now use `>mailbox` to see messages when you receive them.",
+				text: "You can now use >mailbox to see messages when you receive them.",
 			},
 		} });
 	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {

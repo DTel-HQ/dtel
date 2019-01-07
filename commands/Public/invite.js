@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Invite discordtel!",
-					value: `All permissions are essential.\n${config.botInvite}`,
+					value: `[All permissions are essential](${config.botInvite})`,
 				},
 			],
 		},

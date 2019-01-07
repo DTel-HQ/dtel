@@ -24,6 +24,7 @@ module.exports = {
 	siteLink: "https://discordtel.austinhuang.me",
 	applyLink: "https://discordtel.typeform.com/to/cR3ovo",
 	suggestLink: "https://feedback.austinhuang.me/",
+	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 
 	dailies: {
 		boss: 300,
