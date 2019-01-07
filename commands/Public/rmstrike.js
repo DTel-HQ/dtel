@@ -3,7 +3,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.reply("Where is the ID?!?!");
 
 	let strikeID = suffix.split(" ")[0];
-	let strike = (await r.table("Strikes").filter({ id: strikeID }))[0];
+	let strike = await r.table("Strikes").get(strikeID);
 
 	if (!strike) return msg.reply("There is no strike with this ID");
 

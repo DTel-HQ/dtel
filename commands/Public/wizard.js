@@ -35,6 +35,8 @@ module.exports = async(client, msg, suffix) => {
 		expiryDate,
 		description;
 
+	// NUMBER
+
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id,
@@ -77,10 +79,12 @@ module.exports = async(client, msg, suffix) => {
 		if (msg.channel.type != "dm") numberDoc.guild = msg.channel.guild.id;
 
 		await r.table("Numbers").insert(numberDoc);
-		await client.log(`:blue_book: Number ${number} has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
+		await client.log(`:blue_book: Number **${number}** has been self-assigned to channel ${numberDoc.channel} by **${msg.author.tag}** (${msg.author.id})`);
 		await msg.channel.send(`This channel's number is now ${number}. You can also put your number in the phonebook. If you want to do so, type a description for your number, othwerwise type \`skip\`.`);
 		return phonebookChooser();
 	};
+
+	// PHONEBOOK
 
 	let phonebookChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
@@ -99,9 +103,11 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			description = collected.content.replace(/[~_`*]/g, "\\$1");
 
+			let min = 15;
 			let max = 500;
-			if (description.length > max) {
-				msg.reply(`Please shorten your description to match the maximum of **${max}** characters and try again.`);
+			let l = description.length;
+			if (min > l || l > max) {
+				await msg.reply(`Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.`);
 				return phonebookChooser();
 			}
 
@@ -115,6 +121,8 @@ module.exports = async(client, msg, suffix) => {
 			return embedSender();
 		}
 	};
+
+	// INFORMATION
 
 	let embedSender = async() => {
 		embed = new MessageEmbed()

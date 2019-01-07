@@ -9,6 +9,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let numberDoc = await r.table("Numbers").get(toDeassign).default(null);
 	if (!numberDoc) {
+		if (msg.mentions.channels.first()) toDeassign = msg.mentions.channels.first().id;
 		numberDoc = await r.table("Numbers")
 			.getAll(toDeassign, { index: "channel" })
 			.nth(0)
@@ -18,9 +19,9 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Numbers").get(numberDoc.id).delete();
 
-	msg.reply("Number is gone, pay your respects");
-	client.log(`:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.`);
+	await msg.reply("Number is gone, pay your respects");
+	await client.log(`:closed_book: Number **${numberDoc.id}** has been deassigned from channel ${numberDoc.channel} by **${msg.author.tag}**.`);
 
 	// phonebook deletion
-	r.table("Phonebook").get(numberDoc.id).delete();
+	await r.table("Phonebook").get(numberDoc.id).delete();
 };

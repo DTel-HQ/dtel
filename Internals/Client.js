@@ -48,7 +48,13 @@ module.exports = class DTelClient extends require("discord.js").Client {
 			times[i] = times[i] < 10 ? `0${times[i]}` : times[i];
 		}
 
-		msg = `[${times[0]}:${times[1]}:${times[2]}]	${msg}`;
+		// Dont question it.
+		let time = `[${times[0]}:${times[1]}:${times[2]}]`;
+		let ones = time.replace(/[^1]/g, "").length;
+		let fours = time.replace(/[^4]/g, "").length;
+		let spaces = 0 + ones - Math.floor(fours / 3);
+
+		msg = `${time} ${spaces === 0 ? "" : " ".repeat(spaces)}${msg}`;
 
 		await client.apiSend(msg, config.logsChannel);
 		return true;

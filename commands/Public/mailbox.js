@@ -1,11 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	let numberDoc = r.table("Numbers")
-		.getAll(msg.channel.id, { index: "channel" })
-		.nth(0)
-		.default(null);
-	if (!numberDoc) return msg.reply("This channel doesn't have a number.");
+	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	if (!myNumber) return msg.reply("This channel doesn't have a number.");
 
 	let perm = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 
