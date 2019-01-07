@@ -65,7 +65,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	await client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by __${msg.author.tag}__ (${msg.author.id}).`);
+	await client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
 	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
