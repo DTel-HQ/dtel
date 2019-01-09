@@ -270,8 +270,10 @@ client.on("message", async message => {
 			callDocument = undefined;
 		}
 	}
+	// Best Practice obligation
+	if (message.content.startsWith("<@"+client.user.id+"")) message.channel.send("My prefix is `>`.");
 	// If it starts with a the prefix, check if its a command
-	if (message.content.startsWith(process.env.PREFIX)) {
+	else if (message.content.startsWith(process.env.PREFIX)) {
 		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
