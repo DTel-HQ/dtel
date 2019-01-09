@@ -23,7 +23,7 @@ module.exports = async(client, message, args) => {
 		return message.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
 	} else if (userid === message.author.id && !perms.boss) {
 		return message.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
-	} else if (perms.support && !perms.boss) {
+	} else if (perms.support && !sperms.boss) {
 		return message.reply("**YOU THOUGHT WE DIDN'T THINK OF THAT, HUH?** Well we didn't... until now!");
 	}
 	if (isNaN(amount)) {
@@ -37,7 +37,7 @@ module.exports = async(client, message, args) => {
 		account = await Accounts.findOne({ _id: userid });
 		if (!account) throw new Error();
 	} catch (err) {
-		account = await Accounts.create(new Accounts({ _id: message.author.id, balance: 0 }));
+		account = await Accounts.create(new Accounts({ _id: userid, balance: 0 }));
 	}
 	account.balance += parseInt(amount);
 	await account.save();
