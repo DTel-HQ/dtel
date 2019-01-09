@@ -19,10 +19,10 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (toDial == myNumber.id) return msg.reply(":thinking: Why are you trying to call yourself?");
 	if (config.aliasNumbers[toDial]) {
 		toDial = config.aliasNumbers[toDial];
-		if (toDial == "08006113835")	csCall = true;
-		if (toDial == "08006113835" && msg.guild && msg.guild.id === config.supportGuild) {
-			return msg.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
-		}
+	}
+	if (toDial == "08006113835")	csCall = true;
+	if (toDial == "08006113835" && msg.guild && msg.guild.id === config.supportGuild) {
+		return msg.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 	}
 
 	if (toDial == "*411") return require("../../Internals/411.js")();

@@ -6,7 +6,7 @@ module.exports = async guild => {
 		guild = await client.guilds.get(guild.id);
 		if (guild) return;
 		for (let i in numbers) {
-			r.table("Numbers").get(numbers[i]).delete();
+			r.table("Numbers").get(numbers[i].id).delete();
 		}
 	}, 10 * 60 * 1000);
 };

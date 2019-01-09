@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
+	const call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
 	if (!call) return;
 	if (!call.pickedUp) msg.reply(":x: You can't put a call on hold that hasn't been picked up");
 

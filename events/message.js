@@ -19,12 +19,13 @@ module.exports = async msg => {
 		return require("../Internals/callHandler.js")(cmd, msg, suffix);
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
+	} else if (!cmdFile) {
+		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
 
 	if (!msg.content.startsWith(prefix)) return;
 
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
-	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (!cmdFile) return;
 
 	if (cmdFile) {

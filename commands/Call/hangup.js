@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let call = await Calls.find(c => c.to.channel == msg.channel.id || c.from.channel == msg.channel.id);
+	const call = await Calls.find(c => c.to.channel == msg.channel.id || c.from.channel == msg.channel.id);
 	if (!call || (call.to.number === "08006113835" && msg.guild.id != config.supportGuild)) return;
 
 	await Calls.newGet(call.id).delete();

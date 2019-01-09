@@ -8,6 +8,7 @@ module.exports = {
 	prefix: ">",
 	shardCount: 1,
 	supportGuild: "398980667553349649",
+	supportChannel: "399375958525870080",
 	logsChannel: "399006748582871060",
 	bossRole: "398980867864920064",
 	managerRole: "284443515516354560",
@@ -34,4 +35,10 @@ module.exports = {
 	renewCost: 500,
 	lotteryCost: 5,
 	messageCost: 2,
+
+	callPhones: {
+		default: "<:DiscordTelPhone:310817969498226718>",
+		donator: "<:GoldPhone:320768431307882497>",
+		support: ":telephone_receiver:",
+	},
 };
