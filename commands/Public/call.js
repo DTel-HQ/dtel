@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		.get(toDial)
 		.default(null);
 
-	if (!toDialDoc) return msg.reply(":x: Dialing error: Requested number does not exist. Call `*411` to check numbers.");
+	if (!toDialDoc) return msg.reply(`:x: Dialing error: Requested number (${toDial}) does not exist. Call \`*411\` to check numbers.${rcall ? " Please call *611 so we can remove this number from the phonebook." : ""}`);
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
 	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.reply(":no_entry_sign: That number can't be reached.");
 
@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		await r.table("Numbers").get(toDial).delete();
 	}
 
-	let activeCall = Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 	if (activeCall) return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
 
 	if (csCall) {
@@ -65,21 +65,20 @@ module.exports = async(client, msg, suffix, rcall) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	await client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
+	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
 	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
 	setTimeout(async() => {
-		callDoc = Calls.get(callDoc.id);
+		callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 		if (!callDoc || callDoc.pickedUp) return;
 
-		msg.reply(":negative_squared_cross_mark: Nobody was there to answer your call. (2 minutes).");
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
-		callDoc.remove();
+		await Calls.newGet(callDoc.id).delete();
 
 		client.log(`:telephone: The ${rcall ? "random call" : "call"} between channel ${callDoc.from.channel} and channel ${callDoc.to.channel} was not picked up.`);
 
-		r.table("OldCalls").create(callDoc);
+		await r.table("OldCalls").insert(callDoc);
 
 		let mailbox = await r.table("Mailbox").get(toDialDoc.id).default(null);
 		if (!mailbox) return msg.channel.send(":x: The other side did not pick up the call.");

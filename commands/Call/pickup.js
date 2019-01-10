@@ -22,6 +22,7 @@ module.exports = async(client, msg, suffix) => {
 				client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.to.channel);
 			} catch (e) {
 				await Calls.newGet(call.id).delete();
+				await r.table("OldCalls").insert(call);
 				try {
 					client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.from.channel);
 					client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.to.channel);
