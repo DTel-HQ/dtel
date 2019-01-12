@@ -37,7 +37,7 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			chance = Math.round((ownedTickets / currentNumber) * 100);
 		}
-		msg.reply(`The current jackpot is ${jackpot} credits.\nYou have ${ownedTickets} tickets.\nYour chance to win is: ${chance}%\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`);
+		msg.reply(`The current jackpot is ¥${jackpot} credits.\nYou have ${ownedTickets} tickets.\nYour chance to win is: ${chance}%\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`);
 	} else if (!suffix.match(/[^0-9]/)) {
 		let tickets = Number(suffix);
 		let cost = tickets * config.lotteryCost;
@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 			for (let i in userEntries) {
 				ownedTickets += userEntries[i].tickets;
 			}
-			msg.reply(`You have bought ${tickets} tickets.\nThe current jackpot is ${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
+			msg.reply(`You have bought ${tickets} tickets.\nThe current jackpot is ¥${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
 			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);
 		}
 	} else {

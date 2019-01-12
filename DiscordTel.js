@@ -74,7 +74,7 @@ client.login().catch(() => {
 client.on("disconnect", () => client.login());
 
 scheduleJob("0 0 0 * * *", async() => {
-	if (client.shard.id != 1) return;
+	if (typeof client.shard.id[0] === undefined) return;
 	// Daily reset
 	await r.table("Accounts").update({ daily: false });
 

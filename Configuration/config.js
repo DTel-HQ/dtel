@@ -6,7 +6,7 @@ module.exports = {
 	devMode: true,
 
 	prefix: ">",
-	shardCount: 2,
+	shardCount: 1,
 	supportGuild: "398980667553349649",
 	supportChannel: "399375958525870080",
 	logsChannel: "399006748582871060",

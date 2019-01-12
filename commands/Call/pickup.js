@@ -2,7 +2,7 @@ module.exports = async(client, msg, suffix) => {
 	let call = await Calls.find(c => c.to.channel === msg.channel.id);
 	if (!call || call.pickedUp) return;
 
-	client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel)
+	await client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel)
 		.catch(async _ => {
 			await Calls.newGet(call.id).delete();
 			return msg.reply(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.");

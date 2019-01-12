@@ -4,13 +4,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.reply("u forgot id :b:");
 	if (suffix === config.supportGuild) return msg.reply("No thank you.");
 
-	let doc = await Blacklist.newGet(suffix);
-	if (doc) {
-		doc.delete();
-		await client.log(`:wrench: ID \`${suffix}\` is removed from blacklist by ${msg.author.username}.`);
-		return msg.reply(`Removed ID **${suffix}** from the blacklist`);
-	}
-
 	let toBlacklist;
 	if (msg.mentions.users.first()) {
 		toBlacklist = msg.mentions.users.first().id;
@@ -25,6 +18,13 @@ module.exports = async(client, msg, suffix) => {
 			.catch(_ => null);
 	}
 	if (!toBlacklist) return msg.reply("Invalid ID!");
+
+	let doc = await Blacklist.newGet(toBlacklist);
+	if (doc) {
+		doc.delete();
+		await client.log(`:wrench: ID \`${suffix}\` is removed from blacklist by ${msg.author.username}.`);
+		return msg.reply(`Removed ID **${suffix}** from the blacklist`);
+	}
 
 	if ((msg.guild && suffix === msg.guild.id) || suffix === msg.author.id) return msg.reply(`you dumb :b:oi, don't blacklist yourself!`);
 	let user = await client.users.fetch(suffix);
