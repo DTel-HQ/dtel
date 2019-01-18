@@ -14,6 +14,8 @@ module.exports = async(client, message, args) => {
 		//
 	}
 	if (document) {
+		let a = document.type;
+		client.blacklist[`${a.toLowerCase()}s`].splice(client.blacklist[`${a.toLowerCase()}s`].indexOf(args), 1);
 		await document.remove();
 		await client.apiSend(`:wrench: ID \`${args}\` is removed from blacklist by ${message.author.username}.`, process.env.LOGSCHANNEL);
 		message.reply(`Done!`);
