@@ -274,7 +274,6 @@ client.on("message", async message => {
 	if (message.content.startsWith("<@"+client.user.id+"")) message.channel.send("My prefix is `>`.");
 	// If it starts with a the prefix, check if its a command
 	else if (message.content.startsWith(process.env.PREFIX)) {
-		console.log(`${message.author.tag} > ${message.content}`);
 		const args = message.content.split(" ").splice(1).join(" ")
 			.trim();
 		let command = message.content.split(" ")[0].trim().toLowerCase().replace(process.env.PREFIX, "");
@@ -288,6 +287,7 @@ client.on("message", async message => {
 		if (callDocument && callDocument.status && callDocument.onHold) {
 			if (command === "call" || command === "rdial") return message.reply("You can't call someone else during a hold.");
 			try {
+				console.log(`${message.author.tag} > ${message.content}`);
 				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
 				if (fs.existsSync(`./callcmds/${command}.js`)) {
@@ -304,6 +304,7 @@ client.on("message", async message => {
 				}
 				else {
 					try {
+						console.log(`${message.author.tag} > ${message.content}`);
 						commandFile = reload(`./commands/${command}.js`);
 					} catch (err) {
 						if (fs.existsSync(`./commands/${command}.js`)) {
@@ -324,6 +325,7 @@ client.on("message", async message => {
 		} else if (callDocument && callDocument.status) {
 			// not on hold?
 			try {
+				console.log(`${message.author.tag} > ${message.content}`);
 				commandFile = reload(`./callcmds/${command}.js`);
 			} catch (err) {
 				if (fs.existsSync(`./callcmds/${command}.js`)) {
@@ -341,6 +343,7 @@ client.on("message", async message => {
 			}
 		} else {
 			try {
+				console.log(`${message.author.tag} > ${message.content}`);
 				commandFile = reload(`./commands/${command}.js`);
 			} catch (err) {
 				if (fs.existsSync(`./commands/${command}.js`)) {
@@ -360,6 +363,7 @@ client.on("message", async message => {
 		// If so, run it
 		if (commandFile) {
 			try {
+				console.log(`${message.author.tag} > ${message.content}`);
 				return commandFile(client, message, args, callDocument);
 			} catch (err) {
 				if (fs.existsSync(`./commands/${command}.js`)) {
