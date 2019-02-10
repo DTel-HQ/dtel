@@ -2,6 +2,7 @@ const MessageBuilder = require("../modules/MessageBuilder");
 
 module.exports = async(client, message, args, callDocument) => {
 	if (!callDocument) return console.log("wtf no calldoc", callDocument);
+	if (callDocument.to.number === "08006113835") return message.reply(":x: You can't hangup on `*611`."); 
 	let toSend;
 	let side; //rename
 	if (callDocument.to.channelID === message.channel.id) {
