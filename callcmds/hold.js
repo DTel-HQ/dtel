@@ -19,5 +19,19 @@ module.exports = async(client, message, args, callDocument) => {
 		await client.apiSend(":hourglass: Call hold ended.", toSend);
 		callDocument.onHold = "";
 	} else return message.reply("Unexpected `callDocument.onHold` value, please report this to `*611`.");
+	try {
+		let hangups = [];
+		try {
+			const fromChannel = await client.api.channels(callDocument.from.channelID).get();
+			hangups.push({ channel: fromChannel.id, guild: fromChannel.guild_id });
+			const toChannel = await client.api.channels(callDocument.to.channelID).get();
+			hangups.push({ channel: toChannel.id, guild: toChannel.guild_id });
+		} catch (err) {
+			console.log(err);
+		}
+		client.IPC.send("stopTyping", { hangups });
+	} catch (_) {
+		// Ignore
+	}
 	await callDocument.save();
 };
