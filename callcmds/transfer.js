@@ -84,6 +84,20 @@ module.exports = async (client, message, args, callDocument) => {
     if (dialedInCall) {
         return message.reply(":x: Dialing error: The number you dialed is already in a call.");
     }
+	try {
+		let hangups = [];
+		try {
+			const fromChannel = await client.api.channels(callDocument.from.channelID).get();
+			hangups.push({ channel: fromChannel.id, guild: fromChannel.guild_id });
+			const toChannel = await client.api.channels(callDocument.to.channelID).get();
+			hangups.push({ channel: toChannel.id, guild: toChannel.guild_id });
+		} catch (err) {
+			console.log(err);
+		}
+		client.IPC.send("stopTyping", { hangups });
+	} catch (_) {
+		// Ignore
+	}
     if (toDial === "08006113835") {
         try {
             await client.apiSend(`<@&${process.env.SUPPORTROLE}>`, toDialDocument._id);
