@@ -56,7 +56,7 @@ module.exports = async(client, msg, suffix) => {
 
 		number = await client.replaceNumber(collected.content);
 
-		let regex = msg.channel.type === "dm" ? /^0900\d{7}$/ : new RegExp(`^${prefix}\\d{7}$`);
+		let regex = new RegExp(`^${prefix}\\d{7}$`);
 		if (!regex.test(number)) {
 			msg.reply("Invalid number, please try again.");
 			return numberChooser();

@@ -12,6 +12,7 @@ module.exports = async(client, msg, suffix) => {
 		call.onHold = msg.channel.id;
 		await msg.reply(":hourglass_flowing_sand: You have put this call on hold. Re-do `>hold` to release.");
 		await client.apiSend(":hourglass_flowing_sand: The other side has put this call on hold.", call.onHold === call.from.channel ? call.to.channel : call.from.channel);
+		// add stop typing
 	}
 	await Calls.update(call);
 };

@@ -8,13 +8,13 @@ module.exports = async(client, msg, suffix, rcall) => {
 		.nth(0)
 		.default(null);
 
-	if (!myNumber) return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
-	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
-
 	let toDial = suffix;
 	if (!toDial) return msg.reply("Please specify a number to call");
 
 	toDial = await client.replaceNumber(toDial);
+
+	if (!myNumber) return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 
 	if (toDial == myNumber.id) return msg.reply(":thinking: Why are you trying to call yourself?");
 	if (config.aliasNumbers[toDial]) {
@@ -39,8 +39,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 	try {
 		await client.api.channels(toDialDoc.channel).get();
 	} catch (_) {
-		msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 		await r.table("Numbers").get(toDial).delete();
+		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 	}
 
 	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
@@ -68,9 +68,12 @@ module.exports = async(client, msg, suffix, rcall) => {
 	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
 	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
+	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+
 	// But what if they don't pick up? :thinking:
 	setTimeout(async() => {
-		callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+		// Has to be done with ID due to transfers within 2 min.
+		callDoc = await Calls.get(callDoc.id);
 		if (!callDoc || callDoc.pickedUp) return;
 
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);

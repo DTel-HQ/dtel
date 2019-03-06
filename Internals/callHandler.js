@@ -1,6 +1,6 @@
 module.exports = async(cmd, msg, suffix) => {
 	const call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
-	if (!call) return;
+	if (!call || !call.pickedUp) return;
 	call.lastMessage = new Date().getTime();
 	await Calls.update(call);
 
