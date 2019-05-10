@@ -97,7 +97,8 @@ module.exports = async(client, msg, args) => {
 					},
 				});
 			}
-			if (!msg.member.hasPermission("MANAGE_GUILD")) {
+			let perms = await client.permCheck(msg.author.id);
+			if (!msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
 				return msg.reply("You don't have `Manage Server` permission!");
 			} else {
 				mailbox.messages.splice(mailbox.messages.indexOf(message));
@@ -113,7 +114,8 @@ module.exports = async(client, msg, args) => {
 			break;
 		}
 		case "clear": {
-			if (!msg.member.hasPermission("MANAGE_GUILD")) {
+			let perms = await client.permCheck(msg.author.id);
+			if (!msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
 				return msg.reply("You don't have `Manage Server` permission!");
 			} else {
 				mailbox.messages = [];
