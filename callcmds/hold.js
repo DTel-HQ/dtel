@@ -9,12 +9,13 @@ module.exports = async(client, message, args, callDocument) => {
 	} else {
 		toSend = callDocument.to.channelID;
 	}
-	if (callDocument.onHold === toSend) return message.reply("Only the other side can release a call hold.");
+	let perms = await client.permCheck(message.author.id);
+	if (callDocument.onHold === toSend && (process.env.SUPPORTGUILD != message.guild.id || !perms.support)) return message.reply("Only the other side can release a call hold.");
 	else if (callDocument.onHold === "") {
 		message.reply(":hourglass_flowing_sand: You have put this call on hold. Re-do `>hold` to release.");
 		await client.apiSend(":hourglass_flowing_sand: The other side has put this call on hold.", toSend);
 		callDocument.onHold = message.channel.id;
-	} else if (callDocument.onHold === message.channel.id) {
+	} else if (callDocument.onHold === message.channel.id || process.env.SUPPORTGUILD' === message.guild.id) {
 		message.reply(":hourglass: You have ended the call hold.");
 		await client.apiSend(":hourglass: Call hold ended.", toSend);
 		callDocument.onHold = "";
