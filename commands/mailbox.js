@@ -22,7 +22,7 @@ module.exports = async(client, msg, args) => {
 					},
 				});
 			} else if (args.split(" ")[1].toLowerCase() === "autoreply") {
-				if (!msg.member.hasPermission("MANAGE_GUILD")) {
+				if (msg.channel.type != "dm" && !msg.member.hasPermission("MANAGE_GUILD")) {
 				return msg.reply("You don't have `Manage Server` permission!");
 			}
 				let collector = msg.channel.createMessageCollector(newmsg => newmsg.author.id === msg.author.id);
@@ -98,7 +98,7 @@ module.exports = async(client, msg, args) => {
 				});
 			}
 			let perms = await client.permCheck(msg.author.id);
-			if (!msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
+			if (msg.channel.type != "dm" && !msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
 				return msg.reply("You don't have `Manage Server` permission!");
 			} else {
 				mailbox.messages.splice(mailbox.messages.indexOf(message));
@@ -115,7 +115,7 @@ module.exports = async(client, msg, args) => {
 		}
 		case "clear": {
 			let perms = await client.permCheck(msg.author.id);
-			if (!msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
+			if (msg.channel.type != "dm" && !msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
 				return msg.reply("You don't have `Manage Server` permission!");
 			} else {
 				mailbox.messages = [];
