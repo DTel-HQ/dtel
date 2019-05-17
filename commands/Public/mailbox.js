@@ -98,7 +98,8 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setFooter(`Page ${page}/${pages}. Enter an ID to see actions.`);
+				.setDescription("To change your description: >mailbox autoreply [description]\nTo delete your mailbox: >mailbox delete")
+				.setFooter(`Page ${page}/${pages}. Enter an ID to see more actions.`);
 
 			// Display the right messages
 			let startingIndex = (page - 1) * 5;
@@ -106,10 +107,10 @@ module.exports = async(client, msg, suffix) => {
 			for (let i = startingIndex; i < startingIndex + 5; i++) {
 				if (!messages[i]) break;
 				let m = messages[i];
-				let date = Date(m.date);
+				let date = new Date(m.time);
 				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}\n${date}`);
 			}
-			embed.addField("𛲡",
+			embed.addField("Options",
 				`:x: to exit.\
 				${page != 1 ? "\n:arrow_left: go to the previous page." : ""}\
 				${page < pages ? "\n:arrow_right: go to the next page." : ""}\
@@ -129,9 +130,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send(embed);
 
 			if (!omsg.reactions.first()) {
-				for (let i in reactions) {
-					await omsg.react(reactions[i]);
-				}
+				for (let i in reactions) omsg.react(reactions[i]);
 			}
 
 			const reactionCollector = omsg.createReactionCollector(
@@ -197,7 +196,7 @@ module.exports = async(client, msg, suffix) => {
 			let date = Date(message.date);
 			embed.addField(`ID \`${message.id}\` from ${message.number}`, `${message.message}\n${date}`);
 
-			embed.addField("𛲡",
+			embed.addField("Options",
 				`:x: to exit.\
 				\n:arrow_left: to return to messages.\
 				${perm ? "\n:wastebasket: to delete this message." : ""}\
@@ -211,9 +210,7 @@ module.exports = async(client, msg, suffix) => {
 
 			omsg = await msg.channel.send(embed);
 
-			for (let i in reactions) {
-				await omsg.react(reactions[i]);
-			}
+			for (let i in reactions) omsg.react(reactions[i]);
 
 			collector = await omsg.awaitReactions(
 				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,

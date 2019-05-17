@@ -1,133 +1,57 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = async(msg, myNumber) => {
-	let account = await r.table("Accounts").get(msg.author.id).default(null);
+	// get account information / make account
+	let account = await r.table("Accounts").get(msg.author.id);
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
-		r.table("Accounts").insert(account);
+		await r.table("Accounts").insert(account);
 	}
 
-	let renewrate = 500;
+	// make the embed
+	let embed = new MessageEmbed()
+		.setColor(0x3498DB)
+		.setTitle("Number information")
+		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewRate}/month`)
+		.addField("Number", myNumber.id)
+		.addField("Expiration date", myNumber.expiry)
+		.addField("Your balance", `¥${account.balance}`)
+		.addField("How to recharge", "http://discordtel.austinhuang.me/en/latest/Payment/");
 
-	if (account.balance < renewrate) {
-		return msg.channel.send({
-			embed: {
-				title: "Current Number Status",
-				description: "You have less than 500 credits which means you cannot renew your number.",
-				fields: [{
-					name: "Number",
-					value: `${myNumber.id}`,
-				},
-				{
-					name: "Expiration",
-					value: `${new Date(myNumber.expiry).getFullYear()}/${new Date(myNumber.expiry).getMonth() + 1}`,
-				},
-				{
-					name: "Your Balance",
-					value: `${account.balance}`,
-				},
-				{
-					name: "How to recharge",
-					value: "http://discordtel.austinhuang.me/en/latest/Payment/",
-				}],
-			},
-		});
-	} else {
-		let mainEmbed = await msg.channel.send({
-			embed: {
-				color: 3447003,
-				title: "Current Number Status",
-				description: "Type the amount of months you want to renew your number.",
-				fields: [{
-					name: "Number",
-					value: myNumber.id,
-				},
-				{
-					name: "Expiration",
-					value: `${new Date(myNumber.expiry).getFullYear()}/${new Date(myNumber.expiry).getMonth() + 1}`,
-				},
-				{
-					name: "Your Balance",
-					value: `${account.balance}`,
-				},
-				{
-					name: "How to recharge",
-					value: "http://discordtel.austinhuang.me/en/latest/Payment/",
-				}],
-				footer: {
-					text: "To hang up, press `0`.",
-				},
-			},
-		});
+	// Determine maximum amount of months to renew
+	let maxMonths = Math.floor(account.balance / config.renewRate);
+	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hang up after 60 seconds.");
 
-		let collector = msg.channel.createMessageCollector(newmsg => msg.author.id === newmsg.author.id);
-		collector.on("collect", async cmsg => {
-			if (cmsg.content === "0") {
-				await mainEmbed.delete();
-				cmsg.reply(":white_check_mark: You hung up the call.");
-				return collector.stop();
-			}
-			if (!cmsg.content.match(/[^0-9]/)) {
-				cmsg.delete();
-				mainEmbed = await mainEmbed.edit({
-					embed: {
-						color: 3447003,
-						title: "Invalid renewal period",
-						description: "Type the **number** of months you want to renew your number.",
-						fields: [{
-							name: "Number",
-							value: myNumber.id,
-						},
-						{
-							name: "Expiration",
-							value: `${new Date(myNumber.expiry).getFullYear()}/${new Date(myNumber.expiry).getMonth() + 1}`,
-						},
-						{
-							name: "Your Balance",
-							value: `${account.balance}`,
-						},
-						{
-							name: "How to recharge",
-							value: "http://discordtel.austinhuang.me/en/latest/Payment/",
-						}],
-						footer: {
-							text: "To hang up, press `0`.",
-						},
-					},
-				});
-				return;
-			}
-			let renewcost = renewrate * Number(cmsg.content);
-			if (!account.balance >= renewcost) {
-				const d = new Date(myNumber.expiry);
-				d.setMonth(d.getMonth() + parseInt(cmsg.content));
-				r.table("Accounts").get(msg.author.id).update({ balance: account.balance -= renewcost });
-				r.table("Numbers").get(myNumber.id).update({ expiresAt: d });
-				collector.stop();
-				cmsg.delete();
+	// send embed
+	let omsg = await msg.channel.send("", { embed: embed });
+	if (!maxMonths) return;
 
-				return msg.channel.send({
-					embed: {
-						color: 0xFF0000,
-						title: "Error: Insufficient funds!",
-						description: "Type the amount of months you want to renew your number",
-						fields: [{
-							name: "Number",
-							value: myNumber.id,
-						},
-						{
-							name: "Expiration",
-							value: `${new Date(myNumber.expiry).getFullYear()}/${new Date(myNumber.expiry).getMonth() + 1}`,
-						},
-						{
-							name: "Your Balance",
-							value: `${account.balance}`,
-						},
-						{
-							name: "How to recharge",
-							value: "http://discordtel.austinhuang.me/en/latest/Payment/",
-						}],
-					},
-				});
-			}
-		});
-	}
+	// Message collector
+	const collected = await msg.channel.awaitMessages(
+		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
+		{ max: 1, time: 60000 }
+	);
+
+	omsg.delete();
+	if (!collected.first() || collected.first().content === "0") return;
+
+	// new date and balance
+	let newExpiry = new Date(myNumber.expiry);
+	newExpiry.setMonth(newExpiry.getMonth() + parseInt(collected.first().content));
+	let newBalance = account.balance - (config.renewRate * parseInt(collected.first().content));
+
+	// update in db
+	await r.table("Accounts").get(account.id).update({ balance: newBalance });
+	await r.table("Numbers").get(myNumber.id).update({ expiry: newExpiry });
+
+	embed = new MessageEmbed()
+		.setColor(0xEEEEEE)
+		.setAuthor(msg.author.tag)
+		.setTitle("Your receipt")
+		.setDescription(`The number has succesfully been renewed for ${collected.first().content} months.`)
+		.addField("Number", myNumber.id)
+		.addField("New expiration date", newExpiry)
+		.addField("Your new balance", `¥${newBalance}`)
+		.addField("How to recharge", "http://discordtel.austinhuang.me/en/latest/Payment/");
+	msg.channel.send("", { embed: embed });
 };

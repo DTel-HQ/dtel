@@ -40,6 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		user: user ? 1 : 0,
 		reason: reason,
 		creator: msg.author.id,
+		date: new Date(),
 	};
 
 	await r.table("Strikes").insert(strikeDoc);

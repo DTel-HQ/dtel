@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		return msg.reply(":x: You are unable to call *611 here because Customer Support is literally at your doorstep.");
 	}
 
-	if (toDial == "*411") return require("../../Internals/411.js")();
+	if (toDial == "*411") return require("../../Internals/411.js")(msg, myNumber);
 	if (toDial == "*233") return require("../../Internals/233.js")(msg, myNumber);
 
 	let toDialDoc = await r.table("Numbers")

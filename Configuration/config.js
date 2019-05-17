@@ -32,7 +32,7 @@ module.exports = {
 		support: 200,
 		default: 80,
 	},
-	renewCost: 500,
+	renewRate: 500,
 	lotteryCost: 5,
 	messageCost: 2,
 

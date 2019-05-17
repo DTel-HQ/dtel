@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Strikes").get(strikeID).delete();
 
-	await msg.reply(`Succesfully deleted strike \`${strikeID}\``);
+	await msg.reply(`Succesfully removed strike \`${strikeID}\``);
 
 	if (!offender) return;
 
