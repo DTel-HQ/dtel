@@ -66,7 +66,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
 	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
-	client.apiSend(`There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
+	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 
