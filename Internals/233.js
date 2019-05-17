@@ -34,6 +34,7 @@ module.exports = async(msg, myNumber) => {
 
 	omsg.delete();
 	if (!collected.first() || collected.first().content === "0") return;
+	if (collected.first().guild) collected.first().delete();
 
 	// new date and balance
 	let newExpiry = new Date(myNumber.expiry);

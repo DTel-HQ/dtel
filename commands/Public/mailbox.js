@@ -26,7 +26,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected) return;
 
 		omsg.delete();
-		collected.delete();
+		if (collected.guild) collected.delete();
 
 		omsg = await msg.channel.send("Type the description of your mailbox. (max 100 characters)");
 
@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 		collected = collector.first();
 		if (!collected) return msg.reply("You ran out of time, get a description ready and start the set-up again.");
 
-		await collected.delete();
+		if (collected.guild) collected.delete();
 
 		let description = collected.content;
 		let mailboxDoc = {
@@ -177,7 +177,7 @@ module.exports = async(client, msg, suffix) => {
 					messageCollector.stop("User initiated another mailbox");
 				} else {
 					messageCollector.stop("Collected");
-					m.delete();
+					if (m.guild) m.delete();
 					messagePage(m.content, page);
 				}
 			});

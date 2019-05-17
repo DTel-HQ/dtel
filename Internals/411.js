@@ -29,7 +29,7 @@ module.exports = async(msg, myNumber) => {
 		// on collecting
 		mcol.on("end", collected => {
 			omsg.delete();
-			collected.first().delete();
+			if (collected.first().guild) collected.first().delete();
 
 			if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 			return menus(collected.first().content);
@@ -97,7 +97,7 @@ module.exports = async(msg, myNumber) => {
 					mcol.on("end", collected => {
 						if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 
-						collected.first().delete();
+						if (collected.first().guild) collected.first().delete();
 
 						return updatePage(omsg, page, collected.first().content);
 					});
@@ -142,7 +142,7 @@ module.exports = async(msg, myNumber) => {
 				mcol.on("end", async collected => {
 					if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 
-					collected.first().delete();
+					if (collected.first().guild) collected.first().delete();
 
 					// act on what has been said
 					switch (collected.first().content) {
@@ -165,7 +165,7 @@ module.exports = async(msg, myNumber) => {
 							{ time: 180000, max: 1 });
 
 							mcol.on("end", async coll => {
-								coll.first().delete();
+								if (coll.first().guild) coll.first().delete();
 
 								// try to insert/edit in DB
 								let res;

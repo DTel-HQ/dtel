@@ -46,10 +46,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 	if (activeCall) return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
 
-	if (csCall) {
-		await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
-		msg.channel.send("Please wait out the call to give Customer Support agents time to respond, otherwise you could be punished.");
-	}
+	if (csCall) await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
 
 	let callDoc = await Calls.create({
 		id: uuidv4(),
@@ -65,7 +62,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel ${msg.channel.id} and channel ${toDialDoc.channel} by **${msg.author.tag}** (${msg.author.id}).`);
+	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel **${msg.channel.id}** and channel **${toDialDoc.channel}** by ${msg.author.tag} (${msg.author.id}).`);
 	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
@@ -79,7 +76,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
 		await Calls.newGet(callDoc.id).delete();
 
-		client.log(`:telephone: The ${rcall ? "random call" : "call"} between channel ${callDoc.from.channel} and channel ${callDoc.to.channel} was not picked up.`);
+		client.log(`:telephone: The ${rcall ? "random call" : "call"} between channel **${callDoc.from.channel}** and channel **${callDoc.to.channel}** was not picked up.`);
 
 		await r.table("OldCalls").insert(callDoc);
 
