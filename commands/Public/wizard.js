@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 		)
 		.addField(
 			"Payment",
-			"Your number must be renewed for every month of usage. The number will cost **500** in-bot credits per month, after 1 month of free period. You must type `>dial *233` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**"
+			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. You must type \`>dial *233\` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`
 		)
 		.addField(
 			"I'm done reading!",

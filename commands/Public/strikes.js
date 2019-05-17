@@ -14,11 +14,10 @@ module.exports = async(client, msg, suffix) => {
 		.setColor(0x990000)
 		.setFooter(`Use \`>rmstrike [ID]\` to remove a strike.`);
 
-	for (let i in strikes) {
-		let strike = strikes[i];
+	for (let strike of strikes) {
 		let creator = (await client.users.fetch(strike.creator)).tag;
 		embed.addField(
-			`Strike \`${strike.id}\` by ${creator}`,
+			`Strike \`${strike.id}\` by ${strike.creator}`,
 			`Reason: ${strike.reason}`
 		);
 	}

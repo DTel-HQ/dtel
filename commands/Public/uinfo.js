@@ -24,8 +24,8 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Blacklisted", await Blacklist.get(suffix) ? "True" : "False", true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)
 		.addField("Balance", `¥${account.balance}`, true)
-		.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => s.reason)).join("\n") : "None")
-		.setFooter("Use >permcheck to check their permission");
+		.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator}(${client.users.fetch(s.creator) ? client.users.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
+		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
 
 	msg.channel.send("", { embed: embed });
 };

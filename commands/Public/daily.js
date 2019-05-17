@@ -13,8 +13,8 @@ module.exports = async(client, msg, suffix) => {
 	let perms = await msg.author.getPerms();
 	let amount = dailies.default;
 
-	for (let perm in dailies) {
-		if (perms[perm] && dailies[perm] > amount) amount = dailies[perm];
+	for (let perm of dailies) {
+		if (perms && dailies > amount) amount = dailies;
 	}
 
 	account.balance += amount;

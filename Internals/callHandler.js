@@ -12,6 +12,7 @@ module.exports = async(cmd, msg, suffix) => {
 	try {
 		client.apiSend(`**${msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`, toSend);
 	} catch (e) {
+		await r.table("Numbers").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
 		await Calls.newGet(call.id).delete();
 		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", msg.channel.id);
 	}

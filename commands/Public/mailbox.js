@@ -130,7 +130,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send(embed);
 
 			if (!omsg.reactions.first()) {
-				for (let i in reactions) omsg.react(reactions[i]);
+				for (let reaction of reactions) omsg.react(reaction);
 			}
 
 			const reactionCollector = omsg.createReactionCollector(
@@ -210,7 +210,7 @@ module.exports = async(client, msg, suffix) => {
 
 			omsg = await msg.channel.send(embed);
 
-			for (let i in reactions) omsg.react(reactions[i]);
+			for (let reaction of reactions) omsg.react(reaction);
 
 			collector = await omsg.awaitReactions(
 				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,

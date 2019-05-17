@@ -28,8 +28,8 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix) {
 		let ownedTickets = 0;
 		let userEntries = await r.table("Lottery").filter({ userID: msg.author.id });
-		for (let i in userEntries) {
-			ownedTickets += userEntries[i].tickets;
+		for (let entry of userEntries) {
+			ownedTickets += entry.tickets;
 		}
 		let chance;
 		if (currentNumber == 0) {
@@ -59,8 +59,8 @@ module.exports = async(client, msg, suffix) => {
 			});
 			let ownedTickets = 0;
 			let userEntries = await r.table("Lottery").filter({ userID: msg.author.id });
-			for (let i in userEntries) {
-				ownedTickets += userEntries[i].tickets;
+			for (let entry of userEntries) {
+				ownedTickets += entry.tickets;
 			}
 			msg.reply(`You have bought ${tickets} tickets.\nThe current jackpot is ¥${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%`);
 			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);
