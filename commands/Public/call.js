@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	});
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	client.log(`:telephone: A ${rcall ? "random call" : "call"} has been established between channel **${msg.channel.id}** and channel **${toDialDoc.channel}** by ${msg.author.tag} (${msg.author.id}).`);
+	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} ${myNumber.channel} -> ${toDialDoc.channel} has been established by ${msg.author.tag} (${msg.author.id}).`);
 	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
@@ -76,20 +76,12 @@ module.exports = async(client, msg, suffix, rcall) => {
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
 		await Calls.newGet(callDoc.id).delete();
 
-		client.log(`:telephone: The ${rcall ? "random call" : "call"} between channel **${callDoc.from.channel}** and channel **${callDoc.to.channel}** was not picked up.`);
+		client.log(`:telephone: ${rcall ? "Rcall" : "Call"} ${callDoc.from.channel} -> ${callDoc.to.channel} was not picked up.`);
 
 		await r.table("OldCalls").insert(callDoc);
 
-		let mailbox = await r.table("Mailbox").get(toDialDoc.id).default(null);
+		let mailbox = await r.table("Mailbox").get(toDialDoc.channel).default(null);
 		if (!mailbox) return msg.channel.send(":x: The other side did not pick up the call.");
-		msg.channel.send(`:x: The other side did not pick up the call. Automated mailbox message:\n${mailbox.autoReply}\n<@${msg.author.id}>, Type your message or enter \`no\` to exit without sending a message.`);
-
-		let collector = msg.channel.createMessageCollector(nmsg => nmsg.author.id === msg.author.id);
-		collector.on("collect", async cmsg => {
-			await collector.stop();
-			mailbox.messages.push(cmsg.content);
-			r.table("Mailbox").get(toDialDoc.id).update({ messages: mailbox.messages });
-			msg.channel.send(":mailbox: Message sent!");
-		});
+		msg.channel.send(`:x: The other side did not pick up the call.\nAutomated mailbox message: ${mailbox.autoreply}\n<@${msg.author.id}>, you can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} your message here\``);
 	}, 120000);
 };

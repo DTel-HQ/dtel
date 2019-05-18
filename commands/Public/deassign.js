@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 	await r.table("Numbers").get(numberDoc.id).delete();
 
 	await msg.reply("Number is gone, pay your respects");
-	await client.log(`:closed_book: Number **${numberDoc.id}** has been deassigned from channel **${numberDoc.channel}** by ${msg.author.tag}.`);
+	await client.log(`:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.`);
 
 	// phonebook deletion
 	await r.table("Phonebook").get(numberDoc.id).delete();

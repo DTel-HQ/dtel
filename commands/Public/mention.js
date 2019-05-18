@@ -6,8 +6,20 @@ module.exports = async(client, msg, suffix) => {
 	let toMention = number.mentions ? number.mentions : [];
 	let string = `<@${msg.author.id}>`;
 
+	// If removal
+
 	// Don't let the list exceed more than 10 people
-	if (toMention.length >= 10) return msg.channel.send("", { embed: { color: 0x660000, title: "Max mentions reached.", description: "To work within practical limits there can't be more than 10 mentions per number." } });
+	if (toMention.length >= 9) {
+		return msg.channel.send("", { embed: {
+			color: 0x660000,
+			title: "Max mentions reached.",
+			description: "To work within practical limits there can't be more than 9 mentions per number.",
+			fields: [
+				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
+			],
+			footer: ">mention delete [number] to remove someone.",
+		} });
+	}
 
 	// add or remove ID from list
 	let removed;
@@ -21,5 +33,13 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Numbers").get(number.id).update({ mentions: toMention });
 
-	msg.channel.send("", { embed: { color: 3447003, title: "Success", description: `You have been **${removed ? "removed from" : "added to"}** the list of mentions.` } });
+	msg.channel.send("", { embed: {
+		color: 3447003,
+		title: "Success",
+		description: `You have been **${removed ? "removed from" : "added to"}** the list of mentions.`,
+		fields: [
+			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
+		],
+		footer: ">mentions delete [number] to deleta a mention.",
+	} });
 };

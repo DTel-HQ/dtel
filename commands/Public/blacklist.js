@@ -22,8 +22,8 @@ module.exports = async(client, msg, suffix) => {
 	let doc = await Blacklist.newGet(toBlacklist);
 	if (doc) {
 		doc.delete();
-		await client.log(`:wrench: ID \`${suffix}\` is removed from blacklist by ${msg.author.username}.`);
-		return msg.reply(`Removed ID **${suffix}** from the blacklist`);
+		await client.log(`:wrench: ID ${suffix} is removed from blacklist by ${msg.author.username}.`);
+		return msg.reply(`Removed ID ${suffix} from the blacklist`);
 	}
 
 	if ((msg.guild && suffix === msg.guild.id) || suffix === msg.author.id) return msg.reply(`you dumb :b:oi, don't blacklist yourself!`);
@@ -31,6 +31,6 @@ module.exports = async(client, msg, suffix) => {
 	if (user && (await user.getPerms()).support) return msg.reply("Trying to get rid of the competition? Well you can't.");
 
 	await Blacklist.create({ id: suffix });
-	await client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by ${msg.author.username}.`);
-	msg.reply(`Added ID **${suffix}** to the blacklist.`);
+	await client.log(`:hammer: ID ${suffix} has been added to the blacklist by ${msg.author.username}.`);
+	msg.reply(`Added ID ${suffix} to the blacklist.`);
 };

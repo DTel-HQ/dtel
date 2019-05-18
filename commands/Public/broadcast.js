@@ -10,6 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	let channel = number.channel;
 	let message = suffix.split(" ");
 	message.splice(0, 1);
+	if (!message.length) return msg.reply("That's the most useless message I've seen...");
 	if (message.length > 1800) return msg.reply("What ya writing an essay for mate? (too many characters)");
 
 	try {

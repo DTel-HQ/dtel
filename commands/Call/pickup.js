@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 
 	call.pickedUp = true;
 	await Calls.update(call);
-	await client.log(`:white_check_mark: The call between channel ${call.from.channel} and channel ${call.to.channel} was picked up by **${msg.author.tag}** (${msg.author.id}).`);
+	await client.log(`:white_check_mark: Call ${call.from.channel} -> ${call.to.channel} was picked up by ${msg.author.tag}(${msg.author.id}).`);
 	await msg.reply(":white_check_mark: You picked up the call.\n\nYou can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`!");
 
 	let interval = setInterval(async() => {

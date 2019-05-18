@@ -11,13 +11,17 @@ module.exports = async(client, msg, suffix) => {
 	let reason = suffix.join(" ");
 
 	if (!toStrike || !reason) return msg.reply("<:BusThinking:341628019472990209> this command requires 2 parameters. Syntax: `>strike [user] [reason]`");
-	if (toStrike == msg.author.id) return msg.reply("What are you blacklisting yourself for?");
+	if (toStrike == msg.author.id) return msg.reply("What are you striking yourself for?");
 
 	let user,
 		guild;
 
 	user = await client.users.fetch(toStrike).catch(e => null);
 	if (!user) guild = await client.api.guilds(toStrike).get().catch(e => null);
+	if (!guild) {
+		let channel = await client.api.channels(toStrike).get().catch(e => null);
+		if (channel) guild = await client.channels.get(toStrike).guild.id;
+	}
 	if (!user && !guild) return msg.reply("Are you sure that ID is a guild or user?");
 
 	if (user) {

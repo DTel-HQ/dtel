@@ -1,23 +1,29 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
+	// get the number
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (!myNumber) return msg.reply("This channel doesn't have a number.");
 
+	// check if they have permission to do stuff
 	let perm = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 
+	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);
 	let omsg,
 		collected,
 		collector;
 
+	// If there's no mailbox
 	if (!mailbox) {
+		// Permission?
 		if (!perm) return msg.reply("This channel doesn't have a mailbox set up yet. Ask an admin to run this command.");
 		omsg = await msg.reply("You don't have a mailbox set up. Respond `yes` to create one.");
 
+		// yes/no collector
 		collector = await msg.channel.awaitMessages(
 			m => /yes/i.test(m.content) && m.author.id == msg.author.id, {
-				time: 10 * 1000,
+				time: 60 * 1000,
 				max: 1,
 			}
 		);
@@ -28,8 +34,9 @@ module.exports = async(client, msg, suffix) => {
 		omsg.delete();
 		if (collected.guild) collected.delete();
 
-		omsg = await msg.channel.send("Type the description of your mailbox. (max 100 characters)");
+		omsg = await msg.channel.send("Type the autoreply of your mailbox. (max 100 characters)");
 
+		// autoreply collector
 		collector = await msg.channel.awaitMessages(
 			m => m.content.length > 0 && m.content.length < 100 && m.author.id == msg.author.id,
 			{
@@ -40,26 +47,28 @@ module.exports = async(client, msg, suffix) => {
 
 		await omsg.delete();
 		collected = collector.first();
-		if (!collected) return msg.reply("You ran out of time, get a description ready and start the set-up again.");
+		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
 
 		if (collected.guild) collected.delete();
 
-		let description = collected.content;
+		// Succesful autoreply
+		let autoreply = collected.content;
 		let mailboxDoc = {
 			id: msg.channel.id,
-			description: description,
+			autoreply: autoreply,
 			messages: [],
 		};
 		await r.table("Mailbox").insert(mailboxDoc);
 		msg.channel.send({ embed: {
 			color: 0x00FF00,
 			title: "Succesfully set-up this channel's mailbox",
-			description: `**Description:** ${description}`,
+			description: `**autoreply:** ${autoreply}`,
 			footer: {
 				text: "You can now use >mailbox to see messages when you receive them.",
 			},
 		} });
 	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
+		// deleting mailbox
 		if (!perm) return msg.reply("Only admins can do this.");
 
 		omsg = await msg.reply("Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel.");
@@ -82,9 +91,38 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			msg.channel.send("Mailbox deletion aborted.");
 		}
+	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
+		omsg = await msg.channel.send("Type the new autoreply of your mailbox. (max 100 characters)");
+
+		// autoreply collector
+		collector = await msg.channel.awaitMessages(
+			m => m.content.length > 0 && m.content.length < 100 && m.author.id == msg.author.id,
+			{
+				time: 2 * 60 * 1000,
+				max: 1,
+			}
+		);
+
+		await omsg.delete();
+		collected = collector.first();
+		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
+
+		if (collected.guild) collected.delete();
+
+		// Succesful autoreply
+		let autoreply = collected.content;
+		await r.table("Mailbox").get(mailbox.id).update({ autoreply: autoreply });
+		msg.channel.send({ embed: {
+			color: 0x00FF00,
+			title: "Succesfully changed this channel's mailbox",
+			description: `**autoreply:** ${autoreply}`,
+			footer: {
+				text: "Use >mailbox to see messages.",
+			},
+		} });
 	} else {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
-		if (!messages[0]) return msg.reply("You don't have any messages.");
+		if (!messages[0]) return msg.channel.send("", { embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
 
 		// To show all messages
 
@@ -98,7 +136,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setDescription("To change your description: >mailbox autoreply [description]\nTo delete your mailbox: >mailbox delete")
+				.setDescription("To edit your mailbox's autoreply: >mailbox edit\nTo delete your mailbox: >mailbox delete")
 				.setFooter(`Page ${page}/${pages}. Enter an ID to see more actions.`);
 
 			// Display the right messages

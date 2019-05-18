@@ -14,7 +14,23 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{
 					name: ">wizard",
-					value: "Get yourself a number",
+					value: "Get yourself a number.",
+				},
+				{
+					name: ">block",
+					value: "Block a number from calling this channel.",
+				},
+				{
+					name: ">contacts",
+					value: "A contact book for DiscordTel numbers.",
+				},
+				{
+					name: ">convert",
+					value: "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs).",
+				},
+				{
+					name: ">daily",
+					value: "Get daily credits. More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).",
 				},
 				{
 					name: ">dial / >call",
@@ -25,33 +41,24 @@ module.exports = async(client, msg, suffix) => {
 					value: "Dial a random number from the `*411` phonebook.",
 				},
 				{
-					name: ">block",
-					value: "Block a number from calling this channel.",
-				},
-				{
-					name: ">message",
-					value: "Sends a message to another mailbox.",
+					name: ">lottery",
+					value: "Real gambling right there.",
 				},
 				{
 					name: ">mailbox",
 					value: "Check mailbox messages or create one.",
 				},
 				{
-					name: ">daily",
-					value: "Get daily credits",
+					name: ">mention",
+					value: "Get mentioned when there's an incoming call.",
 				},
 				{
-					name: ">convert",
-					value:
-            "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs).",
-				},
-				{
-					name: ">lottery",
-					value: "Real gambling right there",
+					name: ">message",
+					value: "Sends a message to another mailbox.",
 				},
 				{
 					name: "I don't really need to explain them...Right, my master?",
-					value: "`>invite`, `>info`, `>help`",
+					value: "`>help`, `>info`, `>invite`",
 				},
 			],
 			timestamp: new Date(),

@@ -8,15 +8,24 @@ module.exports = async(msg, myNumber) => {
 		await r.table("Accounts").insert(account);
 	}
 
+	// Get easy to format date
+	const currExpiry = new Date(myNumber.expiry);
+
+	// Get guild's strikes
+	let strikes;
+	if (msg.guild) strikes = await r.table("Strikes").get(msg.guild.id) || [];
+
 	// make the embed
 	let embed = new MessageEmbed()
 		.setColor(0x3498DB)
 		.setTitle("Number information")
-		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewRate}/month`)
-		.addField("Number", myNumber.id)
-		.addField("Expiration date", myNumber.expiry)
-		.addField("Your balance", `¥${account.balance}`)
-		.addField("How to recharge", "http://discordtel.austinhuang.me/en/latest/Payment/");
+		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.addField("Number", myNumber.id, true)
+		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth()}-${currExpiry.getFullYear()}`, true)
+		.addField("Your balance", `¥${account.balance}`, true)
+		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");
+
+	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None");
 
 	// Determine maximum amount of months to renew
 	let maxMonths = Math.floor(account.balance / config.renewRate);
@@ -47,11 +56,11 @@ module.exports = async(msg, myNumber) => {
 
 	embed = new MessageEmbed()
 		.setColor(0xEEEEEE)
-		.setAuthor(msg.author.tag)
+		.setAuthor(`${msg.author.tag}(${msg.author.id})`)
 		.setTitle("Your receipt")
-		.setDescription(`The number has succesfully been renewed for ${collected.first().content} months.`)
+		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
 		.addField("Number", myNumber.id)
-		.addField("New expiration date", newExpiry)
+		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth()}-${newExpiry.getFullYear()}`)
 		.addField("Your new balance", `¥${newBalance}`)
 		.addField("How to recharge", "http://discordtel.austinhuang.me/en/latest/Payment/");
 	msg.channel.send("", { embed: embed });
