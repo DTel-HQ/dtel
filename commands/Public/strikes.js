@@ -10,7 +10,9 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{ name: "User strikes", value: userStrikes.length ? userStrikes.map(s => `-${s.reason}`).join("\n") : "None" },
 			],
-			footer: "For any questions/complaints about a strike; call *611.",
+			footer: {
+				text: "For any questions/complaints about a strike; call *611.",
+			},
 		};
 		if (msg.guild) embed.fields.push({ name: "This guild's strikes", value: guildStrikes.length ? guildStrikes.map(s => `-${s.reason}`).join("\n") : "None" });
 		return msg.channel.send("", { embed: embed });

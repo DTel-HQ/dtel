@@ -46,7 +46,31 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 	if (activeCall) return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
 
-	if (csCall) await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
+	if (csCall) {
+		// send confirmation embed
+		let omsg = await msg.channel.send("", { embed: {
+			color: 0x3498DB,
+			title: "Please read before calling",
+			description: "*611 is our Customer Support number operated by real people.\nTherefore any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call *611?\n\nRespond with `yes` or `no`.",
+			footer: {
+				text: "This call will automatically be discarded in 60 seconds",
+			},
+		} });
+
+		// Make a collector for yes/no
+		let collected = await msg.channel.awaitMessages(
+			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
+			{ max: 1, time: 60000 }
+		);
+
+		// on collection
+		omsg.delete();
+		if (msg.guid) collected.first().delete();
+		if (!collected.first() || /no/i.test(collected.first().content)) return;
+
+		// Inform CS
+		await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
+	}
 
 	let callDoc = await Calls.create({
 		id: uuidv4(),
@@ -61,8 +85,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 		startedAt: new Date(),
 	});
 
-	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`"}`);
-	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} ${myNumber.channel} -> ${toDialDoc.channel} has been established by ${msg.author.tag} (${msg.author.id}).`);
+	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`, but give people the time to pick up or you may be striked."}`);
+	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumber.channel} → ${toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}).`);
 	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
@@ -76,7 +100,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
 		await Calls.newGet(callDoc.id).delete();
 
-		client.log(`:telephone: ${rcall ? "Rcall" : "Call"} ${callDoc.from.channel} -> ${callDoc.to.channel} was not picked up.`);
+		client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${callDoc.from.channel} → ${callDoc.to.channel}\` was not picked up.`);
 
 		await r.table("OldCalls").insert(callDoc);
 

@@ -10,8 +10,18 @@ module.exports = async(client, msg, suffix) => {
 
 	call.pickedUp = true;
 	await Calls.update(call);
-	await client.log(`:white_check_mark: Call ${call.from.channel} -> ${call.to.channel} was picked up by ${msg.author.tag}(${msg.author.id}).`);
+	await client.log(`:white_check_mark: Call \`${call.from.channel} → ${call.to.channel}\` was picked up by ${msg.author.tag}(${msg.author.id}).`);
 	await msg.reply(":white_check_mark: You picked up the call.\n\nYou can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`!");
+
+	if (call.to.number == "08006113835") {
+		let account = await r.table("Accounts").get(msg.author.id);
+		if (!account) {
+			account = { id: msg.author.id, balance: 0 };
+			await r.table("Accounts").insert(account);
+		}
+		let newBalance = account.balance + config.pickupBonus;
+		r.table("Accounts").get(account.id).update({ balance: newBalance });
+	}
 
 	let interval = setInterval(async() => {
 		call = await Calls.find(c => c.to.channel == msg.channel.id);

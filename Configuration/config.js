@@ -32,9 +32,10 @@ module.exports = {
 		support: 200,
 		default: 80,
 	},
-	renewRate: 500,
 	lotteryCost: 5,
 	messageCost: 2,
+	pickupBonus: 10,
+	renewRate: 500,
 
 	callPhones: {
 		default: "<:DiscordTelPhone:310817969498226718>",

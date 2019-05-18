@@ -168,7 +168,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send(embed);
 
 			if (!omsg.reactions.first()) {
-				for (let reaction of reactions) omsg.react(reaction);
+				for (let reaction of reactions) await omsg.react(reaction);
 			}
 
 			const reactionCollector = omsg.createReactionCollector(
@@ -187,6 +187,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			reactionCollector.on("collect", async reaction => {
+				let index;
 				messageCollector.stop("Reaction collector went off");
 				switch (reaction.emoji.name) {
 					case "❌":
@@ -248,7 +249,7 @@ module.exports = async(client, msg, suffix) => {
 
 			omsg = await msg.channel.send(embed);
 
-			for (let reaction of reactions) omsg.react(reaction);
+			for (let reaction of reactions) await omsg.react(reaction);
 
 			collector = await omsg.awaitReactions(
 				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,
@@ -259,7 +260,6 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			collected = collector.first();
-			if (!collected) return;
 			let index;
 
 			switch (collected.emoji.name) {

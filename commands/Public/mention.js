@@ -17,7 +17,9 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 			],
-			footer: ">mention delete [number] to remove someone.",
+			footer: {
+				text: ">mention delete [number] to remove someone.",
+			},
 		} });
 	}
 
@@ -40,6 +42,8 @@ module.exports = async(client, msg, suffix) => {
 		fields: [
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
-		footer: ">mentions delete [number] to deleta a mention.",
+		footer: {
+			text: ">mentions delete [number] to deleta a mention.",
+		},
 	} });
 };
