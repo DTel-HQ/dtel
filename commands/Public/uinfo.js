@@ -4,18 +4,19 @@ module.exports = async(client, msg, suffix) => {
 	if (!(await msg.author.getPerms()).support) return;
 
 	// Check if user exists
-	let user;
-	try {
-		user = await client.users.fetch(suffix);
-	} catch (err) {
-		return msg.channel.send("How am I supposed to look up a wrong ID?!");
-	}
+	let user = msg.mentions.users ? msg.mentions.users.first() : client.users.get(suffix);
+	if (!user) return msg.reply("How am I supposed to look up non existant user?!");
 
 	// Get all the needed information
 	const dmChannel = await user.createDM();
 	const dmNumber = (await r.table("Numbers").filter({ channel: dmChannel.id }))[0];
 	const strikes = await r.table("Strikes").filter({ offender: user.id });
-	const account = await r.table("Accounts").get(suffix).default(null);
+	let account = await r.table("Accounts").get(suffix).default(null);
+
+	if (!account) {
+		account = { id: msg.author.id, balance: 0 };
+		await r.table("Accounts").insert(account);
+	}
 
 	// Inform the CS
 	const embed = new MessageEmbed()
