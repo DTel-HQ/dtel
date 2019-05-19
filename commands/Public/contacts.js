@@ -10,79 +10,13 @@ module.exports = async(client, msg, suffix) => {
 	// Get contacts
 	let contacts = myNumber.contacts || [];
 
-	// if they want to add a number
-	if (/add/i.test(suffix.split(" ")[0])) {
-		if (!perm) return msg.reply("You need manage server permissions to do this.");
-		if (contacts.length >= 10) msg.reply("You can't have more than 9 contacts (yet)");
-
-		// send embed
-		let omsg = await msg.channel.send("", { embed: {
-			color: 0x50C878,
-			title: "Add a number",
-			description: "Please input the number you want to add.",
-			footer: {
-				text: "Press (0) to hangup. This call will automatically be hung up in 60 seconds.",
-			},
-		} });
-
-		// make collector
-		let getNumber = async() => {
-			let collected = await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && /^0((30\d)|(8(00|44))|(900))\d{7}$/.test(m.content),
-				{ max: 1, time: 60000 }
-			);
-
-			// on collection
-			if (!collected.first() || /^0$/.test(collected.first().content)) return;
-			try {
-				collected.first().delete();
-			} catch (_) { null; }
-
-			// does that number exist?
-			const number = await r.table("Numbers").get(collected.first().content);
-			if (!number) {
-				omsg = await omsg.edit("", { embed: { color: 0x660000, title: "Bad number" } });
-				return getNumber();
-			}
-
-			// add a description embed
-			omsg = await omsg.edit("", { embed: {
-				color: 0x50C878,
-				title: "Add a description",
-				description: "Please enter a description for the number. (max 100 characters)",
-				footer: {
-					text: "Press (0) to hangup. This call will automatically be hung up in 3 minutes.",
-				},
-			} });
-
-			// collector for description
-			collected = await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && (m.content.length > 0 && m.content.length < 100),
-				{ max: 1, time: 180000 }
-			);
-
-			// on collected
-			omsg.delete();
-			if (!collected.first() || /0/.test(collected.first().content)) return;
-			try {
-				collected.first().delete();
-			} catch (_) { null; }
-
-			let contact = { number: number.id, description: collected.first().content };
-			contacts.push(contact);
-			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
-		};
-
-		await getNumber();
-	}
-
 	// Main contact list
 	let contactList = async() => {
 		// Standard embed
 		const embed = new MessageEmbed()
 			.setColor(0x50C878)
-			.setTitle("Contacts list")
-			.setDescription(`An easy way to store your known DiscordTel numbers.\n\`>contacts add\` to add contacts to the list\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`" : ""}`);
+			.setTitle("Contacts")
+			.setDescription(`An easy way to store your known DiscordTel numbers.\nTo add a contact: repsond with \`add\`.\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
 		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up in 3 minutes");
 
 
@@ -97,20 +31,78 @@ module.exports = async(client, msg, suffix) => {
 
 		// Create collector
 		let collected = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && (contacts[parseInt(m.content) - 1] || /0/.test(m.content)),
+			m => m.author.id === msg.author.id && (contacts[parseInt(m.content) - 1] || /^0$|^add$/im.test(m.content)),
 			{ max: 1, time: 180000 }
 		);
 
-		try {
-			omsg.delete();
-		} catch (_) { null;	}
+		omsg.delete().catch();
 		if (!collected.first() || /0/.test(collected.first().content)) return;
-		try {
-			collected.first().delete();
-		} catch (_) { null;	}
+		collected.first().delete().catch();
+
+		// if they want to add a number
+		if (/add/.test(collected.first().content)) {
+			let getNumber = async bad => {
+				if (!perm) return msg.reply("You need manage server permissions to do this.");
+				if (contacts.length >= 10) msg.reply("You can't have more than 9 contacts (yet)");
+
+				// send embed
+				omsg = await msg.channel.send("", { embed: {
+					color: 0x50C878,
+					title: bad ? "Non existant number. " : "Add a number.",
+					description: "Please input the number you want to add.",
+					footer: {
+						text: "Press (0) to hangup. This call will automatically be hung up in 60 seconds.",
+					},
+				} });
+
+				collected = await msg.channel.awaitMessages(
+					m => m.author.id === msg.author.id && /^0$|^0((30\d)|(8(00|44))|(900))\d{7}$/.test(m.content),
+					{ max: 1, time: 60000 }
+				);
+
+				// on collection
+				if (!collected.first() || /^0$/.test(collected.first().content)) return;
+				collected.first().delete().catch();
+
+				// does that number exist?
+				const number = await r.table("Numbers").get(collected.first().content);
+				if (!number) {
+					omsg.delete().catch();
+					return getNumber(true);
+				}
+
+				// add a description embed
+				omsg = await omsg.edit("", { embed: {
+					color: 0x50C878,
+					title: `Add a description for ${number.id}`,
+					description: "Please enter a description for the number. (max 100 characters)",
+					footer: {
+						text: "Press (0) to hangup. This call will automatically be hung up in 3 minutes.",
+					},
+				} });
+
+				// collector for description
+				collected = await msg.channel.awaitMessages(
+					m => m.author.id === msg.author.id && (m.content.length > 0 && m.content.length < 100),
+					{ max: 1, time: 180000 }
+				);
+
+				// on collected
+				omsg.delete().catch();
+				if (!collected.first() || /0/.test(collected.first().content)) return;
+				collected.first().delete().catch();
+
+				contact = { number: number.id, description: collected.first().content };
+				contacts.push(contact);
+				await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
+				return contactList();
+			};
+
+			await getNumber();
+		}
 
 		// Assign contact
-		let contact = contacts[collected.first().content.split(" ")[0] - 1];
+		let contact = contacts[parseInt(collected.first().content.split(" ")[0]) - 1];
 
 		// if edit
 		if (/edit/.test(collected.first().content.split(" ")[1])) {
@@ -160,6 +152,8 @@ module.exports = async(client, msg, suffix) => {
 
 			return contactList();
 		}
+
+		// if only a number
 		return require("./call.js")(client, msg, contact.number);
 	};
 	contactList();

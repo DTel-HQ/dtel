@@ -2,11 +2,18 @@ module.exports = async(client, msg, suffix) => {
 	let call = await Calls.find(c => c.to.channel === msg.channel.id);
 	if (!call || call.pickedUp) return;
 
-	await client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel)
-		.catch(async _ => {
-			await Calls.newGet(call.id).delete();
-			return msg.reply(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.");
-		});
+	try {
+		await client.api.channels(call.from.channel).get();
+	} catch (_) {
+		await r.table("OldCalls").insert(call);
+		await Calls.newGet(call.id).delete();
+		await r.table("Numbers").get(call.from.number).delete();
+		await r.table("Phonebook").get(call.from.number).delete();
+		await r.table("Mailbox").get(call.from.channel).delete();
+		return msg.reply(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.");
+	}
+
+	await client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel);
 
 	call.pickedUp = true;
 	await Calls.update(call);
@@ -28,18 +35,27 @@ module.exports = async(client, msg, suffix) => {
 		if (!call) return clearInterval(interval);
 		if (!call.lastMessage || call.lastMessage + 290000 < new Date().getTime()) {
 			try {
-				client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.from.channel);
-				client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.to.channel);
-			} catch (e) {
-				await Calls.newGet(call.id).delete();
+				await client.api.channels(call.from.channel).get();
+			} catch (_) {
 				await r.table("OldCalls").insert(call);
-				try {
-					client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.from.channel);
-					client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.to.channel);
-				} catch (_) {
-					// nothing to worry about
-				}
+				await Calls.newGet(call.id).delete();
+				await r.table("Numbers").get(call.from.number).delete();
+				await r.table("Phonebook").get(call.from.number).delete();
+				await r.table("Mailbox").get(call.from.channel).delete();
+				return client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.to.channel);
 			}
+			try {
+				await client.api.channels(call.to.channel).get();
+			} catch (_) {
+				await r.table("OldCalls").insert(call);
+				await Calls.newGet(call.id).delete();
+				await r.table("Numbers").get(call.to.number).delete();
+				await r.table("Phonebook").get(call.to.number).delete();
+				await r.table("Mailbox").get(call.to.channel).delete();
+				return client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", call.from.channel);
+			}
+			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.from.channel);
+			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.to.channel);
 		}
 	}, 300000);
 };

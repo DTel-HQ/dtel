@@ -39,7 +39,9 @@ module.exports = async(client, msg, suffix, rcall) => {
 	try {
 		await client.api.channels(toDialDoc.channel).get();
 	} catch (_) {
-		await r.table("Numbers").get(toDial).delete();
+		await r.table("Numbers").get(toDialDoc.id).delete();
+		await r.table("Phonebook").get(toDialDoc.id).delete();
+		await r.table("Mailbox").get(toDialDoc.channel).delete();
 		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 	}
 
@@ -85,7 +87,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		startedAt: new Date(),
 	});
 
-	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : "You can hang up using `>hangup`, but give people the time to pick up or you may be striked."}`);
+	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`);
 	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumber.channel} → ${toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}).`);
 	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 

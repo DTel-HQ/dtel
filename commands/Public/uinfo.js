@@ -11,10 +11,10 @@ module.exports = async(client, msg, suffix) => {
 	const dmChannel = await user.createDM();
 	const dmNumber = (await r.table("Numbers").filter({ channel: dmChannel.id }))[0];
 	const strikes = await r.table("Strikes").filter({ offender: user.id });
-	let account = await r.table("Accounts").get(suffix).default(null);
+	let account = await r.table("Accounts").get(user.id).default(null);
 
 	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
+		account = { id: user.id, balance: 0 };
 		await r.table("Accounts").insert(account);
 	}
 

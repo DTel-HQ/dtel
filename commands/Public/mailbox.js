@@ -7,6 +7,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// check if they have permission to do stuff
 	let perm = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	if (!perm) perm = (await msg.author.getPerms()).support;
 
 	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);
@@ -58,6 +59,7 @@ module.exports = async(client, msg, suffix) => {
 			autoreply: autoreply,
 			messages: [],
 		};
+		if (msg.guild) mailboxDoc.guild = msg.guild.id;
 		await r.table("Mailbox").insert(mailboxDoc);
 		msg.channel.send({ embed: {
 			color: 0x00FF00,

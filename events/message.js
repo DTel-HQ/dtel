@@ -15,7 +15,7 @@ module.exports = async msg => {
 		.trim();
 
 	let cmdFile;
-	if (call && !msg.content.startsWith(prefix) && !call.onHold) {
+	if (call && !msg.content.startsWith(prefix)) {
 		return require("../Internals/callHandler.js")(cmd, msg, suffix);
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
