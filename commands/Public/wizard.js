@@ -77,6 +77,7 @@ module.exports = async(client, msg, suffix) => {
 			expiry: expiryDate,
 		};
 		if (msg.channel.type != "dm") numberDoc.guild = msg.channel.guild.id;
+		numberDoc.owner = msg.channel.type != "dm" ? msg.guild.ownerID : msg.author.id;
 
 		await r.table("Numbers").insert(numberDoc);
 		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);

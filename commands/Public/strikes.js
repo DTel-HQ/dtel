@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 		let guildStrikes = msg.guild ? await r.table("Strikes").filter({ offender: msg.guild.id }) : [];
 		let embed = {
 			color: 0x000,
-			title: `Strikes for ${msg.author.tag}(${msg.author.id})`,
+			title: `Strikes for ${msg.author.tag} (${msg.author.id})`,
 			fields: [
 				{ name: "User strikes", value: userStrikes.length ? userStrikes.map(s => `-${s.reason}`).join("\n") : "None" },
 			],
@@ -15,7 +15,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		};
 		if (msg.guild) embed.fields.push({ name: "This guild's strikes", value: guildStrikes.length ? guildStrikes.map(s => `-${s.reason}`).join("\n") : "None" });
-		return msg.channel.send("", { embed: embed });
+		return msg.channel.send({ embed: embed });
 	}
 
 	let offenderID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];

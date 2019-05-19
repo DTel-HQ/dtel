@@ -19,11 +19,11 @@ module.exports = {
 		"*611": "08006113835",
 	},
 
-	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284",
+	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
 	guildInvite: "https://discord.gg/RN7pxrB",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 	siteLink: "https://discordtel.austinhuang.me",
-	applyLink: "https://discordtel.typeform.com/to/cR3ovo",
+	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	suggestLink: "https://feedback.austinhuang.me/",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 
@@ -36,6 +36,8 @@ module.exports = {
 	messageCost: 2,
 	pickupBonus: 10,
 	renewRate: 500,
+	transferRate: 0.729,
+	minTransfer: 100,
 
 	callPhones: {
 		default: "<:DiscordTelPhone:310817969498226718>",

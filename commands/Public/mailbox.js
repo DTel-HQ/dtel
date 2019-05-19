@@ -124,7 +124,7 @@ module.exports = async(client, msg, suffix) => {
 		} });
 	} else {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
-		if (!messages[0]) return msg.channel.send("", { embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
+		if (!messages[0]) return msg.channel.send({ embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
 
 		// To show all messages
 

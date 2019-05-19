@@ -31,7 +31,7 @@ module.exports = async(msg, myNumber) => {
 			omsg.delete();
 			if (collected.first().guild) collected.first().delete();
 
-			if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
+			if (!collected.first()) return msg.channel.send({ embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 			return menus(collected.first().content);
 		});
 	};
@@ -44,7 +44,7 @@ module.exports = async(msg, myNumber) => {
 				let phonebook = await r.table("Phonebook");
 				let pages = Math.ceil(phonebook.length / 10);
 
-				if (!phonebook.length) return msg.channel.send("", { embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: 0x660000 } });
+				if (!phonebook.length) return msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: 0x660000 } });
 
 				// Sort numbers by first 08 then 0301 -> 0302 etc...
 				const comparison = (a, b) => {
@@ -85,7 +85,7 @@ module.exports = async(msg, myNumber) => {
 					embed.addField("Options", "Enter a page number to go there...\n(back) to return.\n(0) to exit.");
 
 					// Send/Edit the embed
-					if (!omsg) omsg = await msg.channel.send("", { embed: embed });
+					if (!omsg) omsg = await msg.channel.send({ embed: embed });
 					else omsg = await omsg.edit("", { embed: embed });
 
 					// add collector
@@ -95,7 +95,7 @@ module.exports = async(msg, myNumber) => {
 
 					// on collecting
 					mcol.on("end", collected => {
-						if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
+						if (!collected.first()) return msg.channel.send({ embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 
 						if (collected.first().guild) collected.first().delete();
 
@@ -113,7 +113,7 @@ module.exports = async(msg, myNumber) => {
 				// Check to see if they got perms
 				const perms = await msg.author.getPerms();
 				const cperms = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
-				if (!cperms && !perms) return msg.channel.send("", { embed: { title: "Unauthorized", description: "You need manage guild or higher to access this menu." } });
+				if (!cperms && !perms) return msg.channel.send({ embed: { title: "Unauthorized", description: "You need manage guild or higher to access this menu." } });
 
 				// Basic embed
 				let embed = new MessageEmbed()
@@ -140,7 +140,7 @@ module.exports = async(msg, myNumber) => {
 
 				// on collecting
 				mcol.on("end", async collected => {
-					if (!collected.first()) return msg.channel.send("", { embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
+					if (!collected.first()) return msg.channel.send({ embed: { title: "Call ended", description: "The call with *411 has been hung up due to inactivity.", color: 0x990000 } });
 
 					if (collected.first().guild) collected.first().delete();
 
@@ -165,6 +165,7 @@ module.exports = async(msg, myNumber) => {
 							{ time: 180000, max: 1 });
 
 							mcol.on("end", async coll => {
+								omsg.delete().catch();
 								if (coll.first().guild) coll.first().delete();
 
 								// try to insert/edit in DB
@@ -172,15 +173,15 @@ module.exports = async(msg, myNumber) => {
 								if (entry) res = await r.table("Phonebook").get(myNumber.id).update({ description: coll.first().content });
 								else res = await r.table("Phonebook").insert({ id: myNumber.id, channel: msg.channel.id, description: coll.first().content });
 
-								if (!res.inserted) return msg.channel.send("", { embed: { color: 0x990000, title: "Something went wrong", description: "Something went wrong, please join our support server if you haven't and message one of the staff members or call *611." } });
-								else return msg.channel.send("", { embed: { color: 0x006600, title: "Succes!", description: `Your number's description is: \`\`\`${coll.first().content}\`\`\`` } });
+								return msg.channel.send({ embed: { color: 0x50C878, title: "Success!", description: `Your number's description is: \`\`\`${coll.first().content}\`\`\`` } });
 							});
 							break;
 						}
 						case "2": {
-							let res = await r.table("Phonebook").get(myNumber).delete();
-							if (!res.deleted) return msg.channel.send("", { embed: { color: 0x990000, title: "Something went wrong", description: "Something went wrong, please join our support server if you haven't and message one of the staff members or call *611" } });
-							else return msg.channel.send("", { embed: { color: 0x006600, title: "Success!", description: "Your number's yellowbook entry has been deleted." } });
+							omsg.delete().catch();
+							collected.first().delete().catch();
+							let res = await r.table("Phonebook").get(myNumber.id).delete();
+							return msg.channel.send({ embed: { color: 0x50C878, title: "Success!", description: "Your number's yellowbook entry has been deleted." } });
 						}
 						case "9":
 							omsg.delete();

@@ -24,7 +24,12 @@ module.exports = async(client, msg, suffix) => {
 	let index = blocked.indexOf(toBlock);
 	if (index > -1) {
 		blocked.splice(index, 1);
-		await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
+		if (!blocked.length) {
+			delete myNumber.blocked;
+			await r.table("Numbers").get(myNumber.id).replace(myNumber);
+		} else {
+			await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
+		}
 		await msg.reply(`${toBlock} has been unblocked.`);
 		await client.log(`:name_badge: Number ${toBlock} has been unblocked by number ${myNumber.id}.`);
 	} else {

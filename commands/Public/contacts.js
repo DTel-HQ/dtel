@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(0x50C878)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DiscordTel numbers.\nTo add a contact: repsond with \`add\`.\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
+			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nTo add a contact: repsond with \`add\`.\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
 		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up in 3 minutes");
 
 
@@ -26,7 +26,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		// send the embed
-		let omsg = await msg.channel.send("", { embed: embed });
+		let omsg = await msg.channel.send({ embed: embed });
 		if (!contacts.length) return;
 
 		// Create collector
@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 				if (contacts.length >= 10) msg.reply("You can't have more than 9 contacts (yet)");
 
 				// send embed
-				omsg = await msg.channel.send("", { embed: {
+				omsg = await msg.channel.send({ embed: {
 					color: 0x50C878,
 					title: bad ? "Non existant number. " : "Add a number.",
 					description: "Please input the number you want to add.",
@@ -109,7 +109,7 @@ module.exports = async(client, msg, suffix) => {
 			// check for perm & if the contact is legit
 			if (!perm) return msg.reply("You need manage server permissions to do this.");
 
-			omsg = await msg.channel.send("", { embed: {
+			omsg = await msg.channel.send({ embed: {
 				color: 0x50C878,
 				title: `Editing ${contact.number}`,
 				description: "Enter a new description for the contact. (max 100 characters)",

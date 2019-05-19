@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 				url: "https://discordtel.austinhuang.me",
 			},
 			title: "📖 DiscordTel Information",
-			description: "For command help, use `>help`. More detailed documentation is available at [my website](https://discordtel.austinhuang.me/en/latest).",
+			description: `For command help, use \`>help\`. More detailed documentation is available at [my website](${config.siteLink}).`,
 			fields: [
 				{
 					name: "📞 Getting a number",
@@ -21,19 +21,23 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "💰 Credits",
-					value: "You can either earn credits using this bot, transfer credits from other clients, or donate to DiscordTel's development in exchange of credits. See [this page](http://discordtel.readthedocs.io/en/latest/Payment/) for details.\nAfter recharging, dial `*233` or `>balance` to check balance.",
+					value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DiscordTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, dial \`*233\` or \`>balance\` to check balance.`,
 				},
 				{
 					name: "🔖 Phonebook",
-					value: "To use the phonebook, first dial `*411`. You can check for an existing **11-digit** number by pressing `1`, search the phonebook with **keywords** by pressing `2`. add/edit/remove your number from the phonebook by pressing `3`, and check a special number by pressing `4`.",
+					value: "To use the phonebook, first dial `*411`. You can scroll through the phonebook by pressing `1`, add/edit/remove your number from the phonebook by pressing `2`, and check special numbers by pressing `3`.",
 				},
 				{
 					name: "📥 Invite the bot",
-					value: "Type `>invite` or click this button: [<:dl:382568980218511361>](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=67169284)",
+					value: `Type \`>invite\` or click this button: [<:dl:382568980218511361>](${config.botInvite})`,
+				},
+				{
+					name: "📋 Suggest a feature",
+					value: `Suggest a feature for DiscordTel [here](${config.applyLink}) and we will take a look at it.`,
 				},
 				{
 					name: "📌 Official Server",
-					value: "https://discord.gg/RN7pxrB",
+					value: config.guildInvite,
 				},
 			],
 			timestamp: new Date(),

@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 	let neg = amount.startsWith("-");
 	amount = Number(amount);
 
-	let account = await r.table("Accounts").get(user.id).default(null);
+	let account = await r.table("Accounts").get(user.id);
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
@@ -52,5 +52,5 @@ module.exports = async(client, msg, suffix) => {
 	if (neg) amount = String(amount).substr(1);
 
 	user.send(`:yen: A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.`).catch(() => null);
-	await client.log(`:yen: Support member __${msg.author.tag}__ ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} __${user.tag}__ (${user.id}).`);
+	await client.log(`:yen: Support member ${msg.author.tag} ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag} (${user.id}).`);
 };

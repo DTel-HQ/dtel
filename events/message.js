@@ -1,7 +1,7 @@
 module.exports = async msg => {
 	if (msg.author.bot) return;
-
-	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : config.prefix;
+	let account = await r.table("Accounts").get(msg.author.id) || {};
+	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
 
 	let call = await Calls.find(c => c.to.channel == msg.channel.id || c.from.channel == msg.channel.id);
 

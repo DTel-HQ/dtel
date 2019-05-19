@@ -11,7 +11,7 @@ const { scheduleJob } = require("node-schedule");
 (async() => {
 	await require("./Database/init")()
 		.then(() => winston.info("[Database] Successfully connected to the database."))
-		.catch(err => winston.info(`[Database] An error occured while initializing the database.\n${err}`));
+		.catch(err => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
 
 	let events = await readdir("./Events");
 	for (let e of events) {
@@ -110,7 +110,7 @@ scheduleJob("0 0 0 * * *", async() => {
 
 Object.assign(String.prototype, {
 	escapeRegex() {
-		const matchOperators = /[|\\{}()[\]^$+*?.]/g;
+		const matchOperators = /[|\\{} ()[\]^$+*?.]/g;
 		return this.replace(matchOperators, "\\$&");
 	},
 });

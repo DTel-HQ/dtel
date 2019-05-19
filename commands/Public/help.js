@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">block",
-					value: "Block a number from calling this channel.",
+					value: "Block a number from calling this channel. `>block number`",
 				},
 				{
 					name: ">contacts",
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">dial / >call",
-					value: "Dial a number.",
+					value: "Dial a number. `>dial number`",
 				},
 				{
 					name: ">rdial / >rcall",
@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">lottery",
-					value: "Real gambling right there.",
+					value: "Real gambling right there. `>lottery amount`",
 				},
 				{
 					name: ">mailbox",
@@ -57,8 +57,12 @@ module.exports = async(client, msg, suffix) => {
 					value: "Sends a message to another mailbox.",
 				},
 				{
+					name: ">transfer",
+					value: "Transfer money to another user for a fee. `>transfer user amount [optional: message]`",
+				},
+				{
 					name: "I don't really need to explain them...Right, my master?",
-					value: "`>help`, `>info`, `>invite`",
+					value: "`>help`, `>info`, `>invite`, `>prefix`",
 				},
 			],
 			timestamp: new Date(),

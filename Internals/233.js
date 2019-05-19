@@ -18,11 +18,13 @@ module.exports = async(msg, myNumber) => {
 	// make the embed
 	let embed = new MessageEmbed()
 		.setColor(0x3498DB)
+		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
 		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth()}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
+		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join(", ") : "None")
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");
 
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None");
@@ -56,12 +58,12 @@ module.exports = async(msg, myNumber) => {
 
 	embed = new MessageEmbed()
 		.setColor(0xEEEEEE)
-		.setAuthor(`${msg.author.tag}(${msg.author.id})`)
+		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL())
 		.setTitle("Your receipt")
 		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
 		.addField("Number", myNumber.id)
 		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth()}-${newExpiry.getFullYear()}`)
 		.addField("Your new balance", `¥${newBalance}`)
-		.addField("How to recharge", "http://discordtel.austinhuang.me/en/latest/Payment/");
+		.addField("How to recharge", config.paymentLink);
 	msg.channel.send("", { embed: embed });
 };

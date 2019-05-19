@@ -46,11 +46,44 @@ module.exports = async(client, msg, suffix, rcall) => {
 	}
 
 	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
-	if (activeCall) return msg.reply(":x: Dialing error: The number you dialed is already in a call.");
+	if (activeCall) {
+		// send embed
+		let omsg = await msg.channel.send({ embed: {
+			color: 0x660000,
+			title: "Number is already in a call",
+			description: "You can choose to wait until the number is available again.\nRespond with `yes` or `no`",
+			footer: {
+				text: "This call will automatically be hung up in 60 seconds",
+			},
+		} });
+
+		// create collector
+		let collected = await msg.channel.awaitMessages(
+			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
+			{ max: 1, time: 60000 }
+		);
+
+		// on collected
+		omsg.delete().catch(e => null);
+		collected.first().delete().catch(e => null);
+		if (!collected.first() || /^no$/i.test(collected.first().content)) return;
+
+		omsg = await msg.channel.send("⌛ Waiting...");
+
+		// eslint-disable-next-line no-constant-condition
+		while (true) {
+			setTimeout(async() => {
+				activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+			}, 15000);
+			if (!activeCall) break;
+		}
+
+		omsg.delete().catch();
+	}
 
 	if (csCall) {
 		// send confirmation embed
-		let omsg = await msg.channel.send("", { embed: {
+		let omsg = await msg.channel.send({ embed: {
 			color: 0x3498DB,
 			title: "Please read before calling",
 			description: "*611 is our Customer Support number operated by real people.\nTherefore any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call *611?\n\nRespond with `yes` or `no`.",
