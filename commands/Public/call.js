@@ -46,14 +46,19 @@ module.exports = async(client, msg, suffix, rcall) => {
 	}
 
 	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+	// This could be turned into a module for hangup support.
 	if (activeCall) {
+		// Max time must be full minutes.
+		let waitingRetry = 15000;
+		let maxTime = 1 * 60000;
+
 		// send embed
 		let omsg = await msg.channel.send({ embed: {
 			color: 0x660000,
 			title: "Number is already in a call",
-			description: "You can choose to wait until the number is available again.\nRespond with `yes` or `no`",
+			description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup.\nRespond with \`yes\` or \`no\``,
 			footer: {
-				text: "This call will automatically be hung up in 60 seconds",
+				text: "This call will automatically be hung up after 60 seconds of inactivity",
 			},
 		} });
 
@@ -68,15 +73,26 @@ module.exports = async(client, msg, suffix, rcall) => {
 		collected.first().delete().catch(e => null);
 		if (!collected.first() || /^no$/i.test(collected.first().content)) return;
 
-		omsg = await msg.channel.send("⌛ Waiting...");
+		omsg = await msg.channel.send("⌛ Number is in a call. Please wait...");
 
+		// Wait x amount of minutes to see if number turns available.
 		// eslint-disable-next-line no-constant-condition
-		while (true) {
-			setTimeout(async() => {
+		let wait = await new Promise((resolve, reject) => {
+			let retry = 0;
+			let i = setInterval(async() => {
+				console.log("Hi");
+				retry++;
 				activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
-			}, 15000);
-			if (!activeCall) break;
-		}
+				if (!activeCall) {
+					clearInterval(i);
+					resolve();
+				} else if (retry >= Math.round(maxTime / waitingRetry)) {
+					clearInterval(i);
+					omsg.delete().catch();
+					return msg.reply(":x: Waiting time has expired.");
+				}
+			}, waitingRetry);
+		});
 
 		omsg.delete().catch();
 	}

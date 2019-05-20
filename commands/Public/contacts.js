@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 			.setColor(0x50C878)
 			.setTitle("Contacts")
 			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nTo add a contact: repsond with \`add\`.\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
-		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up in 3 minutes");
+		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
 
 
 		// Add contacts to embed
@@ -51,7 +51,7 @@ module.exports = async(client, msg, suffix) => {
 					title: bad ? "Non existant number. " : "Add a number.",
 					description: "Please input the number you want to add.",
 					footer: {
-						text: "Press (0) to hangup. This call will automatically be hung up in 60 seconds.",
+						text: "Press (0) to hangup. This call will automatically be hung up after 60 seconds of inactivity.",
 					},
 				} });
 
@@ -77,7 +77,7 @@ module.exports = async(client, msg, suffix) => {
 					title: `Add a description for ${number.id}`,
 					description: "Please enter a description for the number. (max 100 characters)",
 					footer: {
-						text: "Press (0) to hangup. This call will automatically be hung up in 3 minutes.",
+						text: "Press (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 					},
 				} });
 
@@ -114,7 +114,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `Editing ${contact.number}`,
 				description: "Enter a new description for the contact. (max 100 characters)",
 				footer: {
-					text: "(0) to hangup. This call will automatically be hung up in 3 minutes",
+					text: "(0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
 				},
 			} });
 
