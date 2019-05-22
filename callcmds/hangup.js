@@ -7,10 +7,10 @@ module.exports = async(client, message, args, callDocument) => {
 	let side; //rename
 	if (callDocument.to.channelID === message.channel.id) {
 		toSend = callDocument.from.channelID;
-		side = 'from';
+		side = 'to';
 	} else {
 		toSend = callDocument.to.channelID;
-		side = 'to';
+		side = 'from';
 	}
 	message.reply(":negative_squared_cross_mark: You hung up the call.");
 	await client.apiSend(`:negative_squared_cross_mark: The call between channel ${callDocument.from.channelID} and channel ${callDocument.to.channelID} was hung up by __${message.author.tag}__ (${message.author.id}) on the ${side} side.`, process.env.LOGSCHANNEL);
