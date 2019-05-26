@@ -13,12 +13,12 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.");
 	}
 
-	await client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel);
-
+	// Pickup - reply first or it'll seem slow
+	msg.reply(":white_check_mark: You picked up the call.\n\nYou can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`!");
+	client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel);
+	client.log(`:white_check_mark: ${call.rcall ? "Rcall" : "call"} \`${call.from.channel} → ${call.to.channel}\` was picked up by ${msg.author.tag} (${msg.author.id}).`);
 	call.pickedUp = true;
 	await Calls.update(call);
-	client.log(`:white_check_mark: Call \`${call.from.channel} → ${call.to.channel}\` was picked up by ${msg.author.tag} (${msg.author.id}).`);
-	msg.reply(":white_check_mark: You picked up the call.\n\nYou can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`!");
 
 	if (call.to.number == "08006113835") {
 		let account = await r.table("Accounts").get(msg.author.id);
@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let interval = setInterval(async() => {
-		call = await Calls.find(c => c.to.channel == msg.channel.id);
+		call = await Calls.get(call.id);
 		if (!call) return clearInterval(interval);
 		if (!call.lastMessage || call.lastMessage + 290000 < new Date().getTime()) {
 			try {

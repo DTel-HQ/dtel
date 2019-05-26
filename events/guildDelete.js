@@ -8,9 +8,10 @@ module.exports = async guild => {
 		guild = await client.guilds.get(guild.id);
 		if (guild) return;
 		for (let number of numbers) {
+			client.log(`📕 Number \`${number.id}\` has automatically been deassigned after leaving \`${guild.id}\`.`);
 			r.table("Numbers").get(number.id).delete();
 			r.table("Phonebook").get(number.id).delete()
-				.catch();
+				.catch(e => null);
 		}
 		for (let mailbox of mailboxes) {
 			r.table("Mailbox").get(mailbox.id).delete();

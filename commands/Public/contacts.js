@@ -22,22 +22,23 @@ module.exports = async(client, msg, suffix) => {
 
 		// Add contacts to embed
 		for (let contact of contacts) {
-			await embed.addField(`${contacts.indexOf(contact) + 1}. ${contact.number}`, contact.description);
+			await embed.addField(`${contacts.indexOf(contact) + 1}. ${contact.number} - ${contact.name}`, contact.description);
 		}
 
 		// send the embed
 		let omsg = await msg.channel.send({ embed: embed });
-		if (!contacts.length) return;
 
 		// Create collector
+		Busy.create({ id: msg.author.id });
 		let collected = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && (contacts[parseInt(m.content) - 1] || /^0$|^add$/im.test(m.content)),
 			{ max: 1, time: 180000 }
 		);
 
-		omsg.delete().catch();
-		if (!collected.first() || /0/.test(collected.first().content)) return;
-		collected.first().delete().catch();
+		// On collection
+		omsg.delete().catch(e => null);
+		if (collected.first()) collected.first().delete().catch(e => null);
+		if (!collected.first() || /^0$/.test(collected.first().content)) return Busy.newGet(msg.author.id).delete();
 
 		// if they want to add a number
 		if (/add/.test(collected.first().content)) {
@@ -61,15 +62,44 @@ module.exports = async(client, msg, suffix) => {
 				);
 
 				// on collection
-				if (!collected.first() || /^0$/.test(collected.first().content)) return;
-				collected.first().delete().catch();
+				if (collected.first()) collected.first().delete().catch(e => null);
+				if (!collected.first() || /^0$/.test(collected.first().content)) {
+					Busy.newGet(msg.author.id).delete();
+					omsg.delete().catch(e => null);
+					return;
+				}
 
 				// does that number exist?
 				const number = await r.table("Numbers").get(collected.first().content);
 				if (!number) {
-					omsg.delete().catch();
+					omsg.delete().catch(e => null);
 					return getNumber(true);
 				}
+
+				// add a name embed
+				omsg = await omsg.edit("", { embed: {
+					color: 0x50C878,
+					title: `Add a name for ${number.id}`,
+					description: "Please enter a name for the number. (max 30 characters)",
+					footer: {
+						text: "Press (0) to hangup. This call will automatically be hung up after 1 minutes of inactivity.",
+					},
+				} });
+
+				// collector for name
+				collected = await msg.channel.awaitMessages(
+					m => m.author.id === msg.author.id && (m.content.length > 0 && m.content.length < 31),
+					{ max: 1, time: 60000 }
+				);
+
+				// on collected
+				if (collected.firsT()) collected.first().delete().catch(e => null);
+				if (!collected.first() || /^0$/.test(collected.first().content)) {
+					Busy.newGet(msg.author.id).delete();
+					omsg.delete().catch(e => null);
+					return;
+				}
+				let name = collected.first().content;
 
 				// add a description embed
 				omsg = await omsg.edit("", { embed: {
@@ -83,22 +113,26 @@ module.exports = async(client, msg, suffix) => {
 
 				// collector for description
 				collected = await msg.channel.awaitMessages(
-					m => m.author.id === msg.author.id && (m.content.length > 0 && m.content.length < 100),
+					m => m.author.id === msg.author.id && (m.content.length > 0 && m.content.length < 101),
 					{ max: 1, time: 180000 }
 				);
 
 				// on collected
-				omsg.delete().catch();
-				if (!collected.first() || /0/.test(collected.first().content)) return;
-				collected.first().delete().catch();
+				if (collected.first()) collected.first().delete().catch(e => null);
+				omsg.delete().catch(e => null);
+				if (!collected.first() || /^0$/.test(collected.first().content)) {
+					Busy.newGet(msg.author.id).delete();
+					return;
+				}
+				let description = collected.first().content;
 
-				contact = { number: number.id, description: collected.first().content };
+				let contact = { number: number.id, name: name, description: description };
 				contacts.push(contact);
 				await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
 				return contactList();
 			};
 
-			await getNumber();
+			return getNumber();
 		}
 
 		// Assign contact
@@ -125,13 +159,10 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			// on collection
-			try {
-				omsg.delete();
-			} catch (_) { null;	}
-			if (!collected.first() || /0/.test(collected.first().content)) return;
-			try {
-				collected.first().delete();
-			} catch (_) { null;	}
+			if (collected.first()) collected.first().delete().catch(e => null);
+			omsg.delete().catch(e => null);
+			Busy.newGet(msg.author.id).delete();
+			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 
 			// Edit the contact's entry
 			let newContact = { number: contact.number, description: collected.first().content };
@@ -143,6 +174,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// if delete
 		if (/delete/.test(collected.first().content.split(" ")[1])) {
+			Busy.newGet(msg.author.id).delete();
 			// check for perm & if the contact is legit
 			if (!perm) return msg.reply("You need manage server permissions to do this.");
 
@@ -154,6 +186,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		// if only a number
+		Busy.newGet(msg.author.id).delete();
 		return require("./call.js")(client, msg, contact.number);
 	};
 	contactList();

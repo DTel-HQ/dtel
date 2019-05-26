@@ -34,6 +34,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	if (!toDialDoc) return msg.reply(`:x: Dialing error: Requested number (${toDial}) does not exist. Call \`*411\` to check numbers.${rcall ? " Please call *611 so we can remove this number from the phonebook." : ""}`);
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
+	if (myNumber.blocked && myNumber.blocked.includes(toDialDoc.id)) return msg.reply(":no_entry_sign: You have blocked this number.");
 	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.reply(":no_entry_sign: That number can't be reached.");
 
 	try {
@@ -70,8 +71,9 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		// on collected
 		omsg.delete().catch(e => null);
+		if (!collected.first()) return;
 		collected.first().delete().catch(e => null);
-		if (!collected.first() || /^no$/i.test(collected.first().content)) return;
+		if (/^no$/i.test(collected.first().content)) return;
 
 		omsg = await msg.channel.send("⌛ Number is in a call. Please wait...");
 
@@ -88,13 +90,13 @@ module.exports = async(client, msg, suffix, rcall) => {
 					resolve();
 				} else if (retry >= Math.round(maxTime / waitingRetry)) {
 					clearInterval(i);
-					omsg.delete().catch();
+					omsg.delete().catch(e => null);
 					return msg.reply(":x: Waiting time has expired.");
 				}
 			}, waitingRetry);
 		});
 
-		omsg.delete().catch();
+		omsg.delete().catch(e => null);
 	}
 
 	if (csCall) {
@@ -116,8 +118,9 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		// on collection
 		omsg.delete();
-		if (msg.guid) collected.first().delete();
-		if (!collected.first() || /no/i.test(collected.first().content)) return;
+		if (!collected.first()) return;
+		collected.first().delete().catch(e => null);
+		if (/^no$/i.test(collected.first().content)) return;
 
 		// Inform CS
 		await client.apiSend(`<@&${config.supportRole}>`, toDialDoc.channel);
@@ -134,11 +137,15 @@ module.exports = async(client, msg, suffix, rcall) => {
 			channel: myNumber.channel,
 		},
 		startedAt: new Date(),
+		rcall: !!rcall,
 	});
+
+	// To send contact name instead of number
+	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
 
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`);
 	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumber.channel} → ${toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}).`);
-	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from \`${myNumber.id}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
+	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 

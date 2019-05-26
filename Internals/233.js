@@ -38,14 +38,18 @@ module.exports = async(msg, myNumber) => {
 	if (!maxMonths) return;
 
 	// Message collector
+	Busy.create({ id: msg.author.id });
 	const collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
 		{ max: 1, time: 60000 }
 	);
 
-	omsg.delete();
-	if (!collected.first() || collected.first().content === "0") return;
-	if (collected.first().guild) collected.first().delete();
+	// On collection
+	Busy.newGet(msg.author.id).delete();
+	omsg.delete().catch(e => null);
+	if (!collected.first()) return;
+	collected.first().delete().catch(e => null);
+	if (/^0$/.test(collected.first().content)) return;
 
 	// new date and balance
 	let newExpiry = new Date(myNumber.expiry);

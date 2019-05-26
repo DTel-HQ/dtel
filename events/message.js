@@ -1,5 +1,8 @@
 module.exports = async msg => {
 	if (msg.author.bot) return;
+
+	// Fix messages
+	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
 	let account = await r.table("Accounts").get(msg.author.id) || {};
 	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
 
@@ -11,7 +14,8 @@ module.exports = async msg => {
 
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
 		.replace(/dial/g, "call");
-	const suffix = msg.content.split(" ").splice(1).join(" ")
+	const suffix = msg.content.split(" ").splice(1)
+		.join(" ")
 		.trim();
 
 	let cmdFile;
@@ -23,7 +27,7 @@ module.exports = async msg => {
 		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
 
-	if (!msg.content.startsWith(prefix)) return;
+	if (!msg.content.startsWith(prefix) || Busy.get(msg.author.id)) return;
 
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;

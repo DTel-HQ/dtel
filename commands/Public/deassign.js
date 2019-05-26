@@ -19,9 +19,9 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Numbers").get(numberDoc.id).delete();
 	await r.table("Phonebook").get(numberDoc.id).delete()
-		.catch();
+		.catch(e => null);
 	await r.table("Mailbox").filter({ channel: numberDoc.channel }).delete()
-		.catch();
+		.catch(e => null);
 
 	await msg.reply("Number is gone, pay your respects");
 	await client.log(`:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.`);

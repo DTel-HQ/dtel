@@ -6,16 +6,29 @@ module.exports = async(client, msg, suffix) => {
 	if (!phonebook[0]) return msg.reply("Seemingly you're using a budget version of the Yellow Pages, there's no numbers in sight!");
 
 	let toDial,
-		expired = true,
-		incall = true;
+		toCall = false,
+		inCall,
+		expired,
+		self,
+		toDialDoc;
 
-	while (expired && incall) {
-		toDial = phonebook[Math.floor(Math.random() * phonebook.length)].id;
-		expired = toDial.expiry < new Date();
-		incall = Calls.find(c => c.to.number === toDial.id || c.from.number === toDial.id);
+
+	while (!toCall) {
+		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
+		if (!toDial) break;
+		if (fromNumber.channel === toDial.channel || Calls.find(c => c.to.channel === toDial.channel || c.from.channel === toDial.channel)) {
+			phonebook.splice(phonebook.indexOf(toDial), 1);
+			continue;
+		}
+		toDialDoc = await r.table("Numbers").get(toDial.id);
+		if (toDialDoc.expiry < new Date()) {
+			phonebook.splice(phonebook.indexOf(toDial), 1);
+			continue;
+		}
+		toCall = toDial.id;
 	}
 
 	if (!toDial) return msg.reply("It seems like you'll have to wait. All active numbers are in a call.");
 
-	require("./call.js")(client, msg, toDial, true);
+	require("./call.js")(client, msg, toCall, true);
 };

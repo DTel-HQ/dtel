@@ -59,20 +59,23 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 		footer: {
-			text: "This call will automatically be hung up in 60 seconds",
+			text: "This call will automatically be hung up after 60 seconds of inactivity",
 		},
 	} });
 
 	// Collector
+	Busy.create({ id: msg.author.id });
 	let collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
 		{ max: 1, time: 60000 }
 	);
 
 	// on collection
-	omsg.delete().catch();
-	collected.first().delete().catch();
-	if (!collected.first() || /^no$/i.test(collected.first().content)) return;
+	Busy.newGet(msg.author.id).delete();
+	omsg.delete().catch(e => null);
+	if (!collected.first()) return;
+	collected.first().delete().catch(e => null);
+	if (/^no$/i.test(collected.first().content)) return;
 
 	// update balances
 	fromAccount.balance -= amount;

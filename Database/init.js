@@ -12,6 +12,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	const tables = [
 		"Accounts",
 		"Blacklist",
+		"Busy",
 		"Calls",
 		"Lottery",
 		"Mailbox",
@@ -22,6 +23,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	];
 	const toCache = [
 		"Blacklist",
+		"Busy",
 		"Calls",
 	];
 
@@ -34,6 +36,8 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 		let all = await r.table(i);
 		for (let a of all) cache.set(a.id, a);
 	}
+
+	Busy.newClear();
 
 	await r.branch(r.table("Calls").indexList().contains("channel"), null, r.table("Calls").indexCreate("channel", [r.row("to")("channelID"), r.row("from")("channelID")]));
 	await r.branch(r.table("Calls").indexStatus("channel").nth(0)("ready"), null, r.table("Calls").indexWait("channel"));

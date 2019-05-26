@@ -15,6 +15,7 @@ module.exports = {
 		reload: true,
 		Calls: true,
 		Blacklist: true,
+		Busy: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",
