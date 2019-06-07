@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 			await Accounts.create(new Accounts({
 				_id: msg.author.id,
 			}));
-			msg.reply("You don't have an DiscordTel account... creating one for you! Please also read this for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
+			msg.reply("You don't have a DiscordTel account... creating one for you! Please also read this for information on payment: <http://discordtel.readthedocs.io/en/latest/Payment/>");
 			account = await Accounts.findOne({ _id: msg.author.id });
 		}
 		msg.channel.send({
