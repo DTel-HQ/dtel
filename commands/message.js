@@ -55,6 +55,7 @@ module.exports = async(client, msg, args) => {
 	} catch (err) {
 		return msg.reply("This number does not have their mailbox set up.");
 	}
+	if (mailbox.messages.length === 25) return msg.reply("This number has their mailbox full...");
 	mailbox.messages.push({
 		_id: randomstring.generate({ length: "8", charset: "alphanumeric" }),
 		from: fromNumberDoc.number,
