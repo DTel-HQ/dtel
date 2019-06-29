@@ -3,6 +3,7 @@ const MessageBuilder = require("../modules/MessageBuilder");
 module.exports = async(client, message, args, callDocument) => {
 	if (!callDocument) return console.log("wtf no calldoc", callDocument);
 	else if (!callDocument.pickedUp) return message.reply(":x: You can't put a pending call on hold!")
+	if ((callDocument.to.number === "08006113835" || callDocument.from.number === "08006113835") && message.guild.id != process.env.SUPPORTGUILD) return message.reply(":x: You can't put `*611` on hold."); 
 	let toSend;
 	if (callDocument.to.channelID === message.channel.id) {
 		toSend = callDocument.from.channelID;
