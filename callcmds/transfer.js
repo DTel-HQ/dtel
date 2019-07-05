@@ -6,6 +6,7 @@ module.exports = async (client, message, args, callDocument) => {
     } else if (!callDocument.pickedUp) {
         return message.reply(":x: You can't transfer a pending call!");
     }
+	if ((callDocument.to.number === "08006113835" || callDocument.from.number === "08006113835") && message.guild.id != process.env.SUPPORTGUILD) return message.reply(":x: You can't transfer `*611`."); 
     let mynumber;
     try {
         mynumber = await Numbers.findOne({ _id: message.channel.id });
