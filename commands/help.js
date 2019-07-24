@@ -12,36 +12,36 @@ module.exports = async(client, message, args) => {
 			description: "For more information, use `>info` or call our support number: `>dial *611`. Making troll-calls to this number can and will result in a blacklist.",
 			fields: [
 				{
-					name: "\>dial / >call",
+					name: "\\>dial / >call",
 					value: "Dial a number",
 				},
 				{
-					name: "\>rdial / >rcall",
+					name: "\\>rdial / >rcall",
 					value: "Dial a random number from the `*411` phonebook",
 				},
 				{
-					name: "\>wizard",
+					name: "\\>wizard",
 					value: "Get yourself a number",
 				},
 				{
-					name: "\>mailbox",
+					name: "\\>mailbox",
 					value: "Check mailbox messages, plus various settings",
 				},
 				{
-					name: "\>message",
+					name: "\\>message",
 					value: "Sends a message to another mailbox",
 				},
 				{
-					name: "\>convert",
+					name: "\\>convert",
 					value:
             "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs)",
 				},
 				{
-					name: "\>daily",
+					name: "\\>daily",
 					value: "Get daily credits",
 				},
 				{
-					name: "\>lottery",
+					name: "\\\>lottery",
 					value: "Real gambling right there",
 				},
 				{
