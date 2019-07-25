@@ -32,7 +32,7 @@ const winston = global.winston = createLogger({
 			colorize: true,
 		}),
 		new DailyRotateFile({
-			filename: `./Logs/Winston-Log-%DATE%-Shard${client.shard.id}.log`,
+			filename: `./Logs/Winston-Log-%DATE%-Shard${client.shard.ids[0]}.log`,
 			datePattern: "YYY-MM-DD-HH",
 			zippedArchive: true,
 			maxFiles: "14d",
@@ -43,7 +43,7 @@ const winston = global.winston = createLogger({
 	format: format.combine(
 		format.colorize(),
 		format.timestamp(),
-		format.printf(info => `${info.level}: [Shard ${client.shard.id}] ${info.message} [${info.timestamp}]`)
+		format.printf(info => `${info.level}: [Shard ${client.shard.ids[0]}] ${info.message} [${info.timestamp}]`)
 		// format.simple(),
 	),
 });
