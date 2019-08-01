@@ -23,6 +23,8 @@ module.exports = async(client, msg, suffix) => {
 		return msg.reply("Not a number!\n`>lottery <Amount of entries>`. 1 Entry costs 5 credits.");
 	}
 	let toBuy = parseInt(suffix);
+	if (toBuy == 0) return msg.reply(":x: We do not sell nothing!");
+	if (toBuy < 0) return msg.reply(":x: YOU MAY NO LONGER ABUSE");
 	if (account.balance < toBuy * 5) {
 		return msg.reply("Insufficient funds! 1 Entry costs 5 credits.");
 	}
