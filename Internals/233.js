@@ -20,7 +20,7 @@ module.exports = async(msg, myNumber) => {
 		.setColor(0x3498DB)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
-		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth()}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
@@ -30,7 +30,7 @@ module.exports = async(msg, myNumber) => {
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None");
 
 	// Determine maximum amount of months to renew
-	let maxMonths = Math.floor(account.balance / config.renewRate);
+	let maxMonths = Math.floor(account.balance / config.renewalRate);
 	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hang up after 60 seconds.");
 
 	// send embed
@@ -54,7 +54,7 @@ module.exports = async(msg, myNumber) => {
 	// new date and balance
 	let newExpiry = new Date(myNumber.expiry);
 	newExpiry.setMonth(newExpiry.getMonth() + parseInt(collected.first().content));
-	let newBalance = account.balance - (config.renewRate * parseInt(collected.first().content));
+	let newBalance = account.balance - (config.renewalRate * parseInt(collected.first().content));
 
 	// update in db
 	await r.table("Accounts").get(account.id).update({ balance: newBalance });

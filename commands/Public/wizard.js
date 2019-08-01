@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 	if (!perm) return msg.reply("You need to have `manage guild` permission to run this command.");
 
-	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.id[0] + 1)}`;
+	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
 
 	let embed = new MessageEmbed()
 		.setColor(0xAAAAAA)
@@ -81,7 +81,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await r.table("Numbers").insert(numberDoc);
 		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
-		await msg.channel.send(`This channel's number is now ${number}. You can also put your number in the phonebook. If you want to do so, type a description for your number, othwerwise type \`skip\`.`);
+		await msg.channel.send(`This channel's number is now ${number}. You can also put your number in the phonebook, meaning this number can be randomly called. If you want to do so, type a description for your number, othwerwise type \`skip\`.`);
 		return phonebookChooser();
 	};
 
