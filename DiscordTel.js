@@ -1,4 +1,4 @@
-const clear = require("clear-require");
+const clear = require("clear-module");
 
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
@@ -16,7 +16,7 @@ const { scheduleJob } = require("node-schedule");
 	let events = await readdir("./Events");
 	for (let e of events) {
 		let name = e.replace(".js", "");
-		client.on(name, (...args) => require(`./Events/${e}`)(...args));
+		client.on(name, async(...args) => (await reload(`./Events/${e}`))(...args));
 	}
 })();
 let structures = require("fs").readdirSync("./Structures");
