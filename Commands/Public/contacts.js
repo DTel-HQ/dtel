@@ -58,7 +58,7 @@ module.exports = async(client, msg, suffix) => {
 				} });
 
 				collected = await msg.channel.awaitMessages(
-					m => m.author.id === msg.author.id && /^0$|^0((30\d)|(8(00|44))|(900))\d{7}$/.test(m.content),
+					m => m.author.id === msg.author.id && /^0$|^0((30\d)|(8(00|44))|(900))\d{7}$/.test(client.replaceNumber(m.content)),
 					{ max: 1, time: 60000 }
 				);
 
