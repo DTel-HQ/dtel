@@ -94,7 +94,7 @@ module.exports = async(client, msg, suffix) => {
 				);
 
 				// on collected
-				if (collected.firsT()) collected.first().delete().catch(e => null);
+				if (collected.first()) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
 					Busy.newGet(msg.author.id).delete();
 					omsg.delete().catch(e => null);
