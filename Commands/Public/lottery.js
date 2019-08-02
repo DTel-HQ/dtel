@@ -38,7 +38,7 @@ module.exports = async(client, msg, suffix) => {
 			chance = Math.round((ownedTickets / currentNumber) * 100);
 		}
 		msg.reply(`The current jackpot is ¥${jackpot} credits.\nYou have ${ownedTickets} tickets.\nYour chance to win is: ${chance}%\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`);
-	} else if (/^\d+$/.test(suffix) && !/^0/.test(suffix)) {
+	} else if (/^\d+$/.test(suffix) && !/^0.*/.test(suffix)) {
 		let tickets = Number(suffix);
 		let cost = tickets * config.lotteryCost;
 		let balance = account.balance;
