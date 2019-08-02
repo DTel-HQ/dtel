@@ -71,7 +71,7 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				// does that number exist?
-				const number = await r.table("Numbers").get(collected.first().content);
+				const number = await r.table("Numbers").get(client.replaceNumber(collected.first().content));
 				if (!number) {
 					omsg.delete().catch(e => null);
 					return getNumber(true);
