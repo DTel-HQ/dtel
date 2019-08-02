@@ -20,7 +20,7 @@ module.exports = async msg => {
 
 	let cmdFile;
 	if (call && !msg.content.startsWith(prefix)) {
-		return require("../Internals/callHandler.js")(cmd, msg, suffix);
+		return (await reload("../Internals/callHandler.js"))(cmd, msg, suffix);
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
 	} else if (!cmdFile) {
