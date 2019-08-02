@@ -54,7 +54,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!blacklist) {
 			await Blacklist.create({ id: toStrike });
 			msg.reply(`This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\``);
-			if (user) (await user.createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
+			if (user) (await client.users.get(user.id).createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
 			return;
 		}
 	}
