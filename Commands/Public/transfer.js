@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	reason = reason.join(" ");
 
 	// Checks for user and amount
-	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: 0x660000, title: "Command usage", description: "Syntax: `>transfer user amount [optional: message]`" } });
+	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: 0x660000, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
 	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: 0x660000, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
 	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: 0x660000, title: "Too low an amount", description: `Transfers can only happen from ¥${config.minTransfer} and up.` } });
 
@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: 0x660000, title: "Balance too low", description: `Your balance is too low. You currently have ${fromAccount.balance}` } });
 
 	// The amount to gift to
-	let toAccount = await r.table("Accounts").get(msg.author.id);
+	let toAccount = await r.table("Accounts").get(user.id);
 	if (!toAccount) {
 		toAccount = { id: user.id, balance: 0 };
 		await r.table("Accounts").insert(toAccount);
