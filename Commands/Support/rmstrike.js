@@ -18,5 +18,5 @@ module.exports = async(client, msg, suffix) => {
 
 	let totalStrikes = (await r.table("Strikes").filter({ offender: strike.offender })).length;
 
-	await client.users.get(strike.offender).send(`A customer support agent removed strike \`${strikeID}\` from your strikes. You now have ${totalStrikes} strike(s) and need ${3 - totalStrikes} more to get blacklisted.`);
+	await (await client.users.get(strike.offender).createDM()).send(`A customer support agent removed strike \`${strikeID}\` from your strikes. You now have ${totalStrikes} strike(s) and need ${3 - totalStrikes} more to get blacklisted.`);
 };
