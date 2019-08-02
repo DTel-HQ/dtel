@@ -68,6 +68,6 @@ module.exports = async(msg, myNumber) => {
 		.addField("Number", myNumber.id)
 		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth()}-${newExpiry.getFullYear()}`)
 		.addField("Your new balance", `¥${newBalance}`)
-		.addField("Need to recharge?", config.paymentLink);
+		.addField("Need to recharge", config.paymentLink);
 	msg.channel.send("", { embed: embed });
 };
