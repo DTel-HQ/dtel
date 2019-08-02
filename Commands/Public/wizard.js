@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
 
-	let embed = await new MessageEmbed()
+	let embed = new MessageEmbed()
 		.setColor(0xAAAAAA)
 		.setTitle("Read this information before proceeding.")
 		.addField(
@@ -30,7 +30,7 @@ module.exports = async(client, msg, suffix) => {
 			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`
 		);
 
-	await msg.channel.send(embed);
+	await msg.channel.send("test", { embed: embed });
 
 	let number,
 		expiryDate,
