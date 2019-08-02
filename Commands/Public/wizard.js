@@ -5,6 +5,7 @@ module.exports = async(client, msg, suffix) => {
 	if (myNumber) return msg.reply("This channel already has a number. Call `*611` if you want to remove it.");
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	if (!perm) perm = (await msg.author.getPerms()).support;
 	if (!perm) return msg.reply("You need to have `manage guild` permission to run this command.");
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
