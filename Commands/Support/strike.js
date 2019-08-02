@@ -3,7 +3,6 @@ const randomstring = require("randomstring");
 module.exports = async(client, msg, suffix) => {
 	// perms needed later on
 	let perms = await msg.author.getPerms();
-	if (!perms.support) return;
 
 	suffix = suffix.split(" ");
 	let toStrike = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix[0];

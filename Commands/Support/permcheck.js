@@ -1,7 +1,4 @@
 module.exports = async(client, msg, suffix, guildID) => {
-	let perms = await msg.author.getPerms();
-	if (!perms.support) return;
-
 	if (!suffix) return msg.reply(`YOU FORGOT BOTH PARAMETERS?! It's \`>permcheck ${guildID ? "" : "[guildID] "}[userID]\``);
 	if (!suffix.split(" ")[1] && !guildID) return msg.reply(`You forgot a parameter! :facepalm: It's \`>permcheck ${guildID ? "" : "[guildID] "}[userID]\``);
 

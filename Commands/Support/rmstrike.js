@@ -1,5 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support) return;
 	if (!suffix) return msg.reply("Where is the ID?!?!");
 
 	let strikeID = suffix.split(" ")[0];

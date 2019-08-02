@@ -11,7 +11,6 @@ module.exports = async(client, msg, suffix) => {
 		amount = suffix.substring(suffix.indexOf(" ") + 1).trim();
 	}
 
-	if (!(await msg.author.getPerms()).support) return msg.reply("Stealing money from the bank?");
 	if (!user) return msg.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
 	if (!amount) return msg.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
 

@@ -1,5 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support);
 	if (msg.guild) msg.delete();
 	if (!suffix) return msg.author.send("<:b1nzyhyperban:356830174660132864> **Input thy channel id/number, *valid this time!* **");
 

@@ -1,8 +1,6 @@
 module.exports = async(client, msg, suffix) => {
 	let toDeassign = suffix.split(" ")[0];
 
-	if (!(await msg.author.getPerms()).support) return;
-
 	if (!toDeassign) return msg.reply("**Add a number or channel to deassign.**");
 
 	let number = client.replaceNumber(suffix);

@@ -1,5 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).boss) return;
 	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
 
 	let allNumbers = await r.table("Numbers");

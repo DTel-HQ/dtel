@@ -1,6 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support) return;
-
 	if (!suffix) return msg.reply("u forgot id :b:");
 	if (suffix === config.supportGuild) return msg.reply("No thank you.");
 

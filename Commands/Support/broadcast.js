@@ -1,6 +1,4 @@
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support) return;
-
 	// Get number with the channel
 	let number = await r.table("Numbers").get(suffix.split(" ")[0]);
 	if (!number) number = (await r.table("Numbers").filter({ channel: suffix.split(" ")[0] }))[0];

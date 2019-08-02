@@ -6,6 +6,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Get the user's permissions
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	if (!perm) perm = (await msg.author.getPerms()).support;
 
 	// Get contacts
 	let contacts = myNumber.contacts || [];
@@ -16,9 +17,9 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(0x50C878)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nTo add a contact: repsond with \`add\`.\n${perm ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
-		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
-
+			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nTo add a contact: repsond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `(1-10) edit/delete`." : ""}`);
+		if (contacts.length) embed.setFooter("Type a number (1-10) to call or (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
+		else embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 
 		// Add contacts to embed
 		for (let contact of contacts) {
@@ -32,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 		Busy.create({ id: msg.author.id });
 		let collected = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && (contacts[parseInt(m.content) - 1] || /^0$|^add$/im.test(m.content)),
-			{ max: 1, time: 180000 }
+			{ max: 1, time: 120000 }
 		);
 
 		// On collection

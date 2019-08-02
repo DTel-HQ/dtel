@@ -13,8 +13,6 @@ module.exports = async(client, msg, suffix) => {
 		number = suffix.split(" ")[1];
 	}
 
-	if (!(await msg.author.getPerms()).support) return;
-
 	let channel = await client.channels.get(channelID);
 	if (!channel) return msg.reply("<:Monocle:366036726449438731> **That channel is nowhere to be found.** Syntax: `>assign (channel ID) (number)` ");
 

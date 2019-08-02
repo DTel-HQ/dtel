@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 		omsg.delete();
 		if (collected.guild) collected.delete();
 
-		omsg = await msg.channel.send("Type the autoreply of your mailbox. (max 100 characters)");
+		omsg = await msg.channel.send("Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
 
 		// autoreply collector
 		collector = await msg.channel.awaitMessages(
@@ -71,7 +71,7 @@ module.exports = async(client, msg, suffix) => {
 		} });
 	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
 		// deleting mailbox
-		if (!perm) return msg.reply("Only admins can do this.");
+		if (!perm) return msg.reply(":x: You need the manage server permission to do this.");
 
 		omsg = await msg.reply("Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel.");
 		collector = await msg.channel.awaitMessages(
@@ -94,7 +94,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.channel.send("Mailbox deletion aborted.");
 		}
 	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
-		omsg = await msg.channel.send("Type the new autoreply of your mailbox. (max 100 characters)");
+		omsg = await msg.channel.send("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
 
 		// autoreply collector
 		collector = await msg.channel.awaitMessages(

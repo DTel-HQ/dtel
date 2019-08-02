@@ -1,8 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support) return;
-
 	// Check if user exists
 	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix);
 	if (!user) return msg.reply("How am I supposed to look up non existant user?!");
