@@ -9,5 +9,5 @@ module.exports = async(client, msg, suffix) => {
 	let channel = await client.channels.get(call.to.channel === config.supportChannel ? call.from.channel : call.to.channel);
 	if (!channel) return msg.reply("Couldn't find the other side");
 	let guildID = channel.guild.id;
-	require("../support/permcheck.js")(client, msg, suffix, guildID);
+	require("../Support/permcheck.js")(client, msg, suffix, guildID);
 };
