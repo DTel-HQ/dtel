@@ -54,11 +54,11 @@ module.exports = async(client, msg, suffix) => {
 		if (!blacklist) {
 			await Blacklist.create({ id: toStrike });
 			msg.reply(`This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\``);
-			if (user) (await client.users.get(user.id).createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
+			if (user) (await user.createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
 			return;
 		}
 	}
 
 	msg.reply(`This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\``);
-	if (user) user.send(`You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.`);
+	if (user) (await user.createDM()).send(`You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.`);
 };
