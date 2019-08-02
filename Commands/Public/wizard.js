@@ -30,7 +30,7 @@ module.exports = async(client, msg, suffix) => {
 			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`
 		);
 
-	await msg.channel.send("test", { embed: embed });
+	await msg.channel.send({ embed: embed });
 
 	let number,
 		expiryDate,
@@ -150,7 +150,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 		}
 
-		await msg.channel.send(embed);
+		await msg.channel.send({ embed: embed };
 	};
 
 	return numberChooser();

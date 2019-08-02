@@ -36,5 +36,5 @@ module.exports = async(client, msg, suffix) => {
 		);
 	}
 
-	msg.channel.send(embed);
+	msg.channel.send({ embed: embed };
 };
