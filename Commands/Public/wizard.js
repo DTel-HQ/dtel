@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
 
-	let embed = new MessageEmbed()
+	let embed = await new MessageEmbed()
 		.setColor(0xAAAAAA)
 		.setTitle("Read this information before proceeding.")
 		.addField(
