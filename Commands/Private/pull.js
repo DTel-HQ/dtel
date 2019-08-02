@@ -1,5 +1,7 @@
 const { exec } = require("child_process");
 const { readdir } = require("fs-nextra");
+const clear = require("clear-module");
+
 
 module.exports = async(client, msg, suffix) => {
 	exec("git pull");
@@ -8,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	const internals = await readdir("./Internals/");
 	const structures = await readdir("./Structures/");
 
-	for (let c of configuration) reload(c);
-	for (let i of internals) reload(i);
-	for (let s of structures) reload(s);
+	for (let c of configuration) clear(c);
+	for (let i of internals) clear(i);
+	for (let s of structures) clear(s);
 };
