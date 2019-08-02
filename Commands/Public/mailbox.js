@@ -167,7 +167,7 @@ module.exports = async(client, msg, suffix) => {
 			if (perm) reactionFilter.push("🔥");
 
 			// Edit existing message or send a new one
-			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed };
+			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed });
 
 			if (!omsg.reactions.first()) {
 				for (let reaction of reactions) await omsg.react(reaction);
@@ -249,7 +249,7 @@ module.exports = async(client, msg, suffix) => {
 			let reactionFilter = ["❌", "⬅", "🔔"];
 			if (perm) reactionFilter.push("🗑");
 
-			omsg = await msg.channel.send({ embed: embed };
+			omsg = await msg.channel.send({ embed: embed });
 
 			for (let reaction of reactions) await omsg.react(reaction);
 

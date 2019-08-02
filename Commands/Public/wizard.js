@@ -150,7 +150,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 		}
 
-		await msg.channel.send({ embed: embed };
+		await msg.channel.send({ embed: embed });
 	};
 
 	return numberChooser();
