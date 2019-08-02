@@ -68,7 +68,7 @@ module.exports = async(client, msg, suffix) => {
 			timestamp: new Date(),
 			footer: {
 				icon_url: "https://avatars1.githubusercontent.com/u/16656689?s=460&v=4",
-				text: "DiscordTel v3 - made with <3 by Austin Huang and his team",
+				text: "DiscordTel V3 - made with <3 by Austin Huang and his team",
 			},
 		},
 	});
