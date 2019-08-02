@@ -30,7 +30,7 @@ module.exports = async msg => {
 	if (!msg.content.startsWith(prefix) || Busy.get(msg.author.id)) return;
 
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
-	if ((await msg.author.getPerms()).support) cmdFile = await reload(`./Commands/Support/${cmd}`);
+	if ((await msg.author.getPerms()).support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
 
 	if (cmdFile) {
