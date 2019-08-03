@@ -13,7 +13,7 @@ module.exports = async(msg, myNumber) => {
 
 	// Load Phonebook once per 411 call (for search through)
 	const phonebook = await r.table("Phonebook");
-	const vipNumber = Date(myNumber.vip.expiry).getTime() > Date.now();
+	const vipNumber = myNumber.vip ? Date(myNumber.vip.expiry).getTime() > Date.now() : false;
 
 	// Sort numbers by first 08 then 0301 -> 0302 etc...
 	const comparison = (a, b) => {

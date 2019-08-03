@@ -11,6 +11,7 @@ module.exports = async(msg, myNumber) => {
 	// Get easy to format date
 	const currExpiry = new Date(myNumber.expiry);
 	const vipExpiry = myNumber.vip ? new Date(myNumber.vip.expiry) : null;
+	const vipNumber = vipExpiry ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
 
 	// Get guild's strikes
 	let strikes;
@@ -18,16 +19,16 @@ module.exports = async(msg, myNumber) => {
 
 	// make the embed
 	let embed = new MessageEmbed()
-		.setColor(new Date(myNumber.vip.expiry).getTime() > Date.now() ? 0xffbf00 : 0x3498DB)
+		.setColor(vipNumber ? 0x3498DB : 0x3498DB)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
 		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth()}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
-		.addField("VIP Number", myNumber.vip.expiry ? !!(new Date(myNumber.expiry).getTime() > Date.now()) : "False", true);
+		.addField("VIP Number", vipNumber, true);
 
-	if (myNumber.vip.expiry && !!(new Date(myNumber.expiry).getTime() < Date.now())) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
+	if (vipNumber) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
 	embed.addField("Your VIP months", account.vip ? account.vip : "0", true)
 		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join(", ") : "None")
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");
