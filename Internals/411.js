@@ -93,7 +93,7 @@ module.exports = async(msg, myNumber) => {
 				\n\`5\` To access VIP options.${vipNumber ? perms ? "" : "You need Manage Guild to do this" : "You need a VIP number to do this."}
 				\n\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
-		if (message) embed.setDescription(message);
+		if (message) embed.setDescription(`:checkmark: **${message}**`);
 		message = null;
 
 		if (omsg) {
@@ -270,9 +270,9 @@ module.exports = async(msg, myNumber) => {
 				embed = new MessageEmbed()
 					.setColor(0xffbf00)
 					.setTitle("VIP Settings")
-					.setDescription(`Press (1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
-													Press (2) to set or clear this number's custom name.
-													Note: abuse (eg. an offensive name) may result in a strike and/or **the removal of vip**`)
+					.setDescription(`(1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
+													\n(2) to set or clear this number's custom name.\
+													\n\nNote: abuse (eg. an offensive name) may result in a strike and/or **the removal of vip**`)
 					.addField("Hidden", myNumber.vip.hidden, true)
 					.addField("Name", myNumber.vip.name ? myNumber.vip.name : "No name has been chosen", true)
 					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
