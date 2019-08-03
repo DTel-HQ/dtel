@@ -13,12 +13,13 @@ module.exports = async(client, msg, suffix) => {
 	if (toStrike == msg.author.id) return msg.reply("What are you striking yourself for?");
 
 	let user,
-		guild;
+		guild,
+		channel;
 
 	user = await client.users.fetch(toStrike).catch(e => null);
 	if (!user) guild = await client.api.guilds(toStrike).get().catch(e => null);
 	if (!guild) {
-		let channel = await client.api.channels(toStrike).get().catch(e => null);
+		channel = await client.api.channels(toStrike).get().catch(e => null);
 		if (channel) guild = await client.channels.get(toStrike).guild.id;
 	}
 	if (!user && !guild) return msg.reply("Are you sure that ID is a guild or user?");
@@ -60,5 +61,10 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	msg.reply(`This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\``);
-	if (user) (await user.createDM()).send(`You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.`);
+	if (user) {
+		(await user.createDM()).send(`You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.`);
+	} else {
+		(await guild.owner.user.createDM()).send(`Your server ${guild.name}(${guild.id}) has been striked due to the following reason: ${reason}. Your server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.`);
+		if (channel) channel.send(`This server has been striked due to the following reason: ${reason}. The server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.`);
+	}
 };
