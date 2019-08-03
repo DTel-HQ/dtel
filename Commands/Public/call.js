@@ -36,6 +36,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.reply(":x: Dialing error: The number you have dialled has expired. Please contact the number owner to renew it.");
 	if (myNumber.blocked && myNumber.blocked.includes(toDialDoc.id)) return msg.reply(":no_entry_sign: You have blocked this number.");
 	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.reply(":no_entry_sign: That number can't be reached.");
+	if (new Date(toDialDoc.expiry).getTime() < Date.now() && myNumber.id != config.aliasNumbers["*611"]) return msg.reply(":x: Billing error: The number you are trying to reach has expired. Please contact the owner to renew it.");
 
 	try {
 		await client.api.channels(toDialDoc.channel).get();
