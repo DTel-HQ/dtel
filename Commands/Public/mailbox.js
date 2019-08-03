@@ -264,9 +264,6 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			collected = collector.first();
-			client.api.channels(msg.channel.id).messages(omsg.id).reactions(collected.emoji)
-				.user(msg.author.id)
-				.delete();
 			let index;
 
 			switch (collected.emoji.name) {
