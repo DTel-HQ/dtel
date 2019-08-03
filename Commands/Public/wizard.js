@@ -80,6 +80,7 @@ module.exports = async(client, msg, suffix) => {
 			id: number,
 			channel: msg.channel.id,
 			expiry: expiryDate,
+			createdAt: new Date(),
 		};
 		if (msg.channel.type != "dm") numberDoc.guild = msg.channel.guild.id;
 		numberDoc.owner = msg.channel.type != "dm" ? msg.guild.ownerID : msg.author.id;

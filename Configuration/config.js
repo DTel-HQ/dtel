@@ -54,4 +54,9 @@ module.exports = {
 
 	// PORTS
 	IPCPort: 7775,
+
+	// Command aliasaes (keep it down or make new file)
+	aliasCommands: {
+		bal: balance,
+	},
 };

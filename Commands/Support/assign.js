@@ -39,6 +39,7 @@ module.exports = async(client, msg, suffix) => {
 		id: number,
 		channel: channelID,
 		expiry: expiryDate,
+		createdAt: new Date(),
 	};
 
 	if (channel.type == "text") {
