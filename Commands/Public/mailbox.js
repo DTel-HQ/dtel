@@ -190,16 +190,17 @@ module.exports = async(client, msg, suffix) => {
 			reactionCollector.on("collect", async reaction => {
 				let index;
 				messageCollector.stop("Reaction collector went off");
-				reaction.users.remove(msg.author.id);
 				switch (reaction.emoji.name) {
 					case "❌":
 						omsg.delete();
 						break;
 					case "⬅":
+						await reaction.users.remove(msg.author.id);
 						page -= 1;
 						messagesPage(page);
 						break;
 					case "➡":
+						await reaction.users.remove(msg.author.id);
 						page += 1;
 						messagesPage(page);
 						break;
