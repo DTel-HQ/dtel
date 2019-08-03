@@ -29,15 +29,22 @@ module.exports = async(client, msg, suffix) => {
 
 	await Calls.newGet(call.id).delete();
 
+	let newFrom = msg.channel.id == call.from.channel ? call.to : call.from;
+	let toDialvip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
+
 	await Calls.create({
 		id: uuidv4(),
 		from: {
-			channel: msg.channel.id == call.from.channel ? call.to.channel : call.from.channel,
-			number: msg.channel.id == call.from.channel ? call.to.number : call.from.number,
+			channel: newFrom.channel,
+			number: newFrom.number,
+			hidden: newFrom.hidden,
+			name: newFrom.name,
 		},
 		to: {
 			channel: toDialDoc.channel,
 			number: toDialDoc.id,
+			hidden: toDialvip ? toDialDoc.vip.hidden : false,
+			name: toDialvip ? toDialDoc.vip.hidden : false,
 		},
 		startedAt: new Date(),
 	});

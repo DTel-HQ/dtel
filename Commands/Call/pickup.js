@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 	// Pickup - reply first or it'll seem slow
 	msg.reply(":white_check_mark: You picked up the call.\n\nYou can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`!");
 	client.apiSend(":heavy_check_mark: The other side picked up!\n\nYou can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`.", call.from.channel);
-	client.log(`:white_check_mark: ${call.rcall ? "Rcall" : "Call"} \`${call.from.channel} → ${call.to.channel}\` was picked up by ${msg.author.tag} (${msg.author.id}). ${call.id}`);
+	client.log(`:white_check_mark: ${call.rcall ? "Rcall" : "Call"} \`${call.from.hidden ? "hidden" : call.from.channel} → ${call.to.hidden ? "hidden" : call.to.channel}\` was picked up by ${msg.author.tag} (${msg.author.id}). ${call.id}`);
 	call.pickedUp = true;
 	await Calls.update(call);
 
