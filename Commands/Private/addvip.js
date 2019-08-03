@@ -14,6 +14,6 @@ module.exports = async(client, msg, suffix) => {
 	if (account.vip && account.vip + Number(months) < 0) return msg.channel.send({ embed: { color: 0x660000, title: "Negative amount of months", description: `Their current amount of months (${account.vip}) plus ${Number(months)} would result in ${account.vip + Number(months)}` } });
 
 	await r.table("Accounts").get(account.id).update({ vip: account.vip ? account.vip + Number(months) : Number(months) });
-	msg.channel.send({ embed: { color: 0xEEEEEE, title: "Succes", description: `Added ${months} to ${user}(${user.id})`, footer: { text: msg.author.id } } });
-	(await user.createDM()).send({ embed: { color: 0xEEEEEE, title: "VIP", description: `You have received ${months} VIP Months`, footer: { text: msg.author.id } } }).catch(e => null);
+	msg.channel.send({ embed: { color: 0xEEEEEE, title: "Succes", description: `Added \`${months}\` VIP Months to ${user}(${user.id})`, footer: { text: `Executed by: ${msg.author.id}` } } });
+	(await user.createDM()).send({ embed: { color: 0xEEEEEE, title: "VIP", description: `You have received \`${months}\` VIP Months`, footer: { text: `Executed by: ${msg.author.id}` } } }).catch(e => null);
 };
