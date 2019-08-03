@@ -3,6 +3,7 @@ module.exports = async(client, msg, suffix) => {
 	let callID = suffix.split(" ")[0];
 	let msgID = suffix.split(" ")[1];
 	if (!callID || !msgID) return msg.channel.send({ embed: { color: 0x000066, title: "Command usage", description: ">identify [Call/Message ID] [Message/Call ID]\nReturns with the user ID of the sender." } });
+	// Flip the values to make it CS-proof
 	if (msgID.length > callID.length) [msgID, callID] = [callID, msgID];
 
 	let call = await r.table("OldCalls").get(callID);
