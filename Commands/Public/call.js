@@ -155,7 +155,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	// This one-lining should honestly stop.
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`);
 	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
-	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? myNumber.vip.name : "Hidden" : myNumber.vip.name ? myNumber.vip.name : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
+	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
 	setTimeout(async() => {
