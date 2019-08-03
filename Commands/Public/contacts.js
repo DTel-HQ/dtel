@@ -241,7 +241,7 @@ module.exports = async(client, msg, suffix) => {
 			Busy.newGet(msg.author.id).delete();
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
-			return (await reload("./Commands/Public/Message.js"))(client, msg, collected.first().content);
+			return (await reload("./Commands/Public/message.js"))(client, msg, collected.first().content);
 		}
 
 		// if only a number
