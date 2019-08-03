@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
-		if (account.vip) embed.addFooter("Enter the amounts of months to upgrade or press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
+		if (account.vip) embed.setFooter("Enter the amounts of months to upgrade or press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 	}
 
 	let omsg = await msg.channel.send({ embed: embed });
