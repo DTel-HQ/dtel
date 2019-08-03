@@ -3,7 +3,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!toDeassign) return msg.reply("**Add a number or channel to deassign.**");
 
-	let number = client.replaceNumber(suffix);
+	let number = await client.replaceNumber(suffix);
 
 	let numberDoc = await r.table("Numbers").get(toDeassign).default(null);
 	if (!numberDoc) {
