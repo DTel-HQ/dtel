@@ -43,6 +43,7 @@ module.exports = {
 	renewalRate: 500,
 	transferRate: 0.729,
 	minTransfer: 100,
+	maxNumbers: 3,
 
 	// EMOTES
 	callPhones: {

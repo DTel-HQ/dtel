@@ -4,6 +4,11 @@ module.exports = async(client, msg, suffix) => {
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (myNumber) return msg.reply("This channel already has a number. Call `*611` if you want to remove it.");
 
+	if (msg.guild) {
+		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
+		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: 0x660000, title: "Too many numbers", description: `You have reached the maximum amount of numbers per guild ${config.maxNumbers}.`, footer: { text: "This limit was set to prevent trolling" } } });
+	}
+
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 	if (!perm) perm = (await msg.author.getPerms()).support;
 	if (!perm) return msg.reply("You need to have `manage guild` permission to run this command.");
