@@ -37,7 +37,7 @@ module.exports = async(client, msg, suffix) => {
 	// Make collector
 	Busy.create({ id: msg.author.id });
 	let collected = (await msg.channel.awaitMessages(
-		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) < account.vip,
+		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) <= account.vip,
 		{ max: 1, time: 120000 }
 	)).first();
 
@@ -61,7 +61,7 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Succesfully upgraded number")
 		.setDescription(`This number is now a VIP number until: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`)
 		.setFooter(`By: ${msg.author.id}`);
-	omsg.edit({ embed: embed }).catch(e => {
+	omsg.edit({ embed: channelEmbed }).catch(e => {
 		omsg.delete();
 		msg.channel.send({ embed: channelEmbed });
 	});
