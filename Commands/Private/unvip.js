@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!suffix) return msg.channel.send({ embed: { color: 0xEEEEEE, title: "Command usage", description: ">unvip [channel(mention)/number]\nCompletely removes the remaining VIP time from a number" } });
+	if (!suffix) return msg.channel.send({ embed: { color: 0xEEEEEE, title: "Command usage", description: "`>unvip [channel, channel mention, number]`\nCompletely removes the remaining VIP time from a number" } });
 
 	let number;
 	if (msg.mentions.channels) number = (await r.table("Numbers").filter({ channel: msg.mentions.channels.first().id }))[0];
