@@ -190,7 +190,9 @@ module.exports = async(client, msg, suffix) => {
 			reactionCollector.on("collect", async reaction => {
 				let index;
 				messageCollector.stop("Reaction collector went off");
-				client.api.channels(msg.channel.id).messages(omsg.id).reactions(reaction.emoji)(msg.author.id).delete();
+				client.api.channels(msg.channel.id).messages(omsg.id).reactions(reaction.emoji)
+					.user(msg.author.id)
+					.delete();
 				switch (reaction.emoji.name) {
 					case "❌":
 						omsg.delete();
