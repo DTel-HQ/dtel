@@ -390,7 +390,7 @@ module.exports = async(client, message, args) => {
 						await account.save();
 						await mynumber.save();
 						collector.stop();
-						cmessage.delete();
+						if (message.guild) cmessage.delete().catch(e => null);
 						return mainEmbed.edit({
 							embed: {
 								color: 0x00FF00,
