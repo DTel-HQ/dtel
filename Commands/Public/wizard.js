@@ -39,7 +39,6 @@ module.exports = async(client, msg, suffix) => {
 
 	// NUMBER
 	let numberChooser = async() => {
-		console.log("2");
 		let collector = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && m.content.length === 11,
 			{
@@ -89,7 +88,6 @@ module.exports = async(client, msg, suffix) => {
 	// PHONEBOOK
 
 	let phonebookChooser = async() => {
-		console.log("3");
 		let collector = await msg.channel.awaitMessages(
 			m => m.author.id == msg.author.id,
 			{
@@ -154,9 +152,5 @@ module.exports = async(client, msg, suffix) => {
 		await msg.channel.send({ embed: embed });
 	};
 
-	if (toChoose) {
-		console.log("1");
-		toChoose = false;
-		return numberChooser();
-	}
+	return numberChooser();
 };
