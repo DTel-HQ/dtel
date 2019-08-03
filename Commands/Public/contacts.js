@@ -145,10 +145,10 @@ module.exports = async(client, msg, suffix) => {
 
 			omsg = await msg.channel.send({ embed: {
 				color: 0x50C878,
-				title: `Editing ${contact.number}`,
+				title: `Editing ${contact.name}(${contact.number})`,
 				description: `Enter a new name for the contact. (max 20 characters)\nCurrent name: \`${contact.name}\``,
 				footer: {
-					text: "(0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
+					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
 				},
 			} });
 
@@ -160,20 +160,24 @@ module.exports = async(client, msg, suffix) => {
 
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
+			if (/^9$/.test(collected.first().content)) {
+				Busy.newGet(msg.author.id).delete();
+				return contactList();
+			}
 			if (!collected.first() || /^0$/.test(collected.first().content)) {
 				Busy.newGet(msg.author.id).delete();
 				return omsg.delete().catch(e => null);
 			}
 
 			// Edit the contact's entry
-			let newName = collected.first().content;
-			let newContact = { number: contact.number, name: newName, description: contact.description };
+			let newContact = { number: contact.number, name: collected.first().content, description: contact.description };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
+			contact = newContact;
 
 			omsg = await omsg.edit({ embed: {
 				color: 0x50C878,
-				title: `Editing ${contact.number}`,
+				title: `Editing ${contact.name}(${contact.number})`,
 				description: `Enter a new description for the contact. (max 100 characters)\nCurrent description: \`${contact.description}\``,
 				footer: {
 					text: "(0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
@@ -190,10 +194,11 @@ module.exports = async(client, msg, suffix) => {
 			if (collected.first()) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
 			Busy.newGet(msg.author.id).delete();
+			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 
 			// Edit the contact's entry
-			newContact = { number: contact.number, name: newName, description: collected.first().content };
+			newContact = { number: contact.number, name: contact.name, description: collected.first().content };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
 
