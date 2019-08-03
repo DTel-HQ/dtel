@@ -261,6 +261,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			collected = collector.first();
+			client.api.channels(msg.channel.id).messages(omsg.id).reactions(collected.emoji)(msg.author.id).delete();
 			let index;
 
 			switch (collected.emoji.name) {
@@ -281,6 +282,7 @@ module.exports = async(client, msg, suffix) => {
 					messagesPage(page);
 					break;
 				case "🔔":
+					client.api.channels(msg.channel.id).messages(omsg.id).reactions.delete();
 					require("./call.js")(client, msg, "*611");
 			}
 		};
