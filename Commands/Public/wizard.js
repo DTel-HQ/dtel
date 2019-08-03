@@ -9,6 +9,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!perm) return msg.reply("You need to have `manage guild` permission to run this command.");
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
+	let toChoose = true;
 
 	let embed = new MessageEmbed()
 		.setColor(0xAAAAAA)
@@ -37,8 +38,6 @@ module.exports = async(client, msg, suffix) => {
 		description;
 
 	// NUMBER
-	numberChooser();
-
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id,
@@ -153,4 +152,9 @@ module.exports = async(client, msg, suffix) => {
 
 		await msg.channel.send({ embed: embed });
 	};
+
+	if (toChoose) {
+		toChoose = false;
+		return numberChooser();
+	}
 };
