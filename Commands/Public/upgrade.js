@@ -53,7 +53,6 @@ module.exports = async(client, msg, suffix) => {
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
 	else vipExpiry = new Date().setMonth(new Date().getMonth() + parseInt(collected.content));
 	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
-
 	vipExpiry = new Date(vipExpiry);
 
 	let channelEmbed = new MessageEmbed()
@@ -64,7 +63,7 @@ module.exports = async(client, msg, suffix) => {
 		.setFooter(`By: ${msg.author.id}`);
 	omsg.edit({ embed: embed }).catch(e => {
 		omsg.delete();
-		msg.channel.send({ embed: embed });
+		msg.channel.send({ embed: channelEmbed });
 	});
 
 	if (!msg.guild) return;
