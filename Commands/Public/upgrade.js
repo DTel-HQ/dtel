@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 	// Get their details
 	let number = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	let vipExpiry = number.vip ? number.vip.expiry ? new Date(number.vip.expiry) : null : null;
-	let vipNumber = vipExpiry.getTime() > Date.now();
+	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 
 	let account = await r.table("Accounts").get(msg.author.id);
 	if (!account) {
