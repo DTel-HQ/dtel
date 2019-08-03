@@ -39,8 +39,9 @@ module.exports = async(client, msg, suffix) => {
 
 	// NUMBER
 	let numberChooser = async() => {
+		console.log("2");
 		let collector = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id,
+			m => m.author.id === msg.author.id && m.content.length === 11,
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
@@ -52,7 +53,6 @@ module.exports = async(client, msg, suffix) => {
 			return msg.reply("Wizard expired. Please run `>wizard` again when you have a number ready.");
 		}
 		if (collected.content.startsWith(config.prefix)) return;
-		if (isNaN(collected.content)) numberChooser();
 		if (collected.content == "0") return msg.reply("Exiting wizard...");
 
 		number = await client.replaceNumber(collected.content);
@@ -89,6 +89,7 @@ module.exports = async(client, msg, suffix) => {
 	// PHONEBOOK
 
 	let phonebookChooser = async() => {
+		console.log("3");
 		let collector = await msg.channel.awaitMessages(
 			m => m.author.id == msg.author.id,
 			{
@@ -154,6 +155,7 @@ module.exports = async(client, msg, suffix) => {
 	};
 
 	if (toChoose) {
+		console.log("1");
 		toChoose = false;
 		return numberChooser();
 	}
