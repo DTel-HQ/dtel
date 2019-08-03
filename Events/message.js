@@ -27,10 +27,10 @@ module.exports = async msg => {
 	} else if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
+
+	if (!msg.content.startsWith(prefix) || (Busy.get(msg.author.id) && !config.maintainers.contains(msg.author.id))) return;
+
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
-
-	if (!msg.content.startsWith(prefix) || Busy.get(msg.author.id)) return;
-
 	if ((await msg.author.getPerms()).support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
 
