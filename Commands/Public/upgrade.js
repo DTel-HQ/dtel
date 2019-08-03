@@ -70,13 +70,13 @@ module.exports = async(client, msg, suffix) => {
 	let userEmbed = new MessageEmbed()
 		.setColor(0xEEEEEE)
 		.setTitle("Your receipt")
-		.setDescription(`You have spent ${collected.content} VIP Months to upgrade ${number.id} in ${msg.channel}(${msg.channel.id})\nThe new VIP expiry date is: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`);
+		.setDescription(`Months spent: ${collected.content}\nNumber: ${number.id}\nChannel: ${msg.channel} (${msg.channel.id})\nNew VIP expiry date: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`);
 	(await msg.author.createDM()).send({ embed: userEmbed }).catch(e => null);
 
 	if (msg.guild.owner.user.id === msg.author.id) return;
 	let ownerEmbed = new MessageEmbed()
 		.setColor(0x3498DB)
 		.setTitle("Your number has been upgraded!")
-		.setDescription(`Member ${msg.author.tag}(${msg.author.id}) has upgraded number ${number.id} in ${msg.channel}(${msg.channel.id}) for ${collected.content} Months!\nThe new VIP expiry date is: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`);
+		.setDescription(`Member ${msg.author.tag}(${msg.author.id}) has upgraded a number in your server for ${collected.content} Months!\nView the new settings in \`*411\`.\n\nNumber: ${number.id}\nChannel: ${msg.channel} (${msg.channel.id})\nThe new VIP expiry date is: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`);
 	(await msg.guild.owner.user.createDM()).send({ embed: ownerEmbed });
 };
