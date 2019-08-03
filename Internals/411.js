@@ -13,6 +13,7 @@ module.exports = async(msg, myNumber) => {
 
 	// Load Phonebook once per 411 call (for search through)
 	const phonebook = await r.table("Phonebook");
+	const vipNumber = Date(myNumber.vip.expiry).getTime() > Date.now();
 
 	// Sort numbers by first 08 then 0301 -> 0302 etc...
 	const comparison = (a, b) => {
@@ -89,6 +90,7 @@ module.exports = async(msg, myNumber) => {
 				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
 				\n\`3\` For information about special numbers.\
 				\n\`4\` To call Customer Support.\
+				\n\`5\` To access VIP options.${vipNumber ? perms ? "" : "You need Manage Guild to do this" : "You need a VIP number to do this."}
 				\n\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
 		if (message) embed.setDescription(message);
@@ -106,7 +108,7 @@ module.exports = async(msg, myNumber) => {
 		// Create collector & make busy
 		Busy.create({ id: msg.author.id });
 		collected = (await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && perms ? /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content),
+			m => m.author.id === msg.author.id && perms ? vipNumber ? /^[0-5]$/.test(m.content) : /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content),
 			{ max: 1, time: 60000 })).first();
 
 		// On main menu collection
@@ -261,7 +263,84 @@ module.exports = async(msg, myNumber) => {
 
 			// Call CS
 			case "4": {
-				return require("../commands/Public/call.js")(client, msg, "*611");
+				return (await reload("./Commands/Public/call.js"))(client, msg, "*611");
+			}
+
+			case "5": {
+				embed = new MessageEmbed()
+					.setColor(0xffbf00)
+					.setTitle("VIP Settings")
+					.setDescription(`Press (1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
+													Press (2) to set or clear this number's custom name.
+													Note: abuse (eg. an offensive name) may result in a strike and/or **the removal of vip**`)
+					.addField("Hidden", myNumber.vip.hidden, true)
+					.addField("Name", myNumber.vip.name ? myNumber.vip.name : "No name has been chosen", true)
+					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
+
+				// edit/send message
+				omsg = await omsg.edit({ embed: embed }).catch(async e => {
+					omsg.delete().catch(_ => null);
+					omsg = await msg.channel.send({ embed: embed });
+				});
+
+				// Collector
+				collected = (await msg.channel.awaitMessages(
+					m => m.author.id === msg.author.id && /^[0129]$/.test(m.content),
+					{ max: 1, time: 120000 }
+				)).first();
+
+				if (collected) collected.delete().catch(e => null);
+				if (!collected || /^0$/.test(collected.content)) {
+					Busy.newGet(msg.author.id).delete();
+					omsg.delete().catch(e => null);
+					loop = false;
+					break;
+				}
+				if (/^9$/.test(collected.content)) break;
+
+				switch (collected.content) {
+					case "1": {
+						myNumber.vip.hidden = !myNumber.vip.hidden;
+						await r.table("Numbers").get(myNumber.id).update({ vip: { hidden: myNumber.vip.hidden } });
+						message = `Succesfully ${myNumber.vip.hidden ? "disabled" : "enabled"} number recognition.`;
+						break;
+					}
+
+					case "2": {
+						embed = new MessageEmbed()
+							.setColor(0xffbf00)
+							.setTitle("Changing custom name")
+							.setDescription("Type your new custom name or `disable` to disable the custom name. (4-25 characters)")
+							.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
+
+						// edit/send message
+						omsg = await omsg.edit({ embed: embed }).catch(async e => {
+							omsg.delete().catch(_ => null);
+							omsg = await msg.channel.send({ embed: embed });
+						});
+
+						// Collector
+						collected = (await msg.channel.awaitMessages(
+							m => m.author.id === msg.author.id && m.content.length > 3 && m.content.length < 26,
+							{ max: 1, time: 120000 }
+						)).first();
+
+						if (collected) collected.delete().catch(e => null);
+						if (!collected || /^0$/.test(collected.content)) {
+							Busy.newGet(msg.author.id).delete();
+							omsg.delete().catch(e => null);
+							loop = false;
+							break;
+						}
+						if (/^9$/.test(collected.content)) break;
+
+						await r.table("Numbers").get(myNumber.id).update({ vip: { name: /^disable$/i.test(collected.content) ? false : collected.content } });
+						if (/^disable$/i.test(collected.content)) message = `Succesfully changed this number's custom name to: ${collected.content}`;
+						else message = "Succesfully disabled this number's custom name.";
+						break;
+					}
+				}
+				break;
 			}
 		}
 	}

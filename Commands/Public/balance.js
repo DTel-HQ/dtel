@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "VIP Months",
-					value: account.vip,
+					value: account.vip ? account.vip : "0",
 					inline: true,
 				},
 				{
