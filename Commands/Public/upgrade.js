@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 		{ max: 1, time: 120000 }
 	)).first();
 
-	Busy.newGet({ id: msg.author.id }).delete();
+	Busy.newGet(msg.author.id).delete();
 	collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
 
