@@ -10,7 +10,7 @@ module.exports = async(msg, myNumber) => {
 
 	// Get easy to format date
 	const currExpiry = new Date(myNumber.expiry);
-	const vipExpiry = myNumber.vip.expiry ? new Date(myNumber.vip.expiry) : null;
+	const vipExpiry = myNumber.vip ? new Date(myNumber.vip.expiry) : null;
 
 	// Get guild's strikes
 	let strikes;

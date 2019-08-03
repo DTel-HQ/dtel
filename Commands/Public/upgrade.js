@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	// Get their details
 	let number = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
-	let vipExpiry = number.vip ? number.vip.expiry ? new Date(number.vip.expiry) : null : null;
+	let vipExpiry = number.vip ? new Date(number.vip.expiry) : null;
 	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 
 	let account = await r.table("Accounts").get(msg.author.id);
@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 	let embed = new MessageEmbed()
 		.setColor(0x3498DB)
 		.setTitle(number ? "Upgrade your number" : "Upgrade")
-		.setDescription(`Upgrade let's you upgrade your number to a VIP number. VIP numbers get the following perks:
+		.setDescription(`Upgrade lets you upgrade your number to a VIP number.\nVIP numbers get the following perks:
 		 	• The ability to add a custom name to your number.
 			• The ability to remove number recognition.
 			• A special VIP emote in calls: :insertSpecialEmote:
@@ -35,12 +35,15 @@ module.exports = async(client, msg, suffix) => {
 	if (!number || !account.vip) return;
 
 	// Make collector
+	Busy.create({ id: msg.author.id });
 	let collected = (await msg.channel.awaitMessages(
-		m => m.author.id === msg.author.id && /^d+$/.test(m.content) && parseInt(m.content < account.vip),
+		m => m.author.id === msg.author.id && /^d+$/.test(m.content) && parseInt(m.content) < account.vip,
 		{ max: 1, time: 120000 }
 	)).first();
 
-	if (!collected || /^0$/.test(collected.content)) return;
+	Busy.newGet({ id: msg.author.id }).delete();
+	collected.delete().catch(e => null);
+	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
 
 	// remove VIP Months
 	account.vip -= parseInt(collected.content);
@@ -57,7 +60,10 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Succesfully upgraded number")
 		.setDescription(`This number is now a VIP number until: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`)
 		.setFooter(`By: ${msg.author.id}`);
-	msg.channel.send({ embed: embed });
+	omsg.edit({ embed: embed }).catch(e => {
+		omsg.delete();
+		msg.channel.send({ embed: embed });
+	});
 
 	if (!msg.guild) return;
 	let userEmbed = new MessageEmbed()
