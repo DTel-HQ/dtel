@@ -147,7 +147,7 @@ module.exports = async(client, msg, suffix) => {
 				if (!messages[i]) break;
 				let m = messages[i];
 				let date = new Date(m.time);
-				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}\n||${date}||`);
+				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}`);
 			}
 			embed.addField("Options",
 				`:x: to exit.\
