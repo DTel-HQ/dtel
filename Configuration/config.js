@@ -57,6 +57,11 @@ module.exports = {
 
 	// Command aliasaes (keep it down or make new file)
 	aliasCommands: {
-		bal: balance,
+		bal: "balance",
+		bc: "broadcast",
+		contact: "contacts",
+		id: "identify",
+		mentions: "mention",
+		perm: "permcheck",
 	},
 };
