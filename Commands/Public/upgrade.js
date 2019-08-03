@@ -52,7 +52,7 @@ module.exports = async(client, msg, suffix) => {
 	// set new VIP expiry date
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
 	else vipExpiry = new Date().setMonth(new Date().getMonth() + parseInt(collected.content));
-	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip.hidden || false, name: number.vip.name || false } });
+	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
 
 	let channelEmbed = new MessageEmbed()
 		.setColor(0xffbf00)
