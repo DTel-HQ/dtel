@@ -13,7 +13,13 @@ module.exports = async(client, msg, suffix) => {
 				title: "Current Account Status",
 				fields: [{
 					name: "Your Balance",
-					value: `${account.balance}`,
+					value: `¥${account.balance}`,
+					inline: true,
+				},
+				{
+					name: "VIP Months",
+					value: account.vip,
+					inline: true,
 				},
 				{
 					name: "Recharging",
