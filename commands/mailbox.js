@@ -116,7 +116,7 @@ module.exports = async(client, msg, args) => {
 		case "clear": {
 			let perms = await client.permCheck(msg.author.id);
 			if (msg.channel.type == "text" && !msg.member.hasPermission("MANAGE_GUILD") && !perms.support) {
-				return msg.reply("You don't have `Manage Server` permission!");
+				return msg.reply("You don't have the `Manage Server` permission!");
 			} else {
 				mailbox.messages = [];
 				await mailbox.save();
@@ -124,7 +124,7 @@ module.exports = async(client, msg, args) => {
 					embed: {
 						color: 0x00FF00,
 						title: ":white_check_mark: Success!",
-						description: "Successfully removed all message.",
+						description: "Successfully removed all messages.",
 					},
 				});
 			}
