@@ -50,12 +50,15 @@ module.exports = async(client, msg, suffix) => {
 	});
 
 	const newCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+	let myNumber = await r.table("Numbers").get(newCall.from.number);
+	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
+	let myNumbervip = myNumber.vip ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
 
-	await client.log(`:arrow_right: Channel ${newCall.from.channel} has been transferred to ${toDial} by ${msg.channel.id}`);
+	await client.log(`:arrow_right: Channel \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to ${toDialvip ? newCall.to.hidden ? newCall.to.name ? `\`${newCall.to.name}\`` : "hidden" : newCall.to.name ? `\`${newCall.to.name} (${newCall.to.number})\`` : toDial : toDial} by ${msg.channel.id}`);
 	await msg.reply(`:arrow_right: You have transferred the other side to ${toDial}.`);
 	if (newCall.to.number === "08006113835") client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
 	await client.apiSend(`:arrow_right: You have been transferred by the other side. Now calling ${newCall.to.number}...`, newCall.from.channel);
-	client.apiSend(`There is an incoming call from \`${newCall.from.number}\`. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, newCall.to.channel);
+	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, newCall.to.channel);
 
 	setTimeout(async() => {
 		let callDoc = await Calls.get(newCall.id);
