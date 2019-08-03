@@ -137,7 +137,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setDescription("To edit your mailbox's autoreply: >mailbox edit\nTo delete your mailbox: >mailbox delete")
+				.setDescription("To edit your mailbox's autoreply: `>mailbox edit`\nTo delete your mailbox: `>mailbox delete`")
 				.setFooter(`Page ${page}/${pages}. Enter an ID to see more actions.`);
 
 			// Display the right messages
@@ -147,7 +147,7 @@ module.exports = async(client, msg, suffix) => {
 				if (!messages[i]) break;
 				let m = messages[i];
 				let date = new Date(m.time);
-				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}\n${date}`);
+				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}\n||${date}||`);
 			}
 			embed.addField("Options",
 				`:x: to exit.\
