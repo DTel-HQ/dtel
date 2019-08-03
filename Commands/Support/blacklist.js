@@ -4,8 +4,8 @@ module.exports = async(client, msg, suffix) => {
 
 	let toBlacklist;
 	if (msg.mentions.users.first()) {
-		toBlacklist = msg.mentions.users.first().id;
-		suffix = toBlacklist;
+		toBlacklist = msg.mentions.users.first();
+		suffix = toBlacklist.id;
 	}
 	if (!toBlacklist) {
 		toBlacklist = await client.users.fetch(suffix)
@@ -16,15 +16,15 @@ module.exports = async(client, msg, suffix) => {
 			.catch(_ => null);
 	}
 	if (!toBlacklist) return msg.reply("Invalid ID!");
+	toBlacklist = toBlacklist.id;
 
 	let doc = await Blacklist.newGet(toBlacklist);
 	if (doc) {
-		doc.delete();
 		await client.log(`:wrench: ID ${suffix} is removed from blacklist by ${msg.author.username}.`);
 		return msg.reply(`Removed ID ${suffix} from the blacklist`);
 	}
 
-	if ((msg.guild && suffix === msg.guild.id) || suffix === msg.author.id) return msg.reply(`you dumb :b:oi, don't blacklist yourself!`);
+	if (suffix === msg.author.id) return msg.reply(`you dumb :b:oi, don't blacklist yourself!`);
 	let user = await client.users.fetch(suffix);
 	if (user && (await user.getPerms()).support) return msg.reply("Trying to get rid of the competition? Well you can't.");
 
