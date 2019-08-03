@@ -74,6 +74,9 @@ client.login().catch(() => {
 
 client.on("disconnect", () => client.login());
 
+// Get lottery
+require("./Internals/lottery.js");
+
 Object.assign(String.prototype, {
 	escapeRegex() {
 		const matchOperators = /[|\\{} ()[\]^$+*?.]/g;
