@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	let call = Calls.get(suffix);
-	if (!call) call = await r.table("Calls").get(suffix);
+	if (!call) call = await r.table("OldCalls").get(suffix);
 	if (!call) return msg.channel.send({ embed: { color: 0x660000, title: "No call", description: "Couldn't find a call with that ID" } });
 
 	let embed = new MessageEmbed()
