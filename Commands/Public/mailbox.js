@@ -28,7 +28,6 @@ module.exports = async(client, msg, suffix) => {
 				max: 1,
 			}
 		);
-		await omsg.delete();
 		collected = collector.first();
 		if (!collected) return;
 
