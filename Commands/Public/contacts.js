@@ -166,8 +166,8 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			// Edit the contact's entry
-			contact.name = collected.first().content;
-			let newContact = { number: contact.number, name: contact.name, description: contact.description };
+			let newName = collected.first().content;
+			let newContact = { number: contact.number, name: newName, description: contact.description };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
 
@@ -193,7 +193,7 @@ module.exports = async(client, msg, suffix) => {
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 
 			// Edit the contact's entry
-			newContact = { number: contact.number, name: contact.name, description: collected.first().content };
+			newContact = { number: contact.number, name: newName, description: collected.first().content };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
 
