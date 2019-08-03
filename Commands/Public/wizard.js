@@ -37,6 +37,7 @@ module.exports = async(client, msg, suffix) => {
 		description;
 
 	// NUMBER
+	numberChooser();
 
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
@@ -152,6 +153,4 @@ module.exports = async(client, msg, suffix) => {
 
 		await msg.channel.send({ embed: embed });
 	};
-
-	return numberChooser();
 };
