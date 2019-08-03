@@ -6,7 +6,6 @@ const config = global.config = require("./Configuration/config.js");
 
 const { Collection } = require("discord.js");
 const { readdir } = require("fs-nextra");
-const { scheduleJob } = require("node-schedule");
 
 (async() => {
 	await require("./Database/init")()
@@ -18,9 +17,11 @@ const { scheduleJob } = require("node-schedule");
 		let name = e.replace(".js", "");
 		client.on(name, async(...args) => (await reload(`./Events/${e}`))(...args));
 	}
+
+	let structures = await readdir("./Structures");
+	for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
 })();
-let structures = require("fs").readdirSync("./Structures");
-for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
+
 
 const client = global.client = new (require("./Internals/Client"))({
 	disableEveryone: true,

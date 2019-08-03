@@ -44,4 +44,6 @@ module.exports = {
 		donator: "<:GoldPhone:320768431307882497>",
 		support: ":telephone_receiver:",
 	},
+
+	IPCPort: 7775,
 };
