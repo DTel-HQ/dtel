@@ -42,7 +42,7 @@ module.exports = async(msg, myNumber) => {
 		embed = new MessageEmbed()
 			.setColor(0xe6e600)
 			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
-			.setDescription(`Enter a page number or query (minimum of three characters) to search for.\n\`clear\` to clear a query.\n\`return\` to return.\n\`0\` to hangup.`)
+			.setDescription(`Enter a page number or query (minimum of three characters) to search for.\n(clear) to clear a query.\n(return) to return from the query.\n(0) to hangup.`)
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
 
 		// Determine if query - add 10 results accordingly

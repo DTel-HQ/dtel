@@ -179,7 +179,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000 }
+						{ time: 120000, max: 1 }
 					)).first();
 
 					Busy.newGet(msg.authorid).delete();
@@ -201,7 +201,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000 }
+						{ time: 120000, max: 1 }
 					)).first();
 
 					Busy.newGet(msg.author.id).delete();
@@ -223,7 +223,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length <= 100,
-						{ time: 180000 }
+						{ time: 180000, max: 1 }
 					)).first();
 
 					Busy.newGet(msg.author.id).delete();
