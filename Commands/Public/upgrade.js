@@ -57,7 +57,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let channelEmbed = new MessageEmbed()
 		.setColor(0xffbf00)
-		.setAuthor(msg.author.tag, msg.author.displayAvatarURL({ size: 2048, format: "png" }))
+		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ size: 2048, format: "png" }))
 		.setTitle("Succesfully upgraded number")
 		.setDescription(`This number is now a VIP number until: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`)
 		.setFooter(`By: ${msg.author.id}`);
@@ -77,6 +77,10 @@ module.exports = async(client, msg, suffix) => {
 	let ownerEmbed = new MessageEmbed()
 		.setColor(0x3498DB)
 		.setTitle("Your number has been upgraded!")
-		.setDescription(`Member ${msg.author.tag}(${msg.author.id}) has upgraded a number in your server for ${collected.content} Months!\nView the new settings in \`*411\`.\n\nNumber: ${number.id}\nChannel: ${msg.channel} (${msg.channel.id})\nThe new VIP expiry date is: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`);
+		.setDescription(`Member ${msg.author} has upgraded a number in your server!`)
+		.addField("Number", number.id, true)
+		.addField("Channel", msg.channel)
+		.addField("Months", collected.content, true)
+		.addField("New expiry date", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
 	(await msg.guild.owner.user.createDM()).send({ embed: ownerEmbed });
 };
