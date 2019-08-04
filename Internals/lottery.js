@@ -1,8 +1,8 @@
 const { scheduleJob } = require("node-schedule");
 
 // does this work?
-Number(process.env.SHARD_ID) === 0 && scheduleJob("0 0 * * *", async() => {
-	if (client.shard != 0) return;
+scheduleJob("0 0 0 * * *", async() => {
+	if (client.shards.ids[0] != 0) return;
 	// Daily reset
 	await r.table("Accounts").update({ daily: false });
 

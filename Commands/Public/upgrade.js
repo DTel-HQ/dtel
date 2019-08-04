@@ -65,7 +65,7 @@ module.exports = async(client, msg, suffix) => {
 		.setDescription(`This number is now a VIP number until: ${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`)
 		.setFooter(`By: ${msg.author.id}`);
 	omsg.edit({ embed: channelEmbed }).catch(e => {
-		omsg.delete();
+		omsg.delete().catch(_ => null);
 		msg.channel.send({ embed: channelEmbed });
 	});
 
