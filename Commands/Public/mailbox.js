@@ -71,8 +71,62 @@ module.exports = async(client, msg, suffix) => {
 				text: "You can now use >mailbox to see messages when you receive them.",
 			},
 		} });
+	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
+		// deleting mailbox
+		if (!perm) return msg.reply(":x: You need the manage server permission to do this.");
+
+		omsg = await msg.reply("Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel.");
+		collector = await msg.channel.awaitMessages(
+			m => /(^yes|no$)/i.test(m.content) && msg.author.id == m.author.id,
+			{
+				time: 60 * 1000,
+				max: 1,
+			}
+		);
+
+		await omsg.delete();
+		collected = collector.first();
+		if (!collected) return msg.reply("Mailbox deletion expired.");
+
+		if (/^yes$/i.test(collected.content)) {
+			omsg.delete();
+			await r.table("Mailbox").get(msg.channel.id).delete();
+			msg.channel.send("Mailbox deletion succesful.");
+		} else {
+			msg.channel.send("Mailbox deletion aborted.");
+		}
+	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
+		omsg = await msg.channel.send("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
+
+		// autoreply collector
+		collector = await msg.channel.awaitMessages(
+			m => m.content.length > 0 && m.content.length < 100 && m.author.id == msg.author.id,
+			{
+				time: 2 * 60 * 1000,
+				max: 1,
+			}
+		);
+
+		await omsg.delete();
+		collected = collector.first();
+		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
+
+		if (collected.guild) collected.delete();
+
+		// Succesful autoreply
+		let autoreply = collected.content;
+		await r.table("Mailbox").get(mailbox.id).update({ autoreply: autoreply });
+		msg.channel.send({ embed: {
+			color: 0x00FF00,
+			title: "Succesfully changed this channel's mailbox",
+			description: `**autoreply:** ${autoreply}`,
+			footer: {
+				text: "Use >mailbox to see messages.",
+			},
+		} });
 	} else {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
+		if (!messages[0]) return msg.channel.send({ embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
 
 		// Showing all messages
 		let messagesPage = async page => {
@@ -85,7 +139,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setDescription(`${messages.length ? "Enter a page number or enter a message ID to see more actions.\n\n" : ""}Options:\n• To edit your mailbox's autoreply: \`edit\`\n• To clear all messages: \`clear\`\n• To delete your mailbox: \`delete\``)
+				.setDescription("Enter a page number or enter a message ID to see more actions.\n\nOther options:\n• To edit your mailbox's autoreply: `edit`\n• To clear all messages: `clear`\n• To delete your mailbox: `delete`")
 				.setFooter(`Page ${page}/${pages}. Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.`);
 
 			// Display the right messages
@@ -104,7 +158,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && (messages.filter(message => message.id == m.content).length > 0 || responses.includes(m.content.toLowerCase()) || /^0$/.test(m.content) || (parseInt(m.content) >= 0 && parseInt(m.content) <= pages)) && parseInt(m.content) != page,
+				m => m.author.id === msg.author.id && (messages.filter(message => message.id === m.content).length > 0 || responses.includes(m.content.toLowerCase() || /^0$/.test(m.content) || ((parseInt(m.content) >= 0 && parseInt(m.content) <= pages) && parseInt(m.content) != page))),
 				{	time: 120000 })).first();
 
 			if (collected) collected.delete().catch(e => null);
