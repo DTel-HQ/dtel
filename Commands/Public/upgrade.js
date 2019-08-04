@@ -54,8 +54,7 @@ module.exports = async(client, msg, suffix) => {
 	// set new VIP- & normal expiry date
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
 	else vipExpiry = (await new Date()).setMonth((await new Date()).getMonth() + parseInt(collected.content));
-	let date = new Date();
-	if (new Date(number.expiry).getTime() < date.setMonth(date.getMonth() + parseInt(collected.content)).getTime()) number.expiry = vipExpiry;
+	if (new Date(number.expiry).getTime() < (await new Date()).setMonth((await new Date()).getMonth() + parseInt(collected.content)).getTime()) number.expiry = vipExpiry;
 	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
 	vipExpiry = new Date(vipExpiry);
 
