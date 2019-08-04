@@ -2,7 +2,7 @@ const clear = require("clear-module");
 
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
-const config = global.config = () => reload("./Configuration/config.js");
+const config = global.config = require("./Configuration/config.js");
 
 const { Collection } = require("discord.js");
 const { readdir } = require("fs-nextra");
