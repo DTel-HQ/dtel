@@ -20,11 +20,11 @@ module.exports = async(client, msg, suffix) => {
 		.addField(">upgrade?", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.paymentLink}) for information on buying VIP Months.`)
 		.addField("VIP Perks", `\
 • **Custom name**
-This name will show up when calling a number.
+You can set a custom name that will show up when you call people.
 • **A VIP Emote**
 When calling, the default phone icon (${config.callPhones.default}) will be replaced with: ${config.callPhones.vip}.
 • **Disable number recognition**
-Your number will be invisible to the people you call. You channel will also be hidden to the public bot-logs in our [server](${config.guildInvite})
+You can set your number to be invisible to the people you call. The channel will then also be hidden to the public bot-logs in our [server](${config.guildInvite}).
 • **Change your number**
 Requesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.
 • **Number expiry**
