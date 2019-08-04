@@ -158,7 +158,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
-				m => m.author.id == msg.author.id && (m.content === "0" || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
+				m => m.author.id == msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
 				{	time: 120000, max: 1 })).first();
 
 			if (collected) collected.delete().catch(e => null);
@@ -240,13 +240,13 @@ module.exports = async(client, msg, suffix) => {
 					break;
 				}
 
-				case (await messages.filter(message => message.id == collected.content)).length > 0: {
-					messagePage(collected.content, page);
+				case !collected || /^0$/.test(collected.content): {
+					omsg.delete();
 					break;
 				}
 
 				default: {
-					omsg.delete().catch(e => null);
+					messagePage(collected.content, page);
 					break;
 				}
 			}
