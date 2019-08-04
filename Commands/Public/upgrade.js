@@ -17,7 +17,13 @@ module.exports = async(client, msg, suffix) => {
 	let embed = new MessageEmbed()
 		.setColor(0x3498DB)
 		.setTitle(number ? "Upgrade your number" : "Upgrade")
-		.addField(">upgrade?", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.paymentLink}) for information on buying VIP Months.`)
+		.addField("Your VIP Months", account.vip ? account.vip : "0", true);
+	if (number) {
+		embed.addField("VIP Number", vipNumber, true);
+		if (vipNumber) embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
+		if (account.vip) embed.setFooter("Enter the amounts of months to upgrade or press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
+	}
+	embed.addField(">upgrade?", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.paymentLink}) for information on buying VIP Months.`)
 		.addField("VIP Perks", `\
 • **Custom name**
 You can set a custom name that will show up when you call people.
@@ -30,13 +36,8 @@ Requesting a number change (by dialing \`*611\`) won't remove all the messages, 
 • **Number expiry**
 Extends the number's expiry date until the end of the VIP period.
 		`)
-		.addField("VIP Options", "Dial `*411` and pres (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.")
-		.addField("Your VIP Months", account.vip ? account.vip : "0", true);
-	if (number) {
-		embed.addField("VIP Number", vipNumber, true);
-		if (vipNumber) embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
-		if (account.vip) embed.setFooter("Enter the amounts of months to upgrade or press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
-	}
+		.addField("VIP Options", "Dial `*411` and pres (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.");
+
 
 	let omsg = await msg.channel.send({ embed: embed });
 
