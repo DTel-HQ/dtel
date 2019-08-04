@@ -240,7 +240,7 @@ module.exports = async(client, msg, suffix) => {
 					break;
 				}
 
-				case messages.filter(m => m.id == collected.content).length > 0: {
+				case (await messages.filter(message => message.id == collected.content)).length > 0: {
 					messagePage(collected.content, page);
 					break;
 				}
