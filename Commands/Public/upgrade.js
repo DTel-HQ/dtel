@@ -21,6 +21,7 @@ module.exports = async(client, msg, suffix) => {
 		 	• The ability to add a custom name to your number.
 			• The ability to remove number recognition.
 			• A special VIP emote in calls: :insertSpecialEmote:
+			• Prevents number expiry for the chosen period.
 
 			To access special features: dial \`*411\`
 			Please note: only someone with manage_server can change the VIP settings`);
@@ -49,9 +50,11 @@ module.exports = async(client, msg, suffix) => {
 	account.vip -= parseInt(collected.content);
 	await r.table("Accounts").get(account.id).update({ vip: account.vip });
 
-	// set new VIP expiry date
+	// set new VIP- & normal expiry date
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
 	else vipExpiry = new Date().setMonth(new Date().getMonth() + parseInt(collected.content));
+	let date = new Date();
+	if (new Date(number.expiry).getTime() < date.setMonth(date.getMonth() + parseInt(collected.content).getTime())) number.expiry = vipExpiry;
 	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
 	vipExpiry = new Date(vipExpiry);
 

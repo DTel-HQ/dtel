@@ -16,5 +16,5 @@ module.exports = async(client, msg, suffix) => {
 	await r.table("Accounts").get(account.id).update({ vip: account.vip ? account.vip + Number(months) : Number(months) });
 	client.log(`💠 User ${user.tag}(${user.id}) has purchased and received ${months} VIP Months`);
 	msg.channel.send({ embed: { color: 0xEEEEEE, title: "Succes", description: `Added \`${months}\` VIP Months to ${user}(${user.id})`, footer: { text: `Executed by: ${msg.author}(${msg.author.id})` } } });
-	(await user.createDM()).send({ embed: { color: 0xEEEEEE, title: "Thanks for your purchase!", description: `You have received \`${months}\` VIP Months`, footer: { text: `Executed by: ${msg.author}(${msg.author.id})` } } }).catch(e => null);
+	(await user.createDM()).send({ embed: { color: 0xEEEEEE, title: "Thanks for your purchase!", description: `You have received \`${months}\` VIP Months`, footer: { text: `Executed by: ${msg.author.tag}(${msg.author.id})` } } }).catch(e => null);
 };
