@@ -24,8 +24,8 @@ module.exports = async(client, msg, suffix) => {
 			• Prevents number expiry for the chosen period.
 
 			To access special features: dial \`*411\`
-			Please note: only someone with manage_server can change the VIP settings`);
-	if (account.vip) embed.addField("VIP Months", account.vip);
+			Please note: only someone with manage_server can change the VIP settings`)
+		.addField("VIP Months", account.vip ? account.vip : "0", true);
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
