@@ -8,9 +8,9 @@ module.exports = async(client, msg, suffix) => {
 		.setColor(0x3498DB)
 		.setTitle("Call information")
 		.setDescription(`Showing details for call: \`${call.id}\`\nUse \`>identify\` to identify people from the bot's messages.`)
-		.addField("Random call", call.rcall)
-		.addField("From", `Number: ${call.from.number}\nChannel: \`${call.from.channel}\`\nHidden: ${call.from.hidden}\nCustom name: ${call.from.name}`)
-		.addField("To", `Number: ${call.to.number}\nChannel: \`${call.to.channel}\`\nHidden: ${call.to.hidden}\nCustom name: ${call.to.name}`)
+		.addField("From", `**Number:** ${call.from.number}\n**Channel:** \`${call.from.channel}\`\n**Hidden:** ${call.from.hidden}\n**Custom name:** ${call.from.name}`, true)
+		.addField("To", `**Number:** ${call.to.number}\n**Channel:** \`${call.to.channel}\`\n**Hidden:** ${call.to.hidden}\n**Custom name:** ${call.to.name}`, true)
+		.addField("Random call", !!call.rcall)
 		.addField("Started at", call.startedAt);
 	msg.channel.send({ embed: embed });
 };
