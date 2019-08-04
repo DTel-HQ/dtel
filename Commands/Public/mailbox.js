@@ -73,7 +73,6 @@ module.exports = async(client, msg, suffix) => {
 		} });
 	} else {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
-		if (!messages[0]) return msg.channel.send({ embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
 
 		// Showing all messages
 		let messagesPage = async page => {
@@ -86,7 +85,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setDescription("Enter a page number or enter a message ID to see more actions.\n\nOther options:\n• To edit your mailbox's autoreply: `edit`\n• To clear all messages: `clear`\n• To delete your mailbox: `delete`")
+				.setDescription(`${messages.length ? "Enter a page number or enter a message ID to see more actions.\n\n" : ""}Options:\n• To edit your mailbox's autoreply: \`edit\`\n• To clear all messages: \`clear\`\n• To delete your mailbox: \`delete\``)
 				.setFooter(`Page ${page}/${pages}. Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.`);
 
 			// Display the right messages
