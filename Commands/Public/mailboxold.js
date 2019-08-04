@@ -15,8 +15,6 @@ module.exports = async(client, msg, suffix) => {
 		collected,
 		collector;
 
-	Busy.create({ id: msg.author.id });
-
 	// If there's no mailbox
 	if (!mailbox) {
 		// Permission?
@@ -47,7 +45,6 @@ module.exports = async(client, msg, suffix) => {
 			}
 		);
 
-		Busy.newGet(msg.author.id).delete();
 		await omsg.delete();
 		collected = collector.first();
 		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
@@ -71,11 +68,65 @@ module.exports = async(client, msg, suffix) => {
 				text: "You can now use >mailbox to see messages when you receive them.",
 			},
 		} });
+	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
+		// deleting mailbox
+		if (!perm) return msg.reply(":x: You need the manage server permission to do this.");
+
+		omsg = await msg.reply("Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel.");
+		collector = await msg.channel.awaitMessages(
+			m => /(^yes|no$)/i.test(m.content) && msg.author.id == m.author.id,
+			{
+				time: 60 * 1000,
+				max: 1,
+			}
+		);
+
+		await omsg.delete();
+		collected = collector.first();
+		if (!collected) return msg.reply("Mailbox deletion expired.");
+
+		if (/^yes$/i.test(collected.content)) {
+			omsg.delete();
+			await r.table("Mailbox").get(msg.channel.id).delete();
+			msg.channel.send("Mailbox deletion succesful.");
+		} else {
+			msg.channel.send("Mailbox deletion aborted.");
+		}
+	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
+		omsg = await msg.channel.send("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
+
+		// autoreply collector
+		collector = await msg.channel.awaitMessages(
+			m => m.content.length > 0 && m.content.length < 100 && m.author.id == msg.author.id,
+			{
+				time: 2 * 60 * 1000,
+				max: 1,
+			}
+		);
+
+		await omsg.delete();
+		collected = collector.first();
+		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
+
+		if (collected.guild) collected.delete();
+
+		// Succesful autoreply
+		let autoreply = collected.content;
+		await r.table("Mailbox").get(mailbox.id).update({ autoreply: autoreply });
+		msg.channel.send({ embed: {
+			color: 0x00FF00,
+			title: "Succesfully changed this channel's mailbox",
+			description: `**autoreply:** ${autoreply}`,
+			footer: {
+				text: "Use >mailbox to see messages.",
+			},
+		} });
 	} else {
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
 		if (!messages[0]) return msg.channel.send({ embed: { color: 0x3498DB, title: "No messages", description: "You don't have any messages (yet).\nTo edit your mailbox's autoreply: >mailbox edit\nTo delete the mailbox: >mailbox delete" } });
 
-		// Showing all messages
+		// To show all messages
+
 		let messagesPage = async page => {
 			let pages = Math.ceil(messages.length / 5);
 
@@ -86,8 +137,8 @@ module.exports = async(client, msg, suffix) => {
 			let embed = new MessageEmbed()
 				.setColor(3447003)
 				.setTitle(`:mailbox: You have ${messages.length} messages.`)
-				.setDescription("Enter a page number or enter a message ID to see more actions.\n\nOther options:\n• To edit your mailbox's autoreply: `edit`\n• To clear all messages: `clear`\n• To delete your mailbox: `delete`")
-				.setFooter(`Page ${page}/${pages}. Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.`);
+				.setDescription("To edit your mailbox's autoreply: `>mailbox edit`\nTo delete your mailbox: `>mailbox delete`")
+				.setFooter(`Page ${page}/${pages}. Enter an ID to see more actions.`);
 
 			// Display the right messages
 			let startingIndex = (page - 1) * 5;
@@ -98,105 +149,80 @@ module.exports = async(client, msg, suffix) => {
 				let date = new Date(m.time);
 				embed.addField(`ID \`${m.id}\` from ${m.number}`, `${m.message}`);
 			}
+			embed.addField("Options",
+				`:x: to exit.\
+				${page != 1 ? "\n:arrow_left: go to the previous page." : ""}\
+				${page < pages ? "\n:arrow_right: go to the next page." : ""}\
+				${perm ? "\n:fire: to delete all messages. (on all pages)" : ""}`
+			);
 
-			let responses = perm ? ["edit", "clear", "delete"] : [];
+			// Action reactions
+			let reactions = ["❌", "⬅", "➡"];
+			if (perm) reactions.push("🔥");
+
+			let reactionFilter = ["❌"];
+			if (page != 1) reactionFilter.push("⬅");
+			if (page < pages) reactionFilter.push("➡");
+			if (perm) reactionFilter.push("🔥");
 
 			// Edit existing message or send a new one
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed });
 
-			collected = (await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && (messages.filter(message => message.id == m.content).length > 0 || responses.includes(m.content.toLowerCase()) || /^0$/.test(m.content) || (parseInt(m.content) >= 0 && parseInt(m.content) <= pages)) && parseInt(m.content) != page,
-				{	time: 120000 })).first();
-
-			if (collected) collected.delete().catch(e => null);
-			switch (collected.content) {
-				case parseInt(collected.content) > 0: {
-					page = parseInt(collected.content);
-					messagesPage(page);
-					break;
-				}
-
-				case "clear": {
-					embed = new MessageEmbed()
-						.setColor(0x660000)
-						.setTitle("Deleting messages")
-						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
-						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
-					omsg = await omsg.edit({ embed: embed });
-
-					collected = (await msg.channel.awaitMessages(
-						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000 }
-					)).first();
-
-					Busy.newGet(msg.authorid).delete();
-					if (collected) collected.delete().catch(e => null);
-					if (!collected || /^no$/i.test(collected.content)) break;
-
-					await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
-					msg.reply("🔥 A fire has gotten rid of all your messages.");
-					break;
-				}
-
-				case "delete": {
-					embed = new MessageEmbed()
-						.setColor(0x660000)
-						.setTitle("Deleting mailbox")
-						.setDescription("Are you sure you want to delete the mailbox? Stored messages will become **unretrievable**.\nRespond with `yes` or `no`.")
-						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
-					omsg = await omsg.edit({ embed: embed });
-
-					collected = (await msg.channel.awaitMessages(
-						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000 }
-					)).first();
-
-					Busy.newGet(msg.author.id).delete();
-					if (collected) collected.delete().catch(e => null);
-					if (!collected || /^no$/i.test(collected.content)) break;
-
-					await r.table("Mailbox").get(msg.channel.id).delete();
-					msg.reply("This channel's mailbox has been deleted.");
-					break;
-				}
-
-				case "edit": {
-					embed = new MessageEmbed()
-						.setColor(3447003)
-						.setTitle("Editing autoreply")
-						.setDescription("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)")
-						.setFooter("Press (0) to hangup. This call will automatically be hung up after 3 minutes.");
-					omsg = await omsg.edit({ embed: embed });
-
-					collected = (await msg.channel.awaitMessages(
-						m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length <= 100,
-						{ time: 180000 }
-					)).first();
-
-					Busy.newGet(msg.author.id).delete();
-					if (collected) collected.delete().catch(e => null);
-					if (!collected || /^0$/.test(collected.content)) break;
-
-					await r.table("Mailbox").get(mailbox.id).update({ autoreply: collected.content });
-					embed = new MessageEmbed()
-						.setColor(0x00AF00)
-						.setTitle("Autoreply has been changed.")
-						.setDescription(`**Autoreply:** ${collected.content}`)
-						.setFooter(`Changed by ${msg.author.tag} (${msg.author.id})`);
-					await omsg.edit({ embed: embed });
-					break;
-				}
-
-				case messages.filter(m => m.id == collected.content).length > 0: {
-					messagePage(collected.content, page);
-					break;
-				}
-
-				default: {
-					omsg.delete().catch(e => null);
-					break;
-				}
+			if (!omsg.reactions.first()) {
+				for (let reaction of reactions) await omsg.react(reaction);
 			}
+
+			const reactionCollector = omsg.createReactionCollector(
+				(reaction, user) => user.id == msg.author.id && reactionFilter.indexOf(reaction.emoji.name) > -1,
+				{
+					time: 2 * 60 * 1000,
+					max: 1,
+				}
+			);
+
+			const messageCollector = msg.channel.createMessageCollector(
+				m => (m.author.id == msg.author.id && messages.filter(message => message.id == m.content).length > 0) || m.content.startsWith(`${config.prefix}mailbox`),
+				{
+					time: 2 * 60 * 1000,
+				}
+			);
+
+			reactionCollector.on("collect", async reaction => {
+				let index;
+				messageCollector.stop("Reaction collector went off");
+				switch (reaction.emoji.name) {
+					case "❌":
+						omsg.delete();
+						break;
+					case "⬅":
+						await reaction.users.remove(msg.author.id);
+						page -= 1;
+						messagesPage(page);
+						break;
+					case "➡":
+						await reaction.users.remove(msg.author.id);
+						page += 1;
+						messagesPage(page);
+						break;
+					case "🔥":
+						omsg.delete();
+						await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
+						msg.reply("🔥 A fire got rid of all your messages!");
+						break;
+				}
+			});
+
+			messageCollector.on("collect", async m => {
+				omsg.delete();
+				reactionCollector.stop("Message collector went off.");
+				if (m.content.startsWith(`${config.prefix}mailbox`)) {
+					messageCollector.stop("User initiated another mailbox");
+				} else {
+					messageCollector.stop("Collected");
+					if (m.guild) m.delete();
+					messagePage(m.content, page);
+				}
+			});
 		};
 
 		// To show a single message with its actions.
@@ -261,7 +287,6 @@ module.exports = async(client, msg, suffix) => {
 					require("./call.js")(client, msg, "*611");
 			}
 		};
-
 
 		messagesPage(1);
 	}

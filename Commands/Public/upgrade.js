@@ -20,6 +20,7 @@ module.exports = async(client, msg, suffix) => {
 		.setDescription(`Upgrade lets you upgrade your number to a VIP number.\nVIP numbers get the following perks:
 		 	• The ability to add a custom name to your number.
 			• The ability to remove number recognition.
+			• The ability to change the number without losing all messages, contacts, settings, etc.
 			• A special VIP emote in calls: :insertSpecialEmote:
 			• Prevents number expiry for the chosen period.
 

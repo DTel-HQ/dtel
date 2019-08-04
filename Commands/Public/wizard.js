@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (msg.guild) {
 		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
-		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: 0x660000, title: "Too many numbers", description: `You have reached the maximum amount of numbers per guild ${config.maxNumbers}.`, footer: { text: "This limit was set to prevent trolling" } } });
+		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: 0x660000, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.`, footer: { text: "This limit was set to prevent trolling" } } });
 	}
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
