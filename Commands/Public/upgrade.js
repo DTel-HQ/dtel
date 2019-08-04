@@ -25,6 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 			To access special features: dial \`*411\`
 			Please note: only someone with manage_server can change the VIP settings`);
+	if (account.vip) embed.addField("VIP Months", account.vip);
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
@@ -54,7 +55,7 @@ module.exports = async(client, msg, suffix) => {
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
 	else vipExpiry = new Date().setMonth(new Date().getMonth() + parseInt(collected.content));
 	let date = new Date();
-	if (new Date(number.expiry).getTime() < date.setMonth(date.getMonth() + parseInt(collected.content).getTime())) number.expiry = vipExpiry;
+	if (new Date(number.expiry).getTime() < date.setMonth(date.getMonth() + parseInt(collected.content)).getTime()) number.expiry = vipExpiry;
 	await r.table("Numbers").get(number.id).update({ vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
 	vipExpiry = new Date(vipExpiry);
 
