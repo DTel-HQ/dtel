@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
-	let call = await Calls.get(suffix);
+	let call = Calls.get(suffix);
 	if (!call) call = await r.table("OldCalls").get(suffix);
 	if (!call) return msg.channel.send({ embed: { color: 0x660000, title: "No call", description: "Couldn't find a call with that ID" } });
 
@@ -12,4 +12,5 @@ module.exports = async(client, msg, suffix) => {
 		.addField("From", `Number: ${call.from.number}\nChannel: \`${call.from.channel}\`\nHidden: ${call.from.hidden}\nCustom name: ${call.from.name}`)
 		.addField("To", `Number: ${call.to.number}\nChannel: \`${call.to.channel}\`\nHidden: ${call.to.hidden}\nCustom name: ${call.to.name}`)
 		.addField("Started at", call.startedAt);
+	msg.channel.send({ embed: embed });
 };
