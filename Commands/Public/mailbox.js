@@ -158,7 +158,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit(embed) : await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && (messages.filter(message => message.id === m.content).length > 0 || responses.includes(m.content.toLowerCase() || /^0$/.test(m.content) || ((parseInt(m.content) >= 0 && parseInt(m.content) <= pages) && parseInt(m.content) != page))),
+				m => m.author.id === msg.author.id && (messages.filter(message => message.id === m.content).length > 0 || responses.includes(m.content.toLowerCase() || /^0$/.test(m.content) || (parseInt(m.content) >= 0 && parseInt(m.content) <= pages) && parseInt(m.content) != page)),
 				{	time: 120000 })).first();
 
 			if (collected) collected.delete().catch(e => null);
