@@ -21,8 +21,9 @@ module.exports = async(client, msg, suffix) => {
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) {
-			embed.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
-			embed.addField("VIP Options", "Dial `*411` and pres (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.");
+			embed.setDescription(`Please view the [site](${config.paymentLink}) for a list of perks.`)
+				.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true)
+				.addField("VIP Options", "Dial `*411` and press (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.");
 		}
 		if (account.vip) embed.setFooter("Enter the amounts of months to upgrade or press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 	}
