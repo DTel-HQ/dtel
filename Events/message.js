@@ -45,7 +45,7 @@ module.exports = async msg => {
 					title: ":x: Error!",
 					description: `An unexpected error has occured.\n\`\`\`js\n${err.stack}\`\`\``,
 					footer: {
-						text: `Please contact a maintainer [here](${config.guildInvite}).`,
+						text: `Please contact a maintainer (${config.guildInvite}).`,
 					},
 				},
 			});
