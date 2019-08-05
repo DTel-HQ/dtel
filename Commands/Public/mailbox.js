@@ -256,7 +256,7 @@ module.exports = async(client, msg, suffix) => {
 
 		let messagePage = async(id, page) => {
 			let message = messages.filter(m => m.id == id)[0];
-			if (!message) msg.reply("Something went wrong");
+			if (!message) return msg.reply(`Something went wrong. Please contact a maintainer [here](${config.guildInvite})`);
 
 			let embed = new MessageEmbed()
 				.setColor(3447003)
@@ -277,7 +277,7 @@ module.exports = async(client, msg, suffix) => {
 			let reactionFilter = ["❌", "⬅", "🔔"];
 			if (perm) reactionFilter.push("🗑");
 
-			omsg = await msg.channel.send({ embed: embed });
+			omsg = await msg.channel.edit({ embed: embed });
 
 			for (let reaction of reactions) await omsg.react(reaction);
 

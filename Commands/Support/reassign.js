@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!toReassign || !newNumber) return msg.reply("**Add a number or channel to reassign and the new number.**");
 	let myNumber = await client.replaceNumber(toReassign);
 
-	let numberDoc = msg.mentions.channels ? toReassign = msg.mentions.channels.first().id : await r.table("Numbers").get(myNumber).default(null);
+	let numberDoc = msg.mentions.channels.first() ? toReassign = msg.mentions.channels.first().id : await r.table("Numbers").get(myNumber).default(null);
 	if (!numberDoc) numberDoc = (await r.table("Numbers").filter({ channel: toReassign }))[0];
 	if (!numberDoc) return msg.reply("Number could not be found");
 
