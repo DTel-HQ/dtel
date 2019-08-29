@@ -61,6 +61,6 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Edit embed
-	omsg = await msg.channel.edit({ embed: { color: config.colors.success, title: "Success!", description: "The number, phonebook and mailbox listings have been reassigned!" } });
+	omsg = await omsg.edit({ embed: { color: config.colors.success, title: "Success!", description: "The number, phonebook and mailbox listings have been reassigned!" } }).catch(e => msg.channel.send({ embed: { color: config.colors.success, title: "Success!", description: "The number, phonebook and mailbox listings have been reassigned!" } }));
 	client.log(`:orange_book: Number ${numbervip ? newNumberDoc.vip.hidden ? "Hidden" : newNumberDoc.id : newNumberDoc.id} has been reassigned to ${toChannel ? numbervip ? newNumberDoc.vip.hidden ? "" : "channel " : "channel " : ""}${numbervip ? newNumberDoc.vip.hidden ? "hidden" : toChannel ? newNumberDoc.channel : newNumberDoc.id : toChannel ? newNumberDoc.channel : newNumberDoc.id} by ${msg.author.tag}`);
 };

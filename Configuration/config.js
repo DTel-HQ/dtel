@@ -23,6 +23,7 @@ module.exports = {
 	lotteryCost: 5,
 	messageCost: 2,
 	pickupBonus: 10,
+	promoteCost: 500,
 	renewalRate: 500,
 	transferRate: 0.729,
 	minTransfer: 100,
@@ -36,22 +37,23 @@ module.exports = {
 	},
 
 	// IDs
-	supportGuild: "398980667553349649",
-	supportChannel: "399375958525870080",
 	logsChannel: "399006748582871060",
+	promoteChannel: "577889780533166106",
+	supportChannel: "399375958525870080",
+	supportGuild: "398980667553349649",
 	bossRole: "398980867864920064",
+	donatorRole: "324578460183822337",
 	managerRole: "284443515516354560",
 	supportRole: "398980993593376769",
-	donatorRole: "324578460183822337",
 
 	// LINKS
+	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
 	guildInvite: "https://discord.gg/RN7pxrB",
-	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
-	siteLink: "https://discordtel.austinhuang.me",
-	applyLink: "https://discordtel.typeform.com/to/jJayAt",
-	suggestLink: "https://feedback.austinhuang.me/",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
+	siteLink: "https://discordtel.austinhuang.me",
+	suggestLink: "https://feedback.austinhuang.me/",
+	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
 
 	// PORTS
@@ -71,7 +73,6 @@ module.exports = {
 	// Command aliasaes (keep it down or make new file)
 	aliasCommands: {
 		bal: "balance",
-		bc: "broadcast",
 		contact: "contacts",
 		id: "identify",
 		mentions: "mention",

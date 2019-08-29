@@ -30,16 +30,16 @@ module.exports = async(client, msg, suffix) => {
 	if (!vipNumber && !account.vip) {
 		embed.addField("Upgrade?!", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.paymentLink}) for information on buying VIP Months.`)
 			.addField("VIP Perks", `\
-• **[Custom name](${config.paymentLink})**
-You can set a custom name that will show up when you call people.
-• **[A VIP Emote]**(${config.paymentLink})
-When calling, the default phone icon (${config.callPhones.default}) will be replaced with: ${config.callPhones.vip}.
-• **[Disable number recognition](${config.paymentLink})**
-You can set your number to be invisible to the people you call. This will make your number hidden. The channel will then also be hidden to the public bot-logs in our [server](${config.guildInvite}).
-• **[Change your number]**(${config.paymentLink})
-Requesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.
-• **[Number expiry]**(${config.paymentLink})
-Extends the number's expiry date until the end of the VIP period.`);
+								**[• Custom name](${config.paymentLink})**\
+								You can set a custom name that will show up when you call people.\
+								**[• A VIP Emote](${config.paymentLink})**\
+								When calling, the default phone icon (${config.callPhones.default}) will be replaced with: ${config.callPhones.vip}.\
+								**[• Disable number recognition](${config.paymentLink})**\
+								You can set your number to be invisible to the people you call. This will make your number hidden. The channel will then also be hidden to the public bot-logs in our [server](${config.guildInvite}).\
+								**[• Change your number](${config.paymentLink})**\
+								Requesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.\
+								**[• Number expiry](${config.paymentLink})**\
+								Extends the number's expiry date until the end of the VIP period.`);
 	}
 
 

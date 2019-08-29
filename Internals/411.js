@@ -90,10 +90,10 @@ module.exports = async(msg, myNumber) => {
 				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
 				\n\`3\` For information about special numbers.\
 				\n\`4\` To call Customer Support.\
-				\n\`5\` To access VIP options.${vipNumber ? perms ? "" : "You need Manage Guild to do this" : "You need a VIP number to do this."}
+				\n\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
 				\n\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
-		if (message) embed.setDescription(`:checkmark: **${message}**`);
+		if (message) embed.setDescription(`✅ **${message}**`);
 		message = null;
 
 		if (omsg) {
@@ -149,9 +149,9 @@ module.exports = async(msg, myNumber) => {
 				const entry = await r.table("Phonebook").get(myNumber.id);
 				if (entry) {
 					embed.addField("Current description", entry.description);
-					embed.addField("Options", "(1) to edit the entry.\n(2) to delete the entry.\n(9) to return.\n(0) to hangup.");
+					embed.addField("Options", "`1` to edit the entry.\n`2` to delete the entry.\n\n`9` to return.\n`0` to hangup.");
 				} else {
-					embed.addField("Options", "(1) to add your number to the yellowbook.\n(9) to return.\n(0) to hangup.");
+					embed.addField("Options", "`1` to add your number to the yellowbook.\n\n`9` to return.\n`0` to hangup.");
 				}
 
 				// Edit/send message
@@ -193,8 +193,8 @@ module.exports = async(msg, myNumber) => {
 					.setFooter("(9) to return. (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
 
 				// Add description based on if there's an entry or not
-				if (entry) embed.setDescription("Please input the new description. This will be publicly visible so refrain from using any bad language. (min 10, max 200 characters)");
-				else embed.setDescription("Please input a description for your number. This will be the description publicly available in the yellowbook so please refrain from using any bad language. (min 10, max 200 characters)");
+				if (entry) embed.setDescription("Please input the new description.\nThis will be publicly visible so refrain from using any bad language.\n\n(min 10, max 200 characters)");
+				else embed.setDescription("Please input a description for your number.\nThis will be the description publicly available in the yellowbook so please refrain from using any bad language.\n\n(min 10, max 200 characters)");
 
 				// edit/send message
 				omsg = await omsg.edit({ embed: embed }).catch(async e => {
