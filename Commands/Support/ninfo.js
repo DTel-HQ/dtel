@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 	const strikes = guild ? await r.table("Strikes").filter({ offender: guild.id }) : await r.table("Strikes").filter({ offender: owner.id });
 
 	const embed = new MessageEmbed()
-		.setColor(0x55AA66)
+		.setColor(config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle(`Number information for ${number.id}`)
 		.setDescription("Here you can find all information relevant for this number")

@@ -6,9 +6,9 @@ module.exports = async(client, msg, suffix) => {
 	reason = reason.join(" ");
 
 	// Checks for user and amount
-	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: 0x660000, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
-	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: 0x660000, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
-	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: 0x660000, title: "Too low an amount", description: `Transfers can only happen from ¥${config.minTransfer} and up.` } });
+	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
+	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
+	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Transfers can only happen from ¥${config.minTransfer} and up.` } });
 
 	// The account from which the amount will be taken
 	let fromAccount = await r.table("Accounts").get(msg.author.id);
@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Enough balance?
-	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: 0x660000, title: "Balance too low", description: `Your balance is too low. You currently have ${fromAccount.balance}` } });
+	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Balance too low", description: `Your balance is too low. You currently have ${fromAccount.balance}` } });
 
 	// The amount to gift to
 	let toAccount = await r.table("Accounts").get(user.id);
@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Information embed
 	let omsg = await msg.channel.send({ embed: {
-		color: 0xEEEEEE,
+		color: config.colors.info,
 		author: {
 			name: `${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),
@@ -71,7 +71,7 @@ module.exports = async(client, msg, suffix) => {
 	);
 
 	// on collection
-	Busy.newGet(msg.author.id).delete();
+	Busy.newGet(msg.author.id).delete().catch(e => null);
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);
@@ -85,7 +85,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Tell the world about it
 	msg.channel.send({ embed: {
-		color: 0xEEEEEE,
+		color: config.colors.receipt,
 		author: {
 			name: `${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),
@@ -110,7 +110,7 @@ module.exports = async(client, msg, suffix) => {
 	} });
 	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) transferred ¥${amount} to ${user.tag} (${user.id})`);
 	user.send({ embed: {
-		color: 0xEEEEEE,
+		color: config.colors.receipt,
 		author: {
 			name: `${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),

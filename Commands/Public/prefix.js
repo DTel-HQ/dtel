@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: 0x660000, title: "Command usage", description: "Usage: `>prefix prefix`\nNotice that the prefix has to be between 1 and 4 characters.", footer: { text: "To remove your prefix: >prefix >" } } });
+	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Usage: `>prefix prefix`\nNotice that the prefix has to be between 1 and 4 characters.", footer: { text: "To remove your prefix: >prefix >" } } });
 
 	// to get rid of prefix
 	if (/^>$/.test(suffix)) suffix = null;
@@ -17,6 +17,6 @@ module.exports = async(client, msg, suffix) => {
 		await r.table("Accounts").get(msg.author.id).replace(account);
 	}
 
-	if (suffix) return msg.channel.send({ embed: { color: 0x50C878, title: "Success", description: `Your custom prefix is now \`${suffix}\`. You can still use \`${config.prefix}\`.`, footer: { text: `To get rid of your prefix, simply do >prefix ${config.prefix}` } } });
-	else return msg.channel.send({ embed: { color: 0x50C878, title: "Success", description: "Your custom prefix has been removed." } });
+	if (suffix) return msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `Your custom prefix is now \`${suffix}\`. You can still use \`${config.prefix}\`.`, footer: { text: `To get rid of your prefix, simply do >prefix ${config.prefix}` } } });
+	else return msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: "Your custom prefix has been removed." } });
 };

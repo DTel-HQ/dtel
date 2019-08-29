@@ -5,35 +5,18 @@ module.exports = {
 		"124989722668957700",
 	],
 	devMode: true,
-	shardCount: 1,
-
-	// IDs
-	supportGuild: "398980667553349649",
-	supportChannel: "399375958525870080",
-	logsChannel: "399006748582871060",
-	bossRole: "398980867864920064",
-	managerRole: "284443515516354560",
-	supportRole: "398980993593376769",
-	donatorRole: "324578460183822337",
+	shardCount: 3,
 
 	// NUMBER ALIASES
 	aliasNumbers: {
 		"*611": "08006113835",
 	},
 
-	// LINKS
-	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
-	guildInvite: "https://discord.gg/RN7pxrB",
-	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
-	siteLink: "https://discordtel.austinhuang.me",
-	applyLink: "https://discordtel.typeform.com/to/jJayAt",
-	suggestLink: "https://feedback.austinhuang.me/",
-	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
-
 	// SETINGS
 	prefix: ">",
 	dailies: {
 		boss: 300,
+		manager: 250,
 		support: 200,
 		default: 80,
 	},
@@ -52,8 +35,38 @@ module.exports = {
 		support: ":telephone_receiver:",
 	},
 
+	// IDs
+	supportGuild: "398980667553349649",
+	supportChannel: "399375958525870080",
+	logsChannel: "399006748582871060",
+	bossRole: "398980867864920064",
+	managerRole: "284443515516354560",
+	supportRole: "398980993593376769",
+	donatorRole: "324578460183822337",
+
+	// LINKS
+	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
+	guildInvite: "https://discord.gg/RN7pxrB",
+	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
+	siteLink: "https://discordtel.austinhuang.me",
+	applyLink: "https://discordtel.typeform.com/to/jJayAt",
+	suggestLink: "https://feedback.austinhuang.me/",
+	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
+
+
 	// PORTS
 	IPCPort: 7775,
+
+	// Embed Colors
+	colors: {
+		contacts: 0x50C878,
+		error: 0xff3333,
+		info: 0x3498d8,
+		receipt: 0xeeeeee,
+		success: 0x47d147,
+		yellowbook: 0xe6e600,
+		vip: 0xcc9900,
+	},
 
 	// Command aliasaes (keep it down or make new file)
 	aliasCommands: {

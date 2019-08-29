@@ -30,9 +30,9 @@ module.exports = async(client, msg, suffix) => {
 		r.table("Accounts").get(account.id).update({ balance: newBalance });
 	}
 
-	let interval = setInterval(async() => {
+	let afkInterval = setInterval(async() => {
 		call = await Calls.get(call.id);
-		if (!call) return clearInterval(interval);
+		if (!call) return clearInterval(afkInterval);
 		if (!call.lastMessage || call.lastMessage + 290000 < new Date().getTime()) {
 			try {
 				await client.api.channels(call.from.channel).get();

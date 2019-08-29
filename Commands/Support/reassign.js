@@ -1,36 +1,66 @@
 module.exports = async(client, msg, suffix) => {
-	let perms = await msg.author.getPerms();
-	let toReassign = suffix.split(" ")[0];
-	let newNumber = client.replaceNumber(suffix.split(" ")[1]);
+	// Check for perms
+	const perms = await msg.author.getPerms();
+	if (!perms.support) return;
 
-	if (!toReassign || !newNumber) return msg.reply("**Add a number or channel to reassign and the new number.**");
-	let myNumber = await client.replaceNumber(toReassign);
+	// Check arguments of command
+	let from = suffix.split(" ")[0];
+	let to = suffix.split(" ")[1];
+	if (!from || !to) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">reassign [from number/channel] [to number/channel]\n\nNote: You can not mention a channel, use the ID." } });
 
-	let numberDoc = msg.mentions.channels.first() ? toReassign = msg.mentions.channels.first().id : await r.table("Numbers").get(myNumber).default(null);
-	if (!numberDoc) numberDoc = (await r.table("Numbers").filter({ channel: toReassign }))[0];
-	if (!numberDoc) return msg.reply("Number could not be found");
+	// Get the FROM number
+	let numberDoc = (await r.table("Numbers").filter({ channel: from }))[0];
+	if (!numberDoc) {
+		from = client.replaceNumber(from);
+		numberDoc = await r.table("Numbers").get(from);
+	}
+	if (!numberDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Bad number", description: "Couldn't find the given number." } });
 
-	let prefix = numberDoc.guild ? "0[38]0\\d" : "0[89]00";
-	let regex = new RegExp(`^${prefix}\\d{7}$`);
-	if (!regex.test(newNumber)) return msg.channel.send({ embed: { color: 0x660000, title: "Bad number", description: "Please make sure to enter a correct new number" } });
-	let newNumberDoc = await r.table("Numbers").get(newNumber);
-	if (newNumberDoc) return msg.channel.send({ embed: { color: 0x66000, title: "Duplicate number", description: "That number already exists" } });
+	// Check if the number is VIP
+	let numbervip = numberDoc.vip ? new Date(numberDoc.vip.expiry).getTime() > Date.now() : false;
+	if (!numbervip && !perms.boss) return msg.channel.send({ embed: { color: config.colors.error, title: "Not VIP", description: "That number is not currently a VIP number." } });
 
-	let numbervip = numberDoc.vip ? new Date(numberDoc.vip).getTime() > Date.now() : false;
-	if (!numbervip && !perms.boss) return msg.reply("That number is not VIP");
+	// New number or channel?
+	let newNumberDoc = await r.table("Numbers").get(to);
+	let toChannel = await client.api.channels(to).get().catch(e => null);
+	let newNumber = client.replaceNumber(to);
+	if (!toChannel) {
+		// It's not a channel → check for correct number and it's availability
+		if (newNumberDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Duplicate number", description: "That number already exists" } });
+		let prefix = numberDoc.guild ? "0[38]0\\d" : "0[89]00";
+		let regex = new RegExp(`^${prefix}\\d{7}$`);
+		if (!regex.test(newNumber)) return msg.channel.send({ embed: { color: config.colors.error, title: "Bad number", description: "Please make sure to enter a correct new number" } });
+	} else {
+		let toChannelDoc = (await r.table("Numbers").filter({ channel: toChannel.id }))[0];
+		if (toChannelDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Channel taken", description: "The new channel already has a number." } });
+	}
 
+	// Send working on embed
+	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Working...", description: "Please wait whilst we're reassigning the number." } });
+
+	// Change the numberDoc
 	await r.table("Numbers").get(numberDoc.id).delete();
 	newNumberDoc = numberDoc;
-	newNumberDoc.id = newNumber;
-	await r.table("Numbers").insert(numberDoc);
+	toChannel ? newNumberDoc.channel = toChannel.id : newNumberDoc.id = newNumber;
+	await r.table("Numbers").insert(newNumberDoc);
 
+	// Change phonebook listing - Doesn't need changing channel
 	let phonebook = await r.table("Phonebook").get(numberDoc.id);
-	if (phonebook) {
-		r.table("Phonebook").get(numberDoc.id).delete();
-		phonebook.id = newNumber;
+	if (phonebook && !toChannel) {
+		await r.table("Phonebook").get(numberDoc.id).delete();
+		phonebook.id = newNumberDoc.id;
 		await r.table("Phonebook").insert(phonebook);
 	}
 
-	await msg.reply("Number has been reassigned");
-	await client.log(`:orange_book: Number \`${numbervip ? numberDoc.vip.hidden ? "hidden" : numberDoc.id : numberDoc.id}\` has been reassigned to \`${numbervip ? numberDoc.vip.hidden ? "hidden" : newNumber : newNumber}\` by ${msg.author.tag}.`);
+	// Take mailbox with - Doesn't need changing number
+	let mailbox = await r.table("Mailbox").get(numberDoc.channel);
+	if (mailbox && toChannel) {
+		await r.table("Mailbox").get(numberDoc.channel).delete();
+		mailbox.id = newNumberDoc.channel;
+		await r.table("Mailbox").insert(mailbox);
+	}
+
+	// Edit embed
+	omsg = await msg.channel.edit({ embed: { color: config.colors.success, title: "Success!", description: "The number, phonebook and mailbox listings have been reassigned!" } });
+	client.log(`:orange_book: Number ${numbervip ? newNumberDoc.vip.hidden ? "Hidden" : newNumberDoc.id : newNumberDoc.id} has been reassigned to ${toChannel ? numbervip ? newNumberDoc.vip.hidden ? "" : "channel " : "channel " : ""}${numbervip ? newNumberDoc.vip.hidden ? "hidden" : toChannel ? newNumberDoc.channel : newNumberDoc.id : toChannel ? newNumberDoc.channel : newNumberDoc.id} by ${msg.author.tag}`);
 };

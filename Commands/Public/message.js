@@ -19,6 +19,7 @@ module.exports = async(client, msg, suffix) => {
 		.nth(0)
 		.default(null);
 	if (!fromNumberDoc) return msg.reply("This channel doesn't have a number.");
+	if (new Date(fromNumberDoc.expiry).getTime() < Date.now()) return msg.reply("This channel's number has expired. Please call `*233` to renew it.");
 
 	toNumber = client.replaceNumber(toNumber);
 	let toNumberDoc = await r.table("Numbers").get(toNumber);

@@ -19,16 +19,16 @@ module.exports = async(msg, myNumber) => {
 
 	// make the embed
 	let embed = new MessageEmbed()
-		.setColor(vipNumber ? 0x3498DB : 0x3498DB)
+		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
 		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
-		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth()}-${currExpiry.getFullYear()}`, true)
+		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
 		.addField("VIP Number", vipNumber, true);
 
-	if (vipNumber) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth()}-${vipExpiry.getFullYear()}`, true);
+	if (vipNumber) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`, true);
 	embed.addField("Your VIP months", account.vip ? account.vip : "0", true)
 		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join(", ") : "None")
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");
@@ -51,7 +51,7 @@ module.exports = async(msg, myNumber) => {
 	);
 
 	// On collection
-	Busy.newGet(msg.author.id).delete();
+	Busy.newGet(msg.author.id).delete().catch(e => null);
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);
@@ -67,13 +67,13 @@ module.exports = async(msg, myNumber) => {
 	await r.table("Numbers").get(myNumber.id).update({ expiry: newExpiry });
 
 	embed = new MessageEmbed()
-		.setColor(0xEEEEEE)
+		.setColor(config.colors.receipt)
 		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL())
 		.setTitle("Your receipt")
 		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
-		.addField("Number", myNumber.id)
-		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth()}-${newExpiry.getFullYear()}`)
-		.addField("Your new balance", `¥${newBalance}`)
+		.addField("Number", myNumber.id, true)
+		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth() + 1}-${newExpiry.getFullYear()}`, true)
+		.addField("Your new balance", `¥${newBalance}`, true)
 		.addField("Need to recharge?", config.paymentLink);
 	msg.channel.send("", { embed: embed });
 };

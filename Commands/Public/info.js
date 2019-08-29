@@ -2,7 +2,7 @@ module.exports = async(client, msg, suffix) => {
 	// Edit later
 	msg.channel.send({
 		embed: {
-			color: 3447003,
+			color: config.colors.info,
 			author: {
 				name: "DiscordTel",
 				icon_url: client.user.displayAvatarURL(),

@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 		let userStrikes = await r.table("Strikes").filter({ offender: msg.author.id });
 		let guildStrikes = msg.guild ? await r.table("Strikes").filter({ offender: msg.guild.id }) : [];
 		let embed = {
-			color: 0x000,
+			color: config.colors.info,
 			title: `Strikes for ${msg.author.tag} (${msg.author.id})`,
 			fields: [
 				{ name: "User strikes", value: userStrikes.length ? userStrikes.map(s => `-${s.reason}`).join("\n") : "None" },
@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let embed = new Discord.MessageEmbed()
 		.setTitle(`This ${strikes[0] ? strikes[0].user ? "user " : "guild " : "ID"} has ${strikes.length} strikes.`)
-		.setColor(0x990000)
+		.setColor(config.colors.info)
 		.setFooter(`Use \`>rmstrike [ID]\` to remove a strike.`);
 
 	for (let strike of strikes) {

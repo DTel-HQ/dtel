@@ -56,7 +56,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		// send embed
 		let omsg = await msg.channel.send({ embed: {
-			color: 0x660000,
+			color: config.colors.error,
 			title: "Number is already in a call",
 			description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup.\nRespond with \`yes\` or \`no\``,
 			footer: {
@@ -103,7 +103,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (csCall) {
 		// send confirmation embed
 		let omsg = await msg.channel.send({ embed: {
-			color: 0x3498DB,
+			color: config.colors.info,
 			title: "Please read before calling",
 			description: "*611 is our Customer Support number operated by real people.\nTherefore any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call *611?\n\nRespond with `yes` or `no`.",
 			footer: {

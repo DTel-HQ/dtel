@@ -3,7 +3,7 @@ module.exports = async(client, msg, suffix) => {
 	let avatarURL = await client.user.displayAvatarURL();
 	msg.channel.send({
 		embed: {
-			color: 3447003,
+			color: config.colors.info,
 			author: {
 				name: client.user.username,
 				icon_url: avatarURL,

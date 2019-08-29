@@ -3,6 +3,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	const myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (!myNumber) return;
+	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.reply("This channel's number has expired. Please call `*233` to renew it.");
 
 	// Get the user's permissions
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
@@ -15,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 	let contactList = async() => {
 		// Standard embed
 		const embed = new MessageEmbed()
-			.setColor(0x50C878)
+			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
 			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: repsond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`);
 		if (contacts.length) embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
@@ -39,7 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		// On collection
 		omsg.delete().catch(e => null);
 		if (collected.first()) collected.first().delete().catch(e => null);
-		if (!collected.first() || /^0$/.test(collected.first().content)) return Busy.newGet(msg.author.id).delete();
+		if (!collected.first() || /^0$/.test(collected.first().content)) return Busy.newGet(msg.author.id).delete().catch(e => null);
 
 		// if they want to add a number
 		if (/add/i.test(collected.first().content)) {
@@ -49,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 
 				// send embed
 				omsg = await msg.channel.send({ embed: {
-					color: 0x50C878,
+					color: config.colors.contacts,
 					title: bad ? "Non existant number. " : "Add a number.",
 					description: "Please input the number you want to add.",
 					footer: {
@@ -65,7 +66,7 @@ module.exports = async(client, msg, suffix) => {
 				// on collection
 				if (collected.first()) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					omsg.delete().catch(e => null);
 					return;
 				}
@@ -79,7 +80,7 @@ module.exports = async(client, msg, suffix) => {
 
 				// add a name embed
 				omsg = await omsg.edit("", { embed: {
-					color: 0x50C878,
+					color: config.colors.contacts,
 					title: `Add a name for ${number.id}`,
 					description: "Please enter a name for the number. (max 20 characters)",
 					footer: {
@@ -96,14 +97,14 @@ module.exports = async(client, msg, suffix) => {
 				// on collected
 				if (collected.first()) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					return omsg.delete().catch(e => null);
 				}
 				let name = collected.first().content;
 
 				// add a description embed
 				omsg = await omsg.edit("", { embed: {
-					color: 0x50C878,
+					color: config.colors.contacts,
 					title: `Add a description for ${number.id}`,
 					description: "Please enter a description for the number. (max 100 characters)",
 					footer: {
@@ -121,7 +122,7 @@ module.exports = async(client, msg, suffix) => {
 				if (collected.first()) collected.first().delete().catch(e => null);
 				omsg.delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					return;
 				}
 				let description = collected.first().content;
@@ -144,7 +145,7 @@ module.exports = async(client, msg, suffix) => {
 			if (!perm) return msg.reply("You need manage server permissions to do this.");
 
 			omsg = await msg.channel.send({ embed: {
-				color: 0x50C878,
+				color: config.colors.contacts,
 				title: `Editing ${contact.name}(${contact.number})`,
 				description: `Enter a new name for the contact. (max 20 characters)\nCurrent name: \`${contact.name}\``,
 				footer: {
@@ -161,11 +162,11 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			if (/^9$/.test(collected.first().content)) {
-				Busy.newGet(msg.author.id).delete();
+				Busy.newGet(msg.author.id).delete().catch(e => null);
 				return contactList();
 			}
 			if (!collected.first() || /^0$/.test(collected.first().content)) {
-				Busy.newGet(msg.author.id).delete();
+				Busy.newGet(msg.author.id).delete().catch(e => null);
 				return omsg.delete().catch(e => null);
 			}
 
@@ -176,7 +177,7 @@ module.exports = async(client, msg, suffix) => {
 			contact = newContact;
 
 			omsg = await omsg.edit({ embed: {
-				color: 0x50C878,
+				color: config.colors.contacts,
 				title: `Editing ${contact.name}(${contact.number})`,
 				description: `Enter a new description for the contact. (max 100 characters)\nCurrent description: \`${contact.description}\``,
 				footer: {
@@ -193,7 +194,7 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			Busy.newGet(msg.author.id).delete();
+			Busy.newGet(msg.author.id).delete().catch(e => null);
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 
@@ -207,7 +208,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// if delete
 		if (/delete/i.test(collected.first().content.split(" ")[0])) {
-			Busy.newGet(msg.author.id).delete();
+			Busy.newGet(msg.author.id).delete().catch(e => null);
 			// check for perm & if the contact is legit
 			if (!perm) return msg.reply("You need manage server permissions to do this.");
 
@@ -221,7 +222,7 @@ module.exports = async(client, msg, suffix) => {
 		// if message
 		if (/message/i.test(collected.first().content.split(" ")[0])) {
 			omsg = await msg.channel.send({ embed: {
-				color: 0x50C878,
+				color: config.colors.contacts,
 				title: `Messaging`,
 				description: `Enter the message you want to sent to ${contact.name}.\nPlease keep it under 400 characters.`,
 				footer: {
@@ -238,14 +239,14 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			Busy.newGet(msg.author.id).delete();
+			Busy.newGet(msg.author.id).delete().catch(e => null);
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 			return (await reload("./Commands/Public/message.js"))(client, msg, `${contact.number} ${collected.first().content}`);
 		}
 
 		// if only a number
-		Busy.newGet(msg.author.id).delete();
+		Busy.newGet(msg.author.id).delete().catch(e => null);
 		return require("./call.js")(client, msg, contact.number);
 	};
 	contactList();

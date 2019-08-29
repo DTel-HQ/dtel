@@ -40,7 +40,7 @@ module.exports = async(msg, myNumber) => {
 
 		// Searchpage embed
 		embed = new MessageEmbed()
-			.setColor(0xe6e600)
+			.setColor(config.colors.yellowbook)
 			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
 			.setDescription(`Enter a page number or query (minimum of three characters) to search for.\n(clear) to clear a query.\n(return) to return from the query.\n(0) to hangup.`)
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
@@ -84,7 +84,7 @@ module.exports = async(msg, myNumber) => {
 	while (loop) {
 		// main menu embed
 		embed = new MessageEmbed()
-			.setColor(0xe6e600)
+			.setColor(config.colors.yellowbook)
 			.addField("Welcome to the DiscordTel yellowbook!",
 				`\`1\` To search through the yellowbook.\
 				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
@@ -114,7 +114,7 @@ module.exports = async(msg, myNumber) => {
 		// On main menu collection
 		if (collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
-			Busy.newGet(msg.author.id).delete();
+			Busy.newGet(msg.author.id).delete().catch(e => null);
 			omsg.delete().catch(e => null);
 			break;
 		}
@@ -123,7 +123,7 @@ module.exports = async(msg, myNumber) => {
 			// Search through yellowbook
 			case "1": {
 				if (!phonebook.length) {
-					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: 0x660000 } });
+					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: config.colors.error } });
 					continue;
 				}
 				// Function for search pages.
@@ -131,7 +131,7 @@ module.exports = async(msg, myNumber) => {
 				if (!result) {
 					loop = false;
 					omsg.delete().catch(e => null);
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 				}
 				break;
 			}
@@ -142,7 +142,7 @@ module.exports = async(msg, myNumber) => {
 				embed = new MessageEmbed()
 					.setTitle("Yellowbook options")
 					.setDescription("Here you can add, edit or delete your number's yellowbook entry.")
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setFooter("This call will automatically be hung up after 2 minutes of inactivity.");
 
 				// Entry? no? Make embed right
@@ -169,7 +169,7 @@ module.exports = async(msg, myNumber) => {
 				// On collection
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -189,7 +189,7 @@ module.exports = async(msg, myNumber) => {
 				// Basic description setting embed
 				embed = new MessageEmbed()
 					.setTitle("Yellowbook description")
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setFooter("(9) to return. (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
 
 				// Add description based on if there's an entry or not
@@ -210,7 +210,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -233,7 +233,7 @@ module.exports = async(msg, myNumber) => {
 			// Information about special numbers
 			case "3": {
 				embed = new MessageEmbed()
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setTitle("Special numbers")
 					.setDescription("This is a list of all currently operational special numbers")
 					.addField("*233", "Displays your number information and lets you recharge the number.")
@@ -254,7 +254,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					omsg.delete().catch(e => null);
 					loop = false;
 				}
@@ -268,7 +268,7 @@ module.exports = async(msg, myNumber) => {
 
 			case "5": {
 				embed = new MessageEmbed()
-					.setColor(0xffbf00)
+					.setColor(config.colors.yellowbook)
 					.setTitle("VIP Settings")
 					.setDescription(`(1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
 													\n(2) to set or clear this number's custom name.\
@@ -291,7 +291,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					Busy.newGet(msg.author.id).delete().catch(e => null);
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -308,7 +308,7 @@ module.exports = async(msg, myNumber) => {
 
 					case "2": {
 						embed = new MessageEmbed()
-							.setColor(0xffbf00)
+							.setColor(config.colors.yellowbook)
 							.setTitle("Changing custom name")
 							.setDescription("Type your new custom name or `disable` to disable the custom name. (4-25 characters)")
 							.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
@@ -327,7 +327,7 @@ module.exports = async(msg, myNumber) => {
 
 						if (collected) collected.delete().catch(e => null);
 						if (!collected || /^0$/.test(collected.content)) {
-							Busy.newGet(msg.author.id).delete();
+							Busy.newGet(msg.author.id).delete().catch(e => null);
 							omsg.delete().catch(e => null);
 							loop = false;
 							break;

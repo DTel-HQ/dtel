@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 
 		msg.channel.send({
 			embed: {
-				color: 0x007FFF,
+				color: config.colors.info,
 				title: "Current Account Status",
 				fields: [{
 					name: "Your Balance",

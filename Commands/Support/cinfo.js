@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!call) return msg.channel.send({ embed: { color: 0x660000, title: "No call", description: "Couldn't find a call with that ID" } });
 
 	let embed = new MessageEmbed()
-		.setColor(0x3498DB)
+		.setColor(config.colors.info)
 		.setTitle("Call information")
 		.setDescription(`Showing details for call: \`${call.id}\`\nUse \`>identify\` to identify people from the bot's messages.`)
 		.addField("From", `**Number:** ${call.from.number}\n**Channel:** \`${call.from.channel}\`\n**Hidden:** ${call.from.hidden}\n**Custom name:** ${call.from.name}`, true)

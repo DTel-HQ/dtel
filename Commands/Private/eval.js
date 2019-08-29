@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix) {
 		return msg.channel.send({
 			embed: {
-				color: 0xFF0000,
+				color: config.colors.error,
 				title: ":x: Error",
 				description: `You didn't specifiy anything to eval.`,
 				footer: {
@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 		} catch (err) {
 			return msg.channel.send({
 				embed: {
-					color: 0xFF0000,
+					color: config.colors.error,
 					title: ":x: Error!",
 					description: `An unexpected error occurred while uploading to Hastebin.\`\`\`js\n${err.stack}\`\`\``,
 				},
@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 		return msg.channel.send({
 			embed: {
-				color: 0x3669FA,
+				color: config.colors.info,
 				title: `The eval results were too large!`,
 				description: `So I uploaded them to Hastebin! https://hastebin.com/${res.body.key}`,
 				footer: {
@@ -60,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 		if (err.stack.length <= 1980) {
 			return msg.channel.send({
 				embed: {
-					color: 0xFF0000,
+					color: config.colors.success,
 					description: `\`\`\`js\n${err.stack}\`\`\``,
 					footer: {
 						text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
@@ -80,7 +80,7 @@ module.exports = async(client, msg, suffix) => {
 	if (result.length <= 1980) {
 		return msg.channel.send({
 			embed: {
-				color: 0x00FF00,
+				color: config.colors.success,
 				description: `\`\`\`js\n${result}\`\`\``,
 				footer: {
 					text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,

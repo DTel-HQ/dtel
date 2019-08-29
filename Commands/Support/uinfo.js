@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Inform the CS
 	const embed = new MessageEmbed()
-		.setColor(3447003)
+		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
 		.addField("Blacklisted", await Blacklist.get(suffix) ? "True" : "False", true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)

@@ -1,7 +1,7 @@
 module.exports = async(client, msg, suffix) => {
 	msg.channel.send({
 		embed: {
-			color: 0x3498DB,
+			color: config.colors.info,
 			fields: [
 				{
 					name: "Join our support server!",
