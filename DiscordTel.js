@@ -73,8 +73,8 @@ client.login().catch(() => {
 
 client.on("disconnect", () => client.login());
 
-// Get lottery
-require("./Internals/lottery.js");
+// Scheduled jobs
+require("./Internals/jobs.js");
 
 Object.assign(String.prototype, {
 	escapeRegex() {
