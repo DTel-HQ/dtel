@@ -12,8 +12,8 @@ module.exports = async(client, msg, suffix) => {
 	if (message.length > 1800) return msg.reply("What ya writing an essay for mate? (too many characters)");
 
 	try {
-		await client.apiSend(`**Message from DiscordTel staff:**\n${message.join(" ")}`, channel);
-		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!.", description: `Message: ${message.join(" ")}`, footer: { text: `By ${msg.author.id}` } } });
+		await client.apiSend({ embed: { color: config.colors.error, title: "❕ Message from DiscordTel staff ❕", description: message.join(" ") } }, channel);
+		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!.", description: `Message: ${message.join(" ")}\nChannel: ${number.channel}`, footer: { text: `By ${msg.author.id}` } } });
 	} catch (err) {
 		await r.table("Numbers").get(number.id).delete();
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't send a message.", description: "The number has now been deleted." } });

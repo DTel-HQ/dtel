@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 		.setDescription(`Showing details for call: \`${call.id}\`\nUse \`>identify\` to identify people from the bot's messages.`)
 		.addField("From", `**Number:** ${call.from.number}\n**Channel:** \`${call.from.channel}\`\n**Hidden:** ${call.from.hidden}\n**Custom name:** ${call.from.name}`, true)
 		.addField("To", `**Number:** ${call.to.number}\n**Channel:** \`${call.to.channel}\`\n**Hidden:** ${call.to.hidden}\n**Custom name:** ${call.to.name}`, true)
-		.addField("General", `**Picked up:** ${!!call.pickedUp}\n**Random call:** ${!!call.rcall}`)
+		.addField("General", `**Picked up:** ${!!call.pickedUp}\n**Random call:** ${!!call.rcall}\n**Transferred by:** ${call.transferredBy ? call.transferredBy : "not transferred"}`)
 		.addField("Started at", call.startedAt);
 	msg.channel.send({ embed: embed });
 };

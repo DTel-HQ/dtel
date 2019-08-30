@@ -23,8 +23,11 @@ module.exports = async(client, msg, suffix, call) => {
 	try {
 		await client.api.channels(toDialDoc.channel).get();
 	} catch (_) {
-		await r.table("Numbers").get(toDial).delete();
-		return msg.reply(":x: Unable to transfer: the number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
+		msg.reply(":x: Unable to transfer: the number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
+		await r.table("Numbers").get(toDialDoc.id).delete();
+		await r.table("Phonebook").get(toDialDoc.id).delete();
+		await r.table("Mailbox").get(toDialDoc.channel).delete();
+		return;
 	}
 
 	// See if the other channel is already in a call
@@ -34,62 +37,49 @@ module.exports = async(client, msg, suffix, call) => {
 	// All checks returned well, delete current call.
 	await r.table("Calls").get(call.id).delete();
 
-	let newFrom = msg.channel.id == call.from.channel ? call.to : call.from;
-	let toDialvip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
+	let fromDoc = msg.channel.id == call.from.channel ? call.to : call.from;
+	let toNumbervip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
 
 	// Create the transferred call.
 	let newCall = {
 		id: uuidv4(),
 		transferredBy: msg.channel.id,
 		from: {
-			channel: newFrom.channel,
-			number: newFrom.number,
-			hidden: newFrom.hidden,
-			name: newFrom.name,
+			channel: fromDoc.channel,
+			number: fromDoc.number,
+			hidden: fromDoc.hidden,
+			name: fromDoc.name,
 		},
 		to: {
 			channel: toDialDoc.channel,
 			number: toDialDoc.id,
-			hidden: toDialvip ? toDialDoc.vip.hidden : false,
-			name: toDialvip ? toDialDoc.vip.hidden : false,
+			hidden: toNumbervip ? toDialDoc.vip.hidden : false,
+			name: toNumbervip ? toDialDoc.vip.hidden : false,
 		},
 		startedAt: new Date(),
 	};
-	await r.table("Calls").insert(call);
+	await r.table("Calls").insert(newCall);
 
-	let myNumber = await r.table("Numbers").get(newCall.from.number);
-	let fromContact = myNumber.contacts ? (await myNumber.contacts.filter(c => c.number === toDial))[0] : null;
-	let toContact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
-	let myNumbervip = myNumber.vip ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
+	let fromNumber = await r.table("Numbers").get(newCall.from.number);
+	let fromContact = fromNumber.contacts ? (await fromNumber.contacts.filter(c => c.number === toDial))[0] : null;
+	let toContact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === fromNumber.id))[0] : null;
+	let fromNumbervip = fromNumber.vip ? new Date(fromNumber.vip.expiry).getTime() > Date.now() : false;
 
-	client.log(`:arrow_right: Channel \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to ${toDialvip ? newCall.to.hidden ? newCall.to.name ? `\`${newCall.to.name}\`` : "hidden" : newCall.to.name ? `\`${newCall.to.name} (${newCall.to.number})\`` : toDial : toDial} by ${msg.channel.id}`);
-	await msg.reply(`:arrow_right: You have transferred the other side to ${toDial}.`);
+	client.log(`:arrow_right: Channel \`${fromNumbervip ? fromNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to \`${toNumbervip ? newCall.to.hidden ? "hidden" : newCall.to.channel : newCall.to.channel}\` by \`${msg.channel.id}\``);
+	await msg.reply(`:arrow_right: You have transferred the other side to \`${toDial}\`.`);
 	if (newCall.to.number === "08006113835") client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
-	await client.apiSend(`:arrow_right: You have been transferred by the other side. Now calling ${newCall.to.number === "08006113835" ? "Customer Support" : toDialvip ? newCall.to.vip.hidden ? newCall.to.vip.name ? `\`${newCall.to.vip.name}\`` : "Hidden" : newCall.to.vip.name ? `\`${newCall.to.vip.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, newCall.from.channel);
-	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${myNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, newCall.to.channel);
+	await client.apiSend(`:arrow_right: You have been transferred by the other side. Now calling ${newCall.to.number === "08006113835" ? "Customer Support" : toNumbervip ? newCall.to.vip.hidden ? newCall.to.vip.name ? `\`${newCall.to.vip.name}\`` : "Hidden" : newCall.to.vip.name ? `\`${newCall.to.vip.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, newCall.from.channel);
+	client.apiSend(`${toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : ""}There is an incoming call from ${fromNumber.id === "08006113835" ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, newCall.to.channel);
 
 	setTimeout(async() => {
 		let callDoc = await r.table("Calls").get(newCall.id);
 		if (!callDoc || callDoc.pickedUp) return;
 
 		// Delete old call
-		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
-		client.log(`:telephone: The call between channel ${callDoc.from.channel} and channel ${callDoc.to.channel} was not picked up.`);
+		client.apiSend(":x: The other side did not pick up (2 minutes).", newCall.from.channel);
+		client.apiSend(":x: You missed the call (2 minutes).", newCall.to.channel);
+		client.log(`:telephone: The call between channel ${newCall.from.hidden ? "hidden" : newCall.from.channel} and channel ${newCall.to.hidden ? "hidden" : newCall.to.channel} was not picked up.`);
 		await r.table("OldCalls").insert(callDoc);
 		await r.table("Calls").get(newCall.id).delete();
-
-		// Check if the other side has a mailbox
-		let mailbox = await r.table("Mailbox").get(toDial);
-		if (!mailbox) return msg.channel.send(":x: The other side did not pick up the call.");
-
-		// Send a mailbox message
-		client.apiSend(`:x: The other side did not pick up the call. Automated mailbox message:\n${mailbox.autoReply}\nType your message or enter \`no\` to exit without sending a message.`, newCall.from.channel);
-		let collector = msg.channel.createMessageCollector(nmsg => nmsg.author.id === msg.author.id);
-		collector.on("collect", async cmsg => {
-			await collector.stop();
-			mailbox.messages.push(cmsg.content);
-			await r.table("Mailbox").get(toDial).update({ messages: mailbox.messages });
-			msg.channel.send(":mailbox: Message sent!");
-		});
 	}, 120000);
 };

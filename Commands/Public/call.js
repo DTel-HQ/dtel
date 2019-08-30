@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	toDial = await client.replaceNumber(toDial);
 
-	if (!myNumber) return msg.reply(":x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing `>wizard`. \nIf you need assistance or have any questions, call `*611`.");
+	if (!myNumber) return msg.reply(`:x: Dialing error: There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite} .`);
 	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.reply(":x: Billing error: Your number has expired. You can renew your number by dialling `*233`.");
 
 	if (toDial == myNumber.id) return msg.reply(":thinking: Why are you trying to call yourself?");
@@ -172,6 +172,6 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		let mailbox = await r.table("Mailbox").get(toDialDoc.channel);
 		if (!mailbox) return msg.channel.send(":x: The other side did not pick up the call.");
-		msg.channel.send(`:x: The other side did not pick up the call.\nAutomated mailbox message: ${mailbox.autoreply}\n<@${msg.author.id}>, you can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} your message here\``);
+		else return msg.channel.send(`:x: The other side did not pick up the call.\nAutomated mailbox message: ${mailbox.autoreply}\n<@${msg.author.id}>, you can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} your message here\``);
 	}, 120000);
 };

@@ -21,25 +21,26 @@ module.exports = async(client, msg, suffix) => {
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) {
-			embed.setDescription(`Enter the amounts of months to upgrade.\n\nPlease view the [site](${config.paymentLink}) for a list of perks.`)
+			embed.setDescription(`Please view the [site](${config.paymentLink}) for a list of perks.`)
 				.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`, true)
 				.addField("VIP Options", "Dial `*411` and press (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.");
 		}
-		if (account.vip) embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
+		if (account.vip) {
+			embed.setDescription(`Enter the amounts of months to upgrade.\n\nPlease view the [site](${config.paymentLink}) for a list of perks.`)
+				.setFooter("Press (0) to hangup. This call will automatically be hung up after 60 seconds of inactivity.");
+		}
 	}
 	if (!vipNumber && !account.vip) {
 		embed.addField("Upgrade?!", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.paymentLink}) for information on buying VIP Months.`)
 			.addField("VIP Perks", `\
-								**[• Custom name](${config.paymentLink})**\
-								You can set a custom name that will show up when you call people.\
-								**[• A VIP Emote](${config.paymentLink})**\
-								When calling, the default phone icon (${config.callPhones.default}) will be replaced with: ${config.callPhones.vip}.\
 								**[• Disable number recognition](${config.paymentLink})**\
-								You can set your number to be invisible to the people you call. This will make your number hidden. The channel will then also be hidden to the public bot-logs in our [server](${config.guildInvite}).\
-								**[• Change your number](${config.paymentLink})**\
-								Requesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.\
-								**[• Number expiry](${config.paymentLink})**\
-								Extends the number's expiry date until the end of the VIP period.`);
+								\nYou can disable your number recognition. This will make your number and names hidden from the other side and the public logs in our [server](${config.guildInvite}).\
+								\n\n**[• Custom name](${config.paymentLink})**\
+								\nYou can set a custom name that will show up besides (or instead of) your number when calling.\
+								\n\n**[• A VIP Emote](${config.paymentLink})**\
+								\nYour messages will have the VIP emote: ${config.callPhones.vip}, instead of the default ${config.callPhones.default}.\
+								\n\n**[• Change your number](${config.paymentLink})**\
+								\nRequesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.`);
 	}
 
 
@@ -51,7 +52,7 @@ module.exports = async(client, msg, suffix) => {
 	await r.table("Busy").insert({ id: msg.author.id });
 	let collected = (await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) <= account.vip,
-		{ max: 1, time: 120000 }
+		{ max: 1, time: 60000 }
 	)).first();
 
 	await r.table("Busy").get(msg.author.id).delete();

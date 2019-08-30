@@ -10,6 +10,9 @@ module.exports = {
 	// NUMBER ALIASES
 	aliasNumbers: {
 		"*611": "08006113835",
+		"*1": "03011111111",
+		"*2": "03022222222",
+		"*3": "03033333333",
 	},
 
 	// SETINGS
@@ -55,10 +58,6 @@ module.exports = {
 	suggestLink: "https://feedback.austinhuang.me/",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
-
-	// PORTS
-	IPCPort: 7775,
-
 	// Embed Colors
 	colors: {
 		contacts: 0x50C878,
@@ -73,6 +72,9 @@ module.exports = {
 	// Command aliasaes (keep it down or make new file)
 	aliasCommands: {
 		bal: "balance",
+		bc: "broadcast",
+		cmds: "help",
+		commands: "help",
 		contact: "contacts",
 		id: "identify",
 		mentions: "mention",

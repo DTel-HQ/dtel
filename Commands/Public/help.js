@@ -1,7 +1,7 @@
 module.exports = async(client, msg, suffix) => {
 	// rework?
 	let avatarURL = await client.user.displayAvatarURL();
-	msg.channel.send({
+	let toSend = {
 		embed: {
 			color: config.colors.info,
 			author: {
@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 				url: "https://discordtel.austinhuang.me",
 			},
 			title: "List of Commands",
-			description: "For more information, use `>info` or `>dial *611`.",
+			description: "For more information, use `>info` or call customer support: `>dial *611`.",
 			fields: [
 				{
 					name: ">wizard",
@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">block",
-					value: "Block a number from calling this channel. `>block number`",
+					value: "Block a number from calling this channel. \n`>block [number]`",
 				},
 				{
 					name: ">contacts",
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">dial / >call",
-					value: "Dial a number. `>dial number`",
+					value: "Dial a number. \n`>dial [number]`",
 				},
 				{
 					name: ">rdial / >rcall",
@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">lottery",
-					value: "Real gambling right there. `>lottery amount`",
+					value: "Real gambling right there. \n`>lottery [optional: amount]`",
 				},
 				{
 					name: ">mailbox",
@@ -58,11 +58,15 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">transfer",
-					value: "Transfer money to another user for a fee. `>transfer user amount [optional: message]`",
+					value: "Transfer money to another user for a fee. \n`>transfer [user] [amount] [optional: message]`\nAlso to transfer the other side in a call to another number. `>transfer [number]`",
+				},
+				{
+					name: ">upgrade",
+					value: "Upgrade your number to a VIP number. Use this to see all the benefits!",
 				},
 				{
 					name: "I don't really need to explain them...Right, my master?",
-					value: "`>help`, `>info`, `>invite`, `>prefix`",
+					value: "`>help`, `>info`, `>invite`, `>prefix`, `>ping`",
 				},
 			],
 			timestamp: new Date(),
@@ -71,5 +75,12 @@ module.exports = async(client, msg, suffix) => {
 				text: "DiscordTel V3 - made with <3 by Austin Huang and his team",
 			},
 		},
-	});
+	};
+
+	let dmChannel = await msg.author.createDM();
+	try {
+		await msg.author.send(toSend);
+	} catch (_) {
+		await msg.channel.send(toSend);
+	}
 };
