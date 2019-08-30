@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Usage: `>prefix prefix`\nNotice that the prefix has to be between 1 and 4 characters.", footer: { text: "To remove your prefix: >prefix >" } } });
+	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Usage: `>prefix [prefix]`\nNotice that the prefix has to be between 1 and 4 characters.", footer: { text: "To remove your prefix: >prefix >" } } });
 
 	// to get rid of prefix
 	if (/^>$/.test(suffix)) suffix = null;

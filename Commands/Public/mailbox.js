@@ -15,7 +15,7 @@ module.exports = async(client, msg, suffix) => {
 		collected,
 		collector;
 
-	Busy.create({ id: msg.author.id });
+	await r.table("Busy").insert({ id: msg.author.id });
 
 	// If there's no mailbox
 	if (!mailbox) {
@@ -47,7 +47,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 		);
 
-		Busy.newGet(msg.author.id).delete().catch(e => null);
+		await r.table("Busy").get(msg.author.id).delete();
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
 		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
@@ -164,7 +164,7 @@ module.exports = async(client, msg, suffix) => {
 			if (collected) {
 				collected.delete().catch(e => null);
 			}	else {
-				Busy.newGet(msg.author.id).delete().catch(e => null);
+				await r.table("Busy").get(msg.author.id).delete();
 				omsg.delete().catch(e => null);
 			}
 
@@ -190,14 +190,14 @@ module.exports = async(client, msg, suffix) => {
 
 					if (collected) collected.delete().catch(e => null);
 					if (!collected) {
-						Busy.newGet(msg.author.id).delete().catch(e => null);
+						await r.table("Busy").get(msg.author.id).delete();
 						omsg.delete().catch(e => null);
 					}
 					if (/^no$/.test(collected.content)) {
 						messagesPage(page);
 						break;
 					}
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 
 					await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
 					msg.reply("🔥 A fire has gotten rid of all your messages.");
@@ -219,14 +219,14 @@ module.exports = async(client, msg, suffix) => {
 
 					if (collected) collected.delete().catch(e => null);
 					if (!collected) {
-						Busy.newGet(msg.author.id).delete().catch(e => null);
+						await r.table("Busy").get(msg.author.id).delete();
 						omsg.delete().catch(e => null);
 					}
 					if (/^no$/.test(collected.content)) {
 						messagesPage(page);
 						break;
 					}
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 
 					await r.table("Mailbox").get(msg.channel.id).delete();
 					msg.reply("This channel's mailbox has been deleted.");
@@ -246,7 +246,7 @@ module.exports = async(client, msg, suffix) => {
 						{ time: 180000, max: 1 }
 					)).first();
 
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					if (collected) collected.delete().catch(e => null);
 					if (!collected || /^0$/.test(collected.content)) break;
 
@@ -261,7 +261,7 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "0": {
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					break;
 				}
@@ -303,7 +303,7 @@ module.exports = async(client, msg, suffix) => {
 			switch (collected.content) {
 				case "0":
 					omsg.delete().catch(e => null);
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					break;
 				case "9":
 					await omsg.delete().catch(e => null);
@@ -317,7 +317,7 @@ module.exports = async(client, msg, suffix) => {
 					messagesPage(page);
 					break;
 				case "report":
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					require("./call.js")(client, msg, "*611");
 			}
 		};

@@ -1,6 +1,5 @@
-module.exports = async(client, msg, suffix) => {
-	const call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
-	if (!call || ((call.to.number === "08006113835" || call.from.number === "08006113835") && msg.channel.id != config.supportChannel)) return;
+module.exports = async(client, msg, suffix, call) => {
+	if ((call.to.number === "08006113835" || call.from.number === "08006113835") && msg.channel.id != config.supportChannel) return;
 	if (!call.pickedUp) msg.reply(":x: You can't put a call on hold that hasn't been picked up");
 
 	if (call.onHold) {
@@ -14,5 +13,5 @@ module.exports = async(client, msg, suffix) => {
 		await client.apiSend(":hourglass_flowing_sand: The other side has put this call on hold.", call.onHold === call.from.channel ? call.to.channel : call.from.channel);
 		// add stop typing
 	}
-	await Calls.update(call);
+	await r.table("Calls").get(call.id).update(call);
 };

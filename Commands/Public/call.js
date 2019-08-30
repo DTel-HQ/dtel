@@ -2,6 +2,7 @@ const uuidv4 = require("uuid/v4");
 
 module.exports = async(client, msg, suffix, rcall) => {
 	let csCall;
+	rcall === true ? rcall = true : rcall = false;
 
 	let myNumber = await r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
@@ -47,7 +48,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		return msg.reply(":x: Dialing error: Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server. Please dial `*611` for further instructions.");
 	}
 
-	let activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+	let activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
 	// This could be turned into a module for hangup support.
 	if (activeCall) {
 		// Max time must be full minutes.
@@ -85,7 +86,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 			let i = setInterval(async() => {
 				console.log("Hi");
 				retry++;
-				activeCall = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
+				activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
 				if (!activeCall) {
 					clearInterval(i);
 					resolve();
@@ -130,7 +131,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let myNumbervip = myNumber.vip ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
 	let toDialvip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
 
-	let callDoc = await Calls.create({
+	let callDoc = {
 		id: uuidv4(),
 		to: {
 			number: toDialDoc.id,
@@ -146,11 +147,11 @@ module.exports = async(client, msg, suffix, rcall) => {
 		},
 		startedAt: new Date(),
 		rcall: !!rcall,
-	});
+	};
+	await r.table("Calls").insert(callDoc);
 
 	// To send contact name instead of number
 	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
-	callDoc = await Calls.find(c => c.to.number === toDial || c.from.number === toDial);
 
 	// This one-lining should honestly stop.
 	msg.reply(`:telephone: Dialling ${toDial}... ${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`);
@@ -160,17 +161,16 @@ module.exports = async(client, msg, suffix, rcall) => {
 	// But what if they don't pick up? :thinking:
 	setTimeout(async() => {
 		// Has to be done with ID due to transfers within 2 min.
-		callDoc = await Calls.get(callDoc.id);
-		if (!callDoc || callDoc.pickedUp) return;
+		let newCallDoc = await r.table("Calls").get(callDoc.id);
+		if (!newCallDoc) newCallDoc = await r.table("Calls").get(callDoc.id);
+		if (!newCallDoc || newCallDoc.pickedUp) return;
 
 		client.apiSend(":x: You missed the call (2 minutes).", callDoc.to.channel);
-		await Calls.newGet(callDoc.id).delete();
-
 		client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up.`);
-
+		await r.table("Calls").get(callDoc.id).delete();
 		await r.table("OldCalls").insert(callDoc);
 
-		let mailbox = await r.table("Mailbox").get(toDialDoc.channel).default(null);
+		let mailbox = await r.table("Mailbox").get(toDialDoc.channel);
 		if (!mailbox) return msg.channel.send(":x: The other side did not pick up the call.");
 		msg.channel.send(`:x: The other side did not pick up the call.\nAutomated mailbox message: ${mailbox.autoreply}\n<@${msg.author.id}>, you can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} your message here\``);
 	}, 120000);

@@ -64,18 +64,22 @@ module.exports = async(client, msg, suffix) => {
 	} });
 
 	// Collector
-	Busy.create({ id: msg.author.id });
+	await r.table("Busy").insert({ id: msg.author.id });
 	let collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
 		{ max: 1, time: 60000 }
 	);
 
 	// on collection
-	Busy.newGet(msg.author.id).delete().catch(e => null);
+	await r.table("Busy").get(msg.author.id).delete();
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);
 	if (/^no$/i.test(collected.first().content)) return;
+
+	// check again
+	fromAccount = await r.table("Accounts").get(msg.author.id);
+	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Balance too low", description: `Your balance is too low. You currently have ${fromAccount.balance}` } });
 
 	// update balances
 	fromAccount.balance -= amount;

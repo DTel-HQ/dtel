@@ -1,8 +1,7 @@
-module.exports = async(cmd, msg, suffix) => {
-	const call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
-	if (!call || !call.pickedUp || call.onhold || !msg.content) return;
+module.exports = async(cmd, msg, suffix, call) => {
+	if (!call.pickedUp || call.onhold || !msg.content) return;
 	call.lastMessage = new Date().getTime();
-	await Calls.update(call);
+	await r.table("Calls").get(call.id).update(call);
 
 	const perms = await msg.author.getPerms();
 	let phone = config.callPhones.default;
@@ -12,11 +11,11 @@ module.exports = async(cmd, msg, suffix) => {
 	try {
 		await client.api.channels(toSend).get();
 	} catch (_) {
-		await r.table("Numbers").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Phonebook").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Mailbox").get(msg.channel.id === call.from.channel ? call.to.channel : call.from.channel).delete();
-		await r.table("OldCalls").insert(call);
-		await Calls.newGet(call.id).delete();
+		r.table("Numbers").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
+		r.table("Phonebook").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
+		r.table("Mailbox").get(msg.channel.id === call.from.channel ? call.to.channel : call.from.channel).delete();
+		r.table("OldCalls").insert(call);
+		r.table("Calls").get(call.id).delete();
 		return client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", msg.channel.id);
 	}
 
@@ -29,5 +28,5 @@ module.exports = async(cmd, msg, suffix) => {
 		time: msg.createdTimestamp,
 	};
 	call.messages ? call.messages.push(msgDoc) : call.messages = [msgDoc];
-	await Calls.update(call);
+	await r.table("Calls").get(call.id).update(call);
 };

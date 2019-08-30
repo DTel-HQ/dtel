@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 	if (msgID.length > callID.length) [msgID, callID] = [callID, msgID];
 
 	let call = await r.table("OldCalls").get(callID);
-	if (!call) call = Calls.get(callID);
+	if (!call) call = r.table("Calls").get(callID);
 	if (!call) return msg.channel.send({ embed: { color: config.colors.error, title: "Call not found", description: "Check if you have the right call ID." } });
 
 	if (!call.messages) return msg.channel.send({ embed: { color: config.colors.error, title: "No messages", description: "This call does not contain any messages." } });

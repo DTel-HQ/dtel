@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		let omsg = await msg.channel.send({ embed: embed });
 
 		// Create collector
-		Busy.create({ id: msg.author.id });
+		await r.table("Busy").insert({ id: msg.author.id });
 		let collected = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && (contacts[parseInt(m.content.split(" ")[1]) - 1] || /^0$|^add$/i.test(m.content)),
 			{ max: 1, time: 120000 }
@@ -40,7 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		// On collection
 		omsg.delete().catch(e => null);
 		if (collected.first()) collected.first().delete().catch(e => null);
-		if (!collected.first() || /^0$/.test(collected.first().content)) return Busy.newGet(msg.author.id).delete().catch(e => null);
+		if (!collected.first() || /^0$/.test(collected.first().content)) return await r.table("Busy").get(msg.author.id).delete();
 
 		// if they want to add a number
 		if (/add/i.test(collected.first().content)) {
@@ -66,7 +66,7 @@ module.exports = async(client, msg, suffix) => {
 				// on collection
 				if (collected.first()) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					return;
 				}
@@ -97,7 +97,7 @@ module.exports = async(client, msg, suffix) => {
 				// on collected
 				if (collected.first()) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					return omsg.delete().catch(e => null);
 				}
 				let name = collected.first().content;
@@ -122,7 +122,7 @@ module.exports = async(client, msg, suffix) => {
 				if (collected.first()) collected.first().delete().catch(e => null);
 				omsg.delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
-					Busy.newGet(msg.author.id).delete().catch(e => null);
+					await r.table("Busy").get(msg.author.id).delete();
 					return;
 				}
 				let description = collected.first().content;
@@ -162,11 +162,11 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			if (/^9$/.test(collected.first().content)) {
-				Busy.newGet(msg.author.id).delete().catch(e => null);
+				await r.table("Busy").get(msg.author.id).delete();
 				return contactList();
 			}
 			if (!collected.first() || /^0$/.test(collected.first().content)) {
-				Busy.newGet(msg.author.id).delete().catch(e => null);
+				await r.table("Busy").get(msg.author.id).delete();
 				return omsg.delete().catch(e => null);
 			}
 
@@ -194,7 +194,7 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			Busy.newGet(msg.author.id).delete().catch(e => null);
+			await r.table("Busy").get(msg.author.id).delete();
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 
@@ -208,7 +208,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// if delete
 		if (/delete/i.test(collected.first().content.split(" ")[0])) {
-			Busy.newGet(msg.author.id).delete().catch(e => null);
+			await r.table("Busy").get(msg.author.id).delete();
 			// check for perm & if the contact is legit
 			if (!perm) return msg.reply("You need manage server permissions to do this.");
 
@@ -239,14 +239,14 @@ module.exports = async(client, msg, suffix) => {
 			// on collection
 			if (collected.first()) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			Busy.newGet(msg.author.id).delete().catch(e => null);
+			await r.table("Busy").get(msg.author.id).delete();
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
 			return (await reload("./Commands/Public/message.js"))(client, msg, `${contact.number} ${collected.first().content}`);
 		}
 
 		// if only a number
-		Busy.newGet(msg.author.id).delete().catch(e => null);
+		await r.table("Busy").get(msg.author.id).delete();
 		return require("./call.js")(client, msg, contact.number);
 	};
 	contactList();

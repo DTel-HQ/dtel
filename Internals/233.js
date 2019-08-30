@@ -44,14 +44,14 @@ module.exports = async(msg, myNumber) => {
 	if (!maxMonths) return;
 
 	// Message collector
-	Busy.create({ id: msg.author.id });
+	await r.table("Busy").insert({ id: msg.author.id });
 	const collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
 		{ max: 1, time: 60000 }
 	);
 
 	// On collection
-	Busy.newGet(msg.author.id).delete().catch(e => null);
+	await r.table("Busy").get(msg.author.id).delete();
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);

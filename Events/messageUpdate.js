@@ -1,6 +1,6 @@
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
-	const call = await Calls.find(c => c.to.channel === nmsg.channel.id || c.from.channel === nmsg.channel.id);
+	const call = await (await r.table("Calls").filter(r.row("from")("channel").eq(nmsg.channel.id).or(r.row("to")("channel").eq(nmsg.channel.id))))[0];
 	if (!call || !call.pickedUp || call.onHold || !nmsg.content) return;
 
 	let perms = await nmsg.author.getPerms();
@@ -10,11 +10,11 @@ module.exports = async(omsg, nmsg) => {
 	try {
 		await client.api.channels(editChannel).get();
 	} catch (_) {
-		await r.table("Numbers").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Phonebook").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Mailbox").get(editChannel).delete();
-		await r.table("OldCalls").insert(call);
-		await Calls.newGet(call.id).delete();
+		r.table("Numbers").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
+		r.table("Phonebook").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
+		r.table("Mailbox").get(editChannel).delete();
+		r.table("OldCalls").insert(call);
+		r.table("Calls").get(call.id).delete();
 		return client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", nmsg.channel.id);
 	}
 

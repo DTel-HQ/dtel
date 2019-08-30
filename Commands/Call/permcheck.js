@@ -1,8 +1,5 @@
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg, suffix, call) => {
 	let perms = await msg.author.getPerms();
-
-	let call = await Calls.find(c => c.to.channel === msg.channel.id || c.from.channel === msg.channel.id);
-	if (!call) return;
 
 	if (!perms.support || msg.channel.id != config.supportChannel || !call.pickedUp) return;
 

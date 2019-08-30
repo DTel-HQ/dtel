@@ -18,8 +18,9 @@ module.exports = async(client, msg, suffix) => {
 	if (!toBlacklist) return msg.reply("Invalid ID!");
 	toBlacklist = toBlacklist.id;
 
-	let doc = await Blacklist.newGet(toBlacklist);
+	let doc = await r.table("Blacklist").get(toBlacklist);
 	if (doc) {
+		await r.table("Blacklist").get(toBlacklist).delete();
 		await client.log(`:wrench: ID ${suffix} is removed from blacklist by ${msg.author.username}.`);
 		return msg.reply(`Removed ID ${suffix} from the blacklist`);
 	}
@@ -28,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 	let user = await client.users.fetch(suffix);
 	if (user && (await user.getPerms()).support) return msg.reply("Trying to get rid of the competition? Well you can't.");
 
-	await Blacklist.create({ id: suffix });
+	await r.table("Blacklist").insert({ id: suffix });
 	await client.log(`:hammer: ID ${suffix} has been added to the blacklist by ${msg.author.username}.`);
 	msg.reply(`Added ID ${suffix} to the blacklist.`);
 };

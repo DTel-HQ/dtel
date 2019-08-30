@@ -51,9 +51,9 @@ module.exports = async(client, msg, suffix) => {
 
 	let totalStrikes = await r.table("Strikes").filter({ offender: toStrike });
 	if (totalStrikes.length >= 3) {
-		let blacklist = await Blacklist.newGet(toStrike);
+		let blacklist = await r.table("Blacklist").get(toStrike);
 		if (!blacklist) {
-			await Blacklist.create({ id: toStrike });
+			await r.table("Blacklist").insert({ id: toStrike });
 			msg.reply(`This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\``);
 			if (user) (await user.createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
 			return;

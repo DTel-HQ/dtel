@@ -48,13 +48,13 @@ module.exports = async(client, msg, suffix) => {
 	if (!number || !account.vip) return;
 
 	// Make collector
-	Busy.create({ id: msg.author.id });
+	await r.table("Busy").insert({ id: msg.author.id });
 	let collected = (await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) <= account.vip,
 		{ max: 1, time: 120000 }
 	)).first();
 
-	Busy.newGet(msg.author.id).delete().catch(e => null);
+	await r.table("Busy").get(msg.author.id).delete();
 	collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
 
