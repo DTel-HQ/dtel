@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	let doc = await r.table("Blacklist").get(toBlacklist);
 	if (doc) {
 		await r.table("Blacklist").get(toBlacklist).delete();
-		await client.log(`:wrench: ID ${suffix} is removed from blacklist by ${msg.author.username}.`);
+		client.log(`:wrench: ID ${suffix} is removed from blacklist by ${msg.author.tag}.`);
 		return msg.reply(`Removed ID ${suffix} from the blacklist`);
 	}
 
@@ -30,6 +30,6 @@ module.exports = async(client, msg, suffix) => {
 	if (user && (await user.getPerms()).support) return msg.reply("Trying to get rid of the competition? Well you can't.");
 
 	await r.table("Blacklist").insert({ id: suffix });
-	await client.log(`:hammer: ID ${suffix} has been added to the blacklist by ${msg.author.username}.`);
+	client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by ${msg.author.tag}.`);
 	msg.reply(`Added ID ${suffix} to the blacklist.`);
 };

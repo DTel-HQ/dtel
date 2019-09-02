@@ -13,12 +13,14 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 		"Accounts",
 		"Blacklist",
 		"Calls",
+		"Cooldowns",
 		"Lottery",
 		"Mailbox",
 		"Numbers",
 		"OldCalls",
 		"Phonebook",
 		"Strikes",
+		"Whitelist",
 	];
 
 	let dblist = await r.dbList().run();

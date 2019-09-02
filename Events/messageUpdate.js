@@ -10,12 +10,10 @@ module.exports = async(omsg, nmsg) => {
 	try {
 		await client.api.channels(editChannel).get();
 	} catch (_) {
-		r.table("Numbers").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		r.table("Phonebook").get(nmsg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		r.table("Mailbox").get(editChannel).delete();
-		r.table("OldCalls").insert(call);
-		r.table("Calls").get(call.id).delete();
-		return client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", nmsg.channel.id);
+		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", nmsg.channel.id);
+		await r.table("OldCalls").insert(call);
+		await r.table("Calls").get(call.id).delete();
+		return client.delete(call.to.channel === nmsg.channel.id ? call.from.number : call.to.number);
 	}
 
 	// Get the message to edit
@@ -25,7 +23,7 @@ module.exports = async(omsg, nmsg) => {
 	let phone = config.callPhones.default;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
-	let toSend = `**${nmsg.author.tag}${call.to.channel === nmsg.channel.id ? call.from.channel : call.to.channel === config.supportChannel ? `(${nmsg.author.id})` : ""}** ${phone} ${nmsg.content}`;
+	let toSend = `**${nmsg.author.tag}${call.to.channel === nmsg.channel.id ? call.from.channel : call.to.channel === config.supportChannel ? `(${nmsg.author.id})` : ""}[edited]** ${phone} ${nmsg.content}`;
 	let edited = await client.apiEdit(toSend, editChannel, message.dtelmsg);
 	if (!edited.id) {
 		await client.apiSend(`[EDITED]: ${toSend}`, editChannel);

@@ -11,6 +11,8 @@ module.exports = async(msg, myNumber) => {
 		queryPages,
 		message;
 
+	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Loading", description: "Please wait whilst we're gathering all numbers." } });
+
 	// Load Phonebook once per 411 call (for search through)
 	const phonebook = await r.table("Phonebook");
 	const vipNumber = myNumber.vip ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
@@ -93,7 +95,7 @@ module.exports = async(msg, myNumber) => {
 				\n\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
 				\n\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
-		if (message) embed.setDescription(`✅ **${message}**`);
+		if (message) embed.setDescription(`✅ ${message}`);
 		message = null;
 
 		if (omsg) {

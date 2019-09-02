@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 	if (account.vip && account.vip + Number(months) < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "Negative amount of months", description: `Their current amount of months (${account.vip}) plus ${Number(months)} would result in ${account.vip + Number(months)}` } });
 
 	await r.table("Accounts").get(account.id).update({ vip: account.vip ? account.vip + Number(months) : Number(months) });
-	client.log(`💠 User ${user.tag} (${user.id}) has purchased and received ${months} VIP Months`);
+	client.log(`💠 ${user.tag} (${user.id}) has purchased and received ${months} VIP Months`);
 	msg.channel.send({ embed: { color: config.colors.receipt, title: "Added VIP Months!", description: `${Number(months) > 0 ? "Added" : "Removed"} \`${Number(months) > 0 ? months : months * -1}\` VIP Months to ${user}(${user.id})`, footer: { text: `Executed by: ${msg.author.id}` } } });
 	if (Number(months) > 0) (await user.createDM()).send({ embed: { color: config.colors.receipt, title: "Thanks for your purchase!", description: `You have received \`${months}\` VIP Months.`, footer: { text: `Executed by: ${msg.author.id}` } } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Private DMs", description: "Could not send the user their receipt in DMs." } }));
 	else (await user.createDM()).send({ embed: { color: config.colors.receipt, title: "VIP Months have been removed", description: `There have been \`${months * -1}\` VIP Months removed from your account.`, footer: { text: `Executed by: ${msg.author.id}` } } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Private DMs", description: "Could not send the user their receipt in DMs." } }));

@@ -10,9 +10,7 @@ module.exports = async msg => {
 	let call = (await r.table("Calls").filter(r.row("from")("channel").eq(msg.channel.id).or(r.row("to")("channel").eq(msg.channel.id))))[0];
 
 	// Check if they're blacklisted → yes? return
-	let blacklisted = await r.table("Blacklist").get(msg.author.id);
-	if (!blacklisted && msg.guild) blacklisted = await r.table("Blacklist").get(msg.guild.id);
-	if (blacklisted) return;
+	// if (msg.author.blacklisted || (msg.guild && msg.guild.blacklisted)) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")

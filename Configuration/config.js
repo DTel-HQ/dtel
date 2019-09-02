@@ -10,9 +10,6 @@ module.exports = {
 	// NUMBER ALIASES
 	aliasNumbers: {
 		"*611": "08006113835",
-		"*1": "03011111111",
-		"*2": "03022222222",
-		"*3": "03033333333",
 	},
 
 	// SETINGS
@@ -69,7 +66,7 @@ module.exports = {
 		vip: 0xcc9900,
 	},
 
-	// Command aliasaes (keep it down or make new file)
+	// Command aliases (keep it down or make new file)
 	aliasCommands: {
 		bal: "balance",
 		bc: "broadcast",
@@ -80,4 +77,11 @@ module.exports = {
 		mentions: "mention",
 		perm: "permcheck",
 	},
+
+	// Cooldown times (s) (This file is getting too big)
+	cooldowns: {
+		default: 5,
+		call: 20,
+		message: 120,
+	}
 };

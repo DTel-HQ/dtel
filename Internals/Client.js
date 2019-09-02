@@ -84,4 +84,8 @@ module.exports = class DTelClient extends require("discord.js").Client {
 			.catch(e => { if (e) { winston.error(`Couldn't log - shard: ${client.shard.id}, message: ${msg}`); } });
 		return true;
 	}
+
+	delete(number) {
+		// later
+	}
 };

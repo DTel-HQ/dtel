@@ -4,9 +4,9 @@ module.exports = async(client, msg, suffix) => {
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (myNumber) return msg.reply("This channel already has a number. Call `*611` if you want to remove it.");
 
-	if (msg.guild) {
+	if (msg.guild && !msg.guild.whitelisted) {
 		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
-		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: config.colors.error, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.`, footer: { text: "This limit was set to prevent trolling" } } });
+		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: config.colors.error, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.\n\nIf you have a good use for more numbers (eg. roleplaying server), please [contact our staff](${config.guildInvite}) to get whitelisted.`, footer: { text: "This limit was set to prevent trolling" } } });
 	}
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");

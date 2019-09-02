@@ -27,6 +27,7 @@ const client = global.client = new (require("./Internals/Client"))({
 });
 
 const winston = global.winston = createLogger({
+	level: "info",
 	transports: [
 		new transports.Console({
 			colorize: true,
@@ -35,7 +36,7 @@ const winston = global.winston = createLogger({
 			filename: `./Logs/Winston-Log-%DATE%-Shard${client.shard.ids[0]}.log`,
 			datePattern: "YYY-MM-DD-HH",
 			zippedArchive: true,
-			maxFiles: "14d",
+			maxFiles: "100d",
 			maxSize: "20m",
 		}),
 	],

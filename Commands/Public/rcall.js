@@ -23,7 +23,7 @@ module.exports = async(client, msg, suffix) => {
 			continue;
 		}
 		toDialDoc = await r.table("Numbers").get(toDial.id);
-		if (toDialDoc.expiry < new Date()) {
+		if (new Date(toDialDoc.expiry).getTime() < Date.now()) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}

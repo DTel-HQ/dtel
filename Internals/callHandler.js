@@ -12,18 +12,14 @@ module.exports = async(cmd, msg, suffix, call) => {
 		await client.api.channels(toSend).get();
 	} catch (_) {
 		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", msg.channel.id);
-		await r.table("Numbers").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Phonebook").get(msg.channel.id === call.from.channel ? call.to.number : call.from.number).delete();
-		await r.table("Mailbox").get(msg.channel.id === call.from.channel ? call.to.channel : call.from.channel).delete();
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
-		return;
+		return client.delete(msg.channel.id === call.from.channel ? call.to.number : call.from.number);
 	}
 
 	// Send msg, hidden?
 	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
 	let sent = await client.apiSend(`**${toSend == config.supportChannel ? msg.author.tag : hidden ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? `(${msg.author.id})` : ""}** ${phone} ${msg.content}`, toSend);
-	winston.info(sent);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
