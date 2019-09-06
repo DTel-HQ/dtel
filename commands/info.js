@@ -33,7 +33,7 @@ module.exports = async(client, message, args) => {
 				},
 				{
 					name: "📌 Official Server",
-					value: "https://discord.gg/RN7pxrB",
+					value: "https://discord.gg/qRVxY55",
 				},
 			],
 			timestamp: new Date(),
