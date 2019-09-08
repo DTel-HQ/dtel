@@ -12,6 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	if (whitelist) await r.table("Whitelist").get(guild.id).delete();
 	else await r.table("Whitelist").insert({ id: guild.id });
 
-	client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by ${msg.author.tag}`);
+	if (!whitelist) client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by ${msg.author.tag}`);
+	else client.log(`🔥 ID \`${guild.id}\` has been removed from the whitelist by ${msg.author.tag}`);
 	msg.channel.send({ embed: { color: config.colors.success, title: whitelist ? "Removed" : "Added", description: whitelist ? `Succesfully removed ${guild.id} from the whitelist.` : `Succesfully added ${guild.id} to the whitelist.` } });
 };
