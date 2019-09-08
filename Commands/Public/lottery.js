@@ -53,6 +53,7 @@ module.exports = async(client, msg, suffix) => {
 			await r.table("Lottery").insert({
 				id: newID,
 				userID: msg.author.id,
+				channel: msg.channel.id,
 				jackpot: newJackpot,
 				number: newNumber,
 				tickets: tickets,

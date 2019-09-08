@@ -4,9 +4,9 @@ module.exports = async(client, msg, suffix) => {
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (myNumber) return msg.reply("This channel already has a number. Call `*611` if you want to remove it.");
 
-	if (msg.guild) {
+	if (msg.guild && !msg.guild.whitelisted) {
 		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
-		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: 0x660000, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.`, footer: { text: "This limit was set to prevent trolling" } } });
+		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: config.colors.error, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.\n\nIf you have a good use for more numbers (eg. roleplaying server), please [contact our staff](${config.guildInvite}) to get whitelisted.`, footer: { text: "This limit was set to prevent trolling" } } });
 	}
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 	let toChoose = true;
 
 	let embed = new MessageEmbed()
-		.setColor(0xAAAAAA)
+		.setColor(config.colors.info)
 		.setTitle("Read this information before proceeding.")
 		.addField(
 			"This is a roleplay bot!",
@@ -133,7 +133,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let embedSender = async() => {
 		embed = new MessageEmbed()
-			.setColor(0x00e64d)
+			.setColor(config.colors.receipt)
 			.setTitle("Your number is all set up!")
 			.setDescription("Here is all your information. If you have any questions or want to report any abuse of the service (eg. a troll call), call `*611`.")
 			.addField(

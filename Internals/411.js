@@ -11,6 +11,8 @@ module.exports = async(msg, myNumber) => {
 		queryPages,
 		message;
 
+	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Loading", description: "Please wait whilst we're gathering all numbers." } });
+
 	// Load Phonebook once per 411 call (for search through)
 	const phonebook = await r.table("Phonebook");
 	const vipNumber = myNumber.vip ? new Date(myNumber.vip.expiry).getTime() > Date.now() : false;
@@ -40,7 +42,7 @@ module.exports = async(msg, myNumber) => {
 
 		// Searchpage embed
 		embed = new MessageEmbed()
-			.setColor(0xe6e600)
+			.setColor(config.colors.yellowbook)
 			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
 			.setDescription(`Enter a page number or query (minimum of three characters) to search for.\n(clear) to clear a query.\n(return) to return from the query.\n(0) to hangup.`)
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
@@ -84,16 +86,16 @@ module.exports = async(msg, myNumber) => {
 	while (loop) {
 		// main menu embed
 		embed = new MessageEmbed()
-			.setColor(0xe6e600)
+			.setColor(config.colors.yellowbook)
 			.addField("Welcome to the DiscordTel yellowbook!",
 				`\`1\` To search through the yellowbook.\
 				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
 				\n\`3\` For information about special numbers.\
 				\n\`4\` To call Customer Support.\
-				\n\`5\` To access VIP options.${vipNumber ? perms ? "" : "You need Manage Guild to do this" : "You need a VIP number to do this."}
+				\n\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
 				\n\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
-		if (message) embed.setDescription(`:checkmark: **${message}**`);
+		if (message) embed.setDescription(`✅ ${message}`);
 		message = null;
 
 		if (omsg) {
@@ -106,7 +108,7 @@ module.exports = async(msg, myNumber) => {
 		}
 
 		// Create collector & make busy
-		Busy.create({ id: msg.author.id });
+		await r.table("Busy").insert({ id: msg.author.id });
 		collected = (await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && perms ? vipNumber ? /^[0-5]$/.test(m.content) : /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content),
 			{ max: 1, time: 60000 })).first();
@@ -114,7 +116,7 @@ module.exports = async(msg, myNumber) => {
 		// On main menu collection
 		if (collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
-			Busy.newGet(msg.author.id).delete();
+			await r.table("Busy").get(msg.author.id).delete();
 			omsg.delete().catch(e => null);
 			break;
 		}
@@ -123,7 +125,7 @@ module.exports = async(msg, myNumber) => {
 			// Search through yellowbook
 			case "1": {
 				if (!phonebook.length) {
-					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: 0x660000 } });
+					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: config.colors.error } });
 					continue;
 				}
 				// Function for search pages.
@@ -131,7 +133,7 @@ module.exports = async(msg, myNumber) => {
 				if (!result) {
 					loop = false;
 					omsg.delete().catch(e => null);
-					Busy.newGet(msg.author.id).delete();
+					await r.table("Busy").get(msg.author.id).delete();
 				}
 				break;
 			}
@@ -142,16 +144,16 @@ module.exports = async(msg, myNumber) => {
 				embed = new MessageEmbed()
 					.setTitle("Yellowbook options")
 					.setDescription("Here you can add, edit or delete your number's yellowbook entry.")
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setFooter("This call will automatically be hung up after 2 minutes of inactivity.");
 
 				// Entry? no? Make embed right
 				const entry = await r.table("Phonebook").get(myNumber.id);
 				if (entry) {
 					embed.addField("Current description", entry.description);
-					embed.addField("Options", "(1) to edit the entry.\n(2) to delete the entry.\n(9) to return.\n(0) to hangup.");
+					embed.addField("Options", "`1` to edit the entry.\n`2` to delete the entry.\n\n`9` to return.\n`0` to hangup.");
 				} else {
-					embed.addField("Options", "(1) to add your number to the yellowbook.\n(9) to return.\n(0) to hangup.");
+					embed.addField("Options", "`1` to add your number to the yellowbook.\n\n`9` to return.\n`0` to hangup.");
 				}
 
 				// Edit/send message
@@ -169,7 +171,7 @@ module.exports = async(msg, myNumber) => {
 				// On collection
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -189,12 +191,12 @@ module.exports = async(msg, myNumber) => {
 				// Basic description setting embed
 				embed = new MessageEmbed()
 					.setTitle("Yellowbook description")
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setFooter("(9) to return. (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
 
 				// Add description based on if there's an entry or not
-				if (entry) embed.setDescription("Please input the new description. This will be publicly visible so refrain from using any bad language. (min 10, max 200 characters)");
-				else embed.setDescription("Please input a description for your number. This will be the description publicly available in the yellowbook so please refrain from using any bad language. (min 10, max 200 characters)");
+				if (entry) embed.setDescription("Please input the new description.\nThis will be publicly visible so refrain from using any bad language.\n\n(min 10, max 200 characters)");
+				else embed.setDescription("Please input a description for your number.\nThis will be the description publicly available in the yellowbook so please refrain from using any bad language.\n\n(min 10, max 200 characters)");
 
 				// edit/send message
 				omsg = await omsg.edit({ embed: embed }).catch(async e => {
@@ -210,7 +212,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -233,7 +235,7 @@ module.exports = async(msg, myNumber) => {
 			// Information about special numbers
 			case "3": {
 				embed = new MessageEmbed()
-					.setColor(0xe6e600)
+					.setColor(config.colors.yellowbook)
 					.setTitle("Special numbers")
 					.setDescription("This is a list of all currently operational special numbers")
 					.addField("*233", "Displays your number information and lets you recharge the number.")
@@ -254,7 +256,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					loop = false;
 				}
@@ -268,7 +270,7 @@ module.exports = async(msg, myNumber) => {
 
 			case "5": {
 				embed = new MessageEmbed()
-					.setColor(0xffbf00)
+					.setColor(config.colors.yellowbook)
 					.setTitle("VIP Settings")
 					.setDescription(`(1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
 													\n(2) to set or clear this number's custom name.\
@@ -291,7 +293,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					Busy.newGet(msg.author.id).delete();
+					await r.table("Busy").get(msg.author.id).delete();
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -308,7 +310,7 @@ module.exports = async(msg, myNumber) => {
 
 					case "2": {
 						embed = new MessageEmbed()
-							.setColor(0xffbf00)
+							.setColor(config.colors.yellowbook)
 							.setTitle("Changing custom name")
 							.setDescription("Type your new custom name or `disable` to disable the custom name. (4-25 characters)")
 							.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
@@ -327,7 +329,7 @@ module.exports = async(msg, myNumber) => {
 
 						if (collected) collected.delete().catch(e => null);
 						if (!collected || /^0$/.test(collected.content)) {
-							Busy.newGet(msg.author.id).delete();
+							await r.table("Busy").get(msg.author.id).delete();
 							omsg.delete().catch(e => null);
 							loop = false;
 							break;

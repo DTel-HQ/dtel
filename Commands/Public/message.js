@@ -1,7 +1,11 @@
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
-	let time = new Date().getTime();
+	let time = Date.now();
+
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
+	if (cooldown && cooldown.time > time) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
+	else client.cooldown(msg.author.id, "message");
 
 	if (!suffix) return msg.reply("How do you send nothing to no one? Syntax: `>mesasge [number] [message]`");
 
@@ -19,6 +23,7 @@ module.exports = async(client, msg, suffix) => {
 		.nth(0)
 		.default(null);
 	if (!fromNumberDoc) return msg.reply("This channel doesn't have a number.");
+	if (new Date(fromNumberDoc.expiry).getTime() < Date.now()) return msg.reply("This channel's number has expired. Please call `*233` to renew it.");
 
 	toNumber = client.replaceNumber(toNumber);
 	let toNumberDoc = await r.table("Numbers").get(toNumber);

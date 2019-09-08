@@ -2,13 +2,15 @@ const { post } = require("chainfetch");
 
 module.exports = async(client, msg, suffix) => {
 	let amount = msg.content.split(" ")[0];
-	let currency = msg.content.split(" ")[1].toUpperCase();
+	let currency = msg.content.split(" ")[1];
+	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">convert [amount] [currency]" } });
+	currency = currency.toUpperCase();
 
 	let account = await r.table("Accounts").get(msg.author.id).default(null);
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
-		return msg.reply(`You don't have an account created...Creating an account for you! Please also read for information on payment: <${config.paymentLink}>`);
+		msg.reply(`You don't have an account created...Creating an account for you! Please also read for information on payment: <${config.paymentLink}>`);
 	}
 
 	if (account.balance < parseInt(amount)) return msg.reply(`Insufficient balance! You have ${account.balance} credits.`);
@@ -32,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 			case "error": {
 				return msg.channel.send({
 					embed: {
-						color: 0xFF0000,
+						color: config.colors.error,
 						title: "Error: Wrong arguments!",
 						description: "You probably typed something wrong in the command. Correct them and try again.",
 						fields: [{
@@ -46,7 +48,7 @@ module.exports = async(client, msg, suffix) => {
 				switch (err.body.reason) {
 					case "per-user limit exceeded": {
 						return msg.channel.send({
-							color: 0xFF0000,
+							color: config.colors.error,
 							title: "Transaction declined!",
 							description: "You reached the daily per-user limit.",
 							fields: [{
@@ -58,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 					case "total limit exceeded": {
 						return msg.channel.send({
 							embed: {
-								color: 0xFF0000,
+								color: config.colors.error,
 								title: "Transaction declined!",
 								description: "You reached the daily per-user limit.",
 								fields: [{
@@ -71,7 +73,7 @@ module.exports = async(client, msg, suffix) => {
 					case "verify required": {
 						return msg.channel.send({
 							embed: {
-								color: 0xFF0000,
+								color: config.colors.error,
 								title: "Transaction declined!",
 								description: "You're not verified. Please verify yourself at http://discoin.sidetrip.xyz/verify.",
 							},
@@ -80,7 +82,7 @@ module.exports = async(client, msg, suffix) => {
 					default: {
 						return msg.channel.send({
 							embed: {
-								color: 0xFF0000,
+								color: config.colors.error,
 								title: "Unexpected Error!",
 								description: `\`\`\`${err.body}\`\`\``,
 							},

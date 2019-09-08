@@ -21,6 +21,10 @@ module.exports = () => {
 					})
 					.catch(() => toRet);
 			}
+
+			get blacklisted() {
+				return !!r.table("Blacklist").get(this.id);
+			}
 		}
 		return DTelUser;
 	});

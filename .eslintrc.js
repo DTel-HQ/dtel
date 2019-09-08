@@ -13,9 +13,6 @@ module.exports = {
 		client: true,
 		r: true,
 		reload: true,
-		Calls: true,
-		Blacklist: true,
-		Busy: true,
 	},
 	rules: {
 		"no-compare-neg-zero": "error",

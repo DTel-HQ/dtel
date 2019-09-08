@@ -5,45 +5,30 @@ module.exports = {
 		"124989722668957700",
 	],
 	devMode: true,
-	shardCount: 1,
-
-	// IDs
-	supportGuild: "398980667553349649",
-	supportChannel: "399375958525870080",
-	logsChannel: "399006748582871060",
-	bossRole: "398980867864920064",
-	managerRole: "284443515516354560",
-	supportRole: "398980993593376769",
-	donatorRole: "324578460183822337",
+	shardCount: 3,
 
 	// NUMBER ALIASES
 	aliasNumbers: {
 		"*611": "08006113835",
 	},
 
-	// LINKS
-	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
-	guildInvite: "https://discord.gg/RN7pxrB",
-	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
-	siteLink: "https://discordtel.austinhuang.me",
-	applyLink: "https://discordtel.typeform.com/to/jJayAt",
-	suggestLink: "https://feedback.austinhuang.me/",
-	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
-
 	// SETINGS
 	prefix: ">",
 	dailies: {
 		boss: 300,
+		manager: 250,
 		support: 200,
 		default: 80,
 	},
 	lotteryCost: 5,
 	messageCost: 2,
 	pickupBonus: 10,
+	promoteCost: 500,
 	renewalRate: 500,
 	transferRate: 0.729,
 	minTransfer: 100,
 	maxNumbers: 3,
+	promoteTimeout: 7,
 
 	// EMOTES
 	callPhones: {
@@ -52,16 +37,52 @@ module.exports = {
 		support: ":telephone_receiver:",
 	},
 
-	// PORTS
-	IPCPort: 7775,
+	// IDs
+	logsChannel: "399006748582871060",
+	promoteChannel: "577889780533166106",
+	supportChannel: "399375958525870080",
+	supportGuild: "398980667553349649",
+	bossRole: "398980867864920064",
+	donatorRole: "324578460183822337",
+	managerRole: "284443515516354560",
+	supportRole: "398980993593376769",
 
-	// Command aliasaes (keep it down or make new file)
+	// LINKS
+	applyLink: "https://discordtel.typeform.com/to/jJayAt",
+	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
+	guildInvite: "https://discord.gg/qRVxY55",
+	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
+	siteLink: "https://discordtel.austinhuang.me",
+	suggestLink: "https://feedback.austinhuang.me/",
+	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
+
+	// Embed Colors
+	colors: {
+		contacts: 0x50C878,
+		error: 0xff3333,
+		info: 0x3498d8,
+		receipt: 0xe1e1e1,
+		success: 0x47d147,
+		yellowbook: 0xe6e600,
+		vip: 0xcc9900,
+	},
+
+	// Command aliases (keep it down or make new file)
 	aliasCommands: {
 		bal: "balance",
 		bc: "broadcast",
+		cmds: "help",
+		commands: "help",
 		contact: "contacts",
 		id: "identify",
 		mentions: "mention",
 		perm: "permcheck",
+	},
+
+	// Cooldown times (s) (This file is getting too big)
+	cooldowns: {
+		default: 5,
+		call: 20,
+		message: 120,
 	},
 };

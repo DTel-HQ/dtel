@@ -12,22 +12,25 @@ module.exports = async(client, msg, suffix) => {
 		self,
 		toDialDoc;
 
+	// Make a searching for embed...
 
 	while (!toCall) {
 		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
 		if (!toDial) break;
-		if (fromNumber.channel === toDial.channel || Calls.find(c => c.to.channel === toDial.channel || c.from.channel === toDial.channel)) {
+		let call = (await r.table("Calls").filter(r.row("from")("number").eq(toDial.id).or(r.row("to")("number").eq(toDial.id))))[0];
+		if (fromNumber.id == toDial.id || call) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}
 		toDialDoc = await r.table("Numbers").get(toDial.id);
-		if (toDialDoc.expiry < new Date()) {
+		if (new Date(toDialDoc.expiry).getTime() < Date.now()) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}
 		toCall = toDial.id;
 	}
 
+	// Change to not found or change to found!
 	if (!toDial) return msg.reply("It seems like you'll have to wait. All active numbers are in a call.");
 
 	require("./call.js")(client, msg, toCall, true);
