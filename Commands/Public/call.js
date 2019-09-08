@@ -4,14 +4,17 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let csCall;
 	rcall === true ? rcall = true : rcall = false;
 
+	let perms = await msg.author.getPerms();
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
-	if (cooldown && cooldown.time > Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
+	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
 	else client.cooldown(msg.author.id, "call");
 
 	let myNumber = await r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
 		.nth(0)
 		.default(null);
+
+	if (myNumber.waiting) return;
 
 	let toDial = suffix;
 	if (!toDial) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "You didn't specify a number... `>call [number]`" } });
@@ -25,8 +28,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (config.aliasNumbers[toDial]) {
 		toDial = config.aliasNumbers[toDial];
 	}
-	if (toDial == "08006113835")	csCall = true;
-	if (toDial == "08006113835" && msg.guild && msg.guild.id === config.supportGuild) {
+	if (toDial == "08007877678")	csCall = true;
+	if (toDial == "08007877678" && msg.guild && msg.guild.id === config.supportGuild) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "You are unable to call *611 here because Customer Support is literally at your doorstep." } });
 	}
 
@@ -79,6 +82,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		collected.first().delete().catch(e => null);
 		if (/^no$/i.test(collected.first().content)) return;
 
+		await r.table("Numbers").get(myNumber.id).update({ waiting: true });
 		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Waiting...", description: "Checking the availability periodically. Please wait for an update." } });
 
 		// Wait x amount of minutes to see if number turns available.
@@ -86,15 +90,16 @@ module.exports = async(client, msg, suffix, rcall) => {
 		let wait = await new Promise((resolve, reject) => {
 			let retry = 0;
 			let i = setInterval(async() => {
-				console.log("Hi");
 				retry++;
 				activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
 				if (!activeCall) {
+					await r.table("Numbers").get(myNumber.id).update({ waiting: false });
 					clearInterval(i);
 					resolve();
 				} else if (retry >= Math.round(maxTime / waitingRetry)) {
 					clearInterval(i);
 					omsg.delete().catch(e => null);
+					await r.table("Numbers").get(myNumber.id).update({ waiting: false });
 					return msg.channel.send({ embed: { color: config.colors.error, title: "Waiting expired", description: "The waiting time has expired and the line is still being used." } });
 				}
 			}, waitingRetry);

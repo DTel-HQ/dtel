@@ -9,7 +9,7 @@ module.exports = {
 
 	// NUMBER ALIASES
 	aliasNumbers: {
-		"*611": "08006113835",
+		"*611": "08007877678",
 	},
 
 	// SETINGS

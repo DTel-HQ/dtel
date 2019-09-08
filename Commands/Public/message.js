@@ -3,8 +3,9 @@ const randomstring = require("randomstring");
 module.exports = async(client, msg, suffix) => {
 	let time = Date.now();
 
+	let perms = await msg.auhor.getPerms();
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
-	if (cooldown && cooldown.time > time) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
+	if (cooldown && cooldown.time > time && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
 	else client.cooldown(msg.author.id, "message");
 
 	if (!suffix) return msg.reply("How do you send nothing to no one? Syntax: `>mesasge [number] [message]`");
