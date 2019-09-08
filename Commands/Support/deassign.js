@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 		.catch(e => null);
 
 	await msg.reply({ embed: { color: config.colors.success, title: "Bye... :(", description: "The number was deassigned." } });
-	await client.log({ embed: { color: config.colors.info, title: "Deassignment", description: `:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.` } });
+	await client.apiSend({ embed: { color: config.colors.info, title: "Deassignment", description: `:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.` } }, config.logsChannel);
 
 	// phonebook deletion
 	await r.table("Phonebook").get(numberDoc.id).delete();
