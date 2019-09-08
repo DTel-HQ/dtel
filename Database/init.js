@@ -12,6 +12,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	const tables = [
 		"Accounts",
 		"Blacklist",
+		"Busy",
 		"Calls",
 		"Cooldowns",
 		"Lottery",
@@ -33,6 +34,9 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 
 	await r.branch(r.table("Numbers").indexList().contains("channel"), null, r.table("Numbers").indexCreate("channel", row => row("channel")));
 	await r.branch(r.table("Numbers").indexStatus("channel").nth(0)("ready"), null, r.table("Numbers").indexWait("channel"));
+
+	await r.table("Busy").delete();
+	await r.table("Cooldowns").delete();
 
 	resolve(r);
 });

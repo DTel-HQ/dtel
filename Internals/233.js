@@ -58,7 +58,7 @@ module.exports = async(msg, myNumber) => {
 	if (/^0$/.test(collected.first().content)) return;
 
 	// new date and balance
-	let newExpiry = new Date(myNumber.expiry);
+	let newExpiry = myNumber.expiry < Date.now() ? new Date() : new Date(myNumber.expiry);
 	newExpiry.setMonth(newExpiry.getMonth() + parseInt(collected.first().content));
 	let newBalance = account.balance - (config.renewalRate * parseInt(collected.first().content));
 

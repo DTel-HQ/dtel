@@ -28,6 +28,7 @@ module.exports = {
 	transferRate: 0.729,
 	minTransfer: 100,
 	maxNumbers: 3,
+	promoteTimeout: 7,
 
 	// EMOTES
 	callPhones: {
@@ -49,7 +50,7 @@ module.exports = {
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
-	guildInvite: "https://discord.gg/RN7pxrB",
+	guildInvite: "https://discord.gg/qRVxY55",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 	siteLink: "https://discordtel.austinhuang.me",
 	suggestLink: "https://feedback.austinhuang.me/",
@@ -60,7 +61,7 @@ module.exports = {
 		contacts: 0x50C878,
 		error: 0xff3333,
 		info: 0x3498d8,
-		receipt: 0xeeeeee,
+		receipt: 0xe1e1e1,
 		success: 0x47d147,
 		yellowbook: 0xe6e600,
 		vip: 0xcc9900,
@@ -83,5 +84,5 @@ module.exports = {
 		default: 5,
 		call: 20,
 		message: 120,
-	}
+	},
 };

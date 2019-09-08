@@ -46,6 +46,6 @@ scheduleJob("0 0 0 * * *", async() => {
 scheduleJob("*/5 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 	let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
-	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers with ${userCount} users. (shard \${this.shard.ids[0]})\`, type: 0 } });`);
+	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[BETA] ${guildCount} servers with ${userCount} users. (shard \${this.shard.ids[0]})\`, type: 0 } });`);
 	winston.verbose("[ScheduleJob] Updated status.");
 });

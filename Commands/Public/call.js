@@ -4,6 +4,10 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let csCall;
 	rcall === true ? rcall = true : rcall = false;
 
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
+	if (cooldown && cooldown.time > Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
+	else client.cooldown(msg.author.id, "call");
+
 	let myNumber = await r.table("Numbers")
 		.getAll(msg.channel.id, { index: "channel" })
 		.nth(0)

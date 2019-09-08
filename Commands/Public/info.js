@@ -36,8 +36,16 @@ module.exports = async(client, msg, suffix) => {
 					value: `Suggest a feature for DiscordTel [here](${config.applyLink}) and we will take a look at it.`,
 				},
 				{
+					name: "💬 Join our team",
+					value: `Strengthen our support team by [applying](${config.applyLink}). Applications will be looked at when we're looking to hire, don't ask about the status of it.`,
+				},
+				{
 					name: "📌 Official Server",
 					value: config.guildInvite,
+				},
+				{
+					name: ":desktop: Official Website",
+					value: config.siteLink,
 				},
 			],
 			timestamp: new Date(),

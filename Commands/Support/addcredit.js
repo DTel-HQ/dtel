@@ -1,4 +1,6 @@
 module.exports = async(client, msg, suffix) => {
+	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">addcredit [userid] [amount]" } });
+
 	let user, amount;
 	// If they were mentioned
 	if (msg.mentions.users.first()) {
@@ -11,25 +13,25 @@ module.exports = async(client, msg, suffix) => {
 		amount = suffix.substring(suffix.indexOf(" ") + 1).trim();
 	}
 
-	if (!user) return msg.reply("Unreachable/Non-existent user. `>addcredit <User_ID> <Credit>`");
-	if (!amount) return msg.reply("WHAT THE F*** ARE YOU DOING? YOU KNOW THERE'S TWO VARIABLES BUT YOU FORGOT IT AND...BEANS? THERE IS NO SUCH THING CALLED MAGIC BEANS YOU STUPID BOIIIIIIIII! `>addcredit <User_ID> <Credit>`");
+	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that user." } });
+	if (!amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Add what...?", description: "You didn't input an amount to add..." } });
 
 	// Check for invalid users
 	if (user.id === client.user.id) {
-		return msg.reply("Uh... I am the bank. Are you in debt?");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Thanks but no.", description: "I already have all the money." } });
 	} else if (user.bot) {
-		return msg.reply("**ARE YOU SURE THAT BOTS ARE HUMAN?** <:Monocle:366036726449438731>");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "AI will destroy humans!!!", description: "Are you sure you want to give them more money?" } });
 	} else if (user.id === msg.author.id && !(await msg.author.getPerms()).boss) {
-		return msg.reply("**YOU CAN'T ADD CREDITS TO YOURSELF**, BEANIE! <:xd:359369769327132682>");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Really?", description: "You thought we'd let you do that?" } });
 	} else if ((await user.getPerms()).support && !(await msg.author.getPerms()).boss) {
-		return msg.reply("You thought we didn't think of that, didn't you! (You can't give to support members)");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Seriously...", description: "That's not something you should be trying on the job!" } });
 	}
 
 	// Check for invalid input
 	if (isNaN(amount)) {
-		return msg.reply("**ARE YOU SURE ABOUT THAT?** I'M NOT LETTING YOU BREAK THE ECONOMY! <:BusThinking:341628019472990209>");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "1, 2, 3...", description: "Keep going to find an actual number." } });
 	} else if (!/^-?\d*$/.test(amount)) {
-		return msg.reply("Trying to break the bank, are we?");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Is it a bird, is it a plane", description: "well, it's not a number..." } });
 	}
 
 	let neg = amount.startsWith("-");
@@ -43,13 +45,13 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	if (account.balance < 0) return msg.reply("Thought we'd let you make someone bankrupt?!");
+	if (account.balance < 0) return msg.reply({ embed: { color: config.colors.error, title: "We aren't not a loan service.", description: `That request would leave them with ¥${account.balance}.` } });
 
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
-	msg.reply("Done.");
+	msg.channel.send({ embed: { color: config.colors.success, title: "Done", description: `${neg ? "Removed" : "Added"} ¥${amount} ${neg ? "from" : "to"} their account.` } });
 
 	if (neg) amount = String(amount).substr(1);
 
-	user.send(`:yen: A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.`).catch(() => null);
+	user.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.` } }).catch(() => null);
 	await client.log(`:yen: Support member ${msg.author.tag} ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag} (${user.id}).`);
 };

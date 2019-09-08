@@ -1,5 +1,6 @@
 module.exports = async msg => {
 	if (msg.author.bot) return;
+	const perms = await msg.author.getPerms(msg.author.id);
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
@@ -30,9 +31,17 @@ module.exports = async msg => {
 		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
 
-	// Return if needed
+	if (!msg.content.startsWith(prefix)) return;
+
+	// Check busy and cooldown
 	let busy = await r.table("Busy").get(msg.author.id);
-	if (!msg.content.startsWith(prefix) || (busy && !config.maintainers.includes(msg.author.id))) return;
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
+
+	// return if needed
+	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s` } });
+	if (busy && !config.maintainers.includes(msg.author.id)) return;
+	// add cooldown
+	if (!perms.support) client.cooldown(msg.author.id, "default");
 
 	// Find Maintainer or Support commands
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);

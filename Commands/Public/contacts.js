@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	const myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
 	if (!myNumber) return;
-	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.reply("This channel's number has expired. Please call `*233` to renew it.");
+	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "This channel's number has expired. Please call `*233` to renew it." } });
 
 	// Get the user's permissions
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
@@ -40,13 +40,13 @@ module.exports = async(client, msg, suffix) => {
 		// On collection
 		omsg.delete().catch(e => null);
 		if (collected.first()) collected.first().delete().catch(e => null);
-		if (!collected.first() || /^0$/.test(collected.first().content)) return await r.table("Busy").get(msg.author.id).delete();
+		if (!collected.first() || /^0$/.test(collected.first().content)) return r.table("Busy").get(msg.author.id).delete();
 
 		// if they want to add a number
 		if (/add/i.test(collected.first().content)) {
 			let getNumber = async bad => {
-				if (!perm) return msg.reply("You need manage server permissions to do this.");
-				if (contacts.length >= 10) msg.reply("You can't have more than 9 contacts (yet)");
+				if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+				if (contacts.length >= 10) msg.channel.send({ embed: { color: config.colors.error, title: "Too many contacts", description: "We currently do not allow more than 9 contacts." } });
 
 				// send embed
 				omsg = await msg.channel.send({ embed: {
@@ -142,7 +142,7 @@ module.exports = async(client, msg, suffix) => {
 		// if edit
 		if (/edit/i.test(collected.first().content.split(" ")[0])) {
 			// check for perm & if the contact is legit
-			if (!perm) return msg.reply("You need manage server permissions to do this.");
+			if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
 
 			omsg = await msg.channel.send({ embed: {
 				color: config.colors.contacts,
@@ -210,7 +210,7 @@ module.exports = async(client, msg, suffix) => {
 		if (/delete/i.test(collected.first().content.split(" ")[0])) {
 			await r.table("Busy").get(msg.author.id).delete();
 			// check for perm & if the contact is legit
-			if (!perm) return msg.reply("You need manage server permissions to do this.");
+			if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
 
 			// Delete the contact's entry
 			await contacts.splice(contacts.indexOf(contact), 1);
