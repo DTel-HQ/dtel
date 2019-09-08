@@ -14,8 +14,8 @@ module.exports = async(client, msg, suffix, call) => {
 	const toDial = await client.replaceNumber(suffix);
 	const toDialDoc = await r.table("Numbers").get(toDial);
 	if (!toDialDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown number", description: "Couldn't find that number." } });
-	if (toDialDoc.channel === msg.channel.id) return msg.channel.id({ embed: { color: config.colors.error, title: "???", description: "Why are you trying to call transfer them to you?" } });
-	if (toDialDoc.channel === call.to.channel || toDialDoc.channel === call.from.channel) return msg.channek.send({ embed: { color: config.colors.error, title: "???", description: "Making them call themselves...?" } });
+	if (toDialDoc.channel === msg.channel.id) return msg.channel.send({ embed: { color: config.colors.error, title: "???", description: "Why are you trying to transfer them to yourself?" } });
+	if (toDialDoc.channel === call.to.channel || toDialDoc.channel === call.from.channel) return msg.channel.send({ embed: { color: config.colors.error, title: "???", description: "Making them call themselves...?" } });
 	if (toDialDoc.blocked && toDialDoc.blocked.includes(msg.channel.id == call.from.channel ? call.to.number : call.from.number)) return msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "We were unable to transfer the other side to that number." } });
 	if (new Date(toDialDoc.expiresAt).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Expired", description: "The number you are trying to reach has expired. Please ask them to renew it." } });
 

@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let number = await client.replaceNumber(suffix);
 
-	let numberDoc = await r.table("Numbers").get(toDeassign).default(null);
+	let numberDoc = await r.table("Numbers").get(number).default(null);
 	if (!numberDoc) {
 		if (msg.mentions.channels.first()) toDeassign = msg.mentions.channels.first().id;
 		numberDoc = await r.table("Numbers")

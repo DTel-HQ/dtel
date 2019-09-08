@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: repsond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`);
+			.setDescription(`An easy way to store your known DiscordTel numbers. Their name will also show up when they call.\n\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`);
 		if (contacts.length) embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 		else embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 

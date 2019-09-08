@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 					value: `${config.guildInvite}`,
 				},
 				{
-					name: "Invite discordtel!",
+					name: "Invite the bot!",
 					value: `[All permissions are essential](${config.botInvite})`,
 				},
 			],

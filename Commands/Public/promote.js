@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// let setTitle = async setup => {
 	// 	sEmbed.setTitle("Editing title")
-	// 		.setDescription(`Please input a title. (min 5, max 25 characters)\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+	// 		.setDescription(`Please input a title. (min 5, max 25 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
 	// 		.setFooter("(0) to quit. This menu will expire in 3 minutes.")
 	// 		.setTimestamp(new Date());
 	//
@@ -74,7 +74,7 @@ module.exports = async(client, msg, suffix) => {
 	// Functions for setup/changing individual settings
 	let setDescription = async setup => {
 		sEmbed.setTitle("Editing description")
-			.setDescription(`This is a general description of what you/your server is about and what your number is for. (min 20, max 150 characters)\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+			.setDescription(`This is a general description of what you/your server is about and what your number is for. (min 20, max 150 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
 			.setFooter("(0) to quit. This menu will expire in 5 minutes.")
 			.setTimestamp(new Date());
 
@@ -104,7 +104,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let setNumber = async setup => {
 		sEmbed.setTitle("Editing number")
-			.setDescription(`If you have chosen your number based on letters (for example 0800support), you may input this here. If not, simply type \`skip\`.\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+			.setDescription(`If you have chosen your number based on letters (for example 0800support), you may input this here. If not, simply type \`skip\`.\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
 			.setFooter("(0) to quit. This menu will expire in 2 minutes")
 			.setTimestamp(new Date());
 
@@ -115,7 +115,7 @@ module.exports = async(client, msg, suffix) => {
 		let filter = `${number.id.substring(0, 4)}\\w{7}`;
 		let regExp = new RegExp(filter, "i");
 		collected = (await msg.channel.awaitMessages(
-			async m => m.author.id === msg.author.id && (await client.replaceNumber(m.content) == number.id || /^skip$/i.test(m.content)),
+			m => m.author.id === msg.author.id && (client.replaceNumber(m.content) === number.id || /^skip$/i.test(m.content) || /^0$/.test(m.content)),
 			{ max: 1, time: 120000 }
 		)).first();
 
@@ -144,7 +144,7 @@ module.exports = async(client, msg, suffix) => {
 			if (setup) fieldsText += "(4) Finish setup";
 
 			sEmbed.setTitle("Editing features")
-				.setDescription(`To make your number stand out more, you may have up to 3 features listed in your promotion.\nFeatures are optional and you may choose to leave some or all empty.\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+				.setDescription(`To make your number stand out more, you may have up to 3 features listed in your promotion.\nFeatures are optional and you may choose to leave some or all empty.\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
 				.addField("Fields", fieldsText)
 				.setFooter("(0) to quit. This menu will expire in 2 minutes")
 				.setTimestamp(new Date());
@@ -173,7 +173,7 @@ module.exports = async(client, msg, suffix) => {
 
 		let editField = async nr => {
 			sEmbed.setTitle(`Editing title`)
-				.setDescription(`Enter a short title for this feature. (min 5, max 25 characters)\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+				.setDescription(`Enter a short title for this feature. (min 5, max 25 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
 				.setFooter("(0) to quit. This menu will expire in 3 minutes")
 				.setTimestamp(new Date());
 
@@ -196,7 +196,7 @@ module.exports = async(client, msg, suffix) => {
 			embed[`field${nr}`].title = collected.content;
 
 			sEmbed.setTitle(`Editing description`)
-				.setDescription(`Enter a description of this feature. (min 20, max 150 characters)\n\n_please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress." : ""}`)
+				.setDescription(`Enter a description of this feature. (min 20, max 150 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress." : ""}`)
 				.setFooter("(0) to quit. This menu will expire in 5 minutes")
 				.setTimestamp(new Date());
 

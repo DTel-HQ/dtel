@@ -37,6 +37,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 
 	await r.table("Busy").delete();
 	await r.table("Cooldowns").delete();
+	await r.table("Numbers").update({ waiting: false });
 
 	resolve(r);
 });
