@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 				url: "https://discordtel.austinhuang.me",
 			},
 			title: "List of Customer Support Commands",
-			description: `For more information... actually read the [CS Documentation](${config.guidelink}) you dumbo.`,
+			description: `For more information... actually read the [CS Documentation](${config.guidelink}), you dumbo.`,
 			fields: [
 				{
 					name: ">All commands",
