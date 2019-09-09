@@ -66,7 +66,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "I don't really need to explain them...Right, my master?",
-					value: "`>help`, `>info`, `>invite`, `>prefix`, `>ping`",
+					value: "`>help`, `>info`, `>invite`, `>links`, `>prefix`, `>ping`",
 				},
 			],
 			timestamp: new Date(),

@@ -50,6 +50,7 @@ module.exports = {
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
+	guidelink: "https://discordtel.austinhuang.me/en/latest/Customer%20Support%20Guide/",
 	guildInvite: "https://discord.gg/qRVxY55",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 	siteLink: "https://discordtel.austinhuang.me",
