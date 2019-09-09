@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!user) return msg.reply("How am I supposed to look up non existant user?!");
 
 	// Get all the needed information
-	let dmChannel = await user.createDM().catch(dmChannel = null);
+	let dmChannel = await user.createDM().catch(e => null);
 	let dmNumber;
 	if (dmChannel) dmNumber = (await r.table("Numbers").filter({ channel: dmChannel.id }))[0];
 	const strikes = await r.table("Strikes").filter({ offender: user.id });
