@@ -1,7 +1,9 @@
 module.exports = async(client, msg, suffix) => {
-	let user = msg.mentions.users ? msg.mentions.users.first() : await client.users.fetch(suffix.split(" ")[0]);
+	let userID = suffix.split(" ")[0];
+	let user = msg.mentions.users ? msg.mentions.users.first() : null;
+	if (!user) user = await client.users.fetch(userID);
 	let months = suffix.split(" ")[1];
-	if (!user || !months || months == 0) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">addvip [user] [months]" } });
+	if (!user || !months || months === 0) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">addvip [user] [months]" } });
 	if (!Number(months)) return msg.channel.send({ embed: { color: config.colors.error, title: "Wrong usage", description: "Months needs to be a number" } });
 
 	let account = await r.table("Accounts").get(user.id);
