@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let user = msg.mentions.users ? msg.mentions.users.first() : client.users.fetch(suffix.split(" ")[0]);
+	let user = msg.mentions.users ? msg.mentions.users.first() : await client.users.fetch(suffix.split(" ")[0]);
 	let months = suffix.split(" ")[1];
 	if (!user || !months || months == 0) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">addvip [user] [months]" } });
 	if (!Number(months)) return msg.channel.send({ embed: { color: config.colors.error, title: "Wrong usage", description: "Months needs to be a number" } });
