@@ -2,7 +2,7 @@ const { post } = require("snekfetch");
 
 module.exports = async(client, message, args) => {
 	const perms = await client.permCheck(message.author.id);
-	if (perms.boss || message.author.id === "139836912335716352") {
+	if (perms.boss || message.author.id === "139836912335716352" || message.author.id === "124989722668957700") {
 		if (args) {
 			let hrstart = process.hrtime();
 			try {
