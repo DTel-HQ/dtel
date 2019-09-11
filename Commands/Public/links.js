@@ -43,11 +43,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		},
 	};
-
-	let dmChannel = await msg.author.createDM();
 	try {
-		await msg.author.send(toSend);
-	} catch (_) {
 		await msg.channel.send(toSend);
 	}
 };
