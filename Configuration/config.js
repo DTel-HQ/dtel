@@ -32,8 +32,8 @@ module.exports = {
 
 	// EMOTES
 	callPhones: {
-		default: "<:DiscordTelPhone:310817969498226718>",
-		donator: "<:GoldPhone:320768431307882497>",
+		default: ":saxophone:",
+		donator: ":cool:",
 		support: ":telephone_receiver:",
 	},
 
@@ -50,6 +50,7 @@ module.exports = {
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=530437196696649738&scope=bot&permissions=67169284",
+	githubLink: "https://github.com/austinhuang0131/discordtel",
 	guidelink: "https://discordtel.austinhuang.me/en/latest/Customer%20Support%20Guide/",
 	guildInvite: "https://discord.gg/qRVxY55",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
@@ -76,6 +77,7 @@ module.exports = {
 		commands: "help",
 		contact: "contacts",
 		id: "identify",
+		link: "links",
 		mentions: "mention",
 		perm: "permcheck",
 	},

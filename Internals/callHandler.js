@@ -4,7 +4,10 @@ module.exports = async(cmd, msg, suffix, call) => {
 	await r.table("Calls").get(call.id).update(call);
 
 	const perms = await msg.author.getPerms();
+	let fromvip = msg.channel.id === call.from.channel ? call.from.vip : call.to.vip;
+
 	let phone = config.callPhones.default;
+	if (fromvip) phone = config.callPhones.donator;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
 

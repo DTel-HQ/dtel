@@ -1,8 +1,15 @@
 module.exports = async(client, msg, suffix) => {
+	let userID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix;
+	let user = await client.users.fetch(userID)
+		.catch(_ => null);
+	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that number." } });
+
+	let account = user.bot ? { balance: "Infinity", vip: "Infinity" } : null;
+
 	let perms = await msg.author.getPerms();
 
 	if (!perms.support || !suffix) {
-		let account = await r.table("Accounts").get(msg.author.id).default(null);
+		if (!account) account = await r.table("Accounts").get(msg.author.id).default(null);
 		if (!account) {
 			account = { id: msg.author.id, balance: 0 };
 			await r.table("Accounts").insert(account);
@@ -30,12 +37,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	} else {
-		let userID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix;
-		let user = await client.users.fetch(userID)
-			.catch(_ => null);
-		if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that number." } });
-
-		let account = await r.table("Accounts").get(userID);
+		if (!account) account = await r.table("Accounts").get(userID);
 		if (!account) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown account", description: "This user doesn't have an account." } });
 
 		msg.channel.send({

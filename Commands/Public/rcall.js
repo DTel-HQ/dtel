@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
 		if (!toDial) break;
 		let call = (await r.table("Calls").filter(r.row("from")("number").eq(toDial.id).or(r.row("to")("number").eq(toDial.id))))[0];
-		if (fromNumber.id == toDial.id || call) {
+		if (fromNumber.id == toDial.id || call || toDial.guild === msg.guild.id) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}

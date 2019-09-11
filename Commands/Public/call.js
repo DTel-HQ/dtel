@@ -143,12 +143,14 @@ module.exports = async(client, msg, suffix, rcall) => {
 		to: {
 			number: toDialDoc.id,
 			channel: toDialDoc.channel,
+			vip: toDialvip,
 			hidden: toDialvip ? toDialDoc.vip.hidden : false,
 			name: toDialvip ? toDialDoc.vip.name : false,
 		},
 		from: {
 			number: myNumber.id,
 			channel: myNumber.channel,
+			vip: myNumbervip,
 			hidden: myNumbervip ? myNumber.vip.hidden : false,
 			name: myNumbervip ? myNumber.vip.name : false,
 		},

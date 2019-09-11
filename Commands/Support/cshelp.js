@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 			description: `For more information... actually read the [CS Documentation](${config.guidelink}), you dumbo.`,
 			fields: [
 				{
-					name: ">All commands",
+					name: "All commands",
 					value: "addcredit, assign, backdoor, blacklist, broadcast, cinfo, cshelp, deassign, identify, minfo, ninfo, permcheck, reassign, rmstrike, strike, uinfo, whitelist",
 				},
 				{
@@ -25,15 +25,15 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">deassign",
-					value: "Use this when someone requests a number removal. Make sure they have the permission to request a removal! (`>permcheck`)\nFor a VIP number you may (**must**) use `>reassign` if they want to move their number.",
+					value: "Use this when someone requests a number removal. Make sure they have the permission to request a removal! (`>permcheck`)\nWhen dealing with a VIP number you **must** use `>reassign`, if they want to move/edit their number.",
 				},
 				{
 					name: ">identify (id)",
-					value: "Use this command on a message sent by the bot in order to get the ID of the original author.",
+					value: "Use this command on a message sent by the bot in order to get the ID of the original **author**.",
 				},
 				{
 					name: ">minfo",
-					value: "To get more information about a mailbox message.",
+					value: "To get more information about a **mailbox message**.",
 				},
 				{
 					name: ">permcheck (perm)",
@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">reassign",
-					value: "You must use reassign, instead of deassign and assign, when dealing with a VIP number. You can change both the channel and number this way.",
+					value: "You must use reassign, instead of deassign and assign, when dealing with a **VIP number**. You can change both the channel and number this way.",
 				},
 				{
 					name: ">whitelist",

@@ -1,5 +1,5 @@
 module.exports = async msg => {
-	if (msg.author.bot) return;
+	if (msg.author.bot || !client.done) return;
 	const perms = await msg.author.getPerms(msg.author.id);
 
 	// Fix messages

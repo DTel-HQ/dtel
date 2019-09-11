@@ -8,32 +8,52 @@ module.exports = async(client, msg, suffix) => {
 				icon_url: avatarURL,
 				url: "https://discordtel.austinhuang.me",
 			},
-			title: "List of Customer Support Commands",
-			description: `For more information... actually read the [CS Documentation](${config.guidelink}) you dumbo.`,
+			title: "List of *all* the links",
 			fields: [
 				{
 					name: "💻 Visit our website!",
-					value: `[DiscordTel's website](${config.siteLink})`,
+					value: `[DiscordTel's website.](${config.siteLink})`,
+					inline: true,
 				},
 				{
 					name: "🌎 Join our support guild!",
-					value: `[Support guild](${config.guildLink})`,
+					value: `[Join now](${config.guildInvite})`,
+					inline: true,
 				},
 				{
-					name: "💲 Support us by donating!",
-					value: `[Information](${config.paymentLink}) on purchasing credits or VIP months.`,
+					name: "📂 View our GitHub",
+					value: `[We are open source!](${config.githubLink})`,
+					inline: true,
 				},
 				{
-					name: "📋 Support us by voting!",
-					value: `You can find information about voting [here](${config.voteLink}) and receive more credits!`,
+					name: "💖 Support us!",
+					value: `[How to donate?](${config.paymentLink})`,
+					inline: true,
+				},
+				{
+					name: "📋 Vote for us!",
+					value: `[Get your free credits!](${config.voteLink})`,
+					inline: true,
+				},
+				{
+					name: "🔗 Invite the bot",
+					value: `[Right here!](${config.botInvite})`,
+					inline: true,
 				},
 				{
 					name: "💡 Suggest a feature!",
-					value: `Go [here](${config.suggestLink}) and help us improve the bot with your suggestion(s)!`,
+					value: `[Suggestions page](${config.suggestLink})`,
+					inline: true,
 				},
 				{
 					name: "💪 Join our team!",
-					value: `[Fill in](${config.applyLink}) an application and come strengthen our team. (applications are only looked at when we're searching)`,
+					value: `[Apply now!](${config.applyLink})`,
+					inline: true,
+				},
+				{
+					name: "\u200b",
+					value: "\u200b",
+					inline: true,
 				},
 			],
 			timestamp: new Date(),
@@ -45,9 +65,5 @@ module.exports = async(client, msg, suffix) => {
 	};
 
 	let dmChannel = await msg.author.createDM();
-	try {
-		await msg.author.send(toSend);
-	} catch (_) {
-		await msg.channel.send(toSend);
-	}
+	await msg.channel.send(toSend);
 };
