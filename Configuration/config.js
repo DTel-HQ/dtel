@@ -34,7 +34,7 @@ module.exports = {
 	callPhones: {
 		default: ":saxophone:",
 		donator: ":cool:",
-		support: ":telephone_receiver:",
+		support: ":cop:",
 	},
 
 	// IDs

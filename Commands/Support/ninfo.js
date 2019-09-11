@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.name}\nDM: ${channel.type === "dm" ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${number.owner ? number.owner : guild.ownerID}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
 		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}` : "None", true)
-		.addField("Created, expiry", `• ${number.createdAt}\n• ${number.expiry}`, true)
+		.addField("Created, expiry", `• ${number.createdAt}\n• ${new Date(number.expiry)}`, true)
 		.addField("Blocked", number.blocked && number.blocked.length ? number.blocked.join(", ") : "None", true)
 		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.size ? strikes.map(s => `${strikes.indexOf(s)}. ${s.reason}`).join("\n") : "None");
 	if (guild) embed.setThumbnail(guild.iconURL());

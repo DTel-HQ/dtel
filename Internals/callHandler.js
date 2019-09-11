@@ -1,3 +1,5 @@
+const { MessageAttachment } = require("discord.js");
+
 module.exports = async(cmd, msg, suffix, call) => {
 	if (!call.pickedUp || call.onhold || !msg.content) return;
 	call.lastMessage = new Date().getTime();
@@ -9,6 +11,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+	let attachments = msg.attachments.array();
+
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
 
 	try {
@@ -22,7 +26,10 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	// Send msg, hidden?
 	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
-	let sent = await client.apiSend(`**${toSend == config.supportChannel ? msg.author.tag : hidden ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? `(${msg.author.id})` : ""}** ${phone} ${msg.content}`, toSend);
+
+	// send the msg
+	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? `(${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	let sent = await client.apiSend(content, toSend);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
