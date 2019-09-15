@@ -9,8 +9,8 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	// Pickup - reply first or it'll seem slow
-	msg.channel.send({ embed: { color: config.colors.success, title: "You picked up the call.", description: "You can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`! Note: if they are trolls, call *611." } });
-	client.apiSend({ embed: { color: config.colors.success, title: "The other side picked up!", description: "You can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`. Note: if they are trolls, call *611." } }, call.from.channel);
+	msg.channel.send({ embed: { color: config.colors.success, title: "You picked up the call.", description: "You can now put the call on `>hold`, or transfer the call to another number by using `>transfer <number>`! Note: if they are trolls, call *611.", footer: { text: call.id } } });
+	client.apiSend({ embed: { color: config.colors.success, title: "The other side picked up!", description: "You can now put the call on `>hold`, or transfer a call to another number by using `>transfer <number>`. Note: if they are trolls, call *611.", footer: { text: call.id } } }, call.from.channel);
 	client.log(`:white_check_mark: ${call.rcall ? "Rcall" : "Call"} \`${call.from.hidden ? "hidden" : call.from.channel} → ${call.to.hidden ? "hidden" : call.to.channel}\` was picked up by ${msg.author.tag} (${msg.author.id}). ${call.id}`);
 	call.pickedUp = true;
 	await r.table("Calls").get(call.id).update(call);

@@ -28,7 +28,8 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	// See if the other channel is already in a call
-	let activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
+	let activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
+	if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
 	if (activeCall) return msg.channel.send({ embed: { color: config.colors.error, title: "Busy line", description: "That number is already in a call." } });
 
 	// All checks returned well, delete current call.
@@ -63,18 +64,18 @@ module.exports = async(client, msg, suffix, call) => {
 	let fromNumbervip = fromNumber.vip ? new Date(fromNumber.vip.expiry).getTime() > Date.now() : false;
 
 	client.log(`:arrow_right: Channel \`${fromNumbervip ? fromNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to \`${toNumbervip ? newCall.to.hidden ? "hidden" : newCall.to.channel : newCall.to.channel}\` by \`${msg.channel.id}\``);
-	await msg.channel.send({ embed: { color: config.colors.success, title: "Transferring...", description: `You have transferred the other side to \`${toDial}\`.` } });
+	await msg.channel.send({ embed: { color: config.colors.success, title: "Transferring...", description: `You have transferred the other side to \`${toDial}\`.`, footer: { text: call.id } } });
 	if (newCall.to.number === "08006113835") client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
-	await client.apiSend({ embed: { color: config.colors.info, title: "You're being transferred...", description: `You have been transferred by the other side. Now dialing ${newCall.to.number === "08006113835" ? "Customer Support" : toNumbervip ? newCall.to.vip.hidden ? newCall.to.vip.name ? `\`${newCall.to.vip.name}\`` : "Hidden" : newCall.to.vip.name ? `\`${newCall.to.vip.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...` } }, newCall.from.channel);
-	client.apiSend({ content: toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${fromNumber.id === "08006113835" ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.` } }, newCall.to.channel);
+	await client.apiSend({ embed: { color: config.colors.info, title: "You're being transferred...", description: `You have been transferred by the other side. Now dialing ${newCall.to.number === "08006113835" ? "Customer Support" : toNumbervip ? newCall.to.vip.hidden ? newCall.to.vip.name ? `\`${newCall.to.vip.name}\`` : "Hidden" : newCall.to.vip.name ? `\`${newCall.to.vip.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, footer: { text: `old: ${call.id}, new: ${newCall.id}` } } }, newCall.from.channel);
+	client.apiSend({ content: toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${fromNumber.id === "08006113835" ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: newCall.id } } }, newCall.to.channel);
 
 	setTimeout(async() => {
 		let callDoc = await r.table("Calls").get(newCall.id);
 		if (!callDoc || callDoc.pickedUp) return;
 
 		// Delete old call
-		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)" } }, newCall.from.channel);
-		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" } }, newCall.to.channel);
+		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", footer: { text: newCall.id } } }, newCall.from.channel);
+		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)", footer: { text: newCall.id } } }, newCall.to.channel);
 		client.log(`:telephone: The call between channel ${newCall.from.hidden ? "hidden" : newCall.from.channel} and channel ${newCall.to.hidden ? "hidden" : newCall.to.channel} was not picked up.`);
 		await r.table("OldCalls").insert(callDoc);
 		await r.table("Calls").get(newCall.id).delete();

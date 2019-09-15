@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let fromNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	let fromNumber = await msg.channel.number;
 	if (!fromNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number. Run `>wizard` to create one." } });
 
 	let phonebook = await r.table("Phonebook");
@@ -17,7 +17,8 @@ module.exports = async(client, msg, suffix) => {
 	while (!toCall) {
 		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
 		if (!toDial) break;
-		let call = (await r.table("Calls").filter(r.row("from")("number").eq(toDial.id).or(r.row("to")("number").eq(toDial.id))))[0];
+		let call = await r.table("Calls").getAll(toDial.id, { index: "fromChannel" }).nth(0).default(null);
+		if (!call) call = await r.table("Calls").getAll(toDial.id, { index: "toChannel" }).nth(0).default(null);
 		if (fromNumber.id == toDial.id || call || toDial.guild === msg.guild.id) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;

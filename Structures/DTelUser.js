@@ -16,7 +16,7 @@ module.exports = () => {
 			}
 
 			get blacklisted() {
-				return !!r.table("Blacklist").get(this.id);
+				return r.table("Blacklist").get(this.id).default(false);
 			}
 
 			async getPerms() {

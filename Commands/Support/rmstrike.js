@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!offender) return;
 
-	let totalStrikes = (await r.table("Strikes").filter({ offender: strike.offender })).length;
+	let totalStrikes = (await r.table("Strikes").getAll(strike.offender, { index: "offender" }).default([])).length;
 
 	await (await client.users.get(strike.offender).createDM()).send({ embed: { color: config.colors.info, title: "A strike has been removed", description: `A customer support agent removed strike \`${strikeID}\` from your strikes. You now have ${totalStrikes} strike(s) and need ${3 - totalStrikes} more to get blacklisted.` } });
 };

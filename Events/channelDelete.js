@@ -1,6 +1,6 @@
 module.exports = async channel => {
 	if (channel.type != "text") return;
-	let number = (await r.table("Numbers").filter({ channel: channel.id }))[0];
+	let number = await channel.number;
 	if (!number) return;
 	await r.table("Numbers").get(number.id).delete();
 	await r.table("Phonebook").get(number.id).delete();

@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!from || !to) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">reassign [from number/channel] [to number/channel]\n\nNote: You can not mention a channel, use the ID." } });
 
 	// Get the FROM number
-	let numberDoc = (await r.table("Numbers").filter({ channel: from }))[0];
+	let numberDoc = await r.table("Numbers").filter(from, { index: "channel" }).nth(0).default(null);
 	if (!numberDoc) {
 		from = client.replaceNumber(from);
 		numberDoc = await r.table("Numbers").get(from);
@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		let regex = new RegExp(`^${prefix}\\d{7}$`);
 		if (!regex.test(newNumber)) return msg.channel.send({ embed: { color: config.colors.error, title: "Bad number", description: "Please make sure to enter a correct new number" } });
 	} else {
-		let toChannelDoc = (await r.table("Numbers").filter({ channel: toChannel.id }))[0];
+		let toChannelDoc = await r.table("Numbers").getAll(toChannel.id, { index: "channel" });
 		if (toChannelDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Channel taken", description: "The new channel already has a number." } });
 	}
 

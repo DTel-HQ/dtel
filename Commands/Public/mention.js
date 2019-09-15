@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	const number = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	const number = await msg.channel.number;
 	if (!number || number.id == "08006113835") return;
 
 	// Get/make list of toPing and string

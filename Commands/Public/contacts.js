@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	const myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	const myNumber = await msg.channel.number;
 	if (!myNumber) return;
 	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "This channel's number has expired. Please call `*233` to renew it." } });
 

@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
   */
 
 	// Do the necessary checks
-	let number = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	let number = await msg.channel.number;
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
 	await r.table("Busy").insert({ id: msg.author.id });
 	let account = await msg.author.account;

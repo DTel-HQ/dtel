@@ -9,10 +9,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
 	else client.cooldown(msg.author.id, "call");
 
-	let myNumber = await r.table("Numbers")
-		.getAll(msg.channel.id, { index: "channel" })
-		.nth(0)
-		.default(null);
+	let myNumber = await msg.channel.number;
 
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
@@ -54,7 +51,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 		return client.delete(toDialDoc.id);
 	}
 
-	let activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
+	let activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
+	if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
 	// This could be turned into a module for hangup support.
 	if (activeCall) {
 		// Max time must be full minutes.
@@ -92,7 +90,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 			let retry = 0;
 			let i = setInterval(async() => {
 				retry++;
-				activeCall = (await r.table("Calls").filter(r.row("from")("number").eq(toDial).or(r.row("to")("number").eq(toDial))))[0];
+				activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
+				if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
 				if (!activeCall) {
 					await r.table("Numbers").get(myNumber.id).update({ waiting: false });
 					clearInterval(i);
@@ -164,9 +163,9 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
 
 	// This one-lining should honestly stop.
-	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\`...`, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}` } });
+	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\`...`, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`, footer: { text: callDoc.id } } });
 	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
-	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.` } }, toDialDoc.channel);
+	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: callDoc.id } } }, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
 	setTimeout(async() => {
@@ -175,13 +174,13 @@ module.exports = async(client, msg, suffix, rcall) => {
 		if (!newCallDoc) newCallDoc = await r.table("Calls").get(callDoc.id);
 		if (!newCallDoc || newCallDoc.pickedUp) return;
 
-		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" } }, callDoc.to.channel);
+		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" }, footer: { text: callDoc.id } }, callDoc.to.channel);
 		client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up.`);
 		await r.table("Calls").get(callDoc.id).delete();
 		await r.table("OldCalls").insert(callDoc);
 
 		let mailbox = await r.table("Mailbox").get(toDialDoc.channel);
-		if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)" } });
-		else return msg.channel.send({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", description: `**[Automated mailbox message:](${config.siteLink})** ${mailbox.autoreply}\n\nYou can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
+		if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", footer: { text: callDoc.id } } });
+		else return msg.channel.send({ embed: { color: config.colors.error, footer: { text: callDoc.id }, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", description: `**[Automated mailbox message:](${config.siteLink})** ${mailbox.autoreply}\n\nYou can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
 	}, 120000);
 };

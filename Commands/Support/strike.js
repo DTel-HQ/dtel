@@ -49,7 +49,7 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Strikes").insert(strikeDoc);
 
-	let totalStrikes = await r.table("Strikes").filter({ offender: toStrike });
+	let totalStrikes = await r.table("Strikes").getAll(toStrike, { index: "offender" }).default([]);
 	if (totalStrikes.length >= 3) {
 		let blacklist = await r.table("Blacklist").get(toStrike);
 		if (!blacklist) {

@@ -1,6 +1,6 @@
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
-	const call = await (await r.table("Calls").filter(r.row("from")("channel").eq(nmsg.channel.id).or(r.row("to")("channel").eq(nmsg.channel.id))))[0];
+	let call = await nmsg.channel.call;
 	if (!call || !call.pickedUp || call.onHold || !nmsg.content) return;
 
 	let perms = await nmsg.author.getPerms();

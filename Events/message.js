@@ -8,10 +8,10 @@ module.exports = async msg => {
 	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
 
 	// Check for call
-	let call = (await r.table("Calls").filter(r.row("from")("channel").eq(msg.channel.id).or(r.row("to")("channel").eq(msg.channel.id))))[0];
+	let call = await msg.channel.call;
 
 	// Check if they're blacklisted → yes? return
-	// if (msg.author.blacklisted || (msg.guild && msg.guild.blacklisted)) return;
+	if (await msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
@@ -30,7 +30,6 @@ module.exports = async msg => {
 	} else if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
-
 	if (!msg.content.startsWith(prefix)) return;
 
 	// Check busy and cooldown
@@ -47,7 +46,6 @@ module.exports = async msg => {
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if ((await msg.author.getPerms()).support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
-
 	// Run the command
 	if (cmdFile) {
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);

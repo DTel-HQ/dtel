@@ -7,14 +7,14 @@ module.exports = async(client, msg, suffix) => {
 	if (!id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >ninfo [number/channelID]" } });
 
 	let number = await r.table("Numbers").get(id);
-	if (!number) number = (await r.table("Numbers").filter({ channel: id }))[0];
+	if (!number) number = await r.table("Numbers").getAll(id, { index: "channel" });
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "Couldn't find that number." } });
 
 	// Get tha information
 	const channel = await client.channels.resolve(number.channel);
 	const guild = channel.guild ? await client.guilds.resolve(channel.guild.id) : null;
 	const owner = guild ? await client.users.fetch(guild.ownerID) : await client.users.fetch(channel.owner);
-	const strikes = guild ? await r.table("Strikes").filter({ offender: guild.id }) : await r.table("Strikes").filter({ offender: owner.id });
+	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
 	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
 	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
 

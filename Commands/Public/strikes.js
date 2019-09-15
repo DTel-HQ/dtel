@@ -2,8 +2,8 @@ const Discord = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	if (!(await msg.author.getPerms()).support || !suffix) {
-		let userStrikes = await r.table("Strikes").filter({ offender: msg.author.id });
-		let guildStrikes = msg.guild ? await r.table("Strikes").filter({ offender: msg.guild.id }) : [];
+		let userStrikes = await r.table("Strikes").getAll(msg.author.id, { index: "offender" }).default([]);
+		let guildStrikes = msg.guild ? await r.table("Strikes").getAll(offenderID, { index: msg.guild.id }).default([]) : [];
 		let embed = {
 			color: config.colors.info,
 			title: `Strikes for ${msg.author.tag} (${msg.author.id})`,
@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let offenderID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];
-	let strikes = await r.table("Strikes").filter({ offender: offenderID });
+	let strikes = await r.table("Strikes").getAll(offenderID, { index: "offender" }).default([]);
 
 	if (!strikes) return msg.channel.send({ embed: { color: config.colors.info, title: "Completely clean!", description: "This ID does not have any strikes." } });
 

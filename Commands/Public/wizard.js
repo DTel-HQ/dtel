@@ -1,11 +1,11 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	let myNumber = await msg.channel.number;
 	if (myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel already has a number. Call `*611` if you want to change/remove it." } });
 
 	if (msg.guild && !msg.guild.whitelisted) {
-		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
+		let guildNumbers = (await msg.guild.numbers).length;
 		if (guildNumbers >= config.maxNumbers) return msg.channel.send({ embed: { color: config.colors.error, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.\n\nIf you have a good use for more numbers (eg. roleplaying server), please [contact our staff](${config.guildInvite}) to get whitelisted.`, footer: { text: "This limit was set to prevent trolling" } } });
 	}
 

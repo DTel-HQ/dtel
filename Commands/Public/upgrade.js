@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	// Get their details
-	let number = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	let number = msg.channel.number;
 	let vipExpiry = number ? number.vip ? new Date(number.vip.expiry) : null : null;
 	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 

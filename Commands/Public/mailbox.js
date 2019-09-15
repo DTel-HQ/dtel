@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	// get the number
-	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
+	let myNumber = await msg.channel.number;
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number." } });
 
 	// check if they have permission to do stuff
