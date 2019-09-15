@@ -14,15 +14,15 @@ module.exports = async(client, msg, suffix, rcall) => {
 		.nth(0)
 		.default(null);
 
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
+	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`." } });
+
 	if (myNumber.waiting) return;
 
 	let toDial = suffix;
 	if (!toDial) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "You didn't specify a number... `>call [number]`" } });
 
 	toDial = await client.replaceNumber(toDial);
-
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
-	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`." } });
 
 	if (toDial == myNumber.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Why would you call yourself?", description: "Try `>rcall` if you don't have anyone to call!" } });
 	if (config.aliasNumbers[toDial]) {
@@ -164,7 +164,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	// This one-lining should honestly stop.
 	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\`...`, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}` } });
-	client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
+	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
 	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.` } }, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
@@ -175,7 +175,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		if (!newCallDoc || newCallDoc.pickedUp) return;
 
 		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" } }, callDoc.to.channel);
-		client.log(`:telephone: ${rcall ? "Rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up.`);
+		client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up.`);
 		await r.table("Calls").get(callDoc.id).delete();
 		await r.table("OldCalls").insert(callDoc);
 

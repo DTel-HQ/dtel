@@ -2,9 +2,8 @@ module.exports = async(client, msg, suffix) => {
 	let userID = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix;
 	let user = await client.users.fetch(userID)
 		.catch(_ => null);
-	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that number." } });
 
-	let account = user.bot ? { balance: "Infinity", vip: "Infinity" } : null;
+	let account = user ? user.bot ? { balance: "Infinity", vip: "Infinity" } : null : null;
 
 	let perms = await msg.author.getPerms();
 
@@ -37,6 +36,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		});
 	} else {
+		if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that number." } });
 		if (!account) account = await r.table("Accounts").get(userID);
 		if (!account) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown account", description: "This user doesn't have an account." } });
 

@@ -29,7 +29,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	let tablelist = await r.tableList().run();
 	for (let i of tables) if (!tablelist.includes(i)) await r.tableCreate(i).run();
 
-	await r.branch(r.table("Calls").indexList().contains("channel"), null, r.table("Calls").indexCreate("channel", [r.row("to")("channelID"), r.row("from")("channelID")]));
+	await r.branch(r.table("Calls").indexList().contains("channel"), null, r.table("Calls").indexCreate("channel", [r.row("to")("channel"), r.row("from")("channel")]));
 	await r.branch(r.table("Calls").indexStatus("channel").nth(0)("ready"), null, r.table("Calls").indexWait("channel"));
 
 	await r.branch(r.table("Numbers").indexList().contains("channel"), null, r.table("Numbers").indexCreate("channel", row => row("channel")));

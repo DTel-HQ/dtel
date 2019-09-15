@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 	// NUMBER
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && m.content.length === 11,
+			m => m.author.id === msg.author.id && (m.content.length === 11 || /^0$/.test(m.conntent)),
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
