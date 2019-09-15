@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	if (account.balance < 0) return msg.reply({ embed: { color: config.colors.error, title: "We aren't not a loan service.", description: `That request would leave them with ¥${account.balance}.` } });
+	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't not a loan service.", description: `That request would leave them with ¥${account.balance}.` } });
 
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
 	msg.channel.send({ embed: { color: config.colors.success, title: "Success!", description: `${neg ? "Removed" : "Added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag}'s account.`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });

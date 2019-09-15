@@ -10,11 +10,10 @@ module.exports = async(client, msg, suffix) => {
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
-		msg.reply(`You don't have an account created...Creating an account for you! Please also read for information on payment: <${config.paymentLink}>`);
 	}
 
-	if (account.balance < parseInt(amount)) return msg.reply(`Insufficient balance! You have ${account.balance} credits.`);
-	if (isNaN(amount)) return msg.reply("That's not a number!");
+	if (account.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
+	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 
 	let snekres;
 	try {
@@ -28,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		});
 	} catch (err) {
 		if (err.status === 503) {
-			return msg.reply("API Error (Downtime?)! Please contact MacDue#4453.");
+			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "API Error (Downtime?)! Please contact MacDue#4453." } });
 		}
 		switch (err.body.status) {
 			case "error": {

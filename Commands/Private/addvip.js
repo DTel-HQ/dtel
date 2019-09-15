@@ -10,7 +10,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
-		msg.reply(`They don't have an account created... creating an account for them!`);
 	}
 
 	if (account.vip && account.vip + Number(months) < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "Negative amount of months", description: `Their current amount of months (${account.vip}) plus ${Number(months)} would result in ${account.vip + Number(months)}` } });

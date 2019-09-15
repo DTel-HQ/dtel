@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
-	if (myNumber) return msg.reply("This channel already has a number. Call `*611` if you want to remove it.");
+	if (myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel already has a number. Call `*611` if you want to change/remove it." } });
 
 	if (msg.guild && !msg.guild.whitelisted) {
 		let guildNumbers = (await r.table("Numbers").filter({ guild: msg.guild.id })).length;
@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 	if (!perm) perm = (await msg.author.getPerms()).support;
-	if (!perm) return msg.reply("You need to have `manage guild` permission to run this command.");
+	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need to have `manage guild` permission to run this command." } });
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.ids[0] + 1)}`;
 	let toChoose = true;
@@ -54,22 +54,22 @@ module.exports = async(client, msg, suffix) => {
 
 		let collected = collector.first();
 		if (!collected) {
-			return msg.reply("Wizard expired. Please run `>wizard` again when you have a number ready.");
+			return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "Wizard expired. Please run `>wizard` again when you have a number ready." } });
 		}
 		if (collected.content.startsWith(config.prefix)) return;
-		if (collected.content == "0") return msg.reply("Exiting wizard...");
+		if (collected.content == "0") return msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } });
 
 		number = await client.replaceNumber(collected.content);
 
 		let regex = new RegExp(`^${prefix}\\d{7}$`);
 		if (!regex.test(number)) {
-			msg.reply("Invalid number, please try again.");
+			msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Please try again." } });
 			return numberChooser();
 		}
 
 		let existingNumber = await r.table("Numbers").get(number);
 		if (existingNumber) {
-			msg.reply("That number already exists, please try again.");
+			msg.channel.send({ embed: { color: config.colors.error, title: "Existing number", description: "That number already exists, please try again." } });
 			return numberChooser();
 		}
 
@@ -103,7 +103,7 @@ module.exports = async(client, msg, suffix) => {
 		);
 
 		let collected = collector.first();
-		if (!collected) return msg.reply("Wizard timed out. Please call `*411` if you want to set a phonebook description.");
+		if (!collected) return msg.channel.send({ embed: { color: config.colors.info, title: "Timed out", description: "Wizard timed out. Please call `*411` if you want to set a phonebook description." } });
 		if (collected.content.startsWith(config.prefix))	return;
 		if (collected.content === "skip") {
 			return embedSender();
@@ -114,7 +114,7 @@ module.exports = async(client, msg, suffix) => {
 			let max = 500;
 			let l = description.length;
 			if (min > l || l > max) {
-				await msg.reply(`Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.`);
+				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
 				return phonebookChooser();
 			}
 

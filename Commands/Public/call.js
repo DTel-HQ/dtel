@@ -15,12 +15,13 @@ module.exports = async(client, msg, suffix, rcall) => {
 		.default(null);
 
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
-	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`." } });
 
 	if (myNumber.waiting) return;
 
 	let toDial = suffix;
 	if (!toDial) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "You didn't specify a number... `>call [number]`" } });
+
+	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`." } });
 
 	toDial = await client.replaceNumber(toDial);
 

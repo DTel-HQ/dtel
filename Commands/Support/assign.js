@@ -1,4 +1,6 @@
 module.exports = async(client, msg, suffix) => {
+	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >assign [channelID/number] [number/channelID]" } });
+
 	let channelID, number;
 	if (msg.mentions.channels.first()) {
 		channelID = msg.mentions.channels.first().id;
@@ -14,24 +16,23 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let channel = await client.channels.get(channelID);
-	if (!channel) return msg.reply("<:Monocle:366036726449438731> **That channel is nowhere to be found.** Syntax: `>assign (channel ID) (number)` ");
+	if (!channel) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Couldn't find that channel." } });
 
-	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **Hey, I think you forgot two parameters!** Syntax: `>assign (channel ID) (number)`");
 	number = client.replaceNumber(number);
 
 	if (!/^0(900|30\d|8(00|44))\d{7}$/.test(number)) {
-		return msg.reply("<:thonkku:356833797804916737> **Is this a valid 11-digit number?** Course not, you dumbass");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "**Is this a valid 11-digit number?** Course not, you dumbass" } });
 	}
 	if (channel.type == "dm" && !/^0(900|8(00|44))\d{7}$/.test(number)) {
-		return msg.reply("**Don't you know what prefix a dm channel has?** It's `0900`.");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid prefix", description: "**Don't you know what prefix a dm channel has?** It's `0900`." } });
 	}
 
 	let foundNumber;
 	foundNumber = await r.table("Numbers").get(number).default(null);
-	if (foundNumber) return msg.reply("<:francis:327464171211849728> **This number is already registered:tm:!**");
+	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That number is already in use!" } });
 	foundNumber = await r.table("Numbers").getAll(channelID, { index: "channel" }).nth(0)
 		.default(null);
-	if (foundNumber) return msg.reply("<:francis:327464171211849728> **There is already a number in this channel!**");
+	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That channel already has a number!" } });
 	const expiryDate = new Date();
 	expiryDate.setMonth(expiryDate.getMonth() + 1);
 
@@ -48,6 +49,6 @@ module.exports = async(client, msg, suffix) => {
 
 	let newNumber = await r.table("Numbers").insert(numberDoc);
 
-	msg.reply("Done. Now turn back to your client!");
+	msg.channel.send({ embed: { color: config.colors.success, title: "ASsigned number", description: `Succesfully assigned ${numberDoc.id} to ${numberDoc.channel}.`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 	client.log(`:green_book: Number \`${numberDoc.id}\` is assigned to channel ${numberDoc.channel} by ${msg.author.tag}.`);
 };
