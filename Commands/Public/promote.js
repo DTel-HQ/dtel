@@ -25,7 +25,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!account) {
 		account = { id: msg.author.id, balance: 0 };
 		await r.table("Accounts").insert(account);
-		await msg.reply(`You don't have an account created...Creating an account for you! Please also read for information on payment: <${config.paymentLink}>`);
 	}
 	if (!number.promote) {
 		number.promote = { lastmsg: null, lastuser: null, lastPromoted: null, lastEdited: null, embed: { title: null, description: null, number: null, field1: { title: null, description: null, n: 1 }, field2: { title: null, description: null, n: 2 }, field3: { title: null, description: null, n: 3 } } };

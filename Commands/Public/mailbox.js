@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	// get the number
 	let myNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
-	if (!myNumber) return msg.reply("This channel doesn't have a number.");
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number." } });
 
 	// check if they have permission to do stuff
 	let perm = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
@@ -20,8 +20,8 @@ module.exports = async(client, msg, suffix) => {
 	// If there's no mailbox
 	if (!mailbox) {
 		// Permission?
-		if (!perm) return msg.reply("This channel doesn't have a mailbox set up yet. Ask an admin to run this command.");
-		omsg = await msg.reply("You don't have a mailbox set up. Respond `yes` to create one.");
+		if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Mailbox?", description: "This channel does not have a mailbox set up yet. Ask an admin to run this command." } });
+		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setup", description: "You don't have a mailbox set up. Respond `yes` to create one." } });
 
 		// yes/no collector
 		collector = await msg.channel.awaitMessages(
@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 		omsg.delete().catch(e => null);
 		if (collected.guild) collected.delete();
 
-		omsg = await msg.channel.send("Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
+		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setting autoreply", description: "Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
 
 		// autoreply collector
 		collector = await msg.channel.awaitMessages(
@@ -50,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 		await r.table("Busy").get(msg.author.id).delete();
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
-		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
+		if (!collected) return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "You ran out of time, get an autoreply ready and start the set-up again." } });
 
 		if (collected.guild) collected.delete();
 
@@ -73,9 +73,9 @@ module.exports = async(client, msg, suffix) => {
 		} });
 	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
 		// deleting mailbox
-		if (!perm) return msg.reply(":x: You need the manage server permission to do this.");
+		if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need the manage guild permission for this." } });
 
-		omsg = await msg.reply("Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel.");
+		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Confirmation", description: "Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel." } });
 		collector = await msg.channel.awaitMessages(
 			m => /(^yes|no$)/i.test(m.content) && msg.author.id == m.author.id,
 			{
@@ -86,17 +86,17 @@ module.exports = async(client, msg, suffix) => {
 
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
-		if (!collected) return msg.reply("Mailbox deletion expired.");
+		if (!collected) return;
 
 		if (/^yes$/i.test(collected.content)) {
 			omsg.delete().catch(e => null);
 			await r.table("Mailbox").get(msg.channel.id).delete();
-			msg.channel.send("Mailbox deletion succesful.");
+			msg.channel.send({ embed: { color: config.colors.error, title: "R.I.P.", description: "Mailbox deletion succesful." } });
 		} else {
-			msg.channel.send("Mailbox deletion aborted.");
+			msg.channel.send({ embed: { color: config.colors.error, title: "That was close!", description: "Mailbox deletion aborted." } });
 		}
 	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
-		omsg = await msg.channel.send("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)");
+		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Editing autoreply", description: "Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
 
 		// autoreply collector
 		collector = await msg.channel.awaitMessages(
@@ -109,7 +109,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
-		if (!collected) return msg.reply("You ran out of time, get an autoreply ready and start the set-up again.");
+		if (!collected) return;
 
 		if (collected.guild) collected.delete();
 
@@ -200,7 +200,7 @@ module.exports = async(client, msg, suffix) => {
 					await r.table("Busy").get(msg.author.id).delete();
 
 					await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
-					msg.reply("🔥 A fire has gotten rid of all your messages.");
+					msg.channel.send({ embed: { color: config.colors.info, title: "Whoosh", description: "After leaving your mailbox open, a strong wind came along and blew all your messages away. (R.I.P.)", footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
@@ -229,7 +229,7 @@ module.exports = async(client, msg, suffix) => {
 					await r.table("Busy").get(msg.author.id).delete();
 
 					await r.table("Mailbox").get(msg.channel.id).delete();
-					msg.reply("This channel's mailbox has been deleted.");
+					msg.channel.send({ embed: { color: config.colors.info, title: "Angry neighbour", description: "Your angry neighbour came along and demolished your mailbox and set all the messages on fire.", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
@@ -278,7 +278,7 @@ module.exports = async(client, msg, suffix) => {
 		let messagePage = async(id, page) => {
 			let message = messages.filter(m => m.id == id)[0];
 			if (id == "0") return;
-			if (!message) return msg.reply(`Something went wrong. Please contact a maintainer <${config.guildInvite}>`);
+			if (!message) return msg.channel.send({ embed: { color: config.colors.error, title: "Err%6F%72", description: `Something went wrong, please call \`*611\` or join our support server: ${config.guildInvite}` } });
 
 			let date = Date(message.date);
 			let embed = new MessageEmbed()

@@ -10,7 +10,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!account) {
 		account = { id: msg.author.id, balance: 0, daily: false };
 		await r.table("Accounts").insert(account);
-		await msg.reply(`You don't have an account created...Creating an account for you! Please also read for information on payment: <${config.paymentLink}>`);
 	}
 
 	// Send general embed based on variables

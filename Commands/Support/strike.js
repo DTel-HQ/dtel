@@ -9,8 +9,8 @@ module.exports = async(client, msg, suffix) => {
 	suffix.shift();
 	let reason = suffix.join(" ");
 
-	if (!toStrike || !reason) return msg.reply("<:BusThinking:341628019472990209> this command requires 2 parameters. Syntax: `>strike [user] [reason]`");
-	if (toStrike == msg.author.id) return msg.reply("What are you striking yourself for?");
+	if (!toStrike || !reason) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >strike [userID/guildID/channelID] [reason]" } });
+	if (toStrike == msg.author.id) return msg.reply(`\n>fire ${msg.author.tag}`);
 
 	let user,
 		guild,
@@ -22,15 +22,15 @@ module.exports = async(client, msg, suffix) => {
 		channel = await client.api.channels(toStrike).get().catch(e => null);
 		if (channel) guild = await client.channels.get(toStrike).guild.id;
 	}
-	if (!user && !guild) return msg.reply("Are you sure that ID is a guild or user?");
+	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid ID", description: "Couldn't find a guild or user matching that ID." } });
 
 	if (user) {
-		if (user.bot) return msg.reply("Why would you strike a bot <:BusThinking:341628019472990209>");
+		if (user.bot) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot user", description: "Don't try striking my brothers!" } });
 		let toStrikePerms = await client.users.get(toStrike).getPerms();
-		if (toStrikePerms.boss || toStrikePerms.manager) return msg.reply("You can't strike a boss or manager");
-		if (toStrikePerms.support && !(perms.boss || perms.manager)) return msg.reply("You can't strike your colleagues.");
+		if (toStrikePerms.boss || toStrikePerms.manager) return msg.reply(`\n>fire ${msg.auhor.tag}`);
+		if (toStrikePerms.support && !(perms.boss || perms.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
 	} else if (guild.id == config.supportGuild) {
-		return msg.reply("As if we'd would allow you to do this.");
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Turning against us?", description: "As if we'd would allow you to do this." } });
 	}
 
 	let strikes = await r.table("Strikes");
@@ -54,17 +54,19 @@ module.exports = async(client, msg, suffix) => {
 		let blacklist = await r.table("Blacklist").get(toStrike);
 		if (!blacklist) {
 			await r.table("Blacklist").insert({ id: toStrike });
-			msg.reply(`This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\``);
-			if (user) (await user.createDM()).send(`You have received your third strike and have been blacklisted. Reason given for strike: ${reason}`);
+			msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\`` } });
+			if (user) (await user.createDM()).send({ embed: { color: config.colors.info, title: "You were blacklisted", description: `You have received your third strike and have been blacklisted. Reason given for strike: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them their blacklist." } }));
+			else (await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server received was blacklisted", description: `Your server ${guild.name}(${guild.id}) has been blacklisted due to the following reason: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the blacklist." } }));
+			if (channel) channel.send({ embed: { color: config.colors.info, title: "This server received a strike", description: `This server has been striked due to the following reason: \n_${reason}_ \n\nThe server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the channel. The guild owner should have been informed." } }));
 			return;
 		}
 	}
 
-	msg.reply(`This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\``);
+	msg.channel.send(`This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\``);
 	if (user) {
-		(await user.createDM()).send(`You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.`);
+		(await user.createDM()).send({ embed: { color: config.colors.info, title: "You received a strike", description: `You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them of their strike." } }));
 	} else {
-		(await guild.owner.user.createDM()).send(`Your server ${guild.name}(${guild.id}) has been striked due to the following reason: ${reason}. Your server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.`);
-		if (channel) channel.send(`This server has been striked due to the following reason: ${reason}. The server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.`);
+		(await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server received a srike", description: `Your server ${guild.name}(${guild.id}) has been striked due to the following reason: \n_${reason}_ \n\nYour server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the strike." } }));
+		if (channel) channel.send({ embed: { color: config.colors.info, title: "This server received a strike", description: `This server has been striked due to the following reason: \n_${reason}_ \n\nThe server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the channel. The guild owner should have been informed." } }));
 	}
 };

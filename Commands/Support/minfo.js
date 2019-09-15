@@ -5,17 +5,17 @@ module.exports = async(client, msg, suffix) => {
 
 	let number = suffix.split(" ")[0];
 	let id = suffix.split(" ")[1];
-	if (!number || !id) return msg.reply("**You seriously forgot how minfo works... `>minfo [Number or Channel] [Message ID]`**");
+	if (!number || !id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >minfo [Number or Channel] [Message ID]" } });
 
 	let myNumber = await r.table("Numbers").get(number);
 	if (!myNumber) myNumber = (await r.table("Numbers").filter({ channel: number }))[0];
-	if (!myNumber) return msg.reply("Couldn't find that number!");
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Couldn't find that number!" } });
 
 	let mailbox = await r.table("Mailbox").get(myNumber.channel);
-	if (!mailbox) return msg.reply("This number doesn't have a mailbox.");
+	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "No mailbox", description: "This number doesn't have a mailbox." } });
 
 	let message = mailbox.messages.filter(m => m.id === id)[0];
-	if (!message) return msg.reply("Couldn't find that message");
+	if (!message) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid mailbox", description: "Couldn't find that message" } });
 
 	const embed = new MessageEmbed()
 		.setColor(config.colors.info)

@@ -13,5 +13,14 @@ module.exports = async(client, msg, suffix) => {
 	if (!call.messages) return msg.channel.send({ embed: { color: config.colors.error, title: "No messages", description: "This call does not contain any messages." } });
 	let msgDoc = await call.messages.find(m => m.dtelmsg == msgID);
 	if (!msgDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Message not found", description: "Couldn't find that message in the call.\nMake sure the message comes from DTel." } });
-	return msg.channel.send({ embed: { color: config.colors.info, title: "Message found!", description: `User: <@${msgDoc.user}>(${msgDoc.user})` } });
+
+	let embed = new MessageEmbed()
+		.setColor(config.colors.info)
+		.setTitle("Message found!")
+		.addField(`Details`, `**User:** <@${msgDoc.user}> (${msgDoc.user})\n**Message:** ${msgDoc.msg}`)
+		.setFooter(msg.author.tag, msg.author.displayAvatarURL());
+
+	if (call.edits && call.edits[msgDoc.umsg]) embed.addField("Edits", call.edits[msgDoc.umsg].map(edit => `**Message:** ${edit.msg}\n**Edited at:** ${edit.time}\n\n`));
+
+	msg.channel.send({ embed: embed });
 };

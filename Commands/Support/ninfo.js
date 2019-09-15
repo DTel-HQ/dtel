@@ -4,11 +4,11 @@ module.exports = async(client, msg, suffix) => {
 	let perms = await msg.author.getPerms();
 
 	let id = suffix.split(" ")[0];
-	if (!id) return msg.reply("**You forgot the number?!?! `>ninfo [number|channel]`**");
+	if (!id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >ninfo [number/channelID]" } });
 
 	let number = await r.table("Numbers").get(id);
 	if (!number) number = (await r.table("Numbers").filter({ channel: id }))[0];
-	if (!number) return msg.reply("Couldn't find that number.");
+	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "Couldn't find that number." } });
 
 	// Get tha information
 	const channel = await client.channels.resolve(number.channel);

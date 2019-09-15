@@ -28,4 +28,10 @@ module.exports = async(omsg, nmsg) => {
 	if (!edited.id) {
 		await client.apiSend(`[EDITED]: ${toSend}`, editChannel);
 	}
+
+	let edits = call.edits || {};
+	let editsById = edits[nmsg.id] || [];
+	editsById.push({ time: new Date(), msg: nmsg.content });
+	edits[nmsg.id] = editsById;
+	await r.table("Calls").get(call.id).update({ edits: edits });
 };

@@ -1,9 +1,9 @@
 module.exports = async(client, msg, suffix) => {
 	let fromNumber = (await r.table("Numbers").filter({ channel: msg.channel.id }))[0];
-	if (!fromNumber) return msg.reply("This channel doesn't have a number.");
+	if (!fromNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number. Run `>wizard` to create one." } });
 
 	let phonebook = await r.table("Phonebook");
-	if (!phonebook[0]) return msg.reply("Seemingly you're using a budget version of the Yellow Pages, there's no numbers in sight!");
+	if (!phonebook[0]) return msg.channel.send({ embed: { color: config.colors.error, title: "Empty book", description: "Seemingly you're using a budget version of the Yellow Pages, there's no numbers in sight!" } });
 
 	let toDial,
 		toCall = false,
@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Change to not found or change to found!
-	if (!toDial) return msg.reply("It seems like you'll have to wait. All active numbers are in a call.");
+	if (!toDial) return msg.channel.send({ embed: { color: config.colors.info, title: "No number available", description: "It seems like you'll have to wait. All active numbers are in a call." } });
 
 	require("./call.js")(client, msg, toCall, true);
 };

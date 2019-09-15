@@ -1,17 +1,17 @@
 module.exports = async(client, msg, suffix) => {
 	if (msg.guild) msg.delete();
-	if (!suffix) return msg.author.send("<:b1nzyhyperban:356830174660132864> **Input thy channel id/number, *valid this time!* **");
+	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >backdoor [number/channelID]" } });
 
 	let channel, number;
 
 	if (/\d{11}/.test(suffix)) {
 		number = client.replaceNumber(suffix);
 		let numberDoc = await r.table("Numbers").get(number);
-		if (!numberDoc) return msg.reply("Not a valid number.");
+		if (!numberDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Not a valid number." } });
 		suffix = numberDoc.channel;
 	}
 	channel = await client.api.channels(suffix).get()
-		.catch(() => { msg.author.send("Not a valid channel."); return null; });
+		.catch(() => { msg.author.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Not a valid channel." } }); return null; });
 
 	if (!channel) return;
 
@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 		.getAll(suffix, { index: "channel" })
 		.default(null)
 		.nth(0);
-	if (!number) return msg.reply("There is no number associated with this channel. Contact your boss if this is urgent.");
+	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "There is no number associated with this channel. Contact your bosses if this is urgent." } });
 
 	client.api.channels(suffix).invites.post({
 		data: {
@@ -31,5 +31,5 @@ module.exports = async(client, msg, suffix) => {
 		.then(invite => {
 			msg.author.send(`https://discord.gg/${invite.code}`);
 		})
-		.catch(() => msg.reply("Privilege is too low."));
+		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
 };

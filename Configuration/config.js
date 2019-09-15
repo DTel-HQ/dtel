@@ -63,6 +63,7 @@ module.exports = {
 		contacts: 0x50C878,
 		error: 0xff3333,
 		info: 0x3498d8,
+		lottery: 0xb3003b,
 		receipt: 0xe1e1e1,
 		success: 0x47d147,
 		yellowbook: 0xe6e600,
