@@ -6,11 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">convert [amount] [currency]" } });
 	currency = currency.toUpperCase();
 
-	let account = await r.table("Accounts").get(msg.author.id).default(null);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
+	let account = await msg.author.account;
 
 	if (account.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });

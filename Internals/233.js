@@ -2,11 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(msg, myNumber) => {
 	// get account information / make account
-	let account = await r.table("Accounts").get(msg.author.id);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
+	let account = await msg.author.account;
 
 	// Get easy to format date
 	const currExpiry = new Date(myNumber.expiry);
