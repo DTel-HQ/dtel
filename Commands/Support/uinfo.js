@@ -11,16 +11,11 @@ module.exports = async(client, msg, suffix) => {
 	let dmNumber;
 	if (dmChannel) dmNumber = (await r.table("Numbers").filter({ channel: dmChannel.id }))[0];
 	const strikes = await r.table("Strikes").filter({ offender: user.id });
-	let account = await r.table("Accounts").get(user.id).default(null);
+	let account = await user.account;
 	let blacklisted = await r.table("Blacklist").get(user.id);
 
 	// Why not
 	if (user.bot && user.id === client.user.id) dmNumber = { id: "Id10tsTryC@ll1ngTh!s" };
-
-	if (!account) {
-		account = { id: user.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
 
 	// Inform the CS
 	const embed = new MessageEmbed()

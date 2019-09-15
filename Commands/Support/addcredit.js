@@ -37,11 +37,7 @@ module.exports = async(client, msg, suffix) => {
 	let neg = amount.startsWith("-");
 	amount = Number(amount);
 
-	let account = await r.table("Accounts").get(user.id);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
+	let account = await user.account;
 
 	account.balance += amount;
 

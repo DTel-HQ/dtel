@@ -8,12 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	let perms = await msg.author.getPerms();
 
 	if (!perms.support || !suffix) {
-		if (!account) account = await r.table("Accounts").get(msg.author.id).default(null);
-		if (!account) {
-			account = { id: msg.author.id, balance: 0 };
-			await r.table("Accounts").insert(account);
-			msg.channel.send({ embed: { color: config.colors.info, title: "Creating an account", description: `You don't have an account created...Creating an account for you! Please also read the [information on payment](${config.paymentLink}).` } });
-		}
+		if (!account) account = await msg.author.account;
 
 		msg.channel.send({
 			embed: {

@@ -5,12 +5,9 @@ module.exports = async(client, msg, suffix) => {
 	if (suffix === config.prefix) suffix = null;
 
 	// get / make account
-	let account = await r.table("Accounts").get(msg.author.id);
-	if (!account) {
-		if (suffix) account = { id: msg.author.id, balance: 0, prefix: suffix };
-		else account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	} else if (suffix) {
+	let account = await msg.author.account;
+
+	if (suffix) {
 		await r.table("Accounts").get(msg.author.id).update({ prefix: suffix });
 	} else {
 		delete account.prefix;

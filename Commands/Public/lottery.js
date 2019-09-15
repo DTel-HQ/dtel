@@ -2,11 +2,7 @@ module.exports = async(client, msg, suffix) => {
 	let lottery = await r.table("Lottery");
 
 	// Check if they have an account
-	let account = await r.table("Accounts").get(msg.author.id);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
+	let account = await msg.author.account;
 
 	let id, jackpot, currentNumber, index, totalEntries, lastEntry;
 

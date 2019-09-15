@@ -6,11 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	let vipExpiry = number ? number.vip ? new Date(number.vip.expiry) : null : null;
 	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 
-	let account = await r.table("Accounts").get(msg.author.id);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0, daily: false };
-		await r.table("Accounts").insert(account);
-	}
+	let account = msg.author.account;
 
 	// Send general embed based on variables
 	let embed = new MessageEmbed()

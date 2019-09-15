@@ -3,6 +3,22 @@ const { Structures } = require("discord.js");
 module.exports = () => {
 	Structures.extend("User", User => {
 		class DTelUser extends User {
+			get account() {
+				return (async() => {
+					let account = await r.table("Accounts").get(this.id);
+					if (!account) {
+						account = { id: this.id, balance: 0 };
+						await r.table("Accounts").insert(account);
+						this.send({ embed: { color: config.colors.info, title: "Account created", description: `We just made an account for you! Please read [this information](${config.paymentLink}) on payment.` } }).catch(e => null);
+					}
+					return account;
+				})();
+			}
+
+			get blacklisted() {
+				return !!r.table("Blacklist").get(this.id);
+			}
+
 			async getPerms() {
 				let toRet = {
 					boss: false,
@@ -20,10 +36,6 @@ module.exports = () => {
 						return toRet;
 					})
 					.catch(() => toRet);
-			}
-
-			get blacklisted() {
-				return !!r.table("Blacklist").get(this.id);
 			}
 		}
 		return DTelUser;

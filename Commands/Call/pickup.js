@@ -16,11 +16,7 @@ module.exports = async(client, msg, suffix, call) => {
 	await r.table("Calls").get(call.id).update(call);
 
 	if (call.to.number == "08006113835") {
-		let account = await r.table("Accounts").get(msg.author.id);
-		if (!account) {
-			account = { id: msg.author.id, balance: 0 };
-			await r.table("Accounts").insert(account);
-		}
+		let account = await msg.author.account;
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 	}

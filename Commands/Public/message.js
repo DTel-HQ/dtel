@@ -32,11 +32,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (fromNumberDoc.id == toNumberDoc.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Why try?", description: "You can't send a message to yourself." } });
 
-	let account = await r.table("Accounts").get(msg.author.id);
-	if (!account) {
-		account = { id: msg.author.id, balance: 0 };
-		await r.table("Accounts").insert(account);
-	}
+	let account = msg.author.account;
 
 	if (account.balance < config.messageCost) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `You don't have enough credits (${config.messageCost}) to send a message.` } });
 	account.balance -= config.messageCost;
