@@ -33,6 +33,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	let msgDoc = {
 		dtelmsg: sent.id,
+		msg: msg.content,
 		umsg: msg.id,
 		user: msg.author.id,
 		time: msg.createdTimestamp,
