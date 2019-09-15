@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	let reason = suffix.join(" ");
 
 	if (!toStrike || !reason) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >strike [userID/guildID/channelID] [reason]" } });
-	if (toStrike == msg.author.id) return msg.reply(`\n>fire ${msg.author.tag}`);
+	if (toStrike == msg.author.id) return msg.channel.send(`>fire ${msg.author.tag}`);
 
 	let user,
 		guild,
@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 	if (user) {
 		if (user.bot) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot user", description: "Don't try striking my brothers!" } });
 		let toStrikePerms = await client.users.get(toStrike).getPerms();
-		if (toStrikePerms.boss || toStrikePerms.manager) return msg.reply(`\n>fire ${msg.auhor.tag}`);
+		if (toStrikePerms.boss || toStrikePerms.manager) return msg.channel.send(`>fire ${msg.auhor.tag}`);
 		if (toStrikePerms.support && !(perms.boss || perms.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
 	} else if (guild.id == config.supportGuild) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Turning against us?", description: "As if we'd would allow you to do this." } });

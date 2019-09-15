@@ -56,6 +56,7 @@ module.exports = {
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 	siteLink: "https://discordtel.austinhuang.me",
 	suggestLink: "https://feedback.austinhuang.me/",
+	vipLinkL: "https://discordtel.austinhuang.me/en/latest/VIP%20Number/",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
 	// Embed Colors

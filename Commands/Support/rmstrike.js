@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!strike) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid ID", description: "How'd you get the ID wrong mate?" } });
 
-	if (strike.offender == msg.author.id) return msg.reply(`\n>fire ${msg.author.tag}`);
+	if (strike.offender == msg.author.id) return msg.channel.send(`>fire ${msg.author.tag}`);
 	let offender = strike.user ? await client.users.fetch(strike.offender) : null;
 	if (offender.getPerms().support && !(msg.author.getPerms().boss || msg.author.getPerms().manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Nice try dumbo", description: "You can't remove strikes from a colleague." } });
 

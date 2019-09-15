@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">identify (id)",
-					value: "Use this command on a message sent by the bot in order to get the ID of the original **author**.",
+					value: "Use this command on a message sent by the bot in order to get the ID of the original **author**. Also shows the original message and previous edits if the message was edited.",
 				},
 				{
 					name: ">minfo",

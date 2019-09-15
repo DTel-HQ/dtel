@@ -41,6 +41,11 @@ module.exports = async(client, msg, suffix) => {
 					inline: true,
 				},
 				{
+					name: `${config.callPhones.donator} VIP Numbers`,
+					value: `[How they work](${config.vipLink})`,
+					inline: true,
+				},
+				{
 					name: "💡 Suggest a feature!",
 					value: `[Suggestions page](${config.suggestLink})`,
 					inline: true,
