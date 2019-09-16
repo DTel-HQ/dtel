@@ -3,11 +3,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Help users a bit by removing spaces & '-'
 	let toBlock = client.replaceNumber(suffix);
-	let myNumber = await r.table("Numbers")
-		.getAll(msg.channel.id, { index: "channel" })
-		.nth(0)
-		.default(null);
-
+	let myNumber = await msg.channel.number;
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "No number", description: "This channel does not have a number." } });
 	if (!myNumber.id == toBlock) return msg.channel.send({ embed: { color: config.colors.error, title: "Blocking yourself?", description: "What is that going to do? Report yourself by calling *611" } });
 
