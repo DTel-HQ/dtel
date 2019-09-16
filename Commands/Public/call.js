@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let perms = await msg.author.getPerms();
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
 	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
-	else client.cooldown(msg.author.id, "call");
+	else msg.author.cooldown = "call";
 
 	let myNumber = await msg.channel.number;
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });

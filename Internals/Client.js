@@ -86,19 +86,14 @@ module.exports = class DTelClient extends require("discord.js").Client {
 	}
 
 	delete(number) {
-		// later
-	}
-
-	async cooldown(userid, type) {
-		// ID: "[user]-[type]"
-		// time (type) in seconds → time in ms
-		let time = config.cooldowns[type];
-		if (!time) return;
-		let endTime = Date.now() + (time * 1000);
-
-		// Insert into cooldowns
-		let cooldown = await r.table("Cooldowns").get(`${userid}-${type}`);
-		if (!cooldown) await r.table("Cooldowns").insert({ id: `${userid}-${type}`, time: endTime });
-		else await r.table("Cooldowns").get(`${userid}-${type}`).update({ time: endTime });
+		setTimeout(async() => {
+			let channel = await client.api.channels(number.channel).get().catch(e => null);
+			if (!channel) {
+				await r.table("Numbers").get(number.id).delete();
+				await r.table("Phonebook").get(number.id).delete();
+				await r.table("Mailbox").get(number.channel).delete();
+				client.log(`📕 Number ${number.id} has been automatically deassigned.`);
+			}
+		}, 10 * 3600);
 	}
 };

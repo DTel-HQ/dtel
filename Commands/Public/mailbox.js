@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// yes/no collector
 		collector = await msg.channel.awaitMessages(
-			m => /yes/i.test(m.content) && m.author.id == msg.author.id, {
+			m => /^yes$|^no$/i.test(m.content) && m.author.id == msg.author.id, {
 				time: 60 * 1000,
 				max: 1,
 			}
@@ -34,7 +34,8 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected) return;
 
 		omsg.delete().catch(e => null);
-		if (collected.guild) collected.delete();
+		if (collected.guild) collected.delete().catch(e => null);
+		if (/^no$/i.test(collected.first().content)) return;
 
 		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setting autoreply", description: "Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
 

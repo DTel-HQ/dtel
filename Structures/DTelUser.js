@@ -19,6 +19,21 @@ module.exports = () => {
 				return r.table("Blacklist").get(this.id).default(false);
 			}
 
+			set cooldown(type) {
+				(async() => {
+					// ID: "[user]-[type]"
+					// time (type) in seconds → time in ms
+					let time = config.cooldowns[type];
+					if (!time) return;
+					let endTime = Date.now() + (time * 1000);
+
+					// Insert into cooldowns
+					let cooldown = await r.table("Cooldowns").get(`${this.id}-${type}`);
+					if (!cooldown) await r.table("Cooldowns").insert({ id: `${this.id}-${type}`, time: endTime });
+					else await r.table("Cooldowns").get(`${this.id}-${type}`).update({ time: endTime });
+				})();
+			}
+
 			async getPerms() {
 				let toRet = {
 					boss: false,

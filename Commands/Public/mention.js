@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
 		footer: {
-			text: ">mentions delete [number] to deleta a mention.",
+			text: ">mentions delete [number] to delete a mention.",
 		},
 	} });
 };

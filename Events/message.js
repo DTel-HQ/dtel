@@ -40,7 +40,7 @@ module.exports = async msg => {
 	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s` } });
 	if (busy && !config.maintainers.includes(msg.author.id)) return;
 	// add cooldown
-	if (!perms.support) client.cooldown(msg.author.id, "default");
+	if (!perms.support && !perms.donator) msg.author.cooldown = "default";
 
 	// Find Maintainer or Support commands
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
