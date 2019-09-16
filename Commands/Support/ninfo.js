@@ -12,8 +12,8 @@ module.exports = async(client, msg, suffix) => {
 
 	// Get tha information
 	const channel = await client.channels.resolve(number.channel);
-	const guild = channel.guild ? await client.guilds.resolve(channel.guild.id) : null;
-	const owner = guild ? await client.users.fetch(guild.ownerID) : await client.users.fetch(channel.owner);
+	const guild = channel.guild ? await client.guilds.resolve(channel.guild.id).catch(e => null) : null;
+	const owner = guild ? await client.users.fetch(guild.ownerID).catch(e => null) : await client.users.fetch(channel.recipient.id).catch(e => null);
 	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
 	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
 	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle(`Number information for ${number.id}`)
 		.setDescription("Here you can find all information relevant for this number")
-		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.name}\nDM: ${channel.type === "dm" ? "True" : "False"}`, true)
+		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === "dm" ? "DM Channel" : channel.name}\nDM: ${channel.type === "dm" ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${number.owner ? number.owner : guild.ownerID}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
 		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}` : "None", true)
 		.addField("Created, expiry", `• ${number.createdAt}\n• ${new Date(number.expiry)}`, true)

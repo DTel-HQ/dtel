@@ -25,6 +25,7 @@ module.exports = async(msg, myNumber) => {
 		.addField("VIP Number", vipNumber, true);
 
 	if (vipNumber) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`, true);
+	else embed.addBlankField(true);
 	embed.addField("Your VIP months", account.vip ? account.vip : "0", true)
 		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join(", ") : "None")
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");

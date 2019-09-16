@@ -10,7 +10,6 @@ module.exports = async(client, msg, suffix, rcall) => {
 	else client.cooldown(msg.author.id, "call");
 
 	let myNumber = await msg.channel.number;
-
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
 	if (myNumber.waiting) return;
