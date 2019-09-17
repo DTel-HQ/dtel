@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 	// Get tha information
 	const channel = await client.channels.resolve(number.channel);
 	const guild = channel.guild ? await client.guilds.resolve(channel.guild.id).catch(e => null) : null;
-	const owner = guild ? await client.users.fetch(guild.ownerID).catch(e => null) : await client.users.fetch(channel.recipient.id).catch(e => null);
+	const owner = guild ? await client.users.fetch(guild.ownerID).catch(e => client.users.fetch(number.owner).catch(_ => null)) : await client.users.fetch(channel.recipient.id).catch(e => null);
 	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
 	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
 	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
