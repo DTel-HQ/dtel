@@ -1,4 +1,5 @@
 const uuidv4 = require("uuid/v4");
+var errors = require("internals/errors)
 
 module.exports = async(client, msg, suffix, rcall) => {
 	let csCall;
@@ -14,7 +15,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		.nth(0)
 		.default(null);
 
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: errors.channelNoNumber.title, description: errors.channelNoNumber.description + `Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
 	if (myNumber.waiting) return;
 
@@ -62,14 +63,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		let maxTime = 5 * 60000;
 
 		// send embed
-		let omsg = await msg.channel.send({ embed: {
-			color: config.colors.error,
-			title: "Number is already in a call",
-			description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup.\nRespond with \`yes\` or \`no\``,
-			footer: {
-				text: "This call will automatically be hung up after 60 seconds of inactivity",
-			},
-		} });
+		let omsg = await msg.channel.send({ embed: { color: config.colors.error, title: "Number is already in a call", description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup.\nRespond with \`yes\` or \`no\``, footer: { text: "This call will automatically be hung up after 60 seconds of inactivity", }, } });
 
 		// create collector
 		let collected = await msg.channel.awaitMessages(
