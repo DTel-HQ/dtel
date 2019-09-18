@@ -12,9 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	if (!numberDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Huh?", description: "That number/channel could not be found." } });
 
-	await r.table("Numbers").get(numberDoc.id).delete();
-	await r.table("Phonebook").get(numberDoc.id).delete();
-	await r.table("Mailbox").getAll(numberDoc.channel, { index: "channel" }).delete();
+	client.delete(numberDoc, { force: true, stopLog: true });
 
 	await msg.channel.send({ embed: { color: config.colors.success, title: "Bye... :(", description: `${numberDoc.id} has been deassigned.`, footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 	await client.log(`:closed_book: Number \`${numberDoc.id}\` has been deassigned from channel ${numberDoc.channel} by ${msg.author.tag}.`);

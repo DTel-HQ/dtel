@@ -20,6 +20,13 @@ module.exports = async(client, msg, suffix) => {
 		currentNumber = lastEntry.number;
 	}
 
+	let date = new Date();
+	let hours = 23 - date.getHours();
+	let minutes = 59 - date.getMinutes();
+	let seconds = 59 - date.getSeconds();
+	let timeLeft = hours ? `${hours}h${minutes}m${seconds}s` : minutes ? `${minutes}m${seconds}s` : `${seconds}s`;
+
+
 	if (!suffix) {
 		let ownedTickets = 0;
 		let userEntries = await r.table("Lottery").filter({ userID: msg.author.id });
@@ -32,7 +39,16 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			chance = Math.round((ownedTickets / currentNumber) * 100);
 		}
-		msg.channel.send({ embed: { color: config.colors.lottery, title: "Lottery information", description: `The current jackpot is ¥${jackpot}.\nYou have ${ownedTickets} tickets.\nYour chance to win is: ${chance}%\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.` } });
+		msg.channel.send({ embed: {
+			color: config.colors.lottery,
+			title: "Lottery",
+			author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() },
+			description: `The lottery jackpot consists of all the entries together and is drawn at 00:00 UTC\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`,
+			fields: [
+				{ name: "Your stats", value: `• Your tickets: ${ownedTickets}.\n• Your chance: ${chance}%`, inline: true },
+				{ name: "Lottery stats", value: `• Jackpot: ¥${jackpot}.\n• Time left: ${timeLeft}`, inline: true },
+			],
+		} });
 	} else if (/^\d+$/.test(suffix) && !/^0.*/.test(suffix)) {
 		let tickets = Number(suffix);
 		let cost = tickets * config.lotteryCost;
@@ -58,7 +74,17 @@ module.exports = async(client, msg, suffix) => {
 			for (let entry of userEntries) {
 				ownedTickets += entry.tickets;
 			}
-			msg.channel.send({ embed: { color: config.colors.lottery, title: "Succesful purchase", description: `You have bought ${tickets} tickets.\nThe current jackpot is ¥${newJackpot}.\nYour chance to win is: ${(Math.round(Number(ownedTickets) / Number(newNumber) * 100))}%` } });
+			let chance = Math.round((ownedTickets / newNumber) * 100);
+			msg.channel.send({ embed: {
+				color: config.colors.lottery,
+				title: "Lottery",
+				author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() },
+				description: `You succesfully purchased ${tickets} tickets for ¥${cost}!`,
+				fields: [
+					{ name: "Your stats", value: `• Your tickets: ${ownedTickets}.\n• Your chance: ${chance}%`, inline: true },
+					{ name: "Lottery stats", value: `• Jackpot: ¥${newJackpot}.\n• Time left: ${timeLeft}`, inline: true },
+				],
+			} });
 			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);
 		}
 	} else {

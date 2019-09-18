@@ -2,11 +2,11 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	// Get their details
-	let number = msg.channel.number;
+	let number = await msg.channel.number;
 	let vipExpiry = number ? number.vip ? new Date(number.vip.expiry) : null : null;
 	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 
-	let account = msg.author.account;
+	let account = await msg.author.account;
 
 	// Send general embed based on variables
 	let embed = new MessageEmbed()

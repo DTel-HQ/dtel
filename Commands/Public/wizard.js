@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`
 		);
 
-	await msg.channel.send({ embed: embed });
+	let omsg = await msg.channel.send({ embed: embed });
 
 	let number,
 		expiryDate,
@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 	// NUMBER
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && (m.content.length === 11 || /^0$/.test(m.conntent)),
+			m => m.author.id === msg.author.id && (m.content.length === 11 || /^0$/.test(m.content)),
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
@@ -56,8 +56,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected) {
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "Wizard expired. Please run `>wizard` again when you have a number ready." } });
 		}
-		if (collected.content.startsWith(config.prefix)) return;
-		if (collected.content == "0") return msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } });
+		if (collected.content == "0") return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
 
 		number = await client.replaceNumber(collected.content);
 

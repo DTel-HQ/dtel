@@ -45,12 +45,20 @@ scheduleJob("0 0 0 * * *", async() => {
 });
 
 // Job to update the playing status regularly.
-scheduleJob("*/5 * * * *", async() => {
+scheduleJob("*/15 * * * * *", async() => {
+	if (!client.shard.ids[0] === client.shard.count - 1) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
-	let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
-	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[BETA] ${guildCount} servers with ${userCount} users. (shard \${this.shard.ids[0]})\`, type: 0 } });`);
+	let sec = new Date().getSeconds();
+	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
+		let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[\${this.shard.ids[0]}] ${guildCount} servers with ${userCount} users.\`, type: 0 } });`);
+	} else {
+		let calls = (await r.table("Calls")).length;
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[\${this.shard.ids[0]}] ${guildCount} servers with ${calls} calls.\`, type: 0 } });`);
+	}
 	winston.verbose("[ScheduleJob] Updated status.");
 });
+
 
 // Job to delete numbers if expired for a long time
 scheduleJob("0 0 0 * * *", async() => {
@@ -69,7 +77,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	for (let number of numbers) {
 		let channel = await client.api.channels(number.channel).get();
 		if (!channel) {
-			client.delete(number);
+			await client.delete(number, { force: true, stopLog: true });
 			deleted.push(number);
 			break;
 		}

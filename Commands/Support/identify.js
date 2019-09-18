@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	let callID = suffix.split(" ")[0];
 	let msgID = suffix.split(" ")[1];
-	if (!callID || !msgID) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">identify [Call/Message ID] [Message/Call ID]\nReturns with the user ID of the sender." } });
+	if (!callID || !msgID) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">identify [Call/Message ID] [Message/Call ID]\nReturns information about the user and past messages if it was edited." } });
 	// Flip the values to make it CS-proof
 	if (msgID.length > callID.length) [msgID, callID] = [callID, msgID];
 

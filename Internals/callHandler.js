@@ -1,7 +1,7 @@
 const { MessageAttachment } = require("discord.js");
 
 module.exports = async(cmd, msg, suffix, call) => {
-	if (!call.pickedUp || call.onhold || !msg.content) return;
+	if (!call.pickedUp || call.onHold || !msg.content) return;
 	call.lastMessage = new Date().getTime();
 	await r.table("Calls").get(call.id).update(call);
 

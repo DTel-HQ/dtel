@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix, call) => {
 
 	if (call.onHold) {
 		if (call.onHold != msg.channel.id) return msg.channel.send({ embed: { color: config.colors.error, title: ":x:", description: "Only the other side can release this hold." } });
-		call.onHold = "";
+		call.onHold = false;
 		await client.apiSend({ embed: { color: config.colors.info, title: "Resuming call", description: "The hold has ended." } }, msg.channel.id === call.from.channel ? call.to.channel : call.from.channel);
 		await msg.channel.send({ embed: { color: config.colors.info, title: "Resuming call", description: "You have ended the hold." } });
 	} else {

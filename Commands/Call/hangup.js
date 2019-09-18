@@ -12,8 +12,8 @@ module.exports = async(client, msg, suffix, call) => {
 
 	// Send the stuff
 	msg.channel.send({ embed: { color: config.colors.error, title: "The call has ended!", description: `You have ended the call${call.pickedUp ? ` after ${time}` : ""}.`, footer: { text: call.id } } });
-	client.apiSend({ embed: { color: config.colors.error, title: "The call has ended!", description: `The other side ended the call${call.pickedUp ? ` after ${time}` : ""}.`, footer: { text: call.id } } }, msg.channel.id === call.from.channel ? call.to.channel : call.from.channel);
-	await r.table("OldCalls").insert(call);
 	await r.table("Calls").get(call.id).delete();
+	await client.apiSend({ embed: { color: config.colors.error, title: "The call has ended!", description: `The other side ended the call${call.pickedUp ? ` after ${time}` : ""}.`, footer: { text: call.id } } }, msg.channel.id === call.from.channel ? call.to.channel : call.from.channel);
+	await r.table("OldCalls").insert(call);
 	client.log(`:negative_squared_cross_mark: ${call.rcall ? "rcall" : "Call"} \`${call.from.hidden ? "hidden" : call.from.channel} → ${call.to.hidden ? "hidden" : call.to.channel}\` was hung up by ${msg.author.tag} (${msg.author.id}) on the ${msg.channel.id === call.from.channel ? "from" : "to"} side. ${call.id}`);
 };

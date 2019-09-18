@@ -85,17 +85,21 @@ module.exports = class DTelClient extends require("discord.js").Client {
 		return true;
 	}
 
-	delete(number, force) {
+	delete(number, settings) {
+		let force = settings.force;
+		let stopLog = settings.log;
+
 		setTimeout(async() => {
+			if (typeof number != "object") number = await r.table("Numbers").get(number);
 			let channelID = typeof number == "object" ? number.channel : (await r.table("Numbers").get(number)).channel;
 			if (!channelID && !force) return;
 			let channel = await client.api.channels(channelID).get().catch(e => null);
 
-			if (!channel) {
+			if (!channel || force) {
 				await r.table("Numbers").get(number.id).delete();
 				await r.table("Phonebook").get(number.id).delete();
 				await r.table("Mailbox").get(number.channel).delete();
-				client.log(`📕 Number ${number.id} has been automatically deassigned.`);
+				if (!force && !stopLog) client.log(`📕 Number ${number.id} has been automatically deassigned.`);
 			}
 		}, force ? 1000 : 600000);
 	}
