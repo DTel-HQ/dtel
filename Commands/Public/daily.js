@@ -1,7 +1,13 @@
 module.exports = async(client, msg, suffix) => {
 	let account = await msg.author.account;
 
-	if (account.daily) return msg.channel.send({ embed: { color: config.colors.info, title: "Already claimed", description: `You already claimed your daily credits!\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See ${config.voteLink} for a list of voting sites.` } });
+	let d = new Date();
+	let h = 23 - d.getHours();
+	let m = 59 - d.getMinutes();
+	let s = 59 - d.getSeconds();
+	let time = client.time(s, m, h);
+
+	if (account.daily) return msg.channel.send({ embed: { color: config.colors.info, title: "Already claimed", description: `You already claimed your daily credits! Try again in **${time}**.\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See ${config.voteLink} for a list of voting sites.` } });
 
 	let dailies = config.dailies;
 	let perms = await msg.author.getPerms();

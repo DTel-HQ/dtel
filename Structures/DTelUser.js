@@ -9,7 +9,7 @@ module.exports = () => {
 					if (!account) {
 						account = { id: this.id, balance: 0 };
 						await r.table("Accounts").insert(account);
-						this.send({ embed: { color: config.colors.info, title: "Account created", description: `We just made an account for you! Please read [this information](${config.paymentLink}) on payment.` } }).catch(e => null);
+						await this.send({ embed: { color: config.colors.info, title: "Account created", description: `We just made an account for you! Please read [this information](${config.paymentLink}) on payment.` } }).catch(e => null);
 					}
 					return account;
 				})();

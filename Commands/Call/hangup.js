@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix, call) => {
 	let m = Math.floor(duration / 60);
 	duration -= m * 60;
 	let s = duration;
-	let time = h ? `${h}h${m}m${s}s` : m ? `${m}m${s}s` : `${s}s`;
+	let time = client.time(s, m, h);
 
 	// Send the stuff
 	msg.channel.send({ embed: { color: config.colors.error, title: "The call has ended!", description: `You have ended the call${call.pickedUp ? ` after ${time}` : ""}.`, footer: { text: call.id } } });

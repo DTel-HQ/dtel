@@ -1,6 +1,5 @@
 module.exports = async(client, msg, suffix, guildID) => {
-	if (!suffix.split(" ")[1]) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: `\`>permcheck [serverID/userID] [userID/serverID]\`` } });
-
+	if (!suffix.split(" ")[1] && !guildID) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: `\`>permcheck [serverID/userID] [userID/serverID]\`` } });
 	let member,
 		guild,
 		userID,

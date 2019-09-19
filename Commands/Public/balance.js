@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 				title: "Current Account Status",
 				fields: [{
 					name: "Your Balance",
-					value: `¥${account.balance}`,
+					value: `¥${client.format(account.balance)}`,
 					inline: true,
 				},
 				{
@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `Information for ${user.tag}`,
 				fields: [{
 					name: "Their Balance",
-					value: `¥${account.balance}`,
+					value: `¥${client.format(account.balance)}`,
 					inline: true,
 				},
 				{

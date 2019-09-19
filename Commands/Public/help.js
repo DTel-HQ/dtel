@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 				url: "https://discordtel.austinhuang.me",
 			},
 			title: "List of Commands",
-			description: "For more information, use `>info` or call customer support: `>dial *611`.",
+			description: "For more information, use `>info`, `>links` or call customer support: `>dial *611`.",
 			fields: [
 				{
 					name: ">wizard",

@@ -32,11 +32,11 @@ scheduleJob("0 0 0 * * *", async() => {
 
 		await r.table("Accounts").get(winnerID).update({ balance: balance });
 		let user = await client.users.fetch(winnerID);
-		user.send(`CONGRATS! You won the jackpot of ¥${lastEntry.jackpot}.`)
+		user.send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } })
 			.catch(async _ => {
 				let channel = await client.api.channels(lastEntry.channel).get();
 				if (!channel || channel.type != "text") return;
-				channel.send(`You have won the lottery of ¥${lastEntry.jackpot} <@${winnerID}>!`);
+				channel.send(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } });
 			});
 	}
 
@@ -46,15 +46,15 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
-	if (!client.shard.ids[0] === client.shard.count - 1) return;
+	if (!client.shard.ids[0] === client.shard.count - 1 || !client.done) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
 		let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
-		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[\${this.shard.ids[0]}] ${guildCount} servers with ${userCount} users.\`, type: 0 } });`);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${userCount} users | >help | [\${this.shard.ids[0]}]\`, type: 3 } });`);
 	} else {
 		let calls = (await r.table("Calls")).length;
-		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[\${this.shard.ids[0]}] ${guildCount} servers with ${calls} calls.\`, type: 0 } });`);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${calls} calls | >help | [\${this.shard.ids[0]}] \`, type: 2 } });`);
 	}
 	winston.verbose("[ScheduleJob] Updated status.");
 });
@@ -62,11 +62,14 @@ scheduleJob("*/15 * * * * *", async() => {
 
 // Job to delete numbers if expired for a long time
 scheduleJob("0 0 0 * * *", async() => {
+	// Don't just change lastwarn k
 	const warnDays = 15;
+	const lastWarn = 29;
 	const deleteDays = 30;
 
 	let time = Date.now();
 	const warnMS = time - (warnDays * 86400000);
+	const lastWarnMS = time - (lastWarn * 86400000);
 	const deleteMS = time - (deleteDays * 86400000);
 
 	if (client.shard.ids[0] != 0) return;
@@ -91,7 +94,9 @@ scheduleJob("0 0 0 * * *", async() => {
 			ctitle,
 			cdesc;
 
-		if (new Date(number.expiry).getTime() < deleteMS) {
+		let expiryMS = new Date(number.expiry).getTime();
+
+		if (expiryMS < deleteMS) {
 			await client.delete(number, true);
 			deleted.push(number);
 
@@ -99,13 +104,17 @@ scheduleJob("0 0 0 * * *", async() => {
 			odesc = `Your number (${number.id}) in <#${channel.id}> has been deleted as it has been expired for >${deleteDays} days.`;
 			ctitle = `This channel's number has been deleted`;
 			cdesc = `This channel's number (${number.id}) has been deleted as it has been expired for >${deleteDays} days.`;
-		} else if (new Date(number.expiry).getTime() < warnMS && new Date(number.expiry).getTime() > warnMS - 86400000) {
+		} else if (expiryMS < warnMS && expiryMS > warnMS - 86400000) {
 			otitle = `Your number soon be deleted.`;
 			odesc = `Your number ${number.id} in <#${channel.id}> has expired and will be automatically deleted in ${deleteDays - warnDays} days. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `This number will soon be deleted`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${warnDays} days and will automatically be deleted in ${deleteDays - warnDays}. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
+		} else if (expiryMS < lastWarnMS && expiryMS > lastWarnMS - 86400000) {
+			otitle = `❕This number will be deleted in 24h❕`;
+			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
+			ctitle = `❕This number will be deleted in 24h❕`;
+			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
 		} else {
-			winston.info("Fine");
 			continue;
 		}
 

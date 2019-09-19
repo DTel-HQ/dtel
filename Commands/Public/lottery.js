@@ -20,11 +20,11 @@ module.exports = async(client, msg, suffix) => {
 		currentNumber = lastEntry.number;
 	}
 
-	let date = new Date();
-	let hours = 23 - date.getHours();
-	let minutes = 59 - date.getMinutes();
-	let seconds = 59 - date.getSeconds();
-	let timeLeft = hours ? `${hours}h${minutes}m${seconds}s` : minutes ? `${minutes}m${seconds}s` : `${seconds}s`;
+	let d = new Date();
+	let h = 23 - d.getHours();
+	let m = 59 - d.getMinutes();
+	let s = 59 - d.getSeconds();
+	let timeLeft = client.time(s, m, h);
 
 
 	if (!suffix) {
@@ -45,8 +45,8 @@ module.exports = async(client, msg, suffix) => {
 			author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() },
 			description: `The lottery jackpot consists of all the entries together and is drawn at 00:00 UTC\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`,
 			fields: [
-				{ name: "Your stats", value: `• Your tickets: ${ownedTickets}.\n• Your chance: ${chance}%`, inline: true },
-				{ name: "Lottery stats", value: `• Jackpot: ¥${jackpot}.\n• Time left: ${timeLeft}`, inline: true },
+				{ name: "Your stats", value: `• Your tickets: ${client.format(ownedTickets)}\n• Your chance: ${chance}%`, inline: true },
+				{ name: "Lottery stats", value: `• Jackpot: ¥${client.format(jackpot)}\n• Time left: ${timeLeft}`, inline: true },
 			],
 		} });
 	} else if (/^\d+$/.test(suffix) && !/^0.*/.test(suffix)) {
@@ -81,8 +81,8 @@ module.exports = async(client, msg, suffix) => {
 				author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() },
 				description: `You succesfully purchased ${tickets} tickets for ¥${cost}!`,
 				fields: [
-					{ name: "Your stats", value: `• Your tickets: ${ownedTickets}.\n• Your chance: ${chance}%`, inline: true },
-					{ name: "Lottery stats", value: `• Jackpot: ¥${newJackpot}.\n• Time left: ${timeLeft}`, inline: true },
+					{ name: "Your stats", value: `• Your tickets: ${client.format(ownedTickets)}\n• Your chance: ${chance}%`, inline: true },
+					{ name: "Lottery stats", value: `• Jackpot: ¥${client.format(newJackpot)}\n• Time left: ${timeLeft}`, inline: true },
 				],
 			} });
 			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);

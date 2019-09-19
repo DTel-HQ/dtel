@@ -15,10 +15,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!channel) return;
 
-	number = number || r.table("Numbers")
-		.getAll(suffix, { index: "channel" })
-		.default(null)
-		.nth(0);
+	number = number || await r.table("Numbers").getAll(suffix, { index: "channel" }).default(null).nth(0);
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "There is no number associated with this channel. Contact your bosses if this is urgent." } });
 
 	client.api.channels(suffix).invites.post({
@@ -29,7 +26,8 @@ module.exports = async(client, msg, suffix) => {
 		reason: `Customer Support Agent ${msg.author.tag} ran backdoor.`,
 	})
 		.then(invite => {
-			msg.author.send(`https://discord.gg/${invite.code}`);
+			msg.author.send(`https://discord.gg/${invite.code}`)
+				.catch(_ => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Couldn't DM you the invite. Please accept DMs from the bot." } }));
 		})
 		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
 };

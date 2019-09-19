@@ -12,14 +12,14 @@ module.exports = async(client, msg, suffix) => {
 		self,
 		toDialDoc;
 
-	// Make a searching for embed...
+	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Searching...", description: "Currently checking numbers in the phonebook to call. \nThis may take a while." } });
 
 	while (!toCall) {
 		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
 		if (!toDial) break;
 		let call = await r.table("Calls").getAll(toDial.id, { index: "fromChannel" }).nth(0).default(null);
 		if (!call) call = await r.table("Calls").getAll(toDial.id, { index: "toChannel" }).nth(0).default(null);
-		if (fromNumber.id == toDial.id || call || toDial.guild === msg.guild.id) {
+		if (fromNumber.id == toDial.id || call || (await client.api.channels(toDial.channel).get()).guild_id === msg.guild.id) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}
@@ -32,7 +32,14 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Change to not found or change to found!
-	if (!toDial) return msg.channel.send({ embed: { color: config.colors.info, title: "No number available", description: "It seems like you'll have to wait. All active numbers are in a call." } });
+	if (!toDial) {
+		let embed = { color: config.colors.info, title: "No number available", description: "It seems like you'll have to wait. All active numbers are in a call." };
+		return omsg.edit({ embed: embed }).catch(e => {
+			omsg.delete();
+			msg.channel.send({ embed: embed });
+		});
+	}
 
+	omsg.edit({ embed: { color: config.colors.success, title: "Found a number!", description: "Attempting to call them now..." } }).catch(e => null);
 	require("./call.js")(client, msg, toCall, true);
 };

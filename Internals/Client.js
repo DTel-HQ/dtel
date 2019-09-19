@@ -64,6 +64,23 @@ module.exports = class DTelClient extends require("discord.js").Client {
 			.replace(/\s+/g, "");
 	}
 
+	time(s, m, h, d) {
+		let times = { s: s, m: m, h: h, d: d };
+		let string = "";
+		for (let t in times) {
+			let tt = times[t];
+			if (!tt) break;
+			if (tt.toString().length != 2) tt = `0${tt}`;
+			string = `${tt}${t}${string}`;
+		}
+		return string;
+	}
+
+	format(number) {
+		if (!/\d+/.test(number.toString())) return number;
+		return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+	}
+
 	async log(msg) {
 		let date = new Date();
 		let times = [

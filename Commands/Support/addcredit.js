@@ -44,10 +44,10 @@ module.exports = async(client, msg, suffix) => {
 	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't not a loan service.", description: `That request would leave them with ¥${account.balance}.` } });
 
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
-	msg.channel.send({ embed: { color: config.colors.success, title: "Success!", description: `${neg ? "Removed" : "Added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag}'s account.`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 
 	if (neg) amount = String(amount).substr(1);
-
+	amount = client.format(amount);
+	msg.channel.send({ embed: { color: config.colors.success, title: "Success!", description: `${neg ? "Removed" : "Added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag}'s account.`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 	user.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.` } }).catch(() => null);
 	await client.log(`:yen: Support member ${msg.author.tag} ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag} (${user.id}).`);
 };

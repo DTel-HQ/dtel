@@ -44,7 +44,6 @@ module.exports = async(msg, myNumber) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
 			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
-			.setDescription(`Enter a page number or query (minimum of three characters) to search for.\n(clear) to clear a query.\n(return) to return from the query.\n(0) to hangup.`)
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
 
 		// Determine if query - add 10 results accordingly
@@ -53,6 +52,7 @@ module.exports = async(msg, myNumber) => {
 			if (!doc) break;
 			await embed.addField(doc.id, doc.description);
 		}
+		embed.addField("Options", `Enter a page number or query (minimum of three characters) to search for.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
 
 		// Edit/send message
 		omsg = await omsg.edit({ embed: embed }).catch(async e => {
@@ -107,6 +107,7 @@ module.exports = async(msg, myNumber) => {
 			omsg = await msg.channel.send({ embed: embed });
 		}
 
+		myNumber = await msg.channel.number;
 		// Create collector & make busy
 		await r.table("Busy").insert({ id: msg.author.id });
 		collected = (await msg.channel.awaitMessages(
@@ -337,7 +338,7 @@ module.exports = async(msg, myNumber) => {
 						if (/^9$/.test(collected.content)) break;
 
 						await r.table("Numbers").get(myNumber.id).update({ vip: { name: /^disable$/i.test(collected.content) ? false : collected.content } });
-						if (/^disable$/i.test(collected.content)) message = `Succesfully changed this number's custom name to: ${collected.content}`;
+						if (!/^disable$/i.test(collected.content)) message = `Succesfully changed this number's custom name to: ${collected.content}`;
 						else message = "Succesfully disabled this number's custom name.";
 						break;
 					}

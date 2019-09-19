@@ -6,6 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	let id = suffix.split(" ")[0];
 	if (!id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >ninfo [number/channelID]" } });
 
+	if (msg.mentions.channels) id = (await msg.mentions.channels.first()).id;
 	let number = await r.table("Numbers").getAll(id, { index: "channel" }).nth(0).default(null);
 	id = await client.replaceNumber(id);
 	if (!number) number = await r.table("Numbers").get(id);
