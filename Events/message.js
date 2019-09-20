@@ -32,20 +32,21 @@ module.exports = async msg => {
 	}
 	if (!msg.content.startsWith(prefix)) return;
 
-	// Check busy and cooldown
+	// check busy first since it's a simple return
 	let busy = await r.table("Busy").get(msg.author.id);
-	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
-
-	// return if needed
-	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s` } });
 	if (busy && !config.maintainers.includes(msg.author.id)) return;
-	// add cooldown
-	if (!perms.support && !perms.donator) msg.author.cooldown = "default";
+
 
 	// Find Maintainer or Support commands
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if ((await msg.author.getPerms()).support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
+
+	// Check cooldown now because it sends an embed
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
+	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s` } });
+	// Add cooldown
+	if (!perms.support && !perms.donator) msg.author.cooldown = "default";
 	// Run the command
 	if (cmdFile) {
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);

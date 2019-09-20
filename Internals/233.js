@@ -22,19 +22,17 @@ module.exports = async(msg, myNumber) => {
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
-		.addField("VIP Number", vipNumber, true);
+		.addField("VIP Number", vipNumber, true)
+		.addField("VIP expiration date", vipNumber ? `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}` : "N/A", true)
+		.addField("Your VIP months", account.vip ? account.vip : "0", true)
+		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join("\n") : "None", true)
+		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join("\n") : "None", true);
 
-	if (vipNumber) embed.addField("VIP expiration date", `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`, true);
-	else embed.addBlankField(true);
-	embed.addField("Your VIP months", account.vip ? account.vip : "0", true)
-		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join(", ") : "None")
-		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join(" ") : "None");
-
-	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None");
+	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None", true);
 
 	// Determine maximum amount of months to renew
 	let maxMonths = Math.floor(account.balance / config.renewalRate);
-	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hung up after 60 seconds.");
+	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hung up after 3 minutes.");
 
 	// send embed
 	let omsg = await msg.channel.send("", { embed: embed });
@@ -44,7 +42,7 @@ module.exports = async(msg, myNumber) => {
 	await r.table("Busy").insert({ id: msg.author.id });
 	const collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
-		{ max: 1, time: 60000 }
+		{ max: 1, time: 180000 }
 	);
 
 	// On collection

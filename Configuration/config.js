@@ -30,11 +30,11 @@ module.exports = {
 	maxNumbers: 3,
 	promoteTimeout: 7,
 
-	// EMOTES
+	// EMOTES - don't change order
 	callPhones: {
-		default: ":saxophone:",
-		donator: ":cool:",
-		support: ":cop:",
+		default: "<:DiscordTelPhone:624377577875832843>",
+		donator: "<:GoldPhone:624377577607397387>",
+		support: "📞",
 	},
 
 	// IDs
@@ -68,7 +68,7 @@ module.exports = {
 		receipt: 0xe1e1e1,
 		success: 0x47d147,
 		yellowbook: 0xe6e600,
-		vip: 0xcc9900,
+		vip: 0xffc61a,
 	},
 
 	// Command aliases (keep it down or make new file)

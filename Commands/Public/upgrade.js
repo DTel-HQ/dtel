@@ -73,7 +73,7 @@ module.exports = async(client, msg, suffix) => {
 		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL({ size: 2048, format: "png" }))
 		.setTitle("Succesfully upgraded number")
 		.setDescription(`This number is now a VIP number until: ${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`)
-		.setFooter(`By: ${msg.author.id}`);
+		.setFooter(`${msg.author.id}`);
 	omsg.edit({ embed: channelEmbed }).catch(e => {
 		omsg.delete().catch(_ => null);
 		msg.channel.send({ embed: channelEmbed });

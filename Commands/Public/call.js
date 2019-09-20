@@ -6,8 +6,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	let perms = await msg.author.getPerms();
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
-	if (cooldown && cooldown.time > Date.now() && !perms.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
-	else msg.author.cooldown = "call";
+	if (cooldown && cooldown.time > Date.now() && !perms.support && !["*411", "*233"].includes(suffix)) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
+	else if (!["*411", "*233"].includes(suffix)) msg.author.cooldown = "call";
 
 	let myNumber = await msg.channel.number;
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
@@ -162,7 +162,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
 
 	// This one-lining should honestly stop.
-	msg.channel.send({ embed: { color: callDoc.from.vip ? config.colors.vip : config.colors.info, title: `Dialing \`${toDial}\`...`, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`, footer: { text: callDoc.id } } });
+	msg.channel.send({ embed: { color: callDoc.from.vip ? config.colors.vip : config.colors.info, title: `Dialing \`${toDial}\``, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`, footer: { text: callDoc.id } } });
 	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
 	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: callDoc.from.vip ? config.colors.vip : config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === "08006113835" ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: callDoc.id } } }, toDialDoc.channel);
 

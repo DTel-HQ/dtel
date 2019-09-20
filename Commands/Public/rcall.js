@@ -19,12 +19,13 @@ module.exports = async(client, msg, suffix) => {
 		if (!toDial) break;
 		let call = await r.table("Calls").getAll(toDial.id, { index: "fromChannel" }).nth(0).default(null);
 		if (!call) call = await r.table("Calls").getAll(toDial.id, { index: "toChannel" }).nth(0).default(null);
-		if (fromNumber.id == toDial.id || call || (await client.api.channels(toDial.channel).get()).guild_id === msg.guild.id) {
+		let channel = await client.api.channels(toDial.channel).get().catch(e => null);
+		if (fromNumber.id == toDial.id || call || (channel && channel.guild_id === msg.guild.id)) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}
 		toDialDoc = await r.table("Numbers").get(toDial.id);
-		if (new Date(toDialDoc.expiry).getTime() < Date.now()) {
+		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}

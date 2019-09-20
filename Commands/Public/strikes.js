@@ -3,18 +3,21 @@ const Discord = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	if (!(await msg.author.getPerms()).support || !suffix) {
 		let userStrikes = await r.table("Strikes").getAll(msg.author.id, { index: "offender" }).default([]);
-		let guildStrikes = msg.guild ? await r.table("Strikes").getAll(offenderID, { index: msg.guild.id }).default([]) : [];
+		let guildStrikes = msg.guild ? await r.table("Strikes").getAll(msg.guild.id, { index: "offender" }).default([]) : [];
 		let embed = {
 			color: config.colors.info,
-			title: `Strikes for ${msg.author.tag} (${msg.author.id})`,
+			author: {
+				name: msg.author.tag,
+				icon_url: msg.author.displayAvatarURL(),
+			},
 			fields: [
-				{ name: "User strikes", value: userStrikes.length ? userStrikes.map(s => `-${s.reason}`).join("\n") : "None" },
+				{ name: "User strikes", value: userStrikes.length ? userStrikes.map(s => `${userStrikes.indexOf(s) + 1}. ${s.id}: ${s.reason}`).join("\n") : "None" },
 			],
 			footer: {
 				text: "For any questions/complaints about a strike; call *611.",
 			},
 		};
-		if (msg.guild) embed.fields.push({ name: "This guild's strikes", value: guildStrikes.length ? guildStrikes.map(s => `-${s.reason}`).join("\n") : "None" });
+		if (msg.guild) embed.fields.push({ name: "This guild's strikes", value: guildStrikes.length ? guildStrikes.map(s => `${userStrikes.indexOf(s) + 1}. ${s.id}: ${s.reason}`).join("\n") : "None" });
 		return msg.channel.send({ embed: embed });
 	}
 

@@ -62,9 +62,9 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 
-	msg.channel.send(`This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\``);
+	await msg.channel.send({ embed: { color: config.colors.success, description: `This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\`` }, author: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
 	if (user) {
-		(await user.createDM()).send({ embed: { color: config.colors.info, title: "You received a strike", description: `You have been striked due to the following reason: ${reason}. You will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them of their strike." } }));
+		(await user.createDM()).send({ embed: { color: config.colors.info, title: "You received a strike", description: `You have been striked due to the following reason: ${reason}.\n\nYou will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them of their strike." } }));
 	} else {
 		(await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server received a srike", description: `Your server ${guild.name}(${guild.id}) has been striked due to the following reason: \n_${reason}_ \n\nYour server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the strike." } }));
 		if (channel) channel.send({ embed: { color: config.colors.info, title: "This server received a strike", description: `This server has been striked due to the following reason: \n_${reason}_ \n\nThe server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the channel. The guild owner should have been informed." } }));
