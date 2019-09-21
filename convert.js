@@ -32,30 +32,30 @@
 			id: i.number,
 			channel: i._id,
 			expiry: expiry,
-		});
+		}).catch(e => null);
 	}
 
 	let blacklist = await Blacklist.find({});
 	for (let i of blacklist) {
 		console.log("moved black" + i._id)
-		await r.table("Blacklist").insert({ id: i._id });
+		await r.table("Blacklist").insert({ id: i._id }).catch(e => null);
 	}
 
 	let mailbox = await Mailbox.find({});
 	for (let i of mailbox) {
 		console.log("moved mailbox" + i._id)
-		await r.table("Mailbox").insert({ id: i._id, autoreply: i.settings.autoreply });
+		await r.table("Mailbox").insert({ id: i._id, autoreply: i.settings.autoreply }).catch(e => null);
 	}
 
 	let phonebook = await Phonebook.find({});
 	for (let i of phonebook) {
 		console.log("moved phonebook" + i._id)
-		await r.table("Phonebook").insert({ id: i._id, description: i.description });
+		await r.table("Phonebook").insert({ id: i._id, description: i.description }).catch(e => null);
 	}
 
 	let strikes = await Strikes.find({});
 	for (let i of strikes) {
 		console.log("moved strikes" + i._id)
-		await r.table("Strikes").insert({ id: i._id, offender: i.offender, reason: i.reason, creator: i.creator });
+		await r.table("Strikes").insert({ id: i._id, offender: i.offender, reason: i.reason, creator: i.creator }).catch(e => null);
 	}
 })();
