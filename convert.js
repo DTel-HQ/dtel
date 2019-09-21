@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 (async() => {
 	let r = await require("./Database/init")()
-		.then(() => winston.info("[Database] Successfully connected to the database."))
-		.catch(err => winston.error(`[Database] An error occurred while initializing the database.\n${err}`));
+		.then(() => console.log("[Database] Successfully connected to the database."))
+		.catch(err => console.log(`[Database] An error occurred while initializing the database.\n${err}`));
 
 	const tables = [
 		"Accounts",
@@ -25,12 +25,7 @@
 	for (let i of tables) if (!tablelist.includes(i)) await r.tableCreate(i).run();
 
 
-	require("./Mongo/database.js").initialize("mongodb://discordtel:g1Iwtzk9syKc@127.0.0.1/discordtel").then(() => {
-		console.log("Database initialized!");
-	}).catch(err => {
-		console.log(`Failed to initialize Database`, err);
-		process.exit(1);
-	});
+	await require("./Mongo/database.js").initialize("mongodb://discordtel:g1Iwtzk9syKc@127.0.0.1/discordtel");
 
 	let accounts = await Accounts.find({});
 	for (let i of accounts) {
