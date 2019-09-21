@@ -15,6 +15,7 @@ module.exports = {
 		reload: true,
 	},
 	rules: {
+		"require-atomic-updates": 0,
 		"no-compare-neg-zero": "error",
 		"no-extra-parens": ["warn", "all", { "nestedBinaryExpressions": false }],
 		"no-template-curly-in-string": "error",
