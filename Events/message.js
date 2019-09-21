@@ -4,7 +4,7 @@ module.exports = async msg => {
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
-	let account = await r.table("Accounts").get(msg.author.id) || {};
+	let account = await msg.author.account || {};
 	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
 
 	// Check for call
@@ -27,8 +27,6 @@ module.exports = async msg => {
 		return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
-	} else if (!cmdFile) {
-		cmdFile = await reload(`./Commands/Public/${cmd}`);
 	}
 	if (!msg.content.startsWith(prefix)) return;
 
@@ -38,6 +36,7 @@ module.exports = async msg => {
 
 
 	// Find Maintainer or Support commands
+	cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (config.maintainers.includes(msg.author.id) && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if ((await msg.author.getPerms()).support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
