@@ -31,6 +31,7 @@
 		await r.table("Numbers").insert({
 			id: i.number,
 			channel: i._id,
+			expiry: expiry,
 		});
 	}
 
@@ -55,6 +56,6 @@
 	let strikes = await Strikes.find({});
 	for (let i of strikes) {
 		console.log("moved strikes" + i._id)
-		await r.table("Strikes").insert({ id: i._id, type: i.type, offender: i.offender, reason: i.reason, creator: i.creator });
+		await r.table("Strikes").insert({ id: i._id, offender: i.offender, reason: i.reason, creator: i.creator });
 	}
 })();

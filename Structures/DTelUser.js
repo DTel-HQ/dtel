@@ -49,9 +49,9 @@ module.exports = () => {
 					support: false,
 					donator: false,
 				};
+				if (config.maintainers.includes(this.id)) toRet = { boss: true, manager: true, support: true, donator: true };
 				return this.client.api.guilds(config.supportGuild).members(this.id).get()
 					.then(member => {
-						if (config.maintainers.includes(this.id)) toRet = { boss: true, manager: true, support: true, donator: true };
 						if (member.roles.includes(config.bossRole)) toRet.boss = true;
 						if (member.roles.includes(config.managerRole)) toRet.manager = true;
 						if (member.roles.includes(config.supportRole)) toRet.support = true;
