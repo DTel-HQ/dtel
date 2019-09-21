@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 
 		omsg.delete().catch(e => null);
 		if (collected.guild) collected.delete().catch(e => null);
-		if (/^no$/i.test(collected.first().content)) return;
+		if (/^no$/i.test(collected.content)) return;
 
 		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setting autoreply", description: "Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
 

@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (fromNumberDoc.id == toNumberDoc.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Why try?", description: "You can't send a message to yourself." } });
 
-	let account = msg.author.account;
+	let account = await msg.author.account;
 
 	if (account.balance < config.messageCost) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `You don't have enough credits (${config.messageCost}) to send a message.` } });
 	account.balance -= config.messageCost;
@@ -59,5 +59,5 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Mailbox").get(toNumberDoc.channel).update({ messages: messages });
 	client.apiSend(`You received a message. Check it using \`>mailbox\``, mailbox.id);
-	msg.channel.send({ embed: { color: config.colors.success, title: "Sent!", description: "Your message succesfully reaached the other side!" } });
+	msg.channel.send({ embed: { color: config.colors.success, title: "Sent!", description: "Your message succesfully reached the other side!" } });
 };
