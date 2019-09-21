@@ -31,7 +31,7 @@
 		await r.table("Numbers").insert({
 			id: i.number,
 			channel: i._id,
-			expiry: expiry,
+			expiry: i.expiry,
 		}).catch(e => null);
 	}
 

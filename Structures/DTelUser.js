@@ -17,7 +17,6 @@ module.exports = () => {
 					if (!account) {
 						account = { id: this.id, balance: 0 };
 						await r.table("Accounts").insert(account);
-						await this.send({ embed: { color: config.colors.info, title: "Account created", description: `You didn't have an account created yet, so we just made an account for you! Please read [this information](${config.paymentLink}) on payment.`, footer: { text: "Accounts only hold trivial information for the bot. (id, balancem, etc)" } } }).catch(e => null);
 					}
 					return account;
 				})();
