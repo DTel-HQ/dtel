@@ -19,12 +19,6 @@
 		"Whitelist",
 	];
 
-	let dblist = await r.dbList().run();
-	if (!dblist.includes(db.db)) await r.dbCreate(db.db);
-	let tablelist = await r.tableList().run();
-	for (let i of tables) if (!tablelist.includes(i)) await r.tableCreate(i).run();
-
-
 	await require("./Mongo/database.js").initialize("mongodb://discordtel:g1Iwtzk9syKc@127.0.0.1/discordtel");
 
 	let accounts = await Accounts.find({});
