@@ -5,8 +5,8 @@ module.exports = async guild => {
 	if (!numbers) return;
 
 	setTimeout(async() => {
-		guild = await client.guilds.get(guild.id);
-		if (guild) return;
+		let currGuild = await client.guilds.get(guild.id);
+		if (currGuild) return;
 		for (let number of numbers) {
 			client.log(`📕 Number \`${number.id}\` has automatically been deassigned after leaving \`${guild.id}\`.`);
 			r.table("Numbers").get(number.id).delete();

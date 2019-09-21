@@ -86,7 +86,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await r.table("Numbers").insert(numberDoc);
 		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
-		await msg.channel.send(`This channel's number is now ${number}. You can also put your number in the phonebook, meaning this number can be randomly called. If you want to do so, type a description for your number, otherwise type \`skip\`.`);
+		await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Phonebook", value: `You can also put your number in the phonebook, meaning this number can be randomly called.\nIf you want to do so, type a description for your number, otherwise type \`skip\`.` }] } });
 		return phonebookChooser();
 	};
 
@@ -135,6 +135,10 @@ module.exports = async(client, msg, suffix) => {
 			.setColor(config.colors.receipt)
 			.setTitle("Your number is all set up!")
 			.setDescription("Here is all your information. If you have any questions or want to report any abuse of the service (eg. a troll call), call `*611`.")
+			.addField(
+				"What now?",
+				`To learn more about the bot: \`>help\`, \`>info\`, \`>links\`.\nFor information about (your) number(s): call \`*233\` and \`*411\`.`
+			)
 			.addField(
 				"Number",
 				`${number}`,

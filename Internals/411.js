@@ -21,7 +21,7 @@ module.exports = async(msg, myNumber) => {
 	const comparison = (a, b) => {
 		let comp = 0;
 		a.id > b.id ? comp = 1 : comp = -1;
-		if (b.id.startsWith("08") && !a.id.startsWith("08")) comp = 1;
+		if (a.id.startsWith("08") && !b.id.startsWith("08")) comp = -1;
 		return comp;
 	};
 	await phonebook.sort(comparison);
@@ -63,7 +63,7 @@ module.exports = async(msg, myNumber) => {
 		// Collector
 		collected = (await msg.channel.awaitMessages(
 			// Search for correct page number or query with more than 3 characters.
-			m => m.author === msg.author && /^\d+$/.test(m.content) ? parseInt(m.content) < query ? queryPages && parseInt(m.content) > -1 : pages : m.content.length > 3,
+			m => m.author === msg.author && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
 			{ max: 1, time: 180000 }
 		)).first();
 
@@ -76,7 +76,11 @@ module.exports = async(msg, myNumber) => {
 		if (/^clear$/.test(collected.content)) query = null;
 
 		// Page number or query? change page number
-		if (/^\d+$/.test(collected.content)) query ? queryPage = parseInt(collected.content) : page = parseInt(collected.content);
+		if (/^\d+$/.test(collected.content)) {
+			let pagenumber = parseInt(collected.content);
+			if (query && pagenumber <= queryPages) queryPage = pagenumber;
+			else if (pagenumber <= pages) page = pagenumber;
+		}
 
 		// Return this function again
 		let res = await searchPage(query);

@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >ninfo [number/channelID]" } });
 
 	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix).catch(e => null);
-	if (user) dmChannel = (await client.users.get(user.id)).createDM();
+	if (user) dmChannel = await (await client.users.get(user.id)).createDM();
 	if (dmChannel) number = await r.table("Numbers").getAll(dmChannel.id, { index: "channel" }).nth(0).default(null);
 	if (msg.mentions.channels.first()) id = (await msg.mentions.channels.first()).id;
 	if (!number) number = await r.table("Numbers").getAll(id, { index: "channel" }).nth(0).default(null);
@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 		.setColor(config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle(`Number information for ${number.id}`)
-		.setDescription("Here you can find all information relevant for this number")
+		.setDescription("Here you can find all information relevant to this number")
 		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === "dm" ? "DM Channel" : channel.name}\nDM: ${channel.type === "dm" ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
 		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}` : "DM Number", true)

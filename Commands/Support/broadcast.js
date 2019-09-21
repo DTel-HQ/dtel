@@ -1,7 +1,8 @@
 module.exports = async(client, msg, suffix) => {
 	// Get number with the channel
+	if (!suffix.split(" ")[0]) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">broadcast [number/channelID] [message]" } });
 	let number = await r.table("Numbers").get(suffix.split(" ")[0]);
-	if (!number) number = await r.table("Numbers").getAll(suffix.split(" ")[0], { index: "channel" });
+	if (!number) number = await r.table("Numbers").getAll(suffix.split(" ")[0], { index: "channel" }).nth(0).default(null);
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't find that.", description: "Keep in mind you can only broadcast to channels with a number." } });
 
 	// Define the message and channel
@@ -13,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 
 	try {
 		await client.apiSend({ embed: { color: config.colors.error, title: "❕ Message from DiscordTel staff ❕", description: message.join(" ") } }, channel);
-		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!.", description: `Message: ${message.join(" ")}\nChannel: ${number.channel}`, footer: { text: `By ${msg.author.id}` } } });
+		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `Message: ${message.join(" ")}\nChannel: ${number.channel}`, author: { name: `By ${msg.author.id}`, icon_url: msg.author.displayAvatarURL() } } });
 	} catch (err) {
 		await r.table("Numbers").get(number.id).delete();
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't send a message.", description: "The number has now been deleted." } });

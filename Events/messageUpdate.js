@@ -1,7 +1,7 @@
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
 	let call = await nmsg.channel.call;
-	if (!call || !call.pickedUp || call.onHold || !nmsg.content) return;
+	if (!call || !call.pickedUp || call.hold || !nmsg.content) return;
 
 	let perms = await nmsg.author.getPerms();
 

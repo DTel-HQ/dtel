@@ -1,10 +1,12 @@
+/* eslint-disable no-inline-comments */
 module.exports = {
 	// BOT MAINTENANCE
 	maintainers: [
+		"207484517898780672",
 		"137589790538334208",
 		"124989722668957700",
 	],
-	devMode: true,
+	devMode: false,
 	shardCount: 3,
 
 	// NUMBER ALIASES
@@ -22,13 +24,13 @@ module.exports = {
 	},
 	lotteryCost: 5,
 	messageCost: 2,
-	pickupBonus: 10,
-	promoteCost: 500,
+	pickupBonus: 10, // *611
+	promoteCost: 250,
 	renewalRate: 500,
 	transferRate: 0.729,
 	minTransfer: 100,
 	maxNumbers: 3,
-	promoteTimeout: 7,
+	promoteTimeout: 7, // days
 
 	// EMOTES - don't change order
 	callPhones: {
@@ -38,14 +40,14 @@ module.exports = {
 	},
 
 	// IDs
-	logsChannel: "399006748582871060",
-	promoteChannel: "577889780533166106",
-	supportChannel: "399375958525870080",
-	supportGuild: "398980667553349649",
-	bossRole: "398980867864920064",
+	logsChannel: "282253502779228160",
+	promoteChannel: "398569181097754624",
+	supportChannel: "281816105289515008",
+	supportGuild: "281815661317980160",
+	bossRole: "281815725365264385",
 	donatorRole: "324578460183822337",
 	managerRole: "284443515516354560",
-	supportRole: "398980993593376769",
+	supportRole: "281815839936741377",
 
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/jJayAt",
@@ -61,27 +63,31 @@ module.exports = {
 
 	// Embed Colors
 	colors: {
-		contacts: 0x50C878,
-		error: 0xff3333,
-		info: 0x3498d8,
-		lottery: 0x80002a,
-		receipt: 0xe1e1e1,
-		success: 0x47d147,
-		yellowbook: 0xe6e600,
-		vip: 0xffc61a,
+		contacts: 0x50C878, // green
+		error: 0xff3333, // red
+		info: 0x3498d8, // blue
+		lottery: 0x80002a, // red
+		receipt: 0xe1e1e1, // white (duh)
+		success: 0x47d147, // green
+		yellowbook: 0xe6e600, // yellow...
+		vip: 0xffc61a, // gold
 	},
 
 	// Command aliases (keep it down or make new file)
 	aliasCommands: {
 		bal: "balance",
 		bc: "broadcast",
+		bl: "blacklist",
 		cmds: "help",
 		commands: "help",
 		contact: "contacts",
+		delstrike: "rmstrike",
 		id: "identify",
 		link: "links",
 		mentions: "mention",
 		perm: "permcheck",
+		promo: "promote",
+		wl: "whitelist",
 	},
 
 	// Cooldown times (s) (This file is getting too big)

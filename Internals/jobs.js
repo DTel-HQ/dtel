@@ -4,6 +4,7 @@ const { post } = require("chainfetch");
 
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {
+	let winnerID;
 	if (client.shard.ids[0] != 0) return;
 	// Daily reset
 	await r.table("Accounts").update({ daily: false });
@@ -16,7 +17,6 @@ scheduleJob("0 0 0 * * *", async() => {
 		let lastEntry = lottery[lottery.length - 1];
 		let winningNumber = Math.round(Math.random() * lastEntry.number) + 1;
 
-		let winnerID;
 		for (let i in lottery) {
 			// find winner
 			if (lottery[i].number >= winningNumber) {
@@ -40,7 +40,7 @@ scheduleJob("0 0 0 * * *", async() => {
 			});
 	}
 
-	winston.info("[ScheduleJob] Reset lottery and dailies.");
+	winston.info(`[ScheduleJob] Reset lottery and dailies. Lottery won by ${winnerID}`);
 	client.log(`⏰ The lottery and dailies have been reset.`);
 });
 
