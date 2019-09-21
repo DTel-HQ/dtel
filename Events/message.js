@@ -1,11 +1,10 @@
 module.exports = async msg => {
-	if (msg.author.bot || !client.done) return;
+	if (msg.author.bot || !client.done || (config.devOnlyMode && !config.maintainers.includes(msg.author.id))) return;
 	const perms = await msg.author.getPerms(msg.author.id);
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
-	let account = await msg.author.account || {};
-	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
+	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : await msg.author.prefix;
 
 	// Check for call
 	let call = await msg.channel.call;

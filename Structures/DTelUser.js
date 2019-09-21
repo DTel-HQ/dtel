@@ -3,13 +3,21 @@ const { Structures } = require("discord.js");
 module.exports = () => {
 	Structures.extend("User", User => {
 		class DTelUser extends User {
+			constructor(...arg) {
+				super(...arg);
+				this.prefix = (async() => {
+					let acc = await r.table("Accounts").get(this.id);
+					return acc ? acc.prefix || config.prefix : config.prefix;
+				})();
+			}
+
 			get account() {
 				return (async() => {
 					let account = await r.table("Accounts").get(this.id);
 					if (!account) {
 						account = { id: this.id, balance: 0 };
 						await r.table("Accounts").insert(account);
-						await this.send({ embed: { color: config.colors.info, title: "Account created", description: `We just made an account for you! Please read [this information](${config.paymentLink}) on payment.` } }).catch(e => null);
+						await this.send({ embed: { color: config.colors.info, title: "Account created", description: `You didn't have an account created yet, so we just made an account for you! Please read [this information](${config.paymentLink}) on payment.`, footer: { text: "Accounts only hold trivial information for the bot. (id, balancem, etc)" } } }).catch(e => null);
 					}
 					return account;
 				})();
