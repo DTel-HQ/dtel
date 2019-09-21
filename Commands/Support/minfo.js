@@ -22,9 +22,9 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle(`Message information for ${id}`)
 		.setDescription("Find out who sent that message!")
 		.addField("Message", message.message)
-		.addField("Author", message.user, true)
-		.addField("From", message.number, true)
-		.addField("At", new Date(message.time))
+		.addField("Author", message.user || "Unknown", true)
+		.addField("From", message.number || "Unknown", true)
+		.addField("At", message.time ? new Date(message.time) : "Unknown")
 		.setFooter(`Requested by: ${msg.author.id}`);
 
 	return msg.channel.send({ embed: embed });

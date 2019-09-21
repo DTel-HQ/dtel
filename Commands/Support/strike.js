@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 	let strikeDoc = {
 		id: id,
 		offender: toStrike,
-		user: user ? 1 : 0,
+		user: !!user,
 		reason: reason,
 		creator: msg.author.id,
 		date: new Date(),
