@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 (async() => {
-	let r = await require("./Database/init")()
-		.then(() => console.log("[Database] Successfully connected to the database."))
-		.catch(err => console.log(`[Database] An error occurred while initializing the database.\n${err}`));
+	await require("./Database/init")()
+		.then(() => winston.info("[Database] Successfully connected to the database."))
+		.catch(err => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
 
 	const tables = [
 		"Accounts",
