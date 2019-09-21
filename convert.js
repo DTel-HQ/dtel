@@ -22,7 +22,7 @@
 	let accounts = await Accounts.find({});
 	for (let i of accounts) {
 		console.log("moved acc" + i._id)
-		await r.table("Users").insert({ id: i._id, balance: i.balance, daily: false });
+		await r.table("Accounts").insert({ id: i._id, balance: i.balance, daily: false });
 	}
 
 	let numbers = await Numbers.find({});
