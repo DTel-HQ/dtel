@@ -173,7 +173,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		if (!newCallDoc || newCallDoc.pickedUp) return;
 
 		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" }, footer: { text: callDoc.id } }, callDoc.to.channel);
-		client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up.`);
+		client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up. ${callDoc.id}`);
 		await r.table("Calls").get(callDoc.id).delete();
 		await r.table("OldCalls").insert(callDoc);
 

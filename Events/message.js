@@ -9,7 +9,6 @@ module.exports = async msg => {
 	// Check for call
 	let call = await msg.channel.call;
 	if (!call && !msg.content.startsWith(prefix)) return;
-	console.log(`Call: ${call}`);
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
@@ -26,14 +25,13 @@ module.exports = async msg => {
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
 	}
-	console.log(`CMDFile: ${cmdFile}`);
-	if (!cmdFile && call && !msg.author.maintainer) return;
+	if (!cmdFile && (call && !call.hold)) return;
 
 	// check busy first since it's a simple return
 	if (msg.author.busy && !call && !msg.author.maintainer) return;
 
 	// Find Maintainer or Support commands
-	cmdFile = await reload(`./Commands/Public/${cmd}`);
+	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (msg.author.maintainer && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (msg.author.support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
 	if (!cmdFile) return;
