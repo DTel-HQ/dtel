@@ -7,9 +7,6 @@ const config = global.config = require("./Configuration/config.js");
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
-		let structures = require("fs").readdirSync("./Structures");
-		for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
-
 		const client = global.client = this.client;
 		client.done = true;
 
