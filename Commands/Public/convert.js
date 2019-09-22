@@ -1,4 +1,4 @@
-const { post } = require("chainfetch");
+const { post } = require("snekfetch");
 
 module.exports = async(client, msg, suffix) => {
 	let amount = suffix.split(" ")[0];
