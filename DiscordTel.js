@@ -1,6 +1,7 @@
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
 		const client = global.client = this.client;
+		client.done = true;
 		const clear = require("clear-module");
 
 		const { createLogger, format, transports } = require("winston");
