@@ -69,14 +69,12 @@ module.exports = Discord => {
 					this.support = true;
 					this.donator = true;
 				}
-				await this.client.api.guilds(config.supportGuild).members(this.id).get()
-					.then(member => {
-						winston.info(`Setting perms for ${this.id}`);
-						if (member.roles.includes(config.bossRole)) this.boss = true;
-						if (member.roles.includes(config.managerRole)) this.manager = true;
-						if (member.roles.includes(config.supportRole)) this.support = true;
-						if (member.roles.includes(config.donatorRole)) this.donator = true;
-					}).catch(e => null);
+				let roles = (await this.client.api.guilds(config.supportGuild).members(this.id).get()).roles;
+				await this.client.api.guilds(config.supportGuild).members(this.id).get().catch(e => winston.error(`Couldn't get guild: ${e}`));
+				if (roles.includes(config.bossRole)) this.boss = true;
+				if (roles.includes(config.managerRole)) this.manager = true;
+				if (roles.includes(config.supportRole)) this.support = true;
+				if (roles.includes(config.donatorRole)) this.donator = true;
 				return this.getPerms();
 			}
 
