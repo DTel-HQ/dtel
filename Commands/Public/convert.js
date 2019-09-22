@@ -4,12 +4,16 @@ module.exports = async(client, msg, suffix) => {
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">convert [amount] [currency]" } });
+	amount = parseInt(amount);
 	currency = currency.toUpperCase();
 
 	let account = await msg.author.account;
 
-	if (account.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
-	if (isNaN(parseInt(amount))) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
+	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
+	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
+
+	account.balance -= amount;
+	await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 	let snekres;
 	try {
@@ -86,5 +90,17 @@ module.exports = async(client, msg, suffix) => {
 				}
 			}
 		}
+	} finally {
+		let embed = {
+			color: config.colors.receipt,
+			title: "Converted!",
+			description: `Succesfully converted ¥${amount} into ${currency}.`,
+			author: {
+				name: msg.author.tag,
+				icon_url: msg.author.displayAvatarURL(),
+			},
+			timestamp: new Date(),
+		};
+		msg.channel.send({ embed: embed });
 	}
 };
