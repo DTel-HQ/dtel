@@ -7,7 +7,7 @@ module.exports = {
 		"124989722668957700",
 	],
 	devMode: false,
-	devOnlyMode: true,
+	devOnlyMode: false,
 	shardCount: 4,
 
 	// NUMBER ALIASES
