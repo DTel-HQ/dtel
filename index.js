@@ -3,11 +3,17 @@ const DailyRotateFile = require("winston-daily-rotate-file");
 
 const config = require("./Configuration/config.js");
 
-const { ShardingManager } = require("discord.js");
-const sharder = new ShardingManager("DiscordTel.js", {
-	totalShards: Number(config.shardCount),
-	respawn: true,
-	token: require("./Configuration/auth.js").discord.token,
+// const { ShardingManager } = require("discord.js");
+// const sharder = new ShardingManager("DiscordTel.js", {
+// 	totalShards: Number(config.shardCount),
+// 	respawn: true,
+// 	token: require("./Configuration/auth.js").discord.token,
+// });
+
+const { ShardingManager } = require("kurasuta");
+const sharder = new ShardingManager(`${__dirname}/DiscordTel.js`, {
+	clientOptions: { disableEveryone: true },
+	client: require("./Internals/Client.js"),
 });
 
 const winston = global.winston = createLogger({
@@ -31,11 +37,6 @@ const winston = global.winston = createLogger({
 	),
 });
 
-// const node = new (require("veza"))("DTelIPC")
-// 	.on("client.identify", client => winston.info(`[IPC] Client Connected ${client.name}`))
-// 	.on("client.destroy", client => console.log(`[IPC] Client Destroyed: ${client.name}`))
-// 	.serve(config.IPCPort);
-
-sharder.on("shardCreate", shard => winston.info(`[Sharder] Spawned Shard ID: ${shard.id}`));
+// sharder.on("spawn", shard => winston.info(`[Sharder] Spawned Shard ID: ${shard.id}`));
 
 sharder.spawn();
