@@ -11,9 +11,13 @@ const config = require("./Configuration/config.js");
 // });
 
 const { ShardingManager } = require("kurasuta");
+const Discord = require("discord.js");
+
+let structures = require("fs").readdirSync("./Structures");
+for (let i of structures) if (i.endsWith(".js")) require(`${__dirname}/../Structures/${i}`)(Discord);
 const sharder = new ShardingManager(`${__dirname}/DiscordTel.js`, {
 	clientOptions: { disableEveryone: true },
-	client: require("./Internals/Client.js"),
+	client: require("./Internals/Client.js")(Discord),
 	token: require("./Configuration/auth.js").discord.token,
 });
 

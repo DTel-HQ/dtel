@@ -1,6 +1,4 @@
-const { Structures, Channel } = require("discord.js");
-
-module.exports = () => {
+module.exports = Discord => {
 	let extend = Structure => {
 		class DTelChannel extends Structure {
 			get number() {
@@ -18,6 +16,6 @@ module.exports = () => {
 		return DTelChannel;
 	};
 
-	Structures.extend("TextChannel", TextChannel => extend(TextChannel));
-	Structures.extend("DMChannel", DMChannel => extend(DMChannel));
+	Discord.Structures.extend("TextChannel", TextChannel => extend(TextChannel));
+	Discord.Structures.extend("DMChannel", DMChannel => extend(DMChannel));
 };

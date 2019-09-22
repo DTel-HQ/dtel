@@ -1,11 +1,4 @@
-let structures = require("fs").readdirSync("./Structures");
-
-module.exports = class DTelClient extends require("discord.js").Client {
-	constructor(...arg) {
-		for (let i of structures) if (i.endsWith(".js")) require(`${__dirname}/../Structures/${i}`)();
-		super(...arg);
-	}
-
+module.exports = Discord => class DTelClient extends Discord.Client {
 	async apiSend(content, channel) {
 		if (!content || !channel) throw new Error("Missing parameters.");
 
