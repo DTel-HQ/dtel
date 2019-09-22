@@ -14,13 +14,23 @@ module.exports = async(client, msg, suffix) => {
 
 	let user,
 		guild,
+		guildID,
+		shard,
 		channel;
 
 	user = await client.users.fetch(toStrike).catch(e => null);
-	if (!user) guild = await client.api.guilds(toStrike).get().catch(e => null);
-	if (!guild) {
+	if (!user) {
 		channel = await client.api.channels(toStrike).get().catch(e => null);
-		if (channel) guild = await client.channels.get(toStrike).guild.id;
+		if (channel && channel.type != 1) guildID = channel.guild_id;
+
+		let results = await client.shard.broadcastEval(`this.guilds.resolve("${guildID || toStrike}")`);
+		for (let result of results) {
+			if (result) {
+				guild = result;
+				shard = results.indexOf(result);
+				break;
+			}
+		}
 	}
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid ID", description: "Couldn't find a guild or user matching that ID." } });
 
@@ -53,7 +63,7 @@ module.exports = async(client, msg, suffix) => {
 	if (totalStrikes.length >= 3) {
 		let blacklist = await r.table("Blacklist").get(toStrike);
 		if (!blacklist) {
-			await r.table("Blacklist").insert({ id: toStrike });
+			let res = user ? await user.blacklist() : await client.shard.broadcastEval(`if (this.shard.ids[0] === ${shard}) this.guilds.get("${guild.id}").blacklist()`);
 			msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\`` } });
 			if (user) (await user.createDM()).send({ embed: { color: config.colors.info, title: "You were blacklisted", description: `You have received your third strike and have been blacklisted. Reason given for strike: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them their blacklist." } }));
 			else (await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server received was blacklisted", description: `Your server ${guild.name}(${guild.id}) has been blacklisted due to the following reason: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the blacklist." } }));

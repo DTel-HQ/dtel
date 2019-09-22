@@ -5,6 +5,10 @@ module.exports = () => {
 		class DTelUser extends User {
 			constructor(...arg) {
 				super(...arg);
+				this.blacklisted = (async() => {
+					let bl = await r.table("Blacklist").get(this.id).default(false);
+					return bl;
+				})();
 				this.prefix = (async() => {
 					let acc = await r.table("Accounts").get(this.id);
 					return acc ? acc.prefix || config.prefix : config.prefix;
@@ -22,8 +26,16 @@ module.exports = () => {
 				})();
 			}
 
-			get blacklisted() {
-				return r.table("Blacklist").get(this.id).default(false);
+			blacklist() {
+				if (this.blacklisted === true) return false;
+				this.blacklisted = true;
+				return r.table("Blacklist").insert({ id: this.id });
+			}
+
+			unBlacklist() {
+				if (!this.blacklisted) return false;
+				this.blacklisted = false;
+				return r.table("Blacklist").get(this.id).delete();
 			}
 
 			set cooldown(type) {

@@ -1,4 +1,4 @@
-/* eslint-disable no-undef */
+/* eslint-disable */
 (async() => {
 	let r = global.r = await require("./Database/init")();
 

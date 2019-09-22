@@ -10,7 +10,7 @@ module.exports = async msg => {
 	let call = await msg.channel.call;
 
 	// Check if they're blacklisted → yes? return
-	if (await msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
+	if (msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
