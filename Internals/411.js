@@ -46,11 +46,9 @@ module.exports = async(msg, myNumber) => {
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
 
 		// Determine if query - add 10 results accordingly
-		for (let i = query ? (queryPage - 1) * 10 : (page - 1) * 10; i < query ? queryPage * 10 : page * 10; i++) {
-			console.log(i < query ? queryPage * 10 : page * 10);
+		for (let i = query ? (queryPage - 1) * 10 : (page - 1) * 10; query ? i < queryPage * 10 : i < page * 10; i++) {
 			let doc = query ? results[i] : phonebook[i];
 			if (!doc) break;
-			console.log(`id: ${doc.id}, desc: ${doc.description}`);
 			await embed.addField(doc.id, doc.description);
 		}
 		embed.addField("Options", `Enter a page number or query (minimum of three characters) to search for.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
