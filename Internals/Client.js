@@ -1,10 +1,13 @@
 let structures = require("fs").readdirSync("./Structures");
-for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
 
 module.exports = class DTelClient extends require("discord.js").Client {
 	constructor(...arg) {
 		super(...arg);
 		this.init();
+	}
+
+	init() {
+		for (let i of structures) if (i.endsWith(".js")) require(`${__dirname}/../${i}`)();
 	}
 
 	async apiSend(content, channel) {
