@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 								\n\n**[• Custom name](${config.paymentLink})**\
 								\nYou can set a custom name that will show up besides (or instead of) your number when calling.\
 								\n\n**[• A VIP Emote](${config.paymentLink})**\
-								\nYour messages will have the VIP emote: ${config.callPhones.donator}, instead of the default ${config.callPhones.default}.\
+								\nYour messages will have the VIP emote: ${config.callPhones.donator}, instead of the default: ${config.callPhones.default}\
 								\n\n**[• Change your number](${config.paymentLink})**\
 								\nRequesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.`);
 	}
