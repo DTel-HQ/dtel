@@ -5,8 +5,8 @@ module.exports = class DTelClient extends require("discord.js").Client {
 	}
 
 	init() {
-		let structures = require("fs").readdirSync("../Structures");
-		for (let i of structures) if (i.endsWith(".js")) require(`../Structures/${i}`)();
+		let structures = require("fs").readdirSync("./Structures");
+		for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
 	}
 
 	async apiSend(content, channel) {
