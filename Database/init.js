@@ -12,7 +12,6 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	const tables = [
 		"Accounts",
 		"Blacklist",
-		"Busy",
 		"Calls",
 		"Cooldowns",
 		"Lottery",

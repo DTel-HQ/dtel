@@ -64,14 +64,14 @@ module.exports = async(client, msg, suffix) => {
 	} });
 
 	// Collector
-	await r.table("Busy").insert({ id: msg.author.id });
+	msg.author.busy = true;
 	let collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
 		{ max: 1, time: 60000 }
 	);
 
 	// on collection
-	await r.table("Busy").get(msg.author.id).delete();
+	msg.author.busy = false;
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);

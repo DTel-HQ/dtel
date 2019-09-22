@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 	// Do the necessary checks
 	let number = await msg.channel.number;
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
-	await r.table("Busy").insert({ id: msg.author.id });
+	msg.author.busy = true;
 	let account = await msg.author.account;
 	if (!number.promote) {
 		number.promote = { lastmsg: null, lastuser: null, lastPromoted: null, lastEdited: null, embed: { title: null, description: null, number: null, field1: { title: null, description: null, n: 1 }, field2: { title: null, description: null, n: 2 }, field3: { title: null, description: null, n: 3 } } };
@@ -56,7 +56,8 @@ module.exports = async(client, msg, suffix) => {
 	// 	if (!collected || /^0$/.test(collected.content)) {
 	// 		pmsg.delete().catch(e => null);
 	// 		omsg.delete().catch(e => null);
-	// 		return r.table("Busy").get(msg.author.id).delete();
+	// 		msg.author.busy = false;
+	//		return;
 	// 	}
 	//
 	// 	embed.title = collected.content;
@@ -87,7 +88,8 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected || /^0$/.test(collected.content)) {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			return r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
+			return;
 		}
 
 		embed.description = collected.content;
@@ -118,7 +120,8 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected || /^0$/.test(collected.content) || (!setup && /^skip$/i.test(collected.content))) {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			return r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
+			return;
 		}
 
 		if (!/^skip$/i.test(collected.content)) embed.number = collected.content;
@@ -159,7 +162,8 @@ module.exports = async(client, msg, suffix) => {
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
-				return r.table("Busy").get(msg.author.id).delete();
+				msg.author.busy = false;
+				return;
 			}
 
 			if (/^4$/.test(collected.content)) return finishSetup();
@@ -185,7 +189,8 @@ module.exports = async(client, msg, suffix) => {
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
-				return r.table("Busy").get(msg.author.id).delete();
+				msg.author.busy = false;
+				return;
 			}
 
 			embed[`field${nr}`].title = collected.content;
@@ -208,7 +213,8 @@ module.exports = async(client, msg, suffix) => {
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
-				return r.table("Busy").get(msg.author.id).delete();
+				msg.author.busy = false;
+				return;
 			}
 
 			embed[`field${nr}`].description = collected.content;
@@ -221,7 +227,7 @@ module.exports = async(client, msg, suffix) => {
 	};
 
 	let finishSetup = async() => {
-		await r.table("Busy").get(msg.author.id).delete();
+		msg.author.busy = false;
 
 		oEmbed.setTitle("Please wait...")
 			.setColor(config.colors.receipt)
@@ -323,7 +329,8 @@ module.exports = async(client, msg, suffix) => {
 	if (!collected || /^0$/.test(collected.content)) {
 		pmsg.delete().catch(e => null);
 		omsg.delete().catch(e => null);
-		return r.table("Busy").get(msg.author.id).delete();
+		msg.author.busy = false;
+		return;
 	}
 
 	switch (collected.content) {
@@ -345,7 +352,7 @@ module.exports = async(client, msg, suffix) => {
 			)).first();
 
 			if (collected) collected.delete().catch(e => null);
-			await r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
@@ -369,7 +376,7 @@ module.exports = async(client, msg, suffix) => {
 		case "3": {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
-			await r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Unfinished feature", description: "Please use (1) for now." } });
 		}
 
@@ -383,7 +390,7 @@ module.exports = async(client, msg, suffix) => {
 			)).first();
 
 			if (collected) collected.delete().catch(e => null);
-			await r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
 			if (!collected || collected.content.toLowerCase() === "no") {
 				return omsg.delete().catch(e => null);
 			}

@@ -27,9 +27,7 @@ module.exports = async msg => {
 	if (!msg.content.startsWith(prefix)) return;
 
 	// check busy first since it's a simple return
-	let busy = await r.table("Busy").get(msg.author.id);
-	if (busy && !msg.author.maintainer) return;
-
+	if (msg.author.busy && !call && !msg.author.maintainer) return;
 
 	// Find Maintainer or Support commands
 	cmdFile = await reload(`./Commands/Public/${cmd}`);

@@ -112,7 +112,7 @@ module.exports = async(msg, myNumber) => {
 
 		myNumber = await msg.channel.number;
 		// Create collector & make busy
-		await r.table("Busy").insert({ id: msg.author.id });
+		msg.author.busy = true;
 		collected = (await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && perms ? vipNumber ? /^[0-5]$/.test(m.content) : /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content),
 			{ max: 1, time: 60000 })).first();
@@ -120,7 +120,7 @@ module.exports = async(msg, myNumber) => {
 		// On main menu collection
 		if (collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
-			await r.table("Busy").get(msg.author.id).delete();
+			msg.author.busy = false;
 			omsg.delete().catch(e => null);
 			break;
 		}
@@ -137,7 +137,7 @@ module.exports = async(msg, myNumber) => {
 				if (!result) {
 					loop = false;
 					omsg.delete().catch(e => null);
-					await r.table("Busy").get(msg.author.id).delete();
+					msg.author.busy = false;
 				}
 				break;
 			}
@@ -175,7 +175,7 @@ module.exports = async(msg, myNumber) => {
 				// On collection
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					await r.table("Busy").get(msg.author.id).delete();
+					msg.author.busy = false;
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -216,7 +216,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					await r.table("Busy").get(msg.author.id).delete();
+					msg.author.busy = false;
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -260,7 +260,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					await r.table("Busy").get(msg.author.id).delete();
+					msg.author.busy = false;
 					omsg.delete().catch(e => null);
 					loop = false;
 				}
@@ -297,7 +297,7 @@ module.exports = async(msg, myNumber) => {
 
 				if (collected) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
-					await r.table("Busy").get(msg.author.id).delete();
+					msg.author.busy = false;
 					omsg.delete().catch(e => null);
 					loop = false;
 					break;
@@ -333,7 +333,7 @@ module.exports = async(msg, myNumber) => {
 
 						if (collected) collected.delete().catch(e => null);
 						if (!collected || /^0$/.test(collected.content)) {
-							await r.table("Busy").get(msg.author.id).delete();
+							msg.author.busy = false;
 							omsg.delete().catch(e => null);
 							loop = false;
 							break;

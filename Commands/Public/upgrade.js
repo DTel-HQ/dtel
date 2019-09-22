@@ -46,15 +46,19 @@ module.exports = async(client, msg, suffix) => {
 	if (!number || !account.vip) return;
 
 	// Make collector
-	await r.table("Busy").insert({ id: msg.author.id });
+	msg.author.busy = true;
 	let collected = (await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) <= account.vip,
 		{ max: 1, time: 60000 }
 	)).first();
 
-	await r.table("Busy").get(msg.author.id).delete();
+	msg.author.busy = false;
 	collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
+
+	// Check account change
+	let currAccount = await msg.author.account;
+	if (currAccount.vip != account.vip) return msg.channel.send({ embed: { color: config.colors.error, title: "Account changed", description: "Your VIP Balance has changed, please try again." } });
 
 	// remove VIP Months
 	account.vip -= parseInt(collected.content);

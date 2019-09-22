@@ -6,6 +6,7 @@ module.exports = () => {
 			constructor(...arg) {
 				super(...arg);
 				this.blacklisted = false;
+				this.busy = false;
 				this.prefix = config.prefix;
 				this.maintainer = config.maintainers.includes(this.id);
 				this.boss = false;

@@ -39,18 +39,22 @@ module.exports = async(msg, myNumber) => {
 	if (!maxMonths) return;
 
 	// Message collector
-	await r.table("Busy").insert({ id: msg.author.id });
+	msg.author.busy = true;
 	const collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
 		{ max: 1, time: 180000 }
 	);
 
 	// On collection
-	await r.table("Busy").get(msg.author.id).delete();
+	msg.author.busy = false;
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	collected.first().delete().catch(e => null);
 	if (/^0$/.test(collected.first().content)) return;
+
+	// check for same balance
+	let currAccount = await msg.author.account;
+	if (account.balance != currAccount.balance) return msg.channel.send({ embed: { color: config.colors.error, title: "Account changed", description: "Your balance has changed, please try again." } });
 
 	// new date and balance
 	let newExpiry = myNumber.expiry < Date.now() ? new Date() : new Date(myNumber.expiry);
