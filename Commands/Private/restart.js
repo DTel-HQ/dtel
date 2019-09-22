@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	await client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`[\${this.shard.id}] Restarting\`, type: 0 } });`);
-	await omsg.edit({ embed: { color: config.colors.info, title: "Restarting...", description: "This may take a while. Watch the bot's playing status for an update." } });
+	await omsg.edit({ embed: { color: config.colors.info, title: "Restarting...", description: `This may take a while. Watch the bot's playing status for an update.\nWarned ${calls.length} calls.` } });
 
 	await client.shard.broadcastEval(`this.done = false`);
 	await client.shard.restartAll();
