@@ -1,15 +1,17 @@
+const { Collection } = require("discord.js");
+const { readdir } = require("fs-nextra");
+const clear = require("clear-module");
+const { createLogger, format, transports } = require("winston");
+const DailyRotateFile = require("winston-daily-rotate-file");
+const config = global.config = require("./Configuration/config.js");
+
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
+		let structures = require("fs").readdirSync("./Structures");
+		for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
+
 		const client = global.client = this.client;
 		client.done = true;
-		const clear = require("clear-module");
-
-		const { createLogger, format, transports } = require("winston");
-		const DailyRotateFile = require("winston-daily-rotate-file");
-		const config = global.config = require("./Configuration/config.js");
-
-		const { Collection } = require("discord.js");
-		const { readdir } = require("fs-nextra");
 
 		(async() => {
 			await require("./Database/init")()
@@ -22,9 +24,6 @@ module.exports = class extends require("kurasuta").BaseCluster {
 				this.client.on(name, async(...args) => (await reload(`./Events/${e}`))(...args));
 			}
 		})();
-
-		let structures = require("fs").readdirSync("./Structures");
-		for (let i of structures) if (i.endsWith(".js")) require(`./Structures/${i}`)();
 
 		const winston = global.winston = createLogger({
 			level: "info",
