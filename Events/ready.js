@@ -6,7 +6,7 @@ module.exports = async() => {
 
 	// Set initial playing status
 	// Last shard so every shard is ready to do eval
-	if (client.shard.ids[0] === client.shard.count - 1) {
+	if (client.shard.id + 1 === client.shard.shardCount) {
 		// await require("../Internals/init.js")();
 
 		await client.shard.broadcastEval(`this.done = true`);
