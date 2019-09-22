@@ -9,11 +9,6 @@ module.exports = () => {
 				this.init();
 			}
 
-			async init() {
-				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
-				this.blacklisted = !!blacklisted;
-			}
-
 			get whitelisted() {
 				return r.table("Whitelist").get(this.id).default(false);
 			}
