@@ -1,6 +1,8 @@
 const { scheduleJob } = require("node-schedule");
 
 module.exports = async() => {
+	console.log(client.shard.shardCount);
+	console.log(client.shard.id);
 	winston.info("[Discord] Successfully connected to Discord.");
 	await client.user.setPresence({ activity: { name: `[${client.shard.id}] Done restarting`, type: 0 } });
 
