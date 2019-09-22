@@ -8,7 +8,6 @@ const config = global.config = require("./Configuration/config.js");
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
 		const client = global.client = this.client;
-		client.done = true;
 
 		(async() => {
 			await require("./Database/init")()

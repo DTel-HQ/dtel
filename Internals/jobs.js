@@ -1,6 +1,8 @@
 const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { post } = require("chainfetch");
+const { get } = require("snekfetch");
+const auth = require("../Configuration/auth.js");
 
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {
@@ -57,6 +59,65 @@ scheduleJob("*/15 * * * * *", async() => {
 		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${calls} calls | >help | [\${this.shard.id}] \`, type: 2 } });`);
 	}
 	winston.verbose("[ScheduleJob] Updated status.");
+});
+
+// Get Discoin transactions
+scheduleJob("* */5 * * * *", async() => {
+	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
+	let result = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: auth.tokens.discoin, "Content-Type": "application/json" })
+		.catch(e => {
+			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e.stack}\n\`\`\``, "348832329525100554");
+			return null;
+		});
+	if (!result) return;
+	for (let t of result.body) {
+		if (t.type) continue;
+
+		// Try to fetch user → send error to manager channel;
+		let user = await client.users.fetch(t.user);
+		if (!user) {
+			client.apiSend(`<@${config.supportRole}>\n[DISCOIN Couldn't find user ${t.user} to give ${t.amount}`);
+			continue;
+		}
+
+		// add amount
+		let account = await user.account;
+		account.balance += t.amount;
+		await r.table("Accounts").get(account.id).update({ balance: account.balance });
+
+		// Send msgs
+		user.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.amount} has been added to your account through Discoin.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.amount} from Discoin`);
+	}
+});
+
+// Vote check
+scheduleJob("* */5 * * * *", async() => {
+	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
+
+	let result = await get("https://hill-playroom.glitch.me/dtel")
+		.set("Authorization", auth.tokens.blspace)
+		.set("Content-Type", "application/json")
+		.set("count", guildCount.toString());
+
+	let votes = JSON.parse(result.body.toString());
+	let users = Object.keys(votes);
+
+	for (let user of users) {
+		user = await client.users.fetch(user).catch(e => null);
+		if (!user) {
+			client.apiSend(`[VOTES] Couldn't find user ${user} to add ${votes[user]}`, "326075875466412033");
+			continue;
+		}
+
+		// save new balance
+		let account = await user.account;
+		account.balance += votes[user];
+		await r.table("Accounts").get(account.id).update({ balance: account.balance });
+
+		user.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
+		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user]} from voting.`);
+	}
 });
 
 
