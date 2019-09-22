@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let blacklisted = user ? user.blacklisted : guild.blacklisted;
 	if (blacklisted) {
-		let res = user ? user.unBlacklist() : await client.shard.broadcastEval(`if (this.shard.ids[0] === ${shard}) this.guilds.resolve("${suffix}").unBlacklist()`);
+		let res = user ? user.unBlacklist() : await client.shard.broadcastEval(`if (this.shard.id=== ${shard}) this.guilds.resolve("${suffix}").unBlacklist()`);
 		client.log(`:wrench: ID \`${suffix}\` has been removed from the blacklist by ${msg.author.tag}.`);
 		return msg.channel.send({ embed: {
 			color: config.colors.success,
@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 	if (suffix === msg.author.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Dumbo", description: "You dumb :b:oi, don't blacklist yourself!" } });
 	if (user && (await user.getPerms()).support) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
 
-	let res = user ? user.blacklist() : await client.shard.broadcastEval(`if (this.shard.ids[0] === ${shard}) this.guilds.resolve("${suffix}").blacklist()`);
+	let res = user ? user.blacklist() : await client.shard.broadcastEval(`if (this.shard.id === ${shard}) this.guilds.resolve("${suffix}").blacklist()`);
 	client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by ${msg.author.tag}.`);
 	msg.channel.send({ embed: {
 		color: config.colors.success,
