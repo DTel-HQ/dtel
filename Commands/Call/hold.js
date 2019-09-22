@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix, call) => {
 	} else {
 		hold = msg.channel.id;
 		await msg.channel.send({ embed: { color: config.colors.info, title: "Call holded", description: "You have put this call on hold. Re-do `>hold` to release." } });
-		await client.apiSend({ embed: { color: config.colors.info, title: "On hold...", description: "The other side has put this call on hold." } }, call.hold === call.from.channel ? call.to.channel : call.from.channel);
+		await client.apiSend({ embed: { color: config.colors.info, title: "On hold...", description: "The other side has put this call on hold." } }, hold === call.from.channel ? call.to.channel : call.from.channel);
 		// add stop typing
 	}
 	await r.table("Calls").get(call.id).update({ hold: hold });
