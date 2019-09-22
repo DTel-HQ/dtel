@@ -1,6 +1,6 @@
 module.exports = Discord => {
-	let extend = Structure => {
-		class DTelChannel extends Structure {
+	let extend = arg => {
+		class DTelChannel extends arg {
 			get number() {
 				return r.table("Numbers").getAll(this.id, { index: "channel" }).nth(0).default(null);
 			}
