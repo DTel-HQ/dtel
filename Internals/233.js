@@ -13,12 +13,16 @@ module.exports = async(msg, myNumber) => {
 	let strikes;
 	if (msg.guild) strikes = await r.table("Strikes").get(msg.guild.id) || [];
 
+	// Determine maximum amount of months to renew
+	let maxMonths = Math.floor(account.balance / config.renewalRate);
+
+
 	// make the embed
 	let embed = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
-		.setDescription(`Type the amount of months you want to renew your number.\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
@@ -29,9 +33,6 @@ module.exports = async(msg, myNumber) => {
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join("\n") : "None", true);
 
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None", true);
-
-	// Determine maximum amount of months to renew
-	let maxMonths = Math.floor(account.balance / config.renewalRate);
 	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hung up after 3 minutes.");
 
 	// send embed
