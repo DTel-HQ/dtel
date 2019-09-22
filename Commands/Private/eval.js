@@ -60,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 		if (err.stack.length <= 1980) {
 			return msg.channel.send({
 				embed: {
-					color: config.colors.success,
+					color: config.colors.error,
 					description: `\`\`\`js\n${err.stack}\`\`\``,
 					footer: {
 						text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
