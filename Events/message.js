@@ -1,7 +1,8 @@
 module.exports = async msg => {
+	if (!client.done) return;
 	if (msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
 	if (!msg.author.loadedPerms) await msg.author.setPerms();
-	if (msg.author.bot || ((!client.done || config.devOnlyMode) && !msg.author.maintainer)) return;
+	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
