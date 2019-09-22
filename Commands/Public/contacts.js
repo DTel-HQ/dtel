@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 		// Create collector
 		msg.author.busy = true;
 		let collected = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && (contacts[parseInt(m.content.split(" ")[1]) - 1] || /^0$|^add$/i.test(m.content)),
+			m => m.author.id === msg.author.id && ((contacts.length && /^\d$/.test(m.content) && parseInt(m.content) <= contacts.length) || /^0$|^add$/i.test(m.content)),
 			{ max: 1, time: 120000 }
 		);
 
