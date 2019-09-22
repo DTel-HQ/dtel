@@ -26,7 +26,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 	if (!vipNumber && !account.vip) {
-		embed.addField("Upgrade?!", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.vipLink}) for information on buying VIP Months.`)
+		embed.addField("Upgrade?!", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.vipLink}) for information on buying VIP Months and all the benefits.`)
 			.addField("VIP Perks", `\
 								**[• Disable number recognition](${config.paymentLink})**\
 								\nYou can disable your number recognition. This will make your number and names hidden from the other side and the public logs in our [server](${config.guildInvite}).\
@@ -35,9 +35,7 @@ module.exports = async(client, msg, suffix) => {
 								\n\n**[• A VIP Emote](${config.paymentLink})**\
 								\nYour messages will have the VIP emote: ${config.callPhones.vip}, instead of the default ${config.callPhones.default}.\
 								\n\n**[• Change your number](${config.paymentLink})**\
-								\nRequesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.\
-								\n\n**[• Extends your number](${config.paymentLink})**\
-								\nYour number (if needed) will be extended to the end of the VIP date.`);
+								\nRequesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.`);
 	}
 
 
