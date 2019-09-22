@@ -75,7 +75,7 @@ module.exports = Discord => {
 						if (member.roles.includes(config.managerRole)) this.manager = true;
 						if (member.roles.includes(config.supportRole)) this.support = true;
 						if (member.roles.includes(config.donatorRole)) this.donator = true;
-					}).catch(() => null);
+					}).catch(() => winston.error(`Couldn't update permissions for ${this.id}`));
 				return this.getPerms();
 			}
 
