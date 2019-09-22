@@ -12,7 +12,6 @@ module.exports = Discord => {
 				this.support = false;
 				this.donator = false;
 				this.loadedPerms = false;
-				this.setPerms();
 				this.init();
 			}
 
@@ -64,7 +63,6 @@ module.exports = Discord => {
 			}
 
 			async setPerms() {
-				console.log("2");
 				this.loadedPerms = true;
 				let member = await this.client.api.guilds(config.supportGuild).members(this.id).get().catch(e => null);
 				let roles = member ? member.roles || [] : [];
@@ -73,7 +71,6 @@ module.exports = Discord => {
 				if (roles.includes(config.supportRole)) this.support = true;
 				if (roles.includes(config.donatorRole)) this.donator = true;
 				if (config.maintainers.includes(this.id)) {
-					console.log("!!!MAINTAINER!!!");
 					this.boss = true;
 					this.manager = true;
 					this.support = true;
