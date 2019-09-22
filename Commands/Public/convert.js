@@ -13,9 +13,6 @@ module.exports = async(client, msg, suffix) => {
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
-	account.balance -= amount;
-	await r.table("Accounts").get(account.id).update({ balance: account.balance });
-
 	let snekres;
 	try {
 		snekres = await post("http://discoin.sidetrip.xyz/transaction").set({
@@ -94,6 +91,9 @@ module.exports = async(client, msg, suffix) => {
 		}
 	} finally {
 		if (!error) {
+			account.balance -= amount;
+			await r.table("Accounts").get(account.id).update({ balance: account.balance });
+
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
