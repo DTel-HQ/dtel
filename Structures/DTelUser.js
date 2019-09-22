@@ -13,6 +13,7 @@ module.exports = Discord => {
 				this.donator = false;
 				this.loadedPerms = false;
 				this.init();
+				this.setPerms();
 			}
 
 			async init() {
@@ -63,21 +64,18 @@ module.exports = Discord => {
 
 			async setPerms() {
 				this.loadedPerms = true;
+				let member = await this.client.api.guilds(config.supportGuild).members(this.id).get().catch(e => null);
+				let roles = member ? member.roles || [] : [];
+				if (roles.includes(config.bossRole)) this.boss = true;
+				if (roles.includes(config.managerRole)) this.manager = true;
+				if (roles.includes(config.supportRole)) this.support = true;
+				if (roles.includes(config.donatorRole)) this.donator = true;
 				if (config.maintainers.includes(this.id)) {
 					this.boss = true;
 					this.manager = true;
 					this.support = true;
 					this.donator = true;
 				}
-				let member = await this.client.api.guilds(config.supportGuild).members(this.id).get().catch(e => {
-					if (this.id === "395990735934980097") winston.error(e);
-					else return null;
-				});
-				let roles = member.roles || {};
-				if (roles.includes(config.bossRole)) this.boss = true;
-				if (roles.includes(config.managerRole)) this.manager = true;
-				if (roles.includes(config.supportRole)) this.support = true;
-				if (roles.includes(config.donatorRole)) this.donator = true;
 				return this.getPerms();
 			}
 

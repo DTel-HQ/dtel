@@ -1,6 +1,5 @@
 module.exports = async msg => {
 	if (msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
-	if (!msg.author.loadedPerms) await msg.author.setPerms();
 	if (msg.author.bot || ((!client.done || config.devOnlyMode) && !msg.author.maintainer)) return;
 
 	// Fix messages
