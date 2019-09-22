@@ -48,7 +48,7 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
-	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
+	if (!client.done) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
