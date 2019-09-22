@@ -62,7 +62,7 @@ scheduleJob("*/15 * * * * *", async() => {
 });
 
 // Get Discoin transactions
-scheduleJob("* */5 * * * *", async() => {
+scheduleJob("*/5 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	let result = await get("http://discoin.sidetrip.xyz/transactions").set({ Authorization: auth.discoinToken, "Content-Type": "application/json" })
 		.catch(e => {
@@ -92,13 +92,17 @@ scheduleJob("* */5 * * * *", async() => {
 });
 
 // Vote check
-scheduleJob("* */5 * * * *", async() => {
+scheduleJob("*/5 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 
 	let result = await get("http://hill-playroom.glitch.me/dtel")
 		.set("Authorization", auth.tokens.blspace)
 		.set("Content-Type", "application/json")
-		.set("count", guildCount.toString());
+		.set("count", guildCount.toString())
+		.catch(e => {
+			client.apiSend(`Yo, there might be something wrong with the glitch API.\n\`\`\`\n${e.stack}\n\`\`\``, "326075875466412033");
+			return null;
+		});
 
 	let votes = JSON.parse(result.body.toString());
 	let users = Object.keys(votes);
