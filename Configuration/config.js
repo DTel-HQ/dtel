@@ -35,8 +35,8 @@ module.exports = {
 
 	// EMOTES - don't change order
 	callPhones: {
-		default: "<:DiscordTelPhone:624377577875832843>",
-		donator: "<:GoldPhone:624377577607397387>",
+		default: "<:DiscordTelPhone:310817969498226718>",
+		donator: "<:GoldPhone:320768431307882497>",
 		support: "📞",
 	},
 
