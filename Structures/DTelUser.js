@@ -11,6 +11,7 @@ module.exports = Discord => {
 				this.manager = false;
 				this.support = false;
 				this.donator = false;
+				this.loadedPerms = false;
 				this.init();
 			}
 
@@ -20,8 +21,6 @@ module.exports = Discord => {
 
 				let account = await this.account;
 				if (account.prefix) this.prefix = account.prefix;
-
-				this.setPerms();
 			}
 
 			get account() {
@@ -63,6 +62,7 @@ module.exports = Discord => {
 			}
 
 			async setPerms() {
+				this.loadedPerms = true;
 				if (config.maintainers.includes(this.id)) {
 					this.boss = true;
 					this.manager = true;
