@@ -14,7 +14,10 @@ const { ShardingManager } = require("kurasuta");
 const Discord = require("discord.js");
 
 let structures = require("fs").readdirSync(`${__dirname}/Structures`);
-for (let i of structures) if (i.endsWith(".js")) require(`${__dirname}/Structures/${i}`)(Discord);
+for (let i of structures) {
+	console.log(`Loading: ${i}`);
+	if (i.endsWith(".js")) require(`${__dirname}/Structures/${i}`)(Discord);
+}
 const sharder = new ShardingManager(`${__dirname}/DiscordTel.js`, {
 	clientOptions: { disableEveryone: true },
 	client: require("./Internals/Client.js")(Discord),
