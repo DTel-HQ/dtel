@@ -7,6 +7,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Need permission and can't block special numbers
 	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	if (!perm) perm = msg.author.support;
 	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "You need to have the `MANAGE_GUILD` permission or higher to execute this command." } });
 	if (!suffix.match(/^0[39]0\d{8}$/) && !suffix.match(/^\d{17-19}$/)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Invalid or special number. You can't block special numbers. Please report any abuse by calling `*611`" } });
 
