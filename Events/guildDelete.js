@@ -1,5 +1,5 @@
 module.exports = async guild => {
-	client.log(`📥 Left guild \`${guild.id}\`(${guild.name}). Currently in ${client.guilds.size} servers on shard ${client.shard.ids[0]}`);
+	client.log(`📥 Left guild \`${guild.id}\`(${guild.name}). Currently in ${client.guilds.size} servers on shard ${client.shard.id}`);
 	let numbers = await r.table("Numbers").filter({ guild: guild.id });
 	let mailboxes = await r.table("Mailbox").filter({ guild: guild.id });
 	if (!numbers) return;

@@ -5,7 +5,7 @@ const { post } = require("chainfetch");
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {
 	let winnerID;
-	if (client.shard.ids[0] != 0) return;
+	if (client.shard.id != 0) return;
 	// Daily reset
 	await r.table("Accounts").update({ daily: false });
 
@@ -46,15 +46,15 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
-	if (!client.shard.ids[0] === client.shard.count - 1 || !client.done) return;
+	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
 		let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
-		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${userCount} users | >help | [\${this.shard.ids[0]}]\`, type: 3 } });`);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${userCount} users | >help | [\${this.shard.id}]\`, type: 3 } });`);
 	} else {
 		let calls = (await r.table("Calls")).length;
-		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${calls} calls | >help | [\${this.shard.ids[0]}] \`, type: 2 } });`);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${calls} calls | >help | [\${this.shard.id}] \`, type: 2 } });`);
 	}
 	winston.verbose("[ScheduleJob] Updated status.");
 });
@@ -72,7 +72,7 @@ scheduleJob("*/15 * * * * *", async() => {
 // 	const lastWarnMS = time - (lastWarn * 86400000);
 // 	const deleteMS = time - (deleteDays * 86400000);
 //
-// 	if (client.shard.ids[0] != 0) return;
+// 	if (client.shard.id != 0) return;
 //
 // 	const numbers = await r.table("Numbers");
 // 	let deleted = [];

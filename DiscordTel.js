@@ -1,5 +1,6 @@
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
+		const client = global.client = this.client;
 		const clear = require("clear-module");
 
 		const { createLogger, format, transports } = require("winston");
@@ -31,7 +32,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 					colorize: true,
 				}),
 				new DailyRotateFile({
-					filename: `./Logs/Winston-Log-%DATE%-Shard${this.client.shard.ids[0]}.log`,
+					filename: `./Logs/Winston-Log-%DATE%-Shard${this.client.shard.id}.log`,
 					datePattern: "YYY-MM-DD-HH",
 					zippedArchive: true,
 					maxFiles: "100d",
@@ -42,7 +43,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			format: format.combine(
 				format.colorize(),
 				format.timestamp(),
-				format.printf(info => `${info.level}: [Shard ${this.client.shard.ids[0]}] ${info.message} [${info.timestamp}]`)
+				format.printf(info => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`)
 				// format.simple(),
 			),
 		});
