@@ -250,6 +250,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// if only a number
 		msg.author.busy = false;
+		contact = contacts[parseInt(collected.first().content) - 1];
 		return require("./call.js")(client, msg, contact.number);
 	};
 	contactList();
