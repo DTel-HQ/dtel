@@ -1,17 +1,5 @@
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
-		this.client.login().catch(() => {
-			let interval = setInterval(() => {
-				this.client.login()
-					.then(() => {
-						clearInterval(interval);
-					})
-					.catch(() => {
-						winston.info("[Discord] Failed to connect. Retrying in 5 minutes...");
-					});
-			}, 300000);
-		});
-
 		const clear = require("clear-module");
 
 		const { createLogger, format, transports } = require("winston");
@@ -84,9 +72,9 @@ module.exports = class extends require("kurasuta").BaseCluster {
 
 		if (config.devMode) process.on("unhandledRejection", e => winston.error(e.stack));
 
-		this.this.client.login().catch(() => {
+		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {
-				this.client.login()
+				this.client.login(require("./Configuration/auth.js").discord.token)
 					.then(() => {
 						clearInterval(interval);
 					})
