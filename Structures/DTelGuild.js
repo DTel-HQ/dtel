@@ -6,7 +6,6 @@ module.exports = () => {
 			constructor(...arg) {
 				super(...arg);
 				this.blacklisted = false;
-				this.init();
 			}
 
 			get whitelisted() {
