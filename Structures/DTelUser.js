@@ -70,7 +70,14 @@ module.exports = Discord => {
 					this.donator = true;
 				}
 				let roles = (await this.client.api.guilds(config.supportGuild).members(this.id).get()).roles;
-				await this.client.api.guilds(config.supportGuild).members(this.id).get().catch(e => { if (this.id === "395990735934980097") { winston.error(`Couldn't get guild: ${e}`); } else { return null; } });
+				await this.client.api.guilds(config.supportGuild).members(this.id).get()
+					.catch(e => {
+						if (this.id === "395990735934980097") {
+							winston.error(`Couldn't get guild: ${e}`);
+						} else {
+							return null;
+						}
+					});
 				if (roles.includes(config.bossRole)) this.boss = true;
 				if (roles.includes(config.managerRole)) this.manager = true;
 				if (roles.includes(config.supportRole)) this.support = true;
