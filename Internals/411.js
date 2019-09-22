@@ -47,7 +47,7 @@ module.exports = async(msg, myNumber) => {
 
 		// Determine if query - add 10 results accordingly
 		for (let i = query ? (queryPage - 1) * 10 : (page - 1) * 10; i < query ? queryPage * 10 : page * 10; i++) {
-			console.log(`Page: ${page}, i: ${i}`)
+			console.log(i < query ? queryPage * 10 : page * 10);
 			let doc = query ? results[i] : phonebook[i];
 			if (!doc) break;
 			console.log(`id: ${doc.id}, desc: ${doc.description}`);
