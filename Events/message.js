@@ -1,4 +1,5 @@
 module.exports = async msg => {
+	if (msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
 	if (msg.author.bot || !client.done || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	// Fix messages
@@ -7,10 +8,6 @@ module.exports = async msg => {
 
 	// Check for call
 	let call = await msg.channel.call;
-
-	// Check if they're blacklisted → yes? return
-	console.log(msg.author.blacklisted);
-	if (msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted)) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
