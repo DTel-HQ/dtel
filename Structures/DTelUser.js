@@ -71,11 +71,12 @@ module.exports = Discord => {
 				}
 				await this.client.api.guilds(config.supportGuild).members(this.id).get()
 					.then(member => {
+						winston.info(`Setting perms for ${this.id}`);
 						if (member.roles.includes(config.bossRole)) this.boss = true;
 						if (member.roles.includes(config.managerRole)) this.manager = true;
 						if (member.roles.includes(config.supportRole)) this.support = true;
 						if (member.roles.includes(config.donatorRole)) this.donator = true;
-					}).catch(() => winston.error(`Couldn't update permissions for ${this.id}`));
+					}).catch(e => null);
 				return this.getPerms();
 			}
 
