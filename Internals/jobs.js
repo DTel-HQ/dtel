@@ -104,7 +104,7 @@ scheduleJob("*/5 * * * *", async() => {
 			return null;
 		});
 
-	let votes = JSON.parse(result.body.toString());
+	let votes = JSON.parse(result.text.toString());
 	let users = Object.keys(votes);
 
 	for (let user of users) {
