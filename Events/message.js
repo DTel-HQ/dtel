@@ -5,9 +5,11 @@ module.exports = async msg => {
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
 	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : await msg.author.prefix;
+	console.log(`Prefix: ${prefix}`);
 
 	// Check for call
 	let call = await msg.channel.call;
+	console.log(`Call: ${call}`);
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
@@ -24,7 +26,8 @@ module.exports = async msg => {
 	} else if (call && msg.content.startsWith(prefix)) {
 		cmdFile = await reload(`./Commands/Call/${cmd}`);
 	}
-	if (!msg.content.startsWith(prefix)) return;
+	console.log(`CMDFile: ${cmdFile}`);
+	if (!msg.content.startsWith(prefix) || (!cmdFile && call && !msg.author.maintainer)) return;
 
 	// check busy first since it's a simple return
 	if (msg.author.busy && !call && !msg.author.maintainer) return;
