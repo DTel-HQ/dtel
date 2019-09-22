@@ -1,6 +1,6 @@
 module.exports = async(client, msg, suffix) => {
 	const number = await msg.channel.number;
-	if (!number || number.id == "08006113835") return;
+	if (!number || number.id === config.supportNumber) return;
 	if (msg.channel.type === "dm") return msg.channel.send({ embed: { color: config.colors.info, title: "Unnecessary", description: "There's no need for this command in DMs" } });
 
 	// Get/make list of toPing and string

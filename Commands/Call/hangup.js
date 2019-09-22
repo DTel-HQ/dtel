@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix, call) => {
-	if (call.to.number === "08006113835" && msg.channel.id != config.supportChannel) return;
+	if (call.to.number === config.supportNumber && msg.channel.id != config.supportChannel) return;
 
 	// Calculate time the call lasted for.
 	let duration = Math.round((Date.now() - call.startedAt) / 1000, 1);

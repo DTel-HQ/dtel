@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix, call) => {
-	if ((call.to.number === "08006113835" || call.from.number === "08006113835") && msg.channel.id != config.supportChannel) return;
+	if ((call.to.number === config.supportNumber || call.from.number === config.supportNumber) && msg.channel.id != config.supportChannel) return;
 	if (!call.pickedUp) return msg.channel.send({ embed: { color: config.colors.error, title: "Holding error", description: "You can't put a call on hold that hasn't been picked up!" } });
 
 	let hold;

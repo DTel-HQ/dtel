@@ -14,6 +14,7 @@ module.exports = {
 	aliasNumbers: {
 		"*611": "08007877678",
 	},
+	supportNumber: "08007877678",
 
 	// SETINGS
 	prefix: ">",

@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix, call) => {
 	if (config.aliasNumbers[suffix]) suffix = config.aliasNumbers[suffix];
 
 	// Check if they're able to transfer
-	if ((call.to.number === "08006113835" || call.from.number === "08006113835") && msg.channel.id != config.supportChannel) return;
+	if ((call.to.number === config.supportNumber || call.from.number === config.supportNumber) && msg.channel.id != config.supportChannel) return;
 	if (!call.pickedUp) return msg.channel.send({ embed: { color: config.colors.error, title: "Please wait", description: "You can't transfer a call before it has been picked up!" } });
 
 	// A lot more checks
@@ -65,9 +65,9 @@ module.exports = async(client, msg, suffix, call) => {
 
 	client.log(`:arrow_right: Channel \`${fromNumbervip ? fromNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to \`${toNumbervip ? newCall.to.hidden ? "hidden" : newCall.to.channel : newCall.to.channel}\` by \`${msg.channel.id}\``);
 	await msg.channel.send({ embed: { color: config.colors.success, title: "Transferring...", description: `You have transferred the other side to \`${toDial}\`.`, footer: { text: call.id } } });
-	if (newCall.to.number === "08006113835") client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
-	await client.apiSend({ embed: { color: config.colors.info, title: "You're being transferred...", description: `You have been transferred by the other side. Now dialing ${newCall.to.number === "08006113835" ? "Customer Support" : toNumbervip ? newCall.to.hidden ? newCall.vip.name ? `\`${newCall.vip.name}\`` : "Hidden" : newCall.to.name ? `\`${newCall.to.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, footer: { text: `old: ${call.id}, new: ${newCall.id}` } } }, newCall.from.channel);
-	client.apiSend({ content: toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${fromNumber.id === "08006113835" ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: newCall.id } } }, newCall.to.channel);
+	if (newCall.to.number === config.supportNumber) client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
+	await client.apiSend({ embed: { color: config.colors.info, title: "You're being transferred...", description: `You have been transferred by the other side. Now dialing ${newCall.to.number === config.supportNumber ? "Customer Support" : toNumbervip ? newCall.to.hidden ? newCall.vip.name ? `\`${newCall.vip.name}\`` : "Hidden" : newCall.to.name ? `\`${newCall.to.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, footer: { text: `old: ${call.id}, new: ${newCall.id}` } } }, newCall.from.channel);
+	client.apiSend({ content: toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${fromNumber.id === config.supportNumber ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: newCall.id } } }, newCall.to.channel);
 
 	setTimeout(async() => {
 		let callDoc = await r.table("Calls").get(newCall.id);
