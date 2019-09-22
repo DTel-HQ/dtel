@@ -14,6 +14,7 @@ const { ShardingManager } = require("kurasuta");
 const sharder = new ShardingManager(`${__dirname}/DiscordTel.js`, {
 	clientOptions: { disableEveryone: true },
 	client: require("./Internals/Client.js"),
+	token: require("./Configuration/auth.js").discord.token,
 });
 
 const winston = global.winston = createLogger({
