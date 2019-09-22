@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	let dmChannel = await user.createDM().catch(e => null);
 	let dmNumber;
 	if (dmChannel) dmNumber = await r.table("Numbers").getAll(dmChannel.id, { index: "channel" });
-	const strikes = await r.table("Strikes").getAll({ offender: user.id }).default([]);
+	const strikes = await r.table("Strikes").getAll(user.id, { index: "offender" }).nth(0).default([]);
 	let account = await user.account;
 	let blacklisted = await r.table("Blacklist").get(user.id);
 
