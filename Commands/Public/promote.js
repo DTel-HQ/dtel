@@ -265,7 +265,6 @@ module.exports = async(client, msg, suffix) => {
 	canPromoteIn = cpaD ? `${cpaD}d${cpaH}h` : `${cpaH}h`;
 	let hasMoney = account.balance > config.promoteCost;
 
-	let perms = await msg.author.getPerms();
 	let gperms = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 
 	// Create both embeds (Promote Embed, Options Embed)
@@ -297,10 +296,10 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Options")
 		.setFooter("(0) to quit. This menu will expire after 2 minutes.");
 
-	let description = `(1) Go through the setup.${!gperms && !perms.support ? " (Missing permission)" : ""}`;
-	if (embed.title) description += `\n(2) Promote your number.${canPromote ? "" : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !perms.support ? " (Missing permission)" : ""}`;
+	let description = `(1) Go through the setup.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
+	if (embed.title) description += `\n(2) Promote your number.${canPromote ? "" : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
 	if (promote.lastPromoted) {
-		description += `\n(4) Remove previous promotion.${!gperms && !perms.support ? " (Missing permission)" : ""}`;
+		description += `\n(4) Remove previous promotion.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
 		let user = await client.users.fetch(promote.lastuser);
 		oEmbed.addField(`Last promotion`, `By: ${user.tag}\n[View here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${promote.lastmsg})`);
 	}
@@ -309,9 +308,9 @@ module.exports = async(client, msg, suffix) => {
 	let pmsg = await msg.channel.send({ embed: await createEmbed(true, false) });
 	let omsg = await msg.channel.send({ embed: oEmbed });
 
-	if (!embed.title && !gperms && !perms.support) return;
+	if (!embed.title && !gperms && !msg.author.support) return;
 	let filter = "^[";
-	if (gperms || perms.support) {
+	if (gperms || msg.author.support) {
 		filter += "1";
 		if (embed.title) filter += "3";
 		if (promote.lastPromoted) filter += "4";

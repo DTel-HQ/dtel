@@ -5,9 +5,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let account = user ? user.bot ? { balance: "Infinity", vip: "Infinity" } : null : null;
 
-	let perms = await msg.author.getPerms();
-
-	if (!perms.support || !suffix) {
+	if (!msg.author.support || !suffix) {
 		if (!account) account = await msg.author.account;
 
 		msg.channel.send({

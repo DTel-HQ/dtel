@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
-	if (!perm) perm = (await msg.author.getPerms()).support;
+	if (!perm) perm = msg.author.support;
 	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need to have `manage guild` permission to run this command." } });
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.id + 1)}`;

@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	if (!(await msg.author.getPerms()).support || !suffix) {
+	if (!msg.author.support || !suffix) {
 		let userStrikes = await r.table("Strikes").getAll(msg.author.id, { index: "offender" }).default([]);
 		let guildStrikes = msg.guild ? await r.table("Strikes").getAll(msg.guild.id, { index: "offender" }).default([]) : [];
 		let embed = {

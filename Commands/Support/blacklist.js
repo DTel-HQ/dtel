@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	if (suffix === msg.author.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Dumbo", description: "You dumb :b:oi, don't blacklist yourself!" } });
-	if (user && (await user.getPerms()).support) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
+	if (user && user.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
 
 	let res = user ? user.blacklist() : await client.shard.broadcastEval(`if (this.shard.id === ${shard}) this.guilds.resolve("${suffix}").blacklist()`);
 	client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by ${msg.author.tag}.`);

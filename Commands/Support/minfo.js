@@ -1,8 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	let perms = await msg.author.getPerms();
-
 	let number = suffix.split(" ")[0];
 	let id = suffix.split(" ")[1];
 	if (!number || !id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >minfo [Number or Channel] [Message ID]" } });

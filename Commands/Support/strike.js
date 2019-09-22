@@ -1,9 +1,6 @@
 const randomstring = require("randomstring");
 
 module.exports = async(client, msg, suffix) => {
-	// perms needed later on
-	let perms = await msg.author.getPerms();
-
 	suffix = suffix.split(" ");
 	let toStrike = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix[0];
 	suffix.shift();
@@ -36,9 +33,8 @@ module.exports = async(client, msg, suffix) => {
 
 	if (user) {
 		if (user.bot) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot user", description: "Don't try striking my brothers!" } });
-		let toStrikePerms = await client.users.get(toStrike).getPerms();
-		if (toStrikePerms.boss || toStrikePerms.manager) return msg.channel.send(`>fire ${msg.auhor.tag}`);
-		if (toStrikePerms.support && !(perms.boss || perms.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
+		if (user.boss || user.manager) return msg.channel.send(`>fire ${msg.auhor.tag}`);
+		if (user.support && !(msg.author.boss || msg.author.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
 	} else if (guild.id == config.supportGuild) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Turning against us?", description: "As if we'd would allow you to do this." } });
 	}
