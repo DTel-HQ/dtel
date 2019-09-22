@@ -8,7 +8,7 @@ module.exports = {
 	],
 	devMode: false,
 	devOnlyMode: true,
-	shardCount: 4,
+	shardCount: 2,
 
 	// NUMBER ALIASES
 	aliasNumbers: {

@@ -5,14 +5,23 @@ module.exports = () => {
 		class DTelUser extends User {
 			constructor(...arg) {
 				super(...arg);
-				this.blacklisted = (async() => {
-					let bl = await r.table("Blacklist").get(this.id).default(false);
-					return bl;
-				})();
-				this.prefix = (async() => {
-					let acc = await r.table("Accounts").get(this.id);
-					return acc ? acc.prefix || config.prefix : config.prefix;
-				})();
+				this.blacklisted = false;
+				this.prefix = config.prefix;
+				this.maintainer = config.maintainers.includes(this.id);
+				this.boss = false;
+				this.manager = false;
+				this.support = false;
+				this.donator = false;
+				this.init();
+				this.setPerms();
+			}
+
+			async init() {
+				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
+				this.blacklisted = !!blacklisted;
+
+				let account = await this.account;
+				if (account.prefix) this.prefix = account.prefix;
 			}
 
 			get account() {
@@ -53,23 +62,29 @@ module.exports = () => {
 				})();
 			}
 
-			async getPerms() {
-				let toRet = {
-					boss: false,
-					manager: false,
-					support: false,
-					donator: false,
-				};
-				if (config.maintainers.includes(this.id)) toRet = { boss: true, manager: true, support: true, donator: true };
+			async setPerms() {
+				if (config.maintainers.includes(this.id)) {
+					this.boss = true;
+					this.manager = true;
+					this.support = true;
+					this.donator = true;
+				}
 				return this.client.api.guilds(config.supportGuild).members(this.id).get()
 					.then(member => {
-						if (member.roles.includes(config.bossRole)) toRet.boss = true;
-						if (member.roles.includes(config.managerRole)) toRet.manager = true;
-						if (member.roles.includes(config.supportRole)) toRet.support = true;
-						if (member.roles.includes(config.donatorRole)) toRet.donator = true;
-						return toRet;
-					})
-					.catch(() => toRet);
+						if (member.roles.includes(config.bossRole)) this.boss = true;
+						if (member.roles.includes(config.managerRole)) this.manager = true;
+						if (member.roles.includes(config.supportRole)) this.support = true;
+						if (member.roles.includes(config.donatorRole)) this.donator = true;
+					}).catch(() => null);
+			}
+
+			async getPerms() {
+				return {
+					boss: this.boss,
+					manager: this.manager,
+					support: this.support,
+					donator: this.donator,
+				};
 			}
 		}
 		return DTelUser;

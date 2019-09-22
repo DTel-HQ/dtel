@@ -1,8 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
-	const perms = await msg.author.getPerms();
-	if (!perms.manager) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "Please contact your manager or a boss to whitelist the server." } });
+	if (!msg.author.manager) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "Please contact your manager or a boss to whitelist the server." } });
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Missing argument", description: "Missing an argument! Usage: `>whitelist [guildID]`" } });
 
 	const guild = await client.api.guilds(suffix).get();

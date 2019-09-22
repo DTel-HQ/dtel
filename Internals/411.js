@@ -28,9 +28,8 @@ module.exports = async(msg, myNumber) => {
 	let pages = Math.ceil(phonebook.length / 10);
 
 	// Check if the user has permission
-	let dperms = await msg.author.getPerms();
 	let gperm = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
-	let perms = dperms.support || gperm;
+	let perms = msg.author.support || gperm;
 
 	// Searchpage function for option 1
 	let searchPage = async query => {

@@ -5,10 +5,13 @@ module.exports = () => {
 		class DTelGuild extends Guild {
 			constructor(...arg) {
 				super(...arg);
-				this.blacklisted = (async() => {
-					let bl = await r.table("Blacklist").get(this.id).default(false);
-					return bl;
-				})();
+				this.blacklisted = false;
+				this.init();
+			}
+
+			async init() {
+				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
+				this.blacklisted = !!blacklisted;
 			}
 
 			get whitelisted() {
