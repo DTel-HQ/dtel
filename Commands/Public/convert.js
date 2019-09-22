@@ -3,13 +3,13 @@ const { post } = require("chainfetch");
 module.exports = async(client, msg, suffix) => {
 	let amount = msg.content.split(" ")[0];
 	let currency = msg.content.split(" ")[1];
-	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: ">convert [amount] [currency]" } });
+	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">convert [amount] [currency]" } });
 	currency = currency.toUpperCase();
 
 	let account = await msg.author.account;
 
 	if (account.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
-	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
+	if (isNaN(parseInt(amount))) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 
 	let snekres;
 	try {

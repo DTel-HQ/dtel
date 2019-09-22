@@ -12,8 +12,8 @@ module.exports = Discord => {
 				this.support = false;
 				this.donator = false;
 				this.loadedPerms = false;
-				this.init();
 				this.setPerms();
+				this.init();
 			}
 
 			async init() {
@@ -22,6 +22,7 @@ module.exports = Discord => {
 
 				let account = await this.account;
 				if (account.prefix) this.prefix = account.prefix;
+				return true;
 			}
 
 			get account() {
