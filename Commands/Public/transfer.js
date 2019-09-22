@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	reason = reason.join(" ");
 
 	// Checks for user and amount
-	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
+	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
 	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
 	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Transfers can only happen from ¥${config.minTransfer} and up.` } });
 
