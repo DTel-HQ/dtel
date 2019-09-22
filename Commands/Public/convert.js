@@ -1,6 +1,7 @@
 const { post } = require("snekfetch");
 
 module.exports = async(client, msg, suffix) => {
+	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">convert [amount] [currency]" } });
@@ -26,6 +27,7 @@ module.exports = async(client, msg, suffix) => {
 			exchangeTo: currency,
 		});
 	} catch (err) {
+		error = err;
 		if (err.status === 503) {
 			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "API Error (Downtime?)! Please contact MacDue#4453." } });
 		}
@@ -91,16 +93,18 @@ module.exports = async(client, msg, suffix) => {
 			}
 		}
 	} finally {
-		let embed = {
-			color: config.colors.receipt,
-			title: "Converted!",
-			description: `Succesfully converted ¥${amount} into ${currency}.`,
-			author: {
-				name: msg.author.tag,
-				icon_url: msg.author.displayAvatarURL(),
-			},
-			timestamp: new Date(),
-		};
-		msg.channel.send({ embed: embed });
+		if (!error) {
+			let embed = {
+				color: config.colors.receipt,
+				title: "Converted!",
+				description: `Succesfully converted ¥${amount} into ${currency}.`,
+				author: {
+					name: msg.author.tag,
+					icon_url: msg.author.displayAvatarURL(),
+				},
+				timestamp: new Date(),
+			};
+			msg.channel.send({ embed: embed });
+		}
 	}
 };
