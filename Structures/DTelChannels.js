@@ -7,8 +7,8 @@ module.exports = Discord => {
 
 			get call() {
 				return (async() => {
-					let call = await r.table("Calls").getAll(this.id, { index: "fromChannel" }).nth(0).default(null);
-					if (!call) call = await r.table("Calls").getAll(this.id, { index: "toChannel" }).nth(0).default(null);
+					let call = await r.table("Calls").getAll(this.id, { index: "fromChannel" }).nth(0).default(false);
+					if (!call) call = await r.table("Calls").getAll(this.id, { index: "toChannel" }).nth(0).default(false);
 					return call;
 				})();
 			}

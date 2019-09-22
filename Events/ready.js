@@ -7,7 +7,7 @@ module.exports = async() => {
 	// Set initial playing status
 	// Last shard so every shard is ready to do eval
 	if (client.shard.id + 1 === client.shard.shardCount) {
-		// await require("../Internals/init.js")();
+		await require("../Internals/init.js")();
 
 		await client.shard.broadcastEval(`this.done = true`);
 		winston.info("[Ready] Done spawning all shards");
