@@ -95,7 +95,7 @@ scheduleJob("* */5 * * * *", async() => {
 scheduleJob("* */5 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 
-	let result = await get("https://hill-playroom.glitch.me/dtel")
+	let result = await get("http://hill-playroom.glitch.me/dtel")
 		.set("Authorization", auth.tokens.blspace)
 		.set("Content-Type", "application/json")
 		.set("count", guildCount.toString());
@@ -190,13 +190,13 @@ scheduleJob("* */5 * * * *", async() => {
 //
 // 	let haste;
 // 	try {
-// 		haste = await post("https://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${deleted.map(n => `${n.id}\n`)}`);
+// 		haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${deleted.map(n => `${n.id}\n`)}`);
 // 	} catch (err) {
 // 		haste = false;
 // 	}
 //
 // 	let count = deleted.length;
 // 	winston.info(`[ScheduleJob] Deleted ${count} expired numbers`);
-// 	if (haste) client.log(`🔥 Automatically deleted ${count} numbers. Results: <https://hastebin.com/${haste.body.key}>`);
+// 	if (haste) client.log(`🔥 Automatically deleted ${count} numbers. Results: <http://hastebin.com/${haste.body.key}>`);
 // 	else client.log(`🔥 Automatically deleted ${count} numbers. Unsuccesful post to hastebin.`);
 // });
