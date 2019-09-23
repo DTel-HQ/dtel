@@ -104,23 +104,22 @@ scheduleJob("*/5 * * * *", async() => {
 			return null;
 		});
 
-	let votes = JSON.parse(result.body.toString());
+	let votes = JSON.parse(result.text.toString());
 	let users = Object.keys(votes);
 
 	for (let user of users) {
 		user = await client.users.fetch(user).catch(e => null);
 		if (!user) {
-			client.apiSend(`[VOTES] Couldn't find user ${user} to add ${votes[user]}`, "326075875466412033");
 			continue;
 		}
 
 		// save new balance
 		let account = await user.account;
-		account.balance += votes[user];
+		account.balance += votes[user.id];
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
-		user.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
-		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user]} from voting.`);
+		user.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
+		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user.id]} from voting.`);
 	}
 });
 
