@@ -204,12 +204,12 @@ module.exports = async(client, msg, suffix) => {
 				omsg = await msg.channel.send({ embed: sEmbed });
 			});
 
-			if (collected) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && ((m.content.length > 19 && m.content.length < 151) || /^0$/.test(m.content)),
 				{ max: 1, time: 300000 }
 			)).first();
 
+			if (collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
