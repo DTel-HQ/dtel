@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!suffix.match(/^0[39]0\d{8}$/) && !suffix.match(/^\d{17-19}$/)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Invalid or special number. You can't block special numbers. Please report any abuse by calling `*611`" } });
 
 	let number = await r.table("Numbers").getAll(suffix, { index: "channel" }).nth(0).default(null);
-	let toBlock = client.replaceNumber(suffix);
+	let toBlock = await client.replaceNumber(suffix);
 	if (!number) number = await r.table("Numbers").get(toBlock);
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown number", description: "That number does not seem to exist." } });
 	if (!myNumber.id === number.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Blocking yourself?", description: "What is that going to do? Report yourself by calling *611" } });
