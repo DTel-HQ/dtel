@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "Couldn't find that number." } });
 
 	// Get tha information
-	const channel = await client.api.channels(number.channel).get();
+	const channel = await client.api.channels(number.channel).get().catch(e => null);
 	const guild = channel.guild_id ? await client.api.guilds(channel.guild_id).get().catch(e => null) : null;
 	const owner = guild ? await client.users.fetch(guild.owner_id).catch(e => null) : await client.users.fetch(channel.recipients[0].id).catch(e => null);
 	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
