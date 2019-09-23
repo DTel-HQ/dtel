@@ -67,7 +67,7 @@ module.exports = async(msg, myNumber) => {
 		)).first();
 
 		// On collection
-		if (collected) collected.delete().catch(e => null);
+		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) return false;
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
