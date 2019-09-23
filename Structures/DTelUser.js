@@ -66,7 +66,6 @@ module.exports = Discord => {
 				this.loadedPerms = true;
 				let member = await (await this.client.guilds.get(config.supportGuild)).members.get(this.id);
 				let roles = member ? member._roles : [];
-				console.log(`ID ${this.id}\nRoles: ${roles}`);
 				if (roles.includes(config.bossRole)) this.boss = true;
 				if (roles.includes(config.managerRole)) this.manager = true;
 				if (roles.includes(config.supportRole)) this.support = true;
