@@ -22,7 +22,7 @@ module.exports = async(msg, myNumber) => {
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
-		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewalrate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewal rate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
 		.addField("Your balance", `¥${account.balance}`, true)
