@@ -78,7 +78,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 
 	format(number) {
 		if (!/\d+/.test(number.toString())) return number;
-		return number.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.").replace(".", ",");
+		return number.toString().replace(".", ",").replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
 	}
 
 	async log(msg) {
