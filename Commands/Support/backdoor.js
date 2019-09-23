@@ -26,9 +26,8 @@ module.exports = async(client, msg, suffix) => {
 		reason: `Customer Support Agent ${msg.author.tag} ran backdoor.`,
 	})
 		.then(async invite => {
-			await msg.author.createDM();
 			msg.author.send(`https://discord.gg/${invite.code}`)
-				.catch(_ => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Couldn't DM you the invite. Please accept DMs from the bot." } }));
+				.catch(_ => msg.channel.send(`https://discord.gg/${invite.code}`));
 		})
 		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
 };
