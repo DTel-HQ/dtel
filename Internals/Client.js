@@ -103,8 +103,9 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 	}
 
 	delete(number, settings) {
-		let force = settings.force;
-		let stopLog = settings.log;
+		if (typeof settings != "object") settings = {};
+		let force = settings.force || false;
+		let stopLog = settings.log || false;
 
 		setTimeout(async() => {
 			if (typeof number != "object") number = await r.table("Numbers").get(number);
