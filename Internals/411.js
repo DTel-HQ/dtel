@@ -62,7 +62,7 @@ module.exports = async(msg, myNumber) => {
 		// Collector
 		collected = (await msg.channel.awaitMessages(
 			// Search for correct page number or query with more than 3 characters.
-			m => m.author === msg.author && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
+			m => m.author.id === msg.author.id && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
 			{ max: 1, time: 180000 }
 		)).first();
 
