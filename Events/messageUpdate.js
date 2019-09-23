@@ -23,7 +23,7 @@ module.exports = async(omsg, nmsg) => {
 	let phone = config.callPhones.default;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
-	let toCSChannel = call.to.channel === nmsg.channel.id ? call.from.channel === config.supportChannel : call.to.channel === config.supportChannel;
+	let toCSChannel = editChannel === config.supportChannel;
 	let toSend = `**${nmsg.author.tag}${toCSChannel ? `(${nmsg.author.id})` : ""}[edited]** ${phone} ${nmsg.content}`;
 	let edited = await client.apiEdit(toSend, editChannel, message.dtelmsg);
 	if (!edited.id) {
