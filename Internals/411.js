@@ -118,7 +118,7 @@ module.exports = async(msg, myNumber) => {
 			{ max: 1, time: 60000 })).first();
 
 		// On main menu collection
-		if (collected) collected.delete().catch(e => null);
+		if (collected && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
 			msg.author.busy = false;
 			omsg.delete().catch(e => null);
