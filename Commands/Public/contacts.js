@@ -6,7 +6,9 @@ module.exports = async(client, msg, suffix) => {
 	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "This channel's number has expired. Please call `*233` to renew it." } });
 
 	// Get the user's permissions
-	let perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	let perm;
+	if (msg.channel.type === "dm") perm = true;
+	else perm = await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
 	if (!perm) perm = msg.author.support;
 
 	// Get contacts
