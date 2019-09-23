@@ -3,7 +3,7 @@ const auth = require("../Configuration/auth.js");
 
 module.exports = async guild => {
 	let name = 	guild.name.replace(/(\*|`|_|~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
-	client.log(`📥 Left guild \`${guild.id}\`(${name}). Currently in ${client.guilds.size} servers on shard ${client.shard.id}`);
+	client.log(`📥 Left guild \`${guild.id}\`(${name}). Currently in ${client.guilds.size} servers on cluster ${client.shard.id}`);
 	let numbers = await r.table("Numbers").filter({ guild: guild.id });
 	let mailboxes = await r.table("Mailbox").filter({ guild: guild.id });
 
