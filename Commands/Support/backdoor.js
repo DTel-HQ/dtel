@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let channel, number;
 
-	if (/\d{11}/.test(suffix)) {
+	if (/^\d{11}$/.test(suffix)) {
 		number = client.replaceNumber(suffix);
 		let numberDoc = await r.table("Numbers").get(number);
 		if (!numberDoc) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Not a valid number." } });
