@@ -62,12 +62,12 @@ module.exports = async(msg, myNumber) => {
 		// Collector
 		collected = (await msg.channel.awaitMessages(
 			// Search for correct page number or query with more than 3 characters.
-			m => m.author === msg.author && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
+			m => m.author.id === msg.author.id && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
 			{ max: 1, time: 180000 }
 		)).first();
 
 		// On collection
-		if (collected) collected.delete().catch(e => null);
+		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) return false;
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
@@ -118,7 +118,7 @@ module.exports = async(msg, myNumber) => {
 			{ max: 1, time: 60000 })).first();
 
 		// On main menu collection
-		if (collected) collected.delete().catch(e => null);
+		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
 			msg.author.busy = false;
 			omsg.delete().catch(e => null);
@@ -173,7 +173,7 @@ module.exports = async(msg, myNumber) => {
 				)).first();
 
 				// On collection
-				if (collected) collected.delete().catch(e => null);
+				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -214,7 +214,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 180000 }
 				)).first();
 
-				if (collected) collected.delete().catch(e => null);
+				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -258,7 +258,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 60000 }
 				)).first();
 
-				if (collected) collected.delete().catch(e => null);
+				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -295,7 +295,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 120000 }
 				)).first();
 
-				if (collected) collected.delete().catch(e => null);
+				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -331,7 +331,7 @@ module.exports = async(msg, myNumber) => {
 							{ max: 1, time: 120000 }
 						)).first();
 
-						if (collected) collected.delete().catch(e => null);
+						if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 						if (!collected || /^0$/.test(collected.content)) {
 							msg.author.busy = false;
 							omsg.delete().catch(e => null);
