@@ -308,14 +308,14 @@ module.exports = async(client, msg, suffix) => {
 	let pmsg = await msg.channel.send({ embed: await createEmbed(true, false) });
 	let omsg = await msg.channel.send({ embed: oEmbed });
 
-	if (!embed.title && !gperms && !msg.author.support) return;
+	if (!embed.description && !gperms && !msg.author.support) return;
 	let filter = "^[";
 	if (gperms || msg.author.support) {
 		filter += "1";
-		if (embed.title) filter += "3";
+		if (embed.description) filter += "3";
 		if (promote.lastPromoted) filter += "4";
 	}
-	if (embed.title && canPromote && hasMoney) filter += "2";
+	if (embed.description && canPromote && hasMoney) filter += "2";
 	filter += "]$";
 	filter = new RegExp(filter);
 
