@@ -292,7 +292,10 @@ module.exports = async(client, msg, suffix) => {
 		let messagePage = async(id, page) => {
 			let message = messages.filter(m => m.id == id)[0];
 			if (id == "0") return;
-			if (!message) return msg.channel.send({ embed: { color: config.colors.error, title: "Err%6F%72", description: `Something went wrong, please call \`*611\` or join our support server: ${config.guildInvite}` } });
+			if (!message) {
+				msg.author.busy = false;
+				return msg.channel.send({ embed: { color: config.colors.error, title: "Err%6F%72", description: `Something went wrong, please call \`*611\` or join our support server: ${config.guildInvite}` } });
+			}
 
 			let date = Date(message.date);
 			let embed = new MessageEmbed()
@@ -310,14 +313,19 @@ module.exports = async(client, msg, suffix) => {
 				m => m.author.id == msg.author.id && (/^[09]$/.test(m.content) || responses.includes(m.content.toLowerCase())),
 				{	time: 120000, max: 1 })).first();
 
+			if (!collected) {
+				msg.author.busy = false;
+				return;
+			}
+
 			collected.delete().catch(e => null);
 
 			let index;
 
 			switch (collected.content) {
 				case "0":
-					omsg.delete().catch(e => null);
 					msg.author.busy = false;
+					omsg.delete().catch(e => null);
 					break;
 				case "9":
 					await omsg.delete().catch(e => null);
