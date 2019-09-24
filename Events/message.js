@@ -20,7 +20,7 @@ module.exports = async msg => {
 		.join(" ")
 		.trim();
 
-	if (msg.channel.number === undefined) msg.channel.number = await r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(null);
+	if (msg.channel.number === undefined) msg.channel.number = await r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(undefined);
 
 	// Find the command file
 	let cmdFile;
