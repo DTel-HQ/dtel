@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number." } });
 
 	// check if they have permission to do stuff
-	let perm = msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	let perm = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	if (!perm) perm = msg.author.support;
 
 	// get their mailbox
