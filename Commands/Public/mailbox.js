@@ -199,7 +199,8 @@ module.exports = async(client, msg, suffix) => {
 						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
 					console.log("2");
-					omsg = await omsg.edit({ embed: embed }).catch(async() => { omsg = await msg.channel.send({ embed: embed }); });
+					omsg = await omsg.edit({ embed: embed })
+						.catch(async() => { omsg = await msg.channel.send({ embed: embed }); return omsg; });
 					console.log("3");
 
 					collected = (await msg.channel.awaitMessages(
