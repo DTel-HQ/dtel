@@ -184,7 +184,6 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			let toSwitch = collected.content.toLowerCase();
-			console.log(toSwitch);
 			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
 					page = parseInt(collected.content);
@@ -209,6 +208,7 @@ module.exports = async(client, msg, suffix) => {
 					if (collected) collected.delete().catch(e => null);
 					if (!collected) {
 						omsg.delete().catch(e => null);
+						break;
 					}
 					if (/^no$/.test(collected.content)) {
 						messagesPage(page);
@@ -216,7 +216,7 @@ module.exports = async(client, msg, suffix) => {
 					}
 
 					await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
-					msg.channel.send({ embed: { color: config.colors.info, title: "Whoosh", description: "After leaving your mailbox open, a strong wind came along and blew all your messages away. (R.I.P.)", footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
+					await omsg.edit({ embed: { color: config.colors.info, title: "Whoosh", description: "After leaving your mailbox open, a strong wind came along and blew all your messages away. (R.I.P.)", footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
@@ -233,19 +233,19 @@ module.exports = async(client, msg, suffix) => {
 						{ time: 120000, max: 1 }
 					)).first();
 
+					msg.author.busy = false;
 					if (collected) collected.delete().catch(e => null);
 					if (!collected) {
-						msg.author.busy = false;
 						omsg.delete().catch(e => null);
+						break;
 					}
 					if (/^no$/.test(collected.content)) {
 						messagesPage(page);
 						break;
 					}
-					msg.author.busy = false;
 
 					await r.table("Mailbox").get(msg.channel.id).delete();
-					msg.channel.send({ embed: { color: config.colors.info, title: "Angry neighbour", description: "Your angry neighbour came along and demolished your mailbox and set all the messages on fire.", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
+					await omsg.edit({ embed: { color: config.colors.info, title: "Angry neighbour", description: "Your angry neighbour came along and demolished your mailbox and set all the messages on fire.", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
