@@ -50,7 +50,7 @@ module.exports = async(msg, myNumber) => {
 	msg.author.busy = false;
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
-	if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+	if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
 	if (/^0$/.test(collected.first().content)) return msg.channel.send({embed:{color: config.colors.receipt, title: "Process terminated", description: "Your account has not been charged."}});
 
 	// check for same balance
