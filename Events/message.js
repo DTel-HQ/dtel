@@ -24,7 +24,7 @@ module.exports = async msg => {
 	if (msg.channel.number === false) msg.channel.number = undefined;
 	if (msg.channel.call === undefined) {
 		msg.channel.call = await r.table("Calls").getAll(this.id, { index: "fromChannel" }).nth(0).default(false);
-		if (!msg.channel.call) msg.channel.call = await r.table("Calls").getAll(this.id, { index: "toChannel" }).nth(0).default(false);
+		if (!msg.channel.call) msg.channel.call = await r.table("Calls").getAll(msg.channel.id, { index: "toChannel" }).nth(0).default(false);
 		if (!msg.channel.call) msg.channel.call = undefined;
 	}
 
