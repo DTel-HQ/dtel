@@ -297,7 +297,7 @@ module.exports = async(client, msg, suffix) => {
 		.setFooter("(0) to quit. This menu will expire after 2 minutes.");
 
 	let description = `(1) Go through the setup.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
-	if (embed.title) description += `\n(2) Promote your number.${canPromote ? "" : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
+	if (embed.description) description += `\n(2) Promote your number.${canPromote ? "" : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
 	if (promote.lastPromoted) {
 		description += `\n(4) Remove previous promotion.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
 		let user = await client.users.fetch(promote.lastuser);
