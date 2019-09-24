@@ -285,7 +285,7 @@ module.exports = async(client, msg, suffix) => {
 		if (preview) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
 
 		if (!explicit) {
-			pEmbed.thumbnail = { url: msg.guild.iconURL({ size: 1024 }) };
+			if (msg.guild) pEmbed.thumbnail = { url: msg.guild.iconURL({ size: 1024 }) };
 			pEmbed.footer = { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() };
 		}
 		return pEmbed;
@@ -334,6 +334,7 @@ module.exports = async(client, msg, suffix) => {
 
 	switch (collected.content) {
 		case "1":
+			// first element to change (setup = true)
 			return setDescription(true);
 
 		case "2": {
