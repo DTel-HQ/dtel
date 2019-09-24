@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle(`Number information for ${number.id}`)
 		.setDescription("Here you can find all information relevant to this number")
-		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === "dm" ? "DM Channel" : channel.name}\nDM: ${channel.type === "dm" ? "True" : "False"}`, true)
+		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === 1 ? "DM Channel" : channel.name}\nDM: ${channel.type === 1 ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
 		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}` : "DM Number", true)
 		.addField("Created, expiry", `• ${number.createdAt}\n• ${new Date(number.expiry)}`, true)
