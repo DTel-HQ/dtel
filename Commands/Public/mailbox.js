@@ -186,19 +186,13 @@ module.exports = async(client, msg, suffix) => {
 			let toSwitch = collected.content.toLowerCase();
 			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
-					console.log("1");
 					page = parseInt(collected.content);
 					messagesPage(page);
 					break;
 				}
 
 				case "clear": {
-<<<<<<< HEAD
 					console.log("1");
-=======
-					console.log("2");
-
->>>>>>> 65abddfd4db9c9877d150ba6bc8e9c30804961ee
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting messages")
@@ -231,8 +225,6 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "delete": {
-					console.log("3");
-
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting mailbox")
@@ -262,8 +254,6 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "edit": {
-					console.log("4");
-
 					embed = new MessageEmbed()
 						.setColor(config.colors.info)
 						.setTitle("Editing autoreply")
@@ -291,16 +281,12 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "0": {
-					console.log("5");
-
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
 					break;
 				}
 
 				default: {
-					console.log("6");
-
 					messagePage(collected.content, page);
 					break;
 				}
