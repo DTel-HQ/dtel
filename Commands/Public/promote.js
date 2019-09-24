@@ -308,7 +308,11 @@ module.exports = async(client, msg, suffix) => {
 	let pmsg = await msg.channel.send({ embed: await createEmbed(true, false) });
 	let omsg = await msg.channel.send({ embed: oEmbed });
 
-	if (!embed.description && !gperms && !msg.author.support) return;
+	if (!embed.description && !gperms && !msg.author.support) {
+		msg.author.busy = false;
+		return;
+	}
+
 	let filter = "^[";
 	if (gperms || msg.author.support) {
 		filter += "1";
