@@ -199,7 +199,7 @@ module.exports = async(client, msg, suffix) => {
 						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
 					console.log("2");
-					await omsg.edit({ embed: embed });
+					omsg = await omsg.edit({ embed: embed });
 					console.log("3");
 
 					collected = (await msg.channel.awaitMessages(
@@ -230,7 +230,7 @@ module.exports = async(client, msg, suffix) => {
 						.setTitle("Deleting mailbox")
 						.setDescription("Are you sure you want to delete the mailbox? Stored messages will become **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
-					await omsg.edit({ embed: embed });
+					omsg = await omsg.edit({ embed: embed });
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
@@ -259,7 +259,7 @@ module.exports = async(client, msg, suffix) => {
 						.setTitle("Editing autoreply")
 						.setDescription("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)")
 						.setFooter("Press (0) to hangup. This call will automatically be hung up after 3 minutes.");
-					await omsg.edit({ embed: embed });
+					omsg = await omsg.edit({ embed: embed });
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length <= 100,
