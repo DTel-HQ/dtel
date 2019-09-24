@@ -255,7 +255,7 @@ module.exports = async(client, msg, suffix) => {
 
 
 	// Get other variables loaded in
-	let isvip = number.vip ? new Date(number.vip.exipiry).getTime() > Date.now() : false;
+	let isvip = number.vip ? new Date(number.vip.expiry).getTime() > Date.now() : false;
 	let promoteTimeout = config.promoteTimeout * 86400000;
 	let canPromote = promote.lastPromoted ? promote.lastPromoted + promoteTimeout < Date.now() : true;
 	let canPromoteIn = canPromote ? null : (promote.lastPromoted + promoteTimeout) - Date.now();
