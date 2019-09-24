@@ -41,8 +41,10 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
 	let id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });
-	while (mailbox.messages.find(x => x.id == id)) {
-		id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });
+	if (mailbox.messages && mailbox.messages[0]) {
+		while (mailbox.messages.find(x => x.id == id)) {
+			id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });
+		}
 	}
 
 	let messageDoc = {
