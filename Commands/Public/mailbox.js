@@ -183,7 +183,9 @@ module.exports = async(client, msg, suffix) => {
 				return omsg.delete().catch(e => null);
 			}
 
-			switch (collected.content.toLowerCase()) {
+			let toSwitch = collected.content.toLowerCase();
+			console.log(toSwitch);
+			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
 					page = parseInt(collected.content);
 					messagesPage(page);
