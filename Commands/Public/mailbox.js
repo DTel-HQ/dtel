@@ -87,6 +87,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
+		msg.author.busy = false;
 		if (!collected) return;
 
 		if (/^yes$/i.test(collected.content)) {
@@ -110,6 +111,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await omsg.delete().catch(e => null);
 		collected = collector.first();
+		msg.author.busy = false;
 		if (!collected) return;
 
 		if (collected.guild) collected.delete();
