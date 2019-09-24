@@ -60,5 +60,5 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Mailbox").get(toNumberDoc.channel).update({ messages: messages });
 	client.apiSend(`You received a message. Check it using \`>mailbox\``, mailbox.id);
-	msg.channel.send({ embed: { color: config.colors.success, title: "Sent!", description: "Your message succesfully reached the other side!" } });
+	msg.channel.send({ embed: { color: config.colors.success, title: "Sent!", description: `Your message succesfully reached the other side!`, footer: { text: id }, author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 };
