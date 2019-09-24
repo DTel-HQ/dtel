@@ -126,7 +126,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		} });
 	} else {
-		if (!mailbox.messages[0]) return msg.channel.send({ embed: { color: config.colors.info, title: "No messages", description: "You don't have any messages (yet).\n\nOptions:\n• To edit your mailbox's autoreply: >mailbox edit\n• To delete the mailbox: >mailbox delete" } });
+		if (!mailbox.messages || !mailbox.messages[0]) return msg.channel.send({ embed: { color: config.colors.info, title: "No messages", description: "You don't have any messages (yet).\n\nOptions:\n• To edit your mailbox's autoreply: >mailbox edit\n• To delete the mailbox: >mailbox delete" } });
 		let messages = mailbox.messages.sort((a, b) => a.time > b.time ? -1 : 1);
 
 		// Showing all messages
