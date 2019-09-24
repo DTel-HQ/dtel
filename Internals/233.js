@@ -42,7 +42,7 @@ module.exports = async(msg, myNumber) => {
 	// Message collector
 	msg.author.busy = true;
 	const collected = await msg.channel.awaitMessages(
-		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) < maxMonths,
+		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) <= maxMonths,
 		{ max: 1, time: 180000 }
 	);
 
@@ -51,7 +51,7 @@ module.exports = async(msg, myNumber) => {
 	omsg.delete().catch(e => null);
 	if (!collected.first()) return;
 	if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
-	if (/^0$/.test(collected.first().content)) return;
+	if (/^0$/.test(collected.first().content)) return msg.channel.send({embed:{color: config.colors.receipt, title: "Process terminated", description: "Your account has not been charged."}});
 
 	// check for same balance
 	let currAccount = await msg.author.account;
