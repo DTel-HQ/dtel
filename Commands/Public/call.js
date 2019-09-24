@@ -179,6 +179,6 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		let mailbox = await r.table("Mailbox").get(toDialDoc.channel);
 		if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", footer: { text: callDoc.id } } });
-		else return msg.channel.send({ embed: { color: config.colors.error, footer: { text: callDoc.id }, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", description: `**[Automated mailbox message:](${config.siteLink})** ${mailbox.autoreply}\n\nYou can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
+		else return msg.channel.send({ embed: { color: config.colors.error, footer: { text: callDoc.id }, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", value: `**Automated mailbox message:** ${mailbox.autoreply}\n\nYou can send a message (cost: ¥${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
 	}, 120000);
 };
