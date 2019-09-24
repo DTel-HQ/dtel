@@ -6,7 +6,8 @@ module.exports = async msg => {
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
-	const prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : await msg.author.prefix;
+	const account = await msg.author.account,
+	      prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix;
 
 	// Check for call
 	let call = await msg.channel.call;
