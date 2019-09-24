@@ -192,17 +192,21 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "clear": {
+					console.log("1");
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting messages")
 						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
+					console.log("2");
 					omsg = await omsg.edit({ embed: embed }).catch(async() => { omsg = await msg.channel.send({ embed: embed }); });
+					console.log("3");
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
 						{ time: 120000, max: 1 }
 					)).first();
+					console.log("4");
 
 					msg.author.busy = false;
 					if (collected) collected.delete().catch(e => null);
