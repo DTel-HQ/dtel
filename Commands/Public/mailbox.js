@@ -176,9 +176,9 @@ module.exports = async(client, msg, suffix) => {
 				m => m.author.id == msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
 				{	time: 120000, max: 1 })).first();
 
-			if (collected) {
+			if (collected && msg.guild) {
 				collected.delete().catch(e => null);
-			}	else {
+			}	else if (!collected) {
 				msg.author.busy = false;
 				return omsg.delete().catch(e => null);
 			}
