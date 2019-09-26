@@ -52,7 +52,7 @@ scheduleJob("*/5 * * * *", async() => {
 	let guild = client.guilds.get(config.supportGuild);
 	for (let role of roles) {
 		guild.members.forEach(async member => {
-			await member.setPerms();
+			await member.user.setPerms();
 		});
 	}
 });
