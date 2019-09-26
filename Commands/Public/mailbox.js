@@ -326,7 +326,7 @@ module.exports = async(client, msg, suffix) => {
 				return;
 			}
 
-			collected.delete().catch(e => null);
+			if (msg.guild) collected.delete().catch(e => null);
 
 			let index;
 
