@@ -187,7 +187,6 @@ module.exports = async(client, msg, suffix) => {
 			)).first();
 
 			if (!collected || /^0$/.test(collected.content)) {
-				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
 				msg.author.busy = false;
 				return;
@@ -330,7 +329,6 @@ module.exports = async(client, msg, suffix) => {
 
 	if (collected) collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) {
-		pmsg.delete().catch(e => null);
 		omsg.delete().catch(e => null);
 		msg.author.busy = false;
 		return;
@@ -358,7 +356,6 @@ module.exports = async(client, msg, suffix) => {
 			if (collected) collected.delete().catch(e => null);
 			msg.author.busy = false;
 			if (!collected || /^0$/.test(collected.content)) {
-				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
 				return;
 			}
@@ -385,7 +382,6 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		case "4": {
-			pmsg.delete().catch(e => null);
 			omsg = await omsg.edit({ embed: { color: config.colors.info, title: "Confirmation", description: "Are you sure you want to delete the last promotion?\nCredits will not be refunded.\n\nRespond with `yes` or `no`.", footer: { text: "This menu will expire in 60 seconds." } } });
 
 			collected = (await msg.channel.awaitMessages(

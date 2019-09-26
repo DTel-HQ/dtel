@@ -4,6 +4,10 @@ module.exports = async msg => {
 	if (!msg.author.loadedPerms) await msg.author.setPerms();
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
+	let channelPerms;
+	if (msg.guild) channelPerms = await msg.channel.permissionsFor(msg.guild.members.get(client.user.id)).toArray();
+	if (msg.guild && !channelPerms.includes("SEND_MESSAGES")) return;
+
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
 	const account = await msg.author.account,
@@ -54,6 +58,7 @@ module.exports = async msg => {
 	if (!msg.author.support && !msg.author.donator) msg.author.cooldown = "default";
 	// Run the command
 	if (cmdFile) {
+		if (msg.guild && !channelPerms.includes("EMBED_LINKS")) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
 			await cmdFile(client, msg, suffix, call);
