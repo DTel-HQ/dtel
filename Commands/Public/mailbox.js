@@ -208,9 +208,9 @@ module.exports = async(client, msg, suffix) => {
 					)).first();
 					console.log("4");
 
-					msg.author.busy = false;
-					if (collected) collected.delete().catch(e => null);
+					if (collected && msg.guild) collected.delete().catch(e => null);
 					if (!collected) {
+						msg.author.busy = false;
 						omsg.delete().catch(e => null);
 						break;
 					}
@@ -219,6 +219,7 @@ module.exports = async(client, msg, suffix) => {
 						break;
 					}
 
+					msg.author.busy = false;
 					await r.table("Mailbox").get(msg.channel.id).update({ messages: [] });
 					await omsg.edit({ embed: { color: config.colors.info, title: "Whoosh", description: "After leaving your mailbox open, a strong wind came along and blew all your messages away. (R.I.P.)", footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 					break;
@@ -237,9 +238,9 @@ module.exports = async(client, msg, suffix) => {
 						{ time: 120000, max: 1 }
 					)).first();
 
-					msg.author.busy = false;
-					if (collected) collected.delete().catch(e => null);
+					if (collected && msg.guild) collected.delete().catch(e => null);
 					if (!collected) {
+						msg.author.busy = false;
 						omsg.delete().catch(e => null);
 						break;
 					}
@@ -248,6 +249,7 @@ module.exports = async(client, msg, suffix) => {
 						break;
 					}
 
+					msg.author.busy = false;
 					await r.table("Mailbox").get(msg.channel.id).delete();
 					await omsg.edit({ embed: { color: config.colors.info, title: "Angry neighbour", description: "Your angry neighbour came along and demolished your mailbox and set all the messages on fire.", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 					break;
@@ -267,7 +269,7 @@ module.exports = async(client, msg, suffix) => {
 					)).first();
 
 					msg.author.busy = false;
-					if (collected) collected.delete().catch(e => null);
+					if (collected && msg.guild) collected.delete().catch(e => null);
 					if (!collected || /^0$/.test(collected.content)) break;
 
 					await r.table("Mailbox").get(mailbox.id).update({ autoreply: collected.content });
