@@ -1,6 +1,7 @@
 module.exports = async(channel, user) => {
 	if (user.bot) return;
-	let call = await channel.call;
+	let call = await r.table("Calls").getAll(channel.id, { index: "fromChannel" }).nth(0).default(false);
+	if (!call) call = await r.table("Calls").getAll(channel.id, { index: "toChannel" }).nth(0).default(false);
 	if (!call || !call.pickedUp || call.hold) return;
 
 	let typeChannel = channel.id === call.from.channel ? call.to.channel : call.from.channel;
