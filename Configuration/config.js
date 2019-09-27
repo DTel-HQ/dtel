@@ -9,6 +9,7 @@ module.exports = {
 	devMode: false,
 	devOnlyMode: false,
 	shardCount: 4,
+	botID: "377609965554237453",
 
 	// NUMBER ALIASES
 	aliasNumbers: {

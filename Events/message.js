@@ -5,7 +5,7 @@ module.exports = async msg => {
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	let channelPerms;
-	if (msg.guild) channelPerms = await msg.channel.permissionsFor(msg.guild.members.get(client.user.id)).toArray();
+	if (msg.guild) channelPerms = msg.channel.permissionsFor(config.botID).toArray();
 	if (msg.guild && !channelPerms.includes("SEND_MESSAGES")) return;
 
 	// Fix messages
