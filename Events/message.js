@@ -6,11 +6,7 @@ module.exports = async msg => {
 
 	let channelPerms;
 	if (msg.guild) {
-		channelPerms = msg.channel.permissionsFor(config.botID)
-			.catch(async e => {
-				await msg.guild.members.fetch();
-				channelPerms = msg.channel.permissionsFor(config.botID).toArray();
-			});
+		channelPerms = msg.channel.permissionsFor(config.botID);
 		if (channelPerms) channelPerms = channelPerms.toArray();
 	}
 	if (msg.guild && !channelPerms.includes("SEND_MESSAGES")) return;
