@@ -153,7 +153,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	let deleted = [];
 
 	for (let number of numbers) {
-		let channel = await client.api.channels(number.channel).get();
+		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
 			await client.delete(number, { force: true, stopLog: true });
 			deleted.push(number);
@@ -206,7 +206,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	try {
 		haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${JSON.stringify(deleted)}`);
 	} catch (err) {
-		haste = false;
+		haste = null;
 	}
 
 	let count = deleted.length;
