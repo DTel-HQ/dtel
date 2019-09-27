@@ -23,7 +23,7 @@
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.0.0",
-    "discord.js": "github:vladfrangu/discOwOd.js#sharding-cleanup",
+    "discord.js": "github:Mitchell3514/discOwOd.js#sharding-cleanup",
     "erlpack": "github:discordapp/erlpack",
     "fs-nextra": "^0.3.8",
     "kurasuta": "^1.1.0",
