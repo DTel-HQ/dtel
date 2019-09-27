@@ -62,7 +62,7 @@ module.exports = async(msg, myNumber) => {
 		// Collector
 		collected = (await msg.channel.awaitMessages(
 			// Search for correct page number or query with more than 3 characters.
-			m => m.author.id === msg.author.id && /^\d+$/.test(m.content) ? true : m.content.length >= 3,
+			m => m.author.id === msg.author.id && (/^\d+$/.test(m.content) ? true : m.content.length >= 3),
 			{ max: 1, time: 180000 }
 		)).first();
 
@@ -114,7 +114,7 @@ module.exports = async(msg, myNumber) => {
 		// Create collector & make busy
 		msg.author.busy = true;
 		collected = (await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && perms ? vipNumber ? /^[0-5]$/.test(m.content) : /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content),
+			m => m.author.id === msg.author.id && (perms ? vipNumber ? /^[0-5]$/.test(m.content) : /^[0-4]$/.test(m.content) : /^[0134]$/.test(m.content)),
 			{ max: 1, time: 60000 })).first();
 
 		// On main menu collection
@@ -168,7 +168,7 @@ module.exports = async(msg, myNumber) => {
 
 				// Collect a number
 				collected = (await msg.channel.awaitMessages(
-					m => m.author.id === msg.author.id && entry ? /^[0129]$/.test(m.content) : /^[019]$/.test(m.content),
+					m => m.author.id === msg.author.id && (entry ? /^[0129]$/.test(m.content) : /^[019]$/.test(m.content)),
 					{ max: 1, time: 120000 }
 				)).first();
 
