@@ -1,7 +1,7 @@
 const { post } = require("chainfetch");
 
 module.exports = async(client, msg, suffix) => {
-	let hrstart = process.hrtime();
+	let hrstart;
 	if (!suffix) {
 		return msg.channel.send({
 			embed: {
@@ -55,6 +55,7 @@ module.exports = async(client, msg, suffix) => {
 	try {
 		if (suffix.startsWith("```js") && suffix.endsWith("```")) suffix = suffix.substring(5, suffix.length - 3);
 		const asyncEval = (code, returns) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
+		hrstart = process.hrtime();
 		result = await eval(asyncEval(suffix, suffix.includes("return")));
 	} catch (err) {
 		if (err.stack.length <= 1980) {
