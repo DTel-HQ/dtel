@@ -5,7 +5,13 @@ module.exports = async msg => {
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	let channelPerms;
-	if (msg.guild) channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+	if (msg.guild) {
+		channelPerms = msg.channel.permissionsFor(config.botID).toArray()
+			.catch(async e => {
+				await msg.guild.members.fetch();
+				channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+			});
+	}
 	if (msg.guild && !channelPerms.includes("SEND_MESSAGES")) return;
 
 	// Fix messages
