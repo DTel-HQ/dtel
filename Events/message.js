@@ -16,16 +16,19 @@ module.exports = async msg => {
 	const account = await msg.author.account,
 		prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix || config.prefix;
 
-	if (msg.channel.number === undefined) msg.channel.number = await r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(false);
-	if (msg.channel.number === false) msg.channel.number = undefined;
+	if (msg.channel.number === undefined) {
+		msg.channel.number = await r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(false);
+	}
 	if (msg.channel.number && msg.channel.call === undefined) {
-		msg.channel.call = await r.table("Calls").getAll(msg.channel.id, { index: "fromChannel" }).nth(0).default(false);
-		if (!msg.channel.call) msg.channel.call = await r.table("Calls").getAll(msg.channel.id, { index: "toChannel" }).nth(0).default(false);
-		if (!msg.channel.call) msg.channel.call = undefined;
+		msg.channel.call = async() => {
+			let call = await r.table("Calls").getAll(msg.channel.id, { index: "fromChannel" }).nth(0).default(null);
+			if (call) call = await r.table("Calls").getAll(msg.channel.id, { index: "toChannel" }).nth(0).default(null);
+			return call;
+		};
 	}
 
 	// Check for call
-	let call = await msg.channel.call;
+	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
 	if (!call && !msg.content.startsWith(prefix)) return;
 
 	// Filter out the command and arguments to pass
