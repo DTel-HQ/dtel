@@ -179,6 +179,7 @@ module.exports = async(client, msg, suffix) => {
 			console.log(collected.content);
 
 			if (collected && delPerm) {
+				console.log("deleting");
 				collected.delete().catch(e => null);
 			}	else if (!collected) {
 				msg.author.busy = false;
