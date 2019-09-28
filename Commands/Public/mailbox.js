@@ -179,7 +179,6 @@ module.exports = async(client, msg, suffix) => {
 			console.log(collected.content);
 
 			if (collected && delPerm) {
-				console.log("deleting");
 				collected.delete().catch(e => null);
 			}	else if (!collected) {
 				msg.author.busy = false;
@@ -187,7 +186,6 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			let toSwitch = collected.content.toLowerCase();
-			console.log(toSwitch);
 			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
 					page = parseInt(collected.content);
@@ -196,7 +194,6 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "clear": {
-					console.log("clearing");
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting messages")
