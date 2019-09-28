@@ -2,13 +2,16 @@ module.exports = async(client, msg, suffix, call) => {
 	if (call.to.number === config.supportNumber && msg.channel.id != config.supportChannel) return;
 
 	// Calculate time the call lasted for.
-	let duration = Math.round((Date.now() - call.startedAt) / 1000, 1);
-	let h = Math.floor(duration / 3600);
-	duration -= h * 3600;
-	let m = Math.floor(duration / 60);
-	duration -= m * 60;
-	let s = duration;
-	let time = client.time(s, m, h);
+	let duration, h, m, s, time;
+	if (call.pickedUp) {
+		duration = Math.round((Date.now() - call.pickedUp) / 1000, 1);
+		h = Math.floor(duration / 3600);
+		duration -= h * 3600;
+		m = Math.floor(duration / 60);
+		duration -= m * 60;
+		s = duration;
+		time = client.time(s, m, h);
+	}
 
 	// Send the stuff
 	msg.channel.send({ embed: { color: config.colors.error, title: "The call has ended!", description: `You have ended the call${call.pickedUp ? ` after ${time}` : ""}.`, footer: { text: call.id } } });
