@@ -173,7 +173,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = omsg ? await omsg.edit({ embed: embed }).catch(async() => { omsg = await msg.channel.send({ embed: embed }); }) : await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
-				m => m.author.id == msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
+				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
 				{	time: 120000, max: 1 })).first();
 
 			if (collected && msg.guild) {

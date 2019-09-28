@@ -114,6 +114,7 @@ scheduleJob("*/5 * * * *", async() => {
 			client.apiSend(`Yo, there might be something wrong with the glitch API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
 			return null;
 		});
+	if (!result) return client.apiSend(`Yo, there might be something wrong with the glitch API.`, "377945714166202368");
 
 	let votes = JSON.parse(result.text.toString());
 	let users = Object.keys(votes);
