@@ -59,6 +59,6 @@ module.exports = async(client, msg, suffix) => {
 	messages.push(messageDoc);
 
 	await r.table("Mailbox").get(toNumberDoc.channel).update({ messages: messages });
-	client.apiSend(`You received a message. Check it using \`>mailbox\``, mailbox.id);
-	msg.channel.send({ embed: { color: config.colors.success, title: "Sent!", description: `Your message succesfully reached the other side!`, footer: { text: id }, author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
+	client.apiSend({ embed: { color: config.colors.info, title: "New message!", description: `You received a message. Check it using \`>mailbox\``, footer: { text: id } } }, mailbox.id);
+	msg.channel.send({ embed: { color: config.colors.success, title: "Message sent!", description: `Your message succesfully reached the other side!\nContent: ${messageDoc.message}`, footer: { text: id }, author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 };
