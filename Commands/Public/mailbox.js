@@ -8,6 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	// check if they have permission to do stuff
 	let perm = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	if (!perm) perm = msg.author.support;
+	let delPerm = msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 
 	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);
@@ -37,7 +38,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		omsg.delete().catch(e => null);
-		if (collected.guild) collected.delete().catch(e => null);
+		if (delPerm) collected.delete().catch(e => null);
 		if (/^no$/i.test(collected.content)) {
 			msg.author.busy = false;
 			return;
@@ -62,7 +63,7 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "You ran out of time, get an autoreply ready and start the set-up again." } });
 		}
 
-		if (collected.guild) collected.delete();
+		if (delPerm) collected.delete();
 
 		// Succesful autoreply
 		let autoreply = collected.content;
@@ -123,7 +124,7 @@ module.exports = async(client, msg, suffix) => {
 		msg.author.busy = false;
 		if (!collected) return;
 
-		if (collected.guild) collected.delete();
+		if (delPerm) collected.delete();
 
 		// Succesful autoreply
 		let autoreply = collected.content;
@@ -177,7 +178,7 @@ module.exports = async(client, msg, suffix) => {
 				{	time: 120000, max: 1 })).first();
 			console.log(collected.content);
 
-			if (collected && msg.guild) {
+			if (collected && delPerm) {
 				collected.delete().catch(e => null);
 			}	else if (!collected) {
 				msg.author.busy = false;
@@ -205,7 +206,7 @@ module.exports = async(client, msg, suffix) => {
 						{ time: 120000, max: 1 }
 					)).first();
 
-					if (collected && msg.guild) collected.delete().catch(e => null);
+					if (collected && delPerm) collected.delete().catch(e => null);
 					if (!collected) {
 						msg.author.busy = false;
 						omsg.delete().catch(e => null);
@@ -235,7 +236,7 @@ module.exports = async(client, msg, suffix) => {
 						{ time: 120000, max: 1 }
 					)).first();
 
-					if (collected && msg.guild) collected.delete().catch(e => null);
+					if (collected && delPerm) collected.delete().catch(e => null);
 					if (!collected) {
 						msg.author.busy = false;
 						omsg.delete().catch(e => null);
@@ -266,7 +267,7 @@ module.exports = async(client, msg, suffix) => {
 					)).first();
 
 					msg.author.busy = false;
-					if (collected && msg.guild) collected.delete().catch(e => null);
+					if (collected && delPerm) collected.delete().catch(e => null);
 					if (!collected || /^0$/.test(collected.content)) break;
 
 					await r.table("Mailbox").get(mailbox.id).update({ autoreply: collected.content });
@@ -323,7 +324,7 @@ module.exports = async(client, msg, suffix) => {
 				return;
 			}
 
-			if (msg.guild) collected.delete().catch(e => null);
+			if (delPerm) collected.delete().catch(e => null);
 
 			let index;
 
