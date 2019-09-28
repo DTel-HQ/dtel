@@ -186,6 +186,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			let toSwitch = collected.content.toLowerCase();
+			console.log(toSwitch);
 			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
 					page = parseInt(collected.content);
@@ -194,6 +195,7 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "clear": {
+					console.log("clearing");
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting messages")
