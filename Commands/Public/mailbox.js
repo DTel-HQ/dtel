@@ -175,6 +175,7 @@ module.exports = async(client, msg, suffix) => {
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
 				{	time: 120000, max: 1 })).first();
+			console.log(collected.content);
 
 			if (collected && msg.guild) {
 				collected.delete().catch(e => null);
