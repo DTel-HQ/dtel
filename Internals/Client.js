@@ -11,12 +11,15 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 		}
 
 		let toSendData = {
-			data: {},
+			data: {
+				content: {},
+				files: [],
+			},
 		};
 
-		if (typeof content === "object" && data.hasOwnProperty("data")) {
+		if (typeof data === "object" && data.hasOwnProperty("data")) {
 			toSendData.data = data.content;
-		} else if (typeof content === "object") {
+		} else if (typeof data === "object") {
 			toSendData.data.content = data;
 		} else {
 			toSendData.data.content = data;
