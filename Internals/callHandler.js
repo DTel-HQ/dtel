@@ -26,6 +26,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 			.setAuthor(hidden ? "Anonymous" : msg.author.tag, hidden ? null : msg.author.displayAvatarURL())
 			.setTitle("Attachment")
 			.setImage(attachment.url)
+			.setFooter(attachment.name || "")
 			._apiTransform();
 	}
 
