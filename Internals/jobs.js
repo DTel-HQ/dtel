@@ -200,7 +200,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		embed.setTitle(otitle)
 			.setDescription(odesc)
 			.setFooter("You are receiving this as you are the owner of the server.");
-		await (await client.users.fetch(owner)).send({ embed: embed }).catch(e => null);
+		if (owner) await (await client.users.fetch(owner)).send({ embed: embed }).catch(e => null);
 	}
 
 	let haste;
