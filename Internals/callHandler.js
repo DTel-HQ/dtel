@@ -1,7 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(cmd, msg, suffix, call) => {
-	let embed = null;
+	let embed = null, content;
 
 	if (!call.pickedUp || call.hold || (!msg.content && !msg.attachments.first())) return;
 	call.lastMessage = new Date().getTime();
@@ -36,7 +36,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
 
 	// send the msg
-	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	if (msg.content) content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
