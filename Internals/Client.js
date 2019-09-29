@@ -20,7 +20,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 		if (typeof data === "object" && data.hasOwnProperty("data")) {
 			toSendData.data = data.content;
 		} else if (typeof data === "object") {
-			toSendData.data.content = data;
+			toSendData.data = data;
 		} else {
 			toSendData.data.content = data;
 		}
