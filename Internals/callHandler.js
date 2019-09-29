@@ -14,12 +14,17 @@ module.exports = async(cmd, msg, suffix, call) => {
 	if (fromvip) phone = config.callPhones.donator;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
+	let toSendSupport = toSend === config.supportChannel;
+
+	// Send hidden?
+	let hidden = toSendSupport ? call.from.channel === msg.channel.id ? call.from.hidden : call.to.hidden : false;
 
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
 		embed = new MessageEmbed()
 			.setColor(config.colors.info)
-			.setTitle("Attachments")
+			.setAuthor(hidden ? "Anonymous" : msg.author.tag, hidden ? null : msg.author.displayAvatarURL())
+			.setTitle("Attachment")
 			.setImage(attachment.url)
 			._apiTransform();
 	}
@@ -33,11 +38,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 		return client.delete(msg.channel.id === call.from.channel ? call.to.number : call.from.number);
 	}
 
-	// Send msg, hidden?
-	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
-
 	// send the msg
-	if (msg.content) content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	if (msg.content) content = { content: `**${hidden ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
