@@ -20,8 +20,10 @@ module.exports = async(cmd, msg, suffix, call) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.info)
 			.setTitle("Attachments")
-			.attachFiles(attachments)._apiTransform();
+			.attachFiles(attachments);
 	}
+
+	console.log(embed._apiTransform());
 
 	try {
 		await client.api.channels(toSend).get();
@@ -37,7 +39,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	// send the msg
 	if (msg.content) content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
-	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
+	let sent = await client.apiSend({ content: content, embed: embed._apiTransform() }, toSend);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
