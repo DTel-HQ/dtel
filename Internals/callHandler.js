@@ -20,7 +20,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.info)
 			.setTitle("Attachments")
-			.setImage(attachment)
+			.setImage(attachment.url)
 			._apiTransform();
 	}
 
