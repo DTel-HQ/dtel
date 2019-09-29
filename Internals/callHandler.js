@@ -1,4 +1,4 @@
-const { MessageAttachment } = require("discord.js");
+const { MessageAttachment, APIMessage } = require("discord.js");
 
 module.exports = async(cmd, msg, suffix, call) => {
 	if (!call.pickedUp || call.hold || !msg.content) return;
