@@ -1,6 +1,6 @@
 module.exports = Discord => class DTelClient extends Discord.Client {
-	async apiSend(content, channel) {
-		if (!content || !channel) throw new Error("Missing parameters.");
+	async apiSend(data, channel) {
+		if (!data || !channel) throw new Error("Missing parameters.");
 
 		let foundChannel;
 		try {
@@ -14,8 +14,13 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 			data: {},
 		};
 
-		if (typeof content === "object") toSendData.data = content;
-		else toSendData.data.content = content;
+		if (typeof content === "object" && data.hasOwnProperty("data")) {
+			toSendData.data = data.content;
+		} else if (typeof content === "object") {
+			toSendData.data.content = data;
+		} else {
+			toSendData.data.content = data;
+		}
 
 		return this.api.channels(channel).messages.post(toSendData);
 	}
