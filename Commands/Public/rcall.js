@@ -5,6 +5,9 @@ module.exports = async(client, msg, suffix) => {
 	let phonebook = await r.table("Phonebook");
 	if (!phonebook[0]) return msg.channel.send({ embed: { color: config.colors.error, title: "Empty book", description: "Seemingly you're using a budget version of the Yellow Pages, there's no numbers in sight!" } });
 
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
+	if (cooldown && cooldown.time > Date.now() && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
+
 	let toDial,
 		toCall = false,
 		inCall,
