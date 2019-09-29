@@ -23,7 +23,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 		let attachment = msg.attachments.first();
 		embed = new MessageEmbed()
 			.setColor(config.colors.info)
-			.setAuthor(hidden ? "Anonymous" : msg.author.tag, hidden ? null : msg.author.displayAvatarURL())
+			.setAuthor(hidden ? "Anonymous" : msg.author.tag)
 			.setTitle("Attachment")
 			.setImage(attachment.url)
 			.setFooter(attachment.name || "")
