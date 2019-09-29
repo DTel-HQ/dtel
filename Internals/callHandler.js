@@ -16,14 +16,12 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
 
 	if (msg.attachments.first()) {
-		let attachments = msg.attachments.array();
+		let attachment = msg.attachments.first();
 		embed = new MessageEmbed()
 			.setColor(config.colors.info)
 			.setTitle("Attachments")
-			.attachFiles(attachments);
+			.setImage(attachment);
 	}
-
-	console.log(embed._apiTransform());
 
 	try {
 		await client.api.channels(toSend).get();
