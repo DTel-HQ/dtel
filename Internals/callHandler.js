@@ -11,7 +11,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
-	let attachments = msg.attachments.array();
+	let attachments = msg.attachments.first() ? msg.attachments.array().map(a => `\n${a.name ? `${a.name} - ` : ""}${a.url}`).join("") : null;
 
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
 
@@ -28,7 +28,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
 
 	// send the msg
-	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? `(${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}${attachments ? attachments : ""}` };
 	let sent = await client.apiSend(content, toSend);
 
 	let msgDoc = {
