@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);
-	let omsg = false,
+	let omsg,
 		collected,
 		collector;
 
@@ -171,7 +171,7 @@ module.exports = async(client, msg, suffix) => {
 			let responses = perm ? ["edit", "clear", "delete"] : [];
 
 			// Edit existing message or send a new one
-			omsg = omsg ? await omsg.edit({ embed: embed }).catch(async() => { omsg = await msg.channel.send({ embed: embed }); }) : await msg.channel.send({ embed: embed });
+			omsg ? await omsg.edit({ embed: embed }) : omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
@@ -199,7 +199,7 @@ module.exports = async(client, msg, suffix) => {
 						.setTitle("Deleting messages")
 						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
-					omsg = await omsg.edit({ embed: embed });
+					await omsg.edit({ embed: embed });
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
@@ -229,7 +229,7 @@ module.exports = async(client, msg, suffix) => {
 						.setTitle("Deleting mailbox")
 						.setDescription("Are you sure you want to delete the mailbox? Stored messages will become **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
-					omsg = await omsg.edit({ embed: embed });
+					await omsg.edit({ embed: embed });
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
@@ -259,7 +259,7 @@ module.exports = async(client, msg, suffix) => {
 						.setTitle("Editing autoreply")
 						.setDescription("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)")
 						.setFooter("Press (0) to hangup. This call will automatically be hung up after 3 minutes.");
-					omsg = await omsg.edit({ embed: embed });
+					await omsg.edit({ embed: embed });
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length <= 100,
@@ -311,7 +311,7 @@ module.exports = async(client, msg, suffix) => {
 				.addField(`ID \`${message.id}\` from ${message.number}`, `${message.message}\n${date}`)
 				.setFooter("Press (0) to hangup, (9) to go back. This call will automatically be hung up after 2 minutes of inactivity.");
 
-			omsg = await omsg.edit({ embed: embed }).catch(async() => { omsg = await msg.channel.send({ embed: embed }); });
+			await omsg.edit({ embed: embed });
 
 			let responses = perm ? ["report", "delete"] : ["report"];
 
