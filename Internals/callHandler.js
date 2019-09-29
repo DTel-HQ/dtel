@@ -1,6 +1,8 @@
-const { MessageAttachment, APIMessage } = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports = async(cmd, msg, suffix, call) => {
+	let embed = null;
+
 	if (!call.pickedUp || call.hold || (!msg.content && !msg.attachments.first())) return;
 	call.lastMessage = new Date().getTime();
 	await r.table("Calls").get(call.id).update(call);
@@ -11,9 +13,15 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
-	let attachments = msg.attachments.first() ? msg.attachments.array().map(a => `\n${a.name ? `${a.name} - ` : ""}${a.url}`).join("") : null;
-
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
+
+	if (msg.attachments.first()) {
+		let attachments = msg.attachments.array();
+		embed = new MessageEmbed()
+			.setColor(config.colors.info)
+			.setTitle("Attachments")
+			.attachFiles(attachments);
+	}
 
 	try {
 		await client.api.channels(toSend).get();
@@ -28,8 +36,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let hidden = call.from.channel == msg.channel.id ? call.from.hidden : call.to.hidden;
 
 	// send the msg
-	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}${attachments ? attachments : ""}` };
-	let sent = await client.apiSend(content, toSend);
+	let content = { content: `**${toSend == config.supportChannel ? msg.author.tag : hidden && toSend != config.supportChannel ? "Anonymous" : msg.author.tag}${toSend === config.supportChannel ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
