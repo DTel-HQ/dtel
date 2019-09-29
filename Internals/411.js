@@ -54,10 +54,7 @@ module.exports = async(msg, myNumber) => {
 		embed.addField("Options", `Enter a page number or query (minimum of three characters) to search for.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
 
 		// Edit/send message
-		omsg = await omsg.edit({ embed: embed }).catch(async e => {
-			omsg.delete().catch(_ => null);
-			omsg = await msg.channel.send({ embed: embed });
-		});
+		await omsg.edit({ embed: embed });
 
 		// Collector
 		collected = (await msg.channel.awaitMessages(
@@ -101,14 +98,7 @@ module.exports = async(msg, myNumber) => {
 		if (message) embed.setDescription(`✅ ${message}`);
 		message = null;
 
-		if (omsg) {
-			omsg = await omsg.edit({ embed: embed }).catch(async e => {
-				omsg.delete().catch(_ => null);
-				omsg = await msg.channel.send({ embed: embed });
-			});
-		} else {
-			omsg = await msg.channel.send({ embed: embed });
-		}
+		await omsg.edit({ embed: embed });
 
 		myNumber = await msg.channel.number;
 		// Create collector & make busy
@@ -161,10 +151,7 @@ module.exports = async(msg, myNumber) => {
 				}
 
 				// Edit/send message
-				omsg = await omsg.edit({ embed: embed }).catch(e => {
-					omsg.delete().catch(_ => null);
-					msg.channel.send({ embed: embed });
-				});
+				await omsg.edit({ embed: embed });
 
 				// Collect a number
 				collected = (await msg.channel.awaitMessages(
@@ -203,10 +190,7 @@ module.exports = async(msg, myNumber) => {
 				else embed.setDescription("Please input a description for your number.\nThis will be the description publicly available in the yellowbook so please refrain from using any bad language.\n\n(min 10, max 200 characters)");
 
 				// edit/send message
-				omsg = await omsg.edit({ embed: embed }).catch(async e => {
-					omsg.delete().catch(_ => null);
-					omsg = await msg.channel.send({ embed: embed });
-				});
+				await omsg.edit({ embed: embed });
 
 				// add collector
 				collected = (await msg.channel.awaitMessages(
@@ -248,10 +232,7 @@ module.exports = async(msg, myNumber) => {
 					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 60 seconds of inactivity.");
 
 				// edit/send message
-				omsg = await omsg.edit({ embed: embed }).catch(async e => {
-					omsg.delete().catch(_ => null);
-					omsg = await msg.channel.send({ embed: embed });
-				});
+				await omsg.edit({ embed: embed });
 
 				collected = (await msg.channel.awaitMessages(
 					m => m.author.id === msg.author.id && /^[09]$/.test(m.content),
@@ -284,10 +265,7 @@ module.exports = async(msg, myNumber) => {
 					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
 
 				// edit/send message
-				omsg = await omsg.edit({ embed: embed }).catch(async e => {
-					omsg.delete().catch(_ => null);
-					omsg = await msg.channel.send({ embed: embed });
-				});
+				await omsg.edit({ embed: embed });
 
 				// Collector
 				collected = (await msg.channel.awaitMessages(
@@ -320,10 +298,7 @@ module.exports = async(msg, myNumber) => {
 							.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
 
 						// edit/send message
-						omsg = await omsg.edit({ embed: embed }).catch(async e => {
-							omsg.delete().catch(_ => null);
-							omsg = await msg.channel.send({ embed: embed });
-						});
+						await omsg.edit({ embed: embed });
 
 						// Collector
 						collected = (await msg.channel.awaitMessages(
