@@ -250,7 +250,7 @@ module.exports = async(msg, myNumber) => {
 
 			// Call CS
 			case "4": {
-				await omsg.edit({ embed: { color: config.colors.info, title: "Call *611", description: "Attempting to call Customer Support now.", author: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
+				await omsg.edit({ embed: { color: config.colors.info, title: "Please wait", description: "Attempting to call Customer Support now.", author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 				return (await reload("./Commands/Public/call.js"))(client, msg, "*611");
 			}
 
