@@ -172,7 +172,7 @@ module.exports = async(client, msg, suffix) => {
 
 		let editField = async nr => {
 			sEmbed.setTitle(`Editing title`)
-				.setDescription(`Enter a short title for this feature. (min 5, max 25 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress._" : ""}`)
+				.setDescription(`Enter a short title for this feature. (min 5, max 25 characters)\n\n_Please note that any explicit content will result in a strike/blacklist._${setup ? " \nQuitting during the setup will reset your progress." : ""}`)
 				.setFooter("(0) to quit. This menu will expire in 3 minutes")
 				.setTimestamp(new Date());
 
@@ -186,6 +186,7 @@ module.exports = async(client, msg, suffix) => {
 				{ max: 1, time: 180000 }
 			)).first();
 
+			if (collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
 				omsg.delete().catch(e => null);
 				msg.author.busy = false;
@@ -195,7 +196,7 @@ module.exports = async(client, msg, suffix) => {
 			embed[`field${nr}`].title = collected.content;
 
 			sEmbed.setTitle(`Editing description`)
-				.setDescription(`Enter a description of this feature. (min 20, max 150 characters)\n\n_Please note that any explicit content will result in a strike/blacklist.${setup ? " \nQuitting during the setup will reset your progress." : ""}`)
+				.setDescription(`Enter a description of this feature. (min 20, max 150 characters)\n\n_Please note that any explicit content will result in a strike/blacklist._${setup ? " \nQuitting during the setup will reset your progress." : ""}`)
 				.setFooter("(0) to quit. This menu will expire in 5 minutes")
 				.setTimestamp(new Date());
 
