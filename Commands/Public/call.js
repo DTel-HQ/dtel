@@ -162,7 +162,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 	// This one-lining should honestly stop.
 	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\``, description: `${csCall ? "" : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`, footer: { text: callDoc.id } } });
-	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : myNumber.channel : myNumber.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel : toDialDoc.channel}\` has been established by ${msg.author.tag} (${msg.author.id}). ${callDoc.id}`);
+	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip && myNumber.vip.hidden ? "hidden" : myNumber.channel} → ${toDialvip && toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel}\` has been established by ${myNumbervip && myNumber.vip.hidden ? "hidden" : msg.author.tag} (${myNumbervip && myNumber.vip.hidden ? "hidden" : msg.author.id}). ${callDoc.id}`);
 	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: callDoc.from.vip ? config.colors.vip : config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === config.supportNumber ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "Hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: callDoc.id } } }, toDialDoc.channel);
 
 	// But what if they don't pick up? :thinking:
@@ -173,7 +173,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		if (!newCallDoc || newCallDoc.pickedUp) return;
 
 		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)" }, footer: { text: callDoc.id } }, callDoc.to.channel);
-		client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up. ${callDoc.id}`);
+		client.log(`:negative_squared_cross_mark: ${rcall ? "rcall" : "Call"} \`${myNumbervip ? myNumber.vip.hidden ? "hidden" : callDoc.from.channel : callDoc.from.channel} → ${toDialvip ? toDialDoc.vip.hidden ? "hidden" : callDoc.to.channel : callDoc.to.channel}\` was not picked up. ${callDoc.id}`);
 		await r.table("Calls").get(callDoc.id).delete();
 		await r.table("OldCalls").insert(callDoc);
 
