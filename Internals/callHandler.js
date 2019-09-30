@@ -10,14 +10,19 @@ module.exports = async(cmd, msg, suffix, call) => {
 	const perms = await msg.author.getPerms();
 	let fromvip = msg.channel.id === call.from.channel ? call.from.vip : call.to.vip;
 
-	let phone = config.callPhones.default;
-	if (fromvip) phone = config.callPhones.donator;
-	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+	// get tosend channel
 	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
 	let toSendSupport = toSend === config.supportChannel;
 
 	// Send hidden?
 	let hidden = toSendSupport ? call.from.channel === msg.channel.id ? call.from.hidden : call.to.hidden : false;
+
+	// get right phone
+	let phone = config.callPhones.default;
+	if (!hidden) {
+		if (fromvip) phone = config.callPhones.donator;
+		for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+	}
 
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
@@ -40,7 +45,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	}
 
 	// send the msg
-	if (msg.content) content = { content: `**${hidden ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	if (msg.content) content = { content: `**${hidden && !toSendSupport ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
