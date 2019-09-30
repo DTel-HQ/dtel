@@ -19,10 +19,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	// get right phone
 	let phone = config.callPhones.default;
-	if (!hidden) {
-		if (fromvip) phone = config.callPhones.donator;
-		for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
-	}
+	if (fromvip) phone = config.callPhones.donator;
+	if (!hidden) for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
