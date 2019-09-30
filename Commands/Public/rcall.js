@@ -23,7 +23,7 @@ module.exports = async(client, msg, suffix) => {
 		let call = await r.table("Calls").getAll(toDial.id, { index: "fromChannel" }).nth(0).default(null);
 		if (!call) call = await r.table("Calls").getAll(toDial.id, { index: "toChannel" }).nth(0).default(null);
 		let channel = await client.api.channels(toDial.channel).get().catch(e => null);
-		if (fromNumber.id == toDial.id || call || (channel && channel.guild_id === msg.guild.id)) {
+		if (fromNumber.id == toDial.id || call || (msg.guild && channel && channel.guild_id === msg.guild.id)) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
 		}
