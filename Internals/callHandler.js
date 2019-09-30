@@ -11,11 +11,12 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let fromvip = msg.channel.id === call.from.channel ? call.from.vip : call.to.vip;
 
 	// get tosend channel
-	let toSend = msg.channel.id === call.from.channel ? call.to.channel : call.from.channel;
-	let toSendSupport = toSend === config.supportChannel;
+	let fromSend = msg.channel.id === call.from.channel ? call.from : call.to;
+	let toSend = msg.channel.id === call.from.channel ? call.to : call.from;
+	let toSendSupport = toSend.channel === config.supportChannel;
 
 	// Send hidden?
-	let hidden = toSendSupport ? call.from.channel === msg.channel.id ? call.from.hidden : call.to.hidden : false;
+	let hidden = toSendSupport ? false : fromSend.hidden;
 
 	// get right phone
 	let phone = config.callPhones.default;
@@ -39,11 +40,11 @@ module.exports = async(cmd, msg, suffix, call) => {
 		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", msg.channel.id);
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
-		return client.delete(msg.channel.id === call.from.channel ? call.to.number : call.from.number);
+		return client.delete(toSend.number);
 	}
 
 	// send the msg
-	if (msg.content) content = `**${hidden && !toSendSupport ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
+	if (msg.content) content = `**${hidden ? "Anonymous#0000" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
