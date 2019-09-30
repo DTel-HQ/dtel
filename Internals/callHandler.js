@@ -43,7 +43,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	}
 
 	// send the msg
-	if (msg.content) content = { content: `**${hidden && !toSendSupport ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}` };
+	if (msg.content) content = `**${hidden && !toSendSupport ? "Anonymous" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
 
 	let msgDoc = {
