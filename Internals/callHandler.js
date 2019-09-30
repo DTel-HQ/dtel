@@ -7,12 +7,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 	call.lastMessage = new Date().getTime();
 	await r.table("Calls").get(call.id).update(call);
 
-	console.log("1")
-
 	const perms = await msg.author.getPerms();
 	let fromvip = msg.channel.id === call.from.channel ? call.from.vip : call.to.vip;
-
-	console.log("2")
 
 	// get tosend channel
 	let fromSend = msg.channel.id === call.from.channel ? call.from : call.to;
@@ -27,8 +23,6 @@ module.exports = async(cmd, msg, suffix, call) => {
 	if (fromvip) phone = config.callPhones.donator;
 	if (!hidden) for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
-	console.log("3")
-
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
 		embed = new MessageEmbed()
@@ -40,8 +34,6 @@ module.exports = async(cmd, msg, suffix, call) => {
 			._apiTransform();
 	}
 
-	console.log("4")
-
 	try {
 		await client.api.channels(toSend.channel).get();
 	} catch (_) {
@@ -51,13 +43,9 @@ module.exports = async(cmd, msg, suffix, call) => {
 		return client.delete(toSend.number);
 	}
 
-	console.log("5")
-
 	// send the msg
 	if (msg.content) content = `**${hidden ? "Anonymous#0000" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
-	let sent = await client.apiSend({ content: content, embed: embed }, toSend);
-
-	console.log("6")
+	let sent = await client.apiSend({ content: content, embed: embed }, toSend.channel);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
