@@ -45,5 +45,5 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	omsg.edit({ embed: { color: config.colors.info, title: "Found a number!", description: "Attempting to call them now..." } }).catch(e => null);
-	require("./call.js")(client, msg, toCall, true);
+	(await reload("./Commands/Public/call.js"))(client, msg, toCall, true);
 };
