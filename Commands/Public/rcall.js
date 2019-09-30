@@ -28,6 +28,10 @@ module.exports = async(client, msg, suffix) => {
 			continue;
 		}
 		toDialDoc = await r.table("Numbers").get(toDial.id);
+		if (!toDialDoc) {
+			client.delete(toDial.id);
+			continue;
+		}
 		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) {
 			phonebook.splice(phonebook.indexOf(toDial), 1);
 			continue;
