@@ -20,11 +20,11 @@ module.exports = async msg => {
 		msg.channel.number = (() => r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(false))();
 	}
 	if (msg.channel.number && msg.channel.call === undefined) {
-		msg.channel.call = (async() => {
+		msg.channel.call = async() => {
 			let call = await r.table("Calls").getAll(msg.channel.id, { index: "fromChannel" }).nth(0).default(null);
 			if (!call) call = await r.table("Calls").getAll(msg.channel.id, { index: "toChannel" }).nth(0).default(null);
 			return call;
-		})();
+		};
 	}
 
 	// Check for call
