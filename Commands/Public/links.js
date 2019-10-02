@@ -55,11 +55,6 @@ module.exports = async(client, msg, suffix) => {
 					value: `[Apply now!](${config.applyLink})`,
 					inline: true,
 				},
-				{
-					name: "\u200b",
-					value: "\u200b",
-					inline: true,
-				},
 			],
 			timestamp: new Date(),
 			footer: {
