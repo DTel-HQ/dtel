@@ -4,6 +4,8 @@ module.exports = async(omsg, nmsg) => {
 	if (!call || !call.pickedUp || call.hold || !nmsg.content) return;
 
 	let perms = await nmsg.author.getPerms();
+	let prefix = nmsg.content.startsWith(client.user) ? `${client.user} ` : nmsg.content.startsWith(config.prefix) ? config.prefix : nmsg.author.prefix || config.prefix;
+	if (nmsg.content.startsWith(prefix)) return;
 
 	// Get the channel to edit in
 	let editChannel = call.to.channel === nmsg.channel.id ? call.from.channel : call.to.channel;
