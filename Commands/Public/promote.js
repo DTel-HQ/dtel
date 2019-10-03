@@ -283,7 +283,7 @@ module.exports = async(client, msg, suffix) => {
 			timestamp: new Date(),
 		};
 
-		if (preview) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
+		if (preview && !isvip) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
 
 		if (!explicit) {
 			if (msg.guild) pEmbed.thumbnail = { url: msg.guild.iconURL({ size: 1024 }) };
