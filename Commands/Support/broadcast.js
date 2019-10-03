@@ -1,10 +1,12 @@
 module.exports = async(client, msg, suffix) => {
 	// Get number with the channel
 	let input = suffix.split(" ")[0];
+	let number;
+
 	if (!input) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">broadcast [number/channelID] [message]" } });
-	if (!number) number = await r.table("Numbers").getAll(input, { index: "channel" }).nth(0).default(null);
+	number = await r.table("Numbers").getAll(input, { index: "channel" }).nth(0).default(null);
 	input = client.replaceNumber(input);
-	let number = await r.table("Numbers").get(input);
+	if (!number) number = await r.table("Numbers").get(input);
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't find that.", description: "Keep in mind you can only broadcast to channels with a number." } });
 
 	// Define the message and channel
