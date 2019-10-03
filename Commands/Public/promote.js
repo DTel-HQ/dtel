@@ -46,13 +46,13 @@ module.exports = async(client, msg, suffix) => {
 	// 		omsg = await msg.channel.send({ embed: sEmbed });
 	// 	});
 	//
-	// 	if (collected) collected.delete().catch(e => null);
+	// 	if (msg.guild && collected) collected.delete().catch(e => null);
 	// 	collected = (await msg.channel.awaitMessages(
 	// 		m => m.author.id === msg.author.id && ((m.content.length > 4 && m.content.length < 26) || /^0$/.test(m.content)),
 	// 		{ max: 1, time: 180000 }
 	// 	)).first();
 	//
-	// 	if (collected) collected.delete().catch(e => null);
+	// 	if (msg.guild && collected) collected.delete().catch(e => null);
 	// 	if (!collected || /^0$/.test(collected.content)) {
 	// 		pmsg.delete().catch(e => null);
 	// 		omsg.delete().catch(e => null);
@@ -78,13 +78,13 @@ module.exports = async(client, msg, suffix) => {
 			omsg = await msg.channel.send({ embed: sEmbed });
 		});
 
-		if (collected) collected.delete().catch(e => null);
+		if (msg.guild && collected) collected.delete().catch(e => null);
 		collected = (await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && ((m.content.length > 19 && m.content.length < 151) || /^0$/.test(m.content)),
 			{ max: 1, time: 300000 }
 		)).first();
 
-		if (collected) collected.delete().catch(e => null);
+		if (msg.guild && collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
@@ -116,7 +116,7 @@ module.exports = async(client, msg, suffix) => {
 			{ max: 1, time: 120000 }
 		)).first();
 
-		if (collected) collected.delete().catch(e => null);
+		if (msg.guild && collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content) || (!setup && /^skip$/i.test(collected.content))) {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
@@ -153,7 +153,7 @@ module.exports = async(client, msg, suffix) => {
 
 			sEmbed.spliceField(0, 1);
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content),
 				{ max: 1, time: 120000 }
@@ -180,13 +180,13 @@ module.exports = async(client, msg, suffix) => {
 				omsg = await msg.channel.send({ embed: sEmbed });
 			});
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && ((m.content.length > 4 && m.content.length < 26) || /^0$/.test(m.content)),
 				{ max: 1, time: 180000 }
 			)).first();
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
 				omsg.delete().catch(e => null);
 				msg.author.busy = false;
@@ -209,7 +209,7 @@ module.exports = async(client, msg, suffix) => {
 				{ max: 1, time: 300000 }
 			)).first();
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
@@ -328,7 +328,7 @@ module.exports = async(client, msg, suffix) => {
 		{ max: 1, time: 120000 }
 	)).first();
 
-	if (collected) collected.delete().catch(e => null);
+	if (msg.guild && collected) collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) {
 		omsg.delete().catch(e => null);
 		msg.author.busy = false;
@@ -354,9 +354,10 @@ module.exports = async(client, msg, suffix) => {
 				{ max: 1, time: 60000 }
 			)).first();
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			msg.author.busy = false;
 			if (!collected || /^0$/.test(collected.content)) {
+				msg.author.busy = false;
 				omsg.delete().catch(e => null);
 				return;
 			}
@@ -390,7 +391,7 @@ module.exports = async(client, msg, suffix) => {
 				{ max: 1, time: 60000 }
 			)).first();
 
-			if (collected) collected.delete().catch(e => null);
+			if (msg.guild && collected) collected.delete().catch(e => null);
 			msg.author.busy = false;
 			if (!collected || collected.content.toLowerCase() === "no") {
 				return omsg.delete().catch(e => null);
