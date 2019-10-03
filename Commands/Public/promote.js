@@ -54,10 +54,8 @@ module.exports = async(client, msg, suffix) => {
 	//
 	// 	if (msg.guild && collected) collected.delete().catch(e => null);
 	// 	if (!collected || /^0$/.test(collected.content)) {
-	//		if (msg.guild) {
-	// 		pmsg.delete().catch(e => null);
-	// 		omsg.delete().catch(e => null);
-	//		}
+	// 	pmsg.delete().catch(e => null);
+	// 	omsg.delete().catch(e => null);
 	// 		msg.author.busy = false;
 	//		return;
 	// 	}
@@ -88,10 +86,8 @@ module.exports = async(client, msg, suffix) => {
 
 		if (msg.guild && collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
-			if (msg.guild) {
-				pmsg.delete().catch(e => null);
-				omsg.delete().catch(e => null);
-			}
+			pmsg.delete().catch(e => null);
+			omsg.delete().catch(e => null);
 			msg.author.busy = false;
 			return;
 		}
@@ -122,10 +118,8 @@ module.exports = async(client, msg, suffix) => {
 
 		if (msg.guild && collected) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content) || (!setup && /^skip$/i.test(collected.content))) {
-			if (msg.guild) {
-				pmsg.delete().catch(e => null);
-				omsg.delete().catch(e => null);
-			}
+			pmsg.delete().catch(e => null);
+			omsg.delete().catch(e => null);
 			msg.author.busy = false;
 			return;
 		}
@@ -166,10 +160,9 @@ module.exports = async(client, msg, suffix) => {
 			)).first();
 
 			if (!collected || /^0$/.test(collected.content)) {
-				if (msg.guild) {
-					pmsg.delete().catch(e => null);
-					omsg.delete().catch(e => null);
-				}
+				pmsg.delete().catch(e => null);
+				omsg.delete().catch(e => null);
+
 				msg.author.busy = false;
 				return;
 			}
@@ -196,9 +189,7 @@ module.exports = async(client, msg, suffix) => {
 
 			if (msg.guild && collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
-				if (msg.guild) {
-					omsg.delete().catch(e => null);
-				}
+				omsg.delete().catch(e => null);
 				msg.author.busy = false;
 				return;
 			}
@@ -221,10 +212,8 @@ module.exports = async(client, msg, suffix) => {
 
 			if (msg.guild && collected) collected.delete().catch(e => null);
 			if (!collected || /^0$/.test(collected.content)) {
-				if (msg.guild) {
-					pmsg.delete().catch(e => null);
-					omsg.delete().catch(e => null);
-				}
+				pmsg.delete().catch(e => null);
+				omsg.delete().catch(e => null);
 				msg.author.busy = false;
 				return;
 			}
@@ -342,9 +331,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (msg.guild && collected) collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) {
-		if (msg.guild) {
-			omsg.delete().catch(e => null);
-		}
+		omsg.delete().catch(e => null);
 		msg.author.busy = false;
 		return;
 	}
@@ -391,10 +378,8 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		case "3": {
-			if (msg.guild) {
-				pmsg.delete().catch(e => null);
-				omsg.delete().catch(e => null);
-			}
+			pmsg.delete().catch(e => null);
+			omsg.delete().catch(e => null);
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Unfinished feature", description: "Please use (1) for now." } });
 		}
