@@ -58,7 +58,10 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "Wizard expired. Please run `>wizard` again when you have a number ready." } });
 		}
-		if (collected.content == "0") return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
+		if (collected.content == "0") {
+			msg.author.busy = false;
+			return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
+		}
 
 		number = await client.replaceNumber(collected.content);
 
@@ -108,7 +111,10 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.info, title: "Timed out", description: "Wizard timed out. Please call `*411` if you want to set a phonebook description." } });
 		}
-		if (collected.content.startsWith(config.prefix))	return;
+		if (collected.content.startsWith(config.prefix)) {
+			msg.author.busy = false;
+			return;
+		}
 		if (collected.content === "skip") {
 			return embedSender();
 		} else {
