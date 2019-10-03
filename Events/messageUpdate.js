@@ -7,6 +7,7 @@ module.exports = async(omsg, nmsg) => {
 
 	// Get the channel to edit in
 	let editChannel = call.to.channel === nmsg.channel.id ? call.from.channel : call.to.channel;
+	let fromSide = call.to.channel === nmsg.channel.id ? call.to : call.from;
 	try {
 		await client.api.channels(editChannel).get();
 	} catch (_) {
@@ -22,6 +23,8 @@ module.exports = async(omsg, nmsg) => {
 
 	let phone = config.callPhones.default;
 	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+
+	let hidden = fromSide.hidden;
 
 	let toCSChannel = editChannel === config.supportChannel;
 	let toSend = `**${nmsg.author.tag}${toCSChannel ? `(${nmsg.author.id})` : ""}[edited]** ${phone} ${nmsg.content}`;
