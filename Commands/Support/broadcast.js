@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 
 	try {
 		await client.apiSend({ embed: { color: config.colors.error, title: "❕ Message from DiscordTel staff ❕", description: message.join(" ") } }, channel);
-		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `Message: ${message.join(" ")}\nChannel: ${number.channel}`, author: { name: `By ${msg.author.id}`, icon_url: msg.author.displayAvatarURL() } } });
+		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `**• Message**: ${message.join(" ")}\n**• Channel**: ${number.channel}`, author: { name: `By ${msg.author.tag}`, icon_url: msg.author.displayAvatarURL() } } });
 	} catch (err) {
 		await r.table("Numbers").get(number.id).delete();
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't send a message.", description: "The number has now been deleted." } });
