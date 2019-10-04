@@ -223,9 +223,8 @@ scheduleJob("0 10 0 * * *", async() => {
 	// start deleting after 2 days, 5 day buffer to ensure none accidentally left.
 	let beginDate = new Date().setDate(date.getDate() - 7);
 	let endDate = new Date().setDate(date.getDate() - 2);
-	let messages = "Deleted";
 
-	let result = await r.table("OldCalls").between(new Date(beginDate), new Date(endDate), { index: "startedAt" }).update({ messages: messages });
+	let result = await r.table("OldCalls").between(new Date(beginDate), new Date(endDate), { index: "startedAt" }).replace(r.row.without("messages"));
 
 	client.log(`📖 Cleared messages of ${result.replaced} numbers.`);
 });
