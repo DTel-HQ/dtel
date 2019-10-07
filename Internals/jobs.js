@@ -34,10 +34,10 @@ scheduleJob("0 0 0 * * *", async() => {
 
 		await r.table("Accounts").get(winnerID).update({ balance: balance });
 		let user = await client.users.fetch(winnerID);
-		user.send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } })
+		(await user.createDM()).send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } })
 			.catch(async _ => {
 				let channel = await client.api.channels(lastEntry.channel).get();
-				if (!channel || channel.type != "text") return;
+				if (!channel || channel.type != 0) return;
 				channel.send(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } });
 			});
 	}
