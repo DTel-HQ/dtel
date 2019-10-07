@@ -28,6 +28,7 @@ module.exports = async(client, msg, suffix) => {
 	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
 	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
 	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
+	const guildWhitelisted = guild ? await r.table("Whitelist").get(guild.id) : false;
 
 
 	const embed = new MessageEmbed()
@@ -37,7 +38,7 @@ module.exports = async(client, msg, suffix) => {
 		.setDescription("Here you can find all information relevant to this number")
 		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === 1 ? "DM Channel" : channel.name}\nDM: ${channel.type === 1 ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
-		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}` : "DM Number", true)
+		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}\nWhitelisted: ${guildWhitelisted ? "True" : "False"}` : "DM Number", true)
 		.addField("Created, expiry", `• ${number.createdAt}\n• ${new Date(number.expiry)}`, true)
 		.addField("Blocked", number.blocked && number.blocked.length ? number.blocked.join(", ") : "None", true)
 		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length ? strikes.map(s => `${strikes.indexOf(s) + 1}. \`${s.id}\`: ${s.reason}`).join("\n") : "None");
