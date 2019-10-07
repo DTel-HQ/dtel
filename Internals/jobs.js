@@ -37,8 +37,9 @@ scheduleJob("0 0 0 * * *", async() => {
 		(await user.createDM()).send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } })
 			.catch(async _ => {
 				let channel = await client.api.channels(lastEntry.channel).get();
-				if (!channel || channel.type != 0) return;
-				channel.send(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } });
+				if (!channel) return;
+				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } }, channel.id)
+					.catch(e => null);
 			});
 	}
 
