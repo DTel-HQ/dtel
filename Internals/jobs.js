@@ -157,7 +157,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	for (let number of numbers) {
 		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
-			await client.delete(number, { force: true, stopLog: true });
+			await client.delete(number, { force: true, log: false });
 			deleted.push(number);
 			break;
 		}
@@ -174,7 +174,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		let expiryMS = new Date(number.expiry).getTime();
 
 		if (expiryMS < deleteMS) {
-			await client.delete(number, true);
+			await client.delete(number, { force: true, log: false });
 			deleted.push(number);
 
 			otitle = `Your number has been deleted`;
