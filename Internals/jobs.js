@@ -218,7 +218,7 @@ scheduleJob("0 0 0 * * *", async() => {
 });
 
 // Job to delete stored messages of calls.
-scheduleJob("0 10 0 * * *", async() => {
+scheduleJob("0 0 0 * * *", async() => {
 	let date = new Date();
 
 	// start deleting after 2 days, 5 day buffer to ensure none accidentally left.
