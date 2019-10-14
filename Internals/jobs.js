@@ -173,6 +173,8 @@ scheduleJob("0 0 0 * * *", async() => {
 
 		let expiryMS = new Date(number.expiry).getTime();
 
+		// First check wether number isn't (>15d) expired - then warn/delete.
+		if (expiryMS > warnMS) continue;
 		if (expiryMS < deleteMS) {
 			await client.delete(number, { force: true, log: false });
 			deleted.push(number);
@@ -191,8 +193,6 @@ scheduleJob("0 0 0 * * *", async() => {
 			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `❕This number will be deleted in 24h❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
-		} else {
-			continue;
 		}
 
 		embed.setTitle(ctitle)
@@ -204,6 +204,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		if (owner) await (await client.users.fetch(owner)).send({ embed: embed }).catch(e => null);
 	}
 
+	// someone switch package for this
 	let haste;
 	try {
 		haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${JSON.stringify(deleted)}`);
