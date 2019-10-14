@@ -68,7 +68,9 @@ module.exports = async msg => {
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
 			await cmdFile(client, msg, suffix, call);
+			msg.author.busy = false;
 		} catch (err) {
+			msg.author.busy = false;
 			msg.channel.send({
 				embed: {
 					color: config.colors.error,
