@@ -37,7 +37,7 @@ module.exports = async(client, msg, suffix) => {
 	let neg = amount.startsWith("-");
 	amount = Number(amount);
 
-	let account = await user.account;
+	let account = await user.account();
 
 	account.balance += amount;
 

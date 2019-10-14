@@ -1,6 +1,6 @@
 module.exports = async(client, msg, suffix) => {
 	if (!msg.author.support || !suffix) {
-		let account = await msg.author.account;
+		let account = await msg.author.account();
 
 		msg.channel.send({
 			embed: {

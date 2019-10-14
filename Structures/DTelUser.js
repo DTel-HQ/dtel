@@ -18,19 +18,15 @@ module.exports = Discord => {
 			async init() {
 				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
 				this.blacklisted = !!blacklisted;
-
-				let account = await this.account;
+				let account = await this.account();
 				if (account.prefix) this.prefix = account.prefix;
 				return true;
 			}
 
-			get account() {
+			account(insert) {
 				return (async() => {
-					let account = await r.table("Accounts").get(this.id);
-					if (!account) {
-						account = { id: this.id, balance: 0 };
-						await r.table("Accounts").insert(account);
-					}
+					let account = await r.table("Accounts").get(this.id).default({ id: this.id, balance: 0, template: true });
+					if (account.template && insert) await r.table("Accounts").insert(account);
 					return account;
 				})();
 			}

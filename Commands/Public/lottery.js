@@ -2,7 +2,7 @@ module.exports = async(client, msg, suffix) => {
 	let lottery = await r.table("Lottery");
 
 	// Check if they have an account
-	let account = await msg.author.account;
+	let account = await msg.author.account();
 
 	let id, jackpot, currentNumber, index, totalEntries, lastEntry;
 
@@ -52,7 +52,7 @@ module.exports = async(client, msg, suffix) => {
 	} else if (/^\d+$/.test(suffix) && !/^0.*/.test(suffix)) {
 		let tickets = Number(suffix);
 		let cost = tickets * config.lotteryCost;
-		account = await msg.author.account;
+		account = await msg.author.account();
 		let balance = account.balance;
 		if (cost > balance) {
 			msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: "This isn't a charity, get enough money first." } });

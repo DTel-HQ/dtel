@@ -4,6 +4,7 @@ module.exports = async msg => {
 	if (!msg.author.loadedPerms) await msg.author.setPerms();
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
+	// Check if the bot is allowed to send messages
 	let channelPerms;
 	if (msg.guild && !config.maintainers.includes(msg.author.id)) {
 		channelPerms = msg.channel.permissionsFor(config.botID);
@@ -13,9 +14,10 @@ module.exports = async msg => {
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
-	const account = await msg.author.account,
+	const account = await msg.author.account(),
 		prefix = msg.content.startsWith(client.user) ? `${client.user} ` : msg.content.startsWith(config.prefix) ? config.prefix : account.prefix || config.prefix;
 
+	// Extends unextended channels
 	if (msg.channel.number === undefined) {
 		msg.channel.number = (() => r.table("Numbers").getAll(msg.channel.id, { index: "channel" }).nth(0).default(false))();
 	}
@@ -64,9 +66,12 @@ module.exports = async msg => {
 	if (!msg.author.support && !msg.author.donator) msg.author.cooldown = "default";
 	// Run the command
 	if (cmdFile) {
+		// first check if the bot can send embeds
 		if (msg.guild && !config.maintainers.includes(msg.author.id) && !channelPerms.includes("EMBED_LINKS")) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
+			// If the user doesn't have an account
+			if (account.template) await msg.author.account(true);
 			await cmdFile(client, msg, suffix, call);
 			msg.author.busy = false;
 		} catch (err) {

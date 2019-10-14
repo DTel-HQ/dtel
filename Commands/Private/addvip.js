@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!user || !months || months === 0) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">addvip [user] [months]" } });
 	if (!Number(months)) return msg.channel.send({ embed: { color: config.colors.error, title: "Wrong usage", description: "Months needs to be a number" } });
 
-	let account = await user.account;
+	let account = await user.account();
 	let added = Number(months) > 0;
 
 	if (account.vip && account.vip + Number(months) < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "Negative amount of months", description: `Their current amount of months (${account.vip}) plus ${Number(months)} would result in ${account.vip + Number(months)}` } });

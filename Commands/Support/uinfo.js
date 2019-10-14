@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 	let dmNumber;
 	if (dmChannel) dmNumber = await r.table("Numbers").getAll(dmChannel.id, { index: "channel" });
 	const strikes = await r.table("Strikes").getAll(user.id, { index: "offender" }).nth(0).default([]);
-	let account = await user.account;
+	let account = await user.account();
 	let blacklisted = user.blacklisted;
 
 	// Why not

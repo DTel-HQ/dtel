@@ -93,7 +93,7 @@ scheduleJob("*/5 * * * *", async() => {
 		}
 
 		// add amount
-		let account = await user.account;
+		let account = await user.account();
 		account.balance += t.amount;
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
@@ -127,7 +127,7 @@ scheduleJob("*/5 * * * *", async() => {
 		}
 
 		// save new balance
-		let account = await user.account;
+		let account = await user.account();
 		account.balance += votes[user.id];
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 

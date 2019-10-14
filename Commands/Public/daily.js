@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let account = await msg.author.account;
+	let account = await msg.author.account();
 
 	let d = new Date();
 	let h = 23 - d.getHours();

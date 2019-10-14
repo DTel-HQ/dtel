@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	amount = parseInt(amount);
 	currency = currency.toUpperCase();
 
-	let account = await msg.author.account;
+	let account = await msg.author.account();
 
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });

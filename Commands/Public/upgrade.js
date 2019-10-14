@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	let vipExpiry = number ? number.vip ? new Date(number.vip.expiry) : null : null;
 	let vipNumber = vipExpiry ? vipExpiry.getTime() > Date.now() : false;
 
-	let account = await msg.author.account;
+	let account = await msg.author.account();
 
 	// Send general embed based on variables
 	let embed = new MessageEmbed()
@@ -55,7 +55,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
 
 	// Check account change
-	let currAccount = await msg.author.account;
+	let currAccount = await msg.author.account();
 	if (currAccount.vip != account.vip) return msg.channel.send({ embed: { color: config.colors.error, title: "Account changed", description: "Your VIP Balance has changed, please try again." } });
 
 	// remove VIP Months

@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 	let number = await msg.channel.number;
 	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
 	msg.author.busy = true;
-	let account = await msg.author.account;
+	let account = await msg.author.account();
 	if (!number.promote) {
 		number.promote = { lastmsg: null, lastuser: null, lastPromoted: null, lastEdited: null, embed: { title: null, description: null, number: null, field1: { title: null, description: null, n: 1 }, field2: { title: null, description: null, n: 2 }, field3: { title: null, description: null, n: 3 } } };
 		await r.table("Numbers").get(number.id).update({ promote: number.promote });
