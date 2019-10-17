@@ -120,7 +120,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 				await r.table("Numbers").get(number.id).delete();
 				await r.table("Phonebook").get(number.id).delete();
 				await r.table("Mailbox").get(number.channel).delete();
-				if (log) client.log(`📕 Number ${number.id} has been automatically deassigned.`);
+				if (log) client.log(`📕 Number \`${number.id}\` has been automatically deassigned.`);
 			}
 		}, force ? 1000 : 600000);
 	}
