@@ -73,7 +73,7 @@ module.exports = async(msg, myNumber) => {
 		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
 		.addField("Number", myNumber.id, true)
 		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth() + 1}-${newExpiry.getFullYear()}`, true)
-		.addField("Your new balance", `¥${newBalance}`, true)
+		.addField("Your new balance", `¥${client.format(newBalance)}`, true)
 		.addField("Need to recharge?", config.paymentLink);
 	msg.channel.send("", { embed: embed });
 };
