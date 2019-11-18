@@ -89,6 +89,7 @@ module.exports = {
 		id: "identify",
 		link: "links",
 		mentions: "mention",
+		msg: "message",
 		perm: "permcheck",
 		promo: "promote",
 		wl: "whitelist",
