@@ -95,7 +95,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: msg.author.displayAvatarURL(),
 		},
 		title: "Success!",
-		description: "You succesfully payed money to someone else. Here is your receipt.",
+		description: "You succesfully gave money to someone else. Here is your receipt.",
 		fields: [
 			{
 				name: "User",
@@ -112,7 +112,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 	} });
-	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) payed ¥${amount} to ${user.tag} (${user.id})`);
+	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave ¥${amount} to ${user.tag} (${user.id})`);
 	user.send({ embed: {
 		color: config.colors.receipt,
 		author: {
@@ -120,7 +120,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: msg.author.displayAvatarURL(),
 		},
 		title: "You received money!",
-		description: "Someone has payed money to you. Here's your receipt.",
+		description: "Someone has given money to you. Here's your receipt.",
 		fields: [
 			{
 				name: "User",
