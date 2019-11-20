@@ -57,8 +57,12 @@ module.exports = async(client, msg, suffix) => {
 					value: "Sends a message to another mailbox.",
 				},
 				{
+					name: ">pay",
+					value: "Give money to another user for a fee.",
+				},
+				{
 					name: ">transfer",
-					value: "Transfer money to another user for a fee.\nAlso to transfer the other side in a call to another number.",
+					value: "Transfer the other side in a call to another number.",
 				},
 				{
 					name: ">upgrade",
