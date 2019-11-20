@@ -76,25 +76,6 @@ module.exports = {
 		vip: 0xffc61a, // gold
 	},
 
-	// Command aliases (keep it down or make new file)
-	aliasCommands: {
-		bal: "balance",
-		bc: "broadcast",
-		bl: "blacklist",
-		cmds: "help",
-		commands: "help",
-		contact: "contacts",
-		credits: "balance",
-		delstrike: "rmstrike",
-		id: "identify",
-		link: "links",
-		mentions: "mention",
-		msg: "message",
-		perm: "permcheck",
-		promo: "promote",
-		wl: "whitelist",
-	},
-
 	// Cooldown times (s) (This file is getting too big)
 	cooldowns: {
 		default: 5,
