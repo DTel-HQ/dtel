@@ -36,7 +36,7 @@ module.exports = async msg => {
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
 		.replace(/dial/g, "call");
-	if (config.aliasCommands[cmd]) cmd = config.aliasCommands[cmd];
+	if (aliases.aliasCommands[cmd]) cmd = aliases.aliasCommands[cmd];
 	const suffix = msg.content.split(" ").splice(1)
 		.join(" ")
 		.trim();
