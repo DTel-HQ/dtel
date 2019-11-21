@@ -1,6 +1,6 @@
 /* eslint-disable no-inline-comments */
 module.exports = {
-       	// Command aliases
+        // Command aliases
         aliasCommands: {
                 bal: "balance",
                 bc: "broadcast",
