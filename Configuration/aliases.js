@@ -9,7 +9,7 @@ module.exports = {
 		commands: "help",
 		contact: "contacts",
 		credits: "balance",
-		delstrike: "rmstrike",	
+		delstrike: "rmstrike",
 		id: "identify",
 		link: "links",
 		mentions: "mention",
