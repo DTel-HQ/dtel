@@ -19,6 +19,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 
 		if (typeof data === "object") toSendData.data = data;
 		else toSendData.data.content = data;
+		toSendData.data.mention_everyone = false;
 
 		return this.api.channels(channel).messages.post(toSendData);
 	}
