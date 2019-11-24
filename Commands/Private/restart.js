@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 		await client.apiSend(toSend, call.to.channel);
 	}
 
-	await client.user.setPresence({ activity: { name: \`Restarting\`, type: 0 } });
+	await client.user.setPresence({ activity: { name: "Restarting", type: 0 } });
 	await omsg.edit({ embed: { color: config.colors.info, title: "Restarting...", description: `This may take a while. Watch the bot's playing status for an update.\nWarned ${calls.length} calls.` } });
 
 	await client.shard.broadcastEval(`this.done = false`);
