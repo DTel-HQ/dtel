@@ -6,8 +6,12 @@ module.exports = async(client, msg, suffix) => {
 	let calls = await r.table("Calls");
 	let toSend = { embed: { color: config.colors.info, title: "Restarting", description: "The bot is restarting. Watch the bot's playing status for updates" } };
 	for (let call of calls) {
-		await client.apiSend(toSend, call.from.channel);
-		await client.apiSend(toSend, call.to.channel);
+		try {
+			await client.apiSend(toSend, call.from.channel);
+			await client.apiSend(toSend, call.to.channel);
+		} catch (e) {
+			// nothing;
+		}
 	}
 
 	await client.user.setPresence({ activity: { name: "Restarting", type: 0 } });
