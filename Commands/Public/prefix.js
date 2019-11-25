@@ -5,6 +5,7 @@ module.exports = async(client, msg, suffix) => {
 	let account = await msg.author.account();
 
 	if (suffix != config.prefix) {
+		msg.author.prefix = suffix;
 		await r.table("Accounts").get(account.id).update({ prefix: suffix });
 	} else {
 		delete account.prefix;
