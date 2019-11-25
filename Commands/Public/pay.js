@@ -6,9 +6,9 @@ module.exports = async(client, msg, suffix) => {
 	reason = reason.join(" ");
 
 	// Checks for user and amount
-	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: `>transfer [user] [amount] [optional: message]`" } });
+	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: `>pay [user] [amount] [optional: message]`" } });
 	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
-	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Transfers can only happen from ¥${config.minTransfer} and up.` } });
+	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Payments can only happen from ¥${config.minTransfer} and up.` } });
 
 	// The account from which the amount will be taken
 	let fromAccount = await r.table("Accounts").get(msg.author.id);
@@ -95,7 +95,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: msg.author.displayAvatarURL(),
 		},
 		title: "Success!",
-		description: "You succesfully transfered money. Here is your receipt.",
+		description: "You succesfully gave money to someone else. Here is your receipt.",
 		fields: [
 			{
 				name: "User",
@@ -112,7 +112,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 	} });
-	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) transferred ¥${amount} to ${user.tag} (${user.id})`);
+	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave ¥${amount} to ${user.tag} (${user.id})`);
 	user.send({ embed: {
 		color: config.colors.receipt,
 		author: {
@@ -120,7 +120,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: msg.author.displayAvatarURL(),
 		},
 		title: "You received money!",
-		description: "Someone has transferred money to you. Here's your receipt.",
+		description: "Someone gave money you. Here's your receipt.",
 		fields: [
 			{
 				name: "User",

@@ -4,6 +4,7 @@ const clear = require("clear-module");
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 const config = global.config = require("./Configuration/config.js");
+const aliases = global.aliases = require("./Configuration/aliases.js");
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
