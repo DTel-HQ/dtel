@@ -7,10 +7,10 @@ module.exports = async(client, msg, suffix) => {
 	if (suffix != config.prefix) {
 		await r.table("Accounts").get(account.id).update({ prefix: suffix });
 	} else {
-		delete account.prefix;
+		account = delete account.prefix;
 		await r.table("Accounts").get(account.id).replace(account);
 	}
 
-	if (suffix != config.prefix) return msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `Your custom (user) prefix is now \`${suffix}\`. You can still use \`${config.prefix}\`.`, footer: { text: `To get rid of your prefix, simply do >prefix ${config.prefix}` } } });
+	if (suffix != config.prefix) return msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `Your custom (user) prefix is now \`${suffix}\`. You can still use \`${config.prefix}\`.`, footer: { text: `To get rid of your prefix, simply do ${config.prefix}prefix ${config.prefix}` } } });
 	else return msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: "Your custom (user) prefix has been removed." } });
 };
