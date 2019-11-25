@@ -7,7 +7,8 @@ module.exports = async(client, msg, suffix) => {
 	if (suffix != config.prefix) {
 		await r.table("Accounts").get(account.id).update({ prefix: suffix });
 	} else {
-		account = delete account.prefix;
+		delete account.prefix;
+		delete msg.author.prefix;
 		await r.table("Accounts").get(account.id).replace(account);
 	}
 
