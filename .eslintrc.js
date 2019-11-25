@@ -11,6 +11,7 @@ module.exports = {
 		winston: true,
 		config: true,
 		client: true,
+		aliases: true,
 		r: true,
 		reload: true,
 	},
