@@ -77,7 +77,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 			let tt = times[t];
 			if (!tt) break;
 			tt = tt.toString().length === 2 ? tt : `0${tt}`;
-			string += `${tt}${suffix[t]}`;
+			string = `${string}${tt}${suffix[t]}`;
 		}
 
 		return string;
