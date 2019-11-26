@@ -72,7 +72,7 @@ module.exports = {
 		lottery: 0x80002a, // red
 		receipt: 0xe1e1e1, // white (duh)
 		success: 0x47d147, // green
-		yellowbook: 0xe6e600, // **yellow**book
+		yellowbook: 0xe6e600, // yellow
 		vip: 0xffc61a, // gold
 	},
 
