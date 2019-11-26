@@ -153,7 +153,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 			name: myNumbervip ? myNumber.vip.name : false,
 		},
 		startedAt: new Date(),
-		startedBy: msg.auhtor.id,
+		startedBy: msg.author.id,
 		rcall: !!rcall,
 	};
 	await r.table("Calls").insert(callDoc);
