@@ -12,6 +12,6 @@ module.exports = async(client, msg, suffix) => {
 		.addField("To", `**Number:** ${call.to.number}\n**Channel:** \`${call.to.channel}\`\n**Hidden:** ${call.to.hidden}\n**Custom name:** ${call.to.name}`, true)
 		.addField("General", `**Picked up:** ${call.pickedUp ? call.pickedUpBy || "true" : "false"}\n**Hung up:** ${!call.hungupBy && !call.pickedUpBy ? "Unknown" : call.hungupBy || "no one"}\n**Random call:** ${!!call.rcall}\n**Transferred by:** ${call.transferredBy ? `\`${call.transferredBy}\`` : "no one"}`)
 		.addField("Started at", call.startedAt)
-	        .addField("Started by", call.startedBy),
+		.addField("Started by", call.startedBy);
 	msg.channel.send({ embed: embed });
 };
