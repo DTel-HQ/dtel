@@ -55,6 +55,7 @@ module.exports = async(client, msg, suffix, call) => {
 			name: toNumbervip ? toDialDoc.vip.hidden : false,
 		},
 		startedAt: new Date(),
+		startedBy: call.startedBy,
 	};
 	await r.table("Calls").insert(newCall);
 
