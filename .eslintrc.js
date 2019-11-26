@@ -8,6 +8,7 @@ module.exports = {
 		node: true,
 	},
 	globals: {
+		aliases: true,
 		winston: true,
 		config: true,
 		client: true,
