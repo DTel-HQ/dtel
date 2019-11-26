@@ -31,7 +31,7 @@ module.exports = {
 	promoteCost: 250,
 	renewalRate: 500,
 	transferRate: 0.729,
-	minTransfer: 100,
+	minTransfer: 50,
 	maxNumbers: 3,
 	promoteTimeout: 7, // days
 
@@ -72,11 +72,11 @@ module.exports = {
 		lottery: 0x80002a, // red
 		receipt: 0xe1e1e1, // white (duh)
 		success: 0x47d147, // green
-		yellowbook: 0xe6e600, // yellow...
+		yellowbook: 0xe6e600, // yellow
 		vip: 0xffc61a, // gold
 	},
 
-	// Cooldown times (s) (This file is getting too big)
+	// Cooldown times (s)
 	cooldowns: {
 		default: 5,
 		call: 20,
