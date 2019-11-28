@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 		toDialDoc = await r.table("Numbers").get(toDial.id);
 		if (!toDialDoc) {
-			client.delete(toDial.id);
+			client.delete(toDial.id, { force: false, log: true, origin: "rcall_to" });
 			continue;
 		}
 		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) {

@@ -40,7 +40,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", msg.channel.id);
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
-		return client.delete(toSend.number);
+		return client.delete(toSend.number, { force: false, log: true, origin: "callHandler" });
 	}
 
 	// send the msg

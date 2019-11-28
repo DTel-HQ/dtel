@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix, call) => {
 		msg.channel.send({ embed: { color: config.colors.error, title: "Where'd they go?", description: "Couldn't find the other side. Please report this to `*611` as this may have been a troll call." } });
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
-		return client.delete(call.from.number);
+		return client.delete(call.from.number, { force: false, log: true, origin: "pickup_from" });
 	}
 
 	// Pickup - reply first or it'll seem slow
@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix, call) => {
 				client.apiSend(":x: The bot can no longer access the opposite side. Please report this by dialing `*611` as it could be a troll call.", call.to.channel);
 				await r.table("OldCalls").insert(call);
 				await r.table("Calls").get(call.id).delete();
-				return client.delete(call.from.number);
+				return client.delete(call.from.number, { force: false, log: true, origin: "pickup_afk_from" });
 			}
 			try {
 				await client.api.channels(call.to.channel).get();
@@ -40,7 +40,7 @@ module.exports = async(client, msg, suffix, call) => {
 				client.apiSend(":x: The bot can no longer access the opposite side. Please report this by dialing `*611` as it could be a troll call.", call.from.channel);
 				await r.table("OldCalls").insert(call);
 				await r.table("Calls").get(call.id).delete();
-				return client.delete(call.to.number);
+				return client.delete(call.to.number, { force: false, log: true, origin: "pickup_afk_to" });
 			}
 			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.from.channel);
 			client.apiSend(`:bulb: Reminder: You still have an ongoing call (${call.id}). You can type \`>hangup\` to end it.`, call.to.channel);

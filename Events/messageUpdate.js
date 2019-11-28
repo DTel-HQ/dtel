@@ -16,7 +16,7 @@ module.exports = async(omsg, nmsg) => {
 		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", nmsg.channel.id);
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
-		return client.delete(call.to.channel === nmsg.channel.id ? call.from.number : call.to.number);
+		return client.delete(call.to.channel === nmsg.channel.id ? call.from.number : call.to.number, { force: false, log: true, origin: "msgEdit" });
 	}
 
 	// Get the message to edit

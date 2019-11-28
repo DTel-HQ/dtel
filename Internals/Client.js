@@ -111,8 +111,18 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 
 	delete(number, settings) {
 		if (typeof settings != "object") settings = {};
-		let force = settings.force || false;
-		let log = settings.log || true;
+		let defSettings = {
+			force: false,
+			log: true,
+			origin: "unknown",
+		};
+
+		let keys = Object.keys(defSettings);
+		for (let i = 0; i < keys.length; i++) {
+			if (!settings[keys[i]]) settings[keys[i]] = defSettings[i];
+		}
+
+		let { force, log, origin } = settings;
 
 		setTimeout(async() => {
 			if (typeof number != "object") number = await r.table("Numbers").get(number);
@@ -124,7 +134,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 				await r.table("Numbers").get(number.id).delete();
 				await r.table("Phonebook").get(number.id).delete();
 				await r.table("Mailbox").get(number.channel).delete();
-				if (log) client.log(`📕 Number \`${number.id}\` has been automatically deassigned.`);
+				if (log) client.log(`📕 Number \`${number.id}\` has been automatically deassigned from ${origin}.`);
 			}
 		}, force ? 1000 : 600000);
 	}

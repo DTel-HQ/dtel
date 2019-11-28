@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 	// delete if needed
 	const channel = await client.api.channels(number.channel).get().catch(e => null);
 	if (!channel) {
-		await client.delete(number);
+		await client.delete(number, { force: false, log: true, origin: "ninfo" });
 		return msg.channel.send({ embed: { color: config.colors.info, title: `Deleting ${number.id}`, description: `Couldn't find the number's channels, it'll be deleted soon.`, timestamp: new Date() } });
 	}
 

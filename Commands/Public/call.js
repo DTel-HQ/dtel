@@ -41,7 +41,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		await client.api.channels(toDialDoc.channel).get();
 	} catch (_) {
 		msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server.${rcall ? "\nSending you back..." : ""}` } });
-		client.delete(toDialDoc.id);
+		client.delete(toDialDoc.id, { force: false, log: true, origin: "call_to" });
 		if (rcall) return (await reload("./Commands/Public/rcall.js"))(client, msg);
 		else return;
 	}

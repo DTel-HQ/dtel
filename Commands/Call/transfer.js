@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix, call) => {
 		await client.api.channels(toDialDoc.channel).get();
 	} catch (_) {
 		msg.channel.send({ embed: { color: config.colors.error, title: "Unavailable", description: "Unable to transfer: the number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server." } });
-		return client.delete(toDialDoc.id);
+		return client.delete(toDialDoc.id, { force: false, log: true, origin: "transfer_to" });
 	}
 
 	// See if the other channel is already in a call

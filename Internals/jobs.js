@@ -157,7 +157,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	for (let number of numbers) {
 		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
-			await client.delete(number, { force: true, log: false });
+			await client.delete(number, { force: true, log: true, origin: "scheduled_noChannel" });
 			deleted.push(number);
 			break;
 		}
@@ -176,7 +176,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		// First check wether number isn't (>15d) expired - then warn/delete.
 		if (expiryMS > warnMS) continue;
 		if (expiryMS < deleteMS) {
-			await client.delete(number, { force: true, log: false });
+			await client.delete(number, { force: true, log: true, origin: "scheduled_expired" });
 			deleted.push(number);
 
 			otitle = `Your number has been deleted`;
@@ -205,17 +205,17 @@ scheduleJob("0 0 0 * * *", async() => {
 	}
 
 	// someone switch package for this
-	let haste;
-	try {
-		haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${JSON.stringify(deleted)}`);
-	} catch (err) {
-		haste = null;
-	}
+	// let haste;
+	// try {
+	// 	haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${JSON.stringify(deleted)}`);
+	// } catch (err) {
+	// 	haste = null;
+	// }
 
 	let count = deleted.length;
 	winston.info(`[ScheduleJob] Deleted ${count} expired numbers`);
-	if (haste) client.log(`🔥 Automatically deleted ${count} numbers. Results: <http://hastebin.com/${haste.body.key}>`);
-	else client.log(`🔥 Automatically deleted ${count} numbers. Unsuccesful post to hastebin.`);
+	// if (haste) client.log(`🔥 Automatically deleted ${count} numbers. Results: <http://hastebin.com/${haste.body.key}>`);
+	client.log(`🔥 Automatically deleted ${count} numbers. Still not posting to hastebin.`);
 });
 
 // Job to delete stored messages of calls.
