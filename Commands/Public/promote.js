@@ -264,7 +264,7 @@ module.exports = async(client, msg, suffix) => {
 	canPromoteIn -= cpaD * 86400000;
 	let cpaH = Math.floor(canPromoteIn / 3600000);
 	canPromoteIn = cpaD ? `${cpaD}d${cpaH}h` : `${cpaH}h`;
-	let hasMoney = account.balance > config.promoteCost;
+	let hasMoney = account.balance >= config.promoteCost;
 
 	let gperms = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 
@@ -364,7 +364,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 			omsg = await omsg.edit({ embed: { color: config.colors.info, title: "Promoting...", description: "This may take a moment." } });
 
-			let newBalance = account.balance - 500;
+			let newBalance = account.balance - config.promoteCost;
 			await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
 			let pEmbed = /^2$/.test(collected.content) ? await createEmbed(false, true) : await createEmbed(false, false);
