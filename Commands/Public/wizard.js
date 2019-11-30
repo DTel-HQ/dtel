@@ -90,7 +90,7 @@ module.exports = async(client, msg, suffix) => {
 		numberDoc.owner = msg.channel.type != "dm" ? msg.guild.ownerID : msg.author.id;
 
 		await r.table("Numbers").insert(numberDoc);
-		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
+		await client.log(`:green_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
 		await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Phonebook", value: `You can also put your number in the phonebook, meaning this number can be randomly called.\nIf you want to do so, type a description for your number, otherwise type \`skip\`.` }] } });
 		return phonebookChooser();
 	};
