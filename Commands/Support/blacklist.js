@@ -5,7 +5,8 @@ module.exports = async(client, msg, suffix) => {
 	if (msg.mentions.users.first()) suffix = (await msg.mentions.users.first()).id;
 
 	let user = await client.users.fetch(suffix).catch(e => null);
-	if (!user) let guild = await client.guilds.resolve(suffix);
+	let guild;
+	if (!user) guild = await client.guilds.resolve(suffix);
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown ID", description: "Couldn't find a user or guild with that ID" } });
 
 	let blacklisted = user ? user.blacklisted : guild.blacklisted;
