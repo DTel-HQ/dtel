@@ -64,11 +64,13 @@ module.exports = async(client, msg, suffix) => {
 			if (user) (await user.createDM()).send({ embed: { color: config.colors.info, title: "You were blacklisted", description: `You have received your third strike and have been blacklisted. Reason given for strike: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them their blacklist." } }));
 			else (await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server was blacklisted", description: `Your server ${guild.name}(${guild.id}) has been blacklisted due to the following reason: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the blacklist." } }));
 			if (channel) channel.send({ embed: { color: config.colors.info, title: "This server received a strike", description: `This server has been striked due to the following reason: \n_${reason}_ \n\nThe server will be blacklisteded after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the channel. The guild owner should have been informed." } }));
+			client.log(`:cloud_lightning: ${channel ? `Guild` : `User`} ID \`${toStrike}\` has been strikken with ID ${strikeDoc.id} by ${msg.author.tag} and was automatically blacklisted. (${totalStrikes.length} strikes)`);
 			return;
 		}
 	}
 
 	await msg.channel.send({ embed: { color: config.colors.success, description: `This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s). StrikeID: \`${id}\`` }, author: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
+	client.log(`:cloud_lightning: ${channel ? `Guild` : `User`} ID \`${toStrike}\` has been strikken with ID ${strikeDoc.id} by ${msg.author.tag}. (${totalStrikes.length} strikes)`);
 	if (user) {
 		(await user.createDM()).send({ embed: { color: config.colors.info, title: "You received a strike", description: `You have been striked due to the following reason: ${reason}.\n\nYou will get blacklisted after receiving ${3 - totalStrikes.length} more strikes.` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them of their strike." } }));
 	} else {
