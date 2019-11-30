@@ -1,3 +1,5 @@
+const { MessageEmbed } = require("discord.js");
+
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
 	let call = await nmsg.channel.call;
@@ -13,7 +15,7 @@ module.exports = async(omsg, nmsg) => {
 	try {
 		await client.api.channels(editChannel).get();
 	} catch (_) {
-		client.apiSend(":x: The bot can no longer access the opposite side. Please report this by calling `*611` as it could be a troll call.", nmsg.channel.id);
+		client.apiSend({ embed: { color: config.colors.error, title: "The bot can no longer access the opposite side", description: "Please report this by calling `*611` as it could be a troll call." } }, nmsg.channel.id);
 		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
 		return client.delete(call.to.channel === nmsg.channel.id ? call.from.number : call.to.number, { force: false, log: true, origin: "msgEdit" });
