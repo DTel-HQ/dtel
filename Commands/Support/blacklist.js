@@ -12,6 +12,8 @@ module.exports = async(client, msg, suffix) => {
 	let blacklisted = user ? user.blacklisted : guild.blacklisted;
 	if (blacklisted) {
 		let res = user ? user.unBlacklist() : await guild.unBlacklist();
+		if (!res.deleted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not deleted", description: "The ID could not be deleted from the DB" } });
+
 		client.log(`:wrench: ID \`${suffix}\` has been removed from the blacklist by ${msg.author.tag}.`);
 		return msg.channel.send({ embed: {
 			color: config.colors.success,
@@ -33,6 +35,8 @@ module.exports = async(client, msg, suffix) => {
 	if (user && user.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
 
 	let res = user ? user.blacklist() : guild.blacklist();
+	if (!res.inserted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not inserted", description: "The ID was not inserted into the DB" } });
+
 	client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by ${msg.author.tag}.`);
 	msg.channel.send({ embed: {
 		color: config.colors.success,
