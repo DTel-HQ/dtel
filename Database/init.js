@@ -20,6 +20,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 		"OldCalls",
 		"Phonebook",
 		"Strikes",
+		"Voting",
 		"Whitelist",
 	];
 
