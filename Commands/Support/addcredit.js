@@ -48,6 +48,7 @@ module.exports = async(client, msg, suffix) => {
 	if (neg) amount = String(amount).substr(1);
 	amount = client.format(amount);
 	msg.channel.send({ embed: { color: config.colors.receipt, title: `${neg ? "Removed" : "Added"} credits!`, description: `${neg ? "Removed" : "Added"} ¥${amount} ${neg ? "from" : "to"} <@${user.id}>(${user.id})`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
-	user.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.` } }).catch(() => null);
+	let dmChannel = await user.createDM().catch(e => null);
+	if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} your account. You now have ¥${account.balance}.` } }).catch(() => null);
 	await client.log(`:yen: Support member ${msg.author.tag} ${neg ? "removed" : "added"} ¥${amount} ${neg ? "from" : "to"} ${user.tag} (${user.id}).`);
 };

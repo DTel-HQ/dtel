@@ -98,7 +98,8 @@ scheduleJob("*/5 * * * *", async() => {
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		user.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.amount} has been added to your account through Discoin.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+		let dmChannel = await user.createDM().catch(e => null);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.amount} has been added to your account through Discoin.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
 		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.amount} from Discoin`);
 	}
 });
@@ -141,8 +142,9 @@ scheduleJob("*/5 * * * *", async() => {
 		await r.table("Votes").get(user.id).update({ amount: monthlyVotes.amount });
 
 		// Let the user know and log the votes
-		user.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
-		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user.id]} from voting.`);
+		let dmChannel = await user.createDM().catch(e => null);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user.id]} from voting.`);
+		client.log(`:ballot_box: ${user.username} (${user.id}) received ¥${votes[user.id]} from voting.`);
 	}
 });
 
@@ -277,6 +279,8 @@ scheduleJob("0 0 0 * * *", async() => {
 			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `❕This number will be deleted in 24h❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
+		} else {
+			continue;
 		}
 
 		embed.setTitle(ctitle)

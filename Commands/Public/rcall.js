@@ -17,25 +17,32 @@ module.exports = async(client, msg, suffix) => {
 
 	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Searching...", description: "Currently checking numbers in the phonebook to call. \nThis may take a while." } });
 
+	let calls = await r.table("Calls");
+
 	while (!toCall) {
+		if (toDial) phonebook.splice(phonebook.indexOf(toDial), 1);
 		toDial = phonebook[Math.floor(Math.random() * phonebook.length)];
 		if (!toDial) break;
-		let call = await r.table("Calls").getAll(toDial.id, { index: "fromChannel" }).nth(0).default(null);
-		if (!call) call = await r.table("Calls").getAll(toDial.id, { index: "toChannel" }).nth(0).default(null);
+
+		let activeCall = calls.find(c => c.from.channel === toDial.id || c.to.channel === toDial.id);
+		if (activeCall) continue;
+
 		let channel = await client.api.channels(toDial.channel).get().catch(e => null);
-		if (fromNumber.id == toDial.id || call || (msg.guild && channel && channel.guild_id === msg.guild.id)) {
-			phonebook.splice(phonebook.indexOf(toDial), 1);
+		if (!channel) {
+			client.delete(toDial.id, { force: false, log: true, origin: "rcall_channel" });
 			continue;
 		}
+
+		if ((msg.guild && channel && channel.guild_id === msg.guild.id) || toDial.id === fromNumber.channel) continue;
+
 		toDialDoc = await r.table("Numbers").get(toDial.id);
 		if (!toDialDoc) {
 			client.delete(toDial.id, { force: false, log: true, origin: "rcall_to" });
 			continue;
 		}
-		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) {
-			phonebook.splice(phonebook.indexOf(toDial), 1);
-			continue;
-		}
+
+		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) continue;
+
 		toCall = toDial.id;
 	}
 
