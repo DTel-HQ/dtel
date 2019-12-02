@@ -113,32 +113,35 @@ module.exports = async(client, msg, suffix) => {
 		timestamp: new Date(),
 	} });
 	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave ¥${amount} to ${user.tag} (${user.id})`);
-	user.send({ embed: {
-		color: config.colors.receipt,
-		author: {
-			name: `${msg.author.tag} (${msg.author.id})`,
-			icon_url: msg.author.displayAvatarURL(),
-		},
-		title: "You received money!",
-		description: "Someone gave money you. Here's your receipt.",
-		fields: [
-			{
-				name: "User",
-				value: `From: ${msg.author.tag} (${msg.author.id})`,
+	let dmChannel = await user.createDM().catch(e => null);
+	if (dmChannel) {
+		dmChannel.send({ embed: {
+			color: config.colors.receipt,
+			author: {
+				name: `${msg.author.tag} (${msg.author.id})`,
+				icon_url: msg.author.displayAvatarURL(),
 			},
-			{
-				name: "Transaction amounts",
-				value: `Amount: ¥${amount}\nFee: ¥${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
-			},
-			{
-				name: "Balance",
-				value: `Your new balance: ¥${toAccount.balance}`,
-			},
-			{
-				name: "Message from sender",
-				value: reason ? reason : "None",
-			},
-		],
-		timestamp: new Date(),
-	} }).catch(e => null);
+			title: "You received money!",
+			description: "Someone gave money you. Here's your receipt.",
+			fields: [
+				{
+					name: "User",
+					value: `From: ${msg.author.tag} (${msg.author.id})`,
+				},
+				{
+					name: "Transaction amounts",
+					value: `Amount: ¥${amount}\nFee: ¥${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+				},
+				{
+					name: "Balance",
+					value: `Your new balance: ¥${toAccount.balance}`,
+				},
+				{
+					name: "Message from sender",
+					value: reason ? reason : "None",
+				},
+			],
+			timestamp: new Date(),
+		} }).catch(e => null);
+	}
 };

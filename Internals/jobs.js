@@ -98,7 +98,8 @@ scheduleJob("*/5 * * * *", async() => {
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		user.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.amount} has been added to your account through Discoin.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+		let dmChannel = await user.createDM().catch(e => null);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.amount} has been added to your account through Discoin.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
 		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.amount} from Discoin`);
 	}
 });
@@ -131,7 +132,8 @@ scheduleJob("*/5 * * * *", async() => {
 		account.balance += votes[user.id];
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
-		user.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
+		let dmChannel = await user.createDM().catch(e => null);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
 		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user.id]} from voting.`);
 	}
 });
