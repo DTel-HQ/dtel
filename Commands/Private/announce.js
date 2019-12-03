@@ -8,26 +8,24 @@ module.exports = async(client, msg, suffix) => {
 	let guilds = [];
 	let count = 0;
 	for (let n of allNumbers) {
-		if (n.optOut) continue;
 		let channel = await client.api.channels(n.channel).get().catch(() => null);
-		if (channel) {
-			if (channel.guild_id && guilds.includes(channel.guild_id)) continue;
-			count++;
-			if (channel.guild_id) guilds.push(channel.guild_id);
-			await client.apiSend({
-				embed: {
-					color: config.colors.info,
-					author: {
-						name: msg.author.tag,
-						url: config.siteLink,
-						icon_url: msg.author.displayAvatarURL(),
-					},
-					title: "DiscordTel Maintainer Announcement",
-					description: suffix,
-					timestamp: new Date(),
+		if (!channel) continue;
+		if (channel.guild_id && guilds.includes(channel.guild_id)) continue;
+		count++;
+		if (channel.guild_id) guilds.push(channel.guild_id);
+		await client.apiSend({
+			embed: {
+				color: config.colors.info,
+				author: {
+					name: msg.author.tag,
+					url: config.siteLink,
+					icon_url: msg.author.displayAvatarURL(),
 				},
-			}, n.channel).catch(() => null);
-		}
+				title: "DiscordTel Maintainer Announcement",
+				description: suffix,
+				timestamp: new Date(),
+			},
+		}, n.channel).catch(() => null);
 	}
 	let diff = await process.hrtime(time);
 	let sec = ((diff[0] * 1e9) + diff[1]) / 1e9;
