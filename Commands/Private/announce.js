@@ -11,9 +11,9 @@ module.exports = async(client, msg, suffix) => {
 		if (n.optOut) continue;
 		let channel = await client.api.channels(n.channel).get().catch(() => null);
 		if (channel) {
-			if (guilds.includes(n.guild)) continue;
+			if (channel.guild_id && guilds.includes(channel.guild_id)) continue;
 			count++;
-			if (n.guild) guilds.push(n.guild);
+			if (channel.guild_id) guilds.push(channel.guild_id);
 			await client.apiSend({
 				embed: {
 					color: config.colors.info,
