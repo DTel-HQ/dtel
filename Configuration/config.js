@@ -43,7 +43,9 @@ module.exports = {
 	},
 
 	// IDs
+	announcementChannel: "281816926144167946",
 	logsChannel: "282253502779228160",
+	badLogsChannel: "377945714166202368",
 	promoteChannel: "398569181097754624",
 	supportChannel: "281816105289515008",
 	supportGuild: "281815661317980160",
