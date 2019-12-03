@@ -28,7 +28,7 @@ module.exports = {
 	lotteryCost: 5,
 	messageCost: 2,
 	pickupBonus: 10, // *611
-	promoteCost: 250,
+	promoteCost: 100,
 	renewalRate: 500,
 	transferRate: 0.729,
 	minTransfer: 50,
