@@ -17,6 +17,7 @@ module.exports = {
 		msg: "message",
 		perm: "permcheck",
 		promo: "promote",
+		vote: "links",
 		wl: "whitelist",
 	},
 };
