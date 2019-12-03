@@ -143,7 +143,7 @@ scheduleJob("*/5 * * * *", async() => {
 
 		// Let the user know and log the votes
 		let dmChannel = await user.createDM().catch(e => null);
-		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });		client.log(`:ballot_box: ${user.tag} (${user.id}) received ¥${votes[user.id]} from voting.`);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
 		client.log(`:ballot_box: ${user.username} (${user.id}) received ¥${votes[user.id]} from voting.`);
 	}
 });
