@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix, call) => {
-	if (call.pickedUp || msg.channel.id === msg.from.channel) return;
+	if (call.pickedUp || msg.channel.id === call.from.channel) return;
 
 	try {
 		await client.api.channels(call.from.channel).get();
