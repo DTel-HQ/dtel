@@ -4,6 +4,13 @@ module.exports = Discord => {
 			constructor(...arg) {
 				super(...arg);
 				this.blacklisted = false;
+				this.init();
+			}
+
+			async init() {
+				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
+				this.blacklisted = !!blacklisted;
+				return true;
 			}
 
 			get whitelisted() {
