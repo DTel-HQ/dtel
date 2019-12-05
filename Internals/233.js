@@ -33,7 +33,7 @@ module.exports = async(msg, myNumber) => {
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join("\n") : "None", true);
 
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None", true);
-	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hung up after 3 minutes.");
+	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hang up after 3 minutes.");
 
 	// send embed
 	let omsg = await msg.channel.send("", { embed: embed });
@@ -76,4 +76,7 @@ module.exports = async(msg, myNumber) => {
 		.addField("Your new balance", `¥${client.format(newBalance)}`, true)
 		.addField("Need to recharge?", config.paymentLink);
 	msg.channel.send("", { embed: embed });
+	
+	// log it
+	client.log(`:arrows_counterclockwise: User ${msg.author.tag} (${msg.author.id}) renewed ${myNumber.id} for ${collected.first().content} months.`
 };
