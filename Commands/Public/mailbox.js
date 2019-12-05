@@ -307,7 +307,7 @@ module.exports = async(client, msg, suffix) => {
 				.setColor(config.colors.info)
 				.setTitle(`:mailbox: Viewing message.`)
 				.setDescription("• To delete this message: `delete`\n• To report this message: `report`")
-				.addField(`ID \`${message.id}\` from ${message.number}`, `${message.message}\n${date}`)
+				.addField(`ID \`${message.id}\` from ${message.from || message.number}`, `${message.message}\n${date}`)
 				.setFooter("Press (0) to hangup, (9) to go back. This call will automatically be hung up after 2 minutes of inactivity.");
 
 			await omsg.edit({ embed: embed });
