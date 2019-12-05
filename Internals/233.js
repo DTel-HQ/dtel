@@ -78,5 +78,5 @@ module.exports = async(msg, myNumber) => {
 	msg.channel.send("", { embed: embed });
 	
 	// log it
-	client.log(`:arrows_counterclockwise: User ${msg.author.tag} (${msg.author.id}) renewed ${myNumber.id} for ${collected.first().content} months.`);
+	client.log(`:arrows_counterclockwise: User ${msg.author.username} (${msg.author.id}) renewed ${myNumber.id} for ${collected.first().content} months.`);
 };
