@@ -47,9 +47,15 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 
+	let fromNumbervip = fromNumberDoc.vip ? new Date(fromNumberDoc.vip.expiry).getTime() > Date.now() : false;
+	let from;
+	if (fromNumbervip && fromNumberDoc.vip.hidden) from = fromNumberDoc.vip.name || "hidden";
+	else from = fromNumberDoc.id;
+
 	let messageDoc = {
 		id: id,
 		number: fromNumberDoc.id,
+		from: from,
 		user: msg.author.id,
 		message: message,
 		time: time,
