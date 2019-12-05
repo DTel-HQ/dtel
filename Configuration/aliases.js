@@ -8,7 +8,7 @@ module.exports = {
 		cmds: "help",
 		commands: "help",
 		contact: "contacts",
-		convert: "exchange",
+		exchange: "convert",
 		credits: "balance",
 		delstrike: "rmstrike",
 		id: "identify",
