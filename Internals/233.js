@@ -76,7 +76,7 @@ module.exports = async(msg, myNumber) => {
 		.addField("Your new balance", `¥${client.format(newBalance)}`, true)
 		.addField("Need to recharge?", config.paymentLink);
 	msg.channel.send("", { embed: embed });
-	
+
 	// log it
 	client.log(`:arrows_counterclockwise: User ${msg.author.username} (${msg.author.id}) renewed ${myNumber.id} for ${collected.first().content} months.`);
 };
