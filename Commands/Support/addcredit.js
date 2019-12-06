@@ -5,12 +5,16 @@ module.exports = async(client, msg, suffix) => {
 	// If they were mentioned
 	if (msg.mentions.users.first()) {
 		user = msg.mentions.users.first();
-		// Genuine offbrand fix
-		amount = suffix.substring(suffix.indexOf(`${msg.mentions.members.first().toString()}`) + msg.mentions.members.first().toString().length + 1).trim();
+		let userpos = suffix.split(" ").indexOf(`<@${user.id}>`);
+		if (!userpos) userpos = suffix.split(" ").indexOf(`<@!${user.id}>`);
+		if (!userpos) return msg.channel.send({ embed: { color: config.colors.error, title: "No hablo", description: "Couldn't read your arguments." } });
+
+		let amountpos = userpos === 0 ? 1 : 0;
+		amount = suffix.split(" ")[amountpos];
 	// otherwise if they used an id
 	} else if (/\d{17,19}/.test(suffix.split(" ")[0])) {
 		user = await client.users.fetch(suffix.split(" ")[0]).catch(() => null);
-		amount = suffix.substring(suffix.indexOf(" ") + 1).trim();
+		amount = suffix.split(" ")[1];
 	}
 
 	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that user." } });
