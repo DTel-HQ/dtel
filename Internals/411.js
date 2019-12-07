@@ -161,7 +161,7 @@ module.exports = async(msg, myNumber) => {
 				)).first();
 
 				// On collection
-				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+				if (collected && delPerm) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -199,7 +199,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 180000 }
 				)).first();
 
-				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+				if (collected && delPerm) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -240,7 +240,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 60000 }
 				)).first();
 
-				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+				if (collected && delPerm) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -276,7 +276,7 @@ module.exports = async(msg, myNumber) => {
 					{ max: 1, time: 120000 }
 				)).first();
 
-				if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+				if (collected && delPerm) collected.delete().catch(e => null);
 				if (!collected || /^0$/.test(collected.content)) {
 					msg.author.busy = false;
 					omsg.delete().catch(e => null);
@@ -309,7 +309,7 @@ module.exports = async(msg, myNumber) => {
 							{ max: 1, time: 120000 }
 						)).first();
 
-						if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+						if (collected && delPerm) collected.delete().catch(e => null);
 						if (!collected || /^0$/.test(collected.content)) {
 							msg.author.busy = false;
 							omsg.delete().catch(e => null);
