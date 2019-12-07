@@ -30,6 +30,7 @@ module.exports = async(msg, myNumber) => {
 	// Check if the user has permission
 	let gperm = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	let perms = msg.author.support || gperm;
+	let delPerm = msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 
 	// Searchpage function for option 1
 	let searchPage = async query => {
@@ -64,7 +65,7 @@ module.exports = async(msg, myNumber) => {
 		)).first();
 
 		// On collection
-		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+		if (collected && delPerm) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) return false;
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
@@ -108,7 +109,7 @@ module.exports = async(msg, myNumber) => {
 			{ max: 1, time: 60000 })).first();
 
 		// On main menu collection
-		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
+		if (collected && delPerm) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
 			msg.author.busy = false;
 			omsg.delete().catch(e => null);
