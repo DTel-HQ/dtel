@@ -5,12 +5,11 @@ module.exports = async msg => {
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	// Check if the bot is allowed to send messages
-	let channelPerms;
+	let channelPerms = [];
 	if (msg.guild && !config.maintainers.includes(msg.author.id)) {
-		channelPerms = msg.channel.permissionsFor(config.botID);
-		if (channelPerms) channelPerms = channelPerms.toArray();
+		channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+		if (!channelPerms.includes("SEND_MESSAGES")) return;
 	}
-	if (msg.guild && !config.maintainers.includes(msg.author.id) && !channelPerms.includes("SEND_MESSAGES")) return;
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
@@ -31,32 +30,25 @@ module.exports = async msg => {
 
 	// Check for call
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if (!call && !msg.content.startsWith(prefix)) return;
+	if ((msg.author.busy && !msg.author.maintainer) && !call && !msg.content.startsWith(prefix)) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
-		.replace(/dial/g, "call");
+		.replace(/dial/gi, "call");
 	if (aliases.aliasCommands[cmd]) cmd = aliases.aliasCommands[cmd];
 	const suffix = msg.content.split(" ").splice(1)
 		.join(" ")
 		.trim();
 
-	// Find the command file
 	let cmdFile;
-	if (call && !msg.content.startsWith(prefix)) {
-		return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
-	} else if (call && msg.content.startsWith(prefix)) {
-		cmdFile = await reload(`./Commands/Call/${cmd}`);
-	}
+	// Find call command files
+	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
+	if (call && msg.content.startsWith(prefix)) cmdFile = await reload(`./Commands/Call/${cmd}`);
 	if (!cmdFile && (call && !call.hold)) return;
-
-	// check busy first since it's a simple return
-	if (msg.author.busy && !call && !msg.author.maintainer) return;
-
-	// Find Maintainer or Support commands
+	// Find non call command files
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
-	if (msg.author.maintainer && !cmdFile) cmdFile = await reload(`./Commands/Private/${cmd}`);
-	if (msg.author.support && !cmdFile) cmdFile = await reload(`./Commands/Support/${cmd}`);
+	if (!cmdFile && msg.author.support) cmdFile = await reload(`./Commands/Support/${cmd}`);
+	if (!cmdFile && msg.author.maintainer) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
 
 	// Check cooldown now because it sends an embed
@@ -67,7 +59,7 @@ module.exports = async msg => {
 	// Run the command
 	if (cmdFile) {
 		// first check if the bot can send embeds
-		if (msg.guild && !config.maintainers.includes(msg.author.id) && !channelPerms.includes("EMBED_LINKS")) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
+		if (!channelPerms.includes("EMBED_LINKS") && msg.guild && !config.maintainers.includes(msg.author.id)) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
 			// If the user doesn't have an account
