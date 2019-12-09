@@ -68,7 +68,7 @@ scheduleJob("*/15 * * * * *", async() => {
 		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${userCount} users | >help | [\${this.shard.id}]\`, type: 3 } });`);
 	} else {
 		let calls = (await r.table("Calls")).length;
-		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${calls} calls | >help | [\${this.shard.id}] \`, type: 2 } });`);
+		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`>wizard | >help | [\${this.shard.id}] \`, type: 2 } });`);
 	}
 	winston.verbose("[ScheduleJob] Updated status.");
 });
