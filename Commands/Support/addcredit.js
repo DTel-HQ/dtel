@@ -17,8 +17,8 @@ module.exports = async(client, msg, suffix) => {
 		amount = suffix.split(" ")[1];
 	}
 
-	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that user." } });
-	if (!amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Add what...?", description: "You didn't input an amount to add..." } });
+	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown user", description: "Couldn't find that user.\nSynax: `>addcredit [user] [amount]`" } });
+	if (!amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Add what...?", description: "You didn't input an amount to add...\nSynax: `>addcredit [user] [amount]`" } });
 
 	// Check for invalid users
 	if (user.id === client.user.id) {
