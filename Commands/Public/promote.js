@@ -374,8 +374,8 @@ module.exports = async(client, msg, suffix) => {
 			if (!sent) return omsg.edit({ embed: { color: config.colors.error, title: "Failed", description: `Something went wrong whilst sending the message. Please contact support by calling *611 or join our [support guild](${config.guildInvite}).` } });
 
 			await r.table("Numbers").get(number.id).update({ promote: { lastmsg: sent.id, lastuser: msg.author.id, lastPromoted: Date.now() } });
+			client.log(`User ${msg.author.username} (${msg.author.id} promoted ${number.id} for ${config.promoteCost}.`);
 			return omsg.edit({ embed: { color: config.colors.success, title: "Success", description: `Succesfully promoted this number.\nView the message [here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${sent.id}).`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() }, timestamp: new Date() } });
-			client.log(`User ${msg.author.username} (${msg.author.id} promoted ${number.id} for ${config.promoteCost}.);
 		}
 
 		case "3": {
