@@ -375,6 +375,7 @@ module.exports = async(client, msg, suffix) => {
 
 			await r.table("Numbers").get(number.id).update({ promote: { lastmsg: sent.id, lastuser: msg.author.id, lastPromoted: Date.now() } });
 			return omsg.edit({ embed: { color: config.colors.success, title: "Success", description: `Succesfully promoted this number.\nView the message [here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${sent.id}).`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() }, timestamp: new Date() } });
+			client.log(`User ${msg.author.username} (${msg.author.id} promoted ${number.id} for ${config.promoteCost}.);
 		}
 
 		case "3": {

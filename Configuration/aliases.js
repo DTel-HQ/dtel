@@ -2,6 +2,7 @@
 module.exports = {
 	// Command aliases
 	aliasCommands: {
+		addcredits: "addcredit",
 		bal: "balance",
 		bc: "broadcast",
 		bl: "blacklist",

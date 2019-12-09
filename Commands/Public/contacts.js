@@ -41,7 +41,8 @@ module.exports = async(client, msg, suffix) => {
 
 		// On collection
 		omsg.delete().catch(e => null);
-		if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+		let delPerm = msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
+		if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 		if (!collected.first() || /^0$/.test(collected.first().content)) {
 			msg.author.busy = false;
 			return;
@@ -100,7 +101,7 @@ module.exports = async(client, msg, suffix) => {
 				);
 
 				// on collected
-				if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+				if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
 					msg.author.busy = false;
 					return omsg.delete().catch(e => null);
@@ -124,7 +125,7 @@ module.exports = async(client, msg, suffix) => {
 				);
 
 				// on collected
-				if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+				if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 				omsg.delete().catch(e => null);
 				if (!collected.first() || /^0$/.test(collected.first().content)) {
 					msg.author.busy = false;
@@ -165,7 +166,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			// on collection
-			if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+			if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 			if (/^9$/.test(collected.first().content)) {
 				msg.author.busy = false;
 				return contactList();
@@ -197,7 +198,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			// on collection
-			if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+			if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
 			msg.author.busy = false;
 			if (/^9$/.test(collected.first().content)) return contactList();
@@ -242,7 +243,7 @@ module.exports = async(client, msg, suffix) => {
 			);
 
 			// on collection
-			if (collected.first() && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.first().delete().catch(e => null);
+			if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 			omsg.delete().catch(e => null);
 			msg.author.busy = false;
 			if (/^9$/.test(collected.first().content)) return contactList();
