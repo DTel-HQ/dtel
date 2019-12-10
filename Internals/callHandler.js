@@ -1,7 +1,8 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(cmd, msg, suffix, call) => {
-	let embed = null, content;
+	let embed = null,
+		content;
 
 	if (!call.pickedUp || call.hold || (!msg.content && !msg.attachments.first())) return;
 	call.lastMessage = new Date().getTime();
@@ -45,7 +46,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	// send the msg
 	if (msg.content) content = `**${hidden ? "Anonymous#0000" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
-	content = content.replace(/(@everyone)|(@here)/ig, "").replace(/(@everyone)|(@here)/ig, "");
+	content = content.replace(/(@everyone)|(@here)/ig, "_I tried to ping @everyone but failed._").replace(/(@everyone)|(@here)/ig, "_I tried to ping @everyone but failed._");
+	if (content.length > 2000) return;
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend.channel);
 
 	let msgDoc = {
