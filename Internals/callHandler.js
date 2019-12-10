@@ -45,7 +45,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	// send the msg
 	if (msg.content) content = `**${hidden ? "Anonymous#0000" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
-	let sent = await client.apiSend({ content: content, embed: embed, mention_everyone: false }, toSend.channel);
+	content = content.replace(/(@everyone)|(@here)/ig, "").replace(/(@everyone)|(@here)/ig, "");
+	let sent = await client.apiSend({ content: content, embed: embed }, toSend.channel);
 
 	let msgDoc = {
 		dtelmsg: sent.id,
