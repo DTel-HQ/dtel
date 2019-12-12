@@ -13,7 +13,7 @@ module.exports = async msg => {
 			try {
 				const botMember = await msg.channel.members.fetch(config.botID);
 				channelPerms = msg.channel.permissionsFor(config.botID).toArray();
-			} catch {
+			} catch (e) {
 				// ignore
 			}
 		}
