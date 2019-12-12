@@ -7,10 +7,16 @@ module.exports = async msg => {
 	// Check if the bot is allowed to send messages
 	let channelPerms = [];
 	if (msg.guild && !config.maintainers.includes(msg.author.id)) {
-		channelPerms = msg.channel.permissionsFor(config.botID).toArray().catch(async e => {
-			const botMember = await msg.channel.members.fetch(config.botID);
+		try {
 			channelPerms = msg.channel.permissionsFor(config.botID).toArray();
-		});
+		} catch (error) {
+			try {
+				const botMember = await msg.channel.members.fetch(config.botID);
+				channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+			} catch {
+				// ignore
+			}
+		}
 		if (!channelPerms.includes("SEND_MESSAGES")) return;
 	}
 
