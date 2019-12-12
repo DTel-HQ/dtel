@@ -5,20 +5,20 @@ module.exports = async msg => {
 	if (msg.author.bot || (config.devOnlyMode && !msg.author.maintainer)) return;
 
 	// Check if the bot is allowed to send messages
-	let channelPerms = [];
-	if (msg.guild && !config.maintainers.includes(msg.author.id)) {
-		try {
-			channelPerms = msg.channel.permissionsFor(config.botID).toArray();
-		} catch (error) {
-			try {
-				const botMember = await msg.channel.members.fetch(config.botID);
-				channelPerms = msg.channel.permissionsFor(config.botID).toArray();
-			} catch (e) {
-				// ignore
-			}
-		}
-		if (!channelPerms.includes("SEND_MESSAGES")) return;
-	}
+	// let channelPerms = [];
+	// if (msg.guild && !config.maintainers.includes(msg.author.id)) {
+	// 	try {
+	// 		channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+	// 	} catch (error) {
+	// 		try {
+	// 			const botMember = await msg.channel.members.fetch(config.botID);
+	// 			channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+	// 		} catch (e) {
+	// 			// ignore
+	// 		}
+	// 	}
+	// 	if (!channelPerms.includes("SEND_MESSAGES")) return;
+	// }
 
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
@@ -68,7 +68,7 @@ module.exports = async msg => {
 	// Run the command
 	if (cmdFile) {
 		// first check if the bot can send embeds
-		if (!channelPerms.includes("EMBED_LINKS") && msg.guild && !config.maintainers.includes(msg.author.id)) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
+		// if (!channelPerms.includes("EMBED_LINKS") && msg.guild && !config.maintainers.includes(msg.author.id)) return msg.channel.send("The bot does not have the 'embed links' permission. It'll be unable to function without it.");
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
 			// If the user doesn't have an account
