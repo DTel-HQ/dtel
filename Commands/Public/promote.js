@@ -19,7 +19,10 @@ module.exports = async(client, msg, suffix) => {
 
 	// Do the necessary checks
 	let number = await msg.channel.number;
-	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
+	if (!number) {
+		msg.author.busy = false;
+		return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
+	}
 	msg.author.busy = true;
 	let account = await msg.author.account();
 	if (!number.promote) {
@@ -96,6 +99,7 @@ module.exports = async(client, msg, suffix) => {
 		promote.lastEdited = msg.author.id;
 		if (setup) return setNumber(setup);
 		else await r.table("Numbers").get(number.id).update({ promote: { lastEdited: promote.lastEdited, embed: embed } });
+		msg.author.busy = false;
 		return omsg.edit({ embed: { color: config.colors.succes, title: "Success", description: `Succesfully set description to: ${embed.description}` }, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
 	};
 
@@ -128,6 +132,7 @@ module.exports = async(client, msg, suffix) => {
 		promote.lastEdited = msg.author.id;
 		if (setup) return setFields(setup);
 		else await r.table("Numbers").get(number.id).update({ promote: { lastEdited: promote.lastEdited, embed: embed } });
+		msg.author.busy = false;
 		return omsg.edit({ embed: { color: config.colors.succes, title: "Success", description: `Succesfully set number to: ${embed.number}` }, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
 	};
 
@@ -162,7 +167,6 @@ module.exports = async(client, msg, suffix) => {
 			if (!collected || /^0$/.test(collected.content)) {
 				pmsg.delete().catch(e => null);
 				omsg.delete().catch(e => null);
-
 				msg.author.busy = false;
 				return;
 			}
@@ -371,13 +375,15 @@ module.exports = async(client, msg, suffix) => {
 			pEmbed.timestamp = new Date();
 			let sent = await client.apiSend({ embed: pEmbed }, config.promoteChannel).catch(e => null);
 
-			if (!sent) return omsg.edit({ embed: { color: config.colors.error, title: "Failed", description: `Something went wrong whilst sending the message. Please contact support by calling *611 or join our [support guild](${config.guildInvite}).` } });
+			if (!sent) {
+				msg.author.busy = false;
+				return omsg.edit({ embed: { color: config.colors.error, title: "Failed", description: `Something went wrong whilst sending the message. Please contact support by calling *611 or join our [support guild](${config.guildInvite}).` } });
+			}
 
 			await r.table("Numbers").get(number.id).update({ promote: { lastmsg: sent.id, lastuser: msg.author.id, lastPromoted: Date.now() } });
 			client.log(`User ${msg.author.username} (${msg.author.id} promoted ${number.id} for ${config.promoteCost}.`);
 			return omsg.edit({ embed: { color: config.colors.success, title: "Success", description: `Succesfully promoted this number.\nView the message [here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${sent.id}).`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() }, timestamp: new Date() } });
 		}
-
 		case "3": {
 			pmsg.delete().catch(e => null);
 			omsg.delete().catch(e => null);
