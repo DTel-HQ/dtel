@@ -13,6 +13,7 @@ module.exports = {
 		credits: "balance",
 		delstrike: "rmstrike",
 		id: "identify",
+		invite: "links",
 		link: "links",
 		mentions: "mention",
 		msg: "message",
