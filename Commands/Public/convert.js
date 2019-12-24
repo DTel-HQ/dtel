@@ -15,19 +15,20 @@ module.exports = async(client, msg, suffix) => {
 
 	let snekres;
 	try {
-		snekres = await post("http://discoin.sidetrip.xyz/transaction").set({
+		snekres = await post("https://discoin.zws.im/transactions").set({
 			Authorization: require("../../Configuration/auth.js").discoinToken,
 			"Content-Type": "application/json",
 		}).send({
 			user: msg.author.id,
 			amount: parseInt(amount),
-			exchangeTo: currency,
+			toId: currency,
 		});
 	} catch (err) {
 		error = err;
 		if (err.status === 503) {
-			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "API Error (Downtime?)! Please contact MacDue#4453." } });
+			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "API Error (Downtime?)." } });
 		}
+		/*
 		switch (err.body.status) {
 			case "error": {
 				return msg.channel.send({
@@ -89,6 +90,7 @@ module.exports = async(client, msg, suffix) => {
 				}
 			}
 		}
+		*/
 	} finally {
 		if (!error) {
 			account.balance -= amount;
