@@ -25,72 +25,7 @@ module.exports = async(client, msg, suffix) => {
 		});
 	} catch (err) {
 		error = err;
-		if (err.status === 503) {
-			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "API Error (Downtime?)." } });
-		}
-		/*
-		switch (err.body.status) {
-			case "error": {
-				return msg.channel.send({
-					embed: {
-						color: config.colors.error,
-						title: "Error: Wrong arguments!",
-						description: "You probably typed something wrong in the command. Correct them and try again.",
-						fields: [{
-							name: "Reason",
-							value: err.body.reason,
-						}],
-					},
-				});
-			}
-			case "declined": {
-				switch (err.body.reason) {
-					case "per-user limit exceeded": {
-						return msg.channel.send({
-							color: config.colors.error,
-							title: "Transaction declined!",
-							description: "You reached the daily per-user limit.",
-							fields: [{
-								name: `Daily Per-User Limit to currency ${err.body.currency}`,
-								value: `${err.body.limit} Discoins`,
-							}],
-						});
-					}
-					case "total limit exceeded": {
-						return msg.channel.send({
-							embed: {
-								color: config.colors.error,
-								title: "Transaction declined!",
-								description: "You reached the daily per-user limit.",
-								fields: [{
-									name: `Daily Per-User Limit to currency ${err.body.currency}`,
-									value: `${err.body.limit} Discoins`,
-								}],
-							},
-						});
-					}
-					case "verify required": {
-						return msg.channel.send({
-							embed: {
-								color: config.colors.error,
-								title: "Transaction declined!",
-								description: "You're not verified. Please verify yourself at http://discoin.sidetrip.xyz/verify.",
-							},
-						});
-					}
-					default: {
-						return msg.channel.send({
-							embed: {
-								color: config.colors.error,
-								title: "Unexpected Error!",
-								description: `\`\`\`${err.body}\`\`\``,
-							},
-						});
-					}
-				}
-			}
-		}
-		*/
+		return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "```json\n"+JSON.stringify(err.body)+"\n```" } });
 	} finally {
 		if (!error) {
 			account.balance -= amount;
@@ -99,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted ¥${amount} into ${currency}.`,
+				description: `Succesfully converted ¥${amount} into ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${snekres.body.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
