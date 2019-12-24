@@ -76,14 +76,16 @@ scheduleJob("*/15 * * * * *", async() => {
 // Get Discoin transactions
 scheduleJob("*/5 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
-	let result = await get("http://discoin.sidetrip.xyz/transactions").set("Authorization", auth.discoinToken).set("Content-Type", "application/json")
+	let result = await get("https://discoin.zws.im/transactions?s=%7B%22to.id%22%3A%20%22DTS%22%2C%20%22handled%22%3A%20false%7D")
+		.set("Authorization", "Bearer " + auth.discoinToken)
+		.set("Content-Type", "application/json")
 		.catch(e => {
 			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
 			return null;
 		});
 	if (!result) return;
 	for (let t of result.body) {
-		if (t.type) continue;
+		if (t.id) continue;
 
 		// Try to fetch user → send error to manager channel;
 		let user = await client.users.fetch(t.user);
