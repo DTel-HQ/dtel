@@ -86,7 +86,7 @@ module.exports = async(client, msg, suffix) => {
 					{ name: "Lottery stats", value: `• Jackpot: ¥${client.format(newJackpot)}\n• Time left: ${timeLeft}`, inline: true },
 				],
 			} });
-			client.log(`:tickets: ${msg.author.tag} just bought ${tickets} lottery tickets.`);
+			client.log(`:tickets: ${msg.author.username} just bought ${tickets} lottery tickets.`);
 		}
 	} else {
 		msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "What did you just input? Type: `>lottery [amount]` to purchase tickets or `>lottery` to see lottery stats." } });
