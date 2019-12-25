@@ -98,6 +98,7 @@ scheduleJob("*/5 * * * *", async() => {
 		let handle = await patch("https://discoin.zws.im/transactions/"+t.id)
 		.set("Authorization", "Bearer " + auth.discoinToken)
 		.set("Content-Type", "application/json")
+		.send({ handled: true })
 		.catch(e => {
 			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
 			let dmChannel = await user.createDM().catch(e => null);
