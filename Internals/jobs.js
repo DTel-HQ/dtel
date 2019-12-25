@@ -99,7 +99,7 @@ scheduleJob("*/5 * * * *", async() => {
 		.set("Authorization", "Bearer " + auth.discoinToken)
 		.set("Content-Type", "application/json")
 		.send({ handled: true })
-		.catch(e => {
+		.catch(async e => {
 			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
 			let dmChannel = await user.createDM().catch(e => null);
 			if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${t.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
