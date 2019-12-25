@@ -80,19 +80,15 @@ scheduleJob("*/5 * * * *", async() => {
 		// .set("Authorization", "Bearer " + auth.discoinToken)
 		.set("Content-Type", "application/json")
 		.catch(e => {
-			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
+			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e.stack}\n\`\`\``, "326075875466412033");
 			return null;
 		});
 	if (!result) return;
 	for (let t of result.body) {
 		if (t.id) continue;
 
-		// Try to fetch user → send error to manager channel;
+		// Try to fetch user
 		let user = await client.users.fetch(t.user);
-		if (!user) {
-			client.apiSend(`<@${config.supportRole}>\n[DISCOIN Couldn't find user ${t.user} to give ${t.amount}`);
-			continue;
-		}
 		
 		// patch
 		let handle = await patch("https://discoin.zws.im/transactions/"+t.id)
@@ -100,7 +96,7 @@ scheduleJob("*/5 * * * *", async() => {
 		.set("Content-Type", "application/json")
 		.send({ handled: true })
 		.catch(async e => {
-			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
+			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
 			let dmChannel = await user.createDM().catch(e => null);
 			if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${t.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
 			return null;
@@ -112,9 +108,10 @@ scheduleJob("*/5 * * * *", async() => {
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
+		if (!user) return client.log(`:repeat: User ${t.user} received ¥${t.payout} from Discoin.`);
 		let dmChannel = await user.createDM().catch(e => null);
 		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${t.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.payout} from Discoin`);
+		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.payout} from Discoin.`);
 	}
 });
 
