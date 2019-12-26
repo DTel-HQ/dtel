@@ -76,8 +76,7 @@ scheduleJob("*/15 * * * * *", async() => {
 // Get Discoin transactions
 scheduleJob("*/5 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
-	let result = await get("https://discoin.zws.im/transactions?s=%7B%22to.id%22%3A%20%22DTS%22%2C%20%22handled%22%3A%20false%7D")
-		// .set("Authorization", "Bearer " + auth.discoinToken)
+	let result = await get(encodeURI("https://discoin.zws.im/transactions?filter=to.id||eq||DTS&filter=handled||eq||false"))
 		.set("Content-Type", "application/json")
 		.catch(e => {
 			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e.stack}\n\`\`\``, "326075875466412033");
