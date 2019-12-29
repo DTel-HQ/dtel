@@ -1,4 +1,4 @@
-const { post } = require("snekfetch");
+const { post } = require("chainfetch");
 
 module.exports = async(client, msg, suffix) => {
 	let error;
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted ¥${amount} into ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${snekres.body.id}/show).`,
+				description: `Succesfully converted ¥${amount} into ${snekres.body.payout} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${snekres.body.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
