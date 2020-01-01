@@ -1,6 +1,7 @@
-const { post } = require("chainfetch");
+const Scambio = require("@discoin/scambio");
 
 module.exports = async(client, msg, suffix) => {
+	const discoinToken = require("../../Configuration/auth.js").discoinToken;
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
@@ -13,15 +14,13 @@ module.exports = async(client, msg, suffix) => {
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
-	let snekres;
+	const client2 = new Scambio(discoinToken, "DTS");
+	let newTransaction;
 	try {
-		snekres = await post("https://discoin.zws.im/transactions").set({
-			Authorization: "Bearer "+require("../../Configuration/auth.js").discoinToken,
-			"Content-Type": "application/json",
-		}).send({
-			user: msg.author.id,
+		newTransaction = await client2.transactions.create({
+			to: currency,
 			amount: parseInt(amount),
-			toId: currency,
+			user: msg.author.id,
 		});
 	} catch (err) {
 		error = err;
@@ -34,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted ¥${amount} into ${snekres.body.payout} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${snekres.body.id}/show).`,
+				description: `Succesfully converted ¥${amount} into ${newTransaction.payout} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),

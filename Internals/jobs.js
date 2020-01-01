@@ -2,6 +2,8 @@ const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { get, post, patch } = require("chainfetch");
 const auth = require("../Configuration/auth.js");
+const Scambio = require("@discoin/scambio");
+const client2 = new Scambio(auth.discoinToken, "DTS");
 
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {
@@ -75,22 +77,14 @@ scheduleJob("*/15 * * * * *", async() => {
 // Get Discoin transactions
 scheduleJob("*/5 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
-	let result = await get("https://discoin.zws.im/transactions?s=%7B%22to.id%22%3A%20%22DTS%22%2C%20%22handled%22%3A%20false%7D")
-		.set("Content-Type", "application/json")
-		.catch(e => {
-			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e.stack}\n\`\`\``, "348832329525100554");
-			return null;
-		});
-	if (!result) return;
-	for (let t of result.body) {
+	const unhandled = await client2.transactions.getMany(client2.commonQueries.UNHANDLED_TRANSACTIONS);
+	if (!unhandled.length) return;
+	for (const transaction of unhandled) {
 		// Try to fetch user
-		let user = await client.users.fetch(t.user);
+		let user = await client.users.fetch(transaction.user);
 		
 		// patch
-		let handle = await patch("https://discoin.zws.im/transactions/"+t.id)
-		.set("Authorization", "Bearer " + auth.discoinToken)
-		.set("Content-Type", "application/json")
-		.send({ handled: true })
+		await transaction.update({handled: true});
 		.catch(async e => {
 			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
 			let dmChannel = await user.createDM().catch(e => null);
@@ -100,14 +94,14 @@ scheduleJob("*/5 * * * *", async() => {
 
 		// add amount
 		let account = await user.account();
-		account.balance += t.payout;
+		account.balance += transaction.payout;
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		if (!user) return client.log(`:repeat: User ${t.user} received ¥${t.payout} from Discoin.`);
+		if (!user) return client.log(`:repeat: User ${transaction.user} received ¥${transaction.payout} from Discoin.`);
 		let dmChannel = await user.createDM().catch(e => null);
-		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits", description: `An amount of ¥${t.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${t.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-		client.log(`:repeat: ${user.username} (${user.id}) received ¥${t.payout} from Discoin.`);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `¥${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+		client.log(`:repeat: ${user.username} (${user.id}) received ¥${transaction.payout} from Discoin.`);
 	}
 });
 
