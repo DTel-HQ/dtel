@@ -82,15 +82,15 @@ scheduleJob("*/5 * * * *", async() => {
 	for (const transaction of unhandled) {
 		// Try to fetch user
 		let user = await client.users.fetch(transaction.user);
-		
+
 		// patch
-		await transaction.update({handled: true});
-		.catch(async e => {
-			client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
-			let dmChannel = await user.createDM().catch(e => null);
-			if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${t.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-			return null;
-		});
+		await transaction.update({ handled: true })
+			.catch(async e => {
+				client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
+				let dmChannel = await user.createDM().catch(_ => null);
+				if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+				return null;
+			});
 
 		// add amount
 		let account = await user.account();

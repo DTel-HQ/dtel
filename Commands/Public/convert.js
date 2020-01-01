@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 		});
 	} catch (err) {
 		error = err;
-		return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: "```json\n"+JSON.stringify(err.body)+"\n```" } });
+		return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`json\n${JSON.stringify(err.body)}\n\`\`\`` } });
 	} finally {
 		if (!error) {
 			account.balance -= amount;
