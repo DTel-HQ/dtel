@@ -15,8 +15,9 @@ module.exports = async(client, msg, suffix) => {
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
 	const client2 = new Scambio(discoinToken, "DTS");
+	let newTransaction;
 	try {
-		const newTransaction = await client2.transactions.create({
+		newTransaction = await client2.transactions.create({
 			to: currency,
 			amount: parseInt(amount),
 			user: msg.author.id,
