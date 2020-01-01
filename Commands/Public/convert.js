@@ -14,9 +14,9 @@ module.exports = async(client, msg, suffix) => {
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
-	const client2 = new Scambio(discoinToken, "DTS")
+	const client2 = new Scambio(discoinToken, "DTS");
 	try {
-		const newTransaction = await client2.transactions.create ({
+		const newTransaction = await client2.transactions.create({
 			to: currency,
 			amount: parseInt(amount),
 			user: msg.author.id,
