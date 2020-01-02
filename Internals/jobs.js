@@ -2,8 +2,8 @@ const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { get, post, patch } = require("chainfetch");
 const auth = require("../Configuration/auth.js");
-const Discoin = require("@discoin/scambio").default;
-const DClient = new Discoin(auth.discoinToken, "DTS");
+const { ScambioClient } = require("@discoin/scambio");
+const DClient = new ScambioClient(auth.discoinToken, "DTS");
 
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {

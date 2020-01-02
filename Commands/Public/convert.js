@@ -1,7 +1,7 @@
-const Discoin = require("@discoin/scambio").default;
+const { ScambioClient } = require("@discoin/scambio");
 
 module.exports = async(client, msg, suffix) => {
-	const DClient = new Discoin(require("../../Configuration/auth.js").discoinToken, "DTS");
+	const DClient = new ScambioClient(require("../../Configuration/auth.js").discoinToken, "DTS");
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
