@@ -1,13 +1,13 @@
-const Scambio = require("@discoin/scambio");
+const Scambio = require("@discoin/scambio").Client;
 
 module.exports = async(client, msg, suffix) => {
-	const client2 = new Scambio(require("../../Configuration/auth.js").discoinToken, "DTS");
+	const Discoin = new Scambio(require("../../Configuration/auth.js").discoinToken, "DTS");
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) {
 		try {
-			let currencies = await client2.currencies.getMany("filter=name||$excl||Test");
+			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test");
 			let dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let newTransaction;
 	try {
-		newTransaction = await client2.transactions.create({
+		newTransaction = await Discoin.transactions.create({
 			to: currency,
 			amount: parseInt(amount),
 			user: msg.author.id,
