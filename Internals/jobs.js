@@ -2,8 +2,8 @@ const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { get, post, patch } = require("chainfetch");
 const auth = require("../Configuration/auth.js");
-const Scambio = require("@discoin/scambio").Discoin;
-const Discoin = new Scambio(auth.discoinToken, "DTS");
+import {Client as Discoin} from '@discoin/scambio';
+const DClient = new Discoin(auth.discoinToken, "DTS");
 
 // Job to reset lottery and dailies every 24h.
 scheduleJob("0 0 0 * * *", async() => {
@@ -77,7 +77,7 @@ scheduleJob("*/15 * * * * *", async() => {
 // Get Discoin transactions
 scheduleJob("*/5 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
-	const unhandled = await Discoin.transactions.getMany(Discoin.commonQueries.UNHANDLED_TRANSACTIONS);
+	const unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
 	if (!unhandled.length) return;
 	for (const transaction of unhandled) {
 		// Try to fetch user
