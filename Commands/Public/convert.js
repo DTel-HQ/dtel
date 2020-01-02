@@ -1,20 +1,19 @@
 const Scambio = require("@discoin/scambio");
 
 module.exports = async(client, msg, suffix) => {
-	const discoinToken = require("../../Configuration/auth.js").discoinToken,
-	      client2 = new Scambio(discoinToken, "DTS");
+	const client2 = new Scambio(require("../../Configuration/auth.js").discoinToken, "DTS");
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) {
 		try {
-			let currencies = await client2.currencies.getMany("filter=name||$excl||Test"),
-			    dts = currencies.find(c => c.id === "DTS");
+			let currencies = await client2.currencies.getMany("filter=name||$excl||Test");
+			let dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `>convert [amount] [currency]\nSee the [docs](${config.discoinLInk}) for more information.`,
+				description: `\`>convert [amount] [currency]\`\nSee the [docs](${config.discoinLInk}) for more information.`,
 				fields: [{
 					name: "Current Exchange Rates",
 					value: currencies.map(c => "* "+c.name+" (`"+c.id+"`): 1 "+c.id+" = "+(parseFloat(dts.value)/parseFloat(c.value)).toFixed(4)+" DTS").join("\n")
