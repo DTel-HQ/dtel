@@ -41,7 +41,7 @@ const winston = global.winston = createLogger({
 	format: format.combine(
 		format.colorize(),
 		format.timestamp(),
-		format.printf(info => `${info.level}: [Shard Master] ${info.message} [${info.timestamp}]`)
+		format.printf(info => `${info.level}: [Shard Master] ${info.message} [${info.timestamp}]`),
 	),
 });
 

@@ -84,7 +84,7 @@ module.exports = async(client, msg, suffix) => {
 		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 		collected = (await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && ((m.content.length > 19 && m.content.length < 151) || /^0$/.test(m.content)),
-			{ max: 1, time: 300000 }
+			{ max: 1, time: 300000 },
 		)).first();
 
 		if (msg.guild && collected) collected.delete().catch(e => null);
@@ -117,7 +117,7 @@ module.exports = async(client, msg, suffix) => {
 		let regExp = new RegExp(filter, "i");
 		collected = (await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && (client.replaceNumber(m.content) === number.id || /^skip$/i.test(m.content) || /^0$/.test(m.content)),
-			{ max: 1, time: 120000 }
+			{ max: 1, time: 120000 },
 		)).first();
 
 		if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
@@ -161,7 +161,7 @@ module.exports = async(client, msg, suffix) => {
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content),
-				{ max: 1, time: 120000 }
+				{ max: 1, time: 120000 },
 			)).first();
 
 			if (!collected || /^0$/.test(collected.content)) {
@@ -188,7 +188,7 @@ module.exports = async(client, msg, suffix) => {
 			if (msg.guild && collected) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && ((m.content.length > 4 && m.content.length < 26) || /^0$/.test(m.content)),
-				{ max: 1, time: 180000 }
+				{ max: 1, time: 180000 },
 			)).first();
 
 			if (msg.guild && collected) collected.delete().catch(e => null);
@@ -211,7 +211,7 @@ module.exports = async(client, msg, suffix) => {
 
 			collected = (await msg.channel.awaitMessages(
 				async m => m.author.id === msg.author.id && ((m.content.length > 19 && m.content.length < 151) || /^0$/.test(m.content)),
-				{ max: 1, time: 300000 }
+				{ max: 1, time: 300000 },
 			)).first();
 
 			if (msg.guild && collected) collected.delete().catch(e => null);
@@ -330,7 +330,7 @@ module.exports = async(client, msg, suffix) => {
 
 	collected = (await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && (/^0$/.test(m.content) || filter.test(m.content)),
-		{ max: 1, time: 120000 }
+		{ max: 1, time: 120000 },
 	)).first();
 
 	if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
@@ -356,7 +356,7 @@ module.exports = async(client, msg, suffix) => {
 			omsg = await omsg.edit({ embed: cEmbed });
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && /^[012]$/.test(m.content),
-				{ max: 1, time: 60000 }
+				{ max: 1, time: 60000 },
 			)).first();
 
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
@@ -396,7 +396,7 @@ module.exports = async(client, msg, suffix) => {
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && ["yes", "no"].includes(m.content.toLowerCase()),
-				{ max: 1, time: 60000 }
+				{ max: 1, time: 60000 },
 			)).first();
 
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);

@@ -73,7 +73,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		// create collector
 		let collected = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-			{ max: 1, time: 60000 }
+			{ max: 1, time: 60000 },
 		);
 
 		// on collected
@@ -123,7 +123,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		// Make a collector for yes/no
 		let collected = await msg.channel.awaitMessages(
 			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-			{ max: 1, time: 60000 }
+			{ max: 1, time: 60000 },
 		);
 
 		// on collection

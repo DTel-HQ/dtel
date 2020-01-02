@@ -13,17 +13,15 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [currency]\`\nSee the [docs](${config.discoinLInk}) for more information.`,
+				description: `\`>convert [amount] [currency]\`\nSee the [docs](${config.discoinLink}) for more information.`,
 				fields: [{
 					name: "Current Exchange Rates",
-					value: currencies.map(c => "* "+c.name+" (`"+c.id+"`): 1 "+c.id+" = "+(parseFloat(dts.value)/parseFloat(c.value)).toFixed(4)+" DTS").join("\n")
-				}]
+					value: currencies.map(c => `•${c.name}(\`${c.id}\`) 1 ${c.id}0 = ${(parseFloat(dts.value) / parseFloat(c.value)).toFixed(4)} DTS`).join("\n"),
+				}],
 			} });
 		} catch (err) {
 			error = err;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`json\n${JSON.stringify(err.body)}\n\`\`\`` } });
-		} finally {
-			return;
 		}
 	}
 	amount = parseInt(amount);
