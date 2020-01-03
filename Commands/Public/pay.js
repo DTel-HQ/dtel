@@ -122,7 +122,7 @@ module.exports = async(client, msg, suffix) => {
 				icon_url: msg.author.displayAvatarURL(),
 			},
 			title: "You received money!",
-			description: "Someone gave money you. Here's your receipt.",
+			description: "Someone gave money to you. Here's your receipt.",
 			fields: [
 				{
 					name: "User",
