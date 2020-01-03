@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) {
 		try {
-			let currencies = await DClient.currencies.getMany("filter=name||$excl||Test");
+			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test");
 			let dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
