@@ -84,7 +84,7 @@ scheduleJob("*/5 * * * *", async() => {
 		let user = await client.users.fetch(transaction.user);
 
 		// patch
-		await transaction.update({ handled: true })
+		transaction.update({ handled: true })
 			.catch(async e => {
 				client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
 				let dmChannel = await user.createDM().catch(_ => null);

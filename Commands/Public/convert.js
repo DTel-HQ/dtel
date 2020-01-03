@@ -7,16 +7,16 @@ module.exports = async(client, msg, suffix) => {
 	let currency = suffix.split(" ")[1];
 	if (!amount || !currency) {
 		try {
-			let currencies = await DClient.currencies.getMany("filter=name||$excl||Test");
+			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC");
 			let dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [currency]\`\nSee the [docs](${config.discoinLink}) for more information.`,
+				description: `\`>convert [amount] [currency]\`\n\`[currency]\` = the 3-letter currency codes written in code blocks below.\nSee the [docs](${config.discoinLink}) for more information.`,
 				fields: [{
 					name: "Current Exchange Rates",
-					value: currencies.map(c => `•${c.name}(\`${c.id}\`) 1 ${c.id}0 = ${(parseFloat(dts.value) / parseFloat(c.value)).toFixed(4)} DTS`).join("\n"),
+					value: currencies.map(c => `• ${c.name} (\`${c.id}\`): 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
 				}],
 			} });
 		} catch (err) {
