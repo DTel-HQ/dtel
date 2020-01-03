@@ -13,10 +13,10 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [currency]\`\nSee the [docs](${config.discoinLink}) for more information.`,
+				description: `\`>convert [amount] [currency]\`\n\`[currency]\` are 3-letter currency codes written in code blocks below.\nSee the [docs](${config.discoinLink}) for more information.`,
 				fields: [{
 					name: "Current Exchange Rates",
-					value: currencies.map(c => `• ${c.name}(\`${c.id}\`) 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
+					value: currencies.map(c => `• ${c.name} (\`${c.id}\`) 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
 				}],
 			} });
 		} catch (err) {
