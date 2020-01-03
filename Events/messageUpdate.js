@@ -31,7 +31,7 @@ module.exports = async(omsg, nmsg) => {
 	let hidden = fromSide.hidden;
 
 	let toCSChannel = editChannel === config.supportChannel;
-	let toSend = `**${nmsg.author.tag}${toCSChannel ? `(${nmsg.author.id})` : ""}[edited]** ${phone} ${nmsg.content}`;
+	let toSend = `**${hidden ? "Anonymous#0000" : nmsg.author.tag}${toCSChannel ? `(${nmsg.author.id})` : ""}[edited]** ${phone} ${nmsg.content}`;
 	let edited = await client.apiEdit(toSend, editChannel, message.dtelmsg);
 	if (!edited.id) {
 		await client.apiSend(`[EDITED]: ${toSend}`, editChannel);
