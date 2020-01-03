@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/austinhuang0131/discordtel#readme",
   "dependencies": {
-    "@discoin/scambio": "^1.0.2",
+    "@discoin/scambio": "^1.0.4",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.0.0",
