@@ -19,6 +19,7 @@
     "url": "https://github.com/austinhuang0131/discordtel/issues"
   },
   "homepage": "https://github.com/austinhuang0131/discordtel#readme",
+  "engines": { "node": "12" },
   "dependencies": {
     "@discoin/scambio": "github:Mitchell3514/scambio#try-http",
     "bufferutil": "^4.0.1",
