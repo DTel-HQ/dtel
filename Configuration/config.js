@@ -57,14 +57,14 @@ module.exports = {
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
-	discoinLink: "https://discoin.gitbook.io/docs/user-guide",
+	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
 	githubLink: "https://github.com/austinhuang0131/discordtel",
-	guidelink: "https://discordtel.austinhuang.me/en/latest/Customer%20Support%20Guide/",
+	guidelink: "https://discordtel.austinhuang.me/en/latest/Customer-Support-Guide/",
 	guildInvite: "https://discord.gg/DcayXMc",
 	paymentLink: "http://discordtel.readthedocs.io/en/latest/Payment/",
 	siteLink: "https://discordtel.austinhuang.me",
 	suggestLink: "https://feedback.austinhuang.me/",
-	vipLink: "https://discordtel.austinhuang.me/en/latest/VIP%20Number/",
+	vipLink: "https://discordtel.austinhuang.me/en/latest/VIP-Number/",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
 	// Embed Colors
