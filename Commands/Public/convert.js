@@ -1,4 +1,4 @@
-const Discoin = require("scambio").default;
+const Discoin = require("@discoin/scambio").default;
 
 module.exports = async(client, msg, suffix) => {
 	const DClient = new Discoin(require("../../Configuration/auth.js").discoinToken, "DTS");
