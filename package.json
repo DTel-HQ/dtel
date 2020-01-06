@@ -13,12 +13,16 @@
   "keywords": [
     "DTEL"
   ],
-  "author": "SunburntRock89",
+  "contributors": [
+    "Mitchell Rademaker <contact@mitchells.work> (https://mitchells.work)",
+    "Austin Huang <im@austinhuang.me> (https://austinhuang.me)",
+    "SunburntRock89 <rhys0710@live.com>"
+  ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/austinhuang0131/discordtel/issues"
   },
-  "homepage": "https://github.com/austinhuang0131/discordtel#readme",
+  "homepage": "https://discordtel.austinhuang.me",
   "engines": { "node": "12" },
   "dependencies": {
     "@discoin/scambio": "^1.0.5",
