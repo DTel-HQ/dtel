@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 			} });
 		} catch (err) {
 			error = err;
-			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`js\n${err}\n\`\`\`` } });
+			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`\n${err}\n\`\`\`` } });
 		}
 	}
 	amount = parseInt(amount);
