@@ -1,4 +1,3 @@
-const { post } = require("snekfetch");
 const auth = require("../Configuration/auth.js");
 
 module.exports = async guild => {
@@ -6,16 +5,6 @@ module.exports = async guild => {
 	client.log(`:outbox_tray: Left guild \`${guild.id}\`(${name}). Currently in ${client.guilds.size} servers on cluster ${client.shard.id}`);
 	let numbers = await r.table("Numbers").filter({ guild: guild.id });
 	let mailboxes = await r.table("Mailbox").filter({ guild: guild.id });
-
-	// let result = await post(`https://discordbots.org/api/bots/${client.user.id}/stats`)
-	// 	.set("Authorization", auth.tokens.bots_org)
-	// 	.set("Content-Type", "application/json")
-	// 	.send({
-	// 		shard_id: client.shard.id,
-	// 		shard_count: client.shard.count,
-	// 		server_count: client.guilds.size,
-	// 	})
-	// 	.catch(e => winston.error(`Couldn't post to DBots: ${e}`));
 
 	if (!numbers) return;
 
