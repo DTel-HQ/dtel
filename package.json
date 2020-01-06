@@ -33,7 +33,6 @@
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
     "rethinkdbdash": "^2.3.31",
-    "snekfetch": "^3.6.4",
     "utf-8-validate": "^5.0.2",
     "uuid": "^3.3.3",
     "winston": "^3.2.1",
