@@ -149,7 +149,7 @@ scheduleJob("*/5 * * * *", async() => {
 	}
 });
 
-scheduleJob("0 20 1 0 0", async() => {
+scheduleJob("0 20 7 * *", async() => {
 	let prize = 1;
 	let topSize = 5;
 
