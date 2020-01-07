@@ -21,5 +21,5 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance, daily: true });
 	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your ¥${amount}! You now have ¥${client.format(account.balance)}.\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See ${config.voteLink} for a list of voting sites.` } });
-	await client.log(`:calendar: ${msg.author.tag} (${msg.author.id}) claimed their daily ¥${amount}.`);
+	await client.log(`:calendar: ${msg.author.username} (${msg.author.id}) claimed their daily ¥${amount}.`);
 };
