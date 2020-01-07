@@ -180,7 +180,7 @@ scheduleJob("0 20 7 * *", async() => {
 	// Make the announcement embed
 	let winnersString = "";
 	for (let winner of winners) {
-		let user = await client.users.get(winner.id).catch(e => null);
+		let user = await client.users.get(winner.id);
 		winnersString += user ? `-${user.username}\n` : "Unknown";
 	}
 
