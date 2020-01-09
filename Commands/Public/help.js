@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">rdial / >rcall",
-					value: "Dial a random number from the `*411` phonebook.",
+					value: "Dial a random number from the `*411` phonebook. (To register yourself on the phonebook, do `>dial *411`.)",
 				},
 				{
 					name: ">block",
