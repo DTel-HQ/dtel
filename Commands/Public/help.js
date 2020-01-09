@@ -13,8 +13,16 @@ module.exports = async(client, msg, suffix) => {
 			description: "For more information, use `>info`, `>links` or call customer support: `>dial *611`.",
 			fields: [
 				{
-					name: ">wizard",
-					value: "Get yourself a number.",
+					name: "Get yourself a number to call others!",
+					value: "Do `>wizard` and follow the prompts. Once you got one, you can...",
+				},
+				{
+					name: ">dial / >call",
+					value: "Dial a specific DiscordTel number you have in mind. Or...",
+				},
+				{
+					name: ">rdial / >rcall",
+					value: "Dial a random number from the `*411` phonebook.",
 				},
 				{
 					name: ">block",
@@ -22,27 +30,11 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">contacts",
-					value: "A contact book for DiscordTel numbers.",
+					value: "A personal contact book for DiscordTel numbers.",
 				},
 				{
-					name: ">convert",
-					value: "Convert your credits into other bot currency via [Discoin](http://discoin.gitbooks.io/docs).",
-				},
-				{
-					name: ">daily",
-					value: "Get daily credits. More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).",
-				},
-				{
-					name: ">dial / >call",
-					value: "Dial a number.",
-				},
-				{
-					name: ">rdial / >rcall",
-					value: "Dial a random number from the `*411` phonebook.",
-				},
-				{
-					name: ">lottery",
-					value: "Real gambling right there.",
+					name: "Currency commands",
+					value: "More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
 				},
 				{
 					name: ">mailbox",
@@ -55,10 +47,6 @@ module.exports = async(client, msg, suffix) => {
 				{
 					name: ">message",
 					value: "Sends a message to another mailbox.",
-				},
-				{
-					name: ">pay",
-					value: "Give money to another user for a fee.",
 				},
 				{
 					name: ">transfer",
@@ -76,7 +64,7 @@ module.exports = async(client, msg, suffix) => {
 			timestamp: new Date(),
 			footer: {
 				icon_url: "https://avatars1.githubusercontent.com/u/16656689",
-				text: "DiscordTel V3 - made with <3 by Austin Huang and his team",
+				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and his team",
 			},
 		},
 	};
