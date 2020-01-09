@@ -33,24 +33,20 @@ module.exports = async(client, msg, suffix) => {
 					value: "A personal contact book for DiscordTel numbers.",
 				},
 				{
-					name: "Currency commands",
-					value: "More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
-				},
-				{
-					name: ">mailbox",
-					value: "Check mailbox messages or create one.",
-				},
-				{
 					name: ">mention",
 					value: "Get mentioned when there's an incoming call.",
 				},
 				{
-					name: ">message",
-					value: "Sends a message to another mailbox.",
-				},
-				{
 					name: ">transfer",
 					value: "Transfer the other side in a call to another number.",
+				},
+				{
+					name: "Currency commands",
+					value: "More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).\n• `>dial *233`: Renew your number registration using credits.\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
+				},
+				{
+					name: "Mailbox commands",
+					value: "\n• `>mailbox`: Check mailbox messages or create one.\n• `>message`: Write a message to other number's mailbox.",
 				},
 				{
 					name: ">upgrade",
@@ -64,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 			timestamp: new Date(),
 			footer: {
 				icon_url: "https://avatars1.githubusercontent.com/u/16656689",
-				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and his team",
+				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};
