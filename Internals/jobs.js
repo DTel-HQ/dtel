@@ -75,7 +75,7 @@ scheduleJob("*/15 * * * * *", async() => {
 });
 
 // Get Discoin transactions
-scheduleJob("*/5 * * * *", async() => {
+scheduleJob("*/1 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	const unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
 	if (!unhandled.length) return;
@@ -106,7 +106,7 @@ scheduleJob("*/5 * * * *", async() => {
 });
 
 // Vote check
-scheduleJob("*/5 * * * *", async() => {
+scheduleJob("*/1 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 
 	let result = await get("http://hill-playroom.glitch.me/dtel")
