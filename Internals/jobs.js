@@ -187,7 +187,7 @@ scheduleJob("0 20 * * 0", async() => {
 	let month = new Date().toLocaleString("default", { month: "long" });
 	let embed = {
 		color: config.colors.info,
-		title: `${month}'s highest voters'`,
+		title: `This week's highest voters`,
 		description: `The voter(s) with the highest amount have been awarded ${prize} VIP Month(s).`,
 		footer: {
 			text: "Note that bosses do not qualify for the prize.",
@@ -210,7 +210,7 @@ scheduleJob("0 20 * * 0", async() => {
 	for (let vote of top) {
 		let voteUser = await client.users.fetch(vote.id).catch(e => null);
 		let username = voteUser ? voteUser.username : "Unknown";
-		topString += `${top.indexOf(vote) + 1}. ${vote.amount} votes - ${username}`;
+		topString += `${top.indexOf(vote) + 1}. ${vote.amount} votes - ${username}\n`;
 	}
 	embed.fields.push({ name: `Top ${topSize}`, value: topString });
 
