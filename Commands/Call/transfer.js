@@ -28,8 +28,8 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	// See if the other channel is already in a call
-	let activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
-	if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
+	let activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "fromChannel" }).nth(0).default(null);
+	if (!activeCall) activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "toChannel" }).nth(0).default(null);
 	if (activeCall) return msg.channel.send({ embed: { color: config.colors.error, title: "Busy line", description: "That number is already in a call." } });
 
 	// All checks returned well, delete current call.
