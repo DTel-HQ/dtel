@@ -51,7 +51,10 @@ module.exports = async(client, msg, suffix) => {
 		// if they want to add a number
 		if (/add/i.test(collected.first().content)) {
 			let getNumber = async bad => {
-				if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+				if (!perm) {
+					msg.author.busy = false;
+					return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+				}
 				if (contacts.length >= 10) msg.channel.send({ embed: { color: config.colors.error, title: "Too many contacts", description: "We currently do not allow more than 9 contacts." } });
 
 				// send embed
@@ -148,7 +151,10 @@ module.exports = async(client, msg, suffix) => {
 		// if edit
 		if (/edit/i.test(collected.first().content.split(" ")[0])) {
 			// check for perm & if the contact is legit
-			if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+			if (!perm) {
+				msg.author.busy = false;
+				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+			}
 
 			omsg = await msg.channel.send({ embed: {
 				color: config.colors.contacts,
