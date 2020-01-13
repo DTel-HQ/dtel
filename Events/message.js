@@ -51,7 +51,10 @@ module.exports = async msg => {
 
 	let cmdFile;
 	// Find call command files
-	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
+	if (call && !msg.content.startsWith(prefix)) {
+		winston.info(`[callHandler] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
+		return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
+	}
 	if (call && msg.content.startsWith(prefix)) cmdFile = await reload(`./Commands/Call/${cmd}`);
 	if (!cmdFile && (call && !call.hold)) return;
 	// Find non call command files
