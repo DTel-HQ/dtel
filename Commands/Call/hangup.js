@@ -1,5 +1,6 @@
 module.exports = async(client, msg, suffix, call) => {
-	if (call.to.number === config.supportNumber && msg.channel.id != config.supportChannel) return;
+	if (call.to.number === config.supportNumber && msg.channel.id != config.supportChannel) return msg.channel.send({ embed: { color: config.colors.error, title: "You cannot hang up on Customer Support!", description: "If your problem is solved, simply indicate so to the responding agent." } });
+	let myNumber = await r.table("Numbers").get(call.from.number);
 
 	// Calculate time the call lasted for.
 	let duration, h, m, s, time;
