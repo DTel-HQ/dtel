@@ -64,7 +64,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 		let omsg = await msg.channel.send({ embed: {
 			color: config.colors.error,
 			title: "Number is already in a call",
-			description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup.\nRespond with \`yes\` or \`no\``,
+			description: `Would you like to wait ${Math.round(maxTime / 60000)} minutes until the number is available?\nYou won't be able to hangup before the waiting period expires.\nRespond with \`yes\` or \`no\``,
 			footer: {
 				text: "This call will automatically be hung up after 60 seconds of inactivity",
 			},
