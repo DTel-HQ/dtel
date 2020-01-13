@@ -52,8 +52,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "That number can't be reached." } });
 	if (new Date(toDialDoc.expiry).getTime() < Date.now() && myNumber.id != config.aliasNumbers["*611"]) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "The number you are trying to reach has expired. Please contact the owner to renew it." } });
 
-	let activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
-	if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
+	let activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "fromChannel" }).nth(0).default(null);
+	if (!activeCall) activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "toChannel" }).nth(0).default(null);
 	// This could be turned into a module for hangup support.
 	if (activeCall) {
 		// Max time must be full minutes.
