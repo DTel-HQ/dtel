@@ -44,6 +44,7 @@ module.exports = async(client, msg, suffix) => {
 		if (new Date(toDialDoc.expiry).getTime() < Date.now() || (toDial.blocked && toDial.blocked.includes(fromNumber.id))) continue;
 
 		toCall = toDial.id;
+		break;
 	}
 
 	// Change to not found or change to found!
