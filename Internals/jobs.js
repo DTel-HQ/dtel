@@ -239,13 +239,11 @@ scheduleJob("0 0 0 * * *", async() => {
 	if (client.shard.id != 0) return;
 
 	const numbers = await r.table("Numbers");
-	let deleted = [];
 
 	for (let number of numbers) {
 		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_noChannel" });
-			deleted.push(number);
 			break;
 		}
 		let owner = number.guild ? (await client.api.guilds(number.guild).get().catch(e => null)).owner_id : null;
@@ -258,13 +256,13 @@ scheduleJob("0 0 0 * * *", async() => {
 			ctitle,
 			cdesc;
 
-		let expiryMS = new Date(number.expiry).getTime();
+		// v2 number has expiry as a date object, yet v3 has string (timestamp) so compromise
+		let expiryMS = typeof number.expiry === "object" ? number.expiry.getTime() : new Date(number.expiry).getTime();
 
 		// First check wether number isn't (>15d) expired - then warn/delete.
 		if (expiryMS > warnMS) continue;
 		if (expiryMS < deleteMS) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_expired" });
-			deleted.push(number);
 
 			otitle = `Your number has been deleted`;
 			odesc = `Your number (${number.id}) in <#${channel.id}> has been deleted as it has been expired for >${deleteDays} days.`;
@@ -292,19 +290,6 @@ scheduleJob("0 0 0 * * *", async() => {
 			.setFooter("You are receiving this as you are the owner of the server.");
 		if (owner) await (await client.users.fetch(owner)).send({ embed: embed }).catch(e => null);
 	}
-
-	// someone switch package for this
-	// let haste;
-	// try {
-	// 	haste = await post("http://hastebin.com/documents").send(`// Deleted numbers: ${new Date()}\n\n${JSON.stringify(deleted)}`);
-	// } catch (err) {
-	// 	haste = null;
-	// }
-
-	let count = deleted.length;
-	winston.info(`[ScheduleJob] Deleted ${count} expired numbers`);
-	// if (haste) client.log(`🔥 Automatically deleted ${count} numbers. Results: <http://hastebin.com/${haste.body.key}>`);
-	client.log(`🔥 Automatically deleted ${count} numbers. Still not posting to hastebin.`);
 });
 
 // Job to delete stored messages of calls.
