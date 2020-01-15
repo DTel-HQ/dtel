@@ -278,6 +278,7 @@ scheduleJob("0 0 0 * * *", async() => {
 			ctitle = `❕This number will be deleted in 24h❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
 		}
+		else continue;
 
 		embed.setTitle(ctitle)
 			.setDescription(cdesc);
