@@ -1,7 +1,7 @@
 module.exports = async(client, msg, suffix) => {
 	const number = await msg.channel.number;
 	if (!number || number.id === config.supportNumber) return;
-	if (msg.channel.type === "dm") return msg.channel.send({ embed: { color: config.colors.info, title: "Unnecessary", description: "There's no need for this command in DMs" } });
+	if (msg.channel.type === "dm") return msg.channel.send({ embed: { color: config.colors.info, title: "Bruh", description: "There's no need for this command in DMs... Don't you get pinged anyway?" } });
 
 	// Get/make list of toPing and string
 	let toMention = number.mentions ? number.mentions : [];
@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 	// If removal
 
 	// Don't let the list exceed more than 10 people
-	if (toMention.length >= 9) {
+	if (toMention.length >= 9 && !toMention.includes(string)) {
 		return msg.channel.send({ embed: {
 			color: config.colors.error,
 			title: "Max mentions reached.",
