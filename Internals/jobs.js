@@ -284,13 +284,12 @@ scheduleJob("0 0 0 * * *", async() => {
 				await r.table("Accounts").get(account.id).update({ balance: newBalance });
 				await r.table("Numbers").get(number.id).update({ expiry: newExpiry });
 
-				otitle = `Automatic Renewal`
+				otitle = `Automatic Renewal`;
 				odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
 				ctitle = `Automatic Renewal`;
 				cdesc = `This channel's number (${number.id}) has expired. Seeing the owner has a sufficient balance, we have renewed it for you!`;
-			}
-			else {
-				otitle = `Automatic Renewal Failure`
+			}	else {
+				otitle = `Automatic Renewal Failure`;
 				odesc = `Your number (${number.id}) in <#${channel.id}> has expired. I am unable to deduct money from your account, so please call \`*233\` from <#${channel.id}> to manually renew your number.`;
 				ctitle = `Automatic Renewal Failure`;
 				cdesc = `This channel's number (${number.id}) has expired. I am unable to deduct money from the owner's account, so please call \`*233\` to manually renew the number.`;
