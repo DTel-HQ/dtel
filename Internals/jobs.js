@@ -282,7 +282,7 @@ scheduleJob("0 0 0 * * *", async() => {
 				let newExpiry = new Date(number.expiry);
 				newExpiry.setMonth(newExpiry.getMonth() + 1);
 				await r.table("Accounts").get(account.id).update({ balance: newBalance });
-				await r.table("Numbers").get(myNumber.id).update({ expiry: newExpiry });
+				await r.table("Numbers").get(number.id).update({ expiry: newExpiry });
 
 				otitle = `Automatic Renewal`
 				odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
