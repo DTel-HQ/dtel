@@ -26,7 +26,8 @@ module.exports = async(omsg, nmsg) => {
 	if (!message) return;
 
 	let phone = config.callPhones.default;
-	for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+	if (fromSide.vip) phone = config.callPhones.donator;
+	if (!hidden) for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
 	let hidden = fromSide.hidden;
 
