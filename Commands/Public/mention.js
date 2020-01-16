@@ -44,7 +44,7 @@ module.exports = async(client, msg, suffix) => {
 	msg.channel.send({ embed: {
 		color: config.colors.success,
 		title: "Success",
-		description: `${userID = msg.author.id ? "You have" : `${userID} has`} been **${removed ? "removed from" : "added to"}** the list of mentions.`,
+		description: `${userID === msg.author.id ? "You have" : `${userID} has`} been **${removed ? "removed from" : "added to"}** the list of mentions.`,
 		fields: [
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
