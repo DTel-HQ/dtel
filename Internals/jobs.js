@@ -225,7 +225,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 
 // Job to delete numbers if expired for a long time
-scheduleJob("0 20 1 * * *", async() => {
+scheduleJob("0 30 1 * * *", async() => {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
@@ -254,7 +254,9 @@ scheduleJob("0 20 1 * * *", async() => {
 		let otitle,
 			odesc,
 			ctitle,
-			cdesc;
+			cdesc,
+		    	account,
+		    	newBalance;
 
 		// v2 number has expiry as a date object, yet v3 has string (timestamp) so compromise
 		let expiryMS = typeof number.expiry === "object" ? number.expiry.getTime() : new Date(number.expiry).getTime();
@@ -275,25 +277,27 @@ scheduleJob("0 20 1 * * *", async() => {
 			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `❕This number will be deleted in 24h❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
-		} else if (expiryMS > time && expiryMS < time + 86400000) {
-			let account = await (await client.users.fetch(owner)).account();
-			let newBalance = account.balance - config.renewalRate;
-			if (newBalance >= 0) {
-				let newExpiry = new Date(number.expiry);
-				newExpiry.setMonth(newExpiry.getMonth() + 1);
-				await r.table("Accounts").get(account.id).update({ balance: newBalance });
-				await r.table("Numbers").get(number.id).update({ expiry: newExpiry });
-
-				otitle = `Automatic Renewal`;
-				odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
-				ctitle = `Automatic Renewal`;
-				cdesc = `This channel's number (${number.id}) has expired. Seeing the owner has a sufficient balance, we have renewed it for you!`;
-			}	else {
-				otitle = `Automatic Renewal Failure`;
-				odesc = `Your number (${number.id}) in <#${channel.id}> has expired. I am unable to deduct money from your account, so please call \`*233\` from <#${channel.id}> to manually renew your number.`;
-				ctitle = `Automatic Renewal Failure`;
-				cdesc = `This channel's number (${number.id}) has expired. I am unable to deduct money from the owner's account, so please call \`*233\` to manually renew the number.`;
-			}
+		}
+		// automatic renewal stuff
+		if (expiryMS > time && expiryMS < time + 86400000) {
+			account = await (await client.users.fetch(owner)).account();
+			newBalance = account.balance - config.renewalRate;
+		}
+		if (newBalance && newBalance >= 0) {
+			let newExpiry = new Date(number.expiry);
+			newExpiry.setMonth(newExpiry.getMonth() + 1);
+			await r.table("Accounts").get(account.id).update({ balance: newBalance });
+			await r.table("Numbers").get(number.id).update({ expiry: newExpiry });
+			embed.setColor(config.colors.success);
+			otitle = `Automatic Renewal`;
+			odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
+			ctitle = `Automatic Renewal`;
+			cdesc = `This channel's number (${number.id}) has expired. Seeing the owner has a sufficient balance, we have renewed it for you!`;
+		} else if (newBalance) {
+			otitle = `Automatic Renewal Failure`;
+			odesc = `Your number (${number.id}) in <#${channel.id}> has expired. I am unable to deduct money from your account, so please call \`*233\` from <#${channel.id}> to manually renew your number.`;
+			ctitle = `Automatic Renewal Failure`;
+			cdesc = `This channel's number (${number.id}) has expired. I am unable to deduct money from the owner's account, so please call \`*233\` to manually renew the number.`;
 		}
 
 		embed.setTitle(ctitle)
