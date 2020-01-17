@@ -287,6 +287,7 @@ scheduleJob("0 35 1 * * *", async() => {
 			account = await (await client.users.fetch(owner)).account();
 			newBalance = account.balance - config.renewalRate;
 		}
+		console.log(number.id, newBalance);
 		if (newBalance && newBalance >= 0) {
 			let newExpiry = new Date(number.expiry);
 			newExpiry.setMonth(newExpiry.getMonth() + 1);
