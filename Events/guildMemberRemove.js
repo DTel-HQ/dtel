@@ -7,7 +7,7 @@ module.exports = async member => {
 	let n, p;
 	for (let i = 0; i < numbers.length; i++) {
 		n = numbers[i];
-		if (!n.mentions) continue;
+		if (!n || !n.mentions) continue;
 		p = n.mentions.indexOf(`<@${member.id}>`);
 		if (p < 0) continue;
 		n.mentions.splice(p, 1);
