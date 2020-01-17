@@ -225,11 +225,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 
 // Job to delete numbers if expired for a long time
-<<<<<<< HEAD
-scheduleJob("0 50 1 * * *", async() => {
-=======
-scheduleJob("0 35 1 * * *", async() => {
->>>>>>> parent of 8b38ab3... [Fix
+scheduleJob("0 10 2 * * *", async() => {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
