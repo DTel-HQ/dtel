@@ -263,26 +263,28 @@ scheduleJob("0 0 0 * * *", async() => {
 
 		if (expiryMS < deleteMS) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_expired" });
+			winston.info(`[ScheduleJob] Number ${number.id} deleted`);
 			otitle = `Your number has been deleted`;
 			odesc = `Your number (${number.id}) in <#${channel.id}> has been deleted as it has been expired for >${deleteDays} days.`;
 			ctitle = `This channel's number has been deleted`;
 			cdesc = `This channel's number (${number.id}) has been deleted as it has been expired for >${deleteDays} days.`;
 		} else if (expiryMS < warnMS && expiryMS > warnMS - 86400000) {
+			winston.info(`[ScheduleJob] Number ${number.id} warned`);
 			otitle = `Your number will soon be deleted`;
 			odesc = `Your number ${number.id} in <#${channel.id}> has expired and will be automatically deleted in ${deleteDays - warnDays} days. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `This number will soon be deleted`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${warnDays} days and will automatically be deleted in ${deleteDays - warnDays}. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
 		} else if (expiryMS < lastWarnMS && expiryMS > lastWarnMS - 86400000) {
+			winston.info(`[ScheduleJob] Number ${number.id} lastwarned`);
 			otitle = `❕This number will be deleted in 24h❕`;
 			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
 			ctitle = `❕This number will be deleted in 24h❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
-		}
-		// automatic renewal stuff
-		if (expiryMS > time && expiryMS < time + 86400000) {
+		} else if (expiryMS > time && expiryMS < time + 86400000) {
+			// automatic renewal stuff
 			account = await (await client.users.fetch(owner)).account();
 			newBalance = account.balance - config.renewalRate;
-		}
+		} else continue;
 		if (newBalance && newBalance >= 0) {
 			let newExpiry = new Date(number.expiry);
 			newExpiry.setMonth(newExpiry.getMonth() + 1);
@@ -293,7 +295,9 @@ scheduleJob("0 0 0 * * *", async() => {
 			odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
 			ctitle = `Automatic Renewal`;
 			cdesc = `This channel's number (${number.id}) has expired. Seeing the owner has a sufficient balance, we have renewed it for you!`;
+			winston.info(`[ScheduleJob] Number ${number.id} renewed, user ${owner} balance ${newBalance}`);
 		} else if (newBalance) {
+			winston.info(`[ScheduleJob] Number ${number.id} renew failure, user ${owner} balance ${account.balance}`);
 			otitle = `Automatic Renewal Failure`;
 			odesc = `Your number (${number.id}) in <#${channel.id}> has expired. I am unable to deduct money from your account, so please call \`*233\` from <#${channel.id}> to manually renew your number.`;
 			ctitle = `Automatic Renewal Failure`;
