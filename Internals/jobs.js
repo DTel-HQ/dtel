@@ -225,7 +225,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 
 // Job to delete numbers if expired for a long time
-scheduleJob("0 20 2 * * *", async() => {
+scheduleJob("0 0 0 * * *", async() => {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
