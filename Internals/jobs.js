@@ -225,7 +225,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 
 // Job to delete numbers if expired for a long time
-scheduleJob("0 15 1 * * *", async() => {
+scheduleJob("0 20 2 * * *", async() => {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
@@ -283,7 +283,6 @@ scheduleJob("0 15 1 * * *", async() => {
 			account = await (await client.users.fetch(owner)).account();
 			newBalance = account.balance - config.renewalRate;
 		}
-		console.log(number.id, newBalance);
 		if (newBalance && newBalance >= 0) {
 			let newExpiry = new Date(number.expiry);
 			newExpiry.setMonth(newExpiry.getMonth() + 1);
@@ -307,7 +306,10 @@ scheduleJob("0 15 1 * * *", async() => {
 		embed.setTitle(otitle)
 			.setDescription(odesc)
 			.setFooter("You are receiving this as you are the owner of the server.");
-		if (owner) await (await client.users.fetch(owner)).send({ embed: embed }).catch(e => null);
+		if (owner) {
+			let dmChannel = await (await client.users.fetch(owner)).createDM().catch(e => null);
+			if (dmChannel) dmChannel.send({ embed: embed }).catch(e => null);
+		}
 	}
 });
 
