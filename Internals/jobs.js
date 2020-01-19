@@ -35,11 +35,11 @@ scheduleJob("0 0 0 * * *", async() => {
 
 		await r.table("Accounts").get(winnerID).update({ balance: balance });
 		let user = await client.users.fetch(winnerID);
-		(await user.createDM()).send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } })
+		(await user.createDM()).send({ embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of <:DTS:668551813317787659>${lastEntry.jackpot}.` } })
 			.catch(async _ => {
 				let channel = await client.api.channels(lastEntry.channel).get();
 				if (!channel) return;
-				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ¥${lastEntry.jackpot}.` } }, channel.id)
+				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of <:DTS:668551813317787659>${lastEntry.jackpot}.` } }, channel.id)
 					.catch(e => null);
 			});
 	}
@@ -98,10 +98,10 @@ scheduleJob("*/1 * * * *", async() => {
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		if (!user) return client.log(`:repeat: User ${transaction.user} received ¥${transaction.payout} from Discoin.`);
+		if (!user) return client.log(`:repeat: User ${transaction.user} received <:DTS:668551813317787659>${transaction.payout} from Discoin.`);
 		let dmChannel = await user.createDM().catch(e => null);
-		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `¥${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-		client.log(`:repeat: ${user.username} (${user.id}) received ¥${transaction.payout} from Discoin.`);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `<:DTS:668551813317787659>${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+		client.log(`:repeat: ${user.username} (${user.id}) received <:DTS:668551813317787659>${transaction.payout} from Discoin.`);
 	}
 });
 
@@ -144,8 +144,8 @@ scheduleJob("*/1 * * * *", async() => {
 
 		// Let the user know and log the votes
 		let dmChannel = await user.createDM().catch(e => null);
-		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received ¥${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
-		client.log(`:ballot_box: ${user.username} (${user.id}) received ¥${votes[user.id]} from voting.`);
+		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received <:DTS:668551813317787659>${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
+		client.log(`:ballot_box: ${user.username} (${user.id}) received <:DTS:668551813317787659>${votes[user.id]} from voting.`);
 	}
 });
 
@@ -255,8 +255,8 @@ scheduleJob("0 0 0 * * *", async() => {
 			odesc,
 			ctitle,
 			cdesc,
-		    	account,
-		    	newBalance;
+			account,
+			newBalance;
 
 		// v2 number has expiry as a date object, yet v3 has string (timestamp) so compromise
 		let expiryMS = typeof number.expiry === "object" ? number.expiry.getTime() : new Date(number.expiry).getTime();
@@ -284,7 +284,9 @@ scheduleJob("0 0 0 * * *", async() => {
 			// automatic renewal stuff
 			account = await (await client.users.fetch(owner)).account();
 			newBalance = account.balance - config.renewalRate;
-		} else continue;
+		} else {
+			continue;
+		}
 		if (newBalance && newBalance >= 0) {
 			let newExpiry = new Date(number.expiry);
 			newExpiry.setMonth(newExpiry.getMonth() + 1);

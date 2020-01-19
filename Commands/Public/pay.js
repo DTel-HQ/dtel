@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	// Checks for user and amount
 	if (!user || !/^\d+$/.test(amount)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: `>pay [user] [amount] [optional: message]`" } });
 	if (user.bot || msg.author.id === user.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot/own user", description: "We don't allow wasting money. (bot/own account)" } });
-	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Payments can only happen from ¥${config.minTransfer} and up.` } });
+	if (parseInt(amount) < config.minTransfer) return msg.channel.send({ embed: { color: config.colors.error, title: "Too low an amount", description: `Payments can only happen from <:DTS:668551813317787659>${config.minTransfer} and up.` } });
 
 	// The account from which the amount will be taken
 	let fromAccount = await r.table("Accounts").get(msg.author.id);
@@ -46,11 +46,11 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction amounts",
-				value: `Amount: ¥${amount}\nFee: ¥${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
+				value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
 			},
 			{
 				name: "Your new balance",
-				value: `¥${fromAccount.balance - amount}`,
+				value: `<:DTS:668551813317787659>${fromAccount.balance - amount}`,
 			},
 			{
 				name: "Message for receiver",
@@ -103,7 +103,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction amounts",
-				value: `Amount: ¥${amount}\nFee: ¥${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+				value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 			},
 			{
 				name: "Message for receiver",
@@ -112,7 +112,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 	} });
-	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave ¥${amount} to ${user.tag} (${user.id})`);
+	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave <:DTS:668551813317787659>${amount} to ${user.tag} (${user.id})`);
 	let dmChannel = await user.createDM().catch(e => null);
 	if (dmChannel) {
 		dmChannel.send({ embed: {
@@ -130,11 +130,11 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Transaction amounts",
-					value: `Amount: ¥${amount}\nFee: ¥${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+					value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 				},
 				{
 					name: "Balance",
-					value: `Your new balance: ¥${toAccount.balance}`,
+					value: `Your new balance: <:DTS:668551813317787659>${toAccount.balance}`,
 				},
 				{
 					name: "Message from sender",

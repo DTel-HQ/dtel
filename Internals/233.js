@@ -22,10 +22,10 @@ module.exports = async(msg, myNumber) => {
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
-		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewal rate is ¥${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewal rate is <:DTS:668551813317787659>${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
-		.addField("Your balance", `¥${client.format(account.balance)}`, true)
+		.addField("Your balance", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
 		.addField("VIP Number", vipNumber, true)
 		.addField("VIP expiration date", vipNumber ? `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}` : "N/A", true)
 		.addField("Your VIP months", account.vip ? account.vip : "0", true)
@@ -73,7 +73,7 @@ module.exports = async(msg, myNumber) => {
 		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
 		.addField("Number", myNumber.id, true)
 		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth() + 1}-${newExpiry.getFullYear()}`, true)
-		.addField("Your new balance", `¥${client.format(newBalance)}`, true)
+		.addField("Your new balance", `<:DTS:668551813317787659>${client.format(newBalance)}`, true)
 		.addField("Need to recharge?", config.paymentLink);
 	msg.channel.send("", { embed: embed });
 

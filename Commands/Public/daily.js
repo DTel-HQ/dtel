@@ -20,6 +20,6 @@ module.exports = async(client, msg, suffix) => {
 	account.balance += amount;
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance, daily: true });
-	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your ¥${amount}! You now have ¥${client.format(account.balance)}.\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See ${config.voteLink} for a list of voting sites.` } });
-	await client.log(`:calendar: ${msg.author.username} (${msg.author.id}) claimed their daily ¥${amount}.`);
+	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your <:DTS:668551813317787659>${amount}! You now have <:DTS:668551813317787659>${client.format(account.balance)}.\n\nYou can vote for DiscordTel on various bot listings to get **60+ more credits every day**! See ${config.voteLink} for a list of voting sites.` } });
+	await client.log(`:calendar: ${msg.author.username} (${msg.author.id}) claimed their daily <:DTS:668551813317787659>${amount}.`);
 };

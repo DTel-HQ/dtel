@@ -349,7 +349,7 @@ module.exports = async(client, msg, suffix) => {
 			let cEmbed = new MessageEmbed()
 				.setColor(config.colors.info)
 				.setTitle(`Promoting ${number.id}`)
-				.setDescription(`Promoting this number will cost ¥${config.promoteCost}. (non-refundable)\nDiscordTel staff have the right to delete this promotion at any time.`)
+				.setDescription(`Promoting this number will cost <:DTS:668551813317787659>${config.promoteCost}. (non-refundable)\nDiscordTel staff have the right to delete this promotion at any time.`)
 				.addField("Options", "If the server image, your name and/or profile picture contain explicit content, make sure to choose the explicit variant. You may also choose this in order to hide the before mentioned details.\n\n(1) Promote\n(2) Promote as explicit")
 				.setFooter("(0) to quit. This menu will expire after 60 seconds.");
 
