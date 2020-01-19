@@ -151,7 +151,7 @@ scheduleJob("*/1 * * * *", async() => {
 
 scheduleJob("0 20 * * 0", async() => {
 	let prize = 1;
-	let topSize = 5;
+	let topSize = 6;
 
 	// Retrieve, delete and check database information
 	let votes = await r.table("Votes");
