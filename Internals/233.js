@@ -25,7 +25,7 @@ module.exports = async(msg, myNumber) => {
 		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewal rate is <:DTS:668551813317787659>${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
-		.addField("Your balance", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
+		.addField("Your credits", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
 		.addField("VIP Number", vipNumber, true)
 		.addField("VIP expiration date", vipNumber ? `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}` : "N/A", true)
 		.addField("Your VIP months", account.vip ? account.vip : "0", true)

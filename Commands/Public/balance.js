@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 					icon_url: msg.author.displayAvatarURL(),
 				},
 				fields: [{
-					name: "Your Balance",
+					name: "Credits",
 					value: `<:DTS:668551813317787659>${client.format(account.balance)}`,
 					inline: true,
 				},
