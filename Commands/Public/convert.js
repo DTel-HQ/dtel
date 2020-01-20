@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`\n${err}\n\`\`\`` } });
 		}
 	}
-	amount = parseInt(amount);
+	amount = parseFloat(amount).toFixed(2);
 	currency = currency.toUpperCase();
 
 	let account = await msg.author.account();
@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 	try {
 		newTransaction = await DClient.transactions.create({
 			to: currency,
-			amount: parseInt(amount),
+			amount: amount,
 			user: msg.author.id,
 		});
 	} catch (err) {
