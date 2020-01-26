@@ -65,7 +65,7 @@ module.exports = async msg => {
 
 	// Check cooldown now because it sends an embed
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
-	if (cooldown && cooldown.time > Date.now() && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s` } });
+	if (cooldown && cooldown.time > Date.now() && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${client.format(Math.ceil((cooldown.time - Date.now()) / 100) / 10)}s` } });
 	// Add cooldown
 	if (!msg.author.support && !msg.author.donator) msg.author.cooldown = "default";
 	// Run the command
