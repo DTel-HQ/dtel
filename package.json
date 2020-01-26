@@ -38,7 +38,7 @@
     "require-reload": "^0.2.2",
     "rethinkdbdash": "^2.3.31",
     "utf-8-validate": "^5.0.2",
-    "uuid": "^3.3.3",
+    "uuid": "^3.4.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.10.0",
     "zlib-sync": "^0.1.6",
