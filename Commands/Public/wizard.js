@@ -26,11 +26,11 @@ module.exports = async(client, msg, suffix) => {
 		)
 		.addField(
 			"Documentation and TOS",
-			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like the Terms Of Service, regarding the use of this bot.`
+			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like the [Privacy Policy](https://discordtel.austinhuang.me/en/latest/Privacy/), regarding the use of this bot.`
 		)
 		.addField(
 			"Payment",
-			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. You must type \`>dial *233\` to renew it. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`
+			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. Renewals can be automatically performed (through the SERVER OWNER's account) or through \`>dial *233\`. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`
 		)
 		.addField(
 			"I'm done reading!",
