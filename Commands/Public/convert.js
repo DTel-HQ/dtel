@@ -32,6 +32,7 @@ module.exports = async(client, msg, suffix) => {
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
+	console.log(`[Convert] Amount: ${amount} ${typeof amount}, Currency: ${currency}`)
 	let newTransaction;
 	try {
 		newTransaction = await DClient.transactions.create({
