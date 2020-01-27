@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`\n${err}\n\`\`\`` } });
 		}
 	}
-	amount = parseFloat(amount).toFixed(2);
+	amount = parseFloat(parseFloat(amount).toFixed(2));
 	currency = currency.toUpperCase();
 
 	let account = await msg.author.account();
