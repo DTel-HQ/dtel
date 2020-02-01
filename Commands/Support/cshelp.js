@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{
 					name: "All commands",
-					value: "addcredit, assign, backdoor, blacklist, broadcast, cinfo, cshelp, deassign, identify, minfo, ninfo, permcheck, reassign, rmstrike, strike, uinfo, whitelist",
+					value: "addcredit, assign, backdoor, blacklist, broadcast, cinfo, cshelp, deassign, identify, minfo, ninfo, permcheck, reassign, rmstrike, strike, uinfo, unbusy, whitelist",
 				},
 				{
 					name: ">broadcast (bc)",
