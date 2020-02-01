@@ -22,11 +22,12 @@ module.exports = async(client, msg, suffix) => {
 		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
 		.addField("Blacklisted", blacklisted ? "True" : "False", true)
+		.addField("Busy", user.busy, true)
+		.addBlankField(true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)
 		.addField("Prefix", `\`${account.prefix || ">"}\``, true)
 		.addField("Balance", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
 		.addField("VIP months", account.vip || "None", true)
-		.addBlankField(true)
 		.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
 

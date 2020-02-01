@@ -43,7 +43,7 @@ module.exports = async(msg, myNumber) => {
 	msg.author.busy = true;
 	const collected = await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d+$/.test(m.content) && parseInt(m.content) <= maxMonths,
-		{ max: 1, time: 180000 }
+		{ max: 1, time: 180000 },
 	);
 
 	// On collection
