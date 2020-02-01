@@ -23,7 +23,6 @@ module.exports = async(client, msg, suffix) => {
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
 		.addField("Blacklisted", blacklisted ? "True" : "False", true)
 		.addField("Busy", user.busy, true)
-		.addBlankField(true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)
 		.addField("Prefix", `\`${account.prefix || ">"}\``, true)
 		.addField("Balance", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
