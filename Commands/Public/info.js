@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "📋 Suggest a feature",
-					value: `Suggest a feature for DiscordTel [here](${config.applyLink}) and we will take a look at it.`,
+					value: `Suggest a feature for DiscordTel [here](${config.suggestLink}) and we will take a look at it.`,
 				},
 				{
 					name: "💬 Join our team",
