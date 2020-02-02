@@ -341,6 +341,7 @@ scheduleJob("0 0 * * * *", async() => {
 		title: "Discoin Rates",
 		color: 0x2196f3,
 		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${prevrates[c.id] ? prevrates[c.id] < c.value ? " :chart_with_upwards_trend:" : prevrates[c.id] > c.value ? " :chart_with_downwards_trend:" : "" : ""}`),
+		timestamp: new Date(),
 	} }, "661239975752499231");
 	const newrates = {};
 	for (let currency of currencies) {
