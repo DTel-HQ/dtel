@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "💖 Support us!",
-					value: `[How to donate?](${config.paymentLink})`,
+					value: `[How to donate?](${config.vipLink})`,
 					inline: true,
 				},
 				{
@@ -58,8 +58,7 @@ module.exports = async(client, msg, suffix) => {
 			],
 			timestamp: new Date(),
 			footer: {
-				icon_url: "https://avatars1.githubusercontent.com/u/16656689",
-				text: "DiscordTel V3 - made with <3 by Austin Huang and his team",
+				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and his team",
 			},
 		},
 	};
