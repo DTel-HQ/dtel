@@ -355,7 +355,11 @@ scheduleJob("0 0 * * * *", async() => {
 	await client.apiSend({ embed: {
 		title: "Discoin Rates",
 		color: 0x2196f3,
+<<<<<<< HEAD
 		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${strings[c.id]}`).join("\n"),
+=======
+		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${prevrates[c.id] ? prevrates[c.id] < c.value ? " :chart_with_upwards_trend:" : prevrates[c.id] > c.value ? " :chart_with_downwards_trend:" : "" : ""}`).join("\n"),
+>>>>>>> 7b0226c007f03f2e96f3a6b023f6874e118d8367
 		timestamp: new Date(),
 	} }, "661239975752499231");
 	const newrates = {};
