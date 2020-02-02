@@ -1,5 +1,5 @@
 node_modules/
 DB/
 Logs/
-Configuration/auth.js
+./src/Configuration/auth.js
 rethinkdb.exe
