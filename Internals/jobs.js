@@ -334,11 +334,17 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Discoi report hourly
 scheduleJob("0 0 * * * *", async() => {
-	let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-	    emojis = client.guilds.get("347859709711089674").emojis;
+	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
+		emojis = client.guilds.get("347859709711089674").emojis;
+	const prevrates = (await r.table("Accounts").get("discoin")).rates;
 	await client.apiSend({embed: {
 		title: "Discoin Rates",
 		color: 0x2196f3,
-		description: currencies.map(c => emojis.find(e => e.name === c.id).toString() + " " + c.value)
+		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${prev[c.id] ? prev[c.id] < c.value ? " :chart_with_upwards_trend:" : prev[c.id] > c.value ? " :chart_with_downwards_trend:" : "" : ""}`),
 	}}, "661239975752499231");
+	const newrates = {};
+	for (let currency of currencies) {
+		newrates[currency.id] = currency.value;
+	}
+	await r.table("Accounts").get("discoin").update({ rates: newrates });
 });
