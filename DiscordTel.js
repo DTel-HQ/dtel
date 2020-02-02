@@ -40,7 +40,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			format: format.combine(
 				format.colorize(),
 				format.timestamp(),
-				format.printf(info => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`)
+				format.printf(info => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`),
 				// format.simple(),
 			),
 		});
