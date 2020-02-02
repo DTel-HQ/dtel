@@ -47,7 +47,7 @@ module.exports = async(client, msg, suffix) => {
 	msg.author.busy = true;
 	let collected = (await msg.channel.awaitMessages(
 		m => m.author.id === msg.author.id && /^\d*$/.test(m.content) && parseInt(m.content) <= account.vip,
-		{ max: 1, time: 60000 }
+		{ max: 1, time: 60000 },
 	)).first();
 
 	msg.author.busy = false;

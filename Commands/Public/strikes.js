@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 		let creator = (await client.users.fetch(strike.creator)).tag;
 		embed.addField(
 			`Strike \`${strike.id}\` by ${strike.creator}`,
-			`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`
+			`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
 		);
 	}
 
