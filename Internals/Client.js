@@ -135,6 +135,25 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 				await r.table("Phonebook").get(number.id).delete();
 				await r.table("Mailbox").get(number.channel).delete();
 				if (log) client.log(`📕 Number \`${number.id}\` has been automatically deassigned from ${origin}.`);
+
+				const numbers = await r.table("Numbers");
+
+				// remove the number from contacts
+				const contactNumbers = numbers.filter(n => n.contacts && (await n.contacts.filter(c => c.number === number.id))[0]);
+				for (let contactNumber of contactNumbers) {
+					let contacts = number.contacts;
+					let contact = contacts.filter(c => c.name === number.id);
+					contacts.splice(contacts.indexOf(contact), 1);
+					await r.table("Numbers").get(contactNumber.id).update({ contacts: contacts });
+				}
+
+				// remove the number from blocked → may lead to abuse though
+				const blockedNumbers = numbers.filter(n => n.blocked && n.blocked.includes(number.id));
+				for (let blockedNumber of blockedNumbers) {
+					let blocked = blockedNumber.blocked;
+					blocked.splice(blocked.indexOf(number.id), 1);
+					await r.table("Numbers").get(blockedNumber.id).update({ blocked: blocked });
+				}
 			}
 		}, force ? 1000 : 600000);
 	}
