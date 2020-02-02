@@ -139,7 +139,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 				const numbers = await r.table("Numbers");
 
 				// remove the number from contacts
-				const contactNumbers = numbers.filter(n => n.contacts && (await n.contacts.filter(c => c.number === number.id))[0]);
+				const contactNumbers = numbers.filter(n => n.contacts && (n.contacts.filter(c => c.number === number.id))[0]);
 				for (let contactNumber of contactNumbers) {
 					let contacts = number.contacts;
 					let contact = contacts.filter(c => c.name === number.id);
