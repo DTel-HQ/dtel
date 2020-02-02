@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Preparing to restart", description: "Making preparations to restart the bot. Please wait." } });
 
 	let calls = await r.table("Calls");
-	let toSend = { embed: { color: config.colors.info, title: "Restarting", description: "The bot is restarting. Watch the bot's playing status for updates" } };
+	let toSend = { embed: { color: config.colors.info, title: "Restarting", description: "The bot is restarting. Watch the bot's playing status for updates", footer: { text: "Your call will automatically continue after the restart." } } };
 	for (let call of calls) {
 		try {
 			await client.apiSend(toSend, call.from.channel);
