@@ -29,12 +29,13 @@ module.exports = async(client, msg, suffix) => {
 	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
 	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
 	const guildWhitelisted = guild ? await r.table("Whitelist").get(guild.id) : false;
+	const vipNumber = number.vip ? new Date(number.vip.expiry) > Date.now() : false;
 
 
 	const embed = new MessageEmbed()
-		.setColor(config.colors.info)
+		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
-		.setTitle(`Number information for ${number.id}`)
+		.setTitle(`Number information for ${number.id}${vipNumber ? " (VIP)" : ""}`)
 		.setDescription("Here you can find all information relevant to this number")
 		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === 1 ? "DM Channel" : channel.name}\nDM: ${channel.type === 1 ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
