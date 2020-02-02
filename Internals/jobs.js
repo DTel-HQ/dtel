@@ -212,7 +212,7 @@ scheduleJob("0 20 * * 0", async() => {
 		let username = voteUser ? voteUser.username : "Unknown";
 		topString += `${top.indexOf(vote) + 1}. ${vote.amount} votes - ${username}\n`;
 	}
-	embed.fields.push({ name: `Top ${topSize}`, value: topString });
+	embed.fields.push({ name: `Top ${topSize - 1}`, value: topString });
 
 	// Send the embed
 	try {
