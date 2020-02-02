@@ -11,8 +11,8 @@ module.exports = async(client, msg, suffix) => {
 	// Send general embed based on variables
 	let embed = new MessageEmbed()
 		.setColor(config.colors.info)
-		.setTitle(number ? "Upgrade your number" : "Upgrade")
-		.addField("Your VIP Months", account.vip ? account.vip : "0", true);
+		.setTitle(number ? "Upgrade your number" : "Upgrade");
+	if ((account.vip && account.vip > 0) || vipNumber) embed.addField("Your VIP Months", account.vip ? account.vip : "0", true);
 	if (number) {
 		embed.addField("VIP Number", vipNumber, true);
 		if (vipNumber) {
