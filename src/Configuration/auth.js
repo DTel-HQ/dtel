@@ -1,10 +1,10 @@
 module.exports = {
 	discord: {
-		token: "NTMwNDM3MTk2Njk2NjQ5NzM4.XWQziA.FYCwutIgsFHOiAsaFDBR_aS1U9c",
+		token: "",
 	},
 	db: {
-		db: "test",
-		user: "admin",
+		db: "",
+		user: "",
 		password: "",
 	},
 	discoinToken: "",
