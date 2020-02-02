@@ -331,3 +331,14 @@ scheduleJob("0 0 0 * * *", async() => {
 
 	client.log(`📖 Cleared messages of ${result.replaced} calls.`);
 });
+
+// Discoi report hourly
+scheduleJob("0 0 * * * *", async() => {
+	let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
+	    emojis = client.guilds.get("347859709711089674").emojis;
+	await client.apiSend({embed: {
+		title: "Discoin Rates",
+		color: 0x2196f3,
+		description: currencies.map(c => emojis.find(e => e.name === c.id).toString() + " " + c.value)
+	}}, "661239975752499231");
+});
