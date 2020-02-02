@@ -186,7 +186,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 	let month = new Date().toLocaleString("default", { month: "long" });
 	let embed = {
-		color: config.colors.info,
+		color: config.colors.vip,
 		title: `This week's highest voters`,
 		description: `The voter(s) with the highest amount have been awarded ${prize} VIP Month(s).`,
 		footer: {
