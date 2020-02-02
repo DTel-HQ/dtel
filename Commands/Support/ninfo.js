@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 	const embed = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
-		.setTitle(`Number information for ${number.id}${vipNumber ? " (VIP)" : ""}`)
+		.setTitle(`Number information for ${number.id}`)
 		.setDescription("Here you can find all information relevant to this number")
 		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === 1 ? "DM Channel" : channel.name}\nDM: ${channel.type === 1 ? "True" : "False"}`, true)
 		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
