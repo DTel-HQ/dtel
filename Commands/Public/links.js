@@ -58,7 +58,7 @@ module.exports = async(client, msg, suffix) => {
 			],
 			timestamp: new Date(),
 			footer: {
-				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and his team",
+				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};
