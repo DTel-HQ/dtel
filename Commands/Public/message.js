@@ -3,10 +3,6 @@ const randomstring = require("randomstring");
 module.exports = async(client, msg, suffix) => {
 	let time = Date.now();
 
-	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
-	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
-	else msg.author.cooldown = "message";
-
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: `>message [number] [message]`" } });
 
 	let toNumber, message;
@@ -38,6 +34,10 @@ module.exports = async(client, msg, suffix) => {
 
 	let mailbox = await r.table("Mailbox").get(toNumberDoc.channel);
 	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "No mailbox", description: "They do not have a mailbox set-up." } });
+
+	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
+	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
+	else msg.author.cooldown = "message";
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
 	let id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });
