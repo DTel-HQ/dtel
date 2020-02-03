@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!perm) perm = msg.author.support;
 	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need to have `manage guild` permission to run this command." } });
 
-	let prefix = msg.channel.type == "dm" ? "0900" : `030${(client.shard.id + 1)}`;
+	let prefix = msg.channel.type == "dm" ? "0900" : `030${client.shard.id + 1}`;
 	let toChoose = true;
 	msg.author.busy = true;
 
@@ -22,19 +22,19 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Read this information before proceeding.")
 		.addField(
 			"This is a roleplay bot!",
-			"In case you haven't noticed, this bot is a roleplay bot used to simulate a telephone system between Discord channels, which means it **cannot call real numbers!**"
+			"In case you haven't noticed, this bot is a roleplay bot used to simulate a telephone system between Discord channels, which means it **cannot call real numbers!**",
 		)
 		.addField(
 			"Documentation and TOS",
-			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like the [Privacy Policy](https://discordtel.austinhuang.me/en/latest/Privacy/), regarding the use of this bot.`
+			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like the [Privacy Policy](https://discordtel.austinhuang.me/en/latest/Privacy/), regarding the use of this bot.`,
 		)
 		.addField(
 			"Payment",
-			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. Renewals can be automatically performed (through the SERVER OWNER's account) or through \`>dial *233\`. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`
+			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. Renewals can be automatically performed (through the SERVER OWNER's account) or through \`>dial *233\`. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`,
 		)
 		.addField(
 			"I'm done reading!",
-			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`
+			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`,
 		);
 
 	let omsg = await msg.channel.send({ embed: embed });
@@ -50,7 +50,7 @@ module.exports = async(client, msg, suffix) => {
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
-			}
+			},
 		);
 
 		let collected = collector.first();
@@ -103,7 +103,7 @@ module.exports = async(client, msg, suffix) => {
 			{
 				max: 1,
 				time: 5 * 60 * 1000,
-			}
+			},
 		);
 
 		let collected = collector.first();
@@ -148,24 +148,24 @@ module.exports = async(client, msg, suffix) => {
 			.setDescription("Here is all your information. If you have any questions or want to report any abuse of the service (eg. a troll call), call `*611`.")
 			.addField(
 				"What now?",
-				`To learn more about the bot: \`>help\`, \`>info\`, \`>links\`.\nFor information about (your) number(s): call \`*233\` and \`*411\`.`
+				`To learn more about the bot: \`>help\`, \`>info\`, \`>links\`.\nFor information about (your) number(s): call \`*233\` and \`*411\`.`,
 			)
 			.addField(
 				"Number",
 				`${number}`,
-				true
+				true,
 			)
 			.addField(
 				"Expiration",
 				`${expiryDate}`,
-				true
+				true,
 			)
 			.setFooter("Wizard has been completed.");
 		if (description) {
 			embed.addField(
 				"Phonebook description",
 				`${description}`,
-				true
+				true,
 			);
 		}
 
