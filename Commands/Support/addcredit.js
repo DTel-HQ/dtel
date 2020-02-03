@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't not a loan service.", description: `That request would leave them with <:DTS:668551813317787659>${account.balance}.` } });
+	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't a loan service!", description: `That request would leave them with <:DTS:668551813317787659>${account.balance}.` } });
 
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
 
