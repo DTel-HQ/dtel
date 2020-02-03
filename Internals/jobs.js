@@ -76,6 +76,7 @@ scheduleJob("*/15 * * * * *", async() => {
 
 // Get Discoin transactions
 scheduleJob("*/1 * * * *", async() => {
+	if (client.user.id != config.realBotID) return;
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	const unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
 	if (!unhandled.length) return;
@@ -107,6 +108,7 @@ scheduleJob("*/1 * * * *", async() => {
 
 // Vote check
 scheduleJob("*/1 * * * *", async() => {
+	if (client.user.id != config.realBotID) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 
 	let result = await get("http://hill-playroom.glitch.me/dtel")
@@ -334,6 +336,7 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Discoi report hourly
 scheduleJob("0 0 */12 * * *", async() => {
+	if (client.user.id != config.realBotID) return;
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 		emojis = client.guilds.get("347859709711089674").emojis;
 
