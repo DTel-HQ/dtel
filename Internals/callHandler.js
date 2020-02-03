@@ -44,6 +44,16 @@ module.exports = async(cmd, msg, suffix, call) => {
 		return client.delete(toSend.number, { force: false, log: true, origin: "callHandler" });
 	}
 
+	// cleanse inaccessible emojis
+	let emojiString = msg.content;
+	let emoji = /(?:<a?:\w{2,32}:)?(\d{17,19})>?/.exec(emojiString);
+	while (emoji) {
+		let regex = new RegExp(`<a?:\\w{2,32}:${emoji[0]}>`, "g");
+		if (!client.emojis.get(emoji[0])) msg.content = msg.content.replace(regex, "");
+		emojiString = emojiString.replace(regex, "");
+		emoji = /(?:<a?:\w{2,32}:)?(\d{17,19})>?/.exec(emojiString);
+	}
+
 	// send the msg
 	if (msg.content) content = `**${hidden ? "Anonymous#0000" : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}** ${phone} ${msg.content}`;
 	while (/@(everyone|here)/ig.test(content)) {
