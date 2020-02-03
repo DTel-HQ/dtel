@@ -53,7 +53,6 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	await r.branch(r.table("Strikes").indexList().contains("offender"), null, r.table("Strikes").indexCreate("offender", row => row("offender")));
 	await r.branch(r.table("Strikes").indexStatus("offender").nth(0)("ready"), null, r.table("Strikes").indexWait("offender"));
 
-	await r.table("Busy").delete();
 	await r.table("Cooldowns").delete();
 	await r.table("Numbers").update({ waiting: false });
 
