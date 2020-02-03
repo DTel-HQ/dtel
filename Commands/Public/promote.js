@@ -285,7 +285,7 @@ module.exports = async(client, msg, suffix) => {
 		if (preview && (!embed.field1 || !embed.field1.title)) pEmbed.fields.push({ name: "List your features!", value: "Why should people call you?\nYou can list up to 3 features or simply (guild) interests!" });
 		if (preview && !isvip) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
 		for (let i = 1; i <= 3; i++) {
-			if (embed[`field${i}`] && embed[`field${i}`].title && embed[`field${i}`].description) embed.push({ name: embed[`field${i}`].title, value: embed[`field${i}`].description });
+			if (embed[`field${i}`] && embed[`field${i}`].title && embed[`field${i}`].description) pEmbed.push({ name: embed[`field${i}`].title, value: embed[`field${i}`].description });
 		}
 
 		if (!explicit) {
