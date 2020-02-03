@@ -8,11 +8,11 @@ module.exports = async msg => {
 	// let channelPerms = [];
 	// if (msg.guild && !config.maintainers.includes(msg.author.id)) {
 	// 	try {
-	// 		channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+	// 		channelPerms = msg.channel.permissionsFor(client.user.id).toArray();
 	// 	} catch (error) {
 	// 		try {
-	// 			const botMember = await msg.channel.members.fetch(config.botID);
-	// 			channelPerms = msg.channel.permissionsFor(config.botID).toArray();
+	// 			const botMember = await msg.channel.members.fetch(client.user.id);
+	// 			channelPerms = msg.channel.permissionsFor(client.user.id).toArray();
 	// 		} catch (e) {
 	// 			// ignore
 	// 		}
