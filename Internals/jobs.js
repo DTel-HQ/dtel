@@ -333,7 +333,7 @@ scheduleJob("0 0 0 * * *", async() => {
 });
 
 // Discoi report hourly
-scheduleJob("0 0 * * * *", async() => {
+scheduleJob("0 0 */12 * * *", async() => {
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 		emojis = client.guilds.get("347859709711089674").emojis;
 
