@@ -333,7 +333,7 @@ scheduleJob("0 0 0 * * *", async() => {
 });
 
 // Discoi report hourly
-scheduleJob("0 0 * * * *", async() => {
+scheduleJob("0 0 */12 * * *", async() => {
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 		emojis = client.guilds.get("347859709711089674").emojis;
 
@@ -353,7 +353,7 @@ scheduleJob("0 0 * * * *", async() => {
 	}
 
 	await client.apiSend({ embed: {
-		title: "Discoin Rates",
+		title: "<:Discoin:357656754642747403>iscoin Rates",
 		color: 0x2196f3,
 		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${strings[c.id]}`).join("\n"),
 		timestamp: new Date(),
