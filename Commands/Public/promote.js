@@ -282,13 +282,14 @@ module.exports = async(client, msg, suffix) => {
 			timestamp: new Date(),
 		};
 
-		if (preview && (!embed.field1 || !embed.field1.title)) pEmbed.fields.push({ name: "List your features!", value: "Why should people call you?\nYou can list up to 3 features or simply (guild) interests!" });
-		if (preview && !isvip) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
-		if (!preview) {
+		if (preview && (!embed.field1 || !embed.field1.title)) {
+			pEmbed.fields.push({ name: "List your features!", value: "Why should people call you?\nYou can list up to 3 features or simply (guild) interests!" });
+		}	else {
 			for (let i = 1; i <= 3; i++) {
 				if (embed[`field${i}`] && embed[`field${i}`].title && embed[`field${i}`].description) pEmbed.fields.push({ name: embed[`field${i}`].title, value: embed[`field${i}`].description });
 			}
 		}
+		if (preview && !isvip) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
 
 		if (!explicit) {
 			if (msg.guild) pEmbed.thumbnail = { url: msg.guild.iconURL({ size: 1024 }) };
