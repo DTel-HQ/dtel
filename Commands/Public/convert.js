@@ -8,9 +8,9 @@ module.exports = async(client, msg, suffix) => {
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-			    currencie = currencies,
 			    emojis = client.guilds.get("347859709711089674").emojis,
 			    dts = currencie.find(c => c.id === "DTS");
+			let currencie = currencies;
 			currencie.splice(currencie.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
