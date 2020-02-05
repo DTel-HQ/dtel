@@ -10,7 +10,7 @@ module.exports = async(client, msg, suffix) => {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 			    currencie = currencies,
 			    emojis = client.guilds.get("347859709711089674").emojis,
-			    dts = currencies.find(c => c.id === "DTS");
+			    dts = currencie.find(c => c.id === "DTS");
 			currencie.splice(currencie.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
