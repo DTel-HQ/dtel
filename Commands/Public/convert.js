@@ -24,8 +24,7 @@ module.exports = async(client, msg, suffix) => {
 					name: "Discoin Rates",
 					value: `• <:DTS:668563890015174677>: **1 DTS = ${dts.value} D$**\n` + currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
 					inline: true
-				}],
-				image: {url: "https://cdn.discordapp.com/attachments/348628563076841472/674706614217080863/5fm9ifqkgzr31.png"}
+				}]
 			} });
 		} catch (err) {
 			error = err;
