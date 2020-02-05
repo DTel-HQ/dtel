@@ -160,7 +160,7 @@ module.exports = async(client, msg, suffix) => {
 
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
-				async m => m.author.id === msg.author.id && (setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content)),
+				m => m.author.id === msg.author.id && (setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content)),
 				{ max: 1, time: 120000 },
 			)).first();
 
