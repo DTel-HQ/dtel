@@ -11,19 +11,19 @@ module.exports = async(client, msg, suffix) => {
 			    emojis = client.guilds.get("347859709711089674").emojis,
 			    dts = currencie.find(c => c.id === "DTS");
 			let currencie = currencies;
-			currencie.splice(currencie.indexOf(dts), 1);
+			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
 				description: `\`>convert [amount] [currency]\`\n\`[currency]\` = the 3-letter currency codes written in code blocks below.\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for more information.`,
 				fields: [{
 					name: "Current Exchange Rates, relative to DTS",
-					value: currencie.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
+					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
 					inline: true
 				},
 				{
 					name: "Discoin Rates",
-					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
+					value: currencie.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
 					inline: true
 				}],
 				image: {url: "https://cdn.discordapp.com/attachments/348628563076841472/674706614217080863/5fm9ifqkgzr31.png"}
