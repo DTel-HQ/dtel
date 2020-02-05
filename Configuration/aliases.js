@@ -21,6 +21,7 @@ module.exports = {
 		perm: "permcheck",
 		promo: "promote",
 		unassign: "deassign",
+		upvote: "links",
 		vote: "links",
 		wl: "whitelist",
 	},
