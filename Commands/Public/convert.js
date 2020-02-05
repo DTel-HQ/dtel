@@ -8,8 +8,8 @@ module.exports = async(client, msg, suffix) => {
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-			    emojis = client.guilds.get("347859709711089674").emojis,
-			    dts = currencies.find(c => c.id === "DTS");
+			    emojis = client.guilds.get("347859709711089674").emojis;
+			let dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
@@ -18,11 +18,6 @@ module.exports = async(client, msg, suffix) => {
 				fields: [{
 					name: "Current Exchange Rates, relative to DTS",
 					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),,
-					inline: true
-				},
-				{
-					name: "Discoin Rates",
-					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
 					inline: true
 				}],
 			} });
