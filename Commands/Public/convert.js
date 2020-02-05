@@ -8,16 +8,17 @@ module.exports = async(client, msg, suffix) => {
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-			    emojis = client.guilds.get("347859709711089674").emojis;
-			let dts = currencies.find(c => c.id === "DTS");
-			currencies.splice(currencies.indexOf(dts), 1);
+			    currencie = currencies,
+			    emojis = client.guilds.get("347859709711089674").emojis,
+			    dts = currencies.find(c => c.id === "DTS");
+			currencie.splice(currencie.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
 				description: `\`>convert [amount] [currency]\`\n\`[currency]\` = the 3-letter currency codes written in code blocks below.\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for more information.`,
 				fields: [{
 					name: "Current Exchange Rates, relative to DTS",
-					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
+					value: currencie.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
 					inline: true
 				},
 				{
