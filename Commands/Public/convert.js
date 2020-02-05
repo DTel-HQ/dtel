@@ -10,7 +10,6 @@ module.exports = async(client, msg, suffix) => {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 			    emojis = client.guilds.get("347859709711089674").emojis,
 			    dts = currencies.find(c => c.id === "DTS");
-			let currencie = currencies;
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
@@ -23,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Discoin Rates",
-					value: currencie.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
+					value: `• <:DTS:668563890015174677>: **1 DTS = ${dts.value} D$**\n` + currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n"),
 					inline: true
 				}],
 				image: {url: "https://cdn.discordapp.com/attachments/348628563076841472/674706614217080863/5fm9ifqkgzr31.png"}
