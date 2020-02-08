@@ -11,7 +11,7 @@ module.exports = (client, msg, suffix, call) => {
 	time -= hours * (60 * 60);
 	const minutes = Math.floor(time / 60);
 	time -= minutes * 60;
-	const seconds = time;
+	const seconds = Math.round(time);
 
 	const messages = call.messages ? call.messages.length : 0;
 
