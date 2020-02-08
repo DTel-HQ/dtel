@@ -160,7 +160,7 @@ module.exports = async(client, msg, suffix) => {
 
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
-				async m => m.author.id === msg.author.id && setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content),
+				m => m.author.id === msg.author.id && (setup ? /^[12340]$/.test(m.content) : /^[1230]$/.test(m.content)),
 				{ max: 1, time: 120000 },
 			)).first();
 
@@ -278,15 +278,17 @@ module.exports = async(client, msg, suffix) => {
 			color: isvip ? config.colors.vip : config.colors.receipt,
 			title: `${embed.number || number.id}${preview ? " (Preview embed)" : ""}`,
 			description: embed.description || "Here goes the general description.",
-			fields: [
-				{
-					name: embed.field1 ? embed.field1.title || "List your features!" : "List your features!",
-					value: embed.field1 ? embed.field1.description || "Why should people call you?\nYou can list up to 3 features or simply (guild) interests!" : "Why should people call you? You can list up to 3 features or simply (guild) interests!",
-				},
-			],
+			fields: [],
 			timestamp: new Date(),
 		};
 
+		if (preview && (!embed.field1 || !embed.field1.title)) {
+			pEmbed.fields.push({ name: "List your features!", value: "Why should people call you?\nYou can list up to 3 features or simply (guild) interests!" });
+		}	else {
+			for (let i = 1; i <= 3; i++) {
+				if (embed[`field${i}`] && embed[`field${i}`].title && embed[`field${i}`].description) pEmbed.fields.push({ name: embed[`field${i}`].title, value: embed[`field${i}`].description });
+			}
+		}
 		if (preview && !isvip) pEmbed.fields.push({ name: "Did you know?", value: `[VIP numbers](${config.paymentLink}) will be more prominently displayed.` });
 
 		if (!explicit) {
@@ -381,7 +383,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			await r.table("Numbers").get(number.id).update({ promote: { lastmsg: sent.id, lastuser: msg.author.id, lastPromoted: Date.now() } });
-			client.log(`:arrow_up: User ${msg.author.username} (${msg.author.id}) promoted ${number.channel} for ${config.promoteCost}.`);
+			client.log(`📢 User ${msg.author.username} (${msg.author.id}) promoted ${number.channel} for ${config.promoteCost}.`);
 			return omsg.edit({ embed: { color: config.colors.success, title: "Success", description: `Succesfully promoted this number.\nView the message [here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${sent.id}).`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() }, timestamp: new Date() } });
 		}
 		case "3": {
