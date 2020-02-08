@@ -5,7 +5,7 @@ module.exports = (client, msg, suffix, call) => {
 
 	const startDate = new Date(call.startedAt);
 	const time = Date.now() - startDate.getTime();
-	const messages = call.messages.length;
+	const messages = call.messages ? call.messages.length : 0;
 
 	const embed = new MessageEmbed()
 		.setColor(config.colors.info)
