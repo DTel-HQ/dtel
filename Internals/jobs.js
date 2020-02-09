@@ -81,7 +81,11 @@ scheduleJob("*/1 * * * *", async() => {
 	if (!unhandled.length) return;
 	for (const transaction of unhandled) {
 		// Try to fetch user
-		let user = await client.users.fetch(transaction.user);
+		let user = await client.users.fetch(transaction.user)
+			.catch(e => {
+				client.apiSend(`[Discoin] couldn't find user ${transaction.user}`, "326075875466412033");
+				return null;
+			});
 
 		// patch
 		transaction.update({ handled: true })
@@ -93,7 +97,7 @@ scheduleJob("*/1 * * * *", async() => {
 			});
 
 		// add amount
-		let account = await user.account();
+		let account = await user.account(true);
 		account.balance += transaction.payout;
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
