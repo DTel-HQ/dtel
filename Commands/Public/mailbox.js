@@ -182,16 +182,13 @@ module.exports = async(client, msg, suffix) => {
 				msg.author.busy = false;
 				return omsg.delete().catch(e => null);
 			}
+			
+			if (parseInt(collected.content) > 0) {
+				page = parseInt(collected.content);
+				return messagesPage(page);
+			}
 
-			let toSwitch = collected.content.toLowerCase();
-			console.log(collected.content, parseInt(collected.content));
-			switch (toSwitch) {
-				case parseInt(collected.content) > 0: {
-					page = parseInt(collected.content);
-					messagesPage(page);
-					break;
-				}
-
+			switch (collected.content.toLowerCase()) {
 				case "clear": {
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
