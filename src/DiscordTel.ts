@@ -1,14 +1,13 @@
-const { Collection } = require("discord.js");
-const { readdir } = require("fs-nextra");
-const clear = require("clear-module");
-const { createLogger, format, transports } = require("winston");
-const DailyRotateFile = require("winston-daily-rotate-file");
-const config = global.config = require("./Configuration/config.js");
-const aliases = global.aliases = require("./Configuration/aliases.js");
+import { readdir } from "fs-nextra"
+import clear from "clear-module";
+import { createLogger, format, transports, Logger } from "winston";
+import DailyRotateFile from "winston-daily-rotate-file";
+const config = require("./Configuration/config.js");
+const aliases = require("./Configuration/aliases.js");
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
-		const client = global.client = this.client;
+		const client = this.client;
 
 		(async() => {
 			await require("./Database/init")()
@@ -22,11 +21,11 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			}
 		})();
 
-		const winston = global.winston = createLogger({
+		const winston: Logger = createLogger({
 			level: "info",
 			transports: [
 				new transports.Console({
-					colorize: true,
+					format: format.colorize(),
 				}),
 				new DailyRotateFile({
 					filename: `./Logs/Winston-Log-%DATE%-Shard${this.client.shard.id}.log`,
@@ -45,16 +44,16 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			),
 		});
 
-		const reload = global.reload = path => new Promise((res, rej) => {
+		const reload = async(path: string) : Promise<any> => {
 			clear(path);
 			try {
-				let file = require(path);
-				if (!file) res(null);
-				res(file);
+				let file : any = require(path);
+				if (!file) return null;
+				return file;
 			} catch (err) {
-				res(null);
+				return null;
 			}
-		});
+		};
 
 		this.client.on("disconnect", () => this.client.login());
 
@@ -68,7 +67,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			},
 		});
 
-		if (config.devMode) process.on("unhandledRejection", e => winston.error(e.stack));
+		if (config.devMode) process.on("unhandledRejection", e => winston.error(e));
 
 		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {

@@ -3,3 +3,7 @@ DB/
 Logs/
 ./src/Configuration/auth.js
 rethinkdb.exe
+
+built/
+
+src/Configuration/auth.js

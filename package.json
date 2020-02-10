@@ -23,9 +23,12 @@
     "url": "https://github.com/austinhuang0131/discordtel/issues"
   },
   "homepage": "https://discordtel.austinhuang.me",
-  "engines": { "node": "12" },
+  "engines": {
+    "node": "12"
+  },
   "dependencies": {
     "@discoin/scambio": "^2.0.3",
+    "@types/node": "^13.7.0",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.0.0",
