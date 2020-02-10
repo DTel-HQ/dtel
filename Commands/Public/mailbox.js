@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		collector = await msg.channel.awaitMessages(
 			m => /^yes$|^no$/i.test(m.content) && m.author.id == msg.author.id, {
 				time: 60 * 1000,
-				max: 1,fomsg.id
+				max: 1,
 			}
 		);
 		collected = collector.first();
