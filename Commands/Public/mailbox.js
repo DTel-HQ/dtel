@@ -184,6 +184,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			let toSwitch = collected.content.toLowerCase();
+			console.log(collected.content, parseInt(collected.content));
 			switch (toSwitch) {
 				case parseInt(collected.content) > 0: {
 					page = parseInt(collected.content);
