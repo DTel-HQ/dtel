@@ -146,10 +146,11 @@ module.exports = async(client, msg, suffix) => {
 		// Showing all messages
 		let messagesPage = async page => {
 			let pages = Math.ceil(messages.length / 5);
-
+			
 			while (!messages[(page - 1) * 5]) {
 				page -= 1;
 			}
+			console.log(page, pages);
 
 			let embed = new MessageEmbed()
 				.setColor(config.colors.info)
@@ -184,6 +185,7 @@ module.exports = async(client, msg, suffix) => {
 			}
 			
 			if (parseInt(collected.content) > 0) {
+				console.log(parseInt(collected.content), parseInt(collected.content) > 0);
 				page = parseInt(collected.content);
 				return messagesPage(page);
 			}
