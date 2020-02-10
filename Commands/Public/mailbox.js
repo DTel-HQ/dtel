@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		collector = await msg.channel.awaitMessages(
 			m => /^yes$|^no$/i.test(m.content) && m.author.id == msg.author.id, {
 				time: 60 * 1000,
-				max: 1,
+				max: 1,fomsg.id
 			}
 		);
 		collected = collector.first();
@@ -150,7 +150,7 @@ module.exports = async(client, msg, suffix) => {
 			while (!messages[(page - 1) * 5]) {
 				page -= 1;
 			}
-			console.log(omsg.id);
+			console.log(!omsg ? "undef" : omsg.id);
 
 			let embed = new MessageEmbed()
 				.setColor(config.colors.info)
