@@ -150,7 +150,7 @@ module.exports = async(client, msg, suffix) => {
 			while (!messages[(page - 1) * 5]) {
 				page -= 1;
 			}
-			console.log(!omsg ? "undef" : omsg.id);
+			console.log(omsg);
 
 			let embed = new MessageEmbed()
 				.setColor(config.colors.info)
