@@ -173,7 +173,7 @@ module.exports = async(client, msg, suffix) => {
 			console.log(embed)
 
 			// Edit existing message or send a new one
-			if (omsg) omsg = await omsg.edit({ embed: embed });
+			if (omsg) omsg = await omsg.edit({ embed: embed }).catch(e => omsg.delete());
 			else omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
