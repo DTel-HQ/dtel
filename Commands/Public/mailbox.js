@@ -170,9 +170,11 @@ module.exports = async(client, msg, suffix) => {
 			let responses = perm ? ["edit", "clear", "delete"] : [];
 			
 			// Edit existing message or send a new one
-			if (omsg) await omsg.delete().catch(e => null);
+			if (omsg) {
+				console.log(omsg.id);
+				await omsg.delete().catch(e => null);
+			}
 			omsg = await msg.channel.send({ embed: embed });
-			console.log(omsg);
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
