@@ -158,6 +158,7 @@ module.exports = async(client, msg, suffix) => {
 				.setDescription("Enter a page number or enter a message ID to see more actions.\n\nOther options:\n• To edit your mailbox's autoreply: `edit`\n• To clear all messages: `clear`\n• To delete your mailbox: `delete`")
 				.setFooter(`Page ${page}/${pages}. Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.`);
 
+			console.log("step 2");
 			// Display the right messages
 			let startingIndex = (page - 1) * 5;
 
@@ -167,11 +168,13 @@ module.exports = async(client, msg, suffix) => {
 				let date = new Date(m.time);
 				embed.addField(`ID \`${m.id}\` from ${m.from || m.number}`, `${m.message}`);
 			}
+			console.log("step 3");
 
 			let responses = perm ? ["edit", "clear", "delete"] : [];
 
 			// Edit existing message or send a new one
-			omsg ? await omsg.edit({ embed: embed }).catch(console.log) : omsg = await msg.channel.send({ embed: embed });
+			omsg ? await omsg.edit({ embed: embed }) : omsg = await msg.channel.send({ embed: embed });
+			console.log("step 4");
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
