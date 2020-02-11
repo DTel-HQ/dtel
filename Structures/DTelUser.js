@@ -20,6 +20,8 @@ module.exports = Discord => {
 				this.blacklisted = !!blacklisted;
 				let account = await this.account();
 				if (account.prefix) this.prefix = account.prefix;
+				if (account.daily) this.daily = account.daily;
+				else this.daily = false;
 				return true;
 			}
 
