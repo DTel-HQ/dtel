@@ -14,6 +14,9 @@ module.exports = async(client, msg, suffix) => {
 	// Get contacts
 	let contacts = myNumber.contacts || [];
 
+	// REMOVE THIS lATER;
+	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}).` } });
+
 	// Main contact list
 	let contactList = async() => {
 		// Standard embed

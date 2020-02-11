@@ -146,7 +146,7 @@ module.exports = async(client, msg, suffix) => {
 		// Showing all messages
 		let messagesPage = async page => {
 			let pages = Math.ceil(messages.length / 5);
-
+			
 			while (!messages[(page - 1) * 5]) {
 				page -= 1;
 			}
@@ -167,10 +167,14 @@ module.exports = async(client, msg, suffix) => {
 				embed.addField(`ID \`${m.id}\` from ${m.from || m.number}`, `${m.message}`);
 			}
 
-			let responses = perm ? ["edit", "clear", "delete"] : [];
-
+			let responses = perm ? ["edit", "clear", "delete"] : [];		
+			
 			// Edit existing message or send a new one
-			omsg ? await omsg.edit({ embed: embed }) : omsg = await msg.channel.send({ embed: embed });
+			if (omsg) {
+				omsg = msg.channel.messages.get(omsg.id);
+				omsg.edit({ embed: embed });
+			}
+			else omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
@@ -182,15 +186,13 @@ module.exports = async(client, msg, suffix) => {
 				msg.author.busy = false;
 				return omsg.delete().catch(e => null);
 			}
+			
+			if (parseInt(collected.content) > 0) {
+				page = parseInt(collected.content);
+				return messagesPage(page);
+			}
 
-			let toSwitch = collected.content.toLowerCase();
-			switch (toSwitch) {
-				case parseInt(collected.content) > 0: {
-					page = parseInt(collected.content);
-					messagesPage(page);
-					break;
-				}
-
+			switch (collected.content.toLowerCase()) {
 				case "clear": {
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)

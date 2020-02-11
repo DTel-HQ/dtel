@@ -82,7 +82,11 @@ scheduleJob("*/1 * * * *", async() => {
 	if (!unhandled.length) return;
 	for (const transaction of unhandled) {
 		// Try to fetch user
-		let user = await client.users.fetch(transaction.user);
+		let user = await client.users.fetch(transaction.user)
+			.catch(e => {
+				client.apiSend(`[Discoin] couldn't find user ${transaction.user}`, "326075875466412033");
+				return null;
+			});
 
 		// patch
 		transaction.update({ handled: true })
@@ -94,12 +98,11 @@ scheduleJob("*/1 * * * *", async() => {
 			});
 
 		// add amount
-		let account = await user.account();
+		let account = await user.account(true);
 		account.balance += transaction.payout;
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		if (!user) return client.log(`:repeat: User ${transaction.user} received <:DTS:668551813317787659>${transaction.payout} from Discoin.`);
 		let dmChannel = await user.createDM().catch(e => null);
 		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `<:DTS:668551813317787659>${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
 		client.log(`:repeat: ${user.username} (${user.id}) received <:DTS:668551813317787659>${transaction.payout} from Discoin.`);
