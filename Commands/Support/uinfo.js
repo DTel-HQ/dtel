@@ -27,8 +27,15 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Prefix", `\`${account.prefix || ">"}\``, true)
 		.addField("Balance", `<:DTS:668551813317787659>${client.format(account.balance)}`, true)
 		.addField("VIP months", account.vip || "None", true)
-		.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
+
+	if (strikes.length) {
+		for (let i = 0; i < strikes.length; i++) {
+			let strike = strikes[0];
+			let striker = client.users.fetch(strike.creator).catch(e => null);
+			embed.addField(`Strike by ${strike.creator}${striker ? ` (${striker.tag})` : ""}`, strike.reason);
+		}
+	}
 
 	msg.channel.send({ embed: embed });
 };
