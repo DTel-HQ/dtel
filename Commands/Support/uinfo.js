@@ -30,9 +30,11 @@ module.exports = async(client, msg, suffix) => {
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
 
 	if (strikes.length) {
+		let strike,
+			striker;
 		for (let i = 0; i < strikes.length; i++) {
-			let strike = strikes[0];
-			let striker = client.users.fetch(strike.creator).catch(e => null);
+			strike = strikes[0];
+			striker = client.users.fetch(strike.creator).catch(e => null);
 			embed.addField(`Strike by ${strike.creator}${striker ? ` (${striker.tag})` : ""}`, strike.reason);
 		}
 	}
