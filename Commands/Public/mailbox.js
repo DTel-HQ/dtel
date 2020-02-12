@@ -282,7 +282,9 @@ module.exports = async(client, msg, suffix) => {
 
 				case "0": {
 					msg.author.busy = false;
-					omsg.delete().catch(e => null);
+					omsg.delete().catch(e => 
+						omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key.\nRemember, you can always open it again with `>mailbox`!", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
+					);
 					break;
 				}
 
