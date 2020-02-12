@@ -335,8 +335,8 @@ scheduleJob("0 0 0 * * *", async() => {
 	client.log(`📖 Cleared messages of ${result.replaced} calls.`);
 });
 
-// Discoi report hourly
-scheduleJob("0 0 */12 * * *", async() => {
+// Discoin report every 6h
+scheduleJob("0 0 */6 * * *", async() => {
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 		emojis = client.guilds.get("347859709711089674").emojis;
 
