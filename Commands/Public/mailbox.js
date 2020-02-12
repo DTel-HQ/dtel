@@ -170,7 +170,7 @@ module.exports = async(client, msg, suffix) => {
 			let responses = perm ? ["edit", "clear", "delete"] : [];		
 			
 			// Edit existing message or send a new one
-			if (omsg) {
+			if (omsg && omsg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES")) {
 				omsg = msg.channel.messages.get(omsg.id);
 				omsg.edit("", { embed: embed });
 			}
