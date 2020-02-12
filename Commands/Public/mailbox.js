@@ -172,9 +172,9 @@ module.exports = async(client, msg, suffix) => {
 			// Edit existing message or send a new one
 			if (omsg) {
 				omsg = msg.channel.messages.get(omsg.id);
-				omsg.edit("", embed);
+				omsg.edit("", { embed: embed });
 			}
-			else omsg = await msg.channel.send("", embed);
+			else omsg = await msg.channel.send("", { embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
