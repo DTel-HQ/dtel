@@ -95,7 +95,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: msg.author.displayAvatarURL(),
 		},
 		title: "Success!",
-		description: "You succesfully gave money to someone else. Here is your receipt.",
+		description: `You succesfully gave ${user.tag} money. Here is your receipt.`,
 		fields: [
 			{
 				name: "User",
@@ -122,7 +122,7 @@ module.exports = async(client, msg, suffix) => {
 				icon_url: msg.author.displayAvatarURL(),
 			},
 			title: "You received money!",
-			description: "Someone gave money to you. Here's your receipt.",
+			description: "Someone gave you money. Here's your receipt.",
 			fields: [
 				{
 					name: "User",
