@@ -1,7 +1,6 @@
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import { readdir } from "fs";
-import config from "./Configuration/config.js";
 import { ShardingManager, Cluster } from "kurasuta";
 import Discord from "discord.js"
 
@@ -37,7 +36,7 @@ const winston: Logger = createLogger({
 	format: format.combine(
 		format.colorize(),
 		format.timestamp(),
-		format.printf(info => `${info.level}: [Sharder] ${info.message} [${info.timestamp}]`)
+		format.printf((info: any) => `${info.level}: [Sharder] ${info.message} [${info.timestamp}]`)
 		// format.simple(),
 	),
 });
