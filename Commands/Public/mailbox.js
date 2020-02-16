@@ -170,10 +170,7 @@ module.exports = async(client, msg, suffix) => {
 			let responses = perm ? ["edit", "clear", "delete"] : [];		
 			
 			// Edit existing message or send a new one
-			if (omsg) {
-				omsg = msg.channel.messages.get(omsg.id);
-				omsg.edit({ embed: embed });
-			}
+			if (msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") && omsg) omsg = await omsg.edit({ embed: embed });
 			else omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
@@ -282,7 +279,8 @@ module.exports = async(client, msg, suffix) => {
 
 				case "0": {
 					msg.author.busy = false;
-					omsg.delete().catch(e => null);
+					omsg.delete().catch(e => {});
+					omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
