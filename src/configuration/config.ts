@@ -1,5 +1,5 @@
 /* eslint-disable no-inline-comments */
-export const ids {
+export const ids = {
 	maintainers: [
 		"207484517898780672",
 		"137589790538334208",
@@ -16,9 +16,9 @@ export const ids {
 	donatorRole: "324578460183822337",
 	managerRole: "284443515516354560",
 	supportRole: "281815839936741377",
-},
+}
 
-export const colors {
+export const colors = {
 	contacts: 0x50C878, // green
 	error: 0xff3333, // red
 	info: 0x3498d8, // blue
@@ -27,9 +27,9 @@ export const colors {
 	success: 0x47d147, // green
 	yellowbook: 0xe6e600, // yellow
 	vip: 0xffc61a, // gold
-},
+}
 
-export const links {
+export const links = {
         applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
 	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
@@ -41,16 +41,16 @@ export const links {
 	suggestLink: "https://feedback.austinhuang.me/",
 	vipLink: "https://discordtel.austinhuang.me/en/latest/VIP-Number/",
 	voteLink: "https://discordtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
-},
+}
 
-export const numbers { // temporary, we'll probs move these
+export const numbers = { // temporary, we'll probs move these
 	aliasNumbers: {
-                "*611:" "08007877678",
-	}
+    "*611": "08007877678",
+	},
 	supportNumber: "08007877678",
-},
+}
 
-export const settings {
+export const settings = {
 	devMode: false,
 	devOnlyMode: false,
 	shardCount: 4,
@@ -70,15 +70,15 @@ export const settings {
 	minTransfer: 50,
 	maxNumbers: 3,
 	promoteTimeout: 7, // days
-},
+}
 
-export const callPhones: {
+export const callPhones = {
 	default: "<:DiscordTelPhone:310817969498226718>",
 	donator: "<:GoldPhone:320768431307882497>",
 	support: "📞",
-},
+}
 
-export const cooldowns: {
+export const cooldowns = {
 	default: 5,
 	call: 20,
 	message: 120,
