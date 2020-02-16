@@ -1,5 +1,5 @@
 /* eslint-disable no-inline-comments */
-module.exports = {
+export const config = {
 	// BOT MAINTENANCE
 	maintainers: [
 		"207484517898780672",
