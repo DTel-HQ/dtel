@@ -2,6 +2,7 @@ import { readdir } from "fs-nextra"
 import clear from "clear-module";
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
+import { settings } from "./configuration/config";
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
@@ -65,7 +66,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			},
 		});
 
-		if (config.devMode) process.on("unhandledRejection", e => winston.error(e));
+		if (settings.devMode) process.on("unhandledRejection", e => winston.error(e));
 
 		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {
