@@ -1,8 +1,8 @@
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import { readdir } from "fs";
-import { ShardingManager, Cluster } from "kurasuta";
-import Discord from "discord.js"
+import { readdir } from "fs-nextra";
+import { ShardingManager, Cluster, SharderEvents } from "kurasuta";
+import * as Discord from "discord.js"
 
 (async(): Promise<void> => {
 	let structures: any = readdir(`${__dirname}/Structures`, (err, files) => {if (!err) return files; else console.log(err);});
@@ -41,6 +41,6 @@ const winston: Logger = createLogger({
 	),
 });
 
-sharder.on("spawn", (shard: Cluster)  => winston.info(`[Sharder] Spawned Shard ID: ${shard.id}`));
+sharder.once(SharderEvents.READY, (shard: Cluster)  => winston.info(`[Sharder] Spawned Shard ID: ${shard.id}`));
 
 sharder.spawn();
