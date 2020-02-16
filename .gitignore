@@ -7,3 +7,5 @@ rethinkdb.exe
 built/
 
 src/Configuration/auth.js
+
+dist/
