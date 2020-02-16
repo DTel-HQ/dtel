@@ -1,12 +1,16 @@
 {
-    "compilerOptions": {
-        "outDir": "./built",
-        "allowJs": true,
+	"compilerOptions": {
+    "outDir": "./built",
+    "allowJs": true,
 		"target": "es2017",
-		"allowSyntheticDefaultImports": true
-    },
-    "include": [
-        "./src/**/*"
+		"allowSyntheticDefaultImports": true,
+		"baseUrl": ".",
+		"paths": {
+			"*": ["node_modules/*", "node_modules/*/index", "node_modules/*/dist/index", "node_modules/*/src/index"],
+		},
+  },
+  "include": [
+    "./src/**/*",
 	],
-	"exclude": [ "./node_modules" ]
+	"exclude": [ "./node_modules" ],
 }
