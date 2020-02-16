@@ -2,8 +2,7 @@ import { readdir } from "fs-nextra"
 import clear from "clear-module";
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-const config = require("./Configuration/config.js");
-const aliases = require("./Configuration/aliases.js");
+import config from "./configuration/config.js";
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
@@ -12,12 +11,12 @@ module.exports = class extends require("kurasuta").BaseCluster {
 		(async() => {
 			await require("./Database/init")()
 				.then(() => winston.info("[Database] Successfully connected to the database."))
-				.catch(err => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
+				.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
 
 			let events = await readdir("./Events");
 			for (let e of events) {
 				let name = e.replace(".js", "");
-				this.client.on(name, async(...args) => (await reload(`./Events/${e}`))(...args));
+				this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
 			}
 		})();
 
@@ -39,7 +38,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			format: format.combine(
 				format.colorize(),
 				format.timestamp(),
-				format.printf(info => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`)
+				format.printf((info: any) => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`)
 				// format.simple(),
 			),
 		});
