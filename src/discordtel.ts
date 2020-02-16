@@ -2,7 +2,7 @@ import { readdir } from "fs-nextra"
 import clear from "clear-module";
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import config from "./configuration/config";
+import * from "./configuration/config";
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
