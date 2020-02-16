@@ -6,7 +6,7 @@
 		"allowSyntheticDefaultImports": true,
 		"baseUrl": ".",
 		"paths": {
-			"*": ["node_modules/*", "node_modules/*/index", "node_modules/*/dist/index", "node_modules/*/src/index"],
+			"*": ["node_modules/*", "node_modules/*/index", "node_modules/*/dist/index", "node_modules/*/src/index", "node_modules/*/typings/index"],
 		},
   },
   "include": [

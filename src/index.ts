@@ -5,7 +5,7 @@ import { ShardingManager, Cluster } from "kurasuta";
 import Discord from "discord.js"
 
 (async(): Promise<void> => {
-	let structures: string[] = await readdir(`${__dirname}/Structures`);
+	let structures: any = readdir(`${__dirname}/Structures`, (err, files) => {if (!err) return files; else console.log(err);});
 	for (let i of structures) {
 		console.log(`Loading: ${i}`);
 		if (i.endsWith(".js")) require(`${__dirname}/Structures/${i}`)(Discord);
