@@ -3,7 +3,7 @@ const clear = require("clear-module");
 import { createLogger, format, transports, Logger } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 import { BaseCluster } from "kurasuta";
-import { settings } from "./configuration/config.js";
+import { settings } from "./configuration/config";
 
 module.exports = class extends BaseCluster {
 	public async launch(): Promise<void> {
