@@ -1,56 +1,59 @@
 import DTelNumber from "./dtelnumber";
+import { ReqlClient } from "rethinkdbdash"
 
 export default class Account {
-	private _balance: Number = 100;
-	private _frozen: Boolean = false;
-	private _prefix: String = ">";
-	private _status: String = "idle";
-	public vip: Number = 0;
+	constructor(readonly id: Number, account?: object, r: ReqlClient) {
+		Object.assign(this, account);
+		this.r = r;
+	}
+	// For my own sake, can you keep constructors at top of files so I can know if they are constructed
+	private _balance: number = 100;
+	private _frozen: boolean = false;
+	private _prefix: string = ">";
+	private _status: string = "idle";
+	private r?: ReqlClient = undefined;
+	public vip: number = 0;
 
 	readonly toStore: any[] = [
 
 	]
 
-	constructor(readonly id: number, account?: object) {
-		Object.assign(this, account);
-	}
-
 	public get balance() {
 		return this._balance;
 	}
 
-	public freeze(status?: String): Boolean {
+	public freeze(status: string): boolean {
 		if (this._frozen) return false;
 		this._status = status;
 		return this._frozen = true;
 	}
 
 	public get number(): DTelNumber {
-		return //number;
+		return new DTelNumber();//number;
 	}
 
-	public get prefix(): String {
+	public get prefix(): string {
 		return this._prefix;
 	}
 
-	public setBalance(amount: Number): Account {
+	public setBalance(amount: number): Account {
 		this._balance = amount;
-		r.table("Accounts").get(this.id).update({ balance: this._balance });
+		this.r!.table("Accounts").get(this.id).update({ balance: this._balance });
 		return this;
 	}
 
 	public setPrefix(prefix: string): Account {
 		this._prefix = prefix;
-		r.table("Accounts").get(this.id).update({ prefix: this._prefix });
+		this.r!.table("Accounts").get(this.id).update({ prefix: this._prefix });
 		return this;
 	}
 
-	public get status(): String {
-		return this._status;
+	public get status(): string {
+		return this._status!;
 	}
 
-	public get transactions(): Object[] {
-		return r.table("Transactions").filter(r.row("fromID").eq(this.id).or(r.row("toID").eq(this.id))).default([]);
+	public get transactions(): object[] {
+		return this.r.table("Transactions").filter(r.row("fromID").eq(this.id).or(r.row("toID").eq(this.id))).default([]);
 	}
 
 	public unfreeze(): void {

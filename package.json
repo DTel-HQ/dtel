@@ -29,6 +29,8 @@
   "dependencies": {
     "@discoin/scambio": "^2.0.3",
     "@types/node": "^13.7.0",
+    "@types/rethinkdb": "^2.3.14",
+    "@types/rethinkdbdash": "github:typed-typings/rethinkdbdash",
     "@types/ws": "^7.2.1",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",

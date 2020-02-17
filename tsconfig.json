@@ -1,16 +1,38 @@
 {
 	"compilerOptions": {
-    "outDir": "./built",
-    "allowJs": true,
-		"target": "es2017",
-		"allowSyntheticDefaultImports": true,
-		"baseUrl": ".",
-		"paths": {
-			"*": ["node_modules/*", "node_modules/*/index", "node_modules/*/dist/index", "node_modules/*/src/index", "node_modules/*/typings/index"],
-		},
-  },
-  "include": [
-    "./src/**/*",
-	],
-	"exclude": [ "./node_modules" ],
+		"allowJs": true,
+		"alwaysStrict": true,
+		"declaration": false,
+		"emitDecoratorMetadata": true,
+		"esModuleInterop": true,
+		"experimentalDecorators": true,
+		"incremental": true,
+		"lib": ["es2019"],
+		"module": "commonjs",
+		"moduleResolution": "node",
+		"noEmitOnError": true,
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"outDir": "./dist",
+		"pretty": true,
+		"removeComments": true,
+		"resolveJsonModule": true,
+		"sourceMap": true,
+		"strict": true,
+		"strictBindCallApply": true,
+		"strictNullChecks": true,
+		"strictPropertyInitialization": true,
+		"target": "esnext",
+		"types": [
+			"node",
+			"discord.js",
+			"rethinkdbdash"
+		]
+	},
+	"include": [
+		"src/**/*",
+	]
 }

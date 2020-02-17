@@ -1,24 +1,21 @@
 import { readdir } from "fs-nextra"
-import clear from "clear-module";
+const clear = require("clear-module");
 import { createLogger, format, transports, Logger } from "winston";
-import DailyRotateFile from "winston-daily-rotate-file";
-import { settings } from "./configuration/config";
+const DailyRotateFile = require("winston-daily-rotate-file");
+import { BaseCluster } from "kurasuta";
+import { settings } from "./configuration/config.js";
 
-module.exports = class extends require("kurasuta").BaseCluster {
-	launch() {
-		const client = this.client;
+module.exports = class extends BaseCluster {
+	public async launch(): Promise<void> {
+		await require("./Database/init")()
+			.then(() => winston.info("[Database] Successfully connected to the database."))
+			.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
 
-		(async() => {
-			await require("./Database/init")()
-				.then(() => winston.info("[Database] Successfully connected to the database."))
-				.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
-
-			let events = await readdir("./Events");
-			for (let e of events) {
-				let name = e.replace(".js", "");
-				this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
-			}
-		})();
+		let events = await readdir("./Events");
+		for (let e of events) {
+			let name = e.replace(".js", "");
+			this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
+		}
 
 		const winston: Logger = createLogger({
 			level: "info",
@@ -27,7 +24,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 					format: format.colorize(),
 				}),
 				new DailyRotateFile({
-					filename: `./Logs/Winston-Log-%DATE%-Shard${this.client.shard.id}.log`,
+					filename: `./Logs/Winston-Log-%DATE%-Shard${this.client.shard!.id}.log`,
 					datePattern: "YYY-MM-DD-HH",
 					zippedArchive: true,
 					maxFiles: "100d",
@@ -38,7 +35,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 			format: format.combine(
 				format.colorize(),
 				format.timestamp(),
-				format.printf((info: any) => `${info.level}: [Shard ${this.client.shard.id}] ${info.message} [${info.timestamp}]`)
+				format.printf((info: any) => `${info.level}: [Shard ${this.client.shard!.id}] ${info.message} [${info.timestamp}]`)
 				// format.simple(),
 			),
 		});
@@ -59,14 +56,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 		// Scheduled jobs
 		require("./Internals/jobs.js");
 
-		Object.assign(String.prototype, {
-			escapeRegex() {
-				const matchOperators = /[|\\{} ()[\]^$+*?.]/g;
-				return this.replace(matchOperators, "\\$&");
-			},
-		});
-
-		if (settings.devMode) process.on("unhandledRejection", e => winston.error(e));
+		if (settings.devMode) process.on("unhandledRejection", (e: any) => winston.error(e));
 
 		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {
