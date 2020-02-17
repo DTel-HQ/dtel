@@ -1,4 +1,4 @@
-import DTelNumber from "./dtelnumber";
+import DMNumber from "./dmnumber";
 import { ReqlClient } from "rethinkdbdash"
 
 export default class Account {
@@ -26,8 +26,8 @@ export default class Account {
 		return this._frozen = true;
 	}
 
-	public get number(): DTelNumber {
-		return new DTelNumber();//number;
+	public get number(): DMNumber | null {
+		return null //not yet
 	}
 
 	public get prefix(): string {
