@@ -1,15 +1,14 @@
-const { db } = require("../Configuration/auth.js");
+import { db } from "../Configuration/auth.js";
+import rethinkdb, { ReqlClient } from "rethinkdbdash";
 
-const Cache = require("../Internals/Cache.js");
-
-const r = global.r = require("rethinkdbdash")({
+const r: ReqlClient = rethinkdb({
 	db: db.db,
 	user: db.user,
 	password: db.password,
 });
 
-module.exports = async() => new Promise(async(resolve, reject) => {
-	const tables = [
+module.exports = async() => new Promise(async(resolve: Function) => {
+	const tables: string[] = [
 		"Accounts",
 		"Blacklist",
 		"Calls",
@@ -41,16 +40,16 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	await r.branch(r.table("OldCalls").indexList().contains("startedAt"), null, r.table("OldCalls").indexCreate("startedAt", r.row("startedAt")));
 	await r.branch(r.table("OldCalls").indexStatus("startedAt").nth(0)("ready"), null, r.table("OldCalls").indexWait("startedAt"));
 
-	await r.branch(r.table("Numbers").indexList().contains("channel"), null, r.table("Numbers").indexCreate("channel", row => row("channel")));
+	await r.branch(r.table("Numbers").indexList().contains("channel"), null, r.table("Numbers").indexCreate("channel", r.row("channel")));
 	await r.branch(r.table("Numbers").indexStatus("channel").nth(0)("ready"), null, r.table("Numbers").indexWait("channel"));
 
-	await r.branch(r.table("Numbers").indexList().contains("guild"), null, r.table("Numbers").indexCreate("guild", row => row("guild")));
+	await r.branch(r.table("Numbers").indexList().contains("guild"), null, r.table("Numbers").indexCreate("guild", r.row("guild")));
 	await r.branch(r.table("Numbers").indexStatus("guild").nth(0)("ready"), null, r.table("Numbers").indexWait("guild"));
 
-	await r.branch(r.table("Mailbox").indexList().contains("channel"), null, r.table("Mailbox").indexCreate("channel", row => row("channel")));
+	await r.branch(r.table("Mailbox").indexList().contains("channel"), null, r.table("Mailbox").indexCreate("channel", r.row("channel")));
 	await r.branch(r.table("Mailbox").indexStatus("channel").nth(0)("ready"), null, r.table("Mailbox").indexWait("channel"));
 
-	await r.branch(r.table("Strikes").indexList().contains("offender"), null, r.table("Strikes").indexCreate("offender", row => row("offender")));
+	await r.branch(r.table("Strikes").indexList().contains("offender"), null, r.table("Strikes").indexCreate("offender", r.row("offender")));
 	await r.branch(r.table("Strikes").indexStatus("offender").nth(0)("ready"), null, r.table("Strikes").indexWait("offender"));
 
 	await r.table("Busy").delete();
