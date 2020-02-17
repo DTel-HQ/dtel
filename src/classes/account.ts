@@ -11,7 +11,7 @@ export default class Account {
 
 	]
 
-	constructor(readonly id: Number, account?: object) {
+	constructor(readonly id: number, account?: object) {
 		Object.assign(this, account);
 	}
 
