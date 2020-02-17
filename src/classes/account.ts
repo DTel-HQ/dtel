@@ -2,16 +2,14 @@ import DTelNumber from "./dtelnumber";
 import { ReqlClient } from "rethinkdbdash"
 
 export default class Account {
-	constructor(readonly id: Number, account?: object, r: ReqlClient) {
+	constructor(readonly id: string, private r: ReqlClient, account?: object) {
 		Object.assign(this, account);
-		this.r = r;
 	}
 	// For my own sake, can you keep constructors at top of files so I can know if they are constructed
 	private _balance: number = 100;
 	private _frozen: boolean = false;
 	private _prefix: string = ">";
 	private _status: string = "idle";
-	private r?: ReqlClient = undefined;
 	public vip: number = 0;
 
 	readonly toStore: any[] = [
@@ -52,8 +50,8 @@ export default class Account {
 		return this._status!;
 	}
 
-	public get transactions(): object[] {
-		return this.r.table("Transactions").filter(r.row("fromID").eq(this.id).or(r.row("toID").eq(this.id))).default([]);
+	public get transactions(): any {
+		return this.r.table("Transactions").filter(this.r.row("fromID").eq(this.id).or(this.r.row("toID").eq(this.id))).default([]);
 	}
 
 	public unfreeze(): void {
