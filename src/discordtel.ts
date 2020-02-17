@@ -3,7 +3,7 @@ const clear = require("clear-module");
 import { createLogger, format, transports, Logger } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 import { BaseCluster } from "kurasuta";
-import * as config from "./configuration/config.js";
+import { settings } from "./configuration/config.js";
 
 module.exports = class extends BaseCluster {
 	public async launch(): Promise<void> {
@@ -56,7 +56,7 @@ module.exports = class extends BaseCluster {
 		// Scheduled jobs
 		require("./Internals/jobs.js");
 
-		if (config.devMode) process.on("unhandledRejection", (e: any) => winston.error(e));
+		if (settings.devMode) process.on("unhandledRejection", (e: any) => winston.error(e));
 
 		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {

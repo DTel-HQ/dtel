@@ -1,4 +1,4 @@
-import { db } from "../Configuration/auth.js";
+import { db } from "../Configuration/auth";
 import rethinkdb, { ReqlClient } from "rethinkdbdash";
 
 const r: ReqlClient = rethinkdb({
