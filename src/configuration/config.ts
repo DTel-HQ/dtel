@@ -30,7 +30,7 @@ export const colors = {
 }
 
 export const links = {
-  applyLink: "https://discordtel.typeform.com/to/jJayAt",
+	applyLink: "https://discordtel.typeform.com/to/jJayAt",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
 	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
 	githubLink: "https://github.com/austinhuang0131/discordtel",
@@ -45,7 +45,7 @@ export const links = {
 
 export const numbers = { // temporary, we'll probs move these
 	aliasNumbers: {
-    "*611": "08007877678",
+		"*611": "08007877678",
 	},
 	supportNumber: "08007877678",
 }
