@@ -5,13 +5,13 @@ module.exports = {
 		name: "call",
 		aliases: [
 		],
-		usage: `{{prefix}}call <${words.number}>`,
+		usage: `{{prefix, prefix}}call <${words.number}>`,
 	},
 	permcheck: {
 		name: "permcheck",
 		aliases: [
 			"pc",
 		],
-		usage: `{{prefix}}permcheck <${words.userID}>`,
+		usage: `{{prefix, prefix}}permcheck <${words.userID}>`,
 	},
 };
