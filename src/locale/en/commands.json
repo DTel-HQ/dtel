@@ -11,5 +11,5 @@
 			"pc",
 		],
 		"usage": "{{prefix, prefix}}permcheck {{userID, words}}",
-	},
+	}
 };
