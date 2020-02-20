@@ -5,4 +5,4 @@
 		{ "name": "Get yourself a number to call others!", "value": "Do `>wizard` and follow the prompts. Once you got one, you can..." },
 		{ "name": ">dial / >call", "value": "Dial a specific DiscordTel number you have in mind. Or..." }
 	]
-};
+}
