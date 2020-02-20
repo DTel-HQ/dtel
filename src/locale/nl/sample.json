@@ -1,0 +1,18 @@
+{
+  "description": "Voor meer informatie: gebruik `&gt;info`, `&gt;links` of bel de hulplijn met `&gt;dial *611`.",
+  "fields": [
+    {
+      "name": "Maak een nummer en bel anderen!",
+      "value": "Gebruik `&gt;wizard` en volg de instructies.\nAls je eenmaal een nummer hebt dan kan je..."
+    },
+    {
+      "name": "&gt;bel",
+      "value": "Bel een specifiek DiscordTel nummer dat je kent, of..."
+    }
+  ],
+  "title": "Functielijst",
+  "string": "Dit is een string",
+  "string_content": "Dit is een string met {{context}}",
+  "addcredit": "{{amount}} is toegevoegd aan uw saldo",
+  "addcredit_user": "{{amount}} is toegevoegd aan uw saldo door {{user}}"
+}
