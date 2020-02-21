@@ -3,3 +3,5 @@ DB/
 Logs/
 Configuration/auth.js
 rethinkdb.exe
+dist/
+built/
