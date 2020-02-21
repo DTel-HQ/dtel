@@ -351,8 +351,11 @@ scheduleJob("0 0 */12 * * *", async() => {
 		if (change < 1) change = 1 - change;
 		else change -= 1;
 		change = Math.round(change * 10000) / 100;
-		if (currency.value > prevrates[currency.id]) strings[currency.id] = ` :chart_with_upwards_trend: +${change}%`;
-		else strings[currency.id] = ` :chart_with_downwards_trend: -${change}%`;
+		const positive = currency.value > prevrates[currency.id];
+		if (positive) change = `+${change}`;
+		else if (!positive) change = `-${change}`;
+		else change = "<0.01";
+		strings[currency.id] = ` ${positive ? ":chart_with_upwards_trend:" : ":chart_with_downwards_trend:"} ${change}%`;
 	}
 
 	await client.apiSend({ embed: {
