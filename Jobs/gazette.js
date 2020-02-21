@@ -41,4 +41,31 @@ module.export = scheduleJob => {
 		}
 		await r.table("Accounts").get("discoin").update({ rates: newrates });
 	});
+
+	// hourly and daily data saving
+	scheduleJob("0 0 */1 * * *", async() => {
+		const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
+			discoin = await r.table("Accounts").get("discoin"),
+			hourlyRates = discoin.hourly || {},
+			dailyRates = discoin.daily || {},
+			daily = new Date().getHours() === 0;
+
+		for (let currency in currencies) {
+			const rate = currencies[currency].value;
+
+			const hrates = hourlyRates[currency] || [];
+			if (hrates.length >= 24) hrates.push(rate).pop();
+			else hrates.push(rate);
+			hourlyRates[currency] = hrates;
+
+			if (daily) {
+				const drates = dailyRates[currency] || [];
+				if (drates.length >= 7) drates.push(rate).pop();
+				else drates.push(rate);
+				dailyRates[currency] = drates;
+			}
+		}
+
+		await r.table("Accounts").get("discoin").update({ hourly: hourlyRates, daily: dailyRates });
+	});
 };
