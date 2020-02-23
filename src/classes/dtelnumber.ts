@@ -5,7 +5,7 @@ import { dmNumber, guildNumber } from "../constants/regexp";
 * Base number class
 * @param {string} id - Number's ID
 * @param {keyof typeof NumberTypes?} typename - Type of number
-* @param {object} data - Number's data
+* @param {object?} data - Number's data
 * @constructor
 */
 
