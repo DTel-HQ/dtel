@@ -14,6 +14,7 @@ export default class Account {
 	private _frozen: boolean = false;
 	private _prefix: string = ">";
 	private _status: string = "idle";
+	private _language: string = "en";
 	public vip: number = 0;
 	readonly toStore: any[] = []
 
@@ -57,6 +58,10 @@ export default class Account {
 
 	public get transactions(): any {
 		return this.r.table("Transactions").filter(this.r.row("fromID").eq(this.id).or(this.r.row("toID").eq(this.id))).default([]);
+	}
+
+	public get language(): string {
+		return this._language;
 	}
 
 	public unfreeze(): Account {
