@@ -137,7 +137,7 @@
 	"message": {
     "name": "message",
 		"description": "Send another number a message.",
-		"usage": "$t(common:prefix)$t(message.name) <$t(common:number)> <$t(common:message)>"
+		"usage": "$t(common:prefix)message <$t(common:number)> <$t(common:message)>"
 	},
 	"minfo": {
 		"name": "",
@@ -157,7 +157,7 @@
 	"permcheck": {
 		"name": "permcheck",
 		"description": "",
-		"usage": "$t(common:prefix)$t(permcheck.name) <$t(common:userID)>"
+		"usage": "$t(common:prefix)permcheck <$t(common:userID)>"
 	},
 	"pickup": {
 		"name": "",
