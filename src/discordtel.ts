@@ -1,16 +1,11 @@
 import { readdir } from "fs-nextra"
 // const clear = require("clear-module");
 import { createLogger, format, transports, Logger } from "winston";
-const DailyRotateFile = require("winston-daily-rotate-file");
+import DailyRotateFile from "winston-daily-rotate-file";
 import { BaseCluster } from "kurasuta";
 import { settings } from "./configuration/config";
-import { Client } from "discord.js";
+import { util } from "./constants/interfaces";
 
-// THIS IS TEMPORARY
-interface csts {
-	client: Client,
-	winston: Logger,
-};
 
 module.exports = class extends BaseCluster {
 	public async launch(): Promise<void> {
@@ -37,9 +32,9 @@ module.exports = class extends BaseCluster {
 			),
 		});
 
-		const constants: csts = {
+		const constants: util = {
 			client: this.client,
-			winston: winston,
+			logger: winston,
 		}
 
 		await require("./Database/init")()
