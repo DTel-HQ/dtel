@@ -30,7 +30,7 @@ export const colors = {
 }
 
 export const links = {
-	applyLink: "https://discordtel.typeform.com/to/jJayAt",
+	apply: "https://discordtel.typeform.com/to/jJayAt",
 	botAvatar: "",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
 	discoin: "https://discoin.gitbook.io/docs/users-guide",
