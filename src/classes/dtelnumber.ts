@@ -19,8 +19,8 @@ export default class DTelNumber {
 	}
 
 	public static type(id: string): number {
-		if (guildNumber.exec(id)) return NumberTypes.DMNumber
-		else if (dmNumber.exec(id)) return NumberTypes.GuildNumber
+		if (guildNumber.exec(id)) return NumberTypes.GuildNumber
+		else if (dmNumber.exec(id)) return NumberTypes.DMNumber
 		else return -1;
 	}
 }
