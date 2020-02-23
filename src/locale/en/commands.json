@@ -7,7 +7,7 @@
 	},
 	"message": {
                 "name": "message",
-		"description": "Send another number a message."
+		"description": "Send another number a message.",
 		"aliases": [
                         "msg"
 		],
