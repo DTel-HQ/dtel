@@ -7,16 +7,6 @@ import { settings } from "./configuration/config";
 
 module.exports = class extends BaseCluster {
 	public async launch(): Promise<void> {
-		await require("./Database/init")()
-			.then(() => winston.info("[Database] Successfully connected to the database."))
-			.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
-
-		let events = await readdir("./Events");
-		for (let e of events) {
-			let name = e.replace(".js", "");
-			this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
-		}
-
 		const winston: Logger = createLogger({
 			level: "info",
 			transports: [
@@ -39,6 +29,16 @@ module.exports = class extends BaseCluster {
 				// format.simple(),
 			),
 		});
+
+		await require("./Database/init")()
+			.then(() => winston.info("[Database] Successfully connected to the database."))
+			.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
+
+		let events: string[] = await readdir("./events");
+		for (let e of events) {
+			let name: string = e.replace(".js", "");
+			this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
+		}
 
 		const reload = async(path: string) : Promise<any> => {
 			clear(path);

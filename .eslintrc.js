@@ -7,15 +7,8 @@ module.exports = {
 		es6: true,
 		node: true,
 	},
-	globals: {
-		aliases: true,
-		winston: true,
-		config: true,
-		client: true,
-		r: true,
-		reload: true,
-	},
 	rules: {
+		"sourceType": "module",
 		"require-atomic-updates": 0,
 		"no-compare-neg-zero": "error",
 		"no-extra-parens": ["warn", "all", { "nestedBinaryExpressions": false }],

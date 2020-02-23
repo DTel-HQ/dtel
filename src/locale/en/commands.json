@@ -1,15 +1,14 @@
 {
 	"call": {
 		"name": "call",
-		"aliases": [
-		],
-		"usage": "{{prefix, prefix}}call" ,
+		"aliases": [],
+		"usage": "{{prefix, prefix}}call"
 	},
 	"permcheck": {
 		"name": "permcheck",
 		"aliases": [
-			"pc",
+			"pc"
 		],
-		"usage": "{{prefix, prefix}}permcheck {{userID, words}}",
+		"usage": "{{prefix, prefix}}permcheck {{userID, words}}"
 	}
 }
