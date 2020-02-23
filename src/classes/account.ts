@@ -1,20 +1,25 @@
 import DMNumber from "./dmnumber";
 import { ReqlClient } from "rethinkdbdash"
 
+/**
+* Create an account
+* @param {string} id - Account ID
+* @param {ReqlClient} r - DB instance
+* @param {object?} account - Account data
+* @constructor
+*/
+
 export default class Account {
-	constructor(readonly id: string, private r: ReqlClient, account?: object) {
-		Object.assign(this, account);
-	}
-	// For my own sake, can you keep constructors at top of files so I can know if they are constructed
 	private _balance: number = 100;
 	private _frozen: boolean = false;
 	private _prefix: string = ">";
 	private _status: string = "idle";
 	public vip: number = 0;
+	readonly toStore: any[] = []
 
-	readonly toStore: any[] = [
-
-	]
+	constructor(readonly id: string, private r: ReqlClient, account?: object) {
+		Object.assign(this, account);
+	}
 
 	public get balance() {
 		return this._balance;
