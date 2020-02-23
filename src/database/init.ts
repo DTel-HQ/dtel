@@ -1,5 +1,6 @@
 import { db } from "../Configuration/auth";
 import rethinkdb, { ReqlClient } from "rethinkdbdash";
+import databaseInterface from "../classes/cache";
 
 const r: ReqlClient = rethinkdb({
 	db: db.db,
@@ -22,11 +23,19 @@ module.exports = async() => new Promise(async(resolve: Function) => {
 		"Votes",
 		"Whitelist",
 	];
+	const databaseInterfaces: databaseInterface[] = [];
 
-	let dblist = await r.dbList().run();
+	let dblist: string[] = await r.dbList().run();
 	if (!dblist.includes(db.db)) await r.dbCreate(db.db);
-	let tablelist = await r.tableList().run();
-	for (let i of tables) if (!tablelist.includes(i)) await r.tableCreate(i).run();
+	let tablelist: string[] = await r.tableList().run();
+
+	for (let i of tables) {
+		if (!tablelist.includes(i)) await r.tableCreate(i).run();
+		databaseInterfaces.push(new databaseInterface({
+			tableName: i,
+			r,
+		}))
+	}
 
 	await r.branch(r.table("Calls").indexList().contains("channel"), null, r.table("Calls").indexCreate("channel", [r.row("to")("channel"), r.row("from")("channel")]));
 	await r.branch(r.table("Calls").indexStatus("channel").nth(0)("ready"), null, r.table("Calls").indexWait("channel"));
@@ -52,9 +61,11 @@ module.exports = async() => new Promise(async(resolve: Function) => {
 	await r.branch(r.table("Strikes").indexList().contains("offender"), null, r.table("Strikes").indexCreate("offender", r.row("offender")));
 	await r.branch(r.table("Strikes").indexStatus("offender").nth(0)("ready"), null, r.table("Strikes").indexWait("offender"));
 
-	await r.table("Busy").delete();
-	await r.table("Cooldowns").delete();
-	await r.table("Numbers").update({ waiting: false });
+	if (tablelist.includes("Busy")) await r.table("Busy").delete()
+	if (tablelist.includes("Cooldowns")) r.table("Cooldowns").delete();
+	if (tablelist.includes("Numbers")) r.table("Numbers").update({ waiting: false });
 
-	resolve(r);
+	resolve({
+		r, databaseInterfaces
+	});
 });

@@ -54,8 +54,9 @@ export default class Account {
 		return this.r.table("Transactions").filter(this.r.row("fromID").eq(this.id).or(this.r.row("toID").eq(this.id))).default([]);
 	}
 
-	public unfreeze(): void {
+	public unfreeze(): Account {
 		this._frozen = false;
 		this._status = "idle";
+		return this;
 	}
 };
