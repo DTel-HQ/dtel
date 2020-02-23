@@ -3,7 +3,15 @@
 		"name": "call",
 		"description": "",
 		"aliases": [],
-		"usage": "$t(common:prefix)call"
+		"usage": "$t(common:prefix)call <number>"
+	},
+	"message": {
+                "name": "message",
+		"description": "Send another number a message."
+		"aliases": [
+                        "msg"
+		],
+		"usage": "$t(common:prefix)$t(message.name) <number> <message>
 	},
 	"permcheck": {
 		"name": "permcheck",
