@@ -1,9 +1,165 @@
 {
+	"addcredit": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"addvip": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"announce": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"assign": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"backdoor": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"balance": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"blacklist": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"block": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"broadcast": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
 	"call": {
 		"name": "call",
 		"description": "",
 		"aliases": [],
-		"usage": "$t(common:prefix)call <number>"
+		"usage": "$t(common:prefix)call <$t(common:number)>"
+	},
+	"cinfo": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"contacts": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"convert": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"cshelp": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"daily": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"deassign": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"eval": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"hangup": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"help": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"hold": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"identify": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"info": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"invite": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"links": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"lottery": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"mailbox": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"mention": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
 	},
 	"message": {
     "name": "message",
@@ -13,6 +169,24 @@
 		],
 		"usage": "$t(common:prefix)$t(message.name) <$t(common:number)> <$t(common:message)>"
 	},
+	"minfo": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"ninfo": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"pay": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
 	"permcheck": {
 		"name": "permcheck",
 		"description": "",
@@ -20,5 +194,113 @@
 			"pc"
 		],
 		"usage": "$t(common:prefix)$t(permcheck.name) <$t(common:userID)>"
+	},
+	"pickup": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"ping": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"prefix": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"promote": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"pull": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"rcall": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"reassign": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"restart": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"rmstrike": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"strike": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"strikes": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"transfer": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"uinfo": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"unbusy": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"unvip": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"upgrade": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"whitelist": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
+	},
+	"wizard": {
+		"name": "",
+		"description": "",
+		"aliases": [],
+		"usage": ""
 	}
 }

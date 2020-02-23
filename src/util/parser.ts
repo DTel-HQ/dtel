@@ -1,8 +1,8 @@
 import { channelMentionRegex, userMentionRegex, numberRegex } from "../constants/regexp";
 import { SuffixTypes } from "../constants/enums";
-import { Client } from "discord.js";
 import { util } from "../constants/interfaces";
 import databaseInterface from "../classes/cache";
+import { Client } from "discord.js";
 
 interface suffixType {
 	type: number;
