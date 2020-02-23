@@ -1,6 +1,8 @@
 import { channelMentionRegex, userMentionRegex, numberRegex } from "../constants/regexp";
 import { SuffixTypes } from "../constants/enums";
 import { Client } from "discord.js";
+import { util } from "../constants/interfaces";
+import databaseInterface from "../classes/cache";
 
 interface suffixType {
 	type: number;
@@ -9,12 +11,17 @@ interface suffixType {
 
 /**
 * Message and Suffix parser
-* @param {Client} client - the client
+* @param {util} util - the util object
 * @constructor
 */
 
 export default class Parser {
-	constructor (protected client: Client) {
+	protected client: Client;
+	protected db: databaseInterface;
+
+	constructor (protected util: util) {
+		this.client = util.client;
+		this.db = util.db;
 	}
 
 	/**
