@@ -11,7 +11,7 @@
 		"aliases": [
                         "msg"
 		],
-		"usage": "$t(common:prefix)$t(message.name) <number> <message>
+		"usage": "$t(common:prefix)$t(message.name) <number> <message>"
 	},
 	"permcheck": {
 		"name": "permcheck",
