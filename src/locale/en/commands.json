@@ -1,14 +1,16 @@
 {
 	"call": {
 		"name": "call",
+		"description": "",
 		"aliases": [],
-		"usage": "{{prefix, prefix}}call"
+		"usage": "$t(common:prefix)call"
 	},
 	"permcheck": {
 		"name": "permcheck",
+		"description": "",
 		"aliases": [
 			"pc"
 		],
-		"usage": "{{prefix, prefix}}permcheck {{userID, words}}"
+		"usage": "$t(common:prefix)$t(permcheck.name) <$t(common:userID)>"
 	}
 }

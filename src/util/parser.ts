@@ -7,6 +7,12 @@ interface suffixType {
 	id: string | null;
 }
 
+/**
+* Message and Suffix parser
+* @param {Client} client - the client
+* @constructor
+*/
+
 export default class Parser {
 	constructor (protected client: Client) {
 	}

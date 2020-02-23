@@ -1,8 +1,12 @@
 {
+	"author": {
+		"name": "$t(common:botName)",
+		"url": "{{botAvatar, links}}"
+	},
 	"title": "List of commands",
-	"description": "For more information, use `info`, `links` or call Customer support: `>dial *611`",
+	"description": "For more information, use `info`, `links` or call Customer support: `$t(common:prefix)dial *611`",
 	"fields": [
-		{ "name": "Get yourself a number to call others!", "value": "Do `>wizard` and follow the prompts. Once you got one, you can..." },
-		{ "name": ">dial / >call", "value": "Dial a specific DiscordTel number you have in mind. Or..." }
+		{ "name": "Get yourself a number to call others!", "value": "Do `$t(common:prefix)wizard` and follow the prompts. Once you got one, you can..." },
+		{ "name": "$t(common:prefix)dial / $t(common:prefix)call", "value": "Dial a specific DiscordTel number you have in mind. Or..." }
 	]
 }
