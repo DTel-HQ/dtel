@@ -1,9 +1,16 @@
 import { readdir } from "fs-nextra"
-const clear = require("clear-module");
+// const clear = require("clear-module");
 import { createLogger, format, transports, Logger } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 import { BaseCluster } from "kurasuta";
 import { settings } from "./configuration/config";
+import { Client } from "discord.js";
+
+// THIS IS TEMPORARY
+interface csts {
+	client: Client,
+	winston: Logger,
+};
 
 module.exports = class extends BaseCluster {
 	public async launch(): Promise<void> {
@@ -30,6 +37,11 @@ module.exports = class extends BaseCluster {
 			),
 		});
 
+		const constants: csts = {
+			client: this.client,
+			winston: winston,
+		}
+
 		await require("./Database/init")()
 			.then(() => winston.info("[Database] Successfully connected to the database."))
 			.catch((err: object) => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
@@ -37,24 +49,26 @@ module.exports = class extends BaseCluster {
 		let events: string[] = await readdir("./events");
 		for (let e of events) {
 			let name: string = e.replace(".js", "");
-			this.client.on(name, async(...args: any[]) => (await reload(`./Events/${e}`))(...args));
+			this.client.on(name, async(...args: any) => {
+				(req => req.default || req)(require(`./Events/${e}`))(constants, ...args)
+			});
 		}
 
-		const reload = async(path: string) : Promise<any> => {
-			clear(path);
-			try {
-				let file : any = require(path);
-				if (!file) return null;
-				return file;
-			} catch (err) {
-				return null;
-			}
-		};
+		// const reload = async(path: string) : Promise<any> => {
+		// 	clear(path);
+		// 	try {
+		// 		let file : any = require(path);
+		// 		if (!file) return null;
+		// 		return file;
+		// 	} catch (err) {
+		// 		return null;
+		// 	}
+		// };
 
 		this.client.on("disconnect", () => this.client.login());
 
 		// Scheduled jobs
-		require("./Internals/jobs.js");
+		// require("./Internals/jobs.js");
 
 		if (settings.devMode) process.on("unhandledRejection", (e: any) => winston.error(e));
 
