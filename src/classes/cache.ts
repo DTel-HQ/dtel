@@ -20,23 +20,16 @@ export default class DBInterface {
 	async get(id: string | number): Promise<modelFound | null> {
 		id = id.toString();
 		let res: unknown = this.cache.get(id);
-		if (typeof res === "object") return new modelFound({
+		if (typeof res === "undefined") {
+			res = this.r.table(this.tableName).get(id).default(null);
+			if (typeof res === "object" && res !== null) this.cache.set(id, res);
+		}
+		if (typeof res === "object" && res !== null) return new modelFound({
 			tableName: this.tableName,
 			r: this.r,
 			cached: res,
 			cache: this.cache,
 		});
-		// TODO: Someone who understands TS pls remove this repetition somehow.
-		res = this.r.table(this.tableName).get(id).default(null);
-		if (typeof res === "object") {
-			this.cache.set(id, res);
-			return new modelFound({
-				tableName: this.tableName,
-				r: this.r,
-				cached: res,
-				cache: this.cache,
-			});
-		}
 		return null;
 	}
 }
