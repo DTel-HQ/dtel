@@ -1,9 +1,11 @@
-// import { NumberTypes } from "../constants/enums";
+import { NumberTypes } from "../constants/enums";
 
 export default class DTelNumber {
-	constructor(readonly id: string, readonly typename: string | null, protected data?: object) {
-		if (!typename) this.typename = "DTelNumber";
+	constructor(readonly id: string, private _typename?: keyof typeof NumberTypes, protected data?: object) {
+		if (this._typename) this.typename = this._typename;
+		else this.typename = "DTelNumber";
 	}
 
-	// readonly type: number = NumberTypes[this.typename];
+	readonly typename: keyof typeof NumberTypes;
+	readonly type: number = NumberTypes[this.typename];
 }
