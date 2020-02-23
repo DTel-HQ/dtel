@@ -1,10 +1,11 @@
 import { ReqlClient } from "rethinkdbdash";
+import { Collection } from "discord.js";
 
 export interface options {
 	tableName: string,
 	r: ReqlClient,
-	cached: unknown, 
-	cache: any, // Can someone figure out how to assign type of d.js collection to these thanks
+	cached: unknown,
+	cache: Collection<string, object>,
 }
 
 export class modelFound {
@@ -23,11 +24,11 @@ export class modelFound {
 		Object.assign(this, this.cached)
 	}
 
-	async delete() {
+	delete() {
 		this.cache.delete(this.id);
 		let res;
 		try {
-			res = await this.r.table(this.tableName).get(this.id).delete();
+			res = this.r.table(this.tableName).get(this.id).delete();
 		} catch (err) {
 			throw new Error(`Could not remove document\n${res}`);
 		}

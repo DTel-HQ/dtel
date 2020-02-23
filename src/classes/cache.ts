@@ -26,7 +26,7 @@ export default class DBInterface {
 			cache: this.cache,
 		});
 		// TODO: Someone who understands TS pls remove this repetition somehow.
-		res = await this.r.table(this.tableName).get(id).default(null);
+		res = this.r.table(this.tableName).get(id).default(null);
 		if (res) {
 			this.cache.set(id, res);
 			return new modelFound({
