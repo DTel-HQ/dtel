@@ -8,7 +8,7 @@ interface options {
 }
 
 export default class DBInterface {
-	public cache = new Collection();
+	public cache: Collection<string, object> = new Collection();
 	public tableName: string;
 	public r: ReqlClient;
 	constructor(options: options) {
@@ -18,8 +18,9 @@ export default class DBInterface {
 	}
 
 	async get(id: string | number): Promise<modelFound | null> {
+		id = id.toString();
 		let res: unknown = this.cache.get(id);
-		if (res) return new modelFound({
+		if (typeof res === "object") return new modelFound({
 			tableName: this.tableName,
 			r: this.r,
 			cached: res,
@@ -27,7 +28,7 @@ export default class DBInterface {
 		});
 		// TODO: Someone who understands TS pls remove this repetition somehow.
 		res = this.r.table(this.tableName).get(id).default(null);
-		if (res) {
+		if (typeof res === "object") {
 			this.cache.set(id, res);
 			return new modelFound({
 				tableName: this.tableName,
