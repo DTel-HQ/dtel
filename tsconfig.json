@@ -20,6 +20,7 @@
 		"outDir": "./dist",
 		"paths": {
 			"command": ["src/classes/command"],
+			"interfaces": ["src/constants/interfaces"]
 		},
 		"pretty": true,
 		"removeComments": true,
