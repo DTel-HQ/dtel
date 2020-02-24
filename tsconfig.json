@@ -2,6 +2,7 @@
 	"compilerOptions": {
 		"allowJs": true,
 		"alwaysStrict": true,
+		"baseUrl": ".",
 		"declaration": false,
 		"emitDecoratorMetadata": true,
 		"esModuleInterop": true,
@@ -17,6 +18,9 @@
 		"noUnusedLocals": true,
 		"noUnusedParameters": true,
 		"outDir": "./dist",
+		"paths": {
+			"command": ["src/classes/command"],
+		},
 		"pretty": true,
 		"removeComments": true,
 		"resolveJsonModule": true,
