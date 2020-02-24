@@ -66,6 +66,7 @@ module.exports = async(client, msg, suffix) => {
 				timestamp: new Date(),
 			};
 			msg.channel.send({ embed: embed });
+			client.log(`:repeat: {msg.author.username} ({msg.author.id}) converted <:DTS:668563890015174677>{amount} into {currency} via Discoin.`);
 		}
 	}
 };
