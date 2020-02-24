@@ -2,251 +2,251 @@
 	"addcredit": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}addcredit <$t(common:userID)> <$t(common:amount)>"
 	},
 	"addvip": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}addvip <$t(common:userID)> <$t(common:amount)>"
 	},
 	"announce": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"assign": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"backdoor": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"balance": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"blacklist": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"block": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"broadcast": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"call": {
 		"name": "call",
 		"description": "",
-		"usage": "$t(common:prefix)call <$t(common:number)>"
+		"usage": "{{prefix, options}}call <$t(common:number)>"
 	},
 	"cinfo": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"contacts": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"convert": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"cshelp": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"daily": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"deassign": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"eval": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"hangup": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"help": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"hold": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"identify": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"info": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"invite": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"links": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"lottery": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"mailbox": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"mention": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"message": {
     "name": "message",
 		"description": "Send another number a message.",
-		"usage": "$t(common:prefix)message <$t(common:number)> <$t(common:message)>"
+		"usage": "{{prefix, options}}message <$t(common:number)> <$t(common:message)>"
 	},
 	"minfo": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"ninfo": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"pay": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"permcheck": {
 		"name": "permcheck",
 		"description": "",
-		"usage": "$t(common:prefix)permcheck <$t(common:userID)>"
+		"usage": "{{prefix, options}}permcheck <$t(common:userID)>"
 	},
 	"pickup": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"ping": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"prefix": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"promote": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"pull": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"rcall": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"reassign": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"restart": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"rmstrike": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"strike": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"strikes": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"transfer": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"uinfo": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"unbusy": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"unvip": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"upgrade": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"whitelist": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	},
 	"wizard": {
 		"name": "",
 		"description": "",
-		"usage": ""
+		"usage": "{{prefix, options}}"
 	}
 }
