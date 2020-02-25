@@ -55,7 +55,7 @@ module.exports = {
 	supportRole: "281815839936741377",
 
 	// LINKS
-	applyLink: "https://discordtel.typeform.com/to/jJayAt",
+	applyLink: "https://discordtel.typeform.com/to/wHjMpX",
 	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
 	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
 	githubLink: "https://github.com/austinhuang0131/discordtel",
