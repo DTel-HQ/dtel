@@ -112,9 +112,9 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (csCall) {
 		// send confirmation embed
 		let omsg = await msg.channel.send({ embed: {
-			color: config.colors.info,
-			title: "Please read before calling",
-			description: "*611 is our Customer Support number operated by real people.\nTherefore any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call *611?\n\nRespond with `yes` or `no`.",
+			color: config.colors.error,
+			title: "You **must** read this before calling!",
+			description: "*611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call *611?\n\nRespond with `yes` or `no`.",
 			footer: {
 				text: "This call will automatically be discarded in 60 seconds",
 			},
