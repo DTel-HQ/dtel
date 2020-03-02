@@ -25,7 +25,7 @@
   "homepage": "https://discordtel.austinhuang.me",
   "engines": { "node": "12" },
   "dependencies": {
-    "@discoin/scambio": "^2.0.3",
+    "@discoin/scambio": "^2.0.4",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.0.0",
