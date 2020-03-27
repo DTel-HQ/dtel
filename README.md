@@ -1,4 +1,4 @@
-![DiscordTel Logo](../old-v1/discordtel.png)
+![DiscordTel Logo](../3.x/A943FA92-144C-4705-8CFA-24EC659FF511.jpeg)
 # DiscordTel [![Get the bot](https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg)](https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot) [![Discord](https://img.shields.io/badge/Discord-Support_Server-7289DA.svg)](https://discord.gg/RN7pxrB) [![Documentation Status](https://readthedocs.org/projects/discordtel/badge/?version=latest)](http://discordtel.austinhuang.me/en/latest/)
 
 DiscordTel is a bot for Discord that allows you to set up a custom number and call other Discord servers.
