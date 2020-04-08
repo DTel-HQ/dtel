@@ -62,10 +62,10 @@ module.exports = Discord => {
 				this.loadedPerms = true;
 				let member = this.client.guilds.cache.get(config.supportGuild).members.cache.get(this.id);
 				let roles = member ? member.roles.cache : [];
-				if (roles.includes(config.bossRole)) this.boss = true;
-				if (roles.includes(config.managerRole)) this.manager = true;
-				if (roles.includes(config.supportRole)) this.support = true;
-				if (roles.includes(config.donatorRole)) this.donator = true;
+				if (roles.has(config.bossRole)) this.boss = true;
+				if (roles.has(config.managerRole)) this.manager = true;
+				if (roles.has(config.supportRole)) this.support = true;
+				if (roles.has(config.donatorRole)) this.donator = true;
 				if (config.maintainers.includes(this.id)) {
 					this.boss = true;
 					this.manager = true;
