@@ -62,7 +62,7 @@ scheduleJob("*/5 * * * *", async() => {
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
 	if (!client.done) return;
-	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
+	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
 		let userCount = (await client.shard.broadcastEval("this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
