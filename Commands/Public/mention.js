@@ -1,6 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	
-	let perms = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : msg.author.support;
+	let perms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : msg.author.support;
 
 	const number = await msg.channel.number;
 	if (!number || number.id === config.supportNumber) return;
@@ -14,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 	let userID = FDelete ? msg.mentions.users.first() ? msg.mentions.users.first() : suffix.split(" ")[1] : msg.author.id;
 	if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "No user", description: `Couldn't find a user to delete\nSyntax: \`${msg.content.split(" ")[0]} delete [userID/mention]\`` } });
 	if (!perms && FDelete) return msg.channel.send({ embed: { color: config.colors.error, title: "Unauthorized!", description: `You do not have \`Manage Messages\` permission.` } });
-	
+
 	let string = `<@${userID}>`;
 	if (FDelete && !toMention.includes(string)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "That user isn't on the list." } });
 

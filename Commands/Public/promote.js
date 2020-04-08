@@ -273,7 +273,7 @@ module.exports = async(client, msg, suffix) => {
 	canPromoteIn = cpaD ? `${cpaD}d${cpaH}h` : `${cpaH}h`;
 	let hasMoney = account.balance >= config.promoteCost;
 
-	let gperms = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
+	let gperms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 
 	// Create both embeds (Promote Embed, Options Embed)
 	let createEmbed = async(preview, explicit) => {

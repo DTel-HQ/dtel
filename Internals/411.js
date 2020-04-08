@@ -28,7 +28,7 @@ module.exports = async(msg, myNumber) => {
 	let pages = Math.ceil(phonebook.length / 10);
 
 	// Check if the user has permission
-	let gperm = msg.guild ? msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
+	let gperm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	let perms = msg.author.support || gperm;
 	let delPerm = false; //msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 

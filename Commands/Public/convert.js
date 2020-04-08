@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-				emojis = client.guilds.get("347859709711089674").emojis,
+				emojis = client.guilds.cache.get("347859709711089674").emojis.cache,
 				dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			return msg.channel.send({ embed: {

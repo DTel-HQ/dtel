@@ -51,9 +51,9 @@ scheduleJob("0 0 0 * * *", async() => {
 // Job to update CS perms
 scheduleJob("*/5 * * * *", async() => {
 	let roles = [config.supportRole, config.donatorRole];
-	let guild = client.guilds.get(config.supportGuild);
+	let guild = client.guilds.cache.get(config.supportGuild);
 	for (let role of roles) {
-		guild.members.forEach(async member => {
+		guild.members.cache.forEach(async member => {
 			await member.user.setPerms();
 		});
 	}
@@ -65,7 +65,7 @@ scheduleJob("*/15 * * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
-		let userCount = (await client.shard.broadcastEval("this.guilds.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
+		let userCount = (await client.shard.broadcastEval("this.guilds.cache.reduce((prev, guild) => prev + guild.memberCount, 0)")).reduce((prev, curr) => prev + curr, 0);
 		client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`${guildCount} servers and ${userCount} users | >help | [\${this.shard.id}]\`, type: 3 } });`);
 	} else {
 		let calls = (await r.table("Calls")).length;
@@ -183,7 +183,7 @@ scheduleJob("0 20 * * 0", async() => {
 	// Make the announcement embed
 	let winnersString = "";
 	for (let winner of winners) {
-		let user = await client.users.get(winner.id);
+		let user = await client.users.cache.get(winner.id);
 		winnersString += user ? `-${user.username}\n` : "Unknown";
 	}
 
@@ -338,7 +338,7 @@ scheduleJob("0 0 0 * * *", async() => {
 // Discoin report every 12h
 scheduleJob("0 0 */12 * * *", async() => {
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-		emojis = client.guilds.get("347859709711089674").emojis;
+		emojis = client.guilds.cache.get("347859709711089674").emojis.cache;
 
 	const prevrates = (await r.table("Accounts").get("discoin")).rates;
 	const strings = {};

@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 		if (guildNumbers.length >= config.maxNumbers) return msg.channel.send({ embed: { color: config.colors.error, title: "Too many numbers", description: `You have reached the maximum amount of ${config.maxNumbers} numbers per guild.\n\nIf you have a good use for more numbers (eg. roleplaying server), please [contact our staff](${config.guildInvite}) to get whitelisted.`, footer: { text: "This limit was set to prevent trolling" } } });
 	}
 
-	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.get(msg.author.id).hasPermission("MANAGE_GUILD");
+	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD");
 	if (!perm) perm = msg.author.support;
 	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need to have `manage guild` permission to run this command." } });
 

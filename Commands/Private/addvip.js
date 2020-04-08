@@ -1,6 +1,6 @@
 module.exports = async(client, msg, suffix) => {
 	let userID = suffix.split(" ")[0];
-	let user = msg.mentions.users ? msg.mentions.users.first() : null;
+	let user = msg.mentions ? msg.mentions.users.first() : null;
 	if (!user) user = await client.users.fetch(userID).catch(e => null);
 	let months = suffix.split(" ")[1];
 	if (!user || !months || months === 0) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">addvip [user] [months]" } });
