@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!id) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >ninfo [number/channelID]" } });
 
 	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix).catch(e => null);
-	if (user) dmChannel = await (await client.users.get(user.id)).createDM();
+	if (user) dmChannel = await (await client.users.cache.get(user.id)).createDM();
 	if (dmChannel) number = await r.table("Numbers").getAll(dmChannel.id, { index: "channel" }).nth(0).default(null);
 	if (msg.mentions.channels.first()) id = (await msg.mentions.channels.first()).id;
 	if (!number) number = await r.table("Numbers").getAll(id, { index: "channel" }).nth(0).default(null);
