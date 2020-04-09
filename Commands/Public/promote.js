@@ -159,7 +159,7 @@ module.exports = async(client, msg, suffix) => {
 				omsg = await msg.channel.send({ embed: sEmbed });
 			});
 
-			sEmbed.spliceField(0, 1);
+			sEmbed.spliceFields(0, 1);
 
 			if (collected && msg.channel.type === "text" && msg.guild.me.hasPermission("MANAGE_MESSAGES")) collected.delete().catch(e => null);
 			collected = (await msg.channel.awaitMessages(
