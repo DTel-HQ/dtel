@@ -4,7 +4,7 @@ import { ShardingManager, Cluster, SharderEvents } from "kurasuta";
 
 const sharder: ShardingManager = new ShardingManager(`${__dirname}/DiscordTel.js`, {
 	clientOptions: { disableEveryone: true },
-	token: require("./Configuration/auth.js").discord.token,
+	token: require("./configuration/auth.js").discord.token,
 });
 
 const winston: Logger = createLogger({

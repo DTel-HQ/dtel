@@ -6,7 +6,7 @@ import { settings } from "../configuration/config";
 /**
 * Create an account
 * @param {string} id - Account ID
-* @param {ReqlClient} r - DB instance
+* @param {ReqlClient} r - RDB client
 * @param {object?} account - Account data
 * @constructor
 */

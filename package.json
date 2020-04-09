@@ -27,19 +27,18 @@
     "node": "12"
   },
   "dependencies": {
-    "@discoin/scambio": "^2.0.3",
-    "@types/node": "^13.7.0",
+    "@discoin/scambio": "^2.0.4",
     "@types/rethinkdb": "^2.3.14",
     "@types/rethinkdbdash": "github:typed-typings/rethinkdbdash",
-    "@types/ws": "^7.2.1",
+    "@types/ws": "^7.2.3",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
-    "clear-module": "^4.0.0",
+    "clear-module": "^4.1.1",
     "discord.js": "github:discordjs/discord.js",
     "erlpack": "github:discordapp/erlpack",
     "fs-nextra": "^0.4.7",
-    "i18next": "^19.3.1",
-    "kurasuta": "^1.1.6",
+    "i18next": "^19.4.0",
+    "kurasuta": "^1.1.7",
     "node-schedule": "^1.3.2",
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
@@ -52,6 +51,6 @@
     "zucc": "^0.1.2"
   },
   "devDependencies": {
-    "@types/node": "^13.7.1"
+    "@types/node": "^13.11.1"
   }
 }

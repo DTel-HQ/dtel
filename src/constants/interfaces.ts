@@ -10,9 +10,25 @@ interface i18next {
 
 export interface util {
 	client: Client;
-	db: DatabaseInterface;
+	db: dbTables;
 	logger: Logger;
-	t: i18next;
+	t?: i18next;
+}
+
+export interface dbTables {
+	accounts: DatabaseInterface;
+	blacklist: DatabaseInterface;
+	calls: DatabaseInterface;
+	cooldowns: DatabaseInterface;
+	lottery: DatabaseInterface;
+	mailbox: DatabaseInterface;
+	numbers: DatabaseInterface;
+	oldCalls: DatabaseInterface;
+	phonebook: DatabaseInterface;
+	strikes: DatabaseInterface;
+	votes: DatabaseInterface;
+	whitelist: DatabaseInterface;
+	[index: string]: DatabaseInterface,
 }
 
 export interface commandOptions {

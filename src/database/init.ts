@@ -1,6 +1,7 @@
 import { db } from "../configuration/auth";
 import rethinkdb, { ReqlClient } from "rethinkdbdash";
 import databaseInterface from "../classes/cache";
+import { dbTables } from "../constants/interfaces";
 
 const r: ReqlClient = rethinkdb({
 	db: db.db,
@@ -23,7 +24,7 @@ module.exports = async() => new Promise(async(resolve: Function) => {
 		"Votes",
 		"Whitelist",
 	];
-	const databaseInterfaces: databaseInterface[] = [];
+	const databaseInterfaces: dbTables = {} as any;
 
 	let dblist: string[] = await r.dbList().run();
 	if (!dblist.includes(db.db)) r.dbCreate(db.db);
@@ -31,10 +32,10 @@ module.exports = async() => new Promise(async(resolve: Function) => {
 
 	for (let i of tables) {
 		if (!tablelist.includes(i)) r.tableCreate(i).run();
-		databaseInterfaces.push(new databaseInterface({
+		databaseInterfaces[i.toLowerCase()] = new databaseInterface({
 			tableName: i,
 			r,
-		}))
+		})
 	}
 
 	r.branch(r.table("Calls").indexList().contains("channel"), null, r.table("Calls").indexCreate("channel", [r.row("to")("channel"), r.row("from")("channel")]));

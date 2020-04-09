@@ -7,6 +7,12 @@ interface options {
 	r: ReqlClient;
 }
 
+/**
+ * Caches a table and allows fetching of data
+ * @param {string} tableName - Name of the cached table
+ * @param {ReqlClient} r - RDB client
+ */
+
 export default class DBInterface {
 	public cache: Collection<string, object> = new Collection();
 	public tableName: string;
