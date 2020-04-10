@@ -6,6 +6,8 @@ export default (util: util, msg: Message) => new Command(util, msg, opts, exec);
 
 const opts = {
 	command: "help",
+	uperm: "default",
+	nperm: "none"
 };
 
 const exec: Function = () => {
