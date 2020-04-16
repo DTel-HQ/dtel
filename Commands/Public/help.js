@@ -25,6 +25,10 @@ module.exports = async(client, msg, suffix) => {
 					value: "Dial a random number from the `*411` phonebook. (To register yourself on the phonebook, do `>dial *411`.)",
 				},
 				{
+					name: ">status",
+					value: "See how long a call has been going for.",
+				},
+				{
 					name: ">block",
 					value: "Block a number from calling this channel.",
 				},
