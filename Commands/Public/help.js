@@ -26,7 +26,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">status",
-					value: "See how long a call has been going for.",
+					value: "See how long a call has been going for, plus the message count and call ID.",
 				},
 				{
 					name: ">block",
