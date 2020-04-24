@@ -1,0 +1,156 @@
+{
+  "call": {
+    "name": "appeler",
+    "usage": "{{prefix, options}}call "
+  },
+  "permcheck": {
+    "name": "permcheck",
+    "usage": "{{prefix, options}}permcheck "
+  },
+  "message": {
+    "name": "message",
+    "description": "Envoyer un message à un autre numéro",
+    "usage": "{{prefix, options}} message  "
+  },
+  "addcredit": {
+    "usage": "{{prefix, options}}addcredit  "
+  },
+  "addvip": {
+    "usage": "{{prefix, options}}addvip  "
+  },
+  "announce": {
+    "usage": "{{prefix, options}}"
+  },
+  "assign": {
+    "usage": "{{prefix, options}}"
+  },
+  "backdoor": {
+    "usage": "{{prefix, options}}"
+  },
+  "balance": {
+    "usage": "{{prefix, options}}"
+  },
+  "blacklist": {
+    "usage": "{{prefix, options}}"
+  },
+  "block": {
+    "usage": "{{prefix, options}}"
+  },
+  "broadcast": {
+    "usage": "{{prefix, options}}"
+  },
+  "cinfo": {
+    "usage": "{{prefix, options}}"
+  },
+  "contacts": {
+    "usage": "{{prefix, options}}"
+  },
+  "convert": {
+    "usage": "{{prefix, options}}"
+  },
+  "cshelp": {
+    "usage": "{{prefix, options}}"
+  },
+  "daily": {
+    "usage": "{{prefix, options}}"
+  },
+  "deassign": {
+    "usage": "{{prefix, options}}"
+  },
+  "eval": {
+    "usage": "{{prefix, options}}"
+  },
+  "hangup": {
+    "usage": "{{prefix, options}}"
+  },
+  "help": {
+    "usage": "{{prefix, options}}"
+  },
+  "hold": {
+    "usage": "{{prefix, options}}"
+  },
+  "identify": {
+    "usage": "{{prefix, options}}"
+  },
+  "info": {
+    "usage": "{{prefix, options}}"
+  },
+  "invite": {
+    "usage": "{{prefix, options}}"
+  },
+  "links": {
+    "usage": "{{prefix, options}}"
+  },
+  "lottery": {
+    "usage": "{{prefix, options}}"
+  },
+  "mailbox": {
+    "usage": "{{prefix, options}}"
+  },
+  "mention": {
+    "usage": "{{prefix, options}}"
+  },
+  "minfo": {
+    "usage": "{{prefix, options}}"
+  },
+  "ninfo": {
+    "usage": "{{prefix, options}}"
+  },
+  "pay": {
+    "usage": "{{prefix, options}}"
+  },
+  "pickup": {
+    "usage": "{{prefix, options}}"
+  },
+  "ping": {
+    "usage": "{{prefix, options}}"
+  },
+  "prefix": {
+    "usage": "{{prefix, options}}"
+  },
+  "promote": {
+    "usage": "{{prefix, options}}"
+  },
+  "pull": {
+    "usage": "{{prefix, options}}"
+  },
+  "rcall": {
+    "usage": "{{prefix, options}}"
+  },
+  "reassign": {
+    "usage": "{{prefix, options}}"
+  },
+  "restart": {
+    "usage": "{{prefix, options}}"
+  },
+  "rmstrike": {
+    "usage": "{{prefix, options}}"
+  },
+  "strike": {
+    "usage": "{{prefix, options}}"
+  },
+  "strikes": {
+    "usage": "{{prefix, options}}"
+  },
+  "transfer": {
+    "usage": "{{prefix, options}}"
+  },
+  "uinfo": {
+    "usage": "{{prefix, options}}"
+  },
+  "unbusy": {
+    "usage": "{{prefix, options}}"
+  },
+  "unvip": {
+    "usage": "{{prefix, options}}"
+  },
+  "upgrade": {
+    "usage": "{{prefix, options}}"
+  },
+  "whitelist": {
+    "usage": "{{prefix, options}}"
+  },
+  "wizard": {
+    "usage": "{{prefix, options}}"
+  }
+}
