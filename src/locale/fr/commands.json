@@ -1,0 +1,12 @@
+{
+  "call": {
+    "name": "appeler"
+  },
+  "permcheck": {
+    "name": "permcheck"
+  },
+  "message": {
+    "name": "message",
+    "description": "Envoyer un message à un autre numéro"
+  }
+}
