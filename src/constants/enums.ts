@@ -5,5 +5,5 @@ export enum Languages {en, fr, de, nl};
 
 export enum Phones {default, donator, support};
 
-export enum UserPerms {default, admin, support, supervisor, boss};
+export enum UserPerms {default, donator, admin, support, supervisor, boss};
 export enum NumberPerms {none, default, active, vip};
