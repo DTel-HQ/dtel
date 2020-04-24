@@ -1,0 +1,18 @@
+{
+  "title": "Lista de comandos.",
+  "fields": [
+    {
+      "name": "Hazte un número para llamar a los demás.",
+      "value": "Haz `$t(common:prefix)wizard` y sigue los pasos. Una vez hecho  ya puedes llamar."
+    },
+    {
+      "value": "Llama a un numero de DiscordTel específico o...",
+      "name": "$t(common:prefix)dial / $t(common:prefix)call"
+    }
+  ],
+  "author": {
+    "name": "$t(common:botName)",
+    "url": "{{botAvatar, links}}"
+  },
+  "description": "Para más información, usa `info`, `links` o llama a Atención al cliente: `$t(common:prefix)dial *611`"
+}
