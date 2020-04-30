@@ -1,5 +1,5 @@
 {
-  "name": "discordtel",
+  "name": "dtel",
   "version": "3.2.0",
   "description": "Discord Telephone",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/austinhuang0131/discordtel.git"
+    "url": "git+https://github.com/austinhuang0131/dtel.git"
   },
   "keywords": [
     "DTEL"
@@ -20,9 +20,9 @@
   ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/austinhuang0131/discordtel/issues"
+    "url": "https://github.com/austinhuang0131/dtel/issues"
   },
-  "homepage": "https://discordtel.austinhuang.me",
+  "homepage": "https://dtel.austinhuang.me",
   "engines": { "node": "12" },
   "dependencies": {
     "@discoin/scambio": "^2.0.3",

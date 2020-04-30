@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 			author: {
 				name: "DTel",
 				icon_url: client.user.displayAvatarURL(),
-				url: "https://discordtel.austinhuang.me",
+				url: "https://dtel.austinhuang.me",
 			},
 			title: "📖 DTel Information",
 			description: `For command help, use \`>help\`. More detailed documentation is available at [my website](${config.siteLink}).`,

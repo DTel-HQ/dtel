@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Recharging",
-					value: "http://discordtel.readthedocs.io/en/latest/Payment/",
+					value: "https://dtel.austinhuang.me/en/latest/Payment/",
 				}],
 			},
 		});
@@ -56,7 +56,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Recharging",
-					value: "http://discordtel.readthedocs.io/en/latest/Payment/",
+					value: "https://dtel.austinhuang.me/en/latest/Payment/",
 				}],
 			},
 		});

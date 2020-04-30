@@ -18,7 +18,7 @@ for (let i of structures) {
 	console.log(`Loading: ${i}`);
 	if (i.endsWith(".js")) require(`${__dirname}/Structures/${i}`)(Discord);
 }
-const sharder = new ShardingManager(`${__dirname}/DiscordTel.js`, {
+const sharder = new ShardingManager(`${__dirname}/DTel.js`, {
 	clientOptions: { disableMentions: "everyone" },
 	client: require("./Internals/Client.js")(Discord),
 	token: require("./Configuration/auth.js").discord.token,

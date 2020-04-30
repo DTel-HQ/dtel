@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 			author: {
 				name: client.user.username,
 				icon_url: avatarURL,
-				url: "https://discordtel.austinhuang.me",
+				url: "https://dtel.austinhuang.me",
 			},
 			title: "List of Customer Support Commands",
 			description: `For more information... actually read the [CS Documentation](${config.guidelink}), you dumbo.`,

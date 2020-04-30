@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 			author: {
 				name: client.user.username,
 				icon_url: avatarURL,
-				url: "https://discordtel.austinhuang.me",
+				url: "https://dtel.austinhuang.me",
 			},
 			title: "List of Commands",
 			description: "For more information, use `>info`, `>links` or call customer support: `>dial *611`.",
@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Currency commands",
-					value: "More information about the currency [here](http://discordtel.austinhuang.me/en/latest/Payment/).\n• `>dial *233`: Renew your number registration using credits.\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
+					value: "More information about the currency [here](http://dtel.austinhuang.me/en/latest/Payment/).\n• `>dial *233`: Renew your number registration using credits.\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
 				},
 				{
 					name: "Mailbox commands",
