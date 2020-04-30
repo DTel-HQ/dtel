@@ -17,10 +17,10 @@ module.exports = async(client, msg, suffix) => {
 	let embed = new MessageEmbed()
 		.setColor(config.colors.info)
 		.setTitle("Message found!")
-		.addField(`Details`, `**User:** <@${msgDoc.user}> (${msgDoc.user})\n**Message:** ${msgDoc.msg}`)
+		.addField(`Details`, `**User:** <@${msgDoc.user}> (${msgDoc.user})`)
 		.setFooter(msg.author.tag, msg.author.displayAvatarURL());
 
-	if (call.edits && call.edits[msgDoc.umsg]) embed.addField("Edits", call.edits[msgDoc.umsg].map(edit => `**Message:** ${edit.msg}\n**Edited at:** ${edit.time}\n\n`));
+	if (call.edits && call.edits[msgDoc.umsg]) embed.addField("Edits", call.edits[msgDoc.umsg].map(edit => `**Edited at:** ${edit.time}\n\n`));
 
 	msg.channel.send({ embed: embed });
 };
