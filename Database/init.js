@@ -8,6 +8,7 @@ const r = global.r = require("rethinkdbdash")({
 	password: db.password,
 });
 
+// eslint-disable-next-line no-async-promise-executor
 module.exports = async() => new Promise(async(resolve, reject) => {
 	const tables = [
 		"Accounts",

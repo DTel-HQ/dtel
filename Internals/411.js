@@ -30,7 +30,7 @@ module.exports = async(msg, myNumber) => {
 	// Check if the user has permission
 	let gperm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	let perms = msg.author.support || gperm;
-	let delPerm = false; //msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
+	let delPerm = false; // msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 
 	// Searchpage function for option 1
 	let searchPage = async query => {
@@ -61,7 +61,7 @@ module.exports = async(msg, myNumber) => {
 		collected = (await msg.channel.awaitMessages(
 			// Search for correct page number or query with more than 3 characters.
 			m => m.author.id === msg.author.id && (/^\d+$/.test(m.content) ? true : m.content.length >= 3),
-			{ max: 1, time: 180000 }
+			{ max: 1, time: 180000 },
 		)).first();
 
 		// On collection
@@ -88,7 +88,7 @@ module.exports = async(msg, myNumber) => {
 		// main menu embed
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
-			.addField("Welcome to the DiscordTel yellowbook!",
+			.addField("Welcome to the DTel yellowbook!",
 				`\`1\` To search through the yellowbook.\
 				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
 				\n\`3\` For information about special numbers.\
@@ -157,7 +157,7 @@ module.exports = async(msg, myNumber) => {
 				// Collect a number
 				collected = (await msg.channel.awaitMessages(
 					m => m.author.id === msg.author.id && (entry ? /^[0129]$/.test(m.content) : /^[019]$/.test(m.content)),
-					{ max: 1, time: 120000 }
+					{ max: 1, time: 120000 },
 				)).first();
 
 				// On collection
@@ -196,7 +196,7 @@ module.exports = async(msg, myNumber) => {
 				// add collector
 				collected = (await msg.channel.awaitMessages(
 					m => m.author.id === msg.author.id && (m.content.length > 10 || /^[09]$/.test(m.content)) && m.content.length < 201,
-					{ max: 1, time: 180000 }
+					{ max: 1, time: 180000 },
 				)).first();
 
 				if (collected && delPerm) collected.delete().catch(e => null);
@@ -229,7 +229,7 @@ module.exports = async(msg, myNumber) => {
 					.setDescription("This is a list of all currently operational special numbers")
 					.addField("*233", "Displays your number information and lets you recharge the number.")
 					.addField("*411", "You should know since you just called it...")
-					.addField("*611", "DiscordTel customer support number. **Troll-calling will result in a strike/blacklist.**")
+					.addField("*611", "DTel customer support number. **Troll-calling will result in a strike/blacklist.**")
 					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 60 seconds of inactivity.");
 
 				// edit/send message
@@ -237,7 +237,7 @@ module.exports = async(msg, myNumber) => {
 
 				collected = (await msg.channel.awaitMessages(
 					m => m.author.id === msg.author.id && /^[09]$/.test(m.content),
-					{ max: 1, time: 60000 }
+					{ max: 1, time: 60000 },
 				)).first();
 
 				if (collected && delPerm) collected.delete().catch(e => null);
@@ -273,7 +273,7 @@ module.exports = async(msg, myNumber) => {
 				// Collector
 				collected = (await msg.channel.awaitMessages(
 					m => m.author.id === msg.author.id && /^[0129]$/.test(m.content),
-					{ max: 1, time: 120000 }
+					{ max: 1, time: 120000 },
 				)).first();
 
 				if (collected && delPerm) collected.delete().catch(e => null);
@@ -306,7 +306,7 @@ module.exports = async(msg, myNumber) => {
 						// Collector
 						collected = (await msg.channel.awaitMessages(
 							m => m.author.id === msg.author.id && m.content.length > 3 && m.content.length < 26,
-							{ max: 1, time: 120000 }
+							{ max: 1, time: 120000 },
 						)).first();
 
 						if (collected && delPerm) collected.delete().catch(e => null);

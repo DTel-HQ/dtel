@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">dial / >call",
-					value: "Dial a specific DiscordTel number you have in mind. Or...",
+					value: "Dial a specific DTel number you have in mind. Or...",
 				},
 				{
 					name: ">rdial / >rcall",
@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">contacts",
-					value: "A personal contact book for DiscordTel numbers.",
+					value: "A personal contact book for DTel numbers.",
 				},
 				{
 					name: ">mention",
@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 			],
 			footer: {
-				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				text: "DTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};

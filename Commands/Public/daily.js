@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 	let s = 59 - d.getSeconds();
 	let time = client.time(s, m, h);
 
-	if (account.daily) return msg.channel.send({ embed: { color: config.colors.info, title: "Already claimed", description: `You already claimed your daily credits! Try again in **${time}**.\n\nYou can vote for DiscordTel to get **60+ more credits every day**!\n See [https://discordtel.austinhuang.me/voting](${config.voteLink}) for a list of voting sites.` } });
+	if (account.daily) return msg.channel.send({ embed: { color: config.colors.info, title: "Already claimed", description: `You already claimed your daily credits! Try again in **${time}**.\n\nYou can vote for DTel to get **60+ more credits every day**!\n See [https://.austinhuang.me/voting](${config.voteLink}) for a list of voting sites.` } });
 
 	let dailies = config.dailies;
 	let perms = await msg.author.getPerms();
@@ -20,6 +20,6 @@ module.exports = async(client, msg, suffix) => {
 	account.balance += amount;
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance, daily: true });
-	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your <:DTS:668551813317787659>${amount}! You now have <:DTS:668551813317787659>${client.format(account.balance)}.\n\nYou can vote for DiscordTel to get **60+ more credits every day**!\n See [https://discordtel.austinhuang.me/voting](${config.voteLink}) for a list of voting sites.` } });
+	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your <:DTS:668551813317787659>${amount}! You now have <:DTS:668551813317787659>${client.format(account.balance)}.\n\nYou can vote for DTel to get **60+ more credits every day**!\n See [https://.austinhuang.me/voting](${config.voteLink}) for a list of voting sites.` } });
 	await client.log(`:calendar: ${msg.author.username} (${msg.author.id}) claimed their daily <:DTS:668551813317787659>${amount}.`);
 };

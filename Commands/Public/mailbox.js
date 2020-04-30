@@ -28,7 +28,7 @@ module.exports = async(client, msg, suffix) => {
 			m => /^yes$|^no$/i.test(m.content) && m.author.id == msg.author.id, {
 				time: 60 * 1000,
 				max: 1,
-			}
+			},
 		);
 		collected = collector.first();
 		if (!collected) {
@@ -51,7 +51,7 @@ module.exports = async(client, msg, suffix) => {
 			{
 				time: 2 * 60 * 1000,
 				max: 1,
-			}
+			},
 		);
 
 		msg.author.busy = false;
@@ -91,7 +91,7 @@ module.exports = async(client, msg, suffix) => {
 			{
 				time: 60 * 1000,
 				max: 1,
-			}
+			},
 		);
 
 		await omsg.delete().catch(e => null);
@@ -115,7 +115,7 @@ module.exports = async(client, msg, suffix) => {
 			{
 				time: 2 * 60 * 1000,
 				max: 1,
-			}
+			},
 		);
 
 		await omsg.delete().catch(e => null);
@@ -146,7 +146,7 @@ module.exports = async(client, msg, suffix) => {
 		// Showing all messages
 		let messagesPage = async page => {
 			let pages = Math.ceil(messages.length / 5);
-			
+
 			while (!messages[(page - 1) * 5]) {
 				page -= 1;
 			}
@@ -167,8 +167,8 @@ module.exports = async(client, msg, suffix) => {
 				embed.addField(`ID \`${m.id}\` from ${m.from || m.number}`, `${m.message}`);
 			}
 
-			let responses = perm ? ["edit", "clear", "delete"] : [];		
-			
+			let responses = perm ? ["edit", "clear", "delete"] : [];
+
 			// Edit existing message or send a new one
 			if (msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") && omsg) omsg = await omsg.edit({ embed: embed });
 			else omsg = await msg.channel.send({ embed: embed });
@@ -183,7 +183,7 @@ module.exports = async(client, msg, suffix) => {
 				msg.author.busy = false;
 				return omsg.delete().catch(e => null);
 			}
-			
+
 			if (parseInt(collected.content) > 0) {
 				page = parseInt(collected.content);
 				return messagesPage(page);
@@ -200,7 +200,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000, max: 1 }
+						{ time: 120000, max: 1 },
 					)).first();
 
 					if (collected) collected.delete().catch(e => null);
@@ -230,7 +230,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-						{ time: 120000, max: 1 }
+						{ time: 120000, max: 1 },
 					)).first();
 
 					if (collected) collected.delete().catch(e => null);
@@ -260,7 +260,7 @@ module.exports = async(client, msg, suffix) => {
 
 					collected = (await msg.channel.awaitMessages(
 						m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length <= 100,
-						{ time: 180000, max: 1 }
+						{ time: 180000, max: 1 },
 					)).first();
 
 					msg.author.busy = false;
@@ -279,7 +279,7 @@ module.exports = async(client, msg, suffix) => {
 
 				case "0": {
 					msg.author.busy = false;
-					omsg.delete().catch(e => {});
+					omsg.delete().catch(e => null);
 					omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}

@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{
 					name: "💻 Visit our website!",
-					value: `[DiscordTel's website.](${config.siteLink})`,
+					value: `[DTel's website.](${config.siteLink})`,
 					inline: true,
 				},
 				{
@@ -57,7 +57,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 			],
 			footer: {
-				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				text: "DTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};

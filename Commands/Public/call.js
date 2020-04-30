@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	else if (!["*411", "*233"].includes(suffix)) msg.author.cooldown = "call";
 
 	let myNumber = await msg.channel.number;
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DiscordTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
 	if (call) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `You are already in a call.\ndebug: ${call}` } });

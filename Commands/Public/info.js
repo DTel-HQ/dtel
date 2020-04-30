@@ -4,11 +4,11 @@ module.exports = async(client, msg, suffix) => {
 		embed: {
 			color: config.colors.info,
 			author: {
-				name: "DiscordTel",
+				name: "DTel",
 				icon_url: client.user.displayAvatarURL(),
 				url: "https://discordtel.austinhuang.me",
 			},
-			title: "📖 DiscordTel Information",
+			title: "📖 DTel Information",
 			description: `For command help, use \`>help\`. More detailed documentation is available at [my website](${config.siteLink}).`,
 			fields: [
 				{
@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "💰 Credits",
-					value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DiscordTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, dial \`*233\` or \`>balance\` to check balance.`,
+					value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, dial \`*233\` or \`>balance\` to check balance.`,
 				},
 				{
 					name: "🔖 Phonebook",
@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "📋 Suggest a feature",
-					value: `Suggest a feature for DiscordTel [here](${config.suggestLink}) and we will take a look at it.`,
+					value: `Suggest a feature for DTel [here](${config.suggestLink}) and we will take a look at it.`,
 				},
 				{
 					name: "💬 Join our team",
@@ -49,7 +49,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 			],
 			footer: {
-				text: "DiscordTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				text: "DTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	});

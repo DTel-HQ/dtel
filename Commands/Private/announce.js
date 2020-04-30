@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 					url: config.siteLink,
 					icon_url: msg.author.displayAvatarURL(),
 				},
-				title: "DiscordTel Maintainer Announcement",
+				title: "DTel Maintainer Announcement",
 				description: suffix,
 				timestamp: new Date(),
 			},

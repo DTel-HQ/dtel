@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 	if (message.length > 1800) return msg.channel.send({ embed: { color: config.colors.error, title: "Oi mate", description: "What ya writing an essay for? (too many characters)" } });
 
 	try {
-		await client.apiSend({ embed: { color: config.colors.info, title: "❕ Message from DiscordTel staff ❕", description: `**${message.join(" ")}**` } }, channel);
+		await client.apiSend({ embed: { color: config.colors.info, title: "❕ Message from DTel staff ❕", description: `**${message.join(" ")}**` } }, channel);
 		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `**• Message**: ${message.join(" ")}\n**• Channel**: ${number.channel}`, author: { name: `By ${msg.author.tag}`, icon_url: msg.author.displayAvatarURL() } } });
 	} catch (err) {
 		await r.table("Numbers").get(number.id).delete();
