@@ -22,19 +22,19 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Read this information before proceeding.")
 		.addField(
 			"This is a roleplay bot!",
-			"In case you haven't noticed, this bot is a roleplay bot used to simulate a telephone system between Discord channels, which means it **cannot call real numbers!**",
+			"In case you haven't noticed, this is a roleplay bot used to simulate a telephone system between Discord channels, which means it **cannot call real numbers!**",
 		)
 		.addField(
 			"Documentation and TOS",
-			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like the [Privacy Policy](https://discordtel.austinhuang.me/en/latest/Privacy/), regarding the use of this bot.`,
+			`The documentation is located at ${config.siteLink}. **Please read it** as it contains important information, like DTel's [Privacy Policy](https://discordtel.austinhuang.me/en/latest/Privacy/).`,
 		)
 		.addField(
 			"Payment",
-			`Your number must be renewed for every month of usage. The number will cost **${config.renewalRate}** in-bot credits per month, after 1 month of free period. Renewals can be automatically performed (through the SERVER OWNER's account) or through \`>dial *233\`. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No real-money purchase is required to use this bot and renew your number.**`,
+			`To keep using your number, you must renew it each month. The number will cost **${config.renewalRate}** credits (the bot's currency) per month. Don't worry, the first month is free! Renewals can be automatically performed (from the SERVER OWNER's account) or through \`>dial *233\`. See [here](https://discordtel.austinhuang.me/en/latest/Payment/) for ways to get credits. **No IRL purchase is required to use this bot or renew your number!**`,
 		)
 		.addField(
 			"I'm done reading!",
-			`Please enter the number you wish to enable in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`,
+			`Please enter the number you wish to have in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`,
 		);
 
 	let omsg = await msg.channel.send({ embed: embed });
