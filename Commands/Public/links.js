@@ -11,13 +11,18 @@ module.exports = async(client, msg, suffix) => {
 			title: "List of *all* the links",
 			fields: [
 				{
-					name: "💻 Visit our website!",
-					value: `[DTel's website.](${config.siteLink})`,
+					name: "🔗 Invite the bot",
+					value: `[Right here!](${config.botInvite})`,
 					inline: true,
 				},
 				{
 					name: "🌎 Join our support guild!",
 					value: `[Join now](${config.guildInvite})`,
+					inline: true,
+				},
+				{
+					name: "💻 Visit our website!",
+					value: `[DTel's website.](${config.siteLink})`,
 					inline: true,
 				},
 				{
@@ -33,11 +38,6 @@ module.exports = async(client, msg, suffix) => {
 				{
 					name: "📋 Vote for us!",
 					value: `[Get your free credits!](${config.voteLink})`,
-					inline: true,
-				},
-				{
-					name: "🔗 Invite the bot",
-					value: `[Right here!](${config.botInvite})`,
 					inline: true,
 				},
 				{
