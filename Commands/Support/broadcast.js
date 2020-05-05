@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 		await client.apiSend({ embed: { color: config.colors.info, title: "❕ Message from DTel staff ❕", description: `**${message.join(" ")}**`, footer: `From ${broadcaster}` } }, channel);
 		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `**• Message**: ${message.join(" ")}\n**• Channel**: ${number.channel}`, author: { name: `By ${msg.author.tag}`, icon_url: msg.author.displayAvatarURL() } } });
 	} catch (err) {
-		await r.table("Numbers").get(number.id).delete();
+		client.delete(number.id, { origin: "broadcast" })
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't send your message.", description: "The number has now been deleted." } });
 	}
 };
