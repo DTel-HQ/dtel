@@ -3,7 +3,7 @@ module.exports = async(client, msg, suffix) => {
 	let input = suffix.split(" ")[0];
 	let number;
 
-	let broadcaster = message.author.id;
+	let broadcaster = msg.author.id;
 
 	if (!input) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">broadcast [number/channelID] [message]" } });
 	number = await r.table("Numbers").getAll(input, { index: "channel" }).nth(0).default(null);
