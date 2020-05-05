@@ -110,7 +110,7 @@ scheduleJob("*/1 * * * *", async() => {
 
 // Vote check
 scheduleJob("*/1 * * * *", async() => {
-	let guildCount = (await client.shard.fetchClientValues("guilds.size")).reduce((a, b) => a + b, 0);
+	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 
 	let result = await get("http://hill-playroom.glitch.me/dtel")
 		.set("Authorization", auth.tokens.blspace)
