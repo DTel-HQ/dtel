@@ -78,7 +78,6 @@ module.exports = async(client, msg, suffix, call) => {
 		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", footer: { text: newCall.id } } }, newCall.from.channel);
 		client.apiSend({ embed: { color: config.colors.error, title: "Call expired", description: "You missed the call. (2 minutes)", footer: { text: newCall.id } } }, newCall.to.channel);
 		client.log(`:telephone: The call between channel ${newCall.from.hidden ? "hidden" : newCall.from.channel} and channel ${newCall.to.hidden ? "hidden" : newCall.to.channel} was not picked up.`);
-		await r.table("OldCalls").insert(callDoc);
 		await r.table("Calls").get(newCall.id).delete();
 	}, 120000);
 };

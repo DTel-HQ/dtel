@@ -5,7 +5,6 @@ module.exports = async(client, msg, suffix, call) => {
 		await client.api.channels(call.from.channel).get();
 	} catch (_) {
 		msg.channel.send({ embed: { color: config.colors.error, title: "Where'd they go?", description: "Couldn't find the other side. Please report this to `*611` as this may have been a troll call." } });
-		await r.table("OldCalls").insert(call);
 		await r.table("Calls").get(call.id).delete();
 		return client.delete(call.from.number, { force: false, log: true, origin: "pickup_from" });
 	}
@@ -34,7 +33,6 @@ module.exports = async(client, msg, suffix, call) => {
 				await client.api.channels(call.from.channel).get();
 			} catch (_) {
 				client.apiSend(":x: The bot can no longer access the opposite side. Please report this by dialing `*611` as it could be a troll call.", call.to.channel);
-				await r.table("OldCalls").insert(call);
 				await r.table("Calls").get(call.id).delete();
 				return client.delete(call.from.number, { force: false, log: true, origin: "pickup_afk_from" });
 			}
@@ -42,7 +40,6 @@ module.exports = async(client, msg, suffix, call) => {
 				await client.api.channels(call.to.channel).get();
 			} catch (_) {
 				client.apiSend(":x: The bot can no longer access the opposite side. Please report this by dialing `*611` as it could be a troll call.", call.from.channel);
-				await r.table("OldCalls").insert(call);
 				await r.table("Calls").get(call.id).delete();
 				return client.delete(call.to.number, { force: false, log: true, origin: "pickup_afk_to" });
 			}

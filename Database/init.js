@@ -18,7 +18,6 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 		"Lottery",
 		"Mailbox",
 		"Numbers",
-		"OldCalls",
 		"Phonebook",
 		"Strikes",
 		"Votes",
@@ -38,9 +37,6 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 
 	await r.branch(r.table("Calls").indexList().contains("toChannel"), null, r.table("Calls").indexCreate("toChannel", r.row("to")("channel")));
 	await r.branch(r.table("Calls").indexStatus("toChannel").nth(0)("ready"), null, r.table("Calls").indexWait("toChannel"));
-
-	await r.branch(r.table("OldCalls").indexList().contains("startedAt"), null, r.table("OldCalls").indexCreate("startedAt", r.row("startedAt")));
-	await r.branch(r.table("OldCalls").indexStatus("startedAt").nth(0)("ready"), null, r.table("OldCalls").indexWait("startedAt"));
 
 	await r.branch(r.table("Numbers").indexList().contains("channel"), null, r.table("Numbers").indexCreate("channel", row => row("channel")));
 	await r.branch(r.table("Numbers").indexStatus("channel").nth(0)("ready"), null, r.table("Numbers").indexWait("channel"));
