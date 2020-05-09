@@ -41,6 +41,7 @@ module.exports = {
 		donator: "<:GoldPhone:320768431307882497>",
 		support: "📞",
 	},
+	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs
 	announcementChannel: "281816926144167946",
