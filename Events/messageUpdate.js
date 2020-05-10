@@ -39,7 +39,7 @@ module.exports = async(omsg, nmsg) => {
 
 	let edits = call.edits || {};
 	let editsById = edits[nmsg.id] || [];
-	editsById.push({ time: new Date(), msg: nmsg.content });
+	editsById.push({ time: new Date() });
 	edits[nmsg.id] = editsById;
 	await r.table("Calls").get(call.id).update({ edits: edits });
 };
