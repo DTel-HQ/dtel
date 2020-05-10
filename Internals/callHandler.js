@@ -30,6 +30,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 			.setColor(config.colors.info)
 			.setAuthor(hidden ? "Anonymous" : msg.author.tag)
 			.setTitle("Attachment")
+			.setURL(attachment.url)
 			.setImage(attachment.url)
 			.setFooter(attachment.name || "");
 	}
