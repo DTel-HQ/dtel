@@ -49,6 +49,9 @@ module.exports = async(cmd, msg, suffix, call) => {
 	while (/@(everyone|here)/ig.test(content)) {
 		content = content.replace(/@(everyone|here)/ig, "_I tried to ping everyone but failed._");
 	}
+	content.match(/(|a)<:\w+:\d+>/g).map(e => {
+		if (!client.emojis.cache.get(e.split(":")[2].replace(">", "")) content = content.replace(e, `\`:${e.split(":")[1]}:\``);
+	})
 	if (content && content.length > 2000) return;
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend.channel);
 
