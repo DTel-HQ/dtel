@@ -37,9 +37,9 @@ module.exports = {
 
 	// EMOTES - don't change order
 	callPhones: {
-		default: "<:DTelPhone:310817969498226718>",
-		donator: "<:GoldPhone:320768431307882497>",
-		support: "📞",
+		default: "<:DTelPhone:709100612935221289>",
+		donator: "<:GoldPhone:709101494242246657>",
+		support: "<:GreenPhone:709101494556819507>",
 	},
 	dtsEmoji: "<:DTS:668551813317787659>",
 
