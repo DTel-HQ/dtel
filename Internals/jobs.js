@@ -48,17 +48,6 @@ scheduleJob("0 0 0 * * *", async() => {
 	client.log(`⏰ The lottery and dailies have been reset.`);
 });
 
-// Job to update CS perms
-scheduleJob("*/5 * * * *", async() => {
-	let roles = [config.supportRole, config.donatorRole];
-	let guild = client.guilds.cache.get(config.supportGuild);
-	for (let role of roles) {
-		guild.members.cache.forEach(async member => {
-			await member.user.setPerms();
-		});
-	}
-});
-
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
 	if (!client.done) return;

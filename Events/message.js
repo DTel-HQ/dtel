@@ -34,13 +34,10 @@ module.exports = async msg => {
 
 	let cmdFile;
 	// Find call command files
-<<<<<<< HEAD
 	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
-=======
 	if (call && !msg.content.startsWith(prefix)) {
 		return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
 	}
->>>>>>> d4bc66ecb617d2097ddbf163dad351cb6ccc20b2
 	if (call && msg.content.startsWith(prefix)) cmdFile = await reload(`./Commands/Call/${cmd}`);
 	if (!cmdFile && (call && !call.hold)) return;
 	// Find non call command files
