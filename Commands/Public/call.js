@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	rcall === true ? rcall = true : rcall = false;
 
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-call`);
-	if (cooldown && cooldown.time > Date.now() && !msg.author.support && !["*411", "*233"].includes(suffix)) return msg.channel.send({ embed: { color: config.colors.error, title: "Call cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
+	if (cooldown && cooldown.time > Date.now() && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) && !["*411", "*233"].includes(suffix)) return msg.channel.send({ embed: { color: config.colors.error, title: "Call cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - Date.now()) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a number will result in a strike/blacklist." } } });
 	else if (!["*411", "*233"].includes(suffix)) msg.author.cooldown = "call";
 
 	let myNumber = await msg.channel.number;

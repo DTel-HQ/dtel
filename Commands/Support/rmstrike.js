@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (strike.offender === msg.author.id) return msg.channel.send(`>fire ${msg.author.tag}`);
 	let offender = strike.user ? await client.users.fetch(strike.offender) : null;
-	if (offender && offender.support && !(msg.author.boss || msg.author.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Nice try dumbo", description: "You can't remove strikes from a colleague." } });
+	if (offender && offender.support && !(config.maintainers.includes(msg.author.id) || msg.author.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Nice try dumbo", description: "You can't remove strikes from a colleague." } });
 
 	await r.table("Strikes").get(strikeID).delete();
 	await client.log(`:sun_with_face: Strike \`${strikeID}\` was deleted by ${msg.author.tag}`);

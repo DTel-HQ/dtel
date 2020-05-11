@@ -3,21 +3,13 @@ module.exports = Discord => {
 		class DTelUser extends User {
 			constructor(...arg) {
 				super(...arg);
-				this.blacklisted = false;
 				this.busy = false;
-				this.prefix = config.prefix;
-				this.maintainer = config.maintainers.includes(this.id);
-				this.boss = false;
-				this.manager = false;
-				this.support = false;
-				this.donator = false;
-				this.loadedPerms = false;
 				this.init();
 			}
 
 			async init() {
 				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
-				this.blacklisted = !!blacklisted;
+				if (blacklisted) this.blacklisted = true;
 				let account = await this.account();
 				if (account.prefix) this.prefix = account.prefix;
 				return true;
@@ -58,26 +50,7 @@ module.exports = Discord => {
 				})();
 			}
 
-			async setPerms() {
-				this.loadedPerms = true;
-				let member = await (await this.client.guilds.cache.get(config.supportGuild)).members.cache.get(this.id);
-				let roles = member ? member.roles.cache : null;
-				if (roles) {
-					if (roles.has(config.bossRole)) this.boss = true;
-					if (roles.has(config.managerRole)) this.manager = true;
-					if (roles.has(config.supportRole)) this.support = true;
-					if (roles.has(config.donatorRole)) this.donator = true;
-				}
-				if (config.maintainers.includes(this.id)) {
-					this.boss = true;
-					this.manager = true;
-					this.support = true;
-					this.donator = true;
-				}
-				return this.getPerms();
-			}
-
-			async getPerms() {
+			getPerms() {
 				return {
 					boss: this.boss,
 					manager: this.manager,

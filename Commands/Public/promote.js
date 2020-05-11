@@ -306,10 +306,10 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("Options")
 		.setFooter("(0) to quit. This menu will expire after 2 minutes.");
 
-	let description = `(1) Go through the setup.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
-	if (embed.description) description += `\n(2) Promote your number.${canPromote ? hasMoney ? "" : ` (Not enough credits)` : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
+	let description = `(1) Go through the setup.${!gperms && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) ? " (Missing permission)" : ""}`;
+	if (embed.description) description += `\n(2) Promote your number.${canPromote ? hasMoney ? "" : ` (Not enough credits)` : ` (${canPromoteIn})`}\n(3) Change specific parts.${!gperms && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) ? " (Missing permission)" : ""}`;
 	if (promote.lastPromoted) {
-		description += `\n(4) Remove previous promotion.${!gperms && !msg.author.support ? " (Missing permission)" : ""}`;
+		description += `\n(4) Remove previous promotion.${!gperms && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) ? " (Missing permission)" : ""}`;
 		let user = await client.users.fetch(promote.lastuser);
 		oEmbed.addField(`Last promotion`, `By: ${user.tag}\n[View here](https://discordapp.com/channels/${config.supportGuild}/${config.promoteChannel}/${promote.lastmsg})`);
 	}
@@ -318,13 +318,13 @@ module.exports = async(client, msg, suffix) => {
 	let pmsg = await msg.channel.send({ embed: await createEmbed(true, false) });
 	let omsg = await msg.channel.send({ embed: oEmbed });
 
-	if (!embed.description && !gperms && !msg.author.support) {
+	if (!embed.description && !gperms && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) {
 		msg.author.busy = false;
 		return;
 	}
 
 	let filter = "^[";
-	if (gperms || msg.author.support) {
+	if (gperms || client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) {
 		filter += "1";
 		if (embed.description) filter += "3";
 		if (promote.lastPromoted) filter += "4";

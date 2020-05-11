@@ -22,7 +22,11 @@ module.exports = async(cmd, msg, suffix, call) => {
 	// get right phone
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
-	if (!hidden) for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
+	const supportGuild = client.guilds.cache.get(config.supportGuild);
+	if (!hidden) {
+		if (supportGuild.roles.cache.get(config.donatorRole).members.get(msg.author.id)) phone = config.callPhones.donator;
+		else if (supportGuild.roles.cache.get(config.supportRole).members.get(msg.author.id)) phone = config.callPhones.support;
+	}
 
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
@@ -49,9 +53,11 @@ module.exports = async(cmd, msg, suffix, call) => {
 	while (/@(everyone|here)/ig.test(content)) {
 		content = content.replace(/@(everyone|here)/ig, "_I tried to ping everyone but failed._");
 	}
-	if (content && content.match(/(|a)<:\w+:\d+>/g) !== null) content.match(/(|a)<:\w+:\d+>/g).map(e => {
-		if (!client.emojis.cache.get(e.split(":")[2].replace(">", ""))) content = content.replace(e, `\`:${e.split(":")[1]}:\``);
-	})
+	if (content && content.match(/(|a)<:\w+:\d+>/g) !== null) {
+		content.match(/(|a)<:\w+:\d+>/g).map(e => {
+			if (!client.emojis.cache.get(e.split(":")[2].replace(">", ""))) content = content.replace(e, `\`:${e.split(":")[1]}:\``);
+		});
+	}
 	if (content && content.length > 2000) return;
 	let sent = await client.apiSend({ content: content, embed: embed }, toSend.channel);
 

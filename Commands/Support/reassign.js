@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// Check if the number is VIP
 	let numbervip = numberDoc.vip ? new Date(numberDoc.vip.expiry).getTime() > Date.now() : false;
-	if (!numbervip && !msg.author.boss) return msg.channel.send({ embed: { color: config.colors.error, title: "Not VIP", description: "That number is not currently a VIP number." } });
+	if (!numbervip && !config.maintainers.includes(msg.author.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Not VIP", description: "That number is not currently a VIP number." } });
 
 	// New number or channel?
 	let newNumberDoc = await r.table("Numbers").get(to);

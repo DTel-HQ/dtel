@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	let perms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : msg.author.support;
+	let perms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id);
 
 	const number = await msg.channel.number;
 	if (!number || number.id === config.supportNumber) return;

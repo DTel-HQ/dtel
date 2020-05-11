@@ -20,7 +20,7 @@ const embed = {
 			},
 			{
 				name: ":question: Who is who?",
-				value: "**Regular users** have the <:DTelPhone:310817969498226718> emoji.\n**Customer Support** have the :telephone_receiver: emoji.",
+				value: "**Regular users** have the <:DTelPhone:310817969498226718> emoji.\n**Customer Support** have the <:GreenPhone:709101494556819507> emoji.",
 			},
 		],
 		footer: {

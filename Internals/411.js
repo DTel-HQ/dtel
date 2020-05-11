@@ -29,7 +29,7 @@ module.exports = async(msg, myNumber) => {
 
 	// Check if the user has permission
 	let gperm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
-	let perms = msg.author.support || gperm;
+	let perms = client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) || gperm;
 	let delPerm = false; // msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 
 	// Searchpage function for option 1

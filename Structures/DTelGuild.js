@@ -3,13 +3,13 @@ module.exports = Discord => {
 		class DTelGuild extends Guild {
 			constructor(...arg) {
 				super(...arg);
-				this.blacklisted = false;
 				this.init();
 			}
 
 			async init() {
 				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
-				this.blacklisted = !!blacklisted;
+				if (blacklisted) this.blacklisted = true;
+				if (blacklisted) this.leave();
 				return true;
 			}
 
