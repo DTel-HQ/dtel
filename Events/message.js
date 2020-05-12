@@ -44,7 +44,7 @@ module.exports = async msg => {
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Support/${cmd}`);
-		if (cmdFile && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).get(msg.author.id)) return;
+		if (cmdFile && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) return;
 	}
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
