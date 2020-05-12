@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "No mailbox", description: "They do not have a mailbox set-up." } });
 
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
-	if (cooldown && cooldown.time > time && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
+	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
 	else msg.author.cooldown = "message";
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });

@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "AI will destroy humans!!!", description: "Are you sure you want to give them more money?" } });
 	} else if (user.id === msg.author.id && !config.maintainers.includes(msg.author.id)) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Really?", description: "You thought we'd let you do that?" } });
-	} else if (client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(user.id) && !config.maintainers.includes(msg.author.id)) {
+	} else if (user.support && !config.maintainers.includes(msg.author.id)) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Seriously...", description: "That's not something you should be trying on the job!" } });
 	}
 

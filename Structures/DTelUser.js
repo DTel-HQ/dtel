@@ -4,15 +4,11 @@ module.exports = Discord => {
 			constructor(...arg) {
 				super(...arg);
 				this.busy = false;
-				this.init();
-			}
-
-			async init() {
-				let blacklisted = await r.table("Blacklist").get(this.id).default(false);
-				if (blacklisted) this.blacklisted = true;
-				let account = await this.account();
-				if (account.prefix) this.prefix = account.prefix;
-				return true;
+				this.boss = false;
+				this.donator = false;
+				this.support = false;
+				this.manager = false;
+				this.blacklisted = false;
 			}
 
 			account(insert) {
