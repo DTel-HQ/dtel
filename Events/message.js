@@ -57,8 +57,12 @@ module.exports = async msg => {
 	// Run the command
 	if (cmdFile) {
 		// check for blacklist
-		const guildBlacklist = await r.table("Blacklist").get(msg.guild.id).default(false);
-		if (guildBlacklist) return msg.guild.leave();
+		const guildBlacklist = msg.guild ? await r.table("Blacklist").get(msg.guild.id).default(false) : false;
+		if (guildBlacklist) {
+			winston.info(`[MessageEvent] Left blacklisted guild ${msg.guild.id}`);
+			client.log();
+			return msg.guild.leave(`:x: Left blacklisted guild ${msg.guild.id} from \`MessageEvent\`.`);
+		}
 		const blacklist = await r.table("Blacklist").get(msg.author.id).default(false);
 		if (blacklist) {
 			msg.author.blacklisted = true;
