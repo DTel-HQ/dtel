@@ -60,7 +60,7 @@ module.exports = async msg => {
 		// check for blacklist
 		const blacklisted = !!(msg.author.blacklisted || (msg.guild && msg.guild.blacklisted));
 		console.log(blacklisted);
-		if (msg.guild.blacklisted) return msg.guild.leave();
+		if (msg.guild && msg.guild.blacklisted) return msg.guild.leave();
 		if (blacklisted) return;
 
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
