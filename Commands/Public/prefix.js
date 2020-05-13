@@ -1,15 +1,14 @@
 module.exports = async(client, msg, suffix) => {
-	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: `Usage: \`>prefix [prefix]\`\nNote that prefixes are per-user and have to be between 1 and 4 characters.${msg.author.prefix ? `\nYour current prefix: \`${msg.author.prefix}\`` : ""}`, footer: { text: `To remove your prefix: >prefix ${config.prefix}` } } });
+	if (!/^\S{1,4}$/.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: `Usage: \`>prefix [prefix]\`\nNote that prefixes are per-user and have to be between 1 and 4 characters.${msg.author.account().prefix ? `\nYour current prefix: \`${msg.author.account().prefix}\`` : ""}`, footer: { text: `To remove your prefix: >prefix ${config.prefix}` } } });
 
 	// get / make account
 	let account = await msg.author.account();
 
 	if (suffix != config.prefix) {
-		msg.author.prefix = suffix;
+		msg.author.account().prefix = suffix;
 		await r.table("Accounts").get(account.id).update({ prefix: suffix });
 	} else {
 		delete account.prefix;
-		delete msg.author.prefix;
 		await r.table("Accounts").get(account.id).replace(account);
 	}
 

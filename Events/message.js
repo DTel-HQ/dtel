@@ -1,8 +1,5 @@
 module.exports = async msg => {
-	if (!client.done) return;
-	if (msg.author.blacklisted) return;
 	if (msg.author.bot || (config.devOnlyMode && !config.maintainers.includes(msg.author.id))) return;
-
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
 	const account = await msg.author.account(),
@@ -38,36 +35,34 @@ module.exports = async msg => {
 	if (call && !msg.content.startsWith(prefix)) {
 		return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
 	}
+
 	if (call && msg.content.startsWith(prefix)) cmdFile = await reload(`./Commands/Call/${cmd}`);
 	if (!cmdFile && (call && !call.hold)) return;
 	// Find non call command files
+
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
 	if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Support/${cmd}`);
-		if (cmdFile && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) return;
+		if (cmdFile && !msg.author.support) return;
 	}
+
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
 
 	// Check cooldown now because it sends an embed
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
-	if (cooldown && cooldown.time > Date.now() && !client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${client.format(Math.ceil((cooldown.time - Date.now()) / 100) / 10)}s` } });
+	if (cooldown && cooldown.time > Date.now() && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Cooldown", description: `You're under cooldown for another ${client.format(Math.ceil((cooldown.time - Date.now()) / 100) / 10)}s` } });
 	// Add cooldown
-	if (!client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id)) msg.author.cooldown = "default";
+	if (!msg.author.support) msg.author.cooldown = "default";
 	// Run the command
+
 	if (cmdFile) {
+
 		// check for blacklist
-		const guildBlacklist = msg.guild ? await r.table("Blacklist").get(msg.guild.id).default(false) : false;
-		if (guildBlacklist) {
-			winston.info(`[MessageEvent] Left blacklisted guild ${msg.guild.id}`);
-			client.log();
-			return msg.guild.leave(`:x: Left blacklisted guild ${msg.guild.id} from \`MessageEvent\`.`);
-		}
-		const blacklist = await r.table("Blacklist").get(msg.author.id).default(false);
-		if (blacklist) {
-			msg.author.blacklisted = true;
-			return;
-		}
+		const blacklisted = msg.author.blacklisted || msg.guild.blacklisted ? true : false;
+		console.log(blacklisted)
+		if (msg.guild.blacklisted) return msg.guild.leave();
+		if (blacklisted) return;
 
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {

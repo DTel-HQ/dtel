@@ -34,7 +34,7 @@ module.exports = async(client, msg, suffix) => {
 	if (user) {
 		if (user.bot) return msg.channel.send({ embed: { color: config.colors.error, title: "Bot user", description: "Don't try striking my brothers!" } });
 		if (user.boss || user.manager) return msg.channel.send(`>fire ${msg.author.tag}`);
-		if (client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(user.id) && !(config.maintainers.includes(msg.author.id) || msg.author.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
+		if (user.support && !(config.maintainers.includes(msg.author.id) || msg.author.manager)) return msg.channel.send({ embed: { color: config.colors.error, title: "Unfair competition", description: "You can't get rid of someone that easily..." } });
 	} else if (guild.id == config.supportGuild) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Turning against us?", description: "As if we'd would allow you to do this." } });
 	}

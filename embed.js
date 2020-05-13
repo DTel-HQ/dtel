@@ -4,7 +4,7 @@ const embed = {
 		fields: [
 			{
 				name: ":book: DTel Server Information",
-				value: "For command help, use `>help`.\nOur invite for the server is https://discord.gg/RN7pxrB. \nThe documentation is located at https://dtel.austinhuang.me/en/latest/. \nYou can get support by either calling `*611`, or you can raise any concerns with the devs, by sending us an email.\nIn addition, you can apply to become Customer Support [here](https://discordtel.typeform.com/to/wHjMpX)",
+				value: "For command help, use `>help`.\nOur invite for the server is https://discord.gg/RN7pxrB. \nThe documentation is located at https://dtel.austinhuang.me/en/latest/. \nYou can get support by either calling `*611`, or you can raise any concerns with the devs, by sending us an email.\nIn addition, you can apply to become Customer Support [here](https://dtel.typeform.com/to/wHjMpX)",
 			},
 			{
 				name: ":telephone_receiver: Getting a number",

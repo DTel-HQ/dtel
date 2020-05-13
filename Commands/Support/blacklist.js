@@ -32,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	if (suffix === msg.author.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Dumbo", description: "You dumb :b:oi, don't blacklist yourself!" } });
-	if (user && client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(user.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
+	if (user && user.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Staff", description: "Don't like your collegue? Think of a better way to get rid of them!" } });
 
 	let res = user ? await user.blacklist() : await guild.blacklist();
 	if (!res.inserted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not inserted", description: "The ID was not inserted into the DB" } });

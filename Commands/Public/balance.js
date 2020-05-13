@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id) || !suffix) {
+	if (!msg.author.support || !suffix) {
 		let account = await msg.author.account();
 
 		msg.channel.send({

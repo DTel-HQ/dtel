@@ -22,10 +22,9 @@ module.exports = async(cmd, msg, suffix, call) => {
 	// get right phone
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
-	const supportGuild = client.guilds.cache.get(config.supportGuild);
 	if (!hidden) {
-		if (supportGuild.roles.cache.get(config.donatorRole).members.get(msg.author.id)) phone = config.callPhones.donator;
-		else if (supportGuild.roles.cache.get(config.supportRole).members.get(msg.author.id)) phone = config.callPhones.support;
+		if (msg.author.donator) phone = config.callPhones.donator;
+		else if (msg.author.support) phone = config.callPhones.support;
 	}
 
 	if (msg.attachments.first()) {

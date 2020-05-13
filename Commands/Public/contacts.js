@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 	let perm;
 	if (msg.channel.type === "dm") perm = true;
 	else perm = await msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD");
-	if (!perm) perm = client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id);
+	if (!perm) perm = msg.author.support;
 
 	// Get contacts
 	let contacts = myNumber.contacts || [];

@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// check if they have permission to do stuff
 	let perm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
-	if (!perm) perm = client.guilds.cache.get(config.supportGuild).roles.cache.get(config.supportRole).members.get(msg.author.id);
+	if (!perm) perm = msg.author.support;
 
 	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);

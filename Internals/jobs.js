@@ -50,7 +50,6 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Job to update the playing status regularly.
 scheduleJob("*/15 * * * * *", async() => {
-	if (!client.done) return;
 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 	let sec = new Date().getSeconds();
 	if ([14, 15, 16, 44, 45, 46].includes(sec)) {
@@ -98,7 +97,7 @@ scheduleJob("*/1 * * * *", async() => {
 });
 
 // Vote check
-scheduleJob("*/1 * * * *", async() => {
+!config.devOnlyMode && scheduleJob("*/1 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 
 	let result = await get("http://hill-playroom.glitch.me/dtel")
