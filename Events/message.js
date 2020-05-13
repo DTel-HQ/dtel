@@ -59,7 +59,6 @@ module.exports = async msg => {
 	if (cmdFile) {
 		// check for blacklist
 		const blacklisted = !!(msg.author.blacklisted || (msg.guild && msg.guild.blacklisted));
-		console.log(blacklisted);
 		if (msg.guild && msg.guild.blacklisted) return msg.guild.leave();
 		if (blacklisted) return;
 
