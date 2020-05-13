@@ -89,12 +89,12 @@ module.exports = async(msg, myNumber) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
 			.addField("Welcome to the DTel yellowbook!",
-				`\`1\` To search through the yellowbook.\
-				\n\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}\
-				\n\`3\` For information about special numbers.\
-				\n\`4\` To call Customer Support.\
-				\n\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
-				\n\`0\` To hangup.`)
+				`\`1\` To search through the yellowbook.
+\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}
+\`3\` For information about special numbers.
+\`4\` To call Customer Support.
+\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
+\`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
 		if (message) embed.setDescription(`✅ ${message}`);
 		message = null;
