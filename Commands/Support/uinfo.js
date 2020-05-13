@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	// Check if user exists
-	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix);
+	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix).catch(e => null);
 	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "How am I supposed to look up non existant user?!" } });
 	if (user.bot && user.id != client.user.id) return msg.channel.send({ embed: { color: config.colors.error, title: "You silly", description: "That's a bot you're trying to look up." } });
 
