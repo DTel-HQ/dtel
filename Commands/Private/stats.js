@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 	d.setMonth(d.getMonth() - 1);
 	const monthNumbers = (await numbers.filter(n => n.createdAt && new Date(n.createdAt) > new Date(d.getTime()))).length;
 
-	const users = r.table("Users").toArray();
+	const users = await r.table("Users");
 	const totalBalance = users.reduce((o, n) => o + n.balance, 0);
 
 	const embed = new MessageEmbed
