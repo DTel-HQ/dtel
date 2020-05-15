@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// more advanced
 	let noNumber = 0;
-	msg.guilds.cache.forEach(async guild => {
+	client.guilds.cache.forEach(async guild => {
 		if (!(await numbers.filter(n => n.guild === guild.id)).length) noNumber++;
 	});
 
