@@ -3,7 +3,7 @@ const { MessageEmbed } = require("discord.js");
 module.exports = async(client, msg, suffix) => {
 	// basic stats
 	const guildCount = client.guilds.cache.size;
-	const shardCount = client.shard.shardcount;
+	const shardCount = client.shard.shardCount;
 
 	const numbers = await r.table("Numbers");
 	const numberCount = numbers.length;
@@ -25,6 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 	const embed = new MessageEmbed()
 		.setTitle("DTel Statistics")
+		.setColor(config.colors.info)
 		.setAuthor(client.user.tag, client.user.avatarURL())
 		.addField("Numbers", `Total: ${numberCount}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`)
 		.addField("Guilds", `Total: ${guildCount}\nNo number: ${noNumber}`)
