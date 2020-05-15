@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 	const embed = new MessageEmbed()
 		.setTitle("DTel Statistics")
-		.addAuthor(client.user.tag, client.user.avatarURL())
+		.setAuthor(client.user.tag, client.user.avatarURL())
 		.addField("Numbers", `Total: ${numberCount}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`)
 		.addField("Guilds", `Total: ${guildCount}\nNo number: ${noNumber}`)
 		.addField("Misc", `Shards: ${shardCount}\nEconomy: ${config.dtsEmoji}${totalBalance}`, true)
