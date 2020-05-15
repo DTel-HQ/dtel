@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 	const expNumbers = (await r.table("Numbers").filter(r.row("expiry").lt(new Date()))).length;
 	const d = new Date();
 	d.setMonth(d.getMonth() - 1);
-	const monthNumbers = (await r.table("Numbers").filter(r.row("createdAt").gt(new Date(d.getTime())))).length;
+	const monthNumbers = (await numbers.filter(n => n.createdAt && new Date(n.createdAt) > new Date(d.getTime()))).length;
 
 	const users = r.table("Users");
 	const totalBalance = users.reduce((o, n) => o + n.balance, 0);
