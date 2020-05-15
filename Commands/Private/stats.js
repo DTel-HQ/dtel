@@ -23,7 +23,7 @@ module.exports = async(client, msg, suffix) => {
 	const users = await r.table("Accounts");
 	const totalBalance = users.reduce((o, n) => o + n.balance, 0);
 
-	const embed = new MessageEmbed
+	const embed = new MessageEmbed()
 		.setTitle("DTel Statistics")
 		.addAuthor(client.user.tag, client.user.avatarURL())
 		.addField("Numbers", `Total: ${numberCount}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`)
