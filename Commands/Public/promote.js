@@ -253,7 +253,7 @@ module.exports = async(client, msg, suffix) => {
 
 		oEmbed.setTitle("Success!")
 			.setColor(config.colors.success)
-			.setDescription("Here is your new promotion message! ||advertisements won't be shown||")
+			.setDescription("Here is your new promotion message! Run the command again to promote your number. ||advertisements won't be shown||")
 			.setFooter(msg.author.id, msg.author.displayAvatarURL())
 			.setTimestamp(new Date());
 
