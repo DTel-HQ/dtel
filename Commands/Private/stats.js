@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Numbers", `Total: ${numberCount}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`)
 		.addField("Guilds", `Total: ${guildCount}\nNo number: ${noNumber}`)
 		.addField("Misc", `Shards: ${shardCount}\nEconomy: ${config.dtsEmoji}${totalBalance}`, true)
-		.addTimestamp();
+		.setTimestamp();
 
 
 	return msg.channel.send(embed);
