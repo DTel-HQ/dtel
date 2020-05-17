@@ -45,14 +45,14 @@ module.exports = async(client, msg, suffix) => {
 
 	account.balance += amount;
 
-	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't a loan service!", description: `That request would leave them with <:DTS:668551813317787659>${account.balance}.` } });
+	if (account.balance < 0) return msg.channel.send({ embed: { color: config.colors.error, title: "We aren't a loan service!", description: `That request would leave them with ${config.dtsEmoji}${account.balance}.` } });
 
 	await r.table("Accounts").get(user.id).update({ balance: account.balance });
 
 	if (neg) amount = String(amount).substr(1);
 	amount = client.format(amount);
-	msg.channel.send({ embed: { color: config.colors.receipt, title: `${neg ? "Removed" : "Added"} credits!`, description: `${neg ? "Removed" : "Added"} <:DTS:668551813317787659>${amount} ${neg ? "from" : "to"} <@${user.id}> (${user.id})`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
+	msg.channel.send({ embed: { color: config.colors.receipt, title: `${neg ? "Removed" : "Added"} credits!`, description: `${neg ? "Removed" : "Added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} <@${user.id}> (${user.id})`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 	let dmChannel = await user.createDM().catch(e => null);
-	if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} <:DTS:668551813317787659>${amount} ${neg ? "from" : "to"} your account. You now have <:DTS:668551813317787659>${account.balance}.` } }).catch(() => null);
-	await client.log(`:yen: Support member ${msg.author.username} ${neg ? "removed" : "added"} <:DTS:668551813317787659>${amount} ${neg ? "from" : "to"} ${user.username} (${user.id}).`);
+	if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} your account. You now have ${config.dtsEmoji}${account.balance}.` } }).catch(() => null);
+	await client.log(`:yen: Support member ${msg.author.username} ${neg ? "removed" : "added"} ${config.dtsEmoji}>${amount} ${neg ? "from" : "to"} ${user.username} (${user.id}).`);
 };
