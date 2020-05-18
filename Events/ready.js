@@ -5,7 +5,7 @@ module.exports = async() => {
 	await client.shard.broadcastEval(`this.done = true`);
 	winston.info("[Ready] Done spawning all shards");
 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
-	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`>wizard | >help | [\${guildCount}] \`, type: 2 } });`);
+	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`>wizard | >help | [${guildCount}] \`, type: 2 } });`);
 
 	let guild = client.guilds.cache.get(config.supportGuild);
 	let bossRole = guild.roles.cache.get(config.bossRole)
