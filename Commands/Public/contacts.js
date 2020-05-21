@@ -2,7 +2,7 @@ const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
 	const myNumber = await msg.channel.number;
-	if (!myNumber) return;
+	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number." } });
 	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "This channel's number has expired. Please call `*233` to renew it." } });
 
 	// Get the user's permissions
