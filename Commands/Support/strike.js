@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
 	user = await client.users.fetch(toStrike).catch(e => null);
 	if (!user) {
 		channel = await client.api.channels(toStrike).get().catch(e => null);
-		if (!channel) guild = client.guilds.cache.get(suffix[0]);
+		if (!channel) guild = client.guilds.cache.get(toStrike);
 	}
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid ID", description: "Couldn't find a guild or user matching that ID." } });
 
@@ -48,7 +48,7 @@ module.exports = async(client, msg, suffix) => {
 	if (totalStrikes.length >= 3) {
 		let blacklist = await r.table("Blacklist").get(toStrike);
 		if (!blacklist) {
-			let res = user ? await user.blacklist() : await client.guilds.cache.get(guild.id).blacklist();
+			let res = user ? await user.blacklist() : await guild.blacklist();
 			msg.channel.send({ embed: { color: config.colors.success, title: "Success", description: `This ${user ? "user" : "guild"} has been striked and blacklisted. StrikeID: \`${id}\`` } });
 			if (user) (await user.createDM()).send({ embed: { color: config.colors.info, title: "You were blacklisted", description: `You have received your third strike and have been blacklisted. Reason given for strike: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the user. Please manually notify them their blacklist." } }));
 			else (await guild.owner.user.createDM()).send({ embed: { color: config.colors.info, title: "Your server was blacklisted", description: `Your server ${guild.name}(${guild.id}) has been blacklisted due to the following reason: \n_${reason}_` } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Error", description: "Couldn't reach the guild owner. Please manually inform them of the blacklist." } }));
