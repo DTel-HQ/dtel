@@ -11,10 +11,6 @@ module.exports = Discord => {
 				return r.table("Blacklist").insert({ id: this.id });
 			}
 
-			get blacklisted() {
-				return r.table("Blacklist").get(this.id).default(false);
-			}
-
 			unBlacklist() {
 				if (!this.blacklisted) return false;
 				this.blacklisted = false;

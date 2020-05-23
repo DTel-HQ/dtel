@@ -58,9 +58,9 @@ module.exports = async msg => {
 
 	if (cmdFile) {
 		// check for blacklist
-		const blacklisted = !!(await msg.author.blacklisted || (msg.guild && await msg.guild.blacklisted));
-		if (msg.guild && msg.guild.blacklisted) return msg.guild.leave();
-		if (blacklisted) return;
+		const userBlacklisted = await r.table("Blacklist").get(msg.author.id).default(false);
+		if (msg.guild && await r.table("Blacklist").get(msg.guild.id)) return msg.guild.leave();
+		if (userBlacklisted) return;
 
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
 		try {
