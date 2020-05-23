@@ -8,7 +8,6 @@ module.exports = Discord => {
 				this.donator = false;
 				this.support = false;
 				this.manager = false;
-				this.blacklisted = false;
 			}
 
 			account(insert) {
@@ -23,6 +22,10 @@ module.exports = Discord => {
 				if (this.blacklisted === true) return false;
 				this.blacklisted = true;
 				return r.table("Blacklist").insert({ id: this.id });
+			}
+
+			get blacklisted() {
+				return r.table("Blacklisted").get(this.id).default(false);
 			}
 
 			unBlacklist() {

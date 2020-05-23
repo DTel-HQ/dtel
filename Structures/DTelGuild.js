@@ -1,11 +1,6 @@
 module.exports = Discord => {
 	Discord.Structures.extend("Guild", Guild => {
 		class DTelGuild extends Guild {
-			constructor(...arg) {
-				super(...arg);
-				this.blacklisted = false;
-			}
-
 			get whitelisted() {
 				return r.table("Whitelist").get(this.id).default(false);
 			}
@@ -14,6 +9,10 @@ module.exports = Discord => {
 				if (this.blacklisted === true) return false;
 				this.blacklisted = true;
 				return r.table("Blacklist").insert({ id: this.id });
+			}
+
+			get blacklisted() {
+				return r.table("Blacklist").get(this.id).default(false);
 			}
 
 			unBlacklist() {

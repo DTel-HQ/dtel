@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!user) guild = await client.guilds.resolve(suffix);
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown ID", description: "Couldn't find a user or guild with that ID" } });
 
-	let blacklisted = user ? user.blacklisted : guild.blacklisted;
+	let blacklisted = user ? await user.blacklisted : await guild.blacklisted;
 	if (blacklisted) {
 		let res = user ? await user.unBlacklist() : await guild.unBlacklist();
 		if (!res.deleted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not deleted", description: "The ID could not be deleted from the DB" } });
