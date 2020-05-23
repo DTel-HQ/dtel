@@ -57,5 +57,7 @@ module.exports = async() => new Promise(async(resolve, reject) => {
 	await r.table("Cooldowns").delete();
 	await r.table("Numbers").update({ waiting: false });
 
+	await r.table("Calls").filter(call => r.not(call.hasFields("pickedUp"))).delete();
+
 	resolve(r);
 });
