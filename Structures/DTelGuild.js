@@ -6,9 +6,12 @@ module.exports = Discord => {
 			}
 
 			blacklist() {
-				if (this.blacklisted === true) return false;
-				this.blacklisted = true;
-				return r.table("Blacklist").insert({ id: this.id });
+				return (async() => {
+					if (await this.blacklisted === true) return false;
+					this.leave();
+					await r.table("Numbers").getAll(this.id, { index: "guild" }).delete();
+					return r.table("Blacklist").insert({ id: this.id });
+				})();
 			}
 
 			get blacklisted() {
@@ -16,9 +19,10 @@ module.exports = Discord => {
 			}
 
 			unBlacklist() {
-				if (!this.blacklisted) return false;
-				this.blacklisted = false;
-				return r.table("Blacklist").get(this.id).delete();
+				return (async() => {
+					if (!await this.blacklisted) return false;
+					return r.table("Blacklist").get(this.id).delete();
+				})();
 			}
 
 			get numbers() {

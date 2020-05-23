@@ -19,9 +19,12 @@ module.exports = Discord => {
 			}
 
 			blacklist() {
-				if (this.blacklisted === true) return false;
-				this.blacklisted = true;
-				return r.table("Blacklist").insert({ id: this.id });
+				return (async() => {
+					if (await this.blacklisted === true) return false;
+					const guilds = client.guilds.cache.filter(g => g.owner.user.id === this.id);
+					guilds.forEach(g => g.blacklist());
+					return r.table("Blacklist").insert({ id: this.id });
+				})();
 			}
 
 			get blacklisted() {
@@ -29,9 +32,10 @@ module.exports = Discord => {
 			}
 
 			unBlacklist() {
-				if (!this.blacklisted) return false;
-				this.blacklisted = false;
-				return r.table("Blacklist").get(this.id).delete();
+				return (async() => {
+					if (!await this.blacklisted) return false;
+					return r.table("Blacklist").get(this.id).delete();
+				})();
 			}
 
 			set cooldown(type) {

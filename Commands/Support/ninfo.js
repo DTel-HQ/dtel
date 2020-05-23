@@ -26,8 +26,8 @@ module.exports = async(client, msg, suffix) => {
 	const guild = channel.guild_id ? await client.api.guilds(channel.guild_id).get().catch(e => null) : null;
 	const owner = guild ? await client.users.fetch(guild.owner_id).catch(e => null) : await client.users.fetch(channel.recipients[0].id).catch(e => null);
 	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
-	const ownerBlacklisted = await r.table("Blacklist").get(owner.id);
-	const guildBlacklisted = guild ? await r.table("Blacklist").get(guild.id) : false;
+	const ownerBlacklisted = await owner.blacklisted;
+	const guildBlacklisted = guild ? await guild.blacklisted : false;
 	const guildWhitelisted = guild ? await r.table("Whitelist").get(guild.id) : false;
 	const vipNumber = number.vip ? new Date(number.vip.expiry) > Date.now() : false;
 

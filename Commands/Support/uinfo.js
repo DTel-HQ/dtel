@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	if (dmChannel) dmNumber = await r.table("Numbers").getAll(dmChannel.id, { index: "channel" }).nth(0).default(null);
 	const strikes = await r.table("Strikes").getAll(user.id, { index: "offender" }).default([]);
 	let account = await user.account();
-	let blacklisted = user.blacklisted;
+	let blacklisted = await user.blacklisted;
 
 	// Why not
 	if (user.bot && user.id === client.user.id) dmNumber = { id: "Id10tsTryC@ll1ngTh!s" };

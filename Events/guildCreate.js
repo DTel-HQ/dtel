@@ -1,8 +1,8 @@
 const auth = require("../Configuration/auth.js");
 
 module.exports = async guild => {
-	let guildBlacklisted = await r.table("Blacklist").get(guild.id);
-	let ownerBlacklisted = await r.table("Blacklist").get(guild.ownerID);
+	let guildBlacklisted = await guild.blacklisted;
+	let ownerBlacklisted = await guild.owner.user.blacklisted;
 	let name = guild.name.replace(/(\*|`|_|~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
 	if (guildBlacklisted || ownerBlacklisted) {
 		client.log(`📑 Left ${guild.id} for being on the blacklist.`);
