@@ -58,8 +58,12 @@ module.exports = async msg => {
 
 	if (cmdFile) {
 		// check for blacklist
-		const userBlacklisted = await r.table("Blacklist").get(msg.author.id).default(false);
-		if (msg.guild && await r.table("Blacklist").get(msg.guild.id)) return msg.guild.leave();
+		const userBlacklisted = await msg.author.blacklisted;
+		if (msg.guild && await msg.guild.blacklisted) {
+			let name = msg.guild.name.replace(/(\*|`|_|~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
+			client.log(`📑 Left guild ${msg.guild.id}(${name}) for being on the blacklist. Currently in ${client.guild.size} servers.`);
+			return msg.guild.leave();
+		}
 		if (userBlacklisted) return;
 
 		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
