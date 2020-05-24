@@ -14,13 +14,8 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [currency]\`\n\`[currency]\` = the 3-letter currency codes written in code blocks below.\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for more information.`,
+				description: `\`>convert [amount] [3-letter currency code]\`\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for info.\n\n**Current rates:**\n${currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n")}`,
 				fields: [{
-					name: "Current Exchange Rates, relative to DTS",
-					value: currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} ${c.name}: 1 DTS = ${(dts.value / c.value).toFixed(4)} ${c.id}`).join("\n"),
-					inline: true,
-				},
-				{
 					name: "Discoin Rates",
 					value: `• <:DTS:668563890015174677>: **1 DTS = ${dts.value} D$**\n${currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n")}`,
 					inline: true,
