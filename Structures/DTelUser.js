@@ -21,7 +21,7 @@ module.exports = Discord => {
 			blacklist() {
 				return (async() => {
 					if (await this.blacklisted === true) return false;
-					const guilds = client.guilds.cache.filter(g => g.owner.user.id === this.id);
+					const guilds = client.guilds.cache.filter(g => g.ownerID === this.id);
 					guilds.forEach(g => g.blacklist());
 					return r.table("Blacklist").insert({ id: this.id });
 				})();
