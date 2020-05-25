@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				fields: [{
 					name: "Credits",
-					value: `<:DTS:668551813317787659>${client.format(account.balance)}`,
+					value: `${config.dtsEmoji}${client.format(account.balance)}`,
 					inline: true,
 				},
 				{
@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				fields: [{
 					name: "Their Balance",
-					value: `<:DTS:668551813317787659>${client.format(account.balance)}`,
+					value: `${config.dtsEmoji}${client.format(account.balance)}`,
 					inline: true,
 				},
 				{

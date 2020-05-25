@@ -183,6 +183,6 @@ module.exports = async(client, msg, suffix, rcall) => {
 
 		let mailbox = await r.table("Mailbox").get(toDialDoc.channel);
 		if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "Call expired", description: "The other side did not pick up. (2 minutes)", footer: { text: callDoc.id } } });
-		else return msg.channel.send({ embed: { color: config.colors.error, footer: { text: callDoc.id }, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", value: `${mailbox.autoreply}\n\nYou can send a message (cost: <:DTS:668551813317787659>${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
+		else return msg.channel.send({ embed: { color: config.colors.error, footer: { text: callDoc.id }, title: "Call expired", description: "The other side did not pick up. (2 minutes)", fields: [{ name: "Mailbox", value: `${mailbox.autoreply}\n\nYou can send a message (cost: ${config.dtsEmoji}${config.messageCost}) with \`>message ${toDial} [message]\`` }] } });
 	}, 120000);
 };

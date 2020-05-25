@@ -46,11 +46,11 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction amounts",
-				value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
 			},
 			{
 				name: "Your new balance",
-				value: `<:DTS:668551813317787659>${fromAccount.balance - amount}`,
+				value: `${config.dtsEmoji}${fromAccount.balance - amount}`,
 			},
 			{
 				name: "Message for receiver",
@@ -103,7 +103,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction amounts",
-				value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 			},
 			{
 				name: "Message for receiver",
@@ -130,11 +130,11 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Transaction amounts",
-					value: `Amount: <:DTS:668551813317787659>${amount}\nFee: <:DTS:668551813317787659>${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+					value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 				},
 				{
 					name: "Balance",
-					value: `Your new balance: <:DTS:668551813317787659>${toAccount.balance}`,
+					value: `Your new balance: ${config.dtsEmoji}${toAccount.balance}`,
 				},
 				{
 					name: "Message from sender",

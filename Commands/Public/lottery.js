@@ -46,7 +46,7 @@ module.exports = async(client, msg, suffix) => {
 			description: `The lottery jackpot consists of all the entries together and is drawn at 00:00 UTC\nType \`>lottery [amount]\` to buy tickets for ${config.lotteryCost} credits each.`,
 			fields: [
 				{ name: "Your stats", value: `• Your tickets: ${client.format(ownedTickets)}\n• Your chance: ${chance}%`, inline: true },
-				{ name: "Lottery stats", value: `• Jackpot: <:DTS:668551813317787659>${client.format(jackpot)}\n• Time left: ${timeLeft}`, inline: true },
+				{ name: "Lottery stats", value: `• Jackpot: ${config.dtsEmoji}${client.format(jackpot)}\n• Time left: ${timeLeft}`, inline: true },
 			],
 		} });
 	} else if (/^\d+$/.test(suffix) && !/^0.*/.test(suffix)) {
@@ -80,10 +80,10 @@ module.exports = async(client, msg, suffix) => {
 				color: config.colors.lottery,
 				title: "Lottery",
 				author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() },
-				description: `You succesfully purchased ${tickets} tickets for <:DTS:668551813317787659>${cost}!`,
+				description: `You succesfully purchased ${tickets} tickets for ${config.dtsEmoji}${cost}!`,
 				fields: [
 					{ name: "Your stats", value: `• Your tickets: ${client.format(ownedTickets)}\n• Your chance: ${chance}%`, inline: true },
-					{ name: "Lottery stats", value: `• Jackpot: <:DTS:668551813317787659>${client.format(newJackpot)}\n• Time left: ${timeLeft}`, inline: true },
+					{ name: "Lottery stats", value: `• Jackpot: ${config.dtsEmoji}${client.format(newJackpot)}\n• Time left: ${timeLeft}`, inline: true },
 				],
 			} });
 			client.log(`:tickets: ${msg.author.username} just bought ${tickets} lottery tickets.`);
