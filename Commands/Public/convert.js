@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 			const content = { embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [3-letter currency code]\`\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for info.\n1 DTS = ${dts.value}`,
+				description: `\`>convert [amount] [3-letter currency code]\`\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for info.\n\n${config.dtsEmoji}1 = ${client.format(dts.value)} D$`,
 				fields: [],
 			} };
 			currencies.forEach(curr => {
