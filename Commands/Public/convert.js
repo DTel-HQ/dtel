@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 			} };
 			currencies.forEach(curr => {
 				let emoji = emojis.find(e => e.name === curr.id).toString();
-				content.embed.fields.push({ name: `${emoji} ${curr.id}`, value: `${config.dtsEmoji}1 = ${emoji}${dts.value / curr.value}\n${emoji}1 = ${curr.value} D$`, inline: true });
+				content.embed.fields.push({ name: `${emoji} [${curr.id}](https://dash.discoin.zws.im/#/currencies "${curr.name}")`, value: `${config.dtsEmoji}1 = ${emoji}${Math.round((dts.value / curr.value) * 100) / 100}\n${emoji}1 = ${curr.value} D$`, inline: true });
 			});
 			return msg.channel.send(content);
 		} catch (err) {
