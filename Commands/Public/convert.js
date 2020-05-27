@@ -11,16 +11,17 @@ module.exports = async(client, msg, suffix) => {
 				emojis = client.guilds.cache.get("347859709711089674").emojis.cache,
 				dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
-			return msg.channel.send({ embed: {
+			const content = { embed: {
 				color: config.colors.info,
 				title: "Command usage",
-				description: `\`>convert [amount] [3-letter currency code]\`\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for info.\n\n**Current rates, relative to DTS:**\n${currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()} 1 DTS = ${(dts.value / c.value).toFixed(4)} [${c.id}](https://dash.discoin.zws.im/#/currencies)`).join("\n")}`,
-				fields: [{
-					name: "Discoin Rates",
-					value: `• <:DTS:668563890015174677>: **1 DTS = ${dts.value} D$**\n${currencies.map(c => `• ${emojis.find(e => e.name === c.id).toString()}: 1 ${c.id} = ${c.value} D$`).join("\n")}`,
-					inline: true,
-				}],
-			} });
+				description: `\`>convert [amount] [3-letter currency code]\`\nSee the [docs](${config.discoinLink}) or \`>dial 0800DISCOIN\` for info.\n1 DTS = ${dts.value}`,
+				fields: [],
+			} };
+			currencies.forEach(curr => {
+				let emoji = emojis.find(e => e.name === curr.id).toString();
+				content.embed.fields.push({ name: `${} ${curr.id}`, value: `${cfg.dtsEmoji}1 = ${emoji}${dts.value / curr.value}\n${emoji}1 = ${curr.value} D$`, inline: true});
+			});
+			return msg.channel.send(content);
 		} catch (err) {
 			error = err;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "API error", description: `\`\`\`\n${err}\n\`\`\`` } });
