@@ -85,7 +85,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 
 	format(number) {
 		if (!/\d+/.test(number.toString())) return new Error(`Client#format input was not a number: ${number}`);
-		number = number < 0 ? Number.parseFloat(number).toPrecision(2) : (Math.round(number * 100) / 100);
+		number = number < 1 ? Number.parseFloat(number).toPrecision(2) : (Math.round(number * 100) / 100);
 		return number.toString().replace(/\d(?<!\.\d*)(?=(\d{3})+(\.|$))/g, "$&,");
 	}
 
