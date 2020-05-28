@@ -187,7 +187,7 @@ module.exports = async(msg, myNumber) => {
 					.setFooter("(9) to return. (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.");
 
 				// Add description based on if there's an entry or not
-				if (entry) embed.setDescription("Please input the new description.\nThis will be publicly visible so refrain from using any bad language.\n\n(min 10, max 200 characters)");
+				if (entry) embed.setDescription("Please input the new description.\nThis will be publicly visible so refrain from using any explicit language.\n\n(min 10, max 200 characters)");
 				else embed.setDescription("Please input a description for your number.\nThis will be the description publicly available in the yellowbook so please refrain from using any bad language.\n\n(min 10, max 200 characters)");
 
 				// edit/send message

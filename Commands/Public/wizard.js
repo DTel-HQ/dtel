@@ -91,7 +91,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await r.table("Numbers").insert(numberDoc);
 		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by ${msg.author.tag} (${msg.author.id})`);
-		await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Phonebook", value: `You can also put your number in the phonebook, meaning this number can be randomly called.\nIf you want to do so, type a description for your number, otherwise type \`skip\`.` }] } });
+		await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Phonebook", value: `You can also put your number in the public phonebook, meaning this number can be randomly called (\`>rcall\`).\nIf you want to do so, type a description for your number (**no explicit language**), otherwise type \`skip\`.` }] } });
 		return phonebookChooser();
 	};
 
