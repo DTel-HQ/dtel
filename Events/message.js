@@ -19,7 +19,7 @@ module.exports = async msg => {
 
 	// Check for call
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if ((!call && !msg.content.startsWith(prefix)) || (msg.author.busy && !msg.author.maintainer)) return;
+	if ((!call && !msg.content.startsWith(prefix)) || (msg.author.busy && !config.maintainers.includes(msg.author.id))) return;
 
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
