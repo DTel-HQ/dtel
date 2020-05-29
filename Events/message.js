@@ -16,11 +16,8 @@ module.exports = async msg => {
 			return call;
 		};
 	}
-
-	// Check for call
-	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if ((!call && !msg.content.startsWith(prefix)) || (msg.author.busy && !config.maintainers.includes(msg.author.id))) return;
-
+	
+	// moved this up here in order for support to be able to run unbusy while busy (to find command) - turret
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
 		.replace(/dial/gi, "call");
@@ -28,6 +25,10 @@ module.exports = async msg => {
 	const suffix = msg.content.split(" ").splice(1)
 		.join(" ")
 		.trim();
+
+	// Check for call
+	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
+	if ((!call && !msg.content.startsWith(prefix)) || (msg.author.busy && !config.maintainers.includes(msg.author.id) && !(msg.author.support && cmd == "unbusy"))) return;
 
 	let cmdFile;
 	// Find call command files
