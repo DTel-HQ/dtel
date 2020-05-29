@@ -1,6 +1,9 @@
 const { MessageEmbed } = require("discord.js");
+const os = require("os");
 
 module.exports = async(client, msg, suffix) => {
+	const DTS = config.dtsEmoji;
+
 	// basic stats
 	const guildCount = client.guilds.cache.size;
 	const shardCount = client.shard.shardCount;
@@ -8,6 +11,9 @@ module.exports = async(client, msg, suffix) => {
 	const numbers = await r.table("Numbers");
 	const numberCount = numbers.length;
 	const yellowCount = (await r.table("Phonebook")).length;
+
+	const blacklisted = (await r.table("Blacklist")).length;
+	const whitelisted = (await r.table("Whitelist")).length;
 
 	// more advanced
 	let noNumber = 0;
@@ -21,15 +27,20 @@ module.exports = async(client, msg, suffix) => {
 	const monthNumbers = (await numbers.filter(n => n.createdAt && new Date(n.createdAt) > new Date(d.getTime()))).length;
 
 	const users = await r.table("Accounts");
+	const usersSortedByBalance = users.sort((a, b) => b.balance - a.balance);
+	const USBBFiltered = usersSortedByBalance.filter(u => u.balance != 0);
 	const totalBalance = client.format(users.reduce((o, n) => o + n.balance, 0));
 
 	const embed = new MessageEmbed()
 		.setTitle("DTel Statistics")
 		.setColor(config.colors.info)
 		.setAuthor(client.user.tag, client.user.avatarURL())
-		.addField("Numbers", `Total: ${numberCount}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`)
-		.addField("Guilds", `Total: ${guildCount}\nNo number: ${noNumber}`)
-		.addField("Misc", `Shards: ${shardCount}\nEconomy: ${config.dtsEmoji}${totalBalance}`, true)
+		.addField("Server", `Shards: ${shardCount}\nRAM usage: ${client.format(process.memoryUsage().heapUsed / 1024 / 1024)}MB\nLoad avgs: ${os.loadavg().map(avg => avg * 100).join(" | ")}`, true)
+		.addField("Numbers", `Total: ${client.format(numberCount)}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`, true)
+		.addField("Guilds", `Total: ${client.format(guildCount)}\nNo number: ${noNumber}`, true)
+		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted; ${whitelisted}`, true)
+		.addField("Top balances", usersSortedByBalance.slice(0, 4).map(acc => `${DTS}${client.format(acc.balance)} (${acc.id})`), true)
+		.addField("Economy", `Total: ${totalBalance}\nMedian: ${DTS}${client.format(usersSortedByBalance[parseInt(usersSortedByBalance.length / 2)])}\nFiltered median: ${DTS}${client.format(USBBFiltered[parseInt(USBBFiltered.length / 2)])}`, true)
 		.setTimestamp();
 
 
