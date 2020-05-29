@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle("DTel Statistics")
 		.setColor(config.colors.info)
 		.setAuthor(client.user.tag, client.user.avatarURL())
-		.addField("Server", `Shards: ${shardCount}\nRAM usage: ${client.format(process.memoryUsage().heapUsed / 1024 / 1024)}MB\nLoad avgs: ${os.loadavg().map(avg => avg * 100).join(" | ")}`, true)
+		.addField("Server", `Shards: ${shardCount}\nRAM usage: ${client.format(process.memoryUsage().heapUsed / 1024 / 1024)}MB\nLoad avgs: ${os.loadavg().map(avg => client.format(avg * 100)).join(" | ")}`, true)
 		.addField("Numbers", `Total: ${client.format(numberCount)}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`, true)
 		.addField("Guilds", `Total: ${client.format(guildCount)}\nNo number: ${noNumber}`, true)
 		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted; ${whitelisted}`, true)
