@@ -53,7 +53,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted <:DTS:668551813317787659>${amount} into ${newTransaction.payout} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
+				description: `Succesfully converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
@@ -61,7 +61,7 @@ module.exports = async(client, msg, suffix) => {
 				timestamp: new Date(),
 			};
 			msg.channel.send({ embed: embed });
-			client.log(`${msg.author.username} converted <:DTS:668551813317787659>${amount} into ${newTransaction.payout} ${currency} using Discoin.`);
+			client.log(`${msg.author.username} converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency} using Discoin.`);
 		}
 	}
 };

@@ -20,6 +20,7 @@ module.exports = async(client, msg, suffix) => {
 	client.guilds.cache.forEach(async guild => {
 		if (!(await numbers.filter(n => n.guild === guild.id)).length) noNumber++;
 	});
+	noNumber = client.format(noNumber);
 
 	const expNumbers = (await r.table("Numbers").filter(r.row("expiry").lt(new Date()))).length;
 	const d = new Date();
@@ -39,7 +40,7 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Numbers", `Total: ${client.format(numberCount)}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`, true)
 		.addField("\u200b", "\u200b", true)
 		.addField("Guilds", `Total: ${client.format(guildCount)}\nNo number: ${noNumber}`, true)
-		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted; ${whitelisted}`, true)
+		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted: ${whitelisted}`, true)
 		.addField("\u200b", "\u200b", true)
 		.addField("Economy", `Total: ${DTS}${totalBalance}\nMedian: ${DTS}${client.format(usersSortedByBalance[parseInt(usersSortedByBalance.length / 2)].balance)}\nFiltered median: ${DTS}${client.format(USBBFiltered[parseInt(USBBFiltered.length / 2)].balance)}`, true)
 		.addField("Top balances", usersSortedByBalance.slice(0, 5).map(acc => `${DTS}${client.format(acc.balance)} (${acc.id})`), true)
