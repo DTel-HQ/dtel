@@ -9,11 +9,11 @@ module.exports = async(channel, user) => {
 
 	let typingCheck = setInterval(async() => {
 		call = await r.table("Calls").get(call.id).default(null);
-		if (!call || call.hold) clearInterval(typingCheck);
+		if (!call || call.hold) return clearInterval(typingCheck);
 		user = await client.users.cache.get(user.id);
-		if (!user) clearInterval(typingCheck);
+		if (!user) return clearInterval(typingCheck);
 		let userTyping = await user.typingIn(channel.id);
-		if (!userTyping) clearInterval(typingCheck);
+		if (!userTyping) return clearInterval(typingCheck);
 		else client.api.channels[typeChannel].typing.post();
 	}, 5000);
 };
