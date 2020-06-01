@@ -14,8 +14,8 @@ module.exports = async(client, msg, suffix) => {
 	// Get contacts
 	let contacts = myNumber.contacts || [];
 
-	// REMOVE THIS lATER;
-	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}).` } });
+	// REMOVE THIS WHEN FIXED
+	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}) and tell us the steps you performed.` } });
 
 	// Main contact list
 	let contactList = async() => {
@@ -163,12 +163,12 @@ module.exports = async(client, msg, suffix) => {
 			// check for perm & if the contact is legit
 			if (!perm) {
 				msg.author.busy = false;
-				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient perms", description: "You need the Manage Server permission to do this." } });
 			}
 
 			omsg = await msg.channel.send({ embed: {
 				color: config.colors.contacts,
-				title: `Editing ${contact.name}(${contact.number})`,
+				title: `Editing ${contact.name} (${contact.number})`,
 				description: `Enter a new name for the contact. (max 20 characters)\nCurrent name: \`${contact.name}\``,
 				footer: {
 					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
