@@ -38,7 +38,7 @@ module.exports = async(client, msg, suffix) => {
 			if (m.author.id !== msg.author.id) return false;
 			if (contacts.length && parseInt(m.content) && parseInt(m.content) <= contacts.length) return true;
 			if (m.content.toLowerCase === "add") return true;
-			const index = m.content.split(" ")[1] ? parseInt(m.content.split(" ")[0]) : null;
+			const index = m.content.split(" ")[1] ? parseInt(m.content.split(" ")[1]) : null;
 			if (!index) return false;
 			const type = m.content.split(" ")[0].toLowerCase();
 			if (perm && ["edit", "delete"].includes(type)) return true;
