@@ -14,6 +14,14 @@ module.exports = async(client, msg, suffix) => {
 	// Get contacts
 	let contacts = myNumber.contacts || [];
 
+	contacts.forEach(async c => {
+		let contactDoc = await r.table("Numbers").get(c.number);
+		if (!contactDoc) {
+			contacts.splice(contacts.indexOf(c), 1);
+			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
+		}
+	});
+
 	// REMOVE THIS WHEN FIXED
 	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}) and tell us the steps you performed.` } });
 
@@ -270,6 +278,8 @@ module.exports = async(client, msg, suffix) => {
 		// if only a number
 		msg.author.busy = false;
 		contact = contacts[parseInt(collected.first().content) - 1];
+
+		// This check is now redundant, but keeping it in
 		const contactDoc = await r.table("Numbers").get(contact.number);
 		if (!contactDoc) {
 			contacts.splice(contacts.indexOf(contact), 1);
