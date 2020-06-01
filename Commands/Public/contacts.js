@@ -274,7 +274,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!contactDoc) {
 			contacts.splice(contacts.indexOf(contact), 1);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
-			return msg.channel.send({ embed: config.colors.error, title: "Registry Error", description: "That number no longer exists. It has been deleted from your contacts" });
+			return msg.channel.send({ embed: config.colors.error, title: "Registry error", description: "That number no longer exists. It has been deleted from your contacts." });
 		} else {
 			return require("./call.js")(client, msg, contact.number);
 		}
