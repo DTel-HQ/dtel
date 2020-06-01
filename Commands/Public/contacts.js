@@ -235,7 +235,7 @@ module.exports = async(client, msg, suffix) => {
 			if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
 
 			// Delete the contact's entry
-			await contacts.splice(contacts.indexOf(contact), 1);
+			contacts.splice(contacts.indexOf(contact), 1);
 			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
 
 			return contactList();
@@ -270,7 +270,14 @@ module.exports = async(client, msg, suffix) => {
 		// if only a number
 		msg.author.busy = false;
 		contact = contacts[parseInt(collected.first().content) - 1];
-		return require("./call.js")(client, msg, contact.number);
+		const contactDoc = await r.table("Numbers").get(contact.number);
+		if (!contactDoc) {
+			contacts.splice(contacts.indexOf(contact), 1);
+			await r.table("Numbers").get(myNumber.id).update({ contacts: contacts });
+			return msg.channel.send({ embed: config.colors.error, title: "Registry Error", description: "That number no longer exists. It has been deleted from your contacts" });
+		} else {
+			return require("./call.js")(client, msg, contact.number);
+		}
 	};
 	contactList();
 };
