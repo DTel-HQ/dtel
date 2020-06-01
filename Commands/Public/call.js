@@ -48,8 +48,11 @@ module.exports = async(client, msg, suffix, rcall) => {
 		if (rcall) return (await reload("./Commands/Public/rcall.js"))(client, msg);
 		else return;
 	}
-	if (myNumber.blocked && myNumber.blocked.includes(toDialDoc.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "You have blocked this number." } });
-	if (toDialDoc.blocked && toDialDoc.blocked.includes(myNumber.id)) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "That number can't be reached." } });
+
+	const fromBlocked = id => myNumber.blocked && myNumber.blocked.includes(id);
+	const toBlocked = id => toDialDoc.blocked && toDialDoc.blocked.includes(id);
+	if (fromBlocked(toDialDoc.id) || (toDialDoc.guild ? fromBlocked(toDialDoc.guild) : fromBlocked(toDialDoc.owner))) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "You have blocked this number." } });
+	if (toBlocked(myNumber.id) || (msg.guild ? toBlocked(msg.guild.id) : toBlocked(msg.author.id))) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "That number can't be reached." } });
 	if (new Date(toDialDoc.expiry).getTime() < Date.now() && myNumber.id != config.aliasNumbers["*611"]) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "The number you are trying to reach has expired. Please contact the owner to renew it." } });
 
 	let activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "fromChannel" }).nth(0).default(null);

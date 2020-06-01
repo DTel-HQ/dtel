@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "To (un)block a number: >block [number]" } });
+	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "To (un)block a number: >block [number]" } });
 
 	// Help users a bit by removing spaces & '-'
 	let myNumber = await msg.channel.number;
@@ -14,12 +14,20 @@ module.exports = async(client, msg, suffix) => {
 	let number = await r.table("Numbers").getAll(suffix, { index: "channel" }).nth(0).default(null);
 	let toBlock = await client.replaceNumber(suffix);
 	if (!number) number = await r.table("Numbers").get(toBlock);
-	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown number", description: "That number does not seem to exist." } });
+	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown number", description: "That number does not seem to exist or the channel has no number." } });
 	if (!myNumber.id === number.id) return msg.channel.send({ embed: { color: config.colors.error, title: "Blocking yourself?", description: "What is that going to do? Report yourself by calling *611" } });
+
+	const toBlockID = number.guild ? number.guild : number.owner;
 
 	// Stuff
 	let blocked = myNumber.blocked || [];
-	let index = blocked.indexOf(toBlock);
+	let index = blocked.indexOf(toBlockID);
+	let deprecated = false;
+	if (index == -1) {
+		index = blocked.indexOf(toBlock);
+		if (index > -1) deprecated = true;
+	}
+
 	if (index > -1) {
 		blocked.splice(index, 1);
 		if (!blocked.length) {
@@ -28,12 +36,13 @@ module.exports = async(client, msg, suffix) => {
 		} else {
 			await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
 		}
-		await msg.channel.send({ embed: { color: config.colors.success, title: "Unblocked", description: `${toBlock} has been unblocked.` } });
-		await client.log(`:name_badge: Number ${toBlock} has been unblocked by ${myNumber.channel}.`);
+		if (deprecated) await msg.channel.send({ embed: { color: config.colors.success, title: "Unblocked", description: `${toBlock} has been unblocked.` } });
+		else await msg.channel.send({ embed: { color: config.colors.success, title: "Unblocked", description: `${number.guild ? `Guild ${toBlockID}` : `User ${toBlockID}`} has been unblocked.` } });
+		await client.log(`:name_badge: Number ${toBlock} (${toBlockID}) has been unblocked by ${myNumber.channel}.`);
 	} else {
-		blocked.push(toBlock);
+		blocked.push(toBlockID);
 		await r.table("Numbers").get(myNumber.id).update({ blocked: blocked });
-		await msg.channel.send({ embed: { color: config.colors.error, title: "Blocked", description: `${toBlock} has been blocked, please report any abuse by calling \`*611\`` } });
-		await client.log(`:no_entry: Number ${toBlock} has been blocked by ${myNumber.channel}.`);
+		await msg.channel.send({ embed: { color: config.colors.error, title: "Blocked", description: `${number.guild ? `Guild ${toBlockID}` : `User ${toBlockID}`} has been blocked, please report any abuse by calling \`*611\``, footer: { text: "To unblock, run the same command again." } } });
+		await client.log(`:no_entry: Number ${toBlock} (${toBlockID}) has been blocked by ${myNumber.channel}.`);
 	}
 };
