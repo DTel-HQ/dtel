@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 		const testFunction = m => {
 			if (m.author.id !== msg.author.id) return false;
 			if (contacts.length && parseInt(m.content) && parseInt(m.content) <= contacts.length) return true;
-			if (m.content.toLowerCase === "add") return true;
+			if (m.content.toLowerCase() === "add" || m.content === "0") return true;
 			const index = m.content.split(" ")[1] ? parseInt(m.content.split(" ")[1]) : null;
 			if (!index) return false;
 			const type = m.content.split(" ")[0].toLowerCase();
