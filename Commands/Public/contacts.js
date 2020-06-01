@@ -23,9 +23,8 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DTel numbers. Their name will also show up when they call.\n\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`);
-		if (contacts.length) embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
-		else embed.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
+			.setDescription(`An easy way to store your known DTel numbers. Their name will also show up when they call.\n\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`)
+			.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 
 		// Add contacts to embed
 		for (let contact of contacts) {
@@ -35,10 +34,13 @@ module.exports = async(client, msg, suffix) => {
 		// send the embed
 		let omsg = await msg.channel.send({ embed: embed });
 
+		const test = [];
+		if (perm) test.concat(["edit", "delete"]);
+
 		// Create collector
 		msg.author.busy = true;
 		let collected = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && ((contacts.length && /^\d$/.test(m.content) && parseInt(m.content) <= contacts.length) || /^0$|^add$/i.test(m.content)),
+			m => m.author.id === msg.author.id && ((contacts.length && /^\d$/.test(m.content) && parseInt(m.content) <= contacts.length) || /^0$|^add$/i.test(m.content) || (test.includes(m.content.split(" ")[0]) && parseInt(m.content.split(" ")[1]))),
 			{ max: 1, time: 120000 },
 		);
 
