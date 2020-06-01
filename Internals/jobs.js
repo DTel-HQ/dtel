@@ -147,12 +147,12 @@ scheduleJob("0 20 * * 0", async() => {
 	// Retrieve, delete and check database information
 	let votes = await r.table("Votes");
 	await r.table("Votes").delete();
-	if (votes.length === 0) return client.log(`<:blobsad:386228996486070272> No voters this month.`);
+	if (votes.length === 0) return client.log(`<:blobsad:386228996486070272> No voters this week.`);
 
 	// Sort the array and get winner(s)
 	await votes.sort((v1, v2) => v2.amount - v1.amount);
 	let filteredVotes = votes.filter(vote => !config.maintainers.includes(vote.id));
-	if (filteredVotes.length === 0) return client.log(`<:blobsad:386228996486070272> No qualifying voters this month.`);
+	if (filteredVotes.length === 0) return client.log(`<:blobsad:386228996486070272> No qualifying voters this week.`);
 	let winners = filteredVotes.filter(vote => vote.amount === filteredVotes[0].amount);
 
 	// Give prize
@@ -165,6 +165,7 @@ scheduleJob("0 20 * * 0", async() => {
 		await r.table("Accounts").get(account.id).update({ vip: account.vip });
 		client.log(`🏆 ${user.username} (${user.id}) won ${prize} VIP Month for being ${winners.length === 1 ? "the" : "a"} highest voter.`);
 
+		await user.createDM();
 		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Months for being ${winners.length === 1 ? "the" : "a"} highest voter this month.` } }).catch(e => null);
 	}
 
