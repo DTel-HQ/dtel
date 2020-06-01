@@ -34,15 +34,20 @@ module.exports = async(client, msg, suffix) => {
 		// send the embed
 		let omsg = await msg.channel.send({ embed: embed });
 
-		const test = [];
-		if (perm) test.concat(["edit", "delete"]);
+		const testFunction = m => {
+			if (m.author.id !== msg.author.id) return false;
+			if (contacts.length && parseInt(m.content) && parseInt(m.content) <= contacts.length) return true;
+			if (m.content.toLowerCase === "add") return true;
+			const index = m.content.split(" ")[1] ? parseInt(m.content.split(" ")[0]) : null;
+			if (!index) return false;
+			const type = m.content.split(" ")[0].toLowerCase();
+			if (perm && ["edit", "delete"].includes(type)) return true;
+			return false;
+		};
 
 		// Create collector
 		msg.author.busy = true;
-		let collected = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && ((contacts.length && /^\d$/.test(m.content) && parseInt(m.content) <= contacts.length) || /^0$|^add$/i.test(m.content) || (test.includes(m.content.split(" ")[0]) && parseInt(m.content.split(" ")[1]))),
-			{ max: 1, time: 120000 },
-		);
+		let collected = await msg.channel.awaitMessages(testFunction,	{ max: 1, time: 120000 });
 
 		// On collection
 		omsg.delete().catch(e => null);
