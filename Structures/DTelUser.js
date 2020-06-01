@@ -3,7 +3,7 @@ module.exports = Discord => {
 		class DTelUser extends User {
 			constructor(...arg) {
 				super(...arg);
-				this.busy = false;
+				this._busy = false;
 				this.boss = false;
 				this.donator = false;
 				this.support = false;
@@ -36,6 +36,15 @@ module.exports = Discord => {
 					if (!await this.blacklisted) return false;
 					return r.table("Blacklist").get(this.id).delete();
 				})();
+			}
+
+			get busy() {
+				return this._busy;
+			}
+
+			set busy(boolean) {
+				if (boolean === true) this._busy = true;
+				if (boolean === false) this._busy = false;
 			}
 
 			set cooldown(type) {
