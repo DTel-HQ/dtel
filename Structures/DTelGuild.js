@@ -7,7 +7,7 @@ module.exports = Discord => {
 
 			blacklist() {
 				return (async() => {
-					if (await this.blacklisted === true) return false;
+					if (await this.blacklisted) return false;
 					this.leave();
 					await r.table("Numbers").getAll(this.id, { index: "guild" }).delete();
 					return r.table("Blacklist").insert({ id: this.id });
