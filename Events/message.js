@@ -16,7 +16,7 @@ module.exports = async msg => {
 			return call;
 		};
 	}
-	
+
 	// moved this up here in order for support to be able to run unbusy while busy (to find command) - turret
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
@@ -28,7 +28,7 @@ module.exports = async msg => {
 
 	// Check for call
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if ((!call && !msg.content.startsWith(prefix)) || (msg.author.busy && !config.maintainers.includes(msg.author.id) && !(msg.author.support && cmd == "unbusy"))) return;
+	if (!call && !msg.content.startsWith(prefix)) return;
 
 	let cmdFile;
 	// Find call command files
@@ -49,6 +49,7 @@ module.exports = async msg => {
 
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
+	if (msg.author.busy && !config.maintainers.includes(msg.author.id) && !(msg.author.support && cmd == "unbusy")) return msg.reply("Couldn't connect you, please close any previous menus (usually `0`)");
 
 	// Check cooldown now because it sends an embed
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-default`);
