@@ -171,6 +171,10 @@ module.exports = async(msg, myNumber) => {
 
 				// if going back
 				if (/^9$/.test(collected.content))	break;
+				if (!perms) {
+					msg.author.busy = false;
+					return msg.reply("You need MANAGE_GUILD perms for that");
+				}
 
 				// if deleting
 				if (/^2$/.test(collected.content)) {

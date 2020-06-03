@@ -107,6 +107,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.channel.send({ embed: { color: config.colors.error, title: "That was close!", description: "Mailbox deletion aborted." } });
 		}
 	} else if (suffix.split(" ")[0].toLowerCase() == "edit") {
+		if (!perm) msg.reply("You need MANAGE_GUILD perms for this");
 		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Editing autoreply", description: "Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
 
 		// autoreply collector
@@ -251,6 +252,11 @@ module.exports = async(client, msg, suffix) => {
 				}
 
 				case "edit": {
+					if (!perm) {
+						msg.author.busy = false;
+						return msg.reply("You need MANAGE_GUILD perms for this");
+					}
+
 					embed = new MessageEmbed()
 						.setColor(config.colors.info)
 						.setTitle("Editing autoreply")
