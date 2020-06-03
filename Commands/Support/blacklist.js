@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix) => {
 			icon_url: user ? user.displayAvatarURL() : `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}`,
 		},
 		title: `Added ${user ? "user" : "guild"} to the blacklist.`,
-		description: `Added ID ${suffix} to the blacklist`,
+		description: `Added ID ${suffix} to the blacklist.`,
 		footer: {
 			text: `By ${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),
