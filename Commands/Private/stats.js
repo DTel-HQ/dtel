@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted: ${whitelisted}`, true)
 		.addField("Economy", `Total: ${DTS}${totalBalance}\nMedian: ${DTS}${client.format(usersSortedByBalance[parseInt(usersSortedByBalance.length / 2)].balance)}\nFiltered median: ${DTS}${client.format(USBBFiltered[parseInt(USBBFiltered.length / 2)].balance)}`, true)
 		.addField("\u200b", "\u200b", true)
-		.addField("Top balances", usersSortedByBalance.slice(0, 5).map(acc => `${DTS}${client.format(acc.balance)} (${acc.id})`), true)
+		.addField("Top balances", usersSortedByBalance.slice(0, 5).map(acc => `${DTS}${client.format(acc.balance)} (<@${acc.id}>)`))
 		.setTimestamp();
 
 
