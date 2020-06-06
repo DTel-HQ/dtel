@@ -38,11 +38,10 @@ module.exports = async(client, msg, suffix) => {
 		.setAuthor(client.user.tag, client.user.avatarURL())
 		.addField("Server", `Shards: ${shardCount}\nRAM usage: ${client.format(process.memoryUsage().heapUsed / 1024 / 1024)}MB\nLoad avgs: ${os.loadavg().map(avg => client.format(avg * 100)).join(" | ")}`, true)
 		.addField("Numbers", `Total: ${client.format(numberCount)}\nYellowbook: ${yellowCount}\nExpired: ${expNumbers}\nMonthly new: ${monthNumbers}`, true)
-		.addField("\u200b", "\u200b", true)
 		.addField("Guilds", `Total: ${client.format(guildCount)}\nNo number: ${noNumber}`, true)
 		.addField("Lists", `Blacklisted: ${blacklisted}\nWhitelisted: ${whitelisted}`, true)
-		.addField("\u200b", "\u200b", true)
 		.addField("Economy", `Total: ${DTS}${totalBalance}\nMedian: ${DTS}${client.format(usersSortedByBalance[parseInt(usersSortedByBalance.length / 2)].balance)}\nFiltered median: ${DTS}${client.format(USBBFiltered[parseInt(USBBFiltered.length / 2)].balance)}`, true)
+		.addField("\u200b", "\u200b", true)
 		.addField("Top balances", usersSortedByBalance.slice(0, 5).map(acc => `${DTS}${client.format(acc.balance)} (${acc.id})`), true)
 		.setTimestamp();
 
