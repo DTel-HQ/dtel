@@ -145,7 +145,7 @@ module.exports = async(client, msg, suffix) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.receipt)
 			.setTitle("Your number is all set up!")
-			.setDescription("Here's all the info about your number. If you have any questions or want to report any abuse of DTel (eg. a troll call), please call `*611`!")
+			.setDescription("Here's all the info about your number. If you have any questions or want to report any abuse of DTel (eg. a troll call), please call `*611`! (Pro tip: **you can check your number by dialling *233!**)")
 			.addField(
 				"What now?",
 				`To learn more about the bot: \`>help\`, \`>info\`, \`>links\`.\nFor information about (your) number(s): call \`*233\` and \`*411\` (where you can also find numbers to call!).`,
