@@ -42,7 +42,7 @@
     "utf-8-validate": "^5.0.2",
     "uuid": "^3.4.0",
     "winston": "^3.2.1",
-    "winston-daily-rotate-file": "^4.4.2",
+    "winston-daily-rotate-file": "^4.5.0",
     "zlib-sync": "^0.1.6",
     "zucc": "^0.1.2"
   }
