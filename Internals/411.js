@@ -178,7 +178,7 @@ module.exports = async(msg, myNumber) => {
 
 				// if deleting
 				if (/^2$/.test(collected.content)) {
-					r.table("Phonebook").get(myNumber.id).delete();
+					await r.table("Phonebook").get(myNumber.id).delete();
 					message = "Your yellowbook entry has been succesfully deleted";
 					break;
 				}
