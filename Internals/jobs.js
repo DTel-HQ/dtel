@@ -100,7 +100,7 @@ scheduleJob("*/1 * * * *", async() => {
 !config.devOnlyMode && scheduleJob("*/1 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 
-	let result = await get("http://hill-playroom.glitch.me/dtel")
+	let result = await get("https://discord.austinhuang.me/dtel")
 		.set("Authorization", auth.tokens.blspace)
 		.set("Content-Type", "application/json")
 		.set("count", guildCount.toString())
