@@ -22,6 +22,7 @@ const sharder = new ShardingManager(`${__dirname}/DTel.js`, {
 	clientOptions: { disableMentions: "everyone" },
 	client: require("./Internals/Client.js")(Discord),
 	token: require("./Configuration/auth.js").discord.token,
+	clusterCount: 1,
 });
 
 const winston = global.winston = createLogger({
