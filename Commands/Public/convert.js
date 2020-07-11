@@ -5,10 +5,12 @@ module.exports = async(client, msg, suffix) => {
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
+	
+	const emojis = client.guilds.cache.get("347859709711089674").emojis.cache;
+	
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
-				emojis = client.guilds.cache.get("347859709711089674").emojis.cache,
 				dts = currencies.find(c => c.id === "DTS");
 			currencies.splice(currencies.indexOf(dts), 1);
 			const content = { embed: {
@@ -29,6 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	amount = parseFloat(parseFloat(amount).toFixed(2));
 	currency = currency.toUpperCase();
+	const emoji = emoji.find(e => e.name === currency).toString();
 
 	let account = await msg.author.account();
 
@@ -53,7 +56,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
+				description: `Succesfully converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${emoji}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
@@ -61,7 +64,7 @@ module.exports = async(client, msg, suffix) => {
 				timestamp: new Date(),
 			};
 			msg.channel.send({ embed: embed });
-			client.log(`${msg.author.username} converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency} using Discoin.`);
+			client.log(`<:Discoin:357656754642747403> ${msg.author.username} converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency} using Discoin.`);
 		}
 	}
 };
