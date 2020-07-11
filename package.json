@@ -34,7 +34,7 @@
     "discord.js": "github:discordjs/discord.js",
     "erlpack": "github:discordapp/erlpack",
     "fs-nextra": "^0.4.7",
-    "kurasuta": "^1.1.7",
+    "kurasuta": "^2.1.0",
     "node-schedule": "^1.3.2",
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
