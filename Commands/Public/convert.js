@@ -64,7 +64,7 @@ module.exports = async(client, msg, suffix) => {
 				timestamp: new Date(),
 			};
 			msg.channel.send({ embed: embed });
-			client.log(`<:Discoin:357656754642747403> ${msg.author.username} converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${currency} using Discoin.`);
+			client.log(`<:Discoin:357656754642747403> ${msg.author.username} converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${emoji} using Discoin.`);
 		}
 	}
 };
