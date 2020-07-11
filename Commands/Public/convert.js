@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 	amount = parseFloat(parseFloat(amount).toFixed(2));
 	currency = currency.toUpperCase();
-	const emoji = emoji.find(e => e.name === currency).toString();
+	const emoji = emojis.find(e => e.name === currency).toString();
 
 	let account = await msg.author.account();
 
