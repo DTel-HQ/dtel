@@ -43,7 +43,7 @@
     "uuid": "^3.4.0",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^4.4.2",
-    "zlib-sync": "^0.1.6",
+    "zlib-sync": "^0.1.7",
     "zucc": "^0.1.2"
   }
 }
