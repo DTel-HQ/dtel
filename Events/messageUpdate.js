@@ -31,7 +31,7 @@ module.exports = async(omsg, nmsg) => {
 	if (!hidden) for (let perm in config.callPhones) if (perms[perm]) phone = config.callPhones[perm];
 
 	let toCSChannel = editChannel === config.supportChannel;
-	let toSend = `**${hidden ? "Anonymous#0000" : nmsg.author.tag}${toCSChannel ? `(${nmsg.author.id})` : ""} [edited]** ${phone} ${nmsg.content}`;
+	let toSend = `**${hidden ? "Anonymous#0000" : nmsg.author.tag}${toCSChannel ? ` (${nmsg.author.id})` : ""} [edited]** ${phone} ${nmsg.content}`;
 	let edited = await client.apiEdit(toSend, editChannel, message.dtelmsg);
 	if (!edited.id) {
 		await client.apiSend(`${toSend}`, editChannel);
