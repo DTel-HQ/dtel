@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if (call) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `You are already in a call.\ndebug: ${call}` } });
+	if (call) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `You're already in a call.\nDebug: ${call}` } });
 
 	if (myNumber.waiting) return;
 
@@ -168,7 +168,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
 
 	// This one-lining should honestly stop.
-	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\``, description: `${csCall ? "You **can not** use `>hangup` on customer support." : `You can hang up using \`>hangup\`${rcall ? ", but give people the time to pick up or you may be striked." : ""}`}`, footer: { text: callDoc.id } } });
+	msg.channel.send({ embed: { color: config.colors.info, title: `Dialing \`${toDial}\``, description: `${csCall ? "You **can not** use `>hangup` on customer support." : `You can hang up at any time using \`>hangup\`, but give the other side time to pick up or you may be striked.`}`, footer: { text: callDoc.id } } });
 	client.log(`:telephone: ${rcall ? "rcall" : "Call"} \`${myNumbervip && myNumber.vip.hidden ? "hidden" : myNumber.channel} → ${toDialvip && toDialDoc.vip.hidden ? "hidden" : toDialDoc.channel}\` has been established by ${myNumbervip && myNumber.vip.hidden ? "Anonymous#0000" : msg.author.tag} (${myNumbervip && myNumber.vip.hidden ? "hidden" : msg.author.id}). ${callDoc.id}`);
 	client.apiSend({ content: toDialDoc.mentions ? toDialDoc.mentions.join(" ") : "", embed: { color: callDoc.from.vip ? config.colors.vip : config.colors.info, title: "Incoming call", description: `There is an incoming call from ${myNumber.id === config.supportNumber ? "Customer Support" : myNumbervip ? myNumber.vip.hidden ? myNumber.vip.name ? `\`${myNumber.vip.name}\`` : "hidden" : myNumber.vip.name ? `\`${myNumber.vip.name} (${myNumber.id})\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\`` : contact ? `:green_book:${contact.name}` : `\`${myNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: callDoc.id } } }, toDialDoc.channel);
 
