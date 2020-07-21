@@ -23,6 +23,7 @@ module.exports = {
 		boss: 300,
 		manager: 250,
 		support: 200,
+		donator: 120,
 		default: 80,
 	},
 	lotteryCost: 5,
