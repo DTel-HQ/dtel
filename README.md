@@ -1,3 +1,4 @@
+![DTel Logo](./A943FA92-144C-4705-8CFA-24EC659FF511.jpeg)
 # DTel
 
 DTel is a bot for Discord that allows you to set up a custom number and call other Discord servers.
