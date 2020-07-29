@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (config.aliasNumbers[toDial]) {
 		toDial = config.aliasNumbers[toDial];
 	}
-	if (toDial == "08007877678") csCall = true;
+	if (toDial == config.supportNumber) csCall = true;
 	if (csCall && msg.guild && msg.guild.id === config.supportGuild) {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "You are unable to call *611 here because Customer Support is literally at your doorstep." } });
 	}
