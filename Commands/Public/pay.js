@@ -112,7 +112,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 	} });
-	client.log(`💸 User ${msg.author.tag} (${msg.author.id}) gave <:DTS:668551813317787659>${amount} to ${user.tag} (${user.id})`);
+	client.log(`💸 User ${msg.author.username} (${msg.author.id}) gave ${config.dtsEmoji}${amount} to ${user.tag} (${user.id})`);
 	let dmChannel = await user.createDM().catch(e => null);
 	if (dmChannel) {
 		dmChannel.send({ embed: {
