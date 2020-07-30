@@ -4,11 +4,10 @@ const urlRegex = require("urlRegex")({ strict: false });
 module.exports = async guild => {
 	let guildBlacklisted = await guild.blacklisted;
 	let ownerBlacklisted = await guild.owner.user.blacklisted;
-	let name = 	guild.name
-		.replace(/(\*|`|_|~)/, "\\$1")
+	let name =	guild.name
+		.replace(/`/gm, "'")
 		.replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**")
 		.replace(/@(everyone|here)/g, "@\u200b$1").replace(/<@!?(\d){17,19}>/gm, "**Mention Censored**")
-		.replace("\\", " ")
 		.replace(urlRegex, "**URL Blocked**");
 	if (guildBlacklisted || ownerBlacklisted) {
 		client.log(`📑 Left ${guild.id} as it or its owner is on the blacklist.`);
