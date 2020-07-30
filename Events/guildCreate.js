@@ -8,5 +8,5 @@ module.exports = async guild => {
 		client.log(`📑 Left ${guild.id} as it or its owner is on the blacklist.`);
 		return guild.leave();
 	}
-	client.log(`📥 Joined guild \`${guild.id}\` (\`${name.replace(/<!?@1(\d){17,19}>/gm, "**Mention Censored**").replace(/@(everyone|here)/g, "@\u200b$1")}\`). Currently in ${client.guilds.cache.size} servers on cluster ${client.shard.id}.`);
+	client.log(`📥 Joined guild \`${guild.id}\` (\`${name.replace(/<@!?(\d){17,19}>/gm, "**Mention Censored**").replace(/@(everyone|here)/g, "@\u200b$1")}\`). Currently in ${client.guilds.cache.size} servers on cluster ${client.shard.id}.`);
 };
