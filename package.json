@@ -39,6 +39,7 @@
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
     "rethinkdbdash": "^2.3.31",
+    "url-regex": "^5.0.0",
     "utf-8-validate": "^5.0.2",
     "uuid": "^3.4.0",
     "winston": "^3.3.3",

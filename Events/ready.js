@@ -8,11 +8,11 @@ module.exports = async() => {
 	client.shard.broadcastEval(`this.user.setPresence({ activity: { name: \`>wizard | >help | [In ${guildCount} servers] \`, type: 2 } });`);
 
 	let guild = client.guilds.cache.get(config.supportGuild);
-	let bossRole = guild.roles.cache.get(config.bossRole)
-	let managerRole = guild.roles.cache.get(config.managerRole)
+	let bossRole = guild.roles.cache.get(config.bossRole);
+	let managerRole = guild.roles.cache.get(config.managerRole);
 	let supportRole = guild.roles.cache.get(config.supportRole);
 	let donatorRole = guild.roles.cache.get(config.donatorRole);
-	
+
 	for (let i of bossRole.members.values()) {
 		i.user.boss = true;
 	}
