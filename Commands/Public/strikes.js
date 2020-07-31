@@ -28,7 +28,7 @@ module.exports = async(client, msg, suffix) => {
 	let type = strikes[0].user === undefined ? "user/guild" : strikes[0].user ? "user" : "guild";
 
 	let embed = new Discord.MessageEmbed()
-		.setTitle(`This ${type} has ${strikes.length} strikes.`)
+		.setTitle(`This ${type} has ${strikes.length} ${strikes.length = 1 ? "strike" : "strikes"}.`)
 		.setColor(config.colors.info)
 		.setFooter(`Use \`>rmstrike [ID]\` to remove a strike.`);
 
