@@ -20,6 +20,7 @@ module.exports = {
 		pc: "permcheck",
 		perm: "permcheck",
 		promo: "promote",
+		suggest: "links",
 		unassign: "deassign",
 		upvote: "links",
 		vote: "links",
