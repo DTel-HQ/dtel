@@ -1,9 +1,10 @@
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import { ShardingManager, Cluster, SharderEvents } from "kurasuta";
+import { ClientOptions } from 'discord.js';
 
 const sharder: ShardingManager = new ShardingManager(`${__dirname}/DiscordTel.js`, {
-	clientOptions: { disableEveryone: true },
+	clientOptions: { disableEveryone: true } as ClientOptions,
 	token: require("./configuration/auth.js").discord.token,
 });
 
