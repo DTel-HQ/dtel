@@ -1,23 +1,24 @@
-export const aliases = {
-	addcredits: "addcredit",
-	bal: "balance",
-	bc: "broadcast",
-	bl: "blacklist",
-	cmds: "help",
-	commands: "help",
-	contact: "contacts",
-	exchange: "convert",
-	credits: "balance",
-	delstrike: "rmstrike",
-	id: "identify",
-	invite: "links",
-	link: "links",
-	mentions: "mention",
-	msg: "message",
-	pc: "permcheck",
-	perm: "permcheck",
-	promo: "promote",
-	unassign: "deassign",
-	vote: "links",
-	wl: "whitelist"
-}
+import { Collection } from "discord.js";
+
+export const aliases: Collection<string,string> = new Collection();
+aliases.set('addcredits', "addcredit")
+aliases.set('bal', "balance")
+aliases.set('bc', "broadcast")
+aliases.set('bl', "blacklist")
+aliases.set('cmds', "help")
+aliases.set('commands', "help")
+aliases.set('contact', "contacts")
+aliases.set('exchange', "convert")
+aliases.set('credits', "balance")
+aliases.set('delstrike', "rmstrike")
+aliases.set('id', "identify")
+aliases.set('invite', "links")
+aliases.set('link', "links")
+aliases.set('mentions', "mention")
+aliases.set('msg', "message")
+aliases.set('pc', "permcheck")
+aliases.set('perm', "permcheck")
+aliases.set('promo', "promote")
+aliases.set('unassign', "deassign")
+aliases.set('vote', "links")
+aliases.set('wl', "whitelist")
