@@ -42,12 +42,17 @@ export default class extends BaseCluster {
 			logger,
 		};
 
-		let events: string[] = await readdir("./events");
+		const events: string[] = await readdir("./events");
 		for (let e of events) {
 			let name: string = e.replace(".js", "");
 			this.client.on(name, async(...args: any) => {
 				(req => req.default || req)(require(`./Events/${e}`))(constants, ...args)
 			});
+		}
+
+		const structures: string[] = await readdir('./structures');
+		for (let s of structures) {
+			require(`./structures/${s}`)(constants);
 		}
 
 		this.client.on("disconnect", () => this.client.login());
