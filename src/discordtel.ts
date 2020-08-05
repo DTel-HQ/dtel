@@ -3,8 +3,9 @@ import { readdir } from "fs-nextra"
 import { createLogger, format, transports, Logger } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
 import { BaseCluster } from "kurasuta";
-import { settings } from "./configuration/config";
 import { util } from "./constants/interfaces";
+import * as config from './configuration/config';
+import * as auth from './configuration/auth';
 
 export default class extends BaseCluster {
 	public async launch(): Promise<void> {
@@ -54,11 +55,11 @@ export default class extends BaseCluster {
 		// Scheduled jobs
 		// require("./Internals/jobs.js");
 
-		if (settings.devMode) process.on("unhandledRejection", (e: any) => logger.error(e));
+		if (config.settings.devMode) process.on("unhandledRejection", (e: any) => logger.error(e));
 
-		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
+		this.client.login(auth.discord.token).catch(() => {
 			let interval = setInterval(() => {
-				this.client.login(require("./Configuration/auth.js").discord.token)
+				this.client.login(auth.discord.token)
 					.then(() => {
 						clearInterval(interval);
 					})
