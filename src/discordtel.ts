@@ -6,7 +6,7 @@ import { BaseCluster } from "kurasuta";
 import { settings } from "./configuration/config";
 import { util } from "./constants/interfaces";
 
-module.exports = class extends BaseCluster {
+export default class extends BaseCluster {
 	public async launch(): Promise<void> {
 		const logger: Logger = createLogger({
 			level: "info",
