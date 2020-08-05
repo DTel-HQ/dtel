@@ -1,4 +1,5 @@
 import * as djs from 'discord.js';
+import Account from './account';
 
 export default class DTelUser extends djs.User {
     private _busy: boolean;
@@ -7,7 +8,7 @@ export default class DTelUser extends djs.User {
     public support: boolean;
     public manager: boolean;
 
-    account(): void;
+    get account(): Account;
 
     blacklist(): void;
 

@@ -17,10 +17,8 @@ export default (consts: util) => {
                 super(Client, arg);
             };
         
-            account() {
-                return (async () => {
-                    return await new Account(this.id, consts);
-                })();
+            get account(): Account {
+                return new Account(this.id, consts);
             };
 
             blacklist() {
@@ -68,7 +66,7 @@ export default (consts: util) => {
                 })();
             };
 
-            getPerms(){
+            get getPerms(){
                 return {
                     boss: this.boss,
                     manager: this.manager,
