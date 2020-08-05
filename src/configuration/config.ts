@@ -1,4 +1,5 @@
-/* eslint-disable no-inline-comments */
+import * as djs from 'discord.js';
+
 export const ids = {
 	maintainers: [
 		"207484517898780672",
@@ -79,8 +80,9 @@ export const callPhones = {
 	support: "📞",
 }
 
-export const cooldowns = {
-	default: 5,
-	call: 20,
-	message: 120,
-};
+// cooldowns so we can do cooldowns.get
+export const cooldowns: djs.Collection<string,number> = new djs.Collection();
+
+cooldowns.set('default', 5);
+cooldowns.set('call', 20);
+cooldowns.set('message', 120);
