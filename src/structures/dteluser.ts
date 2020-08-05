@@ -2,6 +2,7 @@ import * as djs from 'discord.js';
 import Account from "../classes/account";
 import { util } from 'interfaces';
 import * as config from '../configuration/config';
+import DTelGuild from 'src/classes/dtelguild';
 
 export default (consts: util) => {
     djs.Structures.extend("User", (User) => {
@@ -27,7 +28,7 @@ export default (consts: util) => {
                     if(await this.blacklisted) return false;
                     consts.client.guilds.cache.forEach((g: djs.Guild) => {
                         if(g.ownerID === this.id){
-                            g.blacklist();
+                            (g as DTelGuild).blacklist();
                         }
                     }) 
                     return await consts.db.blacklist.r.table('Blacklist').insert({ id: this.id });
