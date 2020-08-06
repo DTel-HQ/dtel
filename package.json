@@ -1,14 +1,14 @@
 {
   "name": "dtel",
   "version": "3.2.0",
-  "description": "Discord Telephone",
+  "description": "Discord Telephone bot",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/austinhuang0131/dtel.git"
+    "url": "git+https://github.com/DTel-HQ/dtel.git"
   },
   "keywords": [
     "DTEL"
@@ -16,11 +16,12 @@
   "contributors": [
     "Mitchell Rademaker <contact@mitchells.work> (https://mitchells.work)",
     "Austin Huang <im@austinhuang.me> (https://austinhuang.me)",
-    "SunburntRock89 <rhys0710@live.com>"
+    "SunburntRock89 <rhys0710@live.com>",
+    "Rexogamer <beartechtalks@gmail.com>
   ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/austinhuang0131/dtel/issues"
+    "url": "https://github.com/DTel-HQ/dtel/issues"
   },
   "homepage": "https://dtel.austinhuang.me",
   "engines": {
