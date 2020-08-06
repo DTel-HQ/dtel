@@ -15,9 +15,10 @@ module.exports = async(client, msg, suffix) => {
 		number = await client.replaceNumber(suffix.split(" ")[1]);
 	}
 
-	if (!/^0(900|30\d|8(00|44))\d{7}$/.test(number)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "**Is this a valid 11-digit number?** Course not, you dumbass" } });
 	let channel = await client.channels.cache.get(channelID);
 	if (!channel) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Couldn't find that channel." } });
+	if (!/^0(900|30\d|8(00|44))\d{7}$/.test(number) || (number.startsWith("0900") && channel.guild)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "**Is this a valid 11-digit number?** Course not, you dumbass" } });
+
 
 	number = client.replaceNumber(number);
 
