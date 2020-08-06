@@ -24,7 +24,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	if (fromvip) phone = config.callPhones.donator;
 	if (!hidden) {
 		if (msg.author.donator) phone = config.callPhones.donator;
-		else if (msg.author.support) phone = config.callPhones.support;
+		if (msg.author.support) phone = config.callPhones.support;
 	}
 
 	if (msg.attachments.first()) {
