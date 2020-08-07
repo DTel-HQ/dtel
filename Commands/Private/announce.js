@@ -10,9 +10,9 @@ module.exports = async(client, msg, suffix) => {
 	for (let n of allNumbers) {
 		let channel = await client.api.channels(n.channel).get().catch(() => null);
 		if (!channel) continue;
-		if (channel.guild_id && guilds.includes(channel.guild_id)) continue;
+		if (channel.guild.id && guilds.includes(channel.guild.id)) continue;
 		count++;
-		if (channel.guild_id) guilds.push(channel.guild_id);
+		if (channel.guild.id) guilds.push(channel.guild.id);
 		await client.apiSend({
 			embed: {
 				color: config.colors.info,

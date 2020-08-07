@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 		)
 		.addField(
 			"I'm done reading!",
-			`Please enter seven (7) digits or letters for your number in <#${msg.channel.id}>. Note: your number will start with the default prefix (${prefix}) followed by the seven digits (letters will be converted) of your choice. Type \`0\` to quit the wizard.`,
+			`**Please enter seven (7) digits or letters for your number in <#${msg.channel.id}>.** Note: your number will start with the default prefix (${prefix}) followed by the seven digits (letters will be converted) of your choice. Type \`0\` to quit the wizard.`,
 		);
 
 	let omsg = await msg.channel.send({ embed: embed });

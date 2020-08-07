@@ -33,7 +33,7 @@ module.exports = async(client, msg, suffix) => {
 			continue;
 		}
 
-		if ((msg.guild && channel && channel.guild_id === msg.guild.id) || toDial.id === fromNumber.channel) continue;
+		if ((msg.guild && channel && channel.guild.id === msg.guild.id) || toDial.id === fromNumber.channel) continue;
 
 		toDialDoc = await r.table("Numbers").get(toDial.id);
 		if (!toDialDoc) {
