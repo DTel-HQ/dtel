@@ -1,13 +1,15 @@
 const Discoin = require("@discoin/scambio").default;
 
 module.exports = async(client, msg, suffix) => {
+	return msg.channel.send({ embed: { color: config.colors.info, title: "Discoin is disabled", description: "For the time being Discoin is disabled. We will announce when it's back online in our Support Server (`>links`)" } });
+
 	const DClient = new Discoin(require("../../Configuration/auth.js").discoinToken, "DTS");
 	let error;
 	let amount = suffix.split(" ")[0];
 	let currency = suffix.split(" ")[1];
-	
+
 	const emojis = client.guilds.cache.get("347859709711089674").emojis.cache;
-	
+
 	if (!amount || !currency) {
 		try {
 			let currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
