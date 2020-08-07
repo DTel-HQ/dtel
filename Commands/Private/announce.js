@@ -1,7 +1,30 @@
 module.exports = async(client, msg, suffix) => {
-	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **You forgot a parameter!**");
+	if (!suffix) return msg.reply("<:bloblul:356789385875816448> **You forgot to add a message!**");
 
-	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
+	const announcementEmbed = {
+		color: config.colors.info,
+		author: {
+			name: msg.author.tag,
+			url: config.siteLink,
+			icon_url: msg.author.displayAvatarURL(),
+		},
+		title: "DTel Maintainer Announcement",
+		description: suffix,
+		timestamp: new Date(),
+	};
+
+	let omsg = await msg.channel.send({
+		content: "This will be the embed sent to all servers/dm channels, send `confirm` to confirm or `0` to quit.",
+		embed: announcementEmbed,
+	});
+
+	const collected = (await msg.channel.awaitMessages(m => m.author.id === msg.author.id && ["confirm", "0"].includes(m.content.toLowerCase()), { max: 1, time: 60000 })).first();
+	if (!collected || collected.content !== "confirm") {
+		omsg.edit({ content: "", embed: { color: config.colors.error, title: "Announcement stopped" } });
+		return;
+	}
+
+	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
 	let time = await process.hrtime();
 
 	let allNumbers = await r.table("Numbers");
@@ -14,24 +37,15 @@ module.exports = async(client, msg, suffix) => {
 		count++;
 		if (channel.guild_id) guilds.push(channel.guild_id);
 		await client.apiSend({
-			embed: {
-				color: config.colors.info,
-				author: {
-					name: msg.author.tag,
-					url: config.siteLink,
-					icon_url: msg.author.displayAvatarURL(),
-				},
-				title: "DTel Maintainer Announcement",
-				description: suffix,
-				timestamp: new Date(),
-			},
+			embed: announcementEmbed,
 		}, n.channel).catch(() => null);
 	}
 	let diff = await process.hrtime(time);
 	let sec = ((diff[0] * 1e9) + diff[1]) / 1e9;
+	let h = Math.floor(sec / 3600);
 	let m = Math.floor(sec / 60);
 	let s = Math.round(sec - (m * 60));
-	let t = await client.time(s, m);
+	let t = await client.time(s, m, h);
 
 	omsg.edit({
 		embed: {
