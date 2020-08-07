@@ -1,25 +1,26 @@
-const modules = require("../../Internals/modules");
+const { numberIsValid } = require("../../Internals/modules");
 
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >assign [channelID/number] [number/channelID]" } });
 
-	let channelID, number;
+	let channelID, numberInput;
 	if (msg.mentions.channels.first()) {
 		channelID = msg.mentions.channels.first().id;
 		// Genuine offbrand fix
-		number = suffix.substring(suffix.indexOf(`${msg.mentions.channels.first().toString()}`) + msg.mentions.channels.first().toString().length + 1).trim();
+		numberInput = suffix.substring(suffix.indexOf(`${msg.mentions.channels.first().toString()}`) + msg.mentions.channels.first().toString().length + 1).trim();
 	// otherwise if they used an id
-	} else if (/\d{7,13}$/.test(await client.replaceNumber(suffix.split(" ")[0]))) {
+	} else if (/\d{7,13}$/.test(suffix.split(" ")[0])) {
 		channelID = suffix.split(" ")[1];
-		number = suffix.split(" ")[0];
+		numberInput = suffix.split(" ")[0];
 	} else {
 		channelID = suffix.split(" ")[0];
-		number = suffix.split(" ")[1];
+		numberInput = suffix.split(" ")[1];
 	}
 
 	let channel = await client.channels.cache.get(channelID);
 	if (!channel) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Couldn't find that channel." } });
-	if (!(await modules.numberIsValid(channel, number))) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Make sure it is 11 digits long & has a valid prefix." } });
+	const number = await numberIsValid(channel, numberInput);
+	if (!number) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Make sure it is 11 digits long & has a valid prefix." } });
 
 
 	let foundNumber;

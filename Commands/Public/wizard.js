@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const modules = require("../../Internals/modules");
+const { numberIsValid } = require("../../Internals/modules");
 
 module.exports = async(client, msg, suffix) => {
 	let myNumber = await msg.channel.number;
@@ -64,7 +64,7 @@ module.exports = async(client, msg, suffix) => {
 			return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
 		}
 
-		const number = await modules.numberIsValid(msg.channel, prefix + collected.content);
+		const number = await numberIsValid(msg.channel, prefix + collected.content);
 		if (!number) {
 			msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Please enter **seven** (7) digits or letters." } });
 			return numberChooser();
