@@ -29,11 +29,11 @@ module.exports = async(client, msg, suffix) => {
 	const owner = guild ? await client.users.fetch(guild.owner_id).catch(e => null) : await client.users.fetch(channel.recipients[0].id).catch(e => null);
 	const vipNumber = number.vip ? new Date(number.vip.expiry) > Date.now() : false;
 	const [strikes, ownerStrikes, guildWhitelisted, entry, mailbox] = Promise.all([
-		guild ? r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]),
-		!guild ? [] : r.table("Strikes").getAll(guild.owner_id, { index: "offender" }).default([]),
-		guild ? r.table("Whitelist").get(guild.id) : false,
-		r.table("Phonebook").get(number.id),
-		r.table("Mailbox").get(channel.id),
+		Promise.resolve(guild ? r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : r.table("Strikes").getAll(owner.id, { index: "offender" }).default([])),
+		Promise.resolve(!guild ? [] : r.table("Strikes").getAll(guild.owner_id, { index: "offender" }).default([])),
+		Promise.resolve(guild ? r.table("Whitelist").get(guild.id) : false),
+		Promise.resolve(r.table("Phonebook").get(number.id)),
+		Promise.resolve(r.table("Mailbox").get(channel.id)),
 	]);
 
 	const details = [];

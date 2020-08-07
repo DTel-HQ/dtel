@@ -1,6 +1,6 @@
 const { MessageEmbed } = require("discord.js");
 
-const reaction = "💡"
+const reaction = "💡";
 
 module.exports = async(client, msg, suffix) => {
 	// Check if user exists
