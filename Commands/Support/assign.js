@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let channel = await client.channels.cache.get(channelID);
 	if (!channel) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Couldn't find that channel." } });
-	if (!(await modules.numberIsValid(channel, number)));
+	if (!(await modules.numberIsValid(channel, number))) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Make sure it is 11 digits long & has a valid prefix." } });
 
 
 	let foundNumber;
