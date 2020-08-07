@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		.addField("VIP months", account.vip || "None", true)
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
 
-	const embedmsg = await msg.channel.send({ embed: embed });
+	const embedmsg = await msg.channel.send({ embed: embed_compact });
 	await embedmsg.react(reaction);
 	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 15000, max: 1 });
 	if (!collected.first()) return;
