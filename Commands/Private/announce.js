@@ -30,15 +30,20 @@ module.exports = async(client, msg, suffix) => {
 	let allNumbers = await r.table("Numbers");
 	let guilds = [];
 	let count = 0;
+	let errors = 0;
 	for (let n of allNumbers) {
 		let channel = await client.api.channels(n.channel).get().catch(() => null);
 		if (!channel) continue;
 		if (channel.guild_id && guilds.includes(channel.guild_id)) continue;
 		count++;
 		if (channel.guild_id) guilds.push(channel.guild_id);
-		await client.apiSend({
-			embed: announcementEmbed,
-		}, n.channel).catch(() => null);
+		try {
+			await client.apiSend({
+				embed: announcementEmbed,
+			}, n.channel);
+		} catch (e) {
+			errors++;
+		}
 	}
 	let diff = await process.hrtime(time);
 	let sec = ((diff[0] * 1e9) + diff[1]) / 1e9;
@@ -55,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			color: config.colors.success,
 			title: "Message successfully sent.",
-			description: `[• Guilds:](${config.siteLink}) ${count}\n[• Message:](${config.siteLink}) ${suffix}\n[• Time:](${config.siteLink}) ${t}`,
+			description: `[• Guilds:](${config.siteLink}) ${count}\n[• Errors:](${config.siteLink}) ${errors}\n[• Message:](${config.siteLink}) ${suffix}\n[• Time:](${config.siteLink}) ${t}`,
 			footer: {
 				text: msg.author.id,
 			},
