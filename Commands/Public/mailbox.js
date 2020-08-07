@@ -177,7 +177,7 @@ module.exports = async(client, msg, suffix) => {
 			else omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (parseInt(m.content) != page && parseInt(m.content) > 0 && parseInt(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
+				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (Number(m.content) != page && Number(m.content) > 0 && Number(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
 				{	time: 120000, max: 1 })).first();
 
 			if (collected && delperm) {
@@ -187,7 +187,7 @@ module.exports = async(client, msg, suffix) => {
 				return omsg.delete().catch(e => null);
 			}
 
-			if (parseInt(collected.content) > 0) {
+			if (Number(collected.content) > 0) {
 				page = parseInt(collected.content);
 				return messagesPage(page);
 			}

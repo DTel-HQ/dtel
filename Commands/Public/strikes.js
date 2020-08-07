@@ -33,7 +33,8 @@ module.exports = async(client, msg, suffix) => {
 		.setFooter(`Use \`>rmstrike [ID]\` to remove a strike.`);
 
 	for (let strike of strikes) {
-		let creator = (await client.users.fetch(strike.creator)).tag;
+		let creator = await client.users.fetch(strike.creator);
+		if (creator) creator = creator.tag;
 		embed.addField(
 			`Strike \`${strike.id}\` by ${creator || strike.creator}`,
 			`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
