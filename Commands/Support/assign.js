@@ -1,3 +1,5 @@
+const modules = require("../../Internals/modules");
+
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >assign [channelID/number] [number/channelID]" } });
 
@@ -9,20 +11,16 @@ module.exports = async(client, msg, suffix) => {
 	// otherwise if they used an id
 	} else if (/\d{7,13}$/.test(await client.replaceNumber(suffix.split(" ")[0]))) {
 		channelID = suffix.split(" ")[1];
-		number = await client.replaceNumber(suffix.split(" ")[0]);
+		number = suffix.split(" ")[0];
 	} else {
 		channelID = suffix.split(" ")[0];
-		number = await client.replaceNumber(suffix.split(" ")[1]);
+		number = suffix.split(" ")[1];
 	}
 
 	let channel = await client.channels.cache.get(channelID);
 	if (!channel) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid channel", description: "Couldn't find that channel." } });
-	if (!/^0(900|30\d|8(00|44))\d{7}$/.test(number) || (number.startsWith("0900") && channel.guild)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "**Is this a valid 11-digit number?** Course not, you dumbass" } });
+	if (!(await modules.numberIsValid(channel, number)));
 
-
-	number = client.replaceNumber(number);
-
-	if (channel.type == "dm" && !/^0(900|8(00|44))\d{7}$/.test(number)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid prefix", description: "**Don't you know what prefix a dm channel has?** It's `0900`." } });
 
 	let foundNumber;
 	foundNumber = await r.table("Numbers").get(number).default(null);

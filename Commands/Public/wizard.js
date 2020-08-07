@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const modules = require("../../Internals/modules");
 
 module.exports = async(client, msg, suffix) => {
 	let myNumber = await msg.channel.number;
@@ -34,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 		)
 		.addField(
 			"I'm done reading!",
-			`Please enter the number you wish to have in <#${msg.channel.id}>. The number must start with \`${prefix}\` followed by another 7 digits (or letters). Type \`0\` to quit the wizard.`,
+			`Please enter seven (7) digits or letters for your number in <#${msg.channel.id}>. Note: your number will start with the default prefix (${prefix}) followed by the seven digits (letters will be converted) of your choice. Type \`0\` to quit the wizard.`,
 		);
 
 	let omsg = await msg.channel.send({ embed: embed });
@@ -46,7 +47,7 @@ module.exports = async(client, msg, suffix) => {
 	// NUMBER
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && (m.content.length === 11 || /^0$/.test(m.content)),
+			m => m.author.id === msg.author.id),
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
@@ -63,17 +64,15 @@ module.exports = async(client, msg, suffix) => {
 			return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
 		}
 
-		number = await client.replaceNumber(collected.content);
-
-		let regex = new RegExp(`^${prefix}\\d{7}$`);
-		if (!regex.test(number)) {
-			msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Please try again." } });
+		const number = await modules.numberIsValid(msg.channel, prefix + collected.content);
+		if (!number) {
+			msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Please enter **seven** (7) digits or letters." } });
 			return numberChooser();
 		}
 
 		let existingNumber = await r.table("Numbers").get(number);
 		if (existingNumber) {
-			msg.channel.send({ embed: { color: config.colors.error, title: "Existing number", description: "That number already exists, please try again." } });
+			msg.channel.send({ embed: { color: config.colors.error, title: "Existing number", description: "Sorry,that number already exists. Try something else!" } });
 			return numberChooser();
 		}
 
