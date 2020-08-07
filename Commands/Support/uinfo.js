@@ -1,5 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
+const reaction = "💡"
+
 module.exports = async(client, msg, suffix) => {
 	// Check if user exists
 	let user = msg.mentions.users.first() ? msg.mentions.users.first() : await client.users.fetch(suffix).catch(e => null);
@@ -18,17 +20,28 @@ module.exports = async(client, msg, suffix) => {
 	if (user.bot && user.id === client.user.id) dmNumber = { id: "Id10tsTryC@ll1ngTh!s" };
 
 	// Inform the CS
-	const embed = new MessageEmbed()
+	const embed_compact = new MessageEmbed()
 		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
+		.addfield("Strikes", strikes.length)
 		.addField("Blacklisted", blacklisted ? "True" : "False", true)
-		.addField("Busy", user.busy, true)
+		.addField("Busy", user.busy ? "True" : "False", true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)
-		.addField("Prefix", `\`${account.prefix || ">"}\``, true)
 		.addField("Balance", `${config.dtsEmoji}${client.format(account.balance)}`, true)
 		.addField("VIP months", account.vip || "None", true)
-		.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.cache.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
 
-	msg.channel.send({ embed: embed });
+	const embedmsg = await msg.channel.send({ embed: embed });
+	await embedmsg.react(reaction);
+	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 15000, max: 1 });
+	if (!collected.first()) return;
+
+	const embed_full = new MessageEmbed()
+		.setColor(config.colors.info)
+		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
+	if (blacklisted) embed_full.addField("Blacklist reason", blacklisted.reason || "empty");
+	if (strikes.length) embed_full.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.cache.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
+
+	await embedmsg.edit({ embed: embed_full });
+	await embedmsg.reactions.removeAll();
 };
