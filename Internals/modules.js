@@ -9,6 +9,6 @@ const numberIsValid = async (channel, number) => {
 	return number;
 };
 
-modules.exports = {
+module.exports = {
 	numberIsValid,
 }
