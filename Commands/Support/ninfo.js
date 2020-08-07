@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Get tha information
-	const guild = channel.guild.id ? await client.api.guilds(channel.guild.id).get().catch(e => null) : null;
+	const guild = channel.guild_id ? await client.api.guilds(channel.guild_id).get().catch(e => null) : null;
 	const owner = guild ? await client.users.fetch(guild.owner_id).catch(e => null) : await client.users.fetch(channel.recipients[0].id).catch(e => null);
 	const vipNumber = number.vip ? new Date(number.vip.expiry) > Date.now() : false;
 	const [strikes, ownerStrikes, guildWhitelisted, entry, mailbox] = await Promise.all([
