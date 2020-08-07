@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 		return;
 	}
 
-	omsg = await msg.channel.edit({ content: "", embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
+	omsg = await omsg.edit({ content: "", embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
 	let time = await process.hrtime();
 
 	let allNumbers = await r.table("Numbers");
