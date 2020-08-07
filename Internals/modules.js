@@ -1,6 +1,6 @@
 const numberIsValid = async (channel, number) => {
 	if (!channel || !number) return new Error("Missing arguments");
-	if (typeof channel !== "object") channel; = await client.channels.cache.fetch(channel);
+	if (typeof channel !== "object") channel = await client.channels.cache.fetch(channel);
 	if (!channel) return new Error("Couldn't find channel");
 	if (number.length !== 11) return false;
 	number = client.replaceNumber(number);
