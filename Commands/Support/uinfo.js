@@ -30,8 +30,11 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Balance", `${config.dtsEmoji}${client.format(account.balance)}`, true)
 		.addField("VIP months", account.vip || "None", true)
 		.setFooter("Use >permcheck to check their permission, >strikes for more information.");
+	if (blacklisted || strikes.length) embed_compact.setDescription("Hit the lightbulb for more information on strikes/blacklist.");
 
 	const embedmsg = await msg.channel.send({ embed: embed_compact });
+	if (!blacklisted && !strikes.length) return;
+
 	await embedmsg.react(reaction);
 	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 15000, max: 1 });
 	if (!collected.first()) return;
@@ -40,7 +43,15 @@ module.exports = async(client, msg, suffix) => {
 		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL());
 	if (blacklisted) embed_full.addField("Blacklist reason", blacklisted.reason || "empty");
-	if (strikes.length) embed_full.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.cache.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
+	if (strikes.length) {
+		for (let strike of strikes) {
+			let creator = (await client.users.fetch(strike.creator)).tag;
+			embed.addField(
+				`Strike \`${strike.id}\` by ${strike.creator}`,
+				`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
+			);
+		}
+	}
 
 	await embedmsg.edit({ embed: embed_full });
 	await embedmsg.reactions.removeAll();

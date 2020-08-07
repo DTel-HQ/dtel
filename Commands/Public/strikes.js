@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 	for (let strike of strikes) {
 		let creator = (await client.users.fetch(strike.creator)).tag;
 		embed.addField(
-			`Strike \`${strike.id}\` by ${strike.creator}`,
+			`Strike \`${strike.id}\` by ${creator || strike.creator}`,
 			`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
 		);
 	}
