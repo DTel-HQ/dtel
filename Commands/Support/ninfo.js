@@ -60,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 
 	await embedmsg.react(reaction);
 	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 45000, max: 1 });
-	if (!collected.first()) return;
+	if (!collected.first()) return embedmsg.reactions.removeAll();
 
 	const embed_details = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
