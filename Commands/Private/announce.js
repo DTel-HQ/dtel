@@ -4,9 +4,9 @@ module.exports = async(client, msg, suffix) => {
 	const announcementEmbed = {
 		color: config.colors.info,
 		author: {
-			name: msg.author.tag,
+			name: "DTel staff",
 			url: config.siteLink,
-			icon_url: msg.author.displayAvatarURL(),
+			icon_url: client.user.displayAvatarURL(),
 		},
 		title: "DTel Maintainer Announcement",
 		description: suffix,
@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 		return;
 	}
 
-	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
+	omsg = await msg.channel.edit({ content: "", embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
 	let time = await process.hrtime();
 
 	let allNumbers = await r.table("Numbers");
