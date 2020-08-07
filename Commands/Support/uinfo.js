@@ -23,7 +23,7 @@ module.exports = async(client, msg, suffix) => {
 	const embed_compact = new MessageEmbed()
 		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
-		.addfield("Strikes", strikes.length)
+		.addField("Strikes", strikes.length)
 		.addField("Blacklisted", blacklisted ? "True" : "False", true)
 		.addField("Busy", user.busy ? "True" : "False", true)
 		.addField("DM number", `\`${dmNumber ? dmNumber.id : "None"}\``, true)
@@ -38,7 +38,7 @@ module.exports = async(client, msg, suffix) => {
 
 	const embed_full = new MessageEmbed()
 		.setColor(config.colors.info)
-		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL())
+		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL());
 	if (blacklisted) embed_full.addField("Blacklist reason", blacklisted.reason || "empty");
 	if (strikes.length) embed_full.addField(strikes.length ? `Strikes (${strikes.length})` : "Strikes", strikes.length ? (await strikes.map(s => `Strike by ${s.creator} (${client.users.fetch(s.creator) ? client.users.cache.get(s.creator).tag : "-"})\n${s.reason}`)).join("\n") : "None")
 
