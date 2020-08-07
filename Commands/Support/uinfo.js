@@ -45,9 +45,10 @@ module.exports = async(client, msg, suffix) => {
 	if (blacklisted) embed_full.addField("Blacklist reason", blacklisted.reason || "empty");
 	if (strikes.length) {
 		for (let strike of strikes) {
-			let creator = (await client.users.fetch(strike.creator)).tag;
+			let creator = await client.users.fetch(strike.creator);
+			if (creator) creator = creator.tag;
 			embed.addField(
-				`Strike \`${strike.id}\` by ${strike.creator}`,
+				`Strike \`${strike.id}\` by ${creator || strike.creator}`,
 				`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
 			);
 		}
