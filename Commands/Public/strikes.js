@@ -37,7 +37,7 @@ module.exports = async(client, msg, suffix) => {
 		if (creator) creator = creator.tag;
 		embed.addField(
 			`Strike \`${strike.id}\` by ${creator || strike.creator}`,
-			`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
+			`• Reason: ${strike.reason}\n• Time: ${strike.date || "unknown"}`,
 		);
 	}
 

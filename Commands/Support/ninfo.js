@@ -1,5 +1,7 @@
 const { MessageEmbed } = require("discord.js");
 
+const reaction = "💡";
+
 module.exports = async(client, msg, suffix) => {
 	let number, dmChannel, id;
 
@@ -25,27 +27,60 @@ module.exports = async(client, msg, suffix) => {
 	// Get tha information
 	const guild = channel.guild_id ? await client.api.guilds(channel.guild_id).get().catch(e => null) : null;
 	const owner = guild ? await client.users.fetch(guild.owner_id).catch(e => null) : await client.users.fetch(channel.recipients[0].id).catch(e => null);
-	const strikes = guild ? await r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : await r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]);
-	const ownerBlacklisted = await owner.blacklisted;
-	const guildBlacklisted = guild ? await guild.blacklisted : false;
-	const guildWhitelisted = guild ? await r.table("Whitelist").get(guild.id) : false;
 	const vipNumber = number.vip ? new Date(number.vip.expiry) > Date.now() : false;
-	const entry = await r.table("Phonebook").get(number.id);
+	const [strikes, ownerStrikes, guildWhitelisted, entry, mailbox] = Promise.all([
+			guild ? r.table("Strikes").getAll(guild.id, { index: "offender" }).default([]) : r.table("Strikes").getAll(owner.id, { index: "offender" }).default([]),
+			!guild ? [] : r.table("Strikes").getAll(guild.owner_id, { index: "offender" }).default([]),
+			guild ? r.table("Whitelist").get(guild.id) : false,
+			r.table("Phonebook").get(number.id),
+			r.table("Mailbox").get(channel.id),
+	]);
 
+	const details = [];
+	if (entry) details.push("phonebook entry");
+	if (mailbox) details.push("mailbox autoreply");
+	if (strikes.length) details.push("guild strikes")
 
-	const embed = new MessageEmbed()
+	const embed_compact = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
-		.setTitle(`Number information for ${number.id}`)
-		.setDescription("Here you can find all information relevant to this number.")
-		.addField("Channel", `ID: \`${channel.id}\`\nName: ${channel.type === 1 ? "DM Channel" : channel.name}\nDM: ${channel.type === 1 ? "True" : "False"}`, true)
-		.addField("Owner", `ID: \`${guild ? guild.owner_id : channel.recipients[0].id}\`\nTag: ${owner.tag}\nBlacklisted: ${ownerBlacklisted ? "True" : "False"}`, true)
-		.addField("Guild", guild ? `ID: \`${guild.id}\`\nName: ${guild.name}\nBlacklisted: ${guildBlacklisted ? "True" : "False"}\nWhitelisted: ${guildWhitelisted ? "True" : "False"}` : "DM Number", true)
+		.setTitle(`Simple information about ${number.id}`)
+		.addField("Channel", `${channel.type === 1 ? "_DM Channel_" : channel.name}\`${channel.id}\``, true)
+		.addField("Owner", `${owner.tag}\n\`${guild ? guild.owner_id : channel.recipients[0].id}\`${!guild ? "" : `\nStrikes: ${ownerStrikes.length}`}`, true)
+		.addField("Guild", guild ? `${guild.name}\`${guild.id}\`\nWhitelisted: ${guildWhitelisted ? "True" : "False"}` : "DM Number", true)
 		.addField("VIP", vipNumber ? "True" : "False", true)
-		.addField("Phonebook description", entry ? `\`${entry.description}\`` : "None", true)
-	        .addField("Blocked", number.blocked && number.blocked.length ? number.blocked.join(", ") : "None", true)
-		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length ? strikes.map(s => `${strikes.indexOf(s) + 1}. \`${s.id}\`: ${s.reason}`).join("\n") : "None", true)
-		.addField("Created, expiry", `• ${number.createdAt}\n• ${new Date(number.expiry)}`);
+	  .addField("Blocked", number.blocked ? number.blocked.length : 0, true)
+		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length : "None", true)
+		.addField("Created, expiry", `• ${number.createdAt || "Not available"}\n• ${new Date(number.expiry)}`);
 	if (guild && guild.icon) embed.setThumbnail(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`);
-	return msg.channel.send({ embed: embed });
+	if (details.length) embed_compact.setDescription(`Hit the lightbulb for more information on: ${details.join(", ")}.`);
+
+	const embedmsg = await msg.channel.send({ embed: embed });
+	if (!details.length) return;
+
+	await embedmsg.react(reaction);
+	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 45000, max: 1 });
+	if (!collected.first()) return;
+
+	const embed_details = new MessageEmbed()
+		.setColor(vipNumber ? config.colors.vip : config.colors.info)
+		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+		.setTitle(`Detailed information about ${number.id}`);
+	if (guild && guild.icon) embed.setThumbnail(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`);
+
+	if (entry) embed_details.addField("Phonebook description", entry.description);
+	if (mailbox) embed_details.addField("Mailbox autoreply", mailbox.autoreply);
+	if (strikes.length) {
+		for (let strike of strikes) {
+			let creator = await client.users.fetch(strike.creator);
+			if (creator) creator = creator.tag;
+			embed_details.addField(
+				`${guild ? "Guild strike"} \`${strike.id}\` by ${creator || strike.creator}`,
+				`• Reason: ${strike.reason}\n• Time: ${strike.date || "unknown"}`,
+			);
+		}
+	}
+
+	await embedmsg.edit({ embed: embed_details });
+	await embedmsg.reactions.removeAll();
 };

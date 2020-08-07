@@ -36,24 +36,24 @@ module.exports = async(client, msg, suffix) => {
 	if (!blacklisted && !strikes.length) return;
 
 	await embedmsg.react(reaction);
-	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 15000, max: 1 });
+	const collected = await embedmsg.awaitReactions((r, u) => u.id === msg.author.id && r.emoji.name === reaction, { time: 45000, max: 1 });
 	if (!collected.first()) return;
 
-	const embed_full = new MessageEmbed()
+	const embed_details = new MessageEmbed()
 		.setColor(config.colors.info)
 		.setAuthor(`${user.tag} (${user.id})`, user.displayAvatarURL());
-	if (blacklisted) embed_full.addField("Blacklist reason", blacklisted.reason || "empty");
+	if (blacklisted) embed_details.addField("Blacklist reason", blacklisted.reason || "empty");
 	if (strikes.length) {
 		for (let strike of strikes) {
 			let creator = await client.users.fetch(strike.creator);
 			if (creator) creator = creator.tag;
-			embed.addField(
+			embed_details.addField(
 				`Strike \`${strike.id}\` by ${creator || strike.creator}`,
-				`• Reason: ${strike.reason}\n• Time: ${strike.date || "null"}`,
+				`• Reason: ${strike.reason}\n• Time: ${strike.date || "unknown"}`,
 			);
 		}
 	}
 
-	await embedmsg.edit({ embed: embed_full });
+	await embedmsg.edit({ embed: embed_details });
 	await embedmsg.reactions.removeAll();
 };
