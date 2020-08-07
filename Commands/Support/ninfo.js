@@ -47,10 +47,10 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle(`Simple information about ${number.id}`)
 		.addField("Channel", `${channel.type === 1 ? "_DM Channel_" : channel.name}\`${channel.id}\``, true)
 		.addField("Owner", `${owner.tag}\n\`${guild ? guild.owner_id : channel.recipients[0].id}\`${!guild ? "" : `\nStrikes: ${ownerStrikes.length}`}`, true)
-		.addField("Guild", guild ? `${guild.name}\`${guild.id}\`\nWhitelisted: ${guildWhitelisted ? "True" : "False"}` : "DM Number", true)
+		.addField("Guild", guild ? `${guild.name}\n\`${guild.id}\`\nWhitelisted: ${guildWhitelisted ? "True" : "False"}` : "DM Number", true)
 		.addField("VIP", vipNumber ? "True" : "False", true)
-		.addField("Blocked", number.blocked ? number.blocked.length : 0, true)
-		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length, true)
+		.addField("Blocked", number.blocked ? number.blocked.length : "None", true)
+		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length ? strikes.length : "None", true)
 		.addField("Created, expiry", `• ${number.createdAt || "Not available"}\n• ${new Date(number.expiry)}`);
 	if (guild && guild.icon) embed_compact.setThumbnail(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`);
 	if (details.length) embed_compact.setDescription(`Hit the lightbulb for more information on: ${details.join(", ")}.`);
