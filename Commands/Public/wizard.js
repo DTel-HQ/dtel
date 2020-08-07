@@ -47,7 +47,7 @@ module.exports = async(client, msg, suffix) => {
 	// NUMBER
 	let numberChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id),
+			m => m.author.id === msg.author.id,
 			{
 				max: 1,
 				time: 2 * 60 * 1000,
@@ -64,7 +64,7 @@ module.exports = async(client, msg, suffix) => {
 			return omsg.edit({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }).catch(e => msg.channel.send({ embed: { color: config.colors.error, title: "Goodbye", description: "Exiting wizard..." } }));
 		}
 
-		const number = await numberIsValid(msg.channel, prefix + collected.content);
+		number = await numberIsValid(msg.channel, prefix + collected.content);
 		if (!number) {
 			msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Please enter **seven** (7) digits or letters." } });
 			return numberChooser();
