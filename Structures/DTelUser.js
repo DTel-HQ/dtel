@@ -18,12 +18,12 @@ module.exports = Discord => {
 				})();
 			}
 
-			blacklist() {
+			blacklist(reason) {
 				return (async() => {
 					if (await this.blacklisted) return false;
 					const guilds = client.guilds.cache.filter(g => g.ownerID === this.id);
 					guilds.forEach(g => g.blacklist());
-					return r.table("Blacklist").insert({ id: this.id });
+					return r.table("Blacklist").insert({ id: this.id, reason: reason || "empty" });
 				})();
 			}
 

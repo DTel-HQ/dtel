@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 		// Genuine offbrand fix
 		numberInput = suffix.substring(suffix.indexOf(`${msg.mentions.channels.first().toString()}`) + msg.mentions.channels.first().toString().length + 1).trim();
 	// otherwise if they used an id
-} else if (suffix.split(" ")[0].length > 13) {
+	} else if (suffix.split(" ")[0].length > 13) {
 		channelID = suffix.split(" ")[1];
 		numberInput = suffix.split(" ")[0];
 	} else {

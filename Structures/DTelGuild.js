@@ -5,11 +5,11 @@ module.exports = Discord => {
 				return r.table("Whitelist").get(this.id).default(false);
 			}
 
-			blacklist() {
+			blacklist(reason) {
 				return (async() => {
 					if (await this.blacklisted) return false;
 					this.leave();
-					await r.table("Numbers").getAll(this.id, { index: "guild" }).delete();
+					await r.table("Numbers").getAll(this.id, { index: "guild", reason: reason || "empty" }).delete();
 					return r.table("Blacklist").insert({ id: this.id });
 				})();
 			}
