@@ -1,8 +1,6 @@
 const Discoin = require("@discoin/scambio").default;
 
 module.exports = async(client, msg, suffix) => {
-	if (!msg.author.boss) return msg.channel.send({ embed: { color: config.colors.info, title: "Discoin is disabled", description: "For the time being Discoin is disabled. We will announce when it's back online in our Support Server (`>links`)" } });
-
 	const DClient = new Discoin(require("../../Configuration/auth.js").discoinToken, ["DTS"]);
 	let error;
 	let amount = suffix.split(" ")[0];
