@@ -43,6 +43,7 @@ module.exports = async(client, msg, suffix) => {
 	let newTransaction;
 	try {
 		newTransaction = await DClient.transactions.create({
+			from: "DTS",
 			to: currency,
 			amount: amount,
 			user: msg.author.id,
