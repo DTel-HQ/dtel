@@ -208,7 +208,8 @@ scheduleJob("0 20 * * 0", async() => {
 
 	// Send the embed
 	try {
-		client.apiSend({ embed: embed }, config.announcementChannel);
+		const announcementmsg = await client.apiSend({ embed: embed }, config.announcementChannel);
+		await client.api.channels(announcementmsg.channel_id).messages(announcementmsg.id).crosspost.post();
 	} catch (e) {
 		console.error(e);
 		client.apiSend({ content: `<@${config.supportRole}> Couldn't send voting leaderboard announcement.`, embed: embed }, config.badLogsChannel);
@@ -347,12 +348,14 @@ scheduleJob("0 0 */12 * * *", async() => {
 		strings[currency.id] = ` ${positive ? ":chart_with_upwards_trend:" : ":chart_with_downwards_trend:"} ${change}%`;
 	}
 
-	await client.apiSend({ embed: {
+	const gazettemsg = await client.apiSend({ embed: {
 		title: "<:Discoin:357656754642747403>iscoin Rates",
 		color: 0x2196f3,
 		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${strings[c.id]}`).join("\n"),
 		timestamp: new Date(),
 	} }, "661239975752499231");
+	await client.api.channels(gazettemsg.channel_id).messages(gazettemsg.id).crosspost.post();
+
 	const newrates = {};
 	for (let currency of currencies) {
 		newrates[currency.id] = currency.value;
