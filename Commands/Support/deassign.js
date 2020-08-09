@@ -24,7 +24,8 @@ module.exports = async(client, msg, suffix) => {
 		} catch (e) {
 			// ignore
 		} finally {
-			client.apiSend({ embed: { color: config.colors.info, title: "This channel's number has been deassigned.", description: "If this action wasn't requested, and you feel like it's unjust, you can dispute the removal in our support server (`>links`).", timestamp: new Date() } }, numberDoc.channel);
+			client.apiSend({ embed: { color: config.colors.info, title: "This channel's number has been deassigned.", description: "If this action wasn't requested, and you feel like it's unjust, you can dispute the removal in our support server (`>links`).", timestamp: new Date() } }, numberDoc.channel)
+				.catch(e => null);
 		}
 	} else {
 		try {

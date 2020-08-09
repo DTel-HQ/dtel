@@ -52,8 +52,8 @@ module.exports = async(client, msg, suffix) => {
 	if (neg) amount = String(amount).substr(1);
 	amount = client.format(amount);
 	const confirmation = { embed: { color: config.colors.receipt, title: `${neg ? "Removed" : "Added"} credits!`, description: `${neg ? "Removed" : "Added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} <@${user.id}> (${user.id})`, footer: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } };
-	msg.channel.send(confirmation);
-	client.apiSend(confirmation, "326075875466412033");
+	await msg.channel.send(confirmation);
+	await client.apiSend(confirmation, "326075875466412033").catch(e => null);
 	let dmChannel = await user.createDM().catch(e => null);
 	if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} your account. You now have ${config.dtsEmoji}${account.balance}.` } }).catch(() => null);
 	await client.log(`:yen: Support member ${msg.author.username} ${neg ? "removed" : "added"} ${config.dtsEmoji}>${amount} ${neg ? "from" : "to"} ${user.username} (${user.id}).`);
