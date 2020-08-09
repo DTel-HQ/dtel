@@ -29,7 +29,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	} else {
 		try {
-			await client.api.channels(numberDoc.channel).messages.post({ embed: { color: config.colors.info, title: "Your number has been deassigned", description: `Your personal number \`${numberDoc.id}\` has just been deassigned.\nIf you didn't request this removal, contact support by joining our server (\`>links\`).`, timestamp: new Date() } });
+			await client.apiSend({ embed: { color: config.colors.info, title: "Your number has been deassigned", description: `Your personal number \`${numberDoc.id}\` has just been deassigned.\nIf you didn't request this removal, contact support by joining our server (\`>links\`).`, timestamp: new Date() } }, numberDoc.channel);
 		} catch (e) {
 			// ignore
 		}
