@@ -1,5 +1,5 @@
 const auth = require("../Configuration/auth.js");
-const urlRegex = require("urlRegex")({ strict: false });
+const urlRegex = require("urlRegex")({ strict: true });
 
 module.exports = async guild => {
 	let guildBlacklisted = await guild.blacklisted;
