@@ -367,7 +367,7 @@ scheduleJob("0 0 */12 * * *", async() => {
 scheduleJob("0 */15 * * * *", () => {
 	client.channels.fetch("742110866891210774").then(channel => {
 		channel.messages.fetch({ limit: 1 }).then(message => {
-			if (message.createdTimestamp > Date.now() - (15 * 60 * 60)) channel.bulkDelete();
+			if (message.createdTimestamp < Date.now() - (15 * 60 * 60)) channel.bulkDelete();
 		});
 	});
 });
