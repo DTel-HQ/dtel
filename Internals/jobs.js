@@ -46,9 +46,10 @@ scheduleJob("0 0 0 * * *", async() => {
 
 	winston.info(`[ScheduleJob] Reset lottery and dailies. Lottery won by ${winnerID}`);
 	client.log(`⏰ The lottery and dailies have been reset.`);
+	client.log(`:tickets: ${winnerID.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
 });
 
-// Job to update the playing status regularly. Disbaled due to d.js bug DO NOT REENABLE
+// Job to update the playing status regularly. Disabled due to Discord.JS bug, DO NOT RE-ENABLE
 // scheduleJob("*/15 * * * * *", async() => {
 // 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 // 	let sec = new Date().getSeconds();
