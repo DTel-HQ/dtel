@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let foundNumber;
 	foundNumber = await r.table("Numbers").get(number).default(null);
-	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That number already exists!" } });
+	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That number is already in use!" } });
 	foundNumber = await r.table("Numbers").getAll(channelID, { index: "channel" }).nth(0)
 		.default(null);
 	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That channel already has a number!" } });
