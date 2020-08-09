@@ -3,8 +3,6 @@ module.exports = async(client, msg, suffix) => {
 	let input = suffix.split(" ")[0];
 	let number;
 
-	let broadcaster = msg.author.id;
-
 	if (!input) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">broadcast [number/channelID] [message]" } });
 	number = await r.table("Numbers").getAll(input, { index: "channel" }).nth(0).default(null);
 	input = client.replaceNumber(input);
@@ -19,10 +17,10 @@ module.exports = async(client, msg, suffix) => {
 	if (message.length > 1800) return msg.channel.send({ embed: { color: config.colors.error, title: "Oi mate", description: "What ya' writing an essay for? (too many characters)" } });
 
 	try {
-		await client.apiSend({ embed: { color: config.colors.info, title: "❕ Message from DTel staff ❕", description: `**${message.join(" ")}**`, footer: { text: `From ${broadcaster}` } } }, channel);
+		await client.apiSend({ embed: { color: config.colors.info, title: "❕ Message from DTel staff ❕", description: `**${message.join(" ")}**`, footer: { text: `From ${msg.author.username} (${msg.author.id})` } } }, channel);
 		return msg.channel.send({ embed: { color: config.colors.success, title: "Message succesfully sent!", description: `**• Message**: ${message.join(" ")}\n**• Channel**: ${number.channel}`, author: { name: `By ${msg.author.tag}`, icon_url: msg.author.displayAvatarURL() } } });
 	} catch (err) {
-		client.delete(number.id, { origin: "broadcast" })
+		client.delete(number.id, { origin: "broadcast" });
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't send your message.", description: "The number has now been deleted." } });
 	}
 };
