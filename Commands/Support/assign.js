@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let foundNumber;
 	foundNumber = await r.table("Numbers").get(number).default(null);
-	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That number is already in use!" } });
+	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That number already exists!" } });
 	foundNumber = await r.table("Numbers").getAll(channelID, { index: "channel" }).nth(0)
 		.default(null);
 	if (foundNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "That channel already has a number!" } });
@@ -46,5 +46,5 @@ module.exports = async(client, msg, suffix) => {
 	let newNumber = await r.table("Numbers").insert(numberDoc);
 
 	msg.channel.send({ embed: { color: config.colors.success, title: "Assigned number", description: `Succesfully assigned ${numberDoc.id} to ${numberDoc.channel}.`, author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
-	client.log(`:green_book: Number \`${numberDoc.id}\` has been assigned to channel ${numberDoc.channel} by ${msg.author.tag}.`);
+	client.log(`:green_book: Number \`${numberDoc.id}\` has been assigned to channel ${numberDoc.channel} by ${msg.author.username}.`);
 };
