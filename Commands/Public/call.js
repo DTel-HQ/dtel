@@ -118,8 +118,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 			let retry = 0;
 			let i = setInterval(async() => {
 				retry++;
-				activeCall = await r.table("Calls").getAll(toDial, { index: "fromChannel" }).nth(0).default(null);
-				if (!activeCall) activeCall = await r.table("Calls").getAll(toDial, { index: "toChannel" }).nth(0).default(null);
+				activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "fromChannel" }).nth(0).default(null);
+				if (!activeCall) activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "toChannel" }).nth(0).default(null);
 				if (!activeCall) {
 					await r.table("Numbers").get(myNumber.id).update({ waiting: false });
 					clearInterval(i);
