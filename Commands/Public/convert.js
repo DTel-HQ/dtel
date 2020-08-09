@@ -33,7 +33,6 @@ module.exports = async(client, msg, suffix) => {
 
 	amount = parseFloat(parseFloat(amount).toFixed(2));
 	currency = currency.toUpperCase();
-	const emoji = emojis.find(e => e.name === currency).toString();
 
 	let account = await msg.author.account();
 
@@ -41,6 +40,8 @@ module.exports = async(client, msg, suffix) => {
 	if (currency === "DTS") return msg.channel.send({ embed: { color: config.colors.error, title: "What are you trying?", description: "You can not convert DTS into DTS... say `>convert` to check currencies" } });
 	if (!currencies.find(c => c.id === currency)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid currency", description: "That currency does not exist... say `>convert` to check all currencies." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
+
+	const emoji = emojis.find(e => e.name === currency).toString();
 
 	let newTransaction;
 	try {
