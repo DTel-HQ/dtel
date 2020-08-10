@@ -23,6 +23,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
 	if (!hidden) {
+		if (msg.author.contributor) phone=config.callPhones.contributor;
 		if (msg.author.donator) phone = config.callPhones.donator;
 		if (msg.author.support) phone = config.callPhones.support;
 	}

@@ -12,6 +12,7 @@ module.exports = async() => {
 	let managerRole = guild.roles.cache.get(config.managerRole);
 	let supportRole = guild.roles.cache.get(config.supportRole);
 	let donatorRole = guild.roles.cache.get(config.donatorRole);
+	let contributorRole = guild.roles.cache.get(config.contributorRole);
 
 	for (let i of bossRole.members.values()) {
 		i.user.boss = true;
@@ -24,6 +25,9 @@ module.exports = async() => {
 	}
 	for (let i of donatorRole.members.values()) {
 		i.user.donator = true;
+	}
+	for(let i of contributorRole.members.values()) {
+		i.user.contributor = true;
 	}
 
 	let blacklist = await r.table("Blacklist");
