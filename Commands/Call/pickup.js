@@ -17,12 +17,12 @@ module.exports = async(client, msg, suffix, call) => {
 
 		let channel = await client.channels.cache.get(config.supportChannel);
 		client.supportChannelPerms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
-		await channel.overwritePermissions(
-			channel.permissionOverwrites.set([
-				[msg.author.id, { id: msg.author.id, allow: ["SEND_MESSAGES"] }],
-				[config.supportRole, { id: config.supportRole, deny: ["SEND_MESSAGES"] }],
-			]),
-			"*611 call pickup");
+		const perms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
+		perms.push([
+			{ id: msg.author.id, allow: ["SEND_MESSAGES"] },
+			{ id: config.supportRole, deny: ["SEND_MESSAGES"] },
+		]);
+		await channel.overwritePermissions(perms, "*611 call pickup");
 	}
 
 	let channelFrom = await client.channels.fetch(call.from.channel);
