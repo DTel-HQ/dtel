@@ -4,6 +4,7 @@ module.exports = async(client, msg, suffix, call) => {
 
 	let user = msg.mentions.users.first();
 	if (!user) user = suffix.split(" ")[0];
+	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't find a user" } });
 	let reason = suffix.split(" ").slice(1).join(" ");
 
 	msg.channel.overwritePermissions(
