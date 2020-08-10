@@ -1,3 +1,5 @@
+const { Collection } = require("discord.js");
+
 module.exports = async(client, msg, suffix, call) => {
 	if (msg.channel.id === config.supportChannel) client.channels.cache.get(config.fakeSupportChannel).id = config.fakeSupportChannel;
 	if (call.pickedUp || msg.channel.id === call.from.channel) return;
@@ -12,14 +14,14 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	if (call.to.number === config.supportNumber) {
-		client.apiSend(`Go to <#${config.supportChannel}>.`, config.fakeSupportChannel);
+		client.apiSend({ embed: { color: config.colors.info, title: "Call picked up", description: `You can now answer the phone in <#${config.supportChannel}>` } }, config.fakeSupportChannel);
 
 		let account = await msg.author.account();
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
 		let channel = await client.channels.cache.get(config.supportChannel);
-		client.supportChannelPerms = new Map(channel.permissionOverwrites);
+		client.supportChannelPerms = new Collection(channel.permissionOverwrites);
 		await channel.overwritePermissions(
 			channel.permissionOverwrites.set(
 				msg.author.id, { id: msg.author.id, allow: ["SEND_MESSAGES"] }),
