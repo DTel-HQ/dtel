@@ -10,5 +10,4 @@ module.exports = async(client, msg, suffix, call) => {
 		msg.channel.permissionOverwrites.set(
 			user.id || user, { id: user.id || user, allow: ["SEND_MESSAGES"] }),
 		reason || `Allow by ${msg.author.tag} (${msg.author.id})`);
-	await r.table("Calls").get(call.id).update({ permissions: [...call.permissions, user.id || user] });
 };

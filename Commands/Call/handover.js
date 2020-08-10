@@ -11,5 +11,4 @@ module.exports = async(client, msg, suffix, call) => {
 			[msg.author.id, { deny: ["SEND_MESSAGES"] }],
 			[user.id || user, { allow: ["SEND_MESSAGES"] }],
 		]),	reason || `Handover by ${msg.author.tag} (${msg.author.id})`);
-	await r.table("Calls").get(call.id).update({ permissions: [...call.permissions, user.id || user] });
 };

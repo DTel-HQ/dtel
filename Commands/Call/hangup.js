@@ -27,8 +27,6 @@ module.exports = async(client, msg, suffix, call) => {
 
 	if (call.to.channel === config.supportChannel || call.from.channel === config.supportChannel) {
 		const channel = client.channels.cache.get(config.supportChannel);
-		const perms = channel.permissionOverwrites;
-		for (let id of call.permissions) perms.set(id, { id: id, deny: ["SEND_MESSAGES"] });
-		channel.overwritePermissions(perms, `Call hung up (${call.id})`);
+		channel.overwritePermissions(client.supportChannelPerms, `Call hung up (${call.id})`);
 	}
 };
