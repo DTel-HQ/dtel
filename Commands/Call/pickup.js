@@ -12,6 +12,8 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	if (call.to.number === config.supportNumber) {
+		msg.channel.send(`Go to <#${config.supportChannel}>.`);
+
 		let account = await msg.author.account();
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
