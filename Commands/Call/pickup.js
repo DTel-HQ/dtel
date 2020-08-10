@@ -15,7 +15,7 @@ module.exports = async(client, msg, suffix, call) => {
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
-		let channel = await client.channels.cache.get(config.supportChannel);
+		let channel = client.channels.cache.get(config.supportChannel);
 		client.supportChannelPerms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
 		const perms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
 		perms.push([
