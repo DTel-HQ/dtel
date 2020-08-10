@@ -4,7 +4,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!msg.author.manager) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "Please contact your manager or a boss to whitelist the server." } });
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Missing argument", description: "Missing an argument! Usage: `>whitelist [guildID]`" } });
 
-	const guild = await client.api.guilds(suffix).get();
+	const guild = await client.guilds.resolve(suffix);
 	if (!guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown ID", description: "The given ID does not match a (known) guild." } });
 
 	const whitelist = await r.table("Whitelist").get(guild.id);
