@@ -26,7 +26,7 @@ module.exports = async(client, msg, suffix, call) => {
 	await client.log(`:negative_squared_cross_mark: ${call.rcall ? "rcall" : "Call"} \`${call.from.hidden ? "hidden" : call.from.channel} → ${call.to.hidden ? "hidden" : call.to.channel}\` was hung up by ${hidden ? "Anonymous#0000" : msg.author.tag} (${hidden ? "hidden" : msg.author.id}) on the ${msg.channel.id === call.from.channel ? "from" : "to"} side. ${call.id}`);
 
 	if (call.to.channel === config.supportChannel || call.from.channel === config.supportChannel) {
-		const channel = client.api.channels.cache.get(config.supportChannel);
+		const channel = client.channels.cache.get(config.supportChannel);
 		const perms = channel.permissionOverwrites;
 		for (let id of call.permissions) perms.set(id, { id: id, deny: ["SEND_MESSAGES"] });
 		channel.overwritePermissions(perms, `Call hung up (${call.id})`);
