@@ -161,7 +161,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	};
 	await r.table("Calls").insert(callDoc);
 
-	if (csCall) await client.apiSend(`<@&${config.supportRole}>`, config.supportChannel);
+	if (csCall) await client.apiSend(`<@&${config.supportRole}>`, config.fakeSupportChannel);
 
 	// To send contact name instead of number
 	let contact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === myNumber.id))[0] : null;
