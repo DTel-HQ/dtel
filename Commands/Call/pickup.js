@@ -1,4 +1,5 @@
 module.exports = async(client, msg, suffix, call) => {
+	if (msg.channel.id === config.supportChannel) client.channels.cache.get(config.fakeSupportChannel).id = config.fakeSupportChannel;
 	if (call.pickedUp || msg.channel.id === call.from.channel) return;
 
 	try {
@@ -10,6 +11,16 @@ module.exports = async(client, msg, suffix, call) => {
 		return client.delete(call.from.number, { force: false, log: true, origin: "pickup_from" });
 	}
 
+	if (call.to.number === config.supportNumber) {
+		let account = await msg.author.account();
+		let newBalance = account.balance + config.pickupBonus;
+		await r.table("Accounts").get(account.id).update({ balance: newBalance });
+
+		client.channels.cache.get(config.supportChannel).overwritePermissions([
+			{ id: msg.author.id, allow: ["SEND_MESSAGES"] },
+		], "*611 call pickup");
+	}
+
 	let channelFrom = await client.channels.fetch(call.from.channel);
 
 	// Pickup - reply first or it'll seem slow
@@ -19,12 +30,6 @@ module.exports = async(client, msg, suffix, call) => {
 	call.pickedUp = Date.now();
 	call.pickedUpBy = msg.author.id;
 	await r.table("Calls").get(call.id).update(call);
-
-	if (call.to.number === config.supportNumber) {
-		let account = await msg.author.account();
-		let newBalance = account.balance + config.pickupBonus;
-		await r.table("Accounts").get(account.id).update({ balance: newBalance });
-	}
 
 	let afkInterval = setInterval(async() => {
 		call = await r.table("Calls").get(call.id);

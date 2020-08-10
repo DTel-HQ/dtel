@@ -12,6 +12,7 @@ module.exports = {
 		exchange: "convert",
 		credits: "balance",
 		delstrike: "rmstrike",
+		ho: "handover",
 		id: "identify",
 		invite: "links",
 		link: "links",

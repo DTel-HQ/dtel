@@ -50,6 +50,7 @@ module.exports = {
 	badLogsChannel: "377945714166202368",
 	promoteChannel: "398569181097754624",
 	supportChannel: "281816105289515008",
+	fakeSupportChannel: "742382389816459336",
 	supportGuild: "281815661317980160",
 	bossRole: "281815725365264385",
 	donatorRole: "324578460183822337",
