@@ -16,9 +16,11 @@ module.exports = async(client, msg, suffix, call) => {
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
-		client.channels.cache.get(config.supportChannel).overwritePermissions([
-			{ id: msg.author.id, allow: ["SEND_MESSAGES"] },
-		], "*611 call pickup");
+		let channel = await client.channels.cache.get(config.supportChannel);
+		channel.overwritePermissions(
+			channel.permissionOverwrites.set(
+				msg.author.id, { id: msg.author.id, allow: ["SEND_MESSAGES"] }),
+			"*611 call pickup");
 	}
 
 	let channelFrom = await client.channels.fetch(call.from.channel);
