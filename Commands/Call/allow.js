@@ -10,4 +10,6 @@ module.exports = async(client, msg, suffix, call) => {
 		msg.channel.permissionOverwrites.set(
 			user.id || user, { id: user.id || user, allow: ["SEND_MESSAGES"] }),
 		reason || `Allow by ${msg.author.tag} (${msg.author.id})`);
+
+	msg.channel.send({ embed: { color: config.colors.info, title: `Allowed ${user.username || user}` } });
 };
