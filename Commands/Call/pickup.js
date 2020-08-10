@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix, call) => {
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
 		let channel = await client.channels.cache.get(config.supportChannel);
-		client.supportChannelPerms = channel.permissionOverwrites;
+		client.supportChannelPerms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
 		await channel.overwritePermissions(
 			channel.permissionOverwrites.set(
 				msg.author.id, { id: msg.author.id, allow: ["SEND_MESSAGES"] }),
