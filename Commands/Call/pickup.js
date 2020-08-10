@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix, call) => {
 		const perms = JSON.parse(JSON.stringify(channel.permissionOverwrites));
 		perms.push(
 			{ id: msg.author.id, type: "user", allow: ["SEND_MESSAGES"] },
-			{ id: config.supportRole, type: "role", deny: ["SEND_MESSAGES"] },
+			{ id: config.supportRole, type: "role", deny: ["SEND_MESSAGES"], allow: ["VIEW_CHANNEL"] },
 		);
 		await channel.overwritePermissions(perms, "*611 call pickup");
 	}
