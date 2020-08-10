@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix, call) => {
 	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't find a user" } });
 	let reason = suffix.split(" ").slice(1).join(" ");
 
-	const perms = client.supportChannelPerms;
+	const perms = JSON.parse(JSON.stringify(client.supportChannelPerms));
 	perms.push({ id: user.id || user, allow: ["SEND_MESSAGES"] });
 	msg.channel.overwritePermissions(perms,	reason || `Handover by ${msg.author.tag} (${msg.author.id})`);
 
