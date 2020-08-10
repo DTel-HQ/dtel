@@ -12,14 +12,14 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	if (call.to.number === config.supportNumber) {
-		msg.channel.send(`Go to <#${config.supportChannel}>.`);
+		client.apiSend(`Go to <#${config.supportChannel}>.`, config.fakeSupportChannel);
 
 		let account = await msg.author.account();
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
 
 		let channel = await client.channels.cache.get(config.supportChannel);
-		client.supportChannelPerms = channel.permissionOverwrites;
+		client.supportChannelPerms = new Map(channel.permissionOverwrites);
 		await channel.overwritePermissions(
 			channel.permissionOverwrites.set(
 				msg.author.id, { id: msg.author.id, allow: ["SEND_MESSAGES"] }),
