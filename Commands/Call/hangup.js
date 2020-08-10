@@ -25,7 +25,7 @@ module.exports = async(client, msg, suffix, call) => {
 	await r.table("OldCalls").insert(call);
 	await client.log(`:negative_squared_cross_mark: ${call.rcall ? "rcall" : "Call"} \`${call.from.hidden ? "hidden" : call.from.channel} → ${call.to.hidden ? "hidden" : call.to.channel}\` was hung up by ${hidden ? "Anonymous#0000" : msg.author.tag} (${hidden ? "hidden" : msg.author.id}) on the ${msg.channel.id === call.from.channel ? "from" : "to"} side. ${call.id}`);
 
-	if (call.to.channel === config.supportChannel || call.from.channel === config.supportChannel) {
+	if (call.to.channel === config.supportChannel) {
 		const channel = client.channels.cache.get(config.supportChannel);
 		channel.overwritePermissions(client.supportChannelPerms, `Call hung up (${call.id})`);
 	}

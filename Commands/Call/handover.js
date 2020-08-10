@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix, call) => {
 	let reason = suffix.split(" ").slice(1).join(" ");
 
 	const perms = JSON.parse(JSON.stringify(client.supportChannelPerms));
-	perms.push({ id: user.id || user, allow: ["SEND_MESSAGES"] });
+	perms.push([{ id: user.id || user, allow: ["SEND_MESSAGES"] }, { id: config.supportRole, deny: ["SEND_MESSAGES"] }]);
 	msg.channel.overwritePermissions(perms,	reason || `Handover by ${msg.author.tag} (${msg.author.id})`);
 
 	msg.channel.send({ embed: { color: config.colors.info, title: `Handed over to ${user.username || user}` } });
