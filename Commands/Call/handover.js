@@ -7,6 +7,10 @@ module.exports = async(client, msg, suffix, call) => {
 	if (!user) return msg.channel.send({ embed: { color: config.colors.error, title: "Couldn't find a user" } });
 	let reason = suffix.split(" ").slice(1).join(" ");
 
+	msg.channel.send(user)
+	msg.channel.send(user.id)
+	msg.channel.send(msg.author.id);
+
 	msg.channel.overwritePermissions(
 		msg.channel.permissionOverwrites.set([
 			[msg.author.id, { id: msg.author.id, deny: ["SEND_MESSAGES"] }],
