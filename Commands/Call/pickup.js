@@ -11,8 +11,6 @@ module.exports = async(client, msg, suffix, call) => {
 	}
 
 	if (call.to.number === config.supportNumber) {
-		client.apiSend({ embed: { color: config.colors.info, title: "Call picked up", description: `You can now answer the phone in <#${config.supportChannel}>` } }, config.fakeSupportChannel);
-
 		let account = await msg.author.account();
 		let newBalance = account.balance + config.pickupBonus;
 		await r.table("Accounts").get(account.id).update({ balance: newBalance });
