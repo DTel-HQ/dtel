@@ -1,3 +1,5 @@
+const urlRegex = require("url-regex")({ strict: true });
+
 module.exports = Discord => class DTelClient extends Discord.Client {
 	async apiSend(data, channel) {
 		if (!data || !channel) throw new Error("Missing parameters.");
@@ -90,6 +92,12 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 	}
 
 	async log(msg) {
+		msg.replace(/`/gm, "'")
+			.replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**")
+			.replace(/@(everyone|here)/g, "@\u200b$1").replace(/<@!?(\d){17,19}>/gm, "**Mention Censored**")
+			.replace(urlRegex, "**URL Blocked**")
+			.replace(/(\|\|)|_|\*/gm, "");
+
 		let date = new Date();
 		let times = [
 			await date.getHours(),
@@ -146,14 +154,6 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 					let contact = contacts.filter(c => c.name === number.id);
 					contacts.splice(contacts.indexOf(contact), 1);
 					await r.table("Numbers").get(contactNumber.id).update({ contacts: contacts });
-				}
-
-				// remove the number from blocked → may lead to abuse though
-				const blockedNumbers = numbers.filter(n => n.blocked && n.blocked.includes(number.id));
-				for (let blockedNumber of blockedNumbers) {
-					let blocked = blockedNumber.blocked;
-					blocked.splice(blocked.indexOf(number.id), 1);
-					await r.table("Numbers").get(blockedNumber.id).update({ blocked: blocked });
 				}
 			}
 		}, force ? 1000 : 600000);
