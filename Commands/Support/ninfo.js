@@ -56,7 +56,6 @@ module.exports = async(client, msg, suffix) => {
 		.addField("Blocked", number.blocked ? number.blocked.length : "None", true)
 		.addField(`${guild ? "Guild" : "Owner"} strikes`, strikes.length ? strikes.length : "None", true)
 		.addField("Created, expiry", `• ${number.createdAt || "Not available"}\n• ${new Date(number.expiry)}`);
-	if (guild && guild.icon) embed_compact.setThumbnail(`https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`);
 	if (details.length) embed_compact.setDescription(`Hit the lightbulb for more information on: ${details.join(", ")}.`);
 
 	const embedmsg = await msg.channel.send({ embed: embed_compact });
