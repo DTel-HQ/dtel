@@ -66,7 +66,12 @@ module.exports = async(msg, myNumber) => {
 
 		// On collection
 		if (collected && delPerm) collected.delete().catch(e => null);
-		if (!collected || /^0$/.test(collected.content)) return false;
+		if (!collected || /^0$/.test(collected.content)) {
+			embed.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}.`);
+			embed.spliceField(embed.fields.length - 1, 1);
+			await omsg.edit({ embed: embed });
+			return false;
+		}
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
 		if (!/^\d+$/.test(collected.content)) query = collected.content;
