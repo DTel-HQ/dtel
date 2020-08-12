@@ -68,7 +68,7 @@ module.exports = Discord => {
 					boss: this.boss,
 					manager: this.manager,
 					support: this.support,
-					donator: this.donator
+					donator: this.donator,
 				};
 			}
 		}
