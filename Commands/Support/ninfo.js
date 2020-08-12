@@ -2,6 +2,10 @@ const { MessageEmbed } = require("discord.js");
 
 const reaction = "💡";
 
+function genIconURL(id, icon) {
+	return `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
+}
+
 module.exports = async(client, msg, suffix) => {
 	let number, dmChannel, id;
 
@@ -43,7 +47,7 @@ module.exports = async(client, msg, suffix) => {
 
 	const embed_compact = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
-		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
+		.setAuthor(guild ? guild.name : owner.tag, guild ? genIconURL(guild.id, guild.icon) : owner.displayAvatarURL())
 		.setTitle(`Simple information about ${number.id}`)
 		.addField("Channel", `${channel.type === 1 ? "_DM Channel_" : channel.name}\n\`${channel.id}\``, true)
 		.addField("Owner", `${owner.tag}\n\`${guild ? guild.owner_id : channel.recipients[0].id}\`${!guild ? "" : `\nStrikes: ${ownerStrikes.length}`}`, true)
