@@ -132,7 +132,6 @@ module.exports = async(msg, myNumber) => {
 				let result = await searchPage();
 				if (!result) {
 					loop = false;
-					omsg.delete().catch(e => null);
 					msg.author.busy = false;
 				}
 				break;
