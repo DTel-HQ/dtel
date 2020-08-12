@@ -13,11 +13,11 @@ module.exports = async(client, msg, suffix) => {
 
 	const dmChannel = await guild.owner.user.createDM();
 	if (!whitelist) {
-		client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by ${msg.author.tag}`);
+		client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by \`${msg.author.tag}\``);
 		dmChannel.send({ embed: { color: config.colors.info, title: `Your server ${guild.name} has been whitelisted.`, description: "You now have the ability to create more than three numbers.\n\nNote: we expect good behaviour from whitelisted server, so any violation of our rules can result in losing the whitelist." } })
 			.catch(e => null);
 	}	else {
-		client.log(`🔥 ID \`${guild.id}\` has been removed from the whitelist by ${msg.author.tag}`);
+		client.log(`🔥 ID \`${guild.id}\` has been removed from the whitelist by \`${msg.author.tag}\``);
 		dmChannel.send({ embed: { color: config.colors.error, title: `Your server ${guild.name} has lost its whitelist.`, description: "If you were not informed of this action or feel like it's unjust, you may dispute it with one of our bosses through the support server." } })
 			.catch(e => null);
 	}

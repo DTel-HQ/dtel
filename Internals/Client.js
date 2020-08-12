@@ -92,8 +92,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 	}
 
 	async log(msg) {
-		msg.replace(/`/gm, "'")
-			.replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**")
+		msg.replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**")
 			.replace(/@(everyone|here)/g, "@\u200b$1").replace(/<@!?(\d){17,19}>/gm, "**Mention Censored**")
 			.replace(urlRegex, "**URL Blocked**");
 
