@@ -1,6 +1,6 @@
 module.exports = async member => {
 	const guild = member.guild;
-	const numbers = r.table("Numbers").getAll(guild.id, { index: "guild" }).default([]);
+	const numbers = (await r.table("Numbers").getAll(guild.id, { index: "guild" }).default([])).filter(n => n.mentions);
 
 	if (!numbers.length) return;
 
