@@ -3,7 +3,8 @@ const { MessageEmbed } = require("discord.js");
 const reaction = "💡";
 
 function genIconURL(id, icon) {
-	return `https://cdn.discordapp.com/icons/${id}/${icon}.webp`
+	if (!icon) return client.user.displayAvatarURL();
+	return `https://cdn.discordapp.com/icons/${id}/${icon}.webp`;
 }
 
 module.exports = async(client, msg, suffix) => {

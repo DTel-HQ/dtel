@@ -68,7 +68,7 @@ module.exports = async(msg, myNumber) => {
 		if (collected && delPerm) collected.delete().catch(e => null);
 		if (!collected || /^0$/.test(collected.content)) {
 			embed.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}.`);
-			embed.spliceField(embed.fields.length - 1, 1);
+			embed.spliceFields(embed.fields.length - 1, 1);
 			await omsg.edit({ embed: embed });
 			return false;
 		}
