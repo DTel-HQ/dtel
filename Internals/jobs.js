@@ -345,7 +345,7 @@ scheduleJob("0 0 */12 * * *", async() => {
 		const positive = currency.value > prevrates[currency.id];
 		if (positive && change > 0) change = `+${change}`;
 		else if (!positive && change > 0) change = `-${change}`;
-		else change = "<±0.01";
+		else change = "±<0.01";
 		strings[currency.id] = ` ${positive ? ":chart_with_upwards_trend:" : ":chart_with_downwards_trend:"} ${change}%`;
 	}
 
