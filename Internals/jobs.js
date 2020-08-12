@@ -352,7 +352,7 @@ scheduleJob("0 0 */12 * * *", async() => {
 	const gazettemsg = await client.apiSend({ embed: {
 		title: "<:Discoin:357656754642747403>iscoin Rates",
 		color: 0x2196f3,
-		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${strings[c.id]}`).join("\n"),
+		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${client.format(c.value)}${strings[c.id]}`).join("\n"),
 		timestamp: new Date(),
 	} }, "661239975752499231");
 	await client.api.channels(gazettemsg.channel_id).messages(gazettemsg.id).crosspost.post();
