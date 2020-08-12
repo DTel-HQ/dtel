@@ -55,29 +55,29 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (toBlocked(myNumber.id) || (msg.guild ? toBlocked(msg.guild.id) : toBlocked(msg.author.id))) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "That number can't be reached." } });
 	if (new Date(toDialDoc.expiry).getTime() < Date.now() && myNumber.id != config.aliasNumbers["*611"]) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "The number you are trying to reach has expired. Please contact the owner to renew it." } });
 
-	if (csCall) {
-		// send confirmation embed
-		let omsg = await msg.channel.send({ embed: {
-			color: config.colors.info,
-			title: "You **must** read this before calling!",
-			description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
-			footer: {
-				text: "This call will automatically be discarded in 60 seconds",
-			},
-		} });
-
-		// Make a collector for yes/no
-		let collected = await msg.channel.awaitMessages(
-			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-			{ max: 1, time: 60000 },
-		);
-
-		// on collection
-		omsg.delete();
-		if (!collected.first()) return;
-		collected.first().delete().catch(e => null);
-		if (/^no$/i.test(collected.first().content)) return;
-	}
+	// if (csCall) {
+	// 	// send confirmation embed
+	// 	let omsg = await msg.channel.send({ embed: {
+	// 		color: config.colors.info,
+	// 		title: "You **must** read this before calling!",
+	// 		description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
+	// 		footer: {
+	// 			text: "This call will automatically be discarded in 60 seconds",
+	// 		},
+	// 	} });
+	//
+	// 	// Make a collector for yes/no
+	// 	let collected = await msg.channel.awaitMessages(
+	// 		m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
+	// 		{ max: 1, time: 60000 },
+	// 	);
+	//
+	// 	// on collection
+	// 	omsg.delete();
+	// 	if (!collected.first()) return;
+	// 	collected.first().delete().catch(e => null);
+	// 	if (/^no$/i.test(collected.first().content)) return;
+	// }
 
 	let activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "fromChannel" }).nth(0).default(null);
 	if (!activeCall) activeCall = await r.table("Calls").getAll(toDialDoc.channel, { index: "toChannel" }).nth(0).default(null);
