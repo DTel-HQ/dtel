@@ -1,5 +1,5 @@
 const auth = require("../Configuration/auth.js");
-const urlRegex = require("urlregex")({ strict: true });
+const urlRegex = require("url-regex")({ strict: true });
 module.exports = async guild => {
 	let name = guild.name
 		.replace(/`/gm, "'")
