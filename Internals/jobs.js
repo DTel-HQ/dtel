@@ -238,7 +238,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_noChannel" });
-			break;
+			continue;
 		}
 		let owner = number.guild ? (await client.api.guilds(number.guild).get().catch(e => null)).owner_id : null;
 
