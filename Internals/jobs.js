@@ -217,6 +217,16 @@ scheduleJob("0 20 * * 0", async() => {
 	}
 });
 
+scheduleJob("0 */1 0 * * *", async() => {
+	if (client.supportChannelPerms) {
+		let activeCall = await r.table("Calls").getAll(config.supportChannel, { index: "fromChannel" }).nth(0).default(null);
+		if (!activeCall) activeCall = await r.table("Calls").getAll(config.supportChannel, { index: "toChannel" }).nth(0).default(null);
+		if (!activeCall) {
+			const channel = client.channels.cache.get(config.supportChannel);
+			if (!client.supportChannelPerms !== JSON.parse(JSON.stringify(channel.permissionOverwrites))) channel.overwritePermissions(client.supportChannelPerms, `No call`);
+		}
+	}
+});
 
 // Job to delete numbers if expired for a long time
 scheduleJob("0 0 0 * * *", expiredNumbers);
