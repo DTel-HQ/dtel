@@ -149,6 +149,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 				const contactNumbers = numbers.filter(n => n.contacts && (n.contacts.filter(c => c.number === number.id))[0]);
 				for (let contactNumber of contactNumbers) {
 					let contacts = number.contacts;
+					if (!contacts) continue;
 					let contact = contacts.filter(c => c.name === number.id);
 					contacts.splice(contacts.indexOf(contact), 1);
 					await r.table("Numbers").get(contactNumber.id).update({ contacts: contacts });
