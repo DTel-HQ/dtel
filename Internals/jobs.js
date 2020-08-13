@@ -219,7 +219,8 @@ scheduleJob("0 20 * * 0", async() => {
 
 
 // Job to delete numbers if expired for a long time
-scheduleJob("0 0 0 * * *", async() => {
+scheduleJob("0 0 0 * * *", expiredNumbers);
+async function expiredNumbers() {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
@@ -311,7 +312,7 @@ scheduleJob("0 0 0 * * *", async() => {
 			if (dmChannel) dmChannel.send({ embed: embed }).catch(e => null);
 		}
 	}
-});
+}
 
 // Job to delete stored messages of calls.
 scheduleJob("0 0 0 * * *", async() => {
@@ -373,3 +374,5 @@ scheduleJob("0 */15 * * * *", () => {
 		});
 	});
 });
+
+module.exports = { expiredNumbers };
