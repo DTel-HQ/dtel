@@ -21,5 +21,5 @@ module.exports = async(client, msg, suffix) => {
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance, daily: true });
 	await msg.channel.send({ embed: { color: config.colors.success, title: "Claimed your dailies!", description: `Here's your ${config.dtsEmoji}${amount}! You now have ${config.dtsEmoji}${client.format(account.balance)}.\n\nYou can vote for DTel to get **60+ more credits every day**!\n See [here](${config.voteLink}) for a list of voting sites.` } });
-	await client.log(`:calendar: ${msg.author.username} (${msg.author.id}) claimed their daily ${config.dtsEmoji}${amount}.`);
+	await client.log(`:calendar: \`${msg.author.username}\` (${msg.author.id}) claimed their daily ${config.dtsEmoji}${amount}.`);
 };

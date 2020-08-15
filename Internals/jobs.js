@@ -42,7 +42,7 @@ scheduleJob("0 0 0 * * *", async() => {
 				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ${config.dtsEmoji}${lastEntry.jackpot}.` } }, channel.id)
 					.catch(e => null);
 			});
-		client.log(`:tickets: ${winnerID.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
+		client.log(`:tickets: ${user.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
 	}
 
 	winston.info(`[ScheduleJob] Reset lottery and dailies. Lottery won by ${winnerID}`);
@@ -217,9 +217,20 @@ scheduleJob("0 20 * * 0", async() => {
 	}
 });
 
+scheduleJob("0 */1 0 * * *", async() => {
+	if (client.supportChannelPerms) {
+		let activeCall = await r.table("Calls").getAll(config.supportChannel, { index: "fromChannel" }).nth(0).default(null);
+		if (!activeCall) activeCall = await r.table("Calls").getAll(config.supportChannel, { index: "toChannel" }).nth(0).default(null);
+		if (!activeCall) {
+			const channel = client.channels.cache.get(config.supportChannel);
+			if (!client.supportChannelPerms !== JSON.parse(JSON.stringify(channel.permissionOverwrites))) channel.overwritePermissions(client.supportChannelPerms, `No call`);
+		}
+	}
+});
 
 // Job to delete numbers if expired for a long time
-scheduleJob("0 0 0 * * *", async() => {
+scheduleJob("0 0 0 * * *", expiredNumbers);
+async function expiredNumbers() {
 	// Don't just change lastwarn k
 	const warnDays = 15;
 	const lastWarn = 29;
@@ -238,7 +249,7 @@ scheduleJob("0 0 0 * * *", async() => {
 		let channel = await client.api.channels(number.channel).get().catch(e => null);
 		if (!channel) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_noChannel" });
-			break;
+			continue;
 		}
 		let owner = number.guild ? (await client.api.guilds(number.guild).get().catch(e => null)).owner_id : null;
 
@@ -311,7 +322,7 @@ scheduleJob("0 0 0 * * *", async() => {
 			if (dmChannel) dmChannel.send({ embed: embed }).catch(e => null);
 		}
 	}
-});
+}
 
 // Job to delete stored messages of calls.
 scheduleJob("0 0 0 * * *", async() => {
@@ -345,14 +356,14 @@ scheduleJob("0 0 */12 * * *", async() => {
 		const positive = currency.value > prevrates[currency.id];
 		if (positive && change > 0) change = `+${change}`;
 		else if (!positive && change > 0) change = `-${change}`;
-		else change = "<0.01";
+		else change = "±<0.01";
 		strings[currency.id] = ` ${positive ? ":chart_with_upwards_trend:" : ":chart_with_downwards_trend:"} ${change}%`;
 	}
 
 	const gazettemsg = await client.apiSend({ embed: {
 		title: "<:Discoin:357656754642747403>iscoin Rates",
 		color: 0x2196f3,
-		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${c.value}${strings[c.id]}`).join("\n"),
+		description: currencies.map(c => `${emojis.find(e => e.name === c.id).toString()} ${client.format(c.value)}${strings[c.id]}`).join("\n"),
 		timestamp: new Date(),
 	} }, "661239975752499231");
 	await client.api.channels(gazettemsg.channel_id).messages(gazettemsg.id).crosspost.post();
@@ -373,3 +384,5 @@ scheduleJob("0 */15 * * * *", () => {
 		});
 	});
 });
+
+module.exports = { expiredNumbers };
