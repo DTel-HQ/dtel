@@ -293,7 +293,7 @@ module.exports = async(client, msg, suffix) => {
 					embed.setDescription("");
 					embed.setFooter("");
 					omsg.edit({ embed: embed });
-					omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.id, icon_url: msg.author.displayAvatarURL() } } });
+					omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.username, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				}
 
@@ -348,6 +348,7 @@ module.exports = async(client, msg, suffix) => {
 					embed.setDescription("");
 					embed.setFooter("");
 					omsg.edit({ embed: embed });
+					omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.username, icon_url: msg.author.displayAvatarURL() } } });
 					break;
 				case "9":
 					await omsg.delete().catch(e => null);
