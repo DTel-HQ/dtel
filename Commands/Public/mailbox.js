@@ -361,6 +361,9 @@ module.exports = async(client, msg, suffix) => {
 					messagesPage(page);
 					break;
 				case "report":
+					embed.setDescription("");
+					embed.setFooter("");
+					omsg.edit({ embed: embed });
 					msg.author.busy = false;
 					require("./call.js")(client, msg, "*611");
 			}
