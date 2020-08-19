@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: `There's no number associated with this channel. Please dial from a channel that has DTel service. Create a number in any channel by typing \`>wizard\`. \nIf you need assistance or have any questions, call \`*611\` or join our support server: ${config.guildInvite}.` } });
 
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
-	if (call) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `You're already in a call.\nDebug: ${call}` } });
+	if (call) return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `You're already in a call.` } });
 
 	if (myNumber.waiting) return;
 
