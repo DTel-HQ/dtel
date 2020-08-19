@@ -42,7 +42,7 @@ scheduleJob("0 0 0 * * *", async() => {
 				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ${config.dtsEmoji}${lastEntry.jackpot}.` } }, channel.id)
 					.catch(e => null);
 			});
-		client.log(`:tickets: ${winnerID.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
+		client.log(`:tickets: ${user.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
 	}
 
 	winston.info(`[ScheduleJob] Reset lottery and dailies. Lottery won by ${winnerID}`);

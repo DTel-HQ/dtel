@@ -29,7 +29,7 @@ module.exports = async(msg, myNumber) => {
 		.addField("VIP Number", vipNumber, true)
 		.addField("VIP expiration date", vipNumber ? `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}` : "N/A", true)
 		.addField("Your VIP months", account.vip ? account.vip : "0", true)
-		.addField("Blocked numbers", myNumber.blocked ? myNumber.blocked.join("\n") : "None", true)
+		.addField("Blocked numbers", myNumber.blocked && myNumber.blocked.length > 0 ? myNumber.blocked.join("\n") : "None", true)
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join("\n") : "None", true);
 
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None", true);
