@@ -23,7 +23,6 @@ module.exports = async(client, msg, suffix) => {
 			}
 		} else {
 			let ID = Number(suffix.split(" ")[1]);
-			if (!ID) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
 			if (toMention[ID]) {
 				userID = toMention[ID].slice(1, toMention[ID].length - 3);
 				toMention.splice(ID, 1);
