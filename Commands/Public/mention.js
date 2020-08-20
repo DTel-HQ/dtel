@@ -2,7 +2,7 @@ module.exports = async(client, msg, suffix) => {
 	let perms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : msg.author.support;
 
 	const number = await msg.channel.number;
-	if (!number || number.id === config.supportNumber) return;
+	if (!number || number.id === config.supportNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number. Run `>wizard` to create one." } });
 	if (msg.channel.type === "dm") return msg.channel.send({ embed: { color: config.colors.info, title: "Bruh", description: "There's no need for this command in DMs... Don't you get pinged anyway?" } });
 
 	// Get/make list of toPing and string
