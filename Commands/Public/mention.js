@@ -12,7 +12,7 @@ module.exports = async(client, msg, suffix) => {
 	let FDelete = /^delete$/i.test(suffix.split(" ")[0]);
 	let userID = FDelete ? msg.mentions.users.first() ? msg.mentions.users.first() : suffix.split(" ")[1] : msg.author.id;
 	if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "No user", description: `Couldn't find a user to delete\nSyntax: \`${msg.content.split(" ")[0]} delete [userID/mention]\`` } });
-	if (!perms && FDelete) return msg.channel.send({ embed: { color: config.colors.error, title: "Unauthorized!", description: `You do not have \`Manage Messages\` permission.` } });
+	if (!perms && FDelete) return msg.channel.send({ embed: { color: config.colors.error, title: "Unauthorized!", description: `You do not have the \`Manage Messages\` permission.` } });
 
 	let string = `<@${userID}>`;
 	if (FDelete && !toMention.includes(string)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "That user isn't on the list." } });
@@ -24,10 +24,10 @@ module.exports = async(client, msg, suffix) => {
 			title: "Max mentions reached.",
 			description: "To work within practical limits there can't be more than 9 mentions per number.",
 			fields: [
-				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
+				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join("\n") : "Empty" },
 			],
 			footer: {
-				text: ">mention delete [number] to remove someone.",
+				text: "Use >mention delete [ping/user ID] to remove someone.",
 			},
 		} });
 	}
@@ -52,7 +52,7 @@ module.exports = async(client, msg, suffix) => {
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
 		footer: {
-			text: ">mentions delete [number] to delete a mention.",
+			text: "Use >mentions delete [ping/user ID] to delete a mention.",
 		},
 	} });
 };
