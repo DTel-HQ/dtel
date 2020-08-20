@@ -49,7 +49,7 @@ scheduleJob("0 0 0 * * *", async() => {
 	client.log(`⏰ The lottery and dailies have been reset.`);
 });
 
-// Job to update the playing status regularly. Disabled due to Discord.JS bug, DO NOT RE-ENABLE
+// Job to update the playing status regularly (disabled due to Discord.JS bug, DO NOT RE-ENABLE)
 // scheduleJob("*/15 * * * * *", async() => {
 // 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 // 	let sec = new Date().getSeconds();
@@ -180,10 +180,10 @@ scheduleJob("0 20 * * 0", async() => {
 	let month = new Date().toLocaleString("default", { month: "long" });
 	let embed = {
 		color: config.colors.vip,
-		title: `This week's highest voters`,
-		description: `The voter(s) with the highest amount have been awarded ${prize} VIP Month(s).`,
+		title: `This week's top voters`,
+		description: `The voter(s) who voted the most have been awarded ${prize} VIP month(s).`,
 		footer: {
-			text: "Note that bosses do not qualify for the prize.",
+			text: "(Note that bosses do not qualify for the prize.)",
 		},
 		fields: [
 			{
