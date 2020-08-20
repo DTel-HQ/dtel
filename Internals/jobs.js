@@ -106,10 +106,10 @@ scheduleJob("*/1 * * * *", async() => {
 		.set("Content-Type", "application/json")
 		.set("count", guildCount.toString())
 		.catch(e => {
-			client.apiSend(`Yo, there might be something wrong with the glitch API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
+			client.apiSend(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
 			return null;
 		});
-	if (!result) return client.apiSend(`Yo, there might be something wrong with the glitch API.`, "377945714166202368");
+	if (!result) return client.apiSend(`Yo, there might be something wrong with the votes API (or there were no votes).`, "377945714166202368");
 
 	let votes = result.body;
 	let users = Object.keys(votes);
