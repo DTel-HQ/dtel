@@ -7,39 +7,46 @@ module.exports = async(client, msg, suffix) => {
 
 	// Get/make list of toPing and string
 	let toMention = number.mentions ? number.mentions : [];
+	let userID;
 
 	// Get used ID
 	let FDelete = /^delete$/i.test(suffix.split(" ")[0]);
-	let userID = FDelete ? msg.mentions.users.first() ? msg.mentions.users.first() : suffix.split(" ")[1] : msg.author.id;
-	if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "No user", description: `Couldn't find a user to delete\nSyntax: \`${msg.content.split(" ")[0]} delete [userID/mention]\`` } });
-	if (!perms && FDelete) return msg.channel.send({ embed: { color: config.colors.error, title: "Unauthorized!", description: `You do not have the \`Manage Messages\` permission.` } });
 
-	let string = `<@${userID}>`;
-	if (FDelete && !toMention.includes(string)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "That user isn't on the list." } });
-
-	// Don't let the list exceed more than 10 people
-	if (toMention.length >= 9 && !toMention.includes(string)) {
+	if (FDelete) {
+		if (!perms) return msg.channel.send({ embed: { color: config.colors.error, title: "Unauthorized!", description: `You do not have the \`Manage Messages\` permission.` } });
+		if (msg.mentions.users.first()) {
+			if (toMention.includes(`<@${msg.mentions.users.first().id}>`)) {
+				userID = msg.mentions.users.first();
+				toMention.splice(toMention.indexOf(`<@${msg.mentions.users.first().id}>`), 1);
+			}	else {
+				return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "That user isn't on the list." } });
+			}
+		} else {
+			let ID = suffix.split(" ")[1];
+			if (!Number(ID)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
+			if (toMention[ID]) {
+				userID = toMention[ID].slice(1, toMention[ID].length - 3);
+				toMention.splice(ID, 1);
+			} else if (toMention.includes(`<@${ID}>`)) {
+				userID = ID;
+				toMention.splice(toMention.indexOf(`<@${ID}>`), 1);
+			}
+		}
+		if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
+	} else if (toMention.length >= 9) {
 		return msg.channel.send({ embed: {
 			color: config.colors.error,
 			title: "Max mentions reached.",
 			description: "To work within practical limits there can't be more than 9 mentions per number.",
 			fields: [
-				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join("\n") : "Empty" },
+				{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 			],
 			footer: {
-				text: "Use >mention delete [ping/user ID] to remove someone.",
+				text: ">mention delete [number] to remove someone.",
 			},
 		} });
-	}
-
-	// add or remove ID from list
-	let removed;
-	if (toMention.includes(string)) {
-		toMention.splice(toMention.indexOf(string), 1);
-		removed = true;
-	} else {
-		toMention.push(string);
-		removed = false;
+	}	else {
+		toMention.push(`<@${msg.author.id}>`);
 	}
 
 	await r.table("Numbers").get(number.id).update({ mentions: toMention });
@@ -47,7 +54,7 @@ module.exports = async(client, msg, suffix) => {
 	msg.channel.send({ embed: {
 		color: config.colors.success,
 		title: "Success",
-		description: `${userID === msg.author.id ? "You have" : `${userID} has`} been **${removed ? "removed from" : "added to"}** the list of mentions.`,
+		description: `${userID === msg.author.id ? "You have" : `${userID} has`} been **${FDelete ? "removed from" : "added to"}** the list of mentions.`,
 		fields: [
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
