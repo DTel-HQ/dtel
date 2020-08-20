@@ -22,7 +22,8 @@ module.exports = async(client, msg, suffix) => {
 				return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid user", description: "That user isn't on the list." } });
 			}
 		} else {
-			let ID = suffix.split(" ")[1];
+			let ID = Number(suffix.split(" ")[1]);
+			if (!ID) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
 			if (toMention[ID]) {
 				userID = toMention[ID].slice(1, toMention[ID].length - 3);
 				toMention.splice(ID, 1);
@@ -31,7 +32,7 @@ module.exports = async(client, msg, suffix) => {
 				toMention.splice(toMention.indexOf(`<@${ID}>`), 1);
 			}
 		}
-		if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
+		if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "Could not find this", description: "I need a number, user ID or mention to remove..." } });
 	} else if (toMention.includes(`<@${msg.author.id}>`)) {
 		FDelete = true;
 		userID = msg.author.id;
