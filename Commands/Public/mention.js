@@ -23,9 +23,9 @@ module.exports = async(client, msg, suffix) => {
 			}
 		} else {
 			let ID = Number(suffix.split(" ")[1]);
-			if (toMention[ID]) {
+			if (toMention[ID - 1]) {
 				userID = toMention[ID].slice(1, toMention[ID].length - 3);
-				toMention.splice(ID, 1);
+				toMention.splice(ID - 1, 1);
 			} else if (toMention.includes(`<@${ID}>`)) {
 				userID = ID;
 				toMention.splice(toMention.indexOf(`<@${ID}>`), 1);
