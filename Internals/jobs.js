@@ -109,7 +109,7 @@ scheduleJob("*/1 * * * *", async() => {
 			client.apiSend(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
 			return null;
 		});
-	if (!result) return client.apiSend(`Yo, there might be something wrong with the votes API (or there were no votes).`, "377945714166202368");
+	if (!result) return;
 
 	let votes = result.body;
 	let users = Object.keys(votes);
