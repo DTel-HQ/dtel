@@ -141,6 +141,7 @@ scheduleJob("*/1 * * * *", async() => {
 	}
 });
 
+// Job to give out weekly VIP voting prize
 scheduleJob("0 20 * * 0", async() => {
 	let prize = 1;
 	let topSize = 6;
@@ -183,7 +184,7 @@ scheduleJob("0 20 * * 0", async() => {
 		title: `This week's top voters`,
 		description: `The voter(s) who voted the most have been awarded ${prize} VIP month(s).`,
 		footer: {
-			text: "(Note that bosses do not qualify for the prize.)",
+			text: `Note that bosses do not qualify for the prize. • Want a chance at winning? Make sure to [vote for us on these sites](${config.voteLink})! (You also get free ${config.dtsEmoji} for voting!)`,
 		},
 		fields: [
 			{
