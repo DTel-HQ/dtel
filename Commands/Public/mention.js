@@ -46,6 +46,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 		} });
 	}	else {
+		userID = msg.author.id;
 		toMention.push(`<@${msg.author.id}>`);
 	}
 
@@ -54,12 +55,12 @@ module.exports = async(client, msg, suffix) => {
 	msg.channel.send({ embed: {
 		color: config.colors.success,
 		title: "Success",
-		description: `${userID === msg.author.id ? "You have" : `${userID} has`} been **${FDelete ? "removed from" : "added to"}** the list of mentions.`,
+		description: `${userID === msg.author.id ? "You have" : `<@${userID}> has`} been **${FDelete ? "removed from" : "added to"}** the list of mentions.`,
 		fields: [
 			{ name: "Mentions list", value: toMention.length ? toMention.map(m => `${toMention.indexOf(m) + 1}. ${m}`).join(" ") : "Empty" },
 		],
 		footer: {
-			text: "Use >mentions delete [ping/user ID] to delete a mention.",
+			text: "Use >mentions delete [number] to delete a mention.",
 		},
 	} });
 };
