@@ -56,5 +56,5 @@ module.exports = async(client, msg, suffix) => {
 	await client.apiSend(confirmation, "326075875466412033").catch(e => null);
 	let dmChannel = await user.createDM().catch(e => null);
 	if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: neg ? "Your balance changed" : "Cash!", description: `A support member has ${neg ? "removed" : "added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} your account. You now have ${config.dtsEmoji}${account.balance}.` } }).catch(() => null);
-	await client.log(`:yen: Support member \`${msg.author.tag}\` ${neg ? "removed" : "added"} ${config.dtsEmoji}>${amount} ${neg ? "from" : "to"} ${user.username} (${user.id}).`);
+	await client.log(`:yen: Support member \`${msg.author.tag}\` ${neg ? "removed" : "added"} ${config.dtsEmoji}${amount} ${neg ? "from" : "to"} ${user.username} (${user.id}).`);
 };
