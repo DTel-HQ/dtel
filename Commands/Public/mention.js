@@ -34,6 +34,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 		if (!userID) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid input", description: "I need a number, user ID or mention to remove..." } });
 	} else if (toMention.includes(`<@${msg.author.id}>`)) {
+		FDelete = true;
 		userID = msg.author.id;
 		toMention.splice(toMention.indexOf(`<@${msg.author.id}>`), 1);
 	} else if (toMention.length >= 9) {
