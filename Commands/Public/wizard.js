@@ -42,7 +42,8 @@ module.exports = async(client, msg, suffix) => {
 
 	let number,
 		expiryDate,
-		description;
+		description,
+	        autoreply;
 
 	// NUMBER
 	let numberChooser = async() => {
@@ -115,7 +116,7 @@ module.exports = async(client, msg, suffix) => {
 			return;
 		}
 		if (collected.content === "skip") {
-			return embedSender();
+			return mailboxChooser();
 		} else {
 			description = collected.content.replace(/[~_`*]/g, "\\$1");
 
@@ -134,6 +135,51 @@ module.exports = async(client, msg, suffix) => {
 			};
 
 			await r.table("Phonebook").insert(phonebookDoc);
+			return mailboxChooser();
+		}
+	};
+	
+	// PHONEBOOK
+
+	let mailboxChooser = async() => {
+		let collector = await msg.channel.awaitMessages(
+			m => m.author.id == msg.author.id,
+			{
+				max: 1,
+				time: 5 * 60 * 1000,
+			},
+		);
+
+		let collected = collector.first();
+		if (!collected) {
+			msg.author.busy = false;
+			return msg.channel.send({ embed: { color: config.colors.info, title: "Timed out", description: "Wizard timed out. Please use `>mailbox` if you want to set up your mailbox." } });
+		}
+		if (collected.content.startsWith(config.prefix)) {
+			msg.author.busy = false;
+			return;
+		}
+		if (collected.content === "skip") {
+			return embedSender();
+		} else {
+			autoreply = collected.content.replace(/[~_`*]/g, "\\$1");
+
+			let min = 1;
+			let max = 100;
+			let l = description.length;
+			if (min > l || l > max) {
+				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
+				return phonebookChooser();
+			}
+
+			let mailboxDoc = {
+				id: number,
+				autoreply: autoreply,
+				messages: [],
+			};
+			if (msg.guild) mailboxDoc.guild = msg.guild.id;
+
+			await r.table("Mailbox").insert(mailboxDoc);
 			return embedSender();
 		}
 	};
@@ -164,6 +210,13 @@ module.exports = async(client, msg, suffix) => {
 			embed.addField(
 				"Phonebook description",
 				`${description}`,
+				true,
+			);
+		}
+		if (autoreply) {
+			embed.addField(
+				"Mailbox autoreply",
+				`${autoreply}`,
 				true,
 			);
 		}
