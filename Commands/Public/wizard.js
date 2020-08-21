@@ -138,11 +138,7 @@ module.exports = async(client, msg, suffix) => {
 		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Welcome in the Yellowbook", description: `Your number can now be found in \`*411\` and randomly dialed.\n\nYou can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say \`skip\`.` } });
 		return mailboxChooser();
 	};
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> 341d6c1238449eefa712d1a8a06e24393305555b
 	// MAILBOX
 
 	let mailboxChooser = async() => {
