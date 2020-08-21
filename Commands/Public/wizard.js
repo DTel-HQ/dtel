@@ -43,7 +43,7 @@ module.exports = async(client, msg, suffix) => {
 	let number,
 		expiryDate,
 		description,
-	        autoreply;
+		autoreply;
 
 	// NUMBER
 	let numberChooser = async() => {
@@ -115,9 +115,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return;
 		}
-		if (collected.content === "skip") {
-			return mailboxChooser();
-		} else {
+		if (collected.content !== "skip") {
 			description = collected.content.replace(/[~_`*]/g, "\\$1");
 
 			let min = 15;
@@ -135,10 +133,10 @@ module.exports = async(client, msg, suffix) => {
 			};
 
 			await r.table("Phonebook").insert(phonebookDoc);
-			return mailboxChooser();
 		}
+		return mailboxChooser();
 	};
-	
+
 	// PHONEBOOK
 
 	let mailboxChooser = async() => {
