@@ -159,9 +159,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return;
 		}
-		if (collected.content === "skip") {
-			return embedSender();
-		} else {
+		if (collected.content !== "skip") {
 			autoreply = collected.content.replace(/[~_`*]/g, "\\$1");
 
 			let min = 1;
@@ -173,15 +171,15 @@ module.exports = async(client, msg, suffix) => {
 			}
 
 			let mailboxDoc = {
-				id: number,
+				id: msg.channel.id,
 				autoreply: autoreply,
 				messages: [],
 			};
 			if (msg.guild) mailboxDoc.guild = msg.guild.id;
 
 			await r.table("Mailbox").insert(mailboxDoc);
-			return embedSender();
 		}
+		return embedSender();
 	};
 
 	// INFORMATION
