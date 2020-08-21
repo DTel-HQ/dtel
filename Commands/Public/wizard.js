@@ -139,7 +139,7 @@ module.exports = async(client, msg, suffix) => {
 		return mailboxChooser();
 	};
 
-	// PHONEBOOK
+	// MAILBOX
 
 	let mailboxChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
