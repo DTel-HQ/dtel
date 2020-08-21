@@ -9,7 +9,14 @@ module.exports = async(client, msg, suffix) => {
 	let perm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	if (!perm) perm = msg.author.support;
 
-	const delperm = msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES").catch(() => false) : false;
+	let delperm = false;
+	if (msg.guild) {
+		try {
+			msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES");
+		} catch (_) {
+			// ignore
+		}
+	}
 
 	// get their mailbox
 	let mailbox = await r.table("Mailbox").get(msg.channel.id);
