@@ -116,6 +116,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return;
 		}
+		collected.delete().catch(e => null);
 		if (collected.content !== "skip") {
 			description = collected.content.replace(/[~_`*]/g, "\\$1");
 
@@ -123,7 +124,8 @@ module.exports = async(client, msg, suffix) => {
 			let max = 500;
 			let l = description.length;
 			if (min > l || l > max) {
-				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
+				let wmsg = await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
+				setTimeout(() => wmsg.delete(), 10000);
 				return phonebookChooser();
 			}
 
@@ -159,6 +161,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return;
 		}
+		collected.delete().catch(e => null);
 		if (collected.content !== "skip") {
 			autoreply = collected.content.replace(/[~_`*]/g, "\\$1");
 
@@ -166,7 +169,8 @@ module.exports = async(client, msg, suffix) => {
 			let max = 100;
 			let l = description.length;
 			if (min > l || l > max) {
-				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
+				let wmsg = await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
+				setTimeout(() => wmsg.delete(), 10000);
 				return mailboxChooser();
 			}
 
