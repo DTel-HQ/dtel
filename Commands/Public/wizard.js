@@ -40,7 +40,8 @@ module.exports = async(client, msg, suffix) => {
 
 	let omsg = await msg.channel.send({ embed: embed });
 
-	let number,
+	let emsg,
+		number,
 		expiryDate,
 		description,
 		autoreply;
@@ -91,7 +92,7 @@ module.exports = async(client, msg, suffix) => {
 
 		await r.table("Numbers").insert(numberDoc);
 		await client.log(`:blue_book: Number \`${number}\` has been self-assigned to channel ${numberDoc.channel} by \`${msg.author.username}\` (${msg.author.id})`);
-		await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Phonebook", value: `You can also put your number in the public phonebook, meaning this number can be randomly called (\`>rcall\`).\nIf you want to do so, type a description for your number (**no explicit language**), otherwise type \`skip\`.` }] } });
+		emsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Registered!", description: `This channel's number is now ${number}.`, fields: [{ name: "Yellowbook", value: `You can also put your number in the public yellowbook, meaning this number can be randomly called (\`>rcall\`).\nIf you want to do so, type a description for your number (**no explicit language**), otherwise type \`skip\`.` }] } });
 		return phonebookChooser();
 	};
 
@@ -123,7 +124,7 @@ module.exports = async(client, msg, suffix) => {
 			let l = description.length;
 			if (min > l || l > max) {
 				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
-				return phonebookChooser();
+				return mailboxChooser();
 			}
 
 			let phonebookDoc = {
@@ -134,6 +135,7 @@ module.exports = async(client, msg, suffix) => {
 
 			await r.table("Phonebook").insert(phonebookDoc);
 		}
+		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Welcome in the Yellowbook", description: `Your number can now be found in \`*411\` and randomly dialed.\n\nYou can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say \`skip\`.` } });
 		return mailboxChooser();
 	};
 
@@ -220,7 +222,8 @@ module.exports = async(client, msg, suffix) => {
 		}
 
 		msg.author.busy = false;
-		await msg.channel.send({ embed: embed });
+		if (!emsg) await msg.channel.send({ embed: embed });
+		else await emsg.edit({ embed: embed });
 	};
 
 	return numberChooser();
