@@ -117,7 +117,7 @@ module.exports = async(client, msg, suffix) => {
 			return;
 		}
 		collected.delete().catch(e => null);
-		if (collected.content !== "skip") {
+		if (!/skip/i.test(collected.content)) {
 			description = collected.content.replace(/[~_`*]/g, "\\$1");
 
 			let min = 15;
@@ -162,7 +162,7 @@ module.exports = async(client, msg, suffix) => {
 			return;
 		}
 		collected.delete().catch(e => null);
-		if (collected.content !== "skip") {
+		if (!/skip/i.test(collected.content)) {
 			autoreply = collected.content.replace(/[~_`*]/g, "\\$1");
 
 			let min = 1;
