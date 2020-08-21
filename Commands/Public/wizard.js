@@ -137,7 +137,7 @@ module.exports = async(client, msg, suffix) => {
 
 			await r.table("Phonebook").insert(phonebookDoc);
 		}
-		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Welcome in the Yellowbook", description: `Your number can now be found in \`*411\` and randomly dialed.\n\nYou can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say \`skip\`.` } });
+		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Welcome to the yellowbook", description: `Your number can now be found in \`*411\` and \`>rdial\`ed .\n\nYou can also set up a mailbox. This will be shown if you didn't pickup a call and without it people can't \`>message\` you.\nType a mailbox reply (again, no explicit language) or say \`skip\`.` } });
 		return mailboxChooser();
 	};
 
