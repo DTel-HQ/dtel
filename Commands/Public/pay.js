@@ -37,15 +37,15 @@ module.exports = async(client, msg, suffix) => {
 			name: `${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),
 		},
-		title: "Confirmation",
-		description: "(yes) to continue, (no) to cancel.",
+		title: "Please confirm",
+		description: "**(yes)** to continue, **(no)** to cancel.",
 		fields: [
 			{
-				name: "User",
+				name: "Recipient",
 				value: `To: ${user.tag} (${user.id})`,
 			},
 			{
-				name: "Transaction amounts",
+				name: "Transaction",
 				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
 			},
 			{
@@ -53,7 +53,7 @@ module.exports = async(client, msg, suffix) => {
 				value: `${config.dtsEmoji}${fromAccount.balance - amount}`,
 			},
 			{
-				name: "Message for receiver",
+				name: "Message",
 				value: reason ? reason : "None",
 			},
 		],
@@ -94,19 +94,19 @@ module.exports = async(client, msg, suffix) => {
 			name: `${msg.author.tag} (${msg.author.id})`,
 			icon_url: msg.author.displayAvatarURL(),
 		},
-		title: "Success!",
-		description: "You succesfully gave money to someone else. Here is your receipt.",
+		title: "Success",
+		description: "Your money is on its way!",
 		fields: [
 			{
-				name: "User",
-				value: `To: ${user.tag} (${user.id})`,
+				name: "Recipient",
+				value: `${user.tag} (${user.id})`,
 			},
 			{
-				name: "Transaction amounts",
+				name: "Transaction",
 				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 			},
 			{
-				name: "Message for receiver",
+				name: "Message",
 				value: reason ? reason : "None",
 			},
 		],
