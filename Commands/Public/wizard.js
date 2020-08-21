@@ -139,7 +139,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	};
 	
-	// PHONEBOOK
+	// MAILBOX
 
 	let mailboxChooser = async() => {
 		let collector = await msg.channel.awaitMessages(
@@ -169,7 +169,7 @@ module.exports = async(client, msg, suffix) => {
 			let l = description.length;
 			if (min > l || l > max) {
 				await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
-				return phonebookChooser();
+				return mailboxChooser();
 			}
 
 			let mailboxDoc = {
