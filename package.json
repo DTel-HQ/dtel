@@ -1,14 +1,14 @@
 {
-  "name": "discordtel",
-  "version": "3.2.0",
+  "name": "dtel",
+  "version": "4.0.0",
   "description": "Discord Telephone",
-  "main": "index.js",
+  "main": "out/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/austinhuang0131/discordtel.git"
+    "url": "git+https://github.com/dtel-hq/dtel.git"
   },
   "keywords": [
     "DTEL"
@@ -20,17 +20,14 @@
   ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/austinhuang0131/discordtel/issues"
+    "url": "https://github.com/dtel-hq/dtel/issues"
   },
-  "homepage": "https://discordtel.austinhuang.me",
+  "homepage": "https://dtel.austinhuang.me",
   "engines": {
     "node": "12"
   },
   "dependencies": {
     "@discoin/scambio": "^2.0.4",
-    "@types/rethinkdb": "^2.3.14",
-    "@types/rethinkdbdash": "github:typed-typings/rethinkdbdash",
-    "@types/ws": "^7.2.3",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.1.1",
@@ -51,6 +48,9 @@
     "zucc": "^0.1.2"
   },
   "devDependencies": {
-    "@types/node": "^13.11.1"
+    "@types/node": "^13.11.1",
+    "@types/rethinkdb": "^2.3.14",
+    "@types/rethinkdbdash": "github:typed-typings/rethinkdbdash",
+    "@types/ws": "^7.2.3"
   }
 }
