@@ -38,6 +38,30 @@ module.exports = async(client, msg, suffix, call) => {
 	let fromDoc = msg.channel.id == call.from.channel ? call.to : call.from;
 	let toNumbervip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
 
+	if (fromDoc.number === config.supportNumber) {
+		// send confirmation embed
+		let omsg = await msg.channel.send({ embed: {
+			color: config.colors.info,
+			title: "You **must** read this before calling!",
+			description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
+			footer: {
+				text: "This call will automatically be discarded in 60 seconds",
+			},
+		} });
+
+		// Make a collector for yes/no
+		let collected = await msg.channel.awaitMessages(
+			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
+			{ max: 1, time: 60000 },
+		);
+
+		// on collection
+		omsg.delete();
+		if (!collected.first()) return;
+		collected.first().delete().catch(e => null);
+		if (/^no$/i.test(collected.first().content)) return;
+	}
+
 	// Create the transferred call.
 	let newCall = {
 		id: uuidv4(),
