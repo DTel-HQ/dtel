@@ -181,15 +181,19 @@ scheduleJob("0 20 * * 0", async() => {
 	let month = new Date().toLocaleString("default", { month: "long" });
 	let embed = {
 		color: config.colors.vip,
-		title: `This week's top voters`,
-		description: `The voter(s) who voted the most have been awarded ${prize} VIP month(s).`,
+		title: "This week's top voters",
+		description: "The voter(s) who voted the most have been awarded ${prize} VIP month(s).",
 		footer: {
-			text: `Note that bosses do not qualify for the prize. • Want a chance at winning? Make sure to [vote for us on these sites](${config.voteLink})! (You also get free ${config.dtsEmoji} for voting!)`,
+			text: "Note that bosses do not qualify for the prize.",
 		},
 		fields: [
 			{
 				name: winners.length === 1 ? "Winner" : "Winners",
 				value: winnersString,
+			},
+			{
+				name: "Want to win?",
+				value: `Make sure to [vote for us on these sites](${config.voteLink})! (You also get free ${config.dtsEmoji} for voting.)`
 			},
 		],
 	};
