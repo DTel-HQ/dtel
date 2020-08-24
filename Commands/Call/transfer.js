@@ -40,7 +40,7 @@ module.exports = async(client, msg, suffix, call) => {
 
 	if (fromDoc.number === config.supportNumber) {
 		// send confirmation embed
-		let omsg = await msg.channel.send({ embed: {
+		let omsg = (await client.channels.fetch(toDialDoc.channel)).channel.send({ embed: {
 			color: config.colors.info,
 			title: "You **must** read this before calling!",
 			description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
@@ -50,7 +50,7 @@ module.exports = async(client, msg, suffix, call) => {
 		} });
 
 		// Make a collector for yes/no
-		let collected = await msg.channel.awaitMessages(
+		let collected = await (await client.channels.fetch(toDialDoc.channel)).awaitMessages(
 			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
 			{ max: 1, time: 60000 },
 		);
