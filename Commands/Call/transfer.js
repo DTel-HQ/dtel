@@ -38,33 +38,6 @@ module.exports = async(client, msg, suffix, call) => {
 	let fromDoc = msg.channel.id == call.from.channel ? call.to : call.from;
 	let toNumbervip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
 
-	await msg.channel.send({ embed: { color: config.colors.success, title: "Transferring...", description: `You have transferred the other side to \`${toDial}\`.\nThis call has ended.`, footer: { text: call.id } } });
-	client.log(`:arrow_right: Channel \`${fromNumbervip ? fromNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to \`${toNumbervip ? newCall.to.hidden ? "hidden" : newCall.to.channel : newCall.to.channel}\` by \`${msg.channel.id}\``);
-
-	if (toDial === config.supportNumber) {
-		// send confirmation embed
-		let omsg = await (await client.channels.fetch(toDialDoc.channel)).send({ embed: {
-			color: config.colors.info,
-			title: "You **must** read this before calling!",
-			description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
-			footer: {
-				text: "This call will automatically be discarded in 60 seconds",
-			},
-		} });
-
-		// Make a collector for yes/no
-		let collected = await (await client.channels.fetch(toDialDoc.channel)).awaitMessages(
-			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
-			{ max: 1, time: 60000 },
-		);
-
-		// on collection
-		omsg.delete();
-		if (!collected.first()) return;
-		collected.first().delete().catch(e => null);
-		if (/^no$/i.test(collected.first().content)) return;
-	}
-
 	// Create the transferred call.
 	let newCall = {
 		id: uuidv4(),
@@ -91,8 +64,35 @@ module.exports = async(client, msg, suffix, call) => {
 	let toContact = toDialDoc.contacts ? (await toDialDoc.contacts.filter(c => c.number === fromNumber.id))[0] : null;
 	let fromNumbervip = fromNumber.vip ? new Date(fromNumber.vip.expiry).getTime() > Date.now() : false;
 
-	if (newCall.to.number === config.supportNumber) client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
+	await msg.channel.send({ embed: { color: config.colors.success, title: "Transferring...", description: `You have transferred the other side to \`${toDial}\`.\nThis call has ended.`, footer: { text: call.id } } });
 	await client.apiSend({ embed: { color: config.colors.info, title: "You're being transferred...", description: `You have been transferred by the other side. Now dialing ${newCall.to.number === config.supportNumber ? "Customer Support" : toNumbervip ? newCall.to.hidden ? newCall.vip.name ? `\`${newCall.vip.name}\`` : "Hidden" : newCall.to.name ? `\`${newCall.to.name} (${newCall.to.number})\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\`` : fromContact ? `:green_book:${fromContact.name}` : `\`${newCall.to.number}\``}...`, footer: { text: `old: ${call.id}, new: ${newCall.id}` } } }, newCall.from.channel);
+	client.log(`:arrow_right: Channel \`${fromNumbervip ? fromNumber.vip.hidden ? "hidden" : newCall.from.channel : newCall.from.channel}\` has been transferred to \`${toNumbervip ? newCall.to.hidden ? "hidden" : newCall.to.channel : newCall.to.channel}\` by \`${msg.channel.id}\``);
+
+	if (toDial === config.supportNumber) {
+		// send confirmation embed
+		let omsg = await (await client.channels.fetch(toDialDoc.channel)).send({ embed: {
+			color: config.colors.info,
+			title: "You **must** read this before calling!",
+			description: "611 is our Customer Support number operated by real people.\nIt is for questions and support ***for the bot.***\nOther people may also need support at the same time.\nTherefore, any misuse of the service (eg. trolling) will result in a strike/blacklist.\nAre you sure you want to call 611?\n\nRespond with `yes` or `no`.",
+			footer: {
+				text: "This call will automatically be discarded in 60 seconds",
+			},
+		} });
+
+		// Make a collector for yes/no
+		let collected = await (await client.channels.fetch(toDialDoc.channel)).awaitMessages(
+			m => m.author.id === msg.author.id && /^yes$|^no$/i.test(m.content),
+			{ max: 1, time: 60000 },
+		);
+
+		// on collection
+		omsg.delete();
+		if (!collected.first()) return;
+		collected.first().delete().catch(e => null);
+		if (/^no$/i.test(collected.first().content)) return;
+	}
+
+	if (newCall.to.number === config.supportNumber) client.apiSend(`<@&${config.supportRole}>`, newCall.to.channel);
 	client.apiSend({ content: toDialDoc.mentions ? `${toDialDoc.mentions.join(" ")}\n` : "", embed: { color: config.colors.info, title: "Incoming call", description: `There is an incoming call from ${fromNumber.id === config.supportNumber ? "Customer Support" : fromNumbervip ? fromNumber.vip.hidden ? fromNumber.vip.name ? `\`${fromNumber.vip.name}\`` : "Hidden" : fromNumber.vip.name ? `\`${fromNumber.vip.name} (${fromNumber.id})\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\`` : toContact ? `:green_book:${toContact.name}` : `\`${fromNumber.id}\``}. You can either type \`>pickup\` or \`>hangup\`, or wait it out.`, footer: { text: newCall.id } } }, newCall.to.channel);
 
 	setTimeout(async() => {
