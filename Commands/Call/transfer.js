@@ -38,7 +38,7 @@ module.exports = async(client, msg, suffix, call) => {
 	let fromDoc = msg.channel.id == call.from.channel ? call.to : call.from;
 	let toNumbervip = toDialDoc.vip ? new Date(toDialDoc.vip.expiry).getTime() > Date.now() : false;
 
-	if (fromDoc.number === config.supportNumber) {
+	if (toDial === config.supportNumber) {
 		// send confirmation embed
 		let omsg = (await client.channels.fetch(toDialDoc.channel)).channel.send({ embed: {
 			color: config.colors.info,
