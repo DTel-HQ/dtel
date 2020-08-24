@@ -3,7 +3,7 @@ const uuidv4 = require("uuid/v4");
 module.exports = async(client, msg, suffix, call) => {
 	// Check arguments
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "You didn't give a number to transfer to... `>transfer [number]`" } });
-	if (["*611", "*411", "*233"].includes(suffix)) return msg.channel.send({ embed: { color: config.colors.error, title: "That'd break the bot...", description: "You can't transfer to this number." } });
+	if (["*411", "*233"].includes(suffix)) return msg.channel.send({ embed: { color: config.colors.error, title: "That'd break the bot...", description: "You can't transfer to this number." } });
 	if (config.aliasNumbers[suffix]) suffix = config.aliasNumbers[suffix];
 
 	// Check if they're able to transfer
