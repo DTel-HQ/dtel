@@ -44,7 +44,7 @@ module.exports = async(client, msg, suffix) => {
 	let res = user ? await user.blacklist(reason) : await guild.blacklist(reason);
 	if (!res.inserted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not inserted", description: "The ID was not inserted into the DB" } });
 
-	client.log(`:hammer: ID \`${suffix}\` has been added to the blacklist by \`${msg.author.tag}\`.`);
+	client.log(`:hammer: ID \`${target}\` has been added to the blacklist by \`${msg.author.tag}\`.`);
 	if (dmChannel) {
 		dmChannel.send({ embed: { color: config.colors.error, title: "You've been blacklisted", description: "This means you can no longer use DTel.\n\nIf you feel like this action was unjust, you can dispute it with one of the bosses in the support server." } })
 			.catch(e => null);
