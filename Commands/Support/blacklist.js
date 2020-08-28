@@ -1,7 +1,10 @@
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: ">blacklist [user/serverID] [reason]" } });
-	const target = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];
-	const reason = suffix.split(" ").slice(1).join(" ");
+	suffix = suffix.split(" ");
+	const target = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix[0];
+	const silent = suffix.includes("-s");
+	if (silent) suffix.splice(suffix.indexOf("-s"), 1);
+	const reason = suffix.slice(1).join(" ");
 
 	if (target === config.supportGuild) return msg.channel.send({ embed: { color: config.colors.error, title: "No", description: "Just no" } });
 
@@ -17,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 		let res = user ? await user.unBlacklist() : await guild.unBlacklist();
 		if (!res.deleted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not deleted", description: "The ID could not be deleted from the DB" } });
 
-		client.log(`:wrench: ID \`${suffix}\` has been removed from the blacklist by \`${msg.author.tag}\`.`);
+		client.log(`:wrench: ID \`${target}\` has been removed from the blacklist by \`${msg.author.tag}\`.`);
 		if (dmChannel) {
 			dmChannel.send({ embed: { color: config.colors.info, title: "You've been pardoned", description: "You have been removed from the blacklist.\nYour record, however, has not be cleansed. Meaning any violation will put you back on the blacklist." } })
 				.catch(e => null);
