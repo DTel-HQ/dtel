@@ -21,7 +21,7 @@ module.exports = async(client, msg, suffix) => {
 		if (!res.deleted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not deleted", description: "The ID could not be deleted from the DB" } });
 
 		client.log(`:wrench: ID \`${target}\` has been removed from the blacklist by \`${msg.author.tag}\`.`);
-		if (dmChannel) {
+		if (!silent && dmChannel) {
 			dmChannel.send({ embed: { color: config.colors.info, title: "You've been pardoned", description: "You have been removed from the blacklist.\nYour record, however, has not be cleansed. Meaning any violation will put you back on the blacklist." } })
 				.catch(e => null);
 		}
@@ -48,7 +48,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!res.inserted) return msg.channel.send({ embed: { color: config.colors.error, title: "ID was not inserted", description: "The ID was not inserted into the DB" } });
 
 	client.log(`:hammer: ID \`${target}\` has been added to the blacklist by \`${msg.author.tag}\`.`);
-	if (dmChannel) {
+	if (!silent && dmChannel) {
 		dmChannel.send({ embed: { color: config.colors.error, title: "You've been blacklisted", description: "This means you can no longer use DTel.\n\nIf you feel like this action was unjust, you can dispute it with one of the bosses in the support server." } })
 			.catch(e => null);
 	}
