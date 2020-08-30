@@ -165,7 +165,7 @@ scheduleJob("0 20 * * 0", async() => {
 		let account = await user.account();
 		account.vip ? account.vip += prize : account.vip = prize;
 		await r.table("Accounts").get(account.id).update({ vip: account.vip });
-		client.log(`🏆 ${user.username} (${user.id}) won ${prize} VIP Month for being ${winners.length === 1 ? "the" : "a"} highest voter.`);
+		client.log(`🏆 ${user.username} (${user.id}) won ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter.`);
 
 		await user.createDM();
 		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Months for being ${winners.length === 1 ? "the" : "a"} highest voter this month.` } }).catch(e => null);
@@ -182,7 +182,7 @@ scheduleJob("0 20 * * 0", async() => {
 	let embed = {
 		color: config.colors.vip,
 		title: "This week's top voters",
-		description: "The voter(s) who voted the most have been awarded ${prize} VIP month(s).",
+		description: `The voter(s) who voted the most have been awarded ${prize} VIP month(s).`,
 		footer: {
 			text: "Note that bosses do not qualify for the prize.",
 		},
