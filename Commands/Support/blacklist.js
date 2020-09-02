@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!user) guild = await client.guilds.resolve(target);
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown ID", description: "Couldn't find a user or server with that ID" } });
 
-	const dmChannel = await user.createDM();
+	const dmChannel = user ? await user.createDM() : null;
 
 	let blacklisted = user ? await user.blacklisted : await guild.blacklisted;
 	if (blacklisted) {
