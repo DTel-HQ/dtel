@@ -8,7 +8,12 @@ module.exports = async(client, msg, suffix) => {
 
 	if (target === config.supportGuild) return msg.channel.send({ embed: { color: config.colors.error, title: "No", description: "Just no" } });
 
-	const user = await client.users.fetch(target).catch(e => null);
+	let user;
+	try {
+		user = await client.users.fetch(target);
+	} catch (_) {
+		user = null;
+	}
 	let guild;
 	if (!user) guild = await client.guilds.resolve(target);
 	if (!user && !guild) return msg.channel.send({ embed: { color: config.colors.error, title: "Unknown ID", description: "Couldn't find a user or server with that ID" } });
