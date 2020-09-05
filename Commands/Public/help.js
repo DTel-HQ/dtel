@@ -9,12 +9,12 @@ module.exports = async(client, msg, suffix) => {
 				icon_url: avatarURL,
 				url: "https://dtel.austinhuang.me",
 			},
-			title: "List of Commands",
-			description: "For more information, use `>info`, `>links` or call customer support: `>dial *611`.",
+			title: "DTel's commands",
+			description: "For more information, use `>info`, `>links` or call Customer Support (`>dial *611`).",
 			fields: [
 				{
 					name: "Get yourself a number to call others!",
-					value: "Do `>wizard` and follow the prompts. Once you got one, you can...",
+					value: "Use `>wizard` and follow the prompts. Once you've got one, you can...",
 				},
 				{
 					name: ">dial / >call",
@@ -22,7 +22,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">rdial / >rcall",
-					value: "Dial a random number from the `*411` phonebook. (To register yourself on the phonebook, do `>dial *411`.)",
+					value: "Dial a random number from the yellowpages (`*411`). (To register your number in the yellowpages, `>dial *411`.)",
 				},
 				{
 					name: ">status",
@@ -30,19 +30,19 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: ">block",
-					value: "Block a number from calling this channel.",
+					value: "Block a number from calling you.",
 				},
 				{
 					name: ">contacts",
-					value: "A personal contact book for DTel numbers.",
+					value: "Your personal contact book of DTel numbers.",
 				},
 				{
 					name: ">mention",
-					value: "Get mentioned when there's an incoming call.",
+					value: "Get mentioned when there's an incoming call (guild only).",
 				},
 				{
 					name: ">transfer",
-					value: "Transfer the other side in a call to another number.",
+					value: "Transfer the other side of a call to another number.",
 				},
 				{
 					name: "Currency commands",
@@ -57,12 +57,12 @@ module.exports = async(client, msg, suffix) => {
 					value: "Upgrade your number to a VIP number. Use this to see all the benefits!",
 				},
 				{
-					name: "I don't really need to explain them...Right, my master?",
-					value: "`>help`, `>info`, `>invite`, `>links`, `>prefix`, `>ping`",
+					name: "I don't really need to explain these... right, my master?",
+					value: "`>help`, `>info`, `>invite`, `>links`, `>prefix` and `>ping`",
 				},
 			],
 			footer: {
-				text: "DTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				text: "DTel V3 • Made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};
