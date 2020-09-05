@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 			let embed = {
 				color: config.colors.receipt,
 				title: "Converted!",
-				description: `Succesfully converted <:DTS:668551813317787659>${client.format(amount)} into ${client.format(newTransaction.payout)} ${emoji}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
+				description: `Succesfully converted <:DTS:668551813317787659>${client.format(amount)} into ${emoji}${client.format(newTransaction.payout)}. You may track your transaction [here](https://dash.discoin.zws.im/#/transactions/${newTransaction.id}/show).`,
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
