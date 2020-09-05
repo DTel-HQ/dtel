@@ -72,7 +72,7 @@ module.exports = async msg => {
 			await cmdFile(client, msg, suffix, call);
 			await msg.author.busy = false;
 		} catch (err) {
-			const user = client.users.fetch(msg.author.id).catch(_ => null);
+			const user = await client.users.fetch(msg.author.id).catch(_ => null);
 			if (user) await user.busy = false;
 			msg.channel.send({
 				embed: {
