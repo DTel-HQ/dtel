@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DTel numbers. Their name will also show up when they call.\n\nPress a number (1-10) to call.\nTo message a contact: respond with \`message (1-10)\`\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`)
+			.setDescription(`An easy way to store your known DTel numbers. Their name will also show up when they call.\n\n${contacts.length ? "Respond with a number (1-10) to call that contact.\nTo message a contact, respond with \`message (1-10)\`." : ""}\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`)
 			.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 
 		// Add contacts to embed
@@ -71,15 +71,15 @@ module.exports = async(client, msg, suffix) => {
 			let getNumber = async bad => {
 				if (!perm) {
 					msg.author.busy = false;
-					return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+					return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permissions", description: "You need the Manage Server permission to do this." } });
 				}
-				if (contacts.length >= 10) msg.channel.send({ embed: { color: config.colors.error, title: "Too many contacts", description: "We currently do not allow more than 9 contacts." } });
+				if (contacts.length >= 10) msg.channel.send({ embed: { color: config.colors.error, title: "Too many contacts", description: "Currently, you can only have 9 contacts." } });
 
 				// send embed
 				omsg = await msg.channel.send({ embed: {
 					color: config.colors.contacts,
-					title: bad ? "Non existant number. " : "Add a number.",
-					description: "Please input the number you want to add.",
+					title: bad ? "Non existant number" : "Add a number",
+					description: bad ? "Please input a valid number." : "Please input the number you want to add.",
 					footer: {
 						text: "Press (0) to hangup. This call will automatically be hung up after 60 seconds of inactivity.",
 					},
@@ -111,7 +111,7 @@ module.exports = async(client, msg, suffix) => {
 					title: `Add a name for ${number.id}`,
 					description: "Please enter a name for the number. (max 20 characters)",
 					footer: {
-						text: "Press (0) to hangup. This call will automatically be hung up after 1 minutes of inactivity.",
+						text: "Press (0) to hangup. This call will automatically be hung up after 1 minute of inactivity.",
 					},
 				} });
 
@@ -132,8 +132,8 @@ module.exports = async(client, msg, suffix) => {
 				// add a description embed
 				omsg = await omsg.edit("", { embed: {
 					color: config.colors.contacts,
-					title: `Add a description for ${number.id}`,
-					description: "Please enter a description for the number. (max 100 characters)",
+					title: `Add a description for ${number.id}.`,
+					description: "Please enter a description for the number (max 100 characters).",
 					footer: {
 						text: "Press (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 					},
@@ -171,7 +171,7 @@ module.exports = async(client, msg, suffix) => {
 			// check for perm & if the contact is legit
 			if (!perm) {
 				msg.author.busy = false;
-				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient perms", description: "You need the Manage Server permission to do this." } });
+				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permissions", description: "You need the `Manage Server` permission to do this." } });
 			}
 
 			omsg = await msg.channel.send({ embed: {
@@ -179,7 +179,7 @@ module.exports = async(client, msg, suffix) => {
 				title: `Editing ${contact.name} (${contact.number})`,
 				description: `Enter a new name for the contact. (max 20 characters)\nCurrent name: \`${contact.name}\``,
 				footer: {
-					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
+					text: "(8) to skip, (9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 				},
 			} });
 
@@ -199,7 +199,9 @@ module.exports = async(client, msg, suffix) => {
 				msg.author.busy = false;
 				return omsg.delete().catch(e => null);
 			}
-
+			if (/^8$/.test(collected.first().content)) {
+				collected.first = contact.name; // maybe not the most elegant solution but I didn't want to have to make a new method - rexo
+			}
 			// Edit the contact's entry
 			let newContact = { number: contact.number, name: collected.first().content, description: contact.description };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
@@ -209,9 +211,9 @@ module.exports = async(client, msg, suffix) => {
 			omsg = await omsg.edit({ embed: {
 				color: config.colors.contacts,
 				title: `Editing ${contact.name}(${contact.number})`,
-				description: `Enter a new description for the contact. (max 100 characters)\nCurrent description: \`${contact.description}\``,
+				description: `Enter a new description for the contact (max 100 characters).\nCurrent description: \`${contact.description}\``,
 				footer: {
-					text: "(0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
+					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 				},
 			} });
 
@@ -253,8 +255,8 @@ module.exports = async(client, msg, suffix) => {
 		if (/message/i.test(collected.first().content.split(" ")[0])) {
 			omsg = await msg.channel.send({ embed: {
 				color: config.colors.contacts,
-				title: `Messaging`,
-				description: `Enter the message you want to sent to ${contact.name}.\nPlease keep it under 400 characters.`,
+				title: `Message ${contact.name}`,
+				description: `Respond with the message you want to sent to ${contact.name}.\nPlease keep it under 400 characters.`,
 				footer: {
 					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity",
 				},
