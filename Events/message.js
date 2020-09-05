@@ -70,9 +70,10 @@ module.exports = async msg => {
 			// If the user doesn't have an account
 			if (account.template) await msg.author.account(true);
 			await cmdFile(client, msg, suffix, call);
-			msg.author.busy = false;
+			await msg.author.busy = false;
 		} catch (err) {
-			msg.author.busy = false;
+			const user = client.users.fetch(msg.author.id).catch(_ => null);
+			if (user) await user.busy = false;
 			msg.channel.send({
 				embed: {
 					color: config.colors.error,
