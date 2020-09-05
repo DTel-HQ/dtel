@@ -5,11 +5,11 @@ module.exports = async(client, msg, suffix) => {
 			fields: [
 				{
 					name: "Join our support server!",
-					value: `${config.guildInvite}`,
+					value: `[Get the latest news, help with the bot and more!](${config.guildInvite})`,
 				},
 				{
 					name: "Invite the bot!",
-					value: `[All permissions are essential](${config.botInvite})`,
+					value: `[Note: all permissions are essential.](${config.botInvite})`,
 				},
 			],
 		},
