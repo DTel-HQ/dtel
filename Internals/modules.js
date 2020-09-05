@@ -1,4 +1,4 @@
-const numberIsValid = async (channel, number) => {
+const numberIsValid = async(channel, number) => {
 	if (!channel || !number) return new Error("Missing arguments");
 	if (typeof channel !== "object") channel = await client.channels.cache.fetch(channel);
 	if (!channel) return new Error("Couldn't find channel");
@@ -11,4 +11,4 @@ const numberIsValid = async (channel, number) => {
 
 module.exports = {
 	numberIsValid,
-}
+};
