@@ -65,8 +65,7 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 			.replace(/(t|u|v)/ig, "8")
 			.replace(/(w|x|y|z)/ig, "9")
 			.replace(/-/ig, "")
-			.replace("(", "")
-			.replace(")", "")
+			.replace(/("("|")")/ig, "")
 			.replace(/\s+/g, "");
 	}
 

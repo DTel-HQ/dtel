@@ -193,7 +193,7 @@ scheduleJob("0 20 * * 0", async() => {
 			},
 			{
 				name: "Want to win?",
-				value: `Make sure to [vote for us on these sites](${config.voteLink})! (You also get free ${config.dtsEmoji} for voting.)`
+				value: `Make sure to [vote for us on these sites](${config.voteLink})! (You also get free ${config.dtsEmoji} for voting.)`,
 			},
 		],
 	};
