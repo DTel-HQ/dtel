@@ -60,7 +60,7 @@ module.exports = async(client, msg, suffix) => {
 		}
 	}
 
-	await msg.channel.send({ embed: { color: config.colors.success, title: "User striked", description: `This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length} strike(s).\nStrike ID: \`${id}\`` }, author: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
+	await msg.channel.send({ embed: { color: config.colors.success, title: "User striked", description: `This ${user ? "user" : "guild"} has been striked and now has ${totalStrikes.length == 1 ? "1 strike" : `${totalStrikes.length} strikes`}.\nStrike ID: \`${id}\`` }, author: { text: msg.author.tag, icon_url: msg.author.displayAvatarURL() } });
 	client.log(`:cloud_lightning: ${channel ? `Guild` : `User`} ID \`${toStrike}\` has been strikken with ID ${strikeDoc.id} by \`${msg.author.tag}\`. (${totalStrikes.length} strikes)`);
 	if (silent) return;
 	if (user) {
