@@ -41,7 +41,7 @@ module.exports = {
 		default: "<:DTelPhone:709100612935221289>",
 		donator: "<:GoldPhone:709101494242246657>",
 		support: "<:GreenPhone:709101494556819507>",
-		contributor: "<:RedPhone:742293638931021904>"
+		contributor: "<:RedPhone:742293638931021904>",
 	},
 	dtsEmoji: "<:DTS:668551813317787659>",
 
@@ -51,7 +51,6 @@ module.exports = {
 	badLogsChannel: "377945714166202368",
 	promoteChannel: "398569181097754624",
 	supportChannel: "281816105289515008",
-	
 	supportGuild: "281815661317980160",
 
 	bossRole: "281815725365264385",
