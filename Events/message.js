@@ -72,8 +72,8 @@ module.exports = async msg => {
 			await cmdFile(client, msg, suffix, call);
 			await msg.author.busy = false;
 		} catch (err) {
-			const user = await client.users.fetch(msg.author.id).catch(_ => null);
-			if (user) await user.busy = false;
+			const user = await client.users.cache.fetch(msg.author.id).catch(_ => null);
+			if (user) user.busy = false;
 			msg.channel.send({
 				embed: {
 					color: config.colors.error,
