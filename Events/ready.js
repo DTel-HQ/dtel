@@ -26,7 +26,7 @@ module.exports = async() => {
 	for (let i of donatorRole.members.values()) {
 		i.user.donator = true;
 	}
-	for(let i of contributorRole.members.values()) {
+	for (let i of contributorRole.members.values()) {
 		i.user.contributor = true;
 	}
 
