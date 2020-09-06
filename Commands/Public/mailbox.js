@@ -52,7 +52,7 @@ module.exports = async(client, msg, suffix) => {
 			return;
 		}
 
-		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setting autoreply", description: "Type the autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)" } });
+		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Setting autoreply", description: "Type the autoreply of your mailbox. Please refrain from cursing and other offensive content.", footer: { text: "Max 100 characters. (0) to exit." } } });
 
 		// autoreply collector
 		collector = await msg.channel.awaitMessages(
@@ -69,6 +69,10 @@ module.exports = async(client, msg, suffix) => {
 		if (!collected) {
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.error, title: "Timed out", description: "You ran out of time, get an autoreply ready and start the set-up again." } });
+		}
+		if (/^0$/i.test(collected.content)) {
+			msg.author.busy = false;
+			return msg.channel.send({ embed: { color: config.colors.info, title: "Aborted prompt", description: "You can re-run this command at any time." } });
 		}
 
 		if (delperm) collected.delete().catch(e => null);
