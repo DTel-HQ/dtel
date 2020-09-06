@@ -1,5 +1,3 @@
-const { MessageEmbed } = require("discord.js");
-
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
 	let call = await nmsg.channel.call;
