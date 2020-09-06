@@ -15,7 +15,6 @@ module.exports = async(client, msg, suffix) => {
 	if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need to have `manage guild` permission to run this command." } });
 
 	let prefix = msg.channel.type == "dm" ? "0900" : `030${client.shard.id + 1}`;
-	let toChoose = true;
 	msg.author.busy = true;
 
 	let embed = new MessageEmbed()
