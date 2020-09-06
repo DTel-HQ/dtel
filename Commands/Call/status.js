@@ -1,5 +1,3 @@
-const { MessageEmbed } = require("discord.js");
-
 module.exports = (client, msg, suffix, call) => {
 	if (!call.pickedUp) return;
 
@@ -15,12 +13,25 @@ module.exports = (client, msg, suffix, call) => {
 
 	const messages = call.messages ? call.messages.length : 0;
 
-	const embed = new MessageEmbed()
-		.setColor(config.colors.info)
-		.setTitle("Call status")
-		.addField("Time elapsed", client.time(seconds, minutes, hours, days), true)
-		.addField("Message count", messages, true)
-		.setFooter(call.id)
-		.setTimestamp();
-	msg.channel.send({ embed: embed });
+	const statusEmbed = {
+		color: config.colors.info,
+		title: "Call status",
+		fields: [
+			{
+				name: "Time elapsed",
+				value: client.time(seconds, minutes, hours, days),
+				inline: true,
+			},
+			{
+				name: "Message count",
+				value: messages,
+				inline: true,
+			},
+		],
+		timestamp: new Date(),
+		footer: {
+			text: call.id,
+		},
+	};
+	msg.channel.send({ embed: statusEmbed });
 };
