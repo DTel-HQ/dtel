@@ -23,7 +23,7 @@ module.exports = async(client, msg, suffix) => {
 	});
 
 	// REMOVE THIS WHEN FIXED
-	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}) and tell us the steps you performed.` } });
+	msg.channel.send({ embed: { color: config.colors.error, title: "Caution", description: `This command may cause issues in some circumstances.\nIf you are unable to use the bot hereafter, [join our support server](${config.guildInvite}) and tell us the steps you performed.` } });
 
 	// Main contact list
 	let contactList = async() => {
@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store your known DTel numbers. Their name will also show up when they call.\n\n${contacts.length ? "Respond with a number (1-10) to call that contact.\nTo message a contact, respond with \`message (1-10)\`." : ""}\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact: respond with `edit/delete (1-10)`." : ""}`)
+			.setDescription(`An easy way to store DTel numbers you contact often. Their name will also show up when they call you.\n\n${contacts.length ? "Respond with a number (1-10) to call that contact.\nTo message a contact, respond with \`message (1-10)\`." : ""}\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact, respond with `edit/delete (1-10)`." : ""}`)
 			.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 
 		// Add contacts to embed
