@@ -8,6 +8,7 @@ module.exports = Discord => {
 				this.donator = false;
 				this.support = false;
 				this.manager = false;
+				this.contributor = false;
 			}
 
 			account(insert) {
