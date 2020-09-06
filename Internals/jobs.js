@@ -168,7 +168,7 @@ scheduleJob("0 20 * * 0", async() => {
 		client.log(`🏆 ${user.username} (${user.id}) won ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter.`);
 
 		await user.createDM();
-		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Months for being ${winners.length === 1 ? "the" : "a"} highest voter this month.` } }).catch(e => null);
+		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter this month.`, footer: { title: "You can now make any number of your choice VIP by using >upgrade." } } }).catch(e => null);
 	}
 
 	// Make the announcement embed
