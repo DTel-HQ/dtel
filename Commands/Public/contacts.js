@@ -55,7 +55,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// Create collector
 		msg.author.busy = true;
-		let collected = await msg.channel.awaitMessages(testFunction,	{ max: 1, time: 120000 });
+		let collected = await msg.channel.awaitMessages(testFunction, { max: 1, time: 120000 });
 
 		// On collection
 		omsg.delete().catch(e => null);
@@ -78,7 +78,7 @@ module.exports = async(client, msg, suffix) => {
 				// send embed
 				omsg = await msg.channel.send({ embed: {
 					color: config.colors.contacts,
-					title: bad ? "Non existant number" : "Add a number",
+					title: bad ? "Non existent number" : "Add a number",
 					description: bad ? "Please input a valid number." : "Please input the number you want to add.",
 					footer: {
 						text: "Press (0) to hangup. This call will automatically be hung up after 60 seconds of inactivity.",
@@ -109,9 +109,9 @@ module.exports = async(client, msg, suffix) => {
 				omsg = await omsg.edit("", { embed: {
 					color: config.colors.contacts,
 					title: `Add a name for ${number.id}`,
-					description: "Please enter a name for the number. (max 20 characters)",
+					description: "Please enter a name for the number.",
 					footer: {
-						text: "Press (0) to hangup. This call will automatically be hung up after 1 minute of inactivity.",
+						text: "Max 20 characters. (0) to hangup. This call will automatically be hung up after 1 minute of inactivity.",
 					},
 				} });
 
@@ -177,15 +177,15 @@ module.exports = async(client, msg, suffix) => {
 			omsg = await msg.channel.send({ embed: {
 				color: config.colors.contacts,
 				title: `Editing ${contact.name} (${contact.number})`,
-				description: `Enter a new name for the contact. (max 20 characters)\nCurrent name: \`${contact.name}\``,
+				description: `Enter a new name for the contact.\nCurrent name: \`${contact.name}\``,
 				footer: {
-					text: "(8) to skip, (9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
+					text: "Max 20 characters. (8) to skip, (9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 				},
 			} });
 
 			// Create collector
 			collected = await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length < 21,
+				m => m.author.id === msg.author.id,
 				{ max: 1, time: 180000 },
 			);
 
@@ -200,7 +200,12 @@ module.exports = async(client, msg, suffix) => {
 				return omsg.delete().catch(e => null);
 			}
 			if (/^8$/.test(collected.first().content)) {
-				collected.first = contact.name; // maybe not the most elegant solution but I didn't want to have to make a new method - rexo
+				collected.first = contact.name;
+			}
+			if (collected.first.length() < 0 || collected.first.length() > 21) {
+				let isItMax = collected.first.length() > 21;
+				msg.author.busy = false;
+				return msg.channel.send({ embed: { title: `Description ${isItMax ? "too long" : "too short"}`, description: `Please ${isItMax ? "lengthen" : "shorten"} the description.` } });
 			}
 			// Edit the contact's entry
 			let newContact = { number: contact.number, name: collected.first().content, description: contact.description };
@@ -210,16 +215,16 @@ module.exports = async(client, msg, suffix) => {
 
 			omsg = await omsg.edit({ embed: {
 				color: config.colors.contacts,
-				title: `Editing ${contact.name}(${contact.number})`,
-				description: `Enter a new description for the contact (max 100 characters).\nCurrent description: \`${contact.description}\``,
+				title: `Editing ${contact.name} (${contact.number})`,
+				description: `Enter a new description for the contact.\nCurrent description: \`${contact.description}\``,
 				footer: {
-					text: "(9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
+					text: "Max 100 characters. (9) to return, (0) to hangup. This call will automatically be hung up after 3 minutes of inactivity.",
 				},
 			} });
 
 			// Create collector
 			collected = await msg.channel.awaitMessages(
-				m => m.author.id === msg.author.id && m.content.length > 0 && m.content.length < 100,
+				m => m.author.id === msg.author.id,
 				{ max: 1, time: 180000 },
 			);
 
@@ -229,7 +234,11 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
-
+			if (collected.first.length() < 0 || collected.first.length() > 100) {
+				let isItMax = collected.first.length() > 100;
+				msg.author.busy = false;
+				return msg.channel.send({ embed: { title: `Description ${isItMax ? "too long" : "too short"}`, description: `Please ${isItMax ? "lengthen" : "shorten"} the description.` } });
+			}
 			// Edit the contact's entry
 			newContact = { number: contact.number, name: contact.name, description: collected.first().content };
 			await contacts.splice(contacts.indexOf(contact), 1, newContact);
