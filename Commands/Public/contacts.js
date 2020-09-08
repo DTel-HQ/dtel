@@ -31,7 +31,7 @@ module.exports = async(client, msg, suffix) => {
 		const embed = new MessageEmbed()
 			.setColor(config.colors.contacts)
 			.setTitle("Contacts")
-			.setDescription(`An easy way to store DTel numbers you contact often. Their name will also show up when they call you.\n\n${contacts.length ? "Respond with a number (1-10) to call that contact.\nTo message a contact, respond with \`message (1-10)\`." : ""}\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact, respond with `edit/delete (1-10)`." : ""}`)
+			.setDescription(`An easy way to store DTel numbers you contact often. Their name will also show up when they call you.\n\n${contacts.length ? "Respond with a number (1-10) to call that contact.\nTo message a contact, respond with `message (1-10)`." : ""}\nTo add a contact: respond with \`add\`.\n${perm && contacts.length ? "To edit/delete a contact, respond with `edit/delete (1-10)`." : ""}`)
 			.setFooter("Press (0) to hangup. This call will automatically be hung up after 2 minutes of inactivity.");
 
 		// Add contacts to embed
