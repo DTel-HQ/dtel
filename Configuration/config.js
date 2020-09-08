@@ -71,7 +71,8 @@ module.exports = {
 
 	// Embed Colors
 	colors: {
-		contacts: 0x50C878, // green
+        contacts: 0x50C878, // green
+        warning: 0xe56b1a, // orange
 		error: 0xff3333, // red
 		info: 0x3498d8, // blue
 		lottery: 0x80002a, // red

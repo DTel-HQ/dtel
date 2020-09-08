@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
   */
 
 	// REMOVE THIS lATER;
-	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}).` } });
+	msg.channel.send({ embed: { color: config.colors.warning, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}).` } });
 
 	// Do the necessary checks
 	let number = await msg.channel.number;
