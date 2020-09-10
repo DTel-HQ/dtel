@@ -8,7 +8,7 @@ module.exports = async(client, msg, suffix) => {
 	// Get the user's permissions
 	let perm;
 	if (msg.channel.type === "dm") perm = true;
-	else perm = await msg.guild.members.cache.fetch(msg.author.id).then(u => u.permisions.has("MANAGE_GUILD"));
+	else perm = await msg.guild.members.fetch(msg.author.id).then(u => u.permisions.has("MANAGE_GUILD"));
 	if (!perm) perm = msg.author.support;
 
 	// Get contacts
