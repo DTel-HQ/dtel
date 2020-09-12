@@ -59,7 +59,7 @@ module.exports = async(client, msg, suffix) => {
 
 		// On collection
 		omsg.delete().catch(e => null);
-		let delPerm = msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
+		let delPerm = msg.guild ? await msg.channel.members.fetch(client.user.id).then(u => u.permissions.has("MANAGE_GUILD")); : false;
 		if (collected.first() && delPerm) collected.first().delete().catch(e => null);
 		if (!collected.first() || /^0$/.test(collected.first().content)) {
 			msg.author.busy = false;
