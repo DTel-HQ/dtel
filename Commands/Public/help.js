@@ -67,7 +67,7 @@ module.exports = async(client, msg, suffix) => {
 		},
 	};
 
-	let dmChannel = await msg.author.createDM();
+	await msg.author.createDM(); // do we need to do this or does msg.author.send do it for us - rexo
 	try {
 		await msg.author.send(toSend);
 	} catch (_) {

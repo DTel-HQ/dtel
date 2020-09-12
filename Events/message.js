@@ -17,7 +17,7 @@ module.exports = async msg => {
 		};
 	}
 
-	// moved this up here in order for support to be able to run unbusy while busy (to find command) - turret
+    // moved this up here to support running >unbusy while busy (to find command) - turret
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
 		.replace(/dial/gi, "call");
@@ -55,39 +55,37 @@ module.exports = async msg => {
 	if (!msg.author.support) msg.author.cooldown = "default";
 	// Run the command
 
-	if (cmdFile) {
-		// check for blacklist
-		const userBlacklisted = await msg.author.blacklisted;
-		if (msg.guild && await msg.guild.blacklisted) {
-			let name = msg.guild.name.replace(/(\*|`|_|~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
-			client.log(`📑 Left guild ${msg.guild.id}(${name}) for being on the blacklist. Currently in ${client.guild.size} servers.`);
-			return msg.guild.leave();
-		}
-		if (userBlacklisted) return;
+	// check for blacklist
+	const userBlacklisted = await msg.author.blacklisted;
+	if (msg.guild && await msg.guild.blacklisted) {
+		let name = msg.guild.name.replace(/(\*|`|_|~)/, "\\$1").replace(/discord\.(gg|io|me|li)\/([\w\d])+/g, "**Invite Link Censored**").replace(/@(everyone|here)/g, "@\u200b$1");
+		client.log(`📑 Left guild ${msg.guild.id}(${name}) for being on the blacklist. Currently in ${client.guild.size} servers.`);
+		return msg.guild.leave();
+	}
+	if (userBlacklisted) return;
 
-		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
-		try {
-			// If the user doesn't have an account
-			if (account.template) await msg.author.account(true);
-			cmdFile(client, msg, suffix, call).then(_ => {
-				msg.author.busy = false;
-			});
-		} catch (err) {
-			client.users.cache.fetch(msg.author.id).then(u => {
-				u.busy = false;
-			}).catch(e => {
-				// rip user	
-			});
-			msg.channel.send({
-				embed: {
-					color: config.colors.error,
-					title: "❌ Error!",
-					description: `An unexpected error has occured.\n\`\`\`js\n${err.stack}\`\`\``,
-					footer: {
-						text: `Please contact a maintainer: ${config.guildInvite}.`,
-					},
+	if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
+	try {
+		// If the user doesn't have an account
+		if (account.template) await msg.author.account(true);
+		cmdFile(client, msg, suffix, call).then(_ => {
+			msg.author.busy = false;
+		});
+	} catch (err) {
+		client.users.cache.fetch(msg.author.id).then(u => {
+			u.busy = false;
+		}).catch(e => {
+			// rip user	
+		});
+		msg.channel.send({
+			embed: {
+				color: config.colors.error,
+				title: "❌ Error!",
+				description: `An unexpected error has occured.\n\`\`\`js\n${err.stack}\`\`\``,
+				footer: {
+					text: `Please contact a maintainer: ${config.guildInvite}.`,
 				},
-			});
-		}
+			},
+		});
 	}
 };
