@@ -17,7 +17,7 @@ module.exports = async msg => {
 		};
 	}
 
-    // moved this up here to support running >unbusy while busy (to find command) - turret
+	// moved this up here to support running >unbusy while busy (to find command) - turret
 	// Filter out the command and arguments to pass
 	let cmd = msg.content.split(" ")[0].trim().toLowerCase().replace(prefix, "")
 		.replace(/dial/gi, "call");
