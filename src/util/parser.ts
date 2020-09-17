@@ -1,7 +1,7 @@
 import { channelMentionRegex, userMentionRegex, numberRegex } from "../constants/regexp";
 import { SuffixTypes } from "../constants/enums";
 import { dbTables, util } from "../constants/interfaces";
-import { Client } from "discord.js";
+import Eris, { Client } from "eris";
 
 interface suffixType {
 	type: number;
@@ -51,10 +51,17 @@ export default class Parser {
 	*/
 
 	public instance(id: string, type: number): any {
-		if (type === SuffixTypes["DTelNumber"]) return ; // TODO: return number
-		else if (type === SuffixTypes["userMention"]) return this.client.users.resolve(id);
-		else if (type === SuffixTypes["channelMention"]) return this.client.channels.resolve(id);
-		return null;
+		let ret = null;
+		if (type === SuffixTypes["DTelNumber"]) ret = null; // TODO: return number
+		else if (type === SuffixTypes["userMention"]) ret = this.client.users.find(user => user.id === id);
+		else if (type === SuffixTypes["channelMention"]) ret = this.client.guilds.map((g: Eris.Guild) => {
+			const channel = g.channels.find(chan => chan.id === id)
+			if (channel !== undefined) {
+				ret = channel
+			};
+			return null;
+		});
+		return ret;
 	}
 
 	/**
