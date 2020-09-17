@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@discoin/scambio": "^2.0.4",
+    "@discordjs/collection": "^0.1.6",
     "@types/rethinkdb": "^2.3.14",
     "@types/rethinkdbdash": "github:typed-typings/rethinkdbdash",
     "@types/ws": "^7.2.3",
