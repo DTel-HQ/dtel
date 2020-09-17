@@ -33,7 +33,7 @@
 		"target": "esnext",
 		"types": [
 			"node",
-			"discord.js",
+			"eris",
 			"rethinkdbdash"
 		]
 	},
