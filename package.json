@@ -36,6 +36,7 @@
     "chainfetch": "^1.2.2",
     "clear-module": "^4.1.1",
     "eris": "^0.13.3",
+    "eris-sharder": "^1.10.0",
     "erlpack": "github:discordapp/erlpack",
     "fs-nextra": "^0.4.7",
     "i18next": "^19.4.0",
