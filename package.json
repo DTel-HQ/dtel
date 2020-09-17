@@ -1,14 +1,14 @@
 {
-  "name": "discordtel",
-  "version": "3.2.0",
+  "name": "dtel",
+  "version": "4.0.0",
   "description": "Discord Telephone",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/austinhuang0131/discordtel.git"
+    "url": "git+https://github.com/dtel-hq/dtel.git"
   },
   "keywords": [
     "DTEL"
@@ -20,9 +20,9 @@
   ],
   "license": "SEE LICENSE IN LICENSE",
   "bugs": {
-    "url": "https://github.com/austinhuang0131/discordtel/issues"
+    "url": "https://github.com/dtel-hq/dtel/issues"
   },
-  "homepage": "https://discordtel.austinhuang.me",
+  "homepage": "https://dtel.austinhuang.me",
   "engines": {
     "node": "12"
   },
