@@ -46,7 +46,7 @@ export default class Account {
 
 	public get transactions(): any {
 		// TODO: make it an index
-		return this.util.db.r.table("Transactions").filter(this.util.db.r.row("fromID").eq(this.id).or(this.util.db.r.row("toID").eq(this.id))).default([]);
+		return this.util.db.transactions.r.table("Transactions").filter(this.util.db.transactions.r.row("fromID").eq(this.id).or(this.util.db.transactions.r.row("toID").eq(this.id))).default([]);
 	}
 
 	public freeze(status: string): boolean {
@@ -57,19 +57,19 @@ export default class Account {
 
 	public setBalance(amount: number): Account {
 		this._balance = amount;
-		this.util.db.r!.table("Accounts").get(this.id).update({ _balance: this._balance });
+		this.util.db.transactions.r!.table("Accounts").get(this.id).update({ _balance: this._balance });
 		return this;
 	}
 
 	public setLanguage(lang: keyof typeof Languages) {
 		this._language = lang;
-		this.util.db.r!.table("Accounts").get(this.id).update({ _language: this._language });
+		this.util.db.transactions.r!.table("Accounts").get(this.id).update({ _language: this._language });
 	}
 
 	public setPrefix(prefix: string | null): Account {
 		if (prefix === null) this._prefix = settings.prefix;
 		else this._prefix = prefix;
-		this.util.db.r!.table("Accounts").get(this.id).update({ _prefix: this._prefix });
+		this.util.db.transactions.r!.table("Accounts").get(this.id).update({ _prefix: this._prefix });
 		return this;
 	}
 

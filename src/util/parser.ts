@@ -1,7 +1,6 @@
 import { channelMentionRegex, userMentionRegex, numberRegex } from "../constants/regexp";
 import { SuffixTypes } from "../constants/enums";
-import { util } from "../constants/interfaces";
-import databaseInterface from "../classes/cache";
+import { dbTables, util } from "../constants/interfaces";
 import { Client } from "discord.js";
 
 interface suffixType {
@@ -17,7 +16,7 @@ interface suffixType {
 
 export default class Parser {
 	protected client: Client;
-	protected db: databaseInterface;
+	protected db: dbTables;
 
 	constructor (protected util: util) {
 		this.client = util.client;
