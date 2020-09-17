@@ -3,7 +3,23 @@ declare module "eris-sharder" {
 	import Eris from "eris"
 
 	class Cluster {
-		id: null
+        public shards: number;
+        public maxShards: number;
+        public firstShardID: number;
+        public lastShardID: number;
+        public mainFile: any;
+        public clusterID: number;
+        public clusterCount: number;
+        public guilds: number;
+        public users: number;
+        public uptime: number;
+        public exclusiveGuilds: number;
+        public largeGuilds: number;
+        public voiceChannels: number;
+        public shardsStats: Array<any>;
+        public app: any;
+        public bot: Eris.Client | null;
+        public test: boolean;
 
 		constructor()
 
@@ -19,7 +35,23 @@ declare module "eris-sharder" {
 	}
 
 	export class Master extends EventEmitter {
-		constructor(token: string, mainFile: string, options: Eris.ClientOptions)
+		constructor(token: string, mainFile: string, options: {
+			clientOptions: Eris.ClientOptions,
+			shards?: number,
+			firstShardID?: number,
+			lastShardID?: number,
+			clusters?: number,
+			clusterTimeout?: number,
+			stats?: boolean,
+			statsInterval?: number,
+			name?: string,
+			guildsPerShard?: number,
+			webhooks?: {
+				cluster: any,
+				shard: any
+			},
+			debug?: boolean
+		})
 
 		isMaster(): boolean;
 
