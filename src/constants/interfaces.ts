@@ -1,4 +1,4 @@
-import { Client } from "discord.js";
+import Eris from "eris";
 import { Logger } from "winston";
 import DatabaseInterface from "../classes/cache";
 import { UserPerms, NumberPerms } from "../constants/enums";
@@ -9,7 +9,7 @@ interface i18next {
 }
 
 export interface util {
-	client: Client;
+	client: Eris.Client;
 	db: dbTables;
 	logger: Logger;
 	t?: i18next;

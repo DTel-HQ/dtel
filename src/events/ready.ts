@@ -1,4 +1,4 @@
-import { Client } from "discord.js"
+import { Client } from "eris"
 import { Logger } from "winston";
 
 export default (constants: { client: Client, winston: Logger }) => {

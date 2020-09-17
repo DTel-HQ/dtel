@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { Message } from "eris";
 import { util, commandOptions } from "../constants/interfaces";
 
 /**

@@ -1,5 +1,5 @@
 import { ReqlClient } from "rethinkdbdash";
-import { Collection } from "discord.js";
+import { Collection } from "@discordjs/collection";
 
 export interface options {
 	tableName: string,

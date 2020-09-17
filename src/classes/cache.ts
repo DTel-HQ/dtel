@@ -1,4 +1,4 @@
-import { Collection } from "discord.js";
+import { Collection } from "@discordjs/collection";
 import { ReqlClient } from "rethinkdbdash";
 import { modelFound } from "./modelFound";
 
