@@ -75,7 +75,7 @@ module.exports = async msg => {
 		client.users.cache.fetch(msg.author.id).then(u => {
 			u.busy = false;
 		}).catch(e => {
-			// rip user	
+			// rip user
 		});
 		msg.channel.send({
 			embed: {
