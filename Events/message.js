@@ -42,7 +42,7 @@ module.exports = async msg => {
 	if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Support/${cmd}`);
 		if (cmdFile && !msg.author.support) return;
-		if (cmdFile && !(msg.author.manager || (msg.channel.parent && msg.channel.parent.id === config.offices))) return msg.channel.send({ color: config.colors.error, description: "This command can not be used outside of HQ channels." });
+		if (cmdFile && !(msg.author.manager || (msg.channel.parent && msg.channel.parent.id === config.offices))) return msg.channel.send({ embed: { color: config.colors.error, description: "This command can not be used outside of HQ channels." } });
 	}
 
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
