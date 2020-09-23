@@ -52,6 +52,7 @@ module.exports = {
 	promoteChannel: "398569181097754624",
 	supportChannel: "281816105289515008",
 	supportGuild: "281815661317980160",
+	offices: "355890256786227210",
 
 	bossRole: "281815725365264385",
 	donatorRole: "324578460183822337",
