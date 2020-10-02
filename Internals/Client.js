@@ -132,7 +132,9 @@ module.exports = Discord => class DTelClient extends Discord.Client {
 
 		setTimeout(async() => {
 			if (typeof number != "object") number = await r.table("Numbers").get(number);
-			let channelID = typeof number == "object" ? number.channel : (await r.table("Numbers").get(number)).channel;
+			if (!number) return;
+
+			let channelID = number.channel;
 			if (!channelID && !force) return;
 			let channel = await client.api.channels(channelID).get().catch(e => null);
 
