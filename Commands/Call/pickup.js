@@ -36,7 +36,10 @@ module.exports = async(client, msg, suffix, call) => {
 	call.pickedUpBy = msg.author.id;
 	await r.table("Calls").get(call.id).update(call);
 
+	let counter = 0;
 	let afkInterval = setInterval(async() => {
+		counter++;
+		if (counter >= 5) return clearInterval(afkInterval);
 		call = await r.table("Calls").get(call.id);
 		if (!call) return clearInterval(afkInterval);
 		if (!call.lastMessage || call.lastMessage + 290000 < new Date().getTime()) {
