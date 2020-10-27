@@ -37,13 +37,13 @@ module.exports = async(msg, myNumber) => {
 		if (query) {
 			results = phonebook.filter(p => p.description.toLowerCase().indexOf(query) > -1);
 			await results.sort(comparison);
-			queryPages = Math.ceil(results.length / 10);
+			queryPages = Math.ceil(results.length / 10) || 1;
 		}
 
 		// Searchpage embed
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
-			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
+			.setTitle(query ? `${results.length ? "Yellowbook" : "No"} results for ${query}` : "Yellowbook entries")
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
 
 		// Determine if query - add 10 results accordingly
