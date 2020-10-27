@@ -1,5 +1,5 @@
 module.exports = async guild => {
-	let guildBlacklisted = client.guilds.get(guild.id);
+	let guildBlacklisted = client.guilds.cache.get(guild.id) || client.guilds.fetch(guild.id);
 	const guildOwner = client.users.fetch(guild.owner_id || guild.ownerID);
 	let ownerBlacklisted = await guildOwner.blacklisted;
 	let name =	guild.name.replace("`", "");

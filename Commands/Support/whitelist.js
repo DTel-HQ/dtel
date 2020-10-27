@@ -11,7 +11,7 @@ module.exports = async(client, msg, suffix) => {
 	if (whitelist) await r.table("Whitelist").get(guild.id).delete();
 	else await r.table("Whitelist").insert({ id: guild.id });
 
-	const dmChannel = await guild.owner.user.createDM();
+	const dmChannel = await (await guild.members.fetch(guild.ownerID)).user.createDM();
 	if (!whitelist) {
 		client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by \`${msg.author.tag}\``);
 		dmChannel.send({ embed: { color: config.colors.info, title: `Your server ${guild.name} has been whitelisted.`, description: "You now have the ability to create more than three numbers.\n\nNote: we expect good behaviour from whitelisted server, so any violation of our rules can result in losing the whitelist." } })
