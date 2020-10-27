@@ -18,21 +18,25 @@ module.exports = async(client, msg, suffix) => {
 
 	let resstr = "";
 	const permsArr = suffix.match(/[+-]\w*/g) || [];
-	await permsArr.forEach(async perm => {
-		const permName = perm.slice(1);
-		if (!perms[permName]) return;
-		try {
-			if (perm.startsWith("+")) {
-				member = await member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
-				resstr += `✅ ${permName}\n`;
-			}	else {
-				member = await member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
-				resstr += `❌ ${permName}\n`;
+	permsArr.push("end");
+	permsArr.forEach(async perm => {
+		if (perm === "end") {
+			const newPerms = await require("../../Internals/modules").updatePerms(member);
+			return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+		} else {
+			const permName = perm.slice(1);
+			if (!perms[permName]) return;
+			try {
+				if (perm.startsWith("+")) {
+					member = await member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
+					resstr += `✅ ${permName}\n`;
+				}	else {
+					member = await member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
+					resstr += `❌ ${permName}\n`;
+				}
+			} catch (e) {
+				resstr += `Couldn't ${perm.startsWith("+") ? "add" : "remove"} the ${permName} role`;
 			}
-		} catch (e) {
-			resstr += `Couldn't ${perm.startsWith("+") ? "add" : "remove"} the ${permName} role`;
 		}
 	});
-	const newPerms = await require("../../Internals/modules").updatePerms(member);
-	return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 };
