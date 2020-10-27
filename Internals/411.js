@@ -52,7 +52,7 @@ module.exports = async(msg, myNumber) => {
 			if (!doc) break;
 			await embed.addField(doc.id, doc.description);
 		}
-		embed.addField("Options", `Enter a page number or query (minimum of three characters) to search for.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
+		embed.addField("Options", `Enter a page number or \`search [query]\` (minimum of three characters) to search in the yellowbook.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
 
 		// Edit/send message
 		await omsg.edit({ embed: embed });
@@ -74,7 +74,7 @@ module.exports = async(msg, myNumber) => {
 		}
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
-		if (!/^\d+$/.test(collected.content)) query = collected.content;
+		if (collected.content.startsWith("search ")) query = collected.content.split(" ").slice(1).join(" ") || null;
 		if (/^clear$/.test(collected.content)) query = null;
 
 		// Page number or query? change page number
