@@ -22,10 +22,10 @@ module.exports = async(client, msg, suffix) => {
 		if (!perms[permName]) continue;
 		try {
 			if (perm.startsWith("+")) {
-				member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
+				await member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
 				resstr += `✅ ${permName}\n`;
 			}	else {
-				member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
+				await member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
 				resstr += `❌ ${permName}\n`;
 			}
 		} catch (e) {
@@ -35,5 +35,5 @@ module.exports = async(client, msg, suffix) => {
 	if (resstr.length) resstr += "\n";
 
 	const newPerms = await require("../../Internals/modules").updatePerms(member);
-	msg.channel.send({ embed: { description: `resstr\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+	msg.channel.send({ embed: { description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 };
