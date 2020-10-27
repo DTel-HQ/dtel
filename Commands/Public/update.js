@@ -6,7 +6,7 @@ const perms = {
 };
 
 module.exports = async(client, msg, suffix) => {
-	if (suffix.test(/help|info/i)) return msg.channel.send({ embed: { color: config.colors.info, description: "Update a user their perms\n`>update [userID]`" } });
+	if (/help|info/i.test(suffix)) return msg.channel.send({ embed: { color: config.colors.info, description: "Update a user their perms\n`>update [userID]`" } });
 	if (!suffix || !msg.author.support) suffix = msg.author.id;
 
 	const id = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];
