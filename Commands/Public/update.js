@@ -17,7 +17,6 @@ module.exports = async(client, msg, suffix) => {
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
 	let resstr = "";
-	let newPerms;
 	suffix.match(/[+-]\w*/g).forEach(async(perm, index, arr) => {
 		const permName = perm.slice(1);
 		if (!perms[permName]) return;
@@ -32,8 +31,9 @@ module.exports = async(client, msg, suffix) => {
 		} catch (e) {
 			resstr += `Couldn't ${perm.startsWith("+") ? "add" : "remove"} the ${perm} role`;
 		}
-		if (index === arr.length - 1) newPerms = await require("../../Internals/modules").updatePerms(member);
+		if (index === arr.length - 1) {
+			const newPerms = await require("../../Internals/modules").updatePerms(member);
+			return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+		}
 	});
-
-	msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 };
