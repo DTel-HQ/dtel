@@ -15,16 +15,18 @@ async function numberIsValid(channel, number) {
 }
 
 function updatePerms(member) {
-	if (member.guild.id !== config.supportGuild) throw new Error("Member should be in support server");
-	const perms = {
-		boss: config.bossRole,
-		manager: config.managerRole,
-		support: config.supportRole,
-		donator: config.donatorRole,
-		contributor: config.contributorRole,
-	};
-	const obj = {};
-	for (let perm of Object.keys(perms)) if (member.roles.cache.has(perms[perm])) obj[perm] = true; else obj[perm] = false;
-	for (let perm of Object.keys(obj)) member.user[perm] = obj[perm];
-	return r.table("Accounts").get(member.id).update(obj).then(() => obj);
+	return member.client.guilds.fetch(member.guild.id).then(guild => guild.members.fetch(member.id).then(newMember => {
+		if (newMember.guild.id !== config.supportGuild) throw new Error("Member should be in support server");
+		const perms = {
+			boss: config.bossRole,
+			manager: config.managerRole,
+			support: config.supportRole,
+			donator: config.donatorRole,
+			contributor: config.contributorRole,
+		};
+		const obj = {};
+		for (let perm of Object.keys(perms)) if (newMember.roles.cache.has(perms[perm])) obj[perm] = true; else obj[perm] = false;
+		for (let perm of Object.keys(obj)) newMember.user[perm] = obj[perm];
+		return r.table("Accounts").get(newMember.id).update(obj).then(() => obj);
+	}));
 }
