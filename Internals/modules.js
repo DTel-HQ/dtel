@@ -22,6 +22,7 @@ const perms = {
 	contributor: config.contributorRole,
 };
 function updatePerms(member) {
+	console.log(require("util").inspect(member));
 	if (member.guild.id !== config.supportGuild) throw new Error("Member should be in support server");
 	return member.fetch(true).then(newMember => {
 		const obj = {};
