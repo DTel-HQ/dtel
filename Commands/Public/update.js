@@ -13,7 +13,7 @@ module.exports = async(client, msg, suffix) => {
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || await client.guilds.fetch(config.supportGuild)
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch HQ server" } }));
-	const member = await supportGuild.members.fetch(id)
+	let member = await supportGuild.members.fetch(id)
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
 	let resstr = "";
@@ -23,10 +23,10 @@ module.exports = async(client, msg, suffix) => {
 		if (!perms[permName]) return;
 		try {
 			if (perm.startsWith("+")) {
-				await member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
+				member = await member.roles.add(perms[permName], `Addition requested by ${msg.author.id}`);
 				resstr += `✅ ${permName}\n`;
 			}	else {
-				await member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
+				member = await member.roles.remove(perms[permName], `Removal requested by ${msg.author.id}`);
 				resstr += `❌ ${permName}\n`;
 			}
 		} catch (e) {
