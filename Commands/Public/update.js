@@ -1,5 +1,6 @@
 module.exports = async(client, msg, suffix) => {
-	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, description: "update a user their perms\n`>update [userID]`" } });
+	if (suffix === "info") return msg.channel.send({ embed: { color: config.colors.info, description: "update a user their perms\n`>update [userID]`" } });
+	if (!suffix) suffix = msg.author.id;
 	if (msg.mentions.users.first()) suffix = msg.mentions.users.first().id;
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || await client.guilds.fetch(config.supportGuild)
