@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
 	let resstr = "";
-	const permsArr = suffix.match(/[+-]\w*/g);
+	const permsArr = suffix.match(/[+-]\w*/g) || [];
 	permsArr.forEach(async(perm, index, arr) => {
 		const permName = perm.slice(1);
 		if (!perms[permName]) return;
