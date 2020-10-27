@@ -5,7 +5,7 @@ module.exports = async() => {
 	await client.shard.broadcastEval(`this.done = true`);
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || client.guilds.fetch(config.supportGuild);
-	const accounts = r.table("Accounts");
+	const accounts = await r.table("Accounts");
 	const filteredAccounts = accounts.filter(acc => acc.boss || acc.manager || acc.support || acc.contributor || acc.donator || false);
 	for (let account of filteredAccounts) updatePerms(await supportGuild.members.fetch(account.id));
 
