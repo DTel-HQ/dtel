@@ -25,6 +25,6 @@ function updatePerms(member) {
 	};
 	const obj = {};
 	for (let perm of Object.keys(perms)) if (member.roles.cache.has(perms[perm])) obj[perm] = true; else obj[perm] = false;
-	Object.apply(member.user, obj);
+	for (let perm of Object.keys(obj)) member.user[perm] = obj[perm];
 	return r.table("Accounts").get(member.id).update(obj).then(() => obj);
 }
