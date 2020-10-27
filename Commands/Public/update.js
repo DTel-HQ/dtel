@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let resstr = "";
 	const permsArr = suffix.match(/[+-]\w*/g) || [];
-	permsArr.forEach(async perm => {
+	await permsArr.forEach(async perm => {
 		const permName = perm.slice(1);
 		if (!perms[permName]) return;
 		try {
