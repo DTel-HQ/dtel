@@ -8,7 +8,8 @@ const perms = {
 module.exports = async(client, msg, suffix) => {
 	if (suffix === "info") return msg.channel.send({ embed: { color: config.colors.info, description: "update a user their perms\n`>update [userID]`" } });
 	if (!msg.author.support) suffix = msg.author.id;
-	if (msg.mentions.users.first()) suffix = msg.mentions.users.first().id;
+
+	const id = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || await client.guilds.fetch(config.supportGuild)
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch HQ server" } }));
