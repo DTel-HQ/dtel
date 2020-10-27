@@ -17,7 +17,8 @@ module.exports = async(client, msg, suffix) => {
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
 	let resstr = "";
-	suffix.match(/[+-]\w*/g).forEach(async(perm, index, arr) => {
+	const permsArr = suffix.match(/[+-]\w*/g);
+	permsArr.forEach(async(perm, index, arr) => {
 		const permName = perm.slice(1);
 		if (!perms[permName]) return;
 		try {
@@ -36,4 +37,8 @@ module.exports = async(client, msg, suffix) => {
 			return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 		}
 	});
+	if (!permsArr.length) {
+		const newPerms = await require("../../Internals/modules").updatePerms(member);
+		return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+	}
 };
