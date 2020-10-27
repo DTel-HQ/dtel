@@ -30,16 +30,6 @@ module.exports = async msg => {
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
 	if (!call && !msg.content.startsWith(prefix)) return;
 
-	// Workaround until we have guild member list intent
-	let guild = client.guilds.cache.get(config.supportGuild) || client.guilds.fetch(config.supportGuild).catch(e => null);
-	if (guild) {
-		if (guild.roles.cache.get(config.bossRole).members.has(msg.author.id)) msg.author.boss = true;
-		if (guild.roles.cache.get(config.managerRole).members.has(msg.author.id)) msg.author.manager = true;
-		if (guild.roles.cache.get(config.supportRole).members.has(msg.author.id)) msg.author.support = true;
-		if (guild.roles.cache.get(config.donatorRole).members.has(msg.author.id)) msg.author.donator = true;
-		if (guild.roles.cache.get(config.contributorRole).members.has(msg.author.id)) msg.author.contributor = true;
-	}
-
 	let cmdFile;
 	// Find call command files
 	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
