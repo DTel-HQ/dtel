@@ -7,5 +7,6 @@ module.exports = async(client, msg, suffix) => {
 	const member = await supportGuild.members.fetch(suffix)
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
-	require("../../Internals/modules").updatePerms(member);
+	const perms = await require("../../Internals/modules").updatePerms(member);
+	msg.channel.send({ embed: { description: `\`\`\`js\n${require("util").inspect(perms)}\`\`\`` } });
 };
