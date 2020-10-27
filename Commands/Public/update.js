@@ -32,8 +32,7 @@ module.exports = async(client, msg, suffix) => {
 			resstr += `Couldn't ${perm.startsWith("+") ? "add" : "remove"} the ${perm} role`;
 		}
 	}
-	if (resstr.length) resstr += "\n";
 
 	const newPerms = await require("../../Internals/modules").updatePerms(member);
-	msg.channel.send({ embed: { description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+	msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 };
