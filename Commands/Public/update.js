@@ -6,7 +6,7 @@ const perms = {
 };
 
 module.exports = async(client, msg, suffix) => {
-	if (suffix === "info") return msg.channel.send({ embed: { color: config.colors.info, description: "update a user their perms\n`>update [userID]`" } });
+	if (suffix === "info") return msg.channel.send({ embed: { color: config.colors.info, description: "Update a user their perms\n`>update [userID]`" } });
 	if (!msg.author.support) suffix = msg.author.id;
 
 	const id = msg.mentions.users.first() ? msg.mentions.users.first().id : suffix.split(" ")[0];
@@ -17,7 +17,7 @@ module.exports = async(client, msg, suffix) => {
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
 	let resstr = "";
-	for (let perm of suffix.match(/[+-]\w*/g)) {
+	for (let perm of suffix.match(/[+-]\w*/g) || []) {
 		const permName = perm.slice(1);
 		if (!perms[permName]) continue;
 		try {
