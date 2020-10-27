@@ -6,7 +6,7 @@ module.exports = async() => {
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || client.guilds.fetch(config.supportGuild);
 	const accounts = r.table("Accounts");
-	const filteredAccounts = accounts.filter(acc => acc.boss || acc.manager || acc.support || acc.contributor || acc.donator);
+	const filteredAccounts = accounts.filter(acc => acc.boss || acc.manager || acc.support || acc.contributor || acc.donator || false);
 	for (let account of filteredAccounts) updatePerms(await supportGuild.members.fetch(account.id));
 
 	let blacklist = await r.table("Blacklist");
