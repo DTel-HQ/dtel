@@ -74,7 +74,7 @@ module.exports = async msg => {
 				msg.author.busy = false;
 			});
 		} catch (err) {
-			client.users.cache.fetch(msg.author.id).then(u => {
+			client.users.fetch(msg.author.id).then(u => {
 				u.busy = false;
 			}).catch(e => {
 				// rip user
