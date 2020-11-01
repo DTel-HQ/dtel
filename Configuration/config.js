@@ -31,7 +31,8 @@ module.exports = {
 	pickupBonus: 25, // *611
 	promoteCost: 100,
 	renewalRate: 500,
-	transferRate: 0.729,
+	normalTransferRate: 0.729, // 27% fee
+	vipTransferRate: 0.849, // 15% fee
 	minTransfer: 50,
 	maxNumbers: 3,
 	promoteTimeout: 7, // days
