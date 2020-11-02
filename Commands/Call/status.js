@@ -1,4 +1,4 @@
-module.exports = (client, msg, suffix, call) => {
+module.exports = async(client, msg, suffix, call) => {
 	if (!call.pickedUp) return;
 
 	const startDate = new Date(call.startedAt);
