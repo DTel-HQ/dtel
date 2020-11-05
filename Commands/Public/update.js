@@ -16,16 +16,19 @@ module.exports = async(client, msg, suffix) => {
 	let member = await supportGuild.members.fetch(id)
 		.catch(e => msg.channel.send({ embed: { color: config.colors.error, description: "Couldn't fetch member in HQ server" } }));
 
+	if (!msg.author.boss) {
+		const newPerms = await require("../../Internals/modules").updatePerms(member);
+		return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+	}
+	
 	let resstr = "";
 	const permsArr = suffix.match(/[+-]\w*/g) || [];
 	permsArr.push("end");
 	permsArr.forEach(async perm => {
 		if (perm === "end") {
-			console.log("end");
 			const newPerms = await require("../../Internals/modules").updatePerms(member);
 			return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 		} else {
-			console.log("new perm");
 			const permName = perm.slice(1);
 			if (!perms[permName]) return;
 			try {
