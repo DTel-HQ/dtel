@@ -28,7 +28,7 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Determine the fee
-	let rate = fromAccount.vip ? config.vipTransferRate : config.normalTransferRate;
+	let rate = (msg.author.donator || user.donator) ? config.vipTransferRate : config.normalTransferRate;
 	let fee = Math.round(amount - (amount * rate));
 
 	// Information embed
