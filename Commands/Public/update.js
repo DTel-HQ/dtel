@@ -18,7 +18,7 @@ module.exports = async(client, msg, suffix) => {
 
 	if (!msg.author.boss) {
 		const newPerms = await require("../../Internals/modules").updatePerms(member);
-		return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `${resstr}\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
+		return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 	}
 	
 	let resstr = "";
