@@ -28,7 +28,8 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Determine the fee
-	let rate = (msg.author.donator || user.donator) ? config.vipTransferRate : config.normalTransferRate;
+	const isDonor = (msg.author.donator || user.donator);
+	let rate = isDonor ? config.vipTransferRate : config.normalTransferRate;
 	let fee = Math.round(amount - (amount * rate));
 
 	// Information embed
@@ -47,7 +48,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__": "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
 			},
 			{
 				name: "Your new balance",
