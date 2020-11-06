@@ -29,13 +29,15 @@ module.exports = async(client, msg, suffix) => {
 		embed.addField("Upgrade?!", `\`>upgrade\` lets you use your VIP Months to upgrade a normal number to a VIP number.\nClick [here](${config.vipLink}) for information on buying VIP Months and all the benefits.`)
 			.addField("VIP Perks", `\
 								**[• Disable number recognition](${config.paymentLink})**\
-								\nYou can disable your number recognition. This will make your number and names hidden from the other side and the public logs in our [server](${config.guildInvite}).\
+								\nYou can disable number recognition. This will make your number and the names of those speaking hidden from the other side and the public logs in our [server](${config.guildInvite}).\
 								\n\n**[• Custom name](${config.paymentLink})**\
-								\nYou can set a custom name that will show up besides (or instead of) your number when calling.\
+								\nYou can set a custom name that will show up next to (or instead of) your number when calling.\
 								\n\n**[• VIP Emote](${config.paymentLink})**\
-								\nYour messages will have the VIP emote: ${config.callPhones.donator} instead of the default: ${config.callPhones.default}\
+								\nYour messages will have the VIP emote: ${config.callPhones.donator} instead of the default emote: ${config.callPhones.default}\
 								\n\n**[• Change your number](${config.paymentLink})**\
-								\nRequesting a number change (by dialing \`*611\`) won't remove all the messages, contacts, phonebook settings, vip settings, etc.`);
+								\nRequesting a number change/move (by dialing \`*611\`) won't remove your messages, contacts, yellowbook settings, VIP settings, etc.
+								\n\n**[• And more!](${config.paymentLink})
+								\nSee [the site](${config.vipLink}) for a full list of perks.`);
 	}
 
 
