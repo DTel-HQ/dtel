@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 	};
 
 	let omsg = await msg.channel.send({
-		content: "This will be the embed sent to all servers/dm channels, send `confirm` to confirm or `0` to quit.",
+		content: "This will be the embed sent to all servers/DM channels. Reply `confirm` to confirm or `0` to quit.",
 		embed: announcementEmbed,
 	});
 
@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
 		return;
 	}
 
-	omsg = await omsg.edit({ content: "", embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This may (it certainly will) take a while." } });
+	omsg = await omsg.edit({ content: "", embed: { color: config.colors.info, title: "Sending...", description: "You will be updated when all numbers have been informed. This will take a while." } });
 	let time = await process.hrtime();
 
 	let allNumbers = await r.table("Numbers");
