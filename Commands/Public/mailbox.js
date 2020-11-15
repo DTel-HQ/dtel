@@ -12,9 +12,9 @@ module.exports = async(client, msg, suffix) => {
 	let delperm = false;
 	if (msg.guild) {
 		try {
-			msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES");
+			delperm = msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES");
 		} catch (_) {
-			// ignore
+			delperm = false;
 		}
 	}
 
@@ -184,8 +184,8 @@ module.exports = async(client, msg, suffix) => {
 			let responses = perm ? ["edit", "clear", "delete"] : [];
 
 			// Edit existing message or send a new one
-			if ((!msg.guild || msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES")) && omsg) omsg = await omsg.edit({ embed: embed });
-			else omsg = await msg.channel.send({ embed: embed });
+			if (omsg) omsg = await omsg.edit({ embed: embed });
+			else omsg = await msg.channel.send({ embed: embed })
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (Number(m.content) != page && Number(m.content) > 0 && Number(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),
@@ -287,7 +287,13 @@ module.exports = async(client, msg, suffix) => {
 
 					msg.author.busy = false;
 					if (collected && delperm) collected.delete().catch(e => null);
-					if (!collected || /^0$/.test(collected.content)) break;
+					if (!collected || /^0$/.test(collected.content)) {
+						msg.author.busy = false;
+						embed.setDescription("");
+						embed.setFooter("");
+						omsg.edit({ embed: embed });
+						omsg.channel.send({ embed: { color: config.colors.info, title: "You closed the p'tit door of your mailbox...", description: "...and locked it with your key. Remember, you can always open it again with `>mailbox`!", footer: { text: msg.author.username, icon_url: msg.author.displayAvatarURL() } } });
+					}
 
 					await r.table("Mailbox").get(mailbox.id).update({ autoreply: collected.content });
 					embed = new MessageEmbed()

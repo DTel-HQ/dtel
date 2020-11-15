@@ -42,6 +42,7 @@ module.exports = async msg => {
 	if (!cmdFile) {
 		cmdFile = await reload(`./Commands/Support/${cmd}`);
 		if (cmdFile && !msg.author.support) return;
+		if (cmdFile && !(msg.author.manager || (msg.channel.parent && msg.channel.parent.id === config.offices))) return msg.channel.send({ embed: { color: config.colors.error, description: "This command can not be used outside of HQ channels." } });
 	}
 
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
@@ -63,27 +64,27 @@ module.exports = async msg => {
 		return msg.guild.leave();
 	}
 	if (userBlacklisted) return;
-
-	if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
-	try {
-		// If the user doesn't have an account
-		if (account.template) await msg.author.account(true);
-		cmdFile(client, msg, suffix, call).then(_ => {
-			msg.author.busy = false;
-		});
-	} catch (err) {
-		client.users.cache.fetch(msg.author.id).then(u => {
-			u.busy = false;
-		}).catch(e => {
-			// rip user
-		});
-		msg.channel.send({
-			embed: {
-				color: config.colors.error,
-				title: "❌ Error!",
-				description: `An unexpected error has occured.\n\`\`\`js\n${err.stack}\`\`\``,
-				footer: {
-					text: `Please contact a maintainer: ${config.guildInvite}.`,
+		if (cmd !== "eval") winston.info(`[${cmd}] ${msg.author.tag}(${msg.author.id}) => ${msg.content}`);
+		try {
+			// If the user doesn't have an account
+			if (account.template) await msg.author.account(true);
+			cmdFile(client, msg, suffix, call).then(_ => {
+				msg.author.busy = false;
+			});
+		} catch (err) {
+			client.users.fetch(msg.author.id).then(u => {
+				u.busy = false;
+			}).catch(e => {
+				// rip user
+			});
+			msg.channel.send({
+				embed: {
+					color: config.colors.error,
+					title: "❌ Error!",
+					description: `An unexpected error has occured.\n\`\`\`js\n${err.stack}\`\`\``,
+					footer: {
+						text: `Please contact a maintainer: ${config.guildInvite}.`,
+					},
 				},
 			},
 		});

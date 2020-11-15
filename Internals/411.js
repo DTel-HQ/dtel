@@ -30,20 +30,20 @@ module.exports = async(msg, myNumber) => {
 	// Check if the user has permission
 	let gperm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
 	let perms = msg.author.support || gperm;
-	let delPerm = false; // msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
+	let delPerm = true; // msg.guild ? msg.channel.permissionsFor(client.user.id).has("MANAGE_MESSAGES") : false;
 
 	// Searchpage function for option 1
 	let searchPage = async query => {
 		if (query) {
 			results = phonebook.filter(p => p.description.toLowerCase().indexOf(query) > -1);
 			await results.sort(comparison);
-			queryPages = Math.ceil(results.length / 10);
+			queryPages = Math.ceil(results.length / 10) || 1;
 		}
 
 		// Searchpage embed
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
-			.setTitle(query ? `Yellowbook results for ${query}` : "Yellowbook entries")
+			.setTitle(query ? `${results.length ? "Yellowbook" : "No"} results for ${query}` : "Yellowbook entries")
 			.setFooter(`Page ${query ? queryPage : page}/${query ? queryPages : pages}. This call will automatically be hung up after 3 minutes of inactivity.`);
 
 		// Determine if query - add 10 results accordingly
@@ -52,7 +52,7 @@ module.exports = async(msg, myNumber) => {
 			if (!doc) break;
 			await embed.addField(doc.id, doc.description);
 		}
-		embed.addField("Options", `Enter a page number or query (minimum of three characters) to search for.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
+		embed.addField("Options", `Enter a page number or \`search [query]\` (minimum of three characters) to search in the yellowbook.\n• \`clear\` to return to all results.\n• \`return\` to return to the main menu.\n• (0) to hangup.`);
 
 		// Edit/send message
 		await omsg.edit({ embed: embed });
@@ -74,7 +74,7 @@ module.exports = async(msg, myNumber) => {
 		}
 		collected.content = collected.content.toLowerCase();
 		if (/^return$/.test(collected.content)) return true;
-		if (!/^\d+$/.test(collected.content)) query = collected.content;
+		if (collected.content.startsWith("search ")) query = collected.content.split(" ").slice(1).join(" ") || null;
 		if (/^clear$/.test(collected.content)) query = null;
 
 		// Page number or query? change page number

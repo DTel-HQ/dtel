@@ -22,9 +22,6 @@ module.exports = async(client, msg, suffix) => {
 		}
 	});
 
-	// REMOVE THIS WHEN FIXED
-	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}) and tell us the steps you performed.` } });
-
 	// Main contact list
 	let contactList = async() => {
 		// Standard embed
@@ -49,6 +46,7 @@ module.exports = async(client, msg, suffix) => {
 			const index = m.content.split(" ")[1] ? parseInt(m.content.split(" ")[1]) : null;
 			if (!index) return false;
 			const type = m.content.split(" ")[0].toLowerCase();
+			if (type === "message") return true;
 			if (perm && ["edit", "delete"].includes(type)) return true;
 			return false;
 		};

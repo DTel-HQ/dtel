@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (!msg.author.manager) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "Please contact your manager or a boss to whitelist the server." } });
+	if (!msg.author.manager) return msg.channel.send({ embed: { color: config.colors.error, title: "No permission", description: "Please contact the supervisor or a boss to whitelist the server." } });
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.error, title: "Missing argument", description: "Missing an argument! Usage: `>whitelist [guildID]`" } });
 
 	const guild = await client.guilds.resolve(suffix);
@@ -9,7 +9,7 @@ module.exports = async(client, msg, suffix) => {
 	if (whitelist) await r.table("Whitelist").get(guild.id).delete();
 	else await r.table("Whitelist").insert({ id: guild.id });
 
-	const dmChannel = await guild.owner.user.createDM();
+	const dmChannel = await (await guild.members.fetch(guild.ownerID)).user.createDM();
 	if (!whitelist) {
 		client.log(`📃 ID \`${guild.id}\` has been added to the whitelist by \`${msg.author.tag}\``);
 		dmChannel.send({ embed: { color: config.colors.info, title: `Your server ${guild.name} has been whitelisted.`, description: "You now have the ability to create more than three numbers.\n\nNote: we expect good behaviour from whitelisted server, so any violation of our rules can result in losing the whitelist." } })

@@ -28,7 +28,9 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Determine the fee
-	let fee = Math.round(amount - (amount * config.transferRate));
+	const isDonor = (msg.author.donator || user.donator);
+	let rate = isDonor ? config.vipTransferRate : config.normalTransferRate;
+	let fee = Math.round(amount - (amount * rate));
 
 	// Information embed
 	let omsg = await msg.channel.send({ embed: {
@@ -46,7 +48,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__": "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
 			},
 			{
 				name: "Your new balance",
@@ -103,7 +105,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - rate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 			},
 			{
 				name: "Message",
@@ -121,8 +123,8 @@ module.exports = async(client, msg, suffix) => {
 				name: `${msg.author.tag} (${msg.author.id})`,
 				icon_url: msg.author.displayAvatarURL(),
 			},
-			title: "You received money!",
-			description: "Someone gave money to you. Here's your receipt.",
+			title: "You've received money!",
+			description: "Someone's sent you some credits. Here's your receipt.",
 			fields: [
 				{
 					name: "User",
@@ -130,7 +132,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "Transaction amounts",
-					value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - config.transferRate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+					value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - rate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
 				},
 				{
 					name: "Balance",

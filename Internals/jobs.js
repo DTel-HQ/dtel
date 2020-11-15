@@ -307,6 +307,7 @@ async function expiredNumbers() {
 			odesc = `Your number ${number.id} in <#${channel.id}> has expired. Seeing you have a sufficient balance, we have renewed it for you!\n\n**${config.renewalRate} credits have been deducted from your account.** Your current balance is ${newBalance} credits.`;
 			ctitle = `Automatic Renewal`;
 			cdesc = `This channel's number (${number.id}) has expired. Seeing the owner has a sufficient balance, we have renewed it for you!`;
+			client.log(`🔄 Number \`${number.id}\` has been auto-renewed by user \`${owner}\``);
 			winston.info(`[ScheduleJob] Number ${number.id} renewed, user ${owner} balance ${newBalance}`);
 		} else if (newBalance) {
 			winston.info(`[ScheduleJob] Number ${number.id} renew failure, user ${owner} balance ${account.balance}`);

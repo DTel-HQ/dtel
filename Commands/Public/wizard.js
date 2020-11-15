@@ -42,7 +42,7 @@ module.exports = async(client, msg, suffix) => {
 	let emsg,
 		number,
 		expiryDate,
-		description,
+		ybDesc,
 		autoreply;
 
 	// NUMBER
@@ -111,17 +111,15 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.info, title: "Timed out", description: "Wizard timed out. Please call `*411` if you want to set a phonebook description." } });
 		}
-		if (collected.content.startsWith(config.prefix)) {
-			msg.author.busy = false;
-			return;
-		}
 		collected.delete().catch(e => null);
+
+		let embedDescription = "You can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say `skip`.";
 		if (!/skip/i.test(collected.content)) {
-			description = collected.content.replace(/[~_`*]/g, "\\$1");
+			ybDesc = collected.content.replace("\\", "").replace(/[~_`*]/g, "\\$1");
 
 			let min = 15;
 			let max = 500;
-			let l = description.length;
+			let l = ybDesc.length;
 			if (min > l || l > max) {
 				let wmsg = await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
 				setTimeout(() => wmsg.delete(), 10000);
@@ -131,12 +129,13 @@ module.exports = async(client, msg, suffix) => {
 			let phonebookDoc = {
 				id: number,
 				channel: msg.channel.id,
-				description: description,
+				description: ybDesc,
 			};
 
 			await r.table("Phonebook").insert(phonebookDoc);
+			embedDescription = `Your number can now be found in \`*411\` and randomly dialed.\n\nYou can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say \`skip\`.`;
 		}
-		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Set-up a mailbox", description: `Your number can now be found in \`*411\` and randomly dialed.\n\nYou can also set-up a mailbox. This will be shown if you couldn't pickup a call and without it people can't send you messages.\nType a mailbox reply (again, no explicit language) or otherwise say \`skip\`.` } });
+		emsg = await emsg.edit({ embed: { color: config.colors.info, title: "Set-up a mailbox", description: embedDescription } });
 		return mailboxChooser();
 	};
 
@@ -156,17 +155,13 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			return msg.channel.send({ embed: { color: config.colors.info, title: "Timed out", description: "Wizard timed out. Please use `>mailbox` if you want to set up your mailbox." } });
 		}
-		if (collected.content.startsWith(config.prefix)) {
-			msg.author.busy = false;
-			return;
-		}
 		collected.delete().catch(e => null);
 		if (!/skip/i.test(collected.content)) {
 			autoreply = collected.content.replace(/[~_`*]/g, "\\$1");
 
 			let min = 1;
 			let max = 100;
-			let l = description.length;
+			let l = autoreply.length;
 			if (min > l || l > max) {
 				let wmsg = await msg.channel.send({ embed: { color: config.colors.error, title: "Length", description: `Please ${min > l ? "add to" : "shorten"} your description to match the ${min > l ? "min" : "max"} of **${min > l ? min : max}** characters and try again.` } });
 				setTimeout(() => wmsg.delete(), 10000);
@@ -207,10 +202,10 @@ module.exports = async(client, msg, suffix) => {
 				true,
 			)
 			.setFooter("The wizard has been completed.");
-		if (description) {
+		if (ybDesc) {
 			embed.addField(
 				"Phonebook description",
-				`${description}`,
+				`${ybDesc}`,
 				true,
 			);
 		}
