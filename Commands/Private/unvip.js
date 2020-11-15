@@ -6,7 +6,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!number) number = await r.table("Numbers").get(client.replaceNumber(suffix));
 	if (!number) number = await r.table("Numbers").getAll(suffix, { index: "channel" }).nth(0).default(null);
 	if (!number) return msg.channel.send({ embed: { color: 0x660000, title: "Number not found", description: "Couldn't find a number or channel associated with your input." } });
-	if (new Date(number.vip.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: 0x66000, title: "Can't unvip", description: "This is not a VIP number" } });
+	if (new Date(number.vip.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: 0x66000, title: "Can't un-VIP", description: "That is not a VIP number." } });
 
 	await r.table("Numbers").get(number.id).update({ vip: { expiry: new Date() } });
 	msg.channel.send({ embed: { color: 0x00AF00, title: "Success", description: `VIP has succesfully been revoked from ${number.id}` } });

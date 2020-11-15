@@ -1,4 +1,3 @@
-const { scheduleJob } = require("node-schedule");
 const { updatePerms } = require("../Internals/modules");
 
 module.exports = async() => {
