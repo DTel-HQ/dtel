@@ -64,10 +64,22 @@ scheduleJob("0 0 0 * * *", async() => {
 // });
 
 // Get Discoin transactions
+let lastWarning = Date.now();
 scheduleJob("*/1 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
-	const unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
+	
+	let unhandled;
+	try {
+		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
+	} catch (e) {
+		if (lastWarning < Date.now() - 6e5) {
+			lastWarning = Date.now();
+			return client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
+		}
+	}
+
 	if (!unhandled.length) return;
+
 	for (const transaction of unhandled) {
 		// Try to fetch user
 		let user = await client.users.fetch(transaction.user)
