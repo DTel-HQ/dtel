@@ -1,5 +1,7 @@
+// @ts-check
 module.exports = async(client, msg, suffix) => {
-	if (msg.guild) msg.delete().catch(e => null);
+	let del = true;
+	if (msg.guild) msg.delete().catch(e => del = false);
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >backdoor [number/channelID]" } });
 
 	let channel, number;
@@ -21,14 +23,20 @@ module.exports = async(client, msg, suffix) => {
 	client.api.channels(suffix).invites.post({
 		data: {
 			max_uses: 1,
+			max_age: 30,
+			target_user: msg.author.id,
 			temporary: true,
 		},
 		reason: `Customer Support Agent ${msg.author.tag} ran backdoor.`,
 	})
 		.then(async invite => {
 			await msg.author.createDM();
-			msg.author.send(`https://discord.gg/${invite.code}`)
+			const m = await msg.author.send(`https://discord.gg/${invite.code}`)
 				.catch(_ => msg.channel.send(`https://discord.gg/${invite.code}`));
+			
+			setTimeout(() => {
+				if (del || !m.guild) m.delete().catch();
+			}, 3e4);
 		})
 		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
 };
