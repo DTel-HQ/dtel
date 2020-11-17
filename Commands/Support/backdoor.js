@@ -35,7 +35,7 @@ module.exports = async(client, msg, suffix) => {
 				.catch(_ => msg.channel.send(`https://discord.gg/${invite.code}`));
 			
 			setTimeout(() => {
-				if (del || !m.guild) m.delete().catch();
+				m.delete().catch();
 			}, 3e4);
 		})
 		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
