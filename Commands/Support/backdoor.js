@@ -1,5 +1,5 @@
 module.exports = async(client, msg, suffix) => {
-	if (msg.guild) msg.delete();
+	if (msg.guild) msg.delete().catch(e => null);
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >backdoor [number/channelID]" } });
 
 	let channel, number;
