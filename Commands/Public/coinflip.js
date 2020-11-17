@@ -24,7 +24,7 @@ module.exports = async(client, msg, suffix) => {
         await r.table("Accounts").get(msg.author.id).update({ balance });
         const title = `Landed on ${side === 0 ? "heads" : "tails"}`
         const description = type === side ? 
-            `Congratulations! You've won <:DTS:668551813317787659>${bet * .5}`
+            `Congratulations! You've won <:DTS:668551813317787659>${Math.ceil(bet * .5)}`
             : `Thanks for your credits, I'll be ~~gambling~~ spending them well!`;
 
         setTimeout(() => {
