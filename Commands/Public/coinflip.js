@@ -16,7 +16,7 @@ module.exports = async(client, msg, suffix) => {
     const color = config.colors.lottery;
 
     return msg.channel.send({ embed: { color, description: "Flipping the coin..." } }).then(async(m) => {
-        const balance = (await msg.author.account()).balance + ((side === type ? .5 : -1) * bet * .5)
+        const balance = (await msg.author.account()).balance + ((side === type ? .5 : -1) * bet)
         await r.table("Accounts").get(msg.author.id).update({ balance });
         const title = `Landed on...`
         const description = type === side ? 
@@ -26,7 +26,5 @@ module.exports = async(client, msg, suffix) => {
         setTimeout(() => {
             m.edit({ embed: { title, description, color } });
         }, 4500);
-    });
-
-   
+    }); 
 };
