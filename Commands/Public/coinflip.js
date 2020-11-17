@@ -5,18 +5,22 @@ module.exports = async(client, msg, suffix) => {
     const type = suffix.split(" ")[0].toLowerCase() === "heads" ? 0 : 1;
     let bet = parseInt(suffix.split(" ")[1]);
 
-    if (!bet) return msg.channel.send({ embed: { color: config.colors.info, description: "We're not playing for free... `>bet [amount]`" } });
-    
-    if (bet > 250) {
+    if (bet < 5) {
+        msg.channel.send({ embed: { color: config.colors.info, description: "We're not playing for free, I've set your bet to <:DTS:668551813317787659>5" } });
+        bet = 5;
+    } else if (bet > 250) {
         msg.channel.send("Hoho, you may be rich but the maximum betting amount is <:DTS:668551813317787659>250. I've lowered it for you.");
         bet = 250;
     }
+
+    const account = await msg.author.account();
+    if (!account.balance || account.balance < bet) msg.channel.send({ embed: { color: config.colors.error, description: "You can't bet with money you don't even have." } });
 
     const side = Math.random() < .5 ? 0 : 1;
     const color = config.colors.lottery;
 
     return msg.channel.send({ embed: { color, description: "Flipping the coin..." } }).then(async(m) => {
-        const balance = (await msg.author.account()).balance + ((side === type ? .5 : -1) * bet)
+        const balance = account.balance + Math.ceil(((side === type ? .5 : -1) * bet));
         await r.table("Accounts").get(msg.author.id).update({ balance });
         const title = `Landed on ${side === 0 ? "heads" : "tails"}`
         const description = type === side ? 
