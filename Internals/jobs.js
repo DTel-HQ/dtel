@@ -64,7 +64,7 @@ scheduleJob("0 0 0 * * *", async() => {
 // });
 
 // Get Discoin transactions
-let lastWarning = Date.now();
+let lastWarning = 0;
 scheduleJob("*/1 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	
