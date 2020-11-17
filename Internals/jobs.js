@@ -74,8 +74,9 @@ scheduleJob("*/1 * * * *", async() => {
 	} catch (e) {
 		if (lastWarning < Date.now() - 6e5) {
 			lastWarning = Date.now();
-			return client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
+			client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
 		}
+		return;
 	}
 
 	if (!unhandled.length) return;
