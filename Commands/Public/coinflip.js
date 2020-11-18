@@ -20,11 +20,11 @@ module.exports = async(client, msg, suffix) => {
     const color = config.colors.lottery;
 
     return msg.channel.send({ embed: { color, description: "Flipping the coin..." } }).then(async(m) => {
-        const balance = account.balance + Math.ceil(((side === type ? .5 : -1) * bet));
+        const balance = account.balance + Math.ceil(((side === type ? .85 : -1) * bet));
         await r.table("Accounts").get(msg.author.id).update({ balance });
         const title = `Landed on ${side === 0 ? "heads" : "tails"}`
         const description = type === side ? 
-            `Congratulations! You've won <:DTS:668551813317787659>${Math.ceil(bet * .5)}`
+            `Congratulations! You've won <:DTS:668551813317787659>${Math.ceil(bet * .85)}`
             : `Thanks for your credits, I'll be ~~gambling~~ spending them well!`;
 
         setTimeout(() => {
