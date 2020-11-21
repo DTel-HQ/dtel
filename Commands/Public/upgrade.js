@@ -14,7 +14,7 @@ module.exports = async(client, msg, suffix) => {
 		.setTitle(number ? "Upgrade your number" : "Upgrade");
 	if ((account.vip && account.vip > 0) || vipNumber) embed.addField("Your VIP Months", account.vip ? account.vip : "0", true);
 	if (number) {
-		embed.addField("VIP Number", vipNumber, true);
+		embed.addField("VIP Number", `${!!vipNumber}`, true);
 		if (vipNumber) {
 			embed.setDescription(`Please view the [site](${config.vipLink}) for a list of perks.`)
 				.addField("VIP Expiry", `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}`, true)
