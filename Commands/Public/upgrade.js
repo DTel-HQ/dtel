@@ -36,7 +36,7 @@ module.exports = async(client, msg, suffix) => {
 								\nYour messages will have the VIP emote: ${config.callPhones.donator} instead of the default emote: ${config.callPhones.default}\
 								\n\n**[• Change your number](${config.paymentLink})**\
 								\nRequesting a number change/move (by dialing \`*611\`) won't delete your data.\
-								\n\n**[• And more!](${config.paymentLink})\
+								\n\n**[• And more!](${config.paymentLink})**\
 								\nSee [the site](${config.vipLink}) for a full list of perks.`);
 	}
 
