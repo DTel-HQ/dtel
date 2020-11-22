@@ -65,6 +65,7 @@ scheduleJob("0 0 0 * * *", async() => {
 
 // Get Discoin transactions
 let lastWarning = 0;
+let WCDiscoin = 0;
 scheduleJob("*/1 * * * *", async() => {
 	if (!client.shard.id === client.shard.shardCount - 1 || !client.done) return;
 	
@@ -74,6 +75,8 @@ scheduleJob("*/1 * * * *", async() => {
 	} catch (e) {
 		if (lastWarning < Date.now() - 6e5) {
 			lastWarning = Date.now();
+			WCDiscoin++;
+			if (WCDiscoin % 300 == 10) client.apiSend(`<@${config.bossRole}> There seems to be a problem with Discoin`, "326075875466412033");
 			client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
 		}
 		return;
@@ -111,6 +114,7 @@ scheduleJob("*/1 * * * *", async() => {
 });
 
 // Vote check
+let WCVotes = 0;
 !config.devOnlyMode && scheduleJob("*/1 * * * *", async() => {
 	let guildCount = (await client.shard.fetchClientValues("guilds.cache.size")).reduce((a, b) => a + b, 0);
 
@@ -119,6 +123,8 @@ scheduleJob("*/1 * * * *", async() => {
 		.set("Content-Type", "application/json")
 		.set("count", guildCount.toString())
 		.catch(e => {
+			warningcount++;
+			if (WCVotes % 300 == 10) client.apiSend(`<@${config.bossRole}> Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
 			client.apiSend(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
 			return null;
 		});
