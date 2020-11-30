@@ -34,8 +34,9 @@ module.exports = async msg => {
 	// Find call command files
 	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
 
+	let isCallCMD = false;
 	if (call && msg.content.startsWith(prefix) && !await msg.author.blacklisted) cmdFile = await reload(`./Commands/Call/${cmd}`);
-	if (!cmdFile && (call && !call.hold)) return;
+	isCallCMD ^= cmdFile;
 	// Find non call command files
 
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
@@ -44,6 +45,9 @@ module.exports = async msg => {
 		if (cmdFile && !msg.author.support) return;
 		if (cmdFile && !(msg.author.manager || (msg.channel.parent && msg.channel.parent.id === config.offices))) return msg.channel.send({ embed: { color: config.colors.error, description: "This command can not be used outside of HQ channels." } });
 	}
+	
+	// tell user only call cmds are enabled
+	if (cmdFile && !isCallCMD && call.pickedUp) return msg.reply("Normal commands are disabled when calling! You can still use them when in `>hold`.");
 
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
