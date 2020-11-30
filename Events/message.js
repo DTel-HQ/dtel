@@ -30,13 +30,12 @@ module.exports = async msg => {
 	let call = msg.channel.number ? typeof msg.channel.call === "function" ? await msg.channel.call() : await msg.channel.call : null;
 	if (!call && !msg.content.startsWith(prefix)) return;
 
-	let cmdFile;
+	let cmdFile = null;
 	// Find call command files
 	if (call && !msg.content.startsWith(prefix)) return (await reload("./Internals/callHandler.js"))(cmd, msg, suffix, call);
 
-	let isCallCMD = false;
 	if (call && msg.content.startsWith(prefix) && !await msg.author.blacklisted) cmdFile = await reload(`./Commands/Call/${cmd}`);
-	isCallCMD ^= cmdFile;
+	const isCallCMD = cmdFile !== null;
 	// Find non call command files
 
 	if (!cmdFile) cmdFile = await reload(`./Commands/Public/${cmd}`);
