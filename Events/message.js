@@ -46,7 +46,7 @@ module.exports = async msg => {
 	}
 	
 	// tell user only call cmds are enabled
-	if (cmdFile && !isCallCMD && call.pickedUp) return msg.reply("Normal commands are disabled when calling! You can still use them when in `>hold`.");
+	if (cmdFile && !isCallCMD && call && call.pickedUp) return msg.reply("Normal commands are disabled when calling! You can still use them when in `>hold`.");
 
 	if (!cmdFile && config.maintainers.includes(msg.author.id)) cmdFile = await reload(`./Commands/Private/${cmd}`);
 	if (!cmdFile) return;
