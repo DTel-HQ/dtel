@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
     const type = suffix.split(" ")[0].toLowerCase() === "heads" ? 0 : 1;
     let bet = parseInt(suffix.split(" ")[1]);
 
-    if (bet === NaN || bet < 5) {
+    if (!bet || bet < 5) {
         msg.channel.send({ embed: { color: config.colors.info, description: "We're not playing for free, I've set your bet to <:DTS:668551813317787659>5" } });
         bet = 5;
     } else if (bet > 250) {
