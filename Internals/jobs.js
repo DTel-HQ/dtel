@@ -76,7 +76,7 @@ scheduleJob("*/1 * * * *", async() => {
 		if (lastWarning < Date.now() - 6e5) {
 			lastWarning = Date.now();
 			WCDiscoin++;
-			if (WCDiscoin % 300 == 10) client.apiSend(`<@&${config.bossRole}> There seems to be a problem with Discoin`, "326075875466412033");
+			if (WCDiscoin % 300 == 10) client.apiSend(`<@&726482842137133068> There seems to be a problem with Discoin`, "326075875466412033");
 			client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
 		}
 		return;
