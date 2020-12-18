@@ -363,7 +363,7 @@ scheduleJob("0 0 0 * * *", async() => {
 });
 
 // Discoin report every 12h
-scheduleJob("0 0 */12 * * *", async() => {
+scheduleJob("0 0 0 */1 * *", async() => {
 	const currencies = await Discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC"),
 		emojis = client.guilds.cache.get("347859709711089674").emojis.cache;
 
