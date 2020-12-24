@@ -1,4 +1,5 @@
 module.exports = async (mr, user) => {
+    if (user.bot) return;
     if (mr.emoji.toString() !== "🎄") return;
     if (mr.message.author.id !== client.user.id) return;
     
