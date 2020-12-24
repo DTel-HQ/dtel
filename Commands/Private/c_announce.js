@@ -14,7 +14,7 @@ module.exports = async(bot, msg, arg) => {
     await client.api.channels(omsg.channel.id).messages(omsg.id).reactions(encodeURIComponent("🎄"), "@me").put();
 
     const collected = (await msg.channel.awaitMessages(m => {
-        m.author.id === msg.author.id;
+        return m.author.id === msg.author.id;
     }), { max: 1, time: 3e4 }).first();
     if (!collected || collected.content !== "!!send") 
         return omsg.edit({ content: "aborted" });
