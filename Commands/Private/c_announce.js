@@ -2,7 +2,7 @@ const embed = {
     image: { url: "https://cdn.discordapp.com/attachments/393598647679582218/393956037637570560/DTel-chan.png", },
     color: 0x6e110b, 
     title: ":christmas_tree: **DTel's Christmas Giveaway** :christmas_tree:", 
-    description:  "To celebrate the festive season, we're holding a special Christmas giveaway! \n\nTo enter, all you have to do is **react to this message with the :christmas_tree: emoji**. You will receive :DTS:**1000** and have a 5% chance at winning **2 months of VIP**!", 
+    description:  "To celebrate the festive season, we're holding a special Christmas giveaway! \n\nTo enter, all you have to do is **react to this message with the :christmas_tree: emoji**. You will receive <:DTS:668551813317787659>**1000** and have a 5% chance at winning **2 months of VIP**!", 
     footer: { text: "The VIP raffle will end December 26th at 8pm UTC. Keep an eye out on your DMs and >balance." },
 }
 
@@ -13,7 +13,7 @@ module.exports = async(bot, msg, arg) => {
     });
     await client.api.channels(omsg.channel.id).messages(omsg.id).reactions(encodeURIComponent("🎄"), "@me").put();
 
-    const collected = (await msg.channel.awaitMessage(m => {
+    const collected = (await msg.channel.awaitMessages(m => {
         m.author.id === msg.author.id;
     }), { max: 1, time: 3e4 })[0];
     if (!collected || collected.content !== "!!send") 
