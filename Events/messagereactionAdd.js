@@ -1,5 +1,7 @@
 module.exports = async (mr, user) => {
+    return;
     if (`${mr.emoji}` !== "🎄") return;
+    if (mr.message.author.id !== client.user.id) return;
     
     let account = await r.table("Accounts").get(user.id);
     if (!account) {
