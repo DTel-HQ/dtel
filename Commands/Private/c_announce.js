@@ -15,7 +15,7 @@ module.exports = async(bot, msg, arg) => {
 
     const collected = (await msg.channel.awaitMessages(m => {
         return m.author.id === msg.author.id;
-    }), { max: 1, time: 3e4 }).first();
+    }{ max: 1, time: 3e4 })).first();
     if (!collected || collected.content !== "!!send") {
         return msg.channel.send("aborted");
     }
