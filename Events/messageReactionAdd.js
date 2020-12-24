@@ -16,5 +16,5 @@ module.exports = async (mr, user) => {
         await r.table("Accounts").get(user.id).update({ CHRISTMASRAFFLE: true, balance });
     }
 
-    mr.message.channel.send(`:mrs_claus: You have entered the raffle <@${user.id}>, best of luck!`);
+    mr.message.channel.send(`:mrs_claus: You have received <:DTS:668551813317787659>1000 and entered the raffle, best of luck and a merry Christmas <@${user.id}>!`);
 }
