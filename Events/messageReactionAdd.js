@@ -6,11 +6,13 @@ module.exports = async (mr, user) => {
     if (!account) {
        account = {
            id: user.id,
-           balance: 0,
+           balance: 1000,
        }
        await r.table("Accounts").insert(account); 
     } else {
-        await r.table("Accounts").get(user.id).update({ CHRISTMASRAFFLE: true });
+        if (account.CHRISTMASRAFFLE) return;
+        const balance = account.balance + 1000;
+        await r.table("Accounts").get(user.id).update({ CHRISTMASRAFFLE: true, balance });
     }
 
     mr.message.channel.send(`:mrs_claus: You have entered the raffle <@${user.id}>, best of luck!`);
