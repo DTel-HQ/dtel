@@ -1,9 +1,6 @@
 module.exports = async (mr, user) => {
     if (mr.emoji.toString() !== "🎄") return;
     if (mr.message.author.id !== client.user.id) return;
-
-    if (user.id !== "124989722668957700") return;
-    else return mr.message.channel.send("seen");
     
     let account = await r.table("Accounts").get(user.id);
     if (!account) {
