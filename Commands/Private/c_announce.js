@@ -15,7 +15,7 @@ module.exports = async(bot, msg, arg) => {
 
     const collected = (await msg.channel.awaitMessage(m => {
         m.author.id === msg.author.id;
-    }))[0];
+    }), { max: 1, time: 3e4 })[0];
     if (!collected || collected.content !== "!!send") 
         return omsg.edit({ content: "aborted" });
 
