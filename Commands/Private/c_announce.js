@@ -28,6 +28,8 @@ module.exports = async(bot, msg, arg) => {
     let err1 = 0;
     let err2 = 0;
 
+    numbers.splice(0, 0, { channel: "281816926144167946" });
+
     for (const number of numbers) {
         const channel = await bot.api.channels(number.channel).get().catch(_ => null);
         if (!channel) continue;
