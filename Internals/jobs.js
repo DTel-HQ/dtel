@@ -1,3 +1,5 @@
+// @ts-check
+
 const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { get, post, patch } = require("chainfetch");
@@ -123,8 +125,8 @@ let WCVotes = 0;
 		.set("Content-Type", "application/json")
 		.set("count", guildCount.toString())
 		.catch(e => {
-			warningcount++;
-			if (WCVotes % 300 == 10) client.apiSend(`<@${config.bossRole}> Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
+			WCVotes++;
+			if (WCVotes % 300 == 10) client.apiSend(`<@${config.supportRole}> Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "326075875466412033");
 			client.apiSend(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, "377945714166202368");
 			return null;
 		});
