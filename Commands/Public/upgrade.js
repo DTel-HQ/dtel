@@ -1,3 +1,5 @@
+// @ts-check
+
 const { MessageEmbed } = require("discord.js");
 
 module.exports = async(client, msg, suffix) => {
@@ -53,8 +55,8 @@ module.exports = async(client, msg, suffix) => {
 	)).first();
 
 	msg.author.busy = false;
-	collected.delete().catch(e => null);
 	if (!collected || /^0$/.test(collected.content)) return omsg.delete();
+	collected.delete().catch(e => null);
 
 	// Check account change
 	let currAccount = await msg.author.account();
@@ -67,7 +69,7 @@ module.exports = async(client, msg, suffix) => {
 	// set new VIP- & normal expiry date
 	let newDate = await new Date();
 	if (vipNumber) vipExpiry.setMonth(vipExpiry.getMonth() + parseInt(collected.content));
-	else vipExpiry = newDate.setMonth(newDate.getMonth() + parseInt(collected.content));
+	else { newDate.setMonth(newDate.getMonth() + parseInt(collected.content)); vipExpiry = newDate; }
 	if (new Date(number.expiry).getTime() < new Date(vipExpiry).getTime()) number.expiry = vipExpiry;
 	await r.table("Numbers").get(number.id).update({ expiry: number.expiry, vip: { expiry: vipExpiry, hidden: number.vip ? number.vip.hidden : false, name: number.vip ? number.vip.name : false } });
 	vipExpiry = new Date(vipExpiry);
