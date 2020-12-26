@@ -1,37 +1,9 @@
 // @ts-check
 module.exports = async(client, msg) => {
-    const participants = (await r.table("Accounts").filter({ CHRISTMASRAFFLE: true })).filter(a => !(a.support || a.manager || a.boss));
-
-    const togive = participants.length * 0.05;
-
-    for (let i = 0; i < togive; i++) {
-        // get user
-        const acc = participants.splice(Math.floor(Math.random()*participants.length), 1)[0];
-        const user = await client.users.fetch(acc.id);
-
-        // add vip
-        await r.table("Accounts").get(acc.id).update({ vip: (acc.vip||0)+2 });
-
-        // notify
-        try {
-            const dm = await user.createDM();
-            dm.send({
-                embed: {
-                    color: 0x6e110b,
-                    title: "Congratulations!",
-                    description: `You are one of the ${Math.ceil(togive)} winners of 2 VIP months.\nYou can use them with the \`>upgrade\` command.\n\nHappy holidays!`,
-                    image: { url: "https://cdn.discordapp.com/attachments/393598647679582218/393956037637570560/DTel-chan.png", },
-                }
-            });
-        } catch(e) {
-            msg.channel.send(acc.id);
-        }
-    }
-
-    const support = (await r.table("Accounts").filter({ support: true })).filter(a => !a.boss);
+    const support = (await r.table("Accounts").filter({ support: true })).filter(a => !a.boss && !a.vip);
     for (const acc of support) {
         // add vip
-        await r.table("Accounts").get(acc.id).update({ vip: acc.vip+2 });
+        await r.table("Accounts").get(acc.id).update({ vip: (acc.vip||0)+2 });
 
         // notify
         const user = await client.users.fetch(acc.id);
@@ -51,5 +23,4 @@ module.exports = async(client, msg) => {
     }
     
     await r.table("Accounts").filter({ CHRISTMASRAFFLE: true }).replace(r.row.without("CHRISTMASRAFFLE"));
-    msg.reply(`done: ${Math.ceil(togive)}•2 + ${support.length}•2 vips given away`);
 };
