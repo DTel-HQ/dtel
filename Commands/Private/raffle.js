@@ -34,6 +34,7 @@ module.exports = async(client, msg) => {
         await r.table("Accounts").get(acc.id).update({ vip: acc.vip+2 });
 
         // notify
+        const user = await client.users.fetch(acc.id);
         try {
             const dm = await user.createDM();
             dm.send({
