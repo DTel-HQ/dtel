@@ -10,7 +10,7 @@ module.exports = async(client, msg) => {
         const user = await client.users.fetch(acc.id);
 
         // add vip
-        await r.table("Accounts").get(acc.id).update({ vip: acc.vip+2 });
+        await r.table("Accounts").get(acc.id).update({ vip: (acc.vip||0)+2 });
 
         // notify
         try {
