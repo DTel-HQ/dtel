@@ -1,8 +1,4 @@
-module.exports = {
-	numberIsValid,
-	updatePerms,
-	perms,
-};
+
 
 async function numberIsValid(channel, number) {
 	if (!channel || !number) return new Error("Missing arguments");
@@ -31,3 +27,9 @@ function updatePerms(member) {
 		return r.table("Accounts").get(newMember.id).update(obj).then(() => obj);
 	});
 }
+
+module.exports = {
+	numberIsValid,
+	updatePerms,
+	perms,
+};
