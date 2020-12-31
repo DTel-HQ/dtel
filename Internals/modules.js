@@ -1,6 +1,7 @@
 module.exports = {
 	numberIsValid,
 	updatePerms,
+	perms,
 };
 
 async function numberIsValid(channel, number) {

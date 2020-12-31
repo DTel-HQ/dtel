@@ -1,9 +1,15 @@
-const { updatePerms } = require("../Internals/modules");
+const { updatePerms, perms } = require("../Internals/modules");
 
 module.exports = async() => {
 	await client.shard.broadcastEval(`this.done = true`);
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || await client.guilds.fetch(config.supportGuild);
+
+	for (const permName of perms) {
+		const roleID = config[`${roleName}Role`];
+		await supportGuild.roles.fetch(roleID, true, true);
+	}
+
 	const accounts = await r.table("Accounts");
 	const filteredAccounts = accounts.filter(acc => acc.boss || acc.manager || acc.support || acc.contributor || acc.donator || false);
 	for (let account of filteredAccounts) updatePerms(await supportGuild.members.fetch(account.id));
@@ -20,7 +26,7 @@ module.exports = async() => {
 		if (!obj) continue;
 		obj.blacklisted = true;
 	}
-
+	
 	try {
 		winston.info("[Discord] Successfully connected to Discord.");
 		winston.info("[Ready] Done spawning all shards");
