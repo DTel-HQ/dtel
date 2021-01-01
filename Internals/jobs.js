@@ -75,14 +75,13 @@ scheduleJob("*/1 * * * *", async() => {
 	try {
 		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
 	} catch (e) {
-		if (lastWarning < Date.now() - 6e5) {
-			lastWarning = Date.now();
-			WCDiscoin++;
-			if (WCDiscoin % 300 == 10) client.apiSend(`<@&726482842137133068> There seems to be a problem with Discoin`, "326075875466412033");
-			client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
-		}
+		lastWarning = Date.now();
+		WCDiscoin++;
+		if (WCDiscoin % 300 == 10) client.apiSend(`<@&726482842137133068> There seems to be a problem with Discoin`, "326075875466412033");
+		client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
 		return;
 	}
+	WCDiscoin--;
 
 	if (!unhandled.length) return;
 
