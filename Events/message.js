@@ -16,6 +16,9 @@ module.exports = async msg => {
 			return call;
 		};
 	}
+	
+	// Since auto update is broke:tm:
+	if (msg.channel?.parentID === "355890256786227210") msg.author.support = true;
 
 	// moved this up here to support running >unbusy while busy (to find command) - turret
 	// Filter out the command and arguments to pass
