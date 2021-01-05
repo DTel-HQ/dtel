@@ -73,7 +73,7 @@ scheduleJob("*/1 * * * *", async() => {
 	
 	let unhandled;
 	try {
-		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS);
+		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS.replace("inL", "$in"));
 	} catch (e) {
 		lastWarning = Date.now();
 		WCDiscoin++;
