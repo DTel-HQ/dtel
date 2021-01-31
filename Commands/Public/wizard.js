@@ -128,6 +128,7 @@ module.exports = async(client, msg, suffix) => {
 
 			let phonebookDoc = {
 				id: number,
+				author: msg.author.id,
 				channel: msg.channel.id,
 				description: ybDesc,
 			};
