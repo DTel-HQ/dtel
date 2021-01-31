@@ -220,10 +220,10 @@ module.exports = async(msg, myNumber) => {
 				// From this point on there's a description
 				// Add/edit entry
 				if (entry) {
-					await r.table("Phonebook").get(myNumber.id).update({ description: collected.content });
+					await r.table("Phonebook").get(myNumber.id).update({ author: msg.author.id, description: collected.content });
 					message = `Succesfully entered this number into the yellowbook.\n${collected.content}`;
 				} else {
-					await r.table("Phonebook").insert({ id: myNumber.id, description: collected.content });
+					await r.table("Phonebook").insert({ id: myNumber.id, author: msg.author.id, description: collected.content });
 					message = `Succesfully changed this number its description:\n${collected.content}`;
 				}
 				break;
