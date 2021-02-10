@@ -3,7 +3,7 @@ module.exports = async msg => {
 	// Fix messages
 	msg.content = msg.content.replace(/^[\n‌]+$/igm, "").replace(/\s{5,}/m, "     ").replace(/^ +| +$/, "");
 	const account = await msg.author.account(),
-		prefix = msg.content.startsWith(config.prefix) ? config.prefix : msg.content.startsWith(client.user.replace("@", "@!")) ? `${client.user} ` : account.prefix || config.prefix;
+		prefix = msg.content.startsWith(config.prefix) ? config.prefix : msg.content.startsWith(client.user.replace("@", "@!")) ? `${client.user.replace("@", "@!")} ` : account.prefix || config.prefix;
 
 	// Extends unextended channels
 	if (msg.channel.number === undefined) {
