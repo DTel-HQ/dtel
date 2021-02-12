@@ -1,4 +1,4 @@
-const urlRegex = require("url-regex")({ strict: true });
+const urlRegex = require("url-regex-safe")({ strict: true });
 
 module.exports = Discord => class DTelClient extends Discord.Client {
 	async apiSend(data, channel) {
