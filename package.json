@@ -28,14 +28,14 @@
     "node": ">=12"
   },
   "dependencies": {
-    "@discoin/scambio": "^2.1.1",
+    "@discoin/scambio": "^2.2.0",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.1.1",
     "discord.js": "^12.5.1",
     "erlpack": "github:discordapp/erlpack",
     "fs-nextra": "^0.4.7",
-    "kurasuta": "^2.1.0",
+    "kurasuta": "^2.2.3",
     "node-schedule": "^1.3.2",
     "randomstring": "^1.1.5",
     "require-reload": "^0.2.2",
