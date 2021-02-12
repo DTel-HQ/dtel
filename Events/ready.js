@@ -5,8 +5,7 @@ module.exports = async() => {
 
 	const supportGuild = client.guilds.cache.get(config.supportGuild) || await client.guilds.fetch(config.supportGuild);
 
-	for (const permName of perms) {
-		const roleID = config[`${roleName}Role`];
+	for (const roleID of Object.values(perms)) {
 		await supportGuild.roles.fetch(roleID, true, true);
 	}
 
@@ -26,7 +25,7 @@ module.exports = async() => {
 		if (!obj) continue;
 		obj.blacklisted = true;
 	}
-	
+
 	try {
 		winston.info("[Discord] Successfully connected to Discord.");
 		winston.info("[Ready] Done spawning all shards");

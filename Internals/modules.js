@@ -1,5 +1,3 @@
-
-
 async function numberIsValid(channel, number) {
 	if (!channel || !number) return new Error("Missing arguments");
 	if (typeof channel !== "object") channel = await client.channels.cache.fetch(channel);
