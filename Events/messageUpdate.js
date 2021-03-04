@@ -1,5 +1,6 @@
 module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
+	if (omsg.content === nmsg.content) return;
 	let call = await nmsg.channel.call;
 	if (!call || !call.pickedUp || call.hold || !nmsg.content) return (await reload("./Events/message.js"))(nmsg);
 
