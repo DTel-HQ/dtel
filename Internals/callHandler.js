@@ -19,6 +19,9 @@ module.exports = async(cmd, msg, suffix, call) => {
 	// Send hidden?
 	let hidden = toSendSupport ? false : fromSend.hidden;
 
+	// ignore messages from blacklisted users
+	if (msg.author.blacklisted) return;
+
 	// get right phone
 	let phone = config.callPhones.default;
 	if (fromvip) phone = config.callPhones.donator;
