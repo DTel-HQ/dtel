@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 
 		client.log(`:wrench: ID \`${target}\` has been removed from the blacklist by \`${msg.author.tag}\`.`);
 		if (!silent && dmChannel) {
-			dmChannel.send({ embed: { color: config.colors.info, title: "You've been pardoned", description: "You have been removed from the blacklist.\nYour record, however, has not be cleansed. Meaning any violation will put you back on the blacklist." } })
+			dmChannel.send({ embed: { color: config.colors.info, title: "You've been pardoned", description: "You have been removed from the blacklist.\nHowever, your strikes have not been cleared, meaning any violation will put you back on the blacklist." } })
 				.catch(e => null);
 		}
 		return msg.channel.send({ embed: {
@@ -54,7 +54,7 @@ module.exports = async(client, msg, suffix) => {
 
 	client.log(`:hammer: ID \`${target}\` has been added to the blacklist by \`${msg.author.tag}\`.`);
 	if (!silent && dmChannel) {
-		dmChannel.send({ embed: { color: config.colors.error, title: "You've been blacklisted", description: "This means you can no longer use DTel.\n\nIf you feel like this action was unjust, you can dispute it with one of the bosses in the support server." } })
+		dmChannel.send({ embed: { color: config.colors.error, title: "You've been blacklisted", description: "This means you can no longer use DTel.\n\nIf you feel like this action was unfair, you can dispute it with one of the bosses in the support server. (Don't try calling 611, as you can't use the bot.) If you evade this blacklist with an alternate account, we will ignore your appeals." } })
 			.catch(e => null);
 	}
 	return msg.channel.send({ embed: {
