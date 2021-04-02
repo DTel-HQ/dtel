@@ -1,5 +1,5 @@
-![DTel Logo](./DTel.jpeg)
 # DTel
+<img src="DTel.jpeg" width="256" height="256"/>
 
 DTel is a Discord bot that allows you to set up a custom number and call other servers.
 
