@@ -33,16 +33,16 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 	if (msg.attachments.first()) {
 		let attachment = msg.attachments.first();
-		if (!["mp4", "mov"].includes(ext)) { 
+		let ext = attachment.url.split(".")[attachment.url.split(".").length - 1];
+		if (!["mp4", "mov"].includes(ext)) {
 			embed = new MessageEmbed()
-			.setColor(config.colors.info)
-			.setAuthor(`Sent by ${hidden ? `Anonymous#${msg.author.id.slice(-4)}` : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}`)
-			.setURL(attachment.url)
-			.setImage(attachment.url)
-			.setFooter(attachment.name || "");
-		}
-		else {
-			let videoMsg = `*${hidden ? `Anonymous#${msg.author.id.slice(-4)}` : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""} sent a video. Here's the link: ${attachment.url}*`
+				.setColor(config.colors.info)
+				.setAuthor(`Sent by ${hidden ? `Anonymous#${msg.author.id.slice(-4)}` : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""}`)
+				.setURL(attachment.url)
+				.setImage(attachment.url)
+				.setFooter(attachment.name || "");
+		} else {
+			let videoMsg = `*${hidden ? `Anonymous#${msg.author.id.slice(-4)}` : msg.author.tag}${toSendSupport ? ` (${msg.author.id})` : ""} sent a video. Here's the link: ${attachment.url}*`;
 			await client.apiSend({ content: videoMsg }, toSend.channel);
 		}
 	}
