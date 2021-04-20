@@ -31,6 +31,7 @@ module.exports = async(client, msg, suffix) => {
 	const isDonor = (msg.author.donator || user.donator);
 	let rate = isDonor ? config.vipTransferRate : config.normalTransferRate;
 	let fee = Math.round(amount - (amount * rate));
+	let postFeeAmount = (account - fee);
 
 	// Information embed
 	let omsg = await msg.channel.send({ embed: {
@@ -48,7 +49,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__": "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__": "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer__ - they will receive ${postFeeAmount}.`,
 			},
 			{
 				name: "Your new balance",
@@ -61,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 		footer: {
-			text: "This call will automatically be hung up after 60 seconds of inactivity",
+			text: "This prompt will automatically end after 60 seconds of inactivity.",
 		},
 	} });
 
@@ -85,7 +86,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// update balances
 	fromAccount.balance -= amount;
-	toAccount.balance += amount - fee;
+	toAccount.balance += postFeeAmount;
 	await r.table("Accounts").get(fromAccount.id).update({ balance: fromAccount.balance });
 	await r.table("Accounts").get(toAccount.id).update({ balance: toAccount.balance });
 
@@ -114,7 +115,7 @@ module.exports = async(client, msg, suffix) => {
 		],
 		timestamp: new Date(),
 	} });
-	client.log(`💸 User \`${msg.author.username}\` (${msg.author.id}) gave ${config.dtsEmoji}${amount} to ${user.tag} (${user.id})`);
+	client.log(`💸 User \`${msg.author.username}\` (${msg.author.id}) gave ${config.dtsEmoji}${amount} (${postFeeAmount} after fees) to ${user.tag} (${user.id})`);
 	let dmChannel = await user.createDM().catch(e => null);
 	if (dmChannel) {
 		dmChannel.send({ embed: {
