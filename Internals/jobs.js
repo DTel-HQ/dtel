@@ -2,7 +2,7 @@
 
 const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
-const { get, post, patch } = require("chainfetch");
+const { get } = require("chainfetch");
 const auth = require("../Configuration/auth.js");
 const Discoin = require("@discoin/scambio").default;
 const DClient = new Discoin(auth.discoinToken, ["DTS"]);
@@ -42,7 +42,7 @@ scheduleJob("0 0 0 * * *", async() => {
 				let channel = await client.api.channels(lastEntry.channel).get();
 				if (!channel) return;
 				client.apiSend(`<@${winnerID}>`, { embed: { color: config.colors.lottery, title: "You've won!", description: `You have won the lottery of ${config.dtsEmoji}${lastEntry.jackpot}.` } }, channel.id)
-					.catch(e => null);
+					.catch(() => null);
 			});
 		client.log(`:tickets: ${user.username} has won the lottery jackpot of ${config.dtsEmoji}${lastEntry.jackpot}.`);
 	}
@@ -88,7 +88,7 @@ scheduleJob("*/1 * * * *", async() => {
 	for (const transaction of unhandled) {
 		// Try to fetch user
 		let user = await client.users.fetch(transaction.user)
-			.catch(e => {
+			.catch(() => {
 				client.apiSend(`[Discoin] couldn't find user ${transaction.user}`, "326075875466412033");
 				return null;
 			});
@@ -108,7 +108,7 @@ scheduleJob("*/1 * * * *", async() => {
 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
 		// Send msgs
-		let dmChannel = await user.createDM().catch(e => null);
+		let dmChannel = await user.createDM().catch(() => null);
 		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `<:DTS:668551813317787659>${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
 		client.log(`:repeat: ${user.username} (${user.id}) received ${config.dtsEmoji}${transaction.payout} from Discoin.`);
 	}
@@ -135,7 +135,7 @@ let WCVotes = 0;
 	let users = Object.keys(votes);
 
 	for (let user of users) {
-		user = await client.users.fetch(user).catch(e => null);
+		user = await client.users.fetch(user).catch(() => null);
 		if (!user) {
 			continue;
 		}
@@ -155,7 +155,7 @@ let WCVotes = 0;
 		await r.table("Votes").get(user.id).update({ amount: monthlyVotes.amount });
 
 		// Let the user know and log the votes
-		let dmChannel = await user.createDM().catch(e => null);
+		let dmChannel = await user.createDM().catch(() => null);
 		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "Thanks for voting!", description: `You received <:DTS:668551813317787659>${votes[user.id]} for voting!`, author: { name: client.user.username, icon_url: client.user.displayAvatarURL() }, timestamp: new Date() } });
 		client.log(`:ballot_box: ${user.username} (${user.id}) received ${config.dtsEmoji}${votes[user.id]} from voting.`);
 	}
@@ -179,7 +179,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 	// Give prize
 	for (let winner of winners) {
-		let user = await client.users.fetch(winner.id).catch(e => null);
+		let user = await client.users.fetch(winner.id).catch(() => null);
 		if (!user) client.apiSend(`<@${config.supportRole}> couldn't fetch vote winner ${user.id}`, config.badLogsChannel);
 
 		let account = await user.account();
@@ -188,7 +188,7 @@ scheduleJob("0 20 * * 0", async() => {
 		client.log(`🏆 ${user.username} (${user.id}) won ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter.`);
 
 		await user.createDM();
-		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter this month.`, footer: { title: "You can now make any number of your choice VIP by using >upgrade." } } }).catch(e => null);
+		user.send({ embed: { color: config.colors.info, title: "Congratulations!", description: `You have received ${prize} VIP Month(s) for being ${winners.length === 1 ? "the" : "a"} highest voter this month.`, footer: { title: "You can now make any number of your choice VIP by using >upgrade." } } }).catch(() => null);
 	}
 
 	// Make the announcement embed
@@ -218,7 +218,7 @@ scheduleJob("0 20 * * 0", async() => {
 		],
 	};
 	if (winners.length === 1) {
-		let firstUser = await client.users.fetch(winners[0].id).catch(e => null);
+		let firstUser = await client.users.fetch(winners[0].id).catch(() => null);
 		if (firstUser) embed.author = { name: firstUser.username, icon_url: firstUser.displayAvatarURL() };
 	}
 
@@ -226,7 +226,7 @@ scheduleJob("0 20 * * 0", async() => {
 	let topString = "";
 	let top = votes.splice(0, topSize - 1);
 	for (let vote of top) {
-		let voteUser = await client.users.fetch(vote.id).catch(e => null);
+		let voteUser = await client.users.fetch(vote.id).catch(() => null);
 		let username = voteUser ? voteUser.username : "Unknown";
 		topString += `${top.indexOf(vote) + 1}. ${vote.amount} votes - ${username}\n`;
 	}
@@ -271,12 +271,12 @@ async function expiredNumbers() {
 	const numbers = await r.table("Numbers");
 
 	for (let number of numbers) {
-		let channel = await client.api.channels(number.channel).get().catch(e => null);
+		let channel = await client.api.channels(number.channel).get().catch(() => null);
 		if (!channel) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_noChannel" });
 			continue;
 		}
-		let owner = number.guild ? (await client.api.guilds(number.guild).get().catch(e => null)).owner_id : null;
+		let owner = number.guild ? (await client.api.guilds(number.guild).get().catch(() => null)).owner_id : null;
 
 		let embed = new MessageEmbed()
 			.setColor(config.colors.error);
@@ -339,13 +339,13 @@ async function expiredNumbers() {
 
 		embed.setTitle(ctitle)
 			.setDescription(cdesc);
-		await client.apiSend({ embed: embed }, channel.id).catch(e => null);
+		await client.apiSend({ embed: embed }, channel.id).catch(() => null);
 		embed.setTitle(otitle)
 			.setDescription(odesc)
 			.setFooter("You are receiving this as you are the owner of the server.");
 		if (owner) {
-			let dmChannel = await (await client.users.fetch(owner)).createDM().catch(e => null);
-			if (dmChannel) dmChannel.send({ embed: embed }).catch(e => null);
+			let dmChannel = await (await client.users.fetch(owner)).createDM().catch(() => null);
+			if (dmChannel) dmChannel.send({ embed: embed }).catch(() => null);
 		}
 	}
 }
