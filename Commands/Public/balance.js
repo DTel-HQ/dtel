@@ -5,7 +5,7 @@ module.exports = async(client, msg, suffix) => {
 		msg.channel.send({
 			embed: {
 				color: config.colors.info,
-				title: "Current Account Status",
+				title: "Your credits and VIP months",
 				author: {
 					name: msg.author.tag,
 					icon_url: msg.author.displayAvatarURL(),
@@ -17,12 +17,12 @@ module.exports = async(client, msg, suffix) => {
 				},
 				{
 					name: "VIP Months",
-					value: account.vip ? account.vip : "0",
+					value: account.vip ? account.vip : `0 ([what they are and how to get them](${config.vipLink}))`,
 					inline: true,
 				},
 				{
 					name: "Recharging",
-					value: "https://dtel.austinhuang.me/en/latest/Payment/",
+					value: `[Click here](${config.paymentLink})`,
 				}],
 			},
 		});

@@ -49,7 +49,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__" : "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer__ - they will receive ${postFeeAmount}.`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__" : "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n__The fee will be deducted from the amount to transfer__ - they will receive ${postFeeAmount}.`,
 			},
 			{
 				name: "Your new balance",
@@ -82,7 +82,7 @@ module.exports = async(client, msg, suffix) => {
 
 	// check again
 	fromAccount = await r.table("Accounts").get(msg.author.id);
-	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Balance too low", description: `Your balance is too low. You currently have ${fromAccount.balance}` } });
+	if (fromAccount.balance < parseInt(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Balance too low", description: `Your balance is too low. You currently have ${config.dtsEmoji}${fromAccount.balance}.` } });
 
 	// update balances
 	fromAccount.balance -= amount;
@@ -106,7 +106,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - rate) * 100)}%)\n_The fee has been deducted from the transferred amount._`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${Math.round((1 - rate) * 100)}%)\n__The fee has been deducted from the transferred amount.__`,
 			},
 			{
 				name: "Message",

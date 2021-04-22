@@ -71,7 +71,7 @@ module.exports = {
 	paymentLink: "https://dtel.austinhuang.me/en/latest/Payment/",
 	siteLink: "https://dtel.austinhuang.me",
 	suggestLink: "https://feedback.austinhuang.me/",
-	vipLink: "https://dtel.austinhuang.me/en/latest/VIP-Number/",
+	vipLink: "https://dtel.austinhuang.me/en/latest/VIP-Numbers/",
 	voteLink: "https://dtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
 	// Embed Colors
