@@ -28,10 +28,10 @@ module.exports = async(client, msg, suffix) => {
 	}
 
 	// Determine the fee
-	const isDonor = (msg.author.donator || user.donator);
+	const isDonor = msg.author.donator || user.donator;
 	let rate = isDonor ? config.vipTransferRate : config.normalTransferRate;
 	let fee = Math.round(amount - (amount * rate));
-	let postFeeAmount = (account - fee);
+	let postFeeAmount = amount - fee;
 
 	// Information embed
 	let omsg = await msg.channel.send({ embed: {
@@ -49,7 +49,7 @@ module.exports = async(client, msg, suffix) => {
 			},
 			{
 				name: "Transaction",
-				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__": "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer__ - they will receive ${postFeeAmount}.`,
+				value: `Amount: ${config.dtsEmoji}${amount}\nFee: ${config.dtsEmoji}${fee} (${isDonor ? "standard/__vip__" : "__standard__/vip"} rate, ${Math.round((1 - rate) * 100)}%)\n_The fee will be deducted from the amount to transfer__ - they will receive ${postFeeAmount}.`,
 			},
 			{
 				name: "Your new balance",
