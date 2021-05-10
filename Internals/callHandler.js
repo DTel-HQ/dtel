@@ -50,14 +50,32 @@ module.exports = async(cmd, msg, suffix, call) => {
 	try {
 		await client.api.channels(toSend.channel).get();
 	} catch (_) {
-		client.apiSend({ embed: { color: config.colors.error, title: "The bot can no longer access the opposite side", description: "Please report this by calling `*611` as it could be a troll call." } }, msg.channel.id);
-		await r.table("OldCalls").insert(call);
-		await r.table("Calls").get(call.id).delete();
-		if (call.to.channel === config.supportChannel) {
-			const channel = client.channels.cache.get(config.supportChannel);
-			channel.overwritePermissions(client.supportChannelPerms, `Call lost access (${call.id})`);
-		}
-		return client.delete(toSend.number, { force: false, log: true, origin: "callHandler" });
+		client.apiSend({ embed: { color: config.colors.error, title: "Connection lost", description: "You can use `>hangup`, or wait to see if it reconnects. If the connection can't be re-established, the call will automatically be hung up in 10 minutes." } }, msg.channel.id);
+		
+		let amt = 0;
+		
+		const lostInterval = setInterval(() => {
+			try {
+				await client.api.channels(toSend.channel).get();
+
+				clearInterval(lostInterval);
+				client.apiSend({ embed: { color: config.colors.success, description: "Connection has been re-established." } }, msg.channel.id);
+			} catch (_) {
+				amt++;
+
+				if (amt >= 60) {
+					client.apiSend({ embed: { color: config.colors.error, description: "The call has automatically ended as the other side could not be reached." } }, msg.channel.id);
+
+					await r.table("OldCalls").insert(call);
+					await r.table("Calls").get(call.id).delete();
+					if (call.to.channel === config.supportChannel) {
+						const channel = client.channels.cache.get(config.supportChannel);
+						channel.overwritePermissions(client.supportChannelPerms, `Call lost access (${call.id})`);
+					}
+					return client.delete(toSend.number, { force: false, log: true, origin: "callHandler" });
+				}
+			}
+		}, 1e4)
 	}
 
 	// send the msg
