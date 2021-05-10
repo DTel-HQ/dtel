@@ -62,6 +62,10 @@ module.exports = async(cmd, msg, suffix, call) => {
 				await client.api.channels(toSend.channel).get();
 
 				clearInterval(lostInterval);
+
+				let currentCall = r.table("Calls").get(call.id);
+				if (currentCall.hungupBy) return;
+				
 				client.apiSend({ embed: { color: config.colors.success, description: "Connection has been re-established." } }, msg.channel.id);
 			} catch (__) {
 				amt++;
