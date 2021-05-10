@@ -60,7 +60,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 
 				clearInterval(lostInterval);
 				client.apiSend({ embed: { color: config.colors.success, description: "Connection has been re-established." } }, msg.channel.id);
-			} catch (_) {
+			} catch (__) {
 				amt++;
 
 				if (amt >= 60) {
