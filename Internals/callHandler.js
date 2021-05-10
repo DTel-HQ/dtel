@@ -54,7 +54,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 		
 		let amt = 0;
 		
-		const lostInterval = setInterval(() => {
+		const lostInterval = setInterval(async () => {
 			try {
 				await client.api.channels(toSend.channel).get();
 
