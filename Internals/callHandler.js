@@ -50,8 +50,11 @@ module.exports = async(cmd, msg, suffix, call) => {
 	try {
 		await client.api.channels(toSend.channel).get();
 	} catch (_) {
+		if (call.connectionLost) return;
+
 		client.apiSend({ embed: { color: config.colors.error, title: "Connection lost", description: "You can use `>hangup`, or wait to see if it reconnects. If the connection can't be re-established, the call will automatically be hung up in 10 minutes." } }, msg.channel.id);
-		
+		r.table("Calls").get(call.id).update({ connectionLost: true });
+
 		let amt = 0;
 		
 		const lostInterval = setInterval(async () => {
