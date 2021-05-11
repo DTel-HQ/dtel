@@ -39,8 +39,8 @@ module.exports = async(client, msg, suffix) => {
 	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
 	else msg.author.cooldown = "message";
 
-	const fromBlocked =  fromNumberDoc.blocked && fromNumberDoc.blocked.includes(toNumberDoc.id);
-	const toBlocked = toNumberDoc.blocked && toNumberDoc.blocked.includes(fromNumberDoc.id);
+	const fromBlocked =  fromNumberDoc.blocked && fromNumberDoc.blocked.includes(toNumberDoc.channel);
+	const toBlocked = toNumberDoc.blocked && toNumberDoc.blocked.includes(fromNumberDoc.channel);
 	if (fromBlocked || toBlocked) return msg.channel.send({ embed: { color: config.colors.error, description: `Could not send a message to \`${toNumberDoc.id}\`.`} })
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
