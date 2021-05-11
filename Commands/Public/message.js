@@ -33,11 +33,15 @@ module.exports = async(client, msg, suffix) => {
 	account.balance -= config.messageCost;
 
 	let mailbox = await r.table("Mailbox").get(toNumberDoc.channel);
-	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "No mailbox", description: "They do not have a mailbox set-up." } });
+	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, description: "Could not send a message, ask them to set-up their mailbox first." } });
 
 	let cooldown = await r.table("Cooldowns").get(`${msg.author.id}-message`);
 	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
 	else msg.author.cooldown = "message";
+
+	const fromBlocked =  fromNumberDoc.blocked && fromNumberDoc.blocked.includes(toNumberDoc.id);
+	const toBlocked = toNumberDoc.blocked && toNumberDoc.blocked.includes(fromNumberDoc.id);
+	if (fromBlocked || toBlocked) return msg.channel.send({ embed: { color: config.colors.error, description: `Could not send a message to \`${toNumberDoc.id}\`.`} })
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
 	let id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });
