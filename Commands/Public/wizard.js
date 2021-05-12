@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { numberIsValid } = require("../../Internals/modules");
+const { numberIsValid } = require("../../internals/modules");
 
 module.exports = async(client, msg, suffix) => {
 	let myNumber = await msg.channel.number;

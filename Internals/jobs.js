@@ -3,7 +3,7 @@
 const { scheduleJob } = require("node-schedule");
 const { MessageEmbed } = require("discord.js");
 const { get } = require("chainfetch");
-const auth = require("../Configuration/auth.js");
+const auth = require("../configuration/auth.js");
 const Discoin = require("@discoin/scambio").default;
 const DClient = new Discoin(auth.discoinToken, ["DTS"]);
 

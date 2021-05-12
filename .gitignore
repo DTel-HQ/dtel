@@ -1,7 +1,7 @@
 node_modules/
 DB/
 Logs/
-Configuration/auth.js
+configuration/auth.js
 rethinkdb.exe
 dist/
 built/

@@ -32,8 +32,8 @@ module.exports = async(client, msg, suffix, rcall) => {
 		return msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: "You are unable to call *611 here because Customer Support is literally at your doorstep." } });
 	}
 
-	if (toDial == "*411") return (await reload("./Internals/411.js"))(msg, myNumber);
-	if (toDial == "*233") return (await reload("./Internals/233.js"))(msg, myNumber);
+	if (toDial == "*411") return (await reload("./internals/411.js"))(msg, myNumber);
+	if (toDial == "*233") return (await reload("./internals/233.js"))(msg, myNumber);
 
 	let toDialDoc = await r.table("Numbers")
 		.get(toDial)
@@ -45,7 +45,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	} catch (_) {
 		msg.channel.send({ embed: { color: config.colors.error, title: "Dialing error", description: `Number is unavailable to dial. It could be deleted, hidden from the client, or it left the corresponding server.${rcall ? "\nSending you back..." : ""}` } });
 		client.delete(toDialDoc.id, { force: false, log: true, origin: "call_to" });
-		if (rcall) return (await reload("./Commands/Public/rcall.js"))(client, msg);
+		if (rcall) return (await reload("./commands/Public/rcall.js"))(client, msg);
 		else return;
 	}
 

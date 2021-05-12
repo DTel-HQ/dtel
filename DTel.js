@@ -3,22 +3,22 @@ const { readdir } = require("fs-nextra");
 const clear = require("clear-module");
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
-const config = global.config = require("./Configuration/config.js");
-const aliases = global.aliases = require("./Configuration/aliases.js");
+const config = global.config = require("./configuration/config.js");
+const aliases = global.aliases = require("./configuration/aliases.js");
 
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
 		const client = global.client = this.client;
 
 		(async() => {
-			await require("./Database/init")()
+			await require("./database/init")()
 				.then(() => winston.info("[Database] Successfully connected to the database."))
 				.catch(err => winston.error(`[Database] An error occured while initializing the database.\n${err}`));
 
-			let events = await readdir("./Events");
+			let events = await readdir("./events");
 			for (let e of events) {
 				let name = e.replace(".js", "");
-				this.client.on(name, async(...args) => (await reload(`./Events/${e}`))(...args));
+				this.client.on(name, async(...args) => (await reload(`./events/${e}`))(...args));
 			}
 		})();
 
@@ -59,7 +59,7 @@ module.exports = class extends require("kurasuta").BaseCluster {
 		this.client.on("disconnect", () => this.client.login());
 
 		// Scheduled jobs
-		require("./Internals/jobs.js");
+		require("./internals/jobs.js");
 
 		Object.assign(String.prototype, {
 			escapeRegex() {
@@ -70,9 +70,9 @@ module.exports = class extends require("kurasuta").BaseCluster {
 
 		if (config.devMode) process.on("unhandledRejection", e => winston.error(e.stack));
 
-		this.client.login(require("./Configuration/auth.js").discord.token).catch(() => {
+		this.client.login(require("./configuration/auth.js").discord.token).catch(() => {
 			let interval = setInterval(() => {
-				this.client.login(require("./Configuration/auth.js").discord.token)
+				this.client.login(require("./configuration/auth.js").discord.token)
 					.then(() => {
 						clearInterval(interval);
 					})

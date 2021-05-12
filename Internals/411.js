@@ -261,7 +261,7 @@ module.exports = async(msg, myNumber) => {
 			case "4": {
 				await omsg.edit({ embed: { color: config.colors.info, title: "Please wait", description: "Attempting to call Customer Support now.", author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 				msg.author.busy = false;
-				return (await reload("./Commands/Public/call.js"))(client, msg, "*611");
+				return (await reload("./commands/Public/call.js"))(client, msg, "*611");
 			}
 
 			case "5": {

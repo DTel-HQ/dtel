@@ -1,4 +1,4 @@
-const modelFound = require("../Database/modelFound.js");
+const modelFound = require("../database/modelFound.js");
 
 module.exports = class Cache extends require("discord.js").Collection {
 	constructor(table, r) {

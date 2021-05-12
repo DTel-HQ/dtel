@@ -1,4 +1,4 @@
-const { numberIsValid } = require("../../Internals/modules");
+const { numberIsValid } = require("../../internals/modules");
 
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >assign [channelID/number] [number/channelID]" } });

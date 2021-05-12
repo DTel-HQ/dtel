@@ -62,7 +62,7 @@ module.exports = async(client, msg, suffix) => {
 				},
 			],
 			footer: {
-				text: "DTel V3 • Made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				text: "DTel V4 • Made with <3 by Austin Huang, Mitchell Rademaker and their team",
 			},
 		},
 	};

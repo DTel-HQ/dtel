@@ -1,27 +1,27 @@
 const { createLogger, format, transports } = require("winston");
 const DailyRotateFile = require("winston-daily-rotate-file");
 
-const config = require("./Configuration/config.js");
+const config = require("./configuration/config.js");
 
 // const { ShardingManager } = require("discord.js");
 // const sharder = new ShardingManager("DiscordTel.js", {
 // 	totalShards: Number(config.shardCount),
 // 	respawn: true,
-// 	token: require("./Configuration/auth.js").discord.token,
+// 	token: require("./configuration/auth.js").discord.token,
 // });
 
 const { ShardingManager } = require("kurasuta");
 const Discord = require("discord.js");
 
-let structures = require("fs").readdirSync(`${__dirname}/Structures`);
+let structures = require("fs").readdirSync(`${__dirname}/structures`);
 for (let i of structures) {
 	console.log(`Loading: ${i}`);
-	if (i.endsWith(".js")) require(`${__dirname}/Structures/${i}`)(Discord);
+	if (i.endsWith(".js")) require(`${__dirname}/structures/${i}`)(Discord);
 }
 const sharder = new ShardingManager(`${__dirname}/DTel.js`, {
 	clientOptions: { disableMentions: "everyone" },
-	client: require("./Internals/Client.js")(Discord),
-	token: require("./Configuration/auth.js").discord.token,
+	client: require("./internals/Client.js")(Discord),
+	token: require("./configuration/auth.js").discord.token,
 	clusterCount: 1,
 });
 

@@ -270,7 +270,7 @@ module.exports = async(client, msg, suffix) => {
 			msg.author.busy = false;
 			if (/^9$/.test(collected.first().content)) return contactList();
 			if (!collected.first() || /^0$/.test(collected.first().content)) return;
-			return (await reload("./Commands/Public/message.js"))(client, msg, `${contact.number} ${collected.first().content}`);
+			return (await reload("./commands/Public/message.js"))(client, msg, `${contact.number} ${collected.first().content}`);
 		}
 
 		// if only a number

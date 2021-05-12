@@ -2,7 +2,7 @@ module.exports = async(omsg, nmsg) => {
 	if (nmsg.author.bot) return;
 	if (omsg.content === nmsg.content) return;
 	let call = await nmsg.channel.call;
-	if (!call || !call.pickedUp || call.hold || !nmsg.content) return (await reload("./Events/message.js"))(nmsg);
+	if (!call || !call.pickedUp || call.hold || !nmsg.content) return (await reload("./events/message.js"))(nmsg);
 
 	let perms = await nmsg.author.getPerms();
 	let prefix = nmsg.content.startsWith(client.user) ? `${client.user} ` : nmsg.content.startsWith(config.prefix) ? config.prefix : nmsg.author.account().prefix || config.prefix;
