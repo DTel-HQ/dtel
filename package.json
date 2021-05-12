@@ -1,10 +1,10 @@
 {
   "name": "dtel",
-  "version": "3.2.0",
-  "description": "Discord Telephone bot",
+  "version": "4.0.0",
+  "description": "A telephone bot for Discord",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: we haven't set up testing yet.\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
     "SunburntRock89 <rhys0710@live.com>",
     "Rexogamer <beartechtalks@gmail.com>"
   ],
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "SEE LICENSE.md",
   "bugs": {
     "url": "https://github.com/DTel-HQ/dtel/issues"
   },
@@ -29,6 +29,9 @@
   },
   "dependencies": {
     "@discoin/scambio": "^2.2.0",
+    "@types/node": "^15.0.3",
+    "@typescript-eslint/eslint-plugin": "^4.23.0",
+    "@typescript-eslint/parser": "^4.23.0",
     "bufferutil": "^4.0.1",
     "chainfetch": "^1.2.2",
     "clear-module": "^4.1.1",

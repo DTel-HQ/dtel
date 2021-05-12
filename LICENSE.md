@@ -1,27 +1,20 @@
-#======================#
-#         DTel         #
-#       LICENSE        #
-#======================#
+# DTel License (revision 3)
 
-## The owners of DTel reserve the right to change the license without prior warning.
+*The owners of DTel reserve the right to change the license without prior warning.*
 
-LICENSE REVISION 2
-  1 May 2020
+**LICENSE REVISION 3, written 12th May 2021**
 
-Bot coded by Austin Huang
-Original license written by Austin Huang; revision 1 written by Tempestius; revision 2 written by SunburntRock89;
+Bot created by Austin Huang
 
-=================================================================
-=================================================================
+Original license written by Austin Huang; revision 1 written by Tempestius; revision 2 written by SunburntRock89; revison 3 written by Rexogamer.
 
-### Discord Telephone System
-### The sole owner of DTel is Austin Huang, thereinafter referred to as "the Owner".
+**The sole owner of DTel is Austin Huang, thereinafter referred to as "the Owner".**
 
 
 ## Open-source Usage
 
 
-# DTel, thereinafter referred to as "the Bot", is bound to a restricted open-source. 
+DTel, thereinafter referred to as "the Bot", is bound to a restricted open-source. 
 Users, thereinafter referred to as "the User", may obtain and edit the Bot's code providing 
 the User's conduct follows the restrictions listed below.
 
@@ -40,8 +33,9 @@ the User's conduct follows the restrictions listed below.
  
 ## Private Hosting
 
-# The Bot may only be hosted privately for purposes deemed acceptable by the Owner.  
+The Bot may only be hosted privately for purposes deemed acceptable by the Owner.  
 
+## Disclaimer
 
 THE BOT AND ITS CODE IS PROVIDED ONLY AS IT IS, 
 NOT INCLUDING A WARRANTY OF ANY KIND, EXPRESSED OR IMPLIED, 

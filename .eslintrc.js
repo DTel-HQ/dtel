@@ -1,5 +1,12 @@
 module.exports = {
-	extends: "eslint:recommended",
+	extends: [
+		"eslint:recommended",
+		"plugin:@typescript-eslint/recommended",
+	],
+	parser: "@typescript-eslint/parser",
+	plugins: [
+		"@typescript-eslint",
+	],
 	parserOptions: {
 		ecmaVersion: 2017,
 	},
@@ -119,6 +126,6 @@ module.exports = {
 		"template-curly-spacing": "error",
 		"no-console": "off",
 		"no-irregular-whitespace": ["error", { skipStrings: true, skipComments: true, skipTemplates: true }],
-		"no-unused-vars": "off",
+		"no-unused-vars": "warn",
 	},
 };
