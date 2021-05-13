@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 module.exports = async(msg, myNumber) => {
 	let omsg,
@@ -11,7 +11,7 @@ module.exports = async(msg, myNumber) => {
 		queryPages,
 		message;
 
-	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Loading", description: "Please wait whilst we're gathering all numbers." } });
+	omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Loading", description: "We're gathering all our numbers, one moment..." } });
 
 	// Load Phonebook once per 411 call (for search through)
 	const phonebook = await r.table("Phonebook");
@@ -94,11 +94,11 @@ module.exports = async(msg, myNumber) => {
 		embed = new MessageEmbed()
 			.setColor(config.colors.yellowbook)
 			.addField("Welcome to the DTel yellowbook!",
-				`\`1\` To search through the yellowbook.
-\`2\` To add/change/remove your yellow entry.${perms ? "" : " (You need Manage Guild to do this)"}
+				`\`1\` to search the yellowbook.
+\`2\` To add/change/remove your yellowbook entry.${perms ? "" : " (You need the `Manage Guild` permission to do this.)"}
 \`3\` For information about special numbers.
 \`4\` To call Customer Support.
-\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need Manage Guild to do this)" : "(You need a VIP number to do this... `>upgrade`)"}
+\`5\` To access VIP options. ${vipNumber ? perms ? "" : "(You need the `Manage Guild` permission to do this.)" : "(You need a VIP number to access these - use `>upgrade` to find out more.)"}
 \`0\` To hangup.`)
 			.setFooter("This call will automatically be hung up after 60 seconds of inactivity.");
 		if (message) embed.setDescription(`✅ ${message}`);
@@ -125,10 +125,10 @@ module.exports = async(msg, myNumber) => {
 			// Search through yellowbook
 			case "1": {
 				if (!phonebook.length) {
-					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call *411 to enter the yellowbook.", color: config.colors.error } });
+					msg.channel.send({ embed: { title: "The yellowbook is empty", description: "There are currently no entries in the yellowbook. Call `*411` again to add your number to the yellowbook.", color: config.colors.error } });
 					continue;
 				}
-				// Function for search pages.
+				// Function for searching pages
 				let result = await searchPage();
 				if (!result) {
 					loop = false;
@@ -150,9 +150,9 @@ module.exports = async(msg, myNumber) => {
 				const entry = await r.table("Phonebook").get(myNumber.id);
 				if (entry) {
 					embed.addField("Current description", entry.description);
-					embed.addField("Options", "`1` to edit the entry.\n`2` to delete the entry.\n\n`9` to return.\n`0` to hangup.");
+					embed.addField("Options", "`1` to edit your entry.\n`2` to delete your entry.\n\n`9` to return to the main menu.\n`0` to hangup.");
 				} else {
-					embed.addField("Options", "`1` to add your number to the yellowbook.\n\n`9` to return.\n`0` to hangup.");
+					embed.addField("Options", "`1` to add your number to the yellowbook.\n\n`9` to return to the main menu.\n`0` to hangup.");
 				}
 
 				// Edit/send message
@@ -234,11 +234,11 @@ module.exports = async(msg, myNumber) => {
 				embed = new MessageEmbed()
 					.setColor(config.colors.yellowbook)
 					.setTitle("Special numbers")
-					.setDescription("This is a list of all currently operational special numbers")
-					.addField("*233", "Displays your number information and lets you recharge the number.")
-					.addField("*411", "You should know since you just called it...")
-					.addField("*611", "DTel customer support number. **Troll-calling will result in a strike/blacklist.**")
-					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 60 seconds of inactivity.");
+					.setDescription("This is a list of DTel's special numbers.")
+					.addField("*233", "Displays your number's information and lets you recharge it.")
+					.addField("*411", "The number you're calling right now.")
+					.addField("*611", "DTel's Customer Support number. **Troll-calling will result in a strike/blacklist.**")
+					.setFooter("`9` to return to the main menu. `0` to hangup. \nThis call will automatically be hung up after 60 seconds of inactivity.");
 
 				// edit/send message
 				await omsg.edit({ embed: embed });
@@ -259,7 +259,7 @@ module.exports = async(msg, myNumber) => {
 
 			// Call CS
 			case "4": {
-				await omsg.edit({ embed: { color: config.colors.info, title: "Please wait", description: "Attempting to call Customer Support now.", author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
+				await omsg.edit({ embed: { color: config.colors.info, title: "Please wait", description: "Attempting to call Customer Support...", author: { name: msg.author.tag, icon_url: msg.author.displayAvatarURL() } } });
 				msg.author.busy = false;
 				return (await reload("./commands/Public/call.js"))(client, msg, "*611");
 			}
@@ -270,10 +270,10 @@ module.exports = async(msg, myNumber) => {
 					.setTitle("VIP Settings")
 					.setDescription(`(1) to ${myNumber.vip.hidden ? "enable" : "disable"} number recognition.\
 													\n(2) to set or clear this number's custom name.\
-													\n\nNote: abuse (eg. an offensive name) may result in a strike and/or **the removal of vip**`)
+													\n\nNote: abuse (eg. an offensive name) may result in a strike and/or the removal of your number's VIP privileges.`)
 					.addField("Hidden", myNumber.vip.hidden, true)
 					.addField("Name", myNumber.vip.name ? myNumber.vip.name : "No name has been chosen", true)
-					.setFooter("(9) to return. (0) to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
+					.setFooter("`9` to return to the main menu. `0` to hangup. \nThis call will automatically be hung up after 2 minutes of inactivity.");
 
 				// edit/send message
 				await omsg.edit({ embed: embed });

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 module.exports = async(msg, myNumber) => {
 	// get account information / make account
@@ -16,24 +16,23 @@ module.exports = async(msg, myNumber) => {
 	// Determine maximum amount of months to renew
 	let maxMonths = Math.floor(account.balance / config.renewalRate);
 
-
 	// make the embed
 	let embed = new MessageEmbed()
 		.setColor(vipNumber ? config.colors.vip : config.colors.info)
 		.setAuthor(msg.author.tag, msg.author.displayAvatarURL())
 		.setTitle("Number information")
-		.setDescription(`${maxMonths ? "Type the amount of months you want to renew your number." : "Your balance is too low."}\nThe renewal rate is <:DTS:668551813317787659>${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
+		.setDescription(`${maxMonths ? "Respond with the amount of months you want to renew your number for." : "Your balance is too low."}\nThe renewal rate is <:DTS:668551813317787659>${config.renewalRate}/month.\n[Click here](http://discordtel.austinhuang.me/en/latest/Payment/) for information on how to up your balance.`)
 		.addField("Number", myNumber.id, true)
 		.addField("Expiration date", `${currExpiry.getDate()}-${currExpiry.getMonth() + 1}-${currExpiry.getFullYear()}`, true)
 		.addField("Your credits", `${config.dtsEmoji}${client.format(account.balance)}`, true)
-		.addField("VIP Number", vipNumber, true)
+		.addField("VIP Number", vipNumber ? vipNumber : `False [what's this?](${config.vipLink})`, true)
 		.addField("VIP expiration date", vipNumber ? `${vipExpiry.getDate()}-${vipExpiry.getMonth() + 1}-${vipExpiry.getFullYear()}` : "N/A", true)
 		.addField("Your VIP months", account.vip ? account.vip : "0", true)
 		.addField("Blocked numbers", myNumber.blocked && myNumber.blocked.length > 0 ? myNumber.blocked.join("\n") : "None", true)
 		.addField("Mentions", myNumber.mentions && myNumber.mentions.length ? myNumber.mentions.map(m => `${myNumber.mentions.indexOf(m) + 1}. ${m}`).join("\n") : "None", true);
 
 	if (msg.guild) embed.addField("Guild strikes", strikes.length ? strikes.map(s => `-${s.reason}`).join("\n") : "None", true);
-	if (maxMonths) embed.setFooter("(0) to hangup. This call will automatically hang up after 3 minutes.");
+	if (maxMonths) embed.setFooter("Respond with `0` to hangup. This call will automatically hang up after 3 minutes.");
 
 	// send embed
 	let omsg = await msg.channel.send("", { embed: embed });
@@ -70,7 +69,7 @@ module.exports = async(msg, myNumber) => {
 		.setColor(config.colors.receipt)
 		.setAuthor(`${msg.author.tag} (${msg.author.id})`, msg.author.displayAvatarURL())
 		.setTitle("Your receipt")
-		.setDescription(`The number has succesfully been renewed by ${collected.first().content} months.`)
+		.setDescription(`Your number has succesfully been renewed for ${collected.first().content} months!`)
 		.addField("Number", myNumber.id, true)
 		.addField("New expiration date", `${newExpiry.getDate()}-${newExpiry.getMonth() + 1}-${newExpiry.getFullYear()}`, true)
 		.addField("Your new balance", `${config.dtsEmoji}${client.format(newBalance)}`, true)
