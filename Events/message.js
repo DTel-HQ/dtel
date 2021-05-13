@@ -16,7 +16,7 @@ module.exports = async msg => {
 			return call;
 		};
 	}
-	
+
 	// Since auto update is broke:tm:
 	if (msg.channel?.parentID === "355890256786227210") msg.author.support = true;
 
@@ -47,7 +47,7 @@ module.exports = async msg => {
 		if (cmdFile && !msg.author.support) return;
 		if (cmdFile && !(msg.author.manager || (msg.channel.parent && msg.channel.parent.id === config.offices))) return msg.channel.send({ embed: { color: config.colors.error, description: "This command can not be used outside of HQ channels." } });
 	}
-	
+
 	// tell user only call cmds are enabled
 	if (cmdFile && !isCallCMD && call && call.pickedUp && !call.hold) return msg.reply("Normal commands are disabled when calling! You can still use them when in `>hold`.");
 
@@ -94,4 +94,4 @@ module.exports = async msg => {
 			},
 		});
 	}
-}
+};

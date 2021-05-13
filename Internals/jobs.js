@@ -1,8 +1,8 @@
 // @ts-check
 
-const { scheduleJob } = require("node-schedule");
-const { MessageEmbed } = require("discord.js");
-const { get } = require("chainfetch");
+import { scheduleJob } from "node-schedule";
+import { MessageEmbed } from "discord.js";
+import { get } from "chainfetch";
 const auth = require("../configuration/auth.js");
 const Discoin = require("@discoin/scambio").default;
 const DClient = new Discoin(auth.discoinToken, ["DTS"]);
