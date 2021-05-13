@@ -1,4 +1,4 @@
-const uuidv4 = require("uuid/v4");
+import { v4 as uuidv4 } from "uuid";
 
 module.exports = async(client, msg, suffix, rcall) => {
 	let csCall;
