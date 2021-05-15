@@ -288,8 +288,7 @@ async function expiredNumbers() {
 			account,
 			newBalance;
 
-		// v2 number has expiry as a date object, yet v3 has string (timestamp) so compromise
-		let expiryMS = typeof number.expiry === "object" ? number.expiry.getTime() : new Date(number.expiry).getTime();
+		let expiryMS = new Date(number.expiry).getTime();
 
 		if (expiryMS < deleteMS) {
 			await client.delete(number, { force: true, log: true, origin: "scheduled_expired" });
