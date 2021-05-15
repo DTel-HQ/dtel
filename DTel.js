@@ -1,7 +1,8 @@
-const { Collection } = require("discord.js");
-const { readdir } = require("fs-nextra");
-const clear = require("clear-module");
-const { createLogger, format, transports } = require("winston");
+import { Collection } from "discord.js";
+import { readdir } from "fs-nextra";
+import * as auth from "./configuration/auth.js";
+import * as clear from ("clear-module");
+import { createLogger, format, transports } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 const config = global.config = require("./configuration/config.js");
 const aliases = global.aliases = require("./configuration/aliases.js");
@@ -70,9 +71,9 @@ module.exports = class extends require("kurasuta").BaseCluster {
 
 		if (config.devMode) process.on("unhandledRejection", e => winston.error(e.stack));
 
-		this.client.login(require("./configuration/auth.js").discord.token).catch(() => {
+		this.client.login(auth.discord.token).catch(() => {
 			let interval = setInterval(() => {
-				this.client.login(require("./configuration/auth.js").discord.token)
+				this.client.login(auth.discord.token)
 					.then(() => {
 						clearInterval(interval);
 					})

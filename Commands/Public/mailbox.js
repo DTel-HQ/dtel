@@ -1,9 +1,10 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
+import embeds from "../../configuration/embeds.js";
 
 module.exports = async(client, msg, suffix) => {
 	// get the number
 	let myNumber = await msg.channel.number;
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number." } });
+	if (!myNumber) return msg.channel.send({ embed: embeds.noNumber });
 
 	// check if they have permission to do stuff
 	let perm = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD") : true;
@@ -185,7 +186,7 @@ module.exports = async(client, msg, suffix) => {
 
 			// Edit existing message or send a new one
 			if (omsg) omsg = await omsg.edit({ embed: embed });
-			else omsg = await msg.channel.send({ embed: embed })
+			else omsg = await msg.channel.send({ embed: embed });
 
 			collected = (await msg.channel.awaitMessages(
 				m => m.author.id === msg.author.id && (/^0$/.test(m.content) || responses.includes(m.content.toLowerCase()) || (Number(m.content) != page && Number(m.content) > 0 && Number(m.content) <= pages) || messages.filter(message => message.id == m.content).length > 0),

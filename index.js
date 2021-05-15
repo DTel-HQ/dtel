@@ -1,7 +1,8 @@
-const { createLogger, format, transports } = require("winston");
+import { createLogger, format, transports } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
+import * as auth from "./configuration/auth.js";
 
-const config = require("./configuration/config.js");
+// import * as config from "./configuration/config.js";
 
 // const { ShardingManager } = require("discord.js");
 // const sharder = new ShardingManager("DiscordTel.js", {
@@ -10,7 +11,7 @@ const config = require("./configuration/config.js");
 // 	token: require("./configuration/auth.js").discord.token,
 // });
 
-const { ShardingManager } = require("kurasuta");
+import { ShardingManager } from "kurasuta";
 const Discord = require("discord.js");
 
 let structures = require("fs").readdirSync(`${__dirname}/structures`);
@@ -21,7 +22,7 @@ for (let i of structures) {
 const sharder = new ShardingManager(`${__dirname}/DTel.js`, {
 	clientOptions: { disableMentions: "everyone" },
 	client: require("./internals/Client.js")(Discord),
-	token: require("./configuration/auth.js").discord.token,
+	token: auth.discord.token,
 	clusterCount: 1,
 });
 

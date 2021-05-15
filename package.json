@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@discoin/scambio": "^2.2.0",
-    "@types/node": "^15.0.3",
+    "@types/node": "^15.3.0",
     "@typescript-eslint/eslint-plugin": "^4.23.0",
     "@typescript-eslint/parser": "^4.23.0",
     "bufferutil": "^4.0.3",

@@ -1,4 +1,4 @@
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg) => {
 	const omsg = await msg.channel.send("Measuring...");
 	const latency = Math.round(client.ws.ping);
 	const ping = Math.round(omsg.createdTimestamp - msg.createdTimestamp);

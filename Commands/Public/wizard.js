@@ -1,7 +1,7 @@
-const { MessageEmbed } = require("discord.js");
-const { numberIsValid } = require("../../internals/modules");
+import { MessageEmbed } from "discord.js";
+import { numberIsValid } from "../../internals/modules";
 
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg) => {
 	let myNumber = await msg.channel.number;
 	if (myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel already has a number. Call `*611` if you want to change/remove it." } });
 
@@ -73,7 +73,7 @@ module.exports = async(client, msg, suffix) => {
 
 		let existingNumber = await r.table("Numbers").get(number);
 		if (existingNumber) {
-			msg.channel.send({ embed: { color: config.colors.error, title: "Existing number", description: "Sorry,that number already exists. Try something else!" } });
+			msg.channel.send({ embed: { color: config.colors.error, title: "Existing number", description: "Sorry, that number already exists. Try something else!" } });
 			return numberChooser();
 		}
 

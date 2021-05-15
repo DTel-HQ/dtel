@@ -1,6 +1,4 @@
-const { exec } = require("child_process");
-
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg) => {
 	let omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Preparing to restart", description: "Please wait." } });
 
 	let calls = await r.table("Calls");

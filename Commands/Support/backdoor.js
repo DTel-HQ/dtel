@@ -1,7 +1,6 @@
 // @ts-check
 module.exports = async(client, msg, suffix) => {
-	let del = true;
-	if (msg.guild) msg.delete().catch(e => del = false);
+	msg.delete().catch(e => null); // delete >backdoor message
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "Syntax: >backdoor [number/channelID]" } });
 
 	let channel, number;
@@ -33,10 +32,10 @@ module.exports = async(client, msg, suffix) => {
 			await msg.author.createDM();
 			const m = await msg.author.send(`https://discord.gg/${invite.code}`)
 				.catch(_ => msg.channel.send(`https://discord.gg/${invite.code}`));
-			
+
 			setTimeout(() => {
 				m.delete().catch();
-			}, 3e4);
+			}, 3e4); // 30 seconds
 		})
 		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
 };

@@ -1,4 +1,4 @@
-const { post } = require("chainfetch");
+import { post } from "chainfetch";
 
 module.exports = async(client, msg, suffix) => {
 	let hrstart;

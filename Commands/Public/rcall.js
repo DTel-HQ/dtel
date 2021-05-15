@@ -1,6 +1,8 @@
-module.exports = async(client, msg, suffix) => {
+import embeds from "../../configuration/embeds";
+
+module.exports = async(client, msg) => {
 	let fromNumber = await msg.channel.number;
-	if (!fromNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not have a number. Run `>wizard` to create one." } });
+	if (!fromNumber) return msg.channel.send({ embed: embeds.noNumber });
 
 	let phonebook = await r.table("Phonebook");
 	if (!phonebook[0]) return msg.channel.send({ embed: { color: config.colors.error, title: "Empty book", description: "Seemingly you're using a budget version of the Yellow Pages, there's no numbers in sight!" } });

@@ -2,9 +2,9 @@
 module.exports = {
 	// BOT MAINTENANCE
 	maintainers: [
-		"207484517898780672",
-		"137589790538334208",
-		"124989722668957700",
+		"207484517898780672", // Austin
+		"137589790538334208", // Sun
+		"124989722668957700", // Mitchell
 	],
 	devMode: false,
 	devOnlyMode: false,
@@ -15,20 +15,20 @@ module.exports = {
 	aliasNumbers: {
 		"*611": "08007877678",
 	},
-	supportNumber: "08007877678",
+	supportNumber: "08007877678", // 0800SUPPORT
 
 	// SETINGS
 	prefix: ">",
-	dailies: {
+	dailies: { // credits earned from using >daily
 		boss: 300,
 		manager: 250,
 		support: 200,
 		donator: 120,
 		default: 80,
 	},
-	lotteryCost: 5,
-	messageCost: 2,
-	pickupBonus: 25, // *611
+	lotteryCost: 5, // credits per lottery entry
+	messageCost: 2, // cost for messages sent with >message
+	pickupBonus: 25, // *611 calls
 	promoteCost: 100,
 	renewalRate: 500,
 	normalTransferRate: 0.85, // 15% fee
@@ -74,7 +74,7 @@ module.exports = {
 	vipLink: "https://dtel.austinhuang.me/en/latest/VIP-Numbers/",
 	voteLink: "https://dtel.austinhuang.me/en/latest/Payment/#voting-for-us-on-listings",
 
-	// Embed Colors
+	// Embed colors
 	colors: {
 		contacts: 0x50C878, // green
 		error: 0xff3333, // red

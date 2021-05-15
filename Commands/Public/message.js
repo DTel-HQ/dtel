@@ -1,4 +1,5 @@
-const randomstring = require("randomstring");
+import * as randomstring from "randomstring";
+import embeds from "../../configuration/embeds";
 
 module.exports = async(client, msg, suffix) => {
 	let time = Date.now();
@@ -18,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 		.getAll(msg.channel.id, { index: "channel" })
 		.nth(0)
 		.default(null);
-	if (!fromNumberDoc) return msg.reply("This channel doesn't have a number.");
+	if (!fromNumberDoc) return msg.channel.send({ embed: embeds.noNumber });
 	if (new Date(fromNumberDoc.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`" } });
 
 	toNumber = client.replaceNumber(toNumber);
@@ -39,9 +40,9 @@ module.exports = async(client, msg, suffix) => {
 	if (cooldown && cooldown.time > time && !msg.author.support) return msg.channel.send({ embed: { color: config.colors.error, title: "Message cooldown", description: `Not so quick... you're under cooldown for another ${Math.round((cooldown.time - time) / 1000, 1)}s`, footer: { text: "Keep in mind that spamming a mailbox will result in a strike/blacklist." } } });
 	else msg.author.cooldown = "message";
 
-	const fromBlocked =  fromNumberDoc.blocked && fromNumberDoc.blocked.includes(toNumberDoc.guild);
+	const fromBlocked = fromNumberDoc.blocked && fromNumberDoc.blocked.includes(toNumberDoc.guild);
 	const toBlocked = toNumberDoc.blocked && toNumberDoc.blocked.includes(fromNumberDoc.guild);
-	if (fromBlocked || toBlocked) return msg.channel.send({ embed: { color: config.colors.error, description: `Could not send a message to \`${toNumberDoc.id}\`.`} })
+	if (fromBlocked || toBlocked) return msg.channel.send({ embed: { color: config.colors.error, description: `Could not send a message to \`${toNumberDoc.id}\`.` } });
 
 	await r.table("Accounts").get(msg.author.id).update({ balance: account.balance });
 	let id = randomstring.generate({ length: 5, charset: "alphanumeric", readable: true });

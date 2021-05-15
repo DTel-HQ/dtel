@@ -1,4 +1,4 @@
-const Discord = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 module.exports = async(client, msg, suffix) => {
 	if (!msg.author.support || !suffix) {
@@ -27,7 +27,7 @@ module.exports = async(client, msg, suffix) => {
 	if (!strikes[0]) return msg.channel.send({ embed: { color: config.colors.info, title: "Completely clean!", description: "This ID does not have any strikes." } });
 	let type = strikes[0].user === undefined ? "user/guild" : strikes[0].user ? "user" : "guild";
 
-	let embed = new Discord.MessageEmbed()
+	let embed = new MessageEmbed()
 		.setTitle(`This ${type} has ${strikes.length} ${strikes.length === 1 ? "strike" : "strikes"}.`)
 		.setColor(config.colors.info)
 		.setFooter(`Use \`>rmstrike [ID]\` to remove a strike.`);

@@ -3,7 +3,7 @@
 import { scheduleJob } from "node-schedule";
 import { MessageEmbed } from "discord.js";
 import { get } from "chainfetch";
-const auth = require("../configuration/auth.js");
+import * as auth from "../configuration/auth.js";
 const Discoin = require("@discoin/scambio").default;
 const DClient = new Discoin(auth.discoinToken, ["DTS"]);
 
@@ -70,7 +70,7 @@ let lastWarning = 0;
 let WCDiscoin = 0;
 scheduleJob("*/1 * * * *", async() => {
 	if (client.shard.id !== client.shard.shardCount - 1 || !client.done) return;
-	
+
 	let unhandled;
 	try {
 		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS.replace("inL", "$in"));
@@ -306,9 +306,9 @@ async function expiredNumbers() {
 			cdesc = `This channel's number (${number.id}) has been expired for >${warnDays} days and will automatically be deleted in ${deleteDays - warnDays}. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
 		} else if (expiryMS < lastWarnMS && expiryMS > lastWarnMS - 86400000) {
 			winston.info(`[ScheduleJob] Number ${number.id} lastwarned`);
-			otitle = `❕This number will be deleted in 24h❕`;
+			otitle = `❕This number will be deleted in 24 hours❕`;
 			odesc = `Your number ${number.id} in <#${channel.id}> has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing your number (and all that comes with it), please extend the duration of your number by calling \`*233\`. `;
-			ctitle = `❕This number will be deleted in 24h❕`;
+			ctitle = `❕This number will be deleted in 24 hours❕`;
 			cdesc = `This channel's number (${number.id}) has been expired for >${lastWarn} days and will automatically be deleted in **24h**. To prevent losing this number and all its settings, please extend it by calling \`*233\`.`;
 		} else if (expiryMS > time && expiryMS < time + 86400000) {
 			// automatic renewal stuff

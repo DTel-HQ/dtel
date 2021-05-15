@@ -1,9 +1,11 @@
+import embeds from "../../configuration/embeds";
+
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "To (un)block a number: >block [number]" } });
 
 	// Help users a bit by removing spaces & '-'
 	let myNumber = await msg.channel.number;
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "No number", description: "This channel does not have a number." } });
+	if (!myNumber) return msg.channel.send({ embed: embeds.noNumber });
 
 	// Need permission and can't block special numbers
 	let perm = msg.channel.type === "dm" ? true : await msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_GUILD");

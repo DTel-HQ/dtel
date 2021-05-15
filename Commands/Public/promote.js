@@ -1,6 +1,7 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
+import embeds from "../../configuration/embeds";
 
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg) => {
 	/*
     number.promote: {
       embed: {
@@ -17,14 +18,14 @@ module.exports = async(client, msg, suffix) => {
     }
   */
 
-	// REMOVE THIS lATER;
-	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you are unable to use the bot hereafter, join our [support server](${config.guildInvite}).` } });
+	// REMOVE THIS LATER
+	msg.channel.send({ embed: { color: config.colors.info, title: "Caution", description: `This command may cause issues in some circumstances. \nIf you can't use the bot after using this command or find any bugs, join our [support server](${config.guildInvite}).` } });
 
 	// Do the necessary checks
 	let number = await msg.channel.number;
 	if (!number) {
 		msg.author.busy = false;
-		return msg.channel.send({ embed: { color: config.colors.error, title: "Registry error", description: "This channel does not seem to have a number." } });
+		return msg.channel.send({ embed: embeds.noNumber });
 	}
 	msg.author.busy = true;
 	let account = await msg.author.account();
