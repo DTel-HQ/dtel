@@ -6,8 +6,7 @@
 [![website-shield]][website] [![gitlocalize-shield]][gitlocalize] [![codacy-shield]][codacy]
 
 ## What is DTel?
-DTel is a Discord bot that allows you to communicate with other servers on Discord.  
-The bot acts like a telephone network, but **cannot** make real-world calls. (sorry about that)
+DTel is a Discord bot that allows you to communicate with other servers on Discord. The bot acts like a telephone network, but **cannot** make real-world calls. (sorry about that)
 
 So, ready to dive into the world of DTel?
 
