@@ -36,7 +36,11 @@ Are you fluent in both English and another language? Then you can help us make t
 All of us at DTel have a passion for programming, which is why we were able to create and maintain DTel over the years.  
 However, hosting the bot isn't free. So if you like what we're doing, have a look at our VIP options by clicking here: [![vip-shield]][website-vip]
 
-
+### Branches
+- `development` contains the latest code - this has been reviewed, but there's no guarantee it works.
+- `master` contains the code currently used on the bot - this branch is only pushed to when `development`'s code is ready.
+- If you'd like to see older code (v1, v2 and the original v4), check out our [archive repo][archive-repo].
+- Any other branches are temporary.
 
 <!-- external links -->
 [invite-bot]: https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953
@@ -47,7 +51,7 @@ However, hosting the bot isn't free. So if you like what we're doing, have a loo
 [website-vip]: https://dtel.austinhuang.me/en/latest/VIP-Numbers/
 [gitlocalize]: https://gitlocalize.com/repo/3993
 [codacy]: https://www.codacy.com/gh/DTel-HQ/dtel/dashboard
-
+[archive-repo]: https://github.com/DTel-HQ/dtel-archive
 
 <!-- repo links -->
 [contributing]: ./.github/CONTRIBUTING.md
