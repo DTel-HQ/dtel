@@ -1,5 +1,5 @@
 # DTel V4
-<img src="DTel.jpeg" width="256" height="256"/>
+<img src="assets/DTel.jpeg" width="256" height="256"/>
 
 **V4 is a reworking of V3 in Typescript with better code and more features. You can't currently add it to your server but stay tuned!**
 

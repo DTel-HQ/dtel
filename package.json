@@ -2,7 +2,7 @@
   "name": "dtel",
   "version": "4.0.0",
   "description": "A telephone bot for Discord",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: we haven't set up testing yet.\" && exit 1"
   },
