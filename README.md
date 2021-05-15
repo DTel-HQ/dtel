@@ -3,7 +3,7 @@
 
 ![version-master] ![version-development]
 
-[![website-shield]][website] [![gitlocalize-shield]][gitlocalize] [![codacy-shield]][codacy]
+[![bot-shield]][invite-bot] [![website-shield]][website] [![gitlocalize-shield]][gitlocalize] [![codacy-shield]][codacy]
 
 ## What is DTel?
 DTel is a Discord bot that allows you to communicate with other servers on Discord. The bot acts like a telephone network, but **cannot** make real-world calls. (sorry about that)
@@ -60,6 +60,7 @@ However, hosting the bot isn't free. So if you like what we're doing, have a loo
 [gitlocalize-shield]: https://gitlocalize.com/repo/3993/whole_project/badge.svg
 [codacy-shield]: https://app.codacy.com/project/badge/Grade/04d77bc4c8a44d869bfef5967030e249
 [vip-shield]: https://img.shields.io/badge/support_us-VIP-green
+[bot-shield]: https://discordbots.org/api/widget/status/377609965554237453.png
 
 [version-master]: https://img.shields.io/github/package-json/v/DTel-HQ/dtel/master
 [version-development]: https://img.shields.io/github/package-json/v/DTel-HQ/dtel/development
