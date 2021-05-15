@@ -1,8 +1,8 @@
 // @ts-check
 
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
-module.exports = async(client, msg, suffix) => {
+module.exports = async(client, msg) => {
 	// Get their details
 	let number = await msg.channel.number;
 	let vipExpiry = number ? number.vip ? new Date(number.vip.expiry) : null : null;

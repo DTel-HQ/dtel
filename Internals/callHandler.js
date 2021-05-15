@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 module.exports = async(cmd, msg, suffix, call) => {
 	let embed = null,
@@ -56,8 +56,8 @@ module.exports = async(cmd, msg, suffix, call) => {
 		await r.table("Calls").get(call.id).update({ connectionLost: true });
 
 		let amt = 0;
-		
-		const lostInterval = setInterval(async () => {
+
+		const lostInterval = setInterval(async() => {
 			try {
 				await client.api.channels(toSend.channel).get();
 
@@ -82,7 +82,7 @@ module.exports = async(cmd, msg, suffix, call) => {
 					return client.delete(toSend.number, { force: false, log: true, origin: "callHandler" });
 				}
 			}
-		}, 1e4)
+		}, 1e4);
 	}
 
 	// send the msg

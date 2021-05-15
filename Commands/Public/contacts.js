@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import embeds from "../../configuration/embeds";
 
 module.exports = async(client, msg) => {
 	const myNumber = await msg.channel.number;
@@ -70,7 +69,7 @@ module.exports = async(client, msg) => {
 			let getNumber = async bad => {
 				if (!perm) {
 					msg.author.busy = false;
-					return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+					return msg.channel.send({ embed: embeds.requiresManageGuild });
 				}
 				if (contacts.length >= 10) msg.channel.send({ embed: { color: config.colors.error, title: "Too many contacts", description: "We currently do not allow more than 9 contacts." } });
 
@@ -170,7 +169,7 @@ module.exports = async(client, msg) => {
 			// check for perm & if the contact is legit
 			if (!perm) {
 				msg.author.busy = false;
-				return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient perms", description: "You need the Manage Server permission to do this." } });
+				return msg.channel.send({ embed: embeds.requiresManageGuild });
 			}
 
 			omsg = await msg.channel.send({ embed: {
@@ -239,7 +238,7 @@ module.exports = async(client, msg) => {
 		if (/delete/i.test(collected.first().content.split(" ")[0])) {
 			msg.author.busy = false;
 			// check for perm & if the contact is legit
-			if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Insufficient permission", description: "You need manage server permission to do this." } });
+			if (!perm) return msg.channel.send({ embed: embeds.requiresManageGuild });
 
 			// Delete the contact's entry
 			contacts.splice(contacts.indexOf(contact), 1);

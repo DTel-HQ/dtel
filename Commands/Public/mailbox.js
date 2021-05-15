@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import embeds from "../../configuration/embeds.js";
 
 module.exports = async(client, msg, suffix) => {
 	// get the number
@@ -97,7 +96,7 @@ module.exports = async(client, msg, suffix) => {
 		} });
 	} else if (suffix.split(" ")[0].toLowerCase() == "delete") {
 		// deleting mailbox
-		if (!perm) return msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "You need the manage guild permission for this." } });
+		if (!perm) return msg.channel.send({ embed: embeds.requiresManageGuild });
 
 		omsg = await msg.channel.send({ embed: { color: config.colors.info, title: "Confirmation", description: "Are you sure you want to delete your mailbox? Stored messages will become **unretrievable**.\nType **yes** to confirm, **no** to cancel." } });
 		collector = await msg.channel.awaitMessages(

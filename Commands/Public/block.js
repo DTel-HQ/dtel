@@ -1,5 +1,3 @@
-import embeds from "../../configuration/embeds";
-
 module.exports = async(client, msg, suffix) => {
 	if (!suffix) return msg.channel.send({ embed: { color: config.colors.info, title: "Command usage", description: "To (un)block a number: >block [number]" } });
 

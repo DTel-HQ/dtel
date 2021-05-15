@@ -1,4 +1,5 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
+
 module.exports = async(client, msg, suffix) => {
 	let callID = suffix.split(" ")[0];
 	let msgID = suffix.split(" ")[1];

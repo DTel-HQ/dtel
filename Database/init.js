@@ -1,4 +1,4 @@
-const { db } = require("../configuration/auth.js");
+import { db } from "../configuration/auth.js";
 
 const Cache = require("../internals/Cache.js");
 

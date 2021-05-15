@@ -1,4 +1,4 @@
-const { updatePerms, perms } = require("../internals/modules");
+import { updatePerms, perms } from "../internals/modules";
 
 module.exports = async() => {
 	await client.shard.broadcastEval(`this.done = true`);

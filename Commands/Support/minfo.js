@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
 
 module.exports = async(client, msg, suffix) => {
 	let number = suffix.split(" ")[0];

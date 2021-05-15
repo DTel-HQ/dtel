@@ -1,5 +1,4 @@
 import { MessageEmbed } from "discord.js";
-import embeds from "../../configuration/embeds";
 
 module.exports = async(client, msg) => {
 	/*

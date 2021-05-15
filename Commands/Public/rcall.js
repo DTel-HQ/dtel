@@ -1,5 +1,3 @@
-import embeds from "../../configuration/embeds";
-
 module.exports = async(client, msg) => {
 	let fromNumber = await msg.channel.number;
 	if (!fromNumber) return msg.channel.send({ embed: embeds.noNumber });

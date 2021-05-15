@@ -1,4 +1,5 @@
-const { MessageEmbed } = require("discord.js");
+import { MessageEmbed } from "discord.js";
+
 module.exports = async(client, msg, suffix) => {
 	let call = await r.table("OldCalls").get(suffix);
 	if (!call) call = await r.table("Calls").get(suffix);

@@ -20,7 +20,7 @@ module.exports = async(client, msg, suffix) => {
 		const newPerms = await require("../../internals/modules").updatePerms(member);
 		return msg.channel.send({ embed: { author: { name: member.user.tag, icon_url: member.user.displayAvatarURL() }, description: `\`\`\`js\n${require("util").inspect(newPerms)}\`\`\`` } });
 	}
-	
+
 	let resstr = "";
 	const permsArr = suffix.match(/[+-]\w*/g) || [];
 	permsArr.push("end");

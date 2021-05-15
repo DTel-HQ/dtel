@@ -6,7 +6,7 @@ import { createLogger, format, transports } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 const config = global.config = require("./configuration/config.js");
 const aliases = global.aliases = require("./configuration/aliases.js");
-
+const embeds = global.embeds = require ("./configuration/embeds.js");
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
 		const client = global.client = this.client;

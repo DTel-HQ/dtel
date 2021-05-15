@@ -1,5 +1,3 @@
-import embeds from "../../configuration/embeds";
-
 module.exports = async(client, msg, suffix) => {
 	let perms = msg.guild ? msg.guild.members.cache.get(msg.author.id).hasPermission("MANAGE_MESSAGES") : msg.author.support;
 

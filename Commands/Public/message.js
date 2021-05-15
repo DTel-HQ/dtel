@@ -1,5 +1,4 @@
 import * as randomstring from "randomstring";
-import embeds from "../../configuration/embeds";
 
 module.exports = async(client, msg, suffix) => {
 	let time = Date.now();
