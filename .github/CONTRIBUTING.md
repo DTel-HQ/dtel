@@ -25,7 +25,7 @@ eg. you have an issue nr 301 named "Add feature branches to contributing", then 
 ### Commenting
 - All comments should be written in English.
 - Be sure to follow our [Code of Conduct].
-- Keep any discussion on-topic, or move it to another issue/platform.
+- Keep any discussion on-topic, or move it to another issue/platform. eg. our [testing server][invite-test]
 
 ## Pull requests
 
@@ -59,3 +59,4 @@ If at any stage you find an issue, you can choose to stop at that stage until a 
 
 <!-- Other links -->
 [Angular contributing]: https://github.com/angular/angular/blob/master/CONTRIBUTING.md#commit
+[invite-test]: https://discord.gg/uWQfxdXtFY
