@@ -1,5 +1,5 @@
 # DTel
-<img style="float: right;" src="assets/DTel.jpeg" width="256" height="256"/>
+<img style="align: right; float: right;" src="assets/DTel.jpeg" width="256" height="256"/>
 
 ![version-master] ![version-development]
 
