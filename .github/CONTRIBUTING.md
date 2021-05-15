@@ -33,7 +33,9 @@ eg. you have an issue nr 301 named "Add feature branches to contributing", then 
 - Keep the title short, descriptive and [imperative].
 - Write a short description of your changes.  
 If your PR solves any issue(s), make sure to add `resolves #<issue nr>` at the end.
-- Add any relevant tags.
+- Add any relevant tags. (if you can)
+- When your PR is ready for review, add DTel-HQ/dtel-maintainers as reviewers and wait on feedback.  
+Do not ask for review in any other way, excluding DTel-HQ members.
 
 ### Review
 These steps have been written to go from quick and easy to more rigorous.  
