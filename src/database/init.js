@@ -1,6 +1,6 @@
 import { db } from "../configuration/auth.js";
 
-const Cache = require("../internals/Cache.js");
+const Cache = require("../internals/cache.js");
 
 const r = global.r = require("rethinkdbdash")({
 	db: db.db,

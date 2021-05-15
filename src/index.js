@@ -21,7 +21,7 @@ for (let i of structures) {
 }
 const sharder = new ShardingManager(`${__dirname}/dtel.js`, {
 	clientOptions: { disableMentions: "everyone" },
-	client: require("./internals/Client.js")(Discord),
+	client: require("./internals/client.js")(Discord),
 	token: auth.discord.token,
 	clusterCount: 1,
 });
