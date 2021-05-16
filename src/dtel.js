@@ -1,7 +1,7 @@
 import { Collection } from "discord.js";
 import { readdir } from "fs-nextra";
 import * as auth from "./configuration/auth.js";
-import * as clear from ("clear-module");
+import * as clear from "clear-module";
 import { createLogger, format, transports } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 const config = global.config = require("./configuration/config.js");
