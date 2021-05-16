@@ -27,5 +27,11 @@ module.exports = {
 		color: config.colors.error,
 		title: "Billing error",
 		description: "Your number has expired. You can `>call *233` to renew it; you can also `>call *611` if you need any help."
+	},
+	// Invalid number
+	invalidNumber: {
+		color: config.colors.error,
+		title: "Invalid number",
+		description: "That's not a valid number. Make sure it's 11 digits long, and try again."
 	}
 };

@@ -7,7 +7,7 @@ module.exports = async(client, msg, suffix) => {
 
 	let myNumber = await r.table("Numbers").get(number);
 	if (!myNumber) myNumber = await r.table("Numbers").getAll(number, { index: "channel" }).nth(0).default(null);
-	if (!myNumber) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid number", description: "Couldn't find that number!" } });
+	if (!myNumber) return msg.channel.send({ embed: embeds.invalidNumber });
 
 	let mailbox = await r.table("Mailbox").get(myNumber.channel);
 	if (!mailbox) return msg.channel.send({ embed: { color: config.colors.error, title: "No mailbox", description: "This number doesn't have a mailbox." } });
