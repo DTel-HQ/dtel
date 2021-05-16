@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix, rcall) => {
 	let toDial = suffix;
 	if (!toDial) return msg.channel.send({ embed: { color: config.colors.error, title: "Command usage", description: "You didn't specify a number... `>call [number]`" } });
 
-	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`." } });
+	if (new Date(myNumber.expiry).getTime() < Date.now() && !["*233", "*611"].includes(toDial)) return msg.channel.send({ embed: embeds.numberExpired });
 
 	toDial = await client.replaceNumber(toDial);
 

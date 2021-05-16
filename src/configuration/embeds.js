@@ -1,5 +1,7 @@
 /* eslint-disable no-inline-comments */
 
+const { config } = require("process");
+
 // This file contains a series of commonly-used embed objects.
 module.exports = {
 	// Registry error: no number
@@ -22,4 +24,10 @@ module.exports = {
 		title: "Permission error",
 		description: "You can’t use this command outside of `*611` calls." 
 	},
+	// Billing error: number has expired
+	numberExpired: {
+		color: config.colors.error,
+		title: "Billing error",
+		description: "Your number has expired. You can `>call *233` to renew it; you can also `>call *611` if you need any help."
+	}
 };

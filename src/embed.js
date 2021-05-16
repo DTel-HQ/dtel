@@ -1,3 +1,4 @@
+// This embed is used in DTel HQ (the support server)'s #info channel.
 const embed = {
 	embed: {
 		color: 0x3498d8,
