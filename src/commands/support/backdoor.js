@@ -37,5 +37,5 @@ module.exports = async(client, msg, suffix) => {
 				m.delete().catch();
 			}, 3e4); // 30 seconds
 		})
-		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "Privilege is too low." } }));
+		.catch(() => msg.channel.send({ embed: { color: config.colors.error, title: "Permission error", description: "The bot doesn't have the `Create Invites` permission." } }));
 };
