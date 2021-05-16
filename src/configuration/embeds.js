@@ -1,7 +1,5 @@
 /* eslint-disable no-inline-comments */
 
-const { config } = require("process");
-
 // This file contains a series of commonly-used embed objects.
 module.exports = {
 	// Registry error: no number
