@@ -23,7 +23,7 @@ module.exports = async(client, msg) => {
 				.addField("VIP Options", "Dial `*411` and press (5) to access the VIP settings.\nNote: Only someone with the Manage Guild permission may change the VIP settings.");
 		}
 		if (account.vip) {
-			embed.setDescription(`Enter the amounts of months to upgrade.\n\nPlease view the [site](${config.vipLink}) for a list of perks.`)
+			embed.setDescription(`Enter the amount of months to upgrade your number for.\n\nPlease view the [site](${config.vipLink}) for a list of perks.`)
 				.setFooter("Press (0) to hangup. This call will automatically be hung up after 60 seconds of inactivity.");
 		}
 	}

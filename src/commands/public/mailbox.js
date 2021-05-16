@@ -211,7 +211,7 @@ module.exports = async(client, msg, suffix) => {
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting messages")
-						.setDescription("Are you sure you want to delete all the messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
+						.setDescription("Are you sure you want to delete all your messages? The messages will be **unretrievable**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
 					await omsg.edit({ embed: embed });
 
@@ -241,7 +241,7 @@ module.exports = async(client, msg, suffix) => {
 					embed = new MessageEmbed()
 						.setColor(config.colors.error)
 						.setTitle("Deleting mailbox")
-						.setDescription("Are you sure you want to delete the mailbox? Stored messages will become **unretrievable**.\nRespond with `yes` or `no`.")
+						.setDescription("Are you sure you want to delete your mailbox? Stored messages **cannot be retrieved**.\nRespond with `yes` or `no`.")
 						.setFooter("This dialogue will be cancelled after 2 minutes of inactivity.");
 					await omsg.edit({ embed: embed });
 
@@ -276,7 +276,7 @@ module.exports = async(client, msg, suffix) => {
 					embed = new MessageEmbed()
 						.setColor(config.colors.info)
 						.setTitle("Editing autoreply")
-						.setDescription("Type the new autoreply of your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)")
+						.setDescription("Type a new autoreply for your mailbox. Please refrain from cursing and other possibly offensive matters. (max 100 characters)")
 						.setFooter("Press (0) to hangup. This call will automatically be hung up after 3 minutes.");
 					await omsg.edit({ embed: embed });
 
