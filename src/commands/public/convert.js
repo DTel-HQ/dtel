@@ -37,8 +37,8 @@ module.exports = async(client, msg, suffix) => {
 	let account = await msg.author.account();
 
 	if (isNaN(amount)) return msg.channel.send({ embed: { color: config.colors.error, title: "Syntax error", description: "That's not a number..." } });
-	if (currency === "DTS") return msg.channel.send({ embed: { color: config.colors.error, title: "What are you trying?", description: "You can not convert DTS into DTS... say `>convert` to check currencies" } });
-	if (!currencies.find(c => c.id === currency)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid currency", description: "That currency does not exist... say `>convert` to check all currencies." } });
+	if (currency === "DTS") return msg.channel.send({ embed: { color: config.colors.error, title: "What are you trying?", description: "You can't convert DTS into DTS...", footer: "Use `>convert` to check Discoin's currencies." } });
+	if (!currencies.find(c => c.id === currency)) return msg.channel.send({ embed: { color: config.colors.error, title: "Invalid currency", description: "That currency does not exist...", footer: "Use `>convert` to check Discoin's currencies." } });
 	if (account.balance < amount) return msg.channel.send({ embed: { color: config.colors.error, title: "Payment error", description: `Insufficient balance! You have ${account.balance} credits.` } });
 
 	const emoji = emojis.find(e => e.name === currency).toString();

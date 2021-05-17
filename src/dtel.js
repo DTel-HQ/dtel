@@ -1,15 +1,14 @@
-import { Collection } from "discord.js";
 import { readdir } from "fs-nextra";
 import * as auth from "./configuration/auth.js";
-import * as clear from ("clear-module");
+import * as clear from "clear-module";
 import { createLogger, format, transports } from "winston";
 const DailyRotateFile = require("winston-daily-rotate-file");
 const config = global.config = require("./configuration/config.js");
-const aliases = global.aliases = require("./configuration/aliases.js");
-const embeds = global.embeds = require ("./configuration/embeds.js");
+global.aliases = require("./configuration/aliases.js");
+global.embeds = require("./configuration/embeds.js");
 module.exports = class extends require("kurasuta").BaseCluster {
 	launch() {
-		const client = global.client = this.client;
+		global.client = this.client;
 
 		(async() => {
 			await require("./database/init")()

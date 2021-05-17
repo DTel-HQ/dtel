@@ -16,4 +16,22 @@ module.exports = {
 		description: "This command requires the `Manage Guild` (also known as the `Manage Server`) permission. Ask an admin to run this command.",
 		footer: `If you have any questions, or if you think you have the Manage Guild permission, please join our support server (${config.guildInvite}) or \`>call *611\`.`,
 	},
+	// "Perm" error: command cannot be used outside *611
+	cannotUseOutside611: {
+		color: config.colors.error,
+		title: "Permission error",
+		description: "You can’t use this command outside of `*611` calls.",
+	},
+	// Billing error: number has expired
+	numberExpired: {
+		color: config.colors.error,
+		title: "Billing error",
+		description: "Your number has expired. You can `>call *233` to renew it; you can also `>call *611` if you need any help.",
+	},
+	// Invalid number
+	invalidNumber: {
+		color: config.colors.error,
+		title: "Invalid number",
+		description: "That's not a valid number. Make sure it's 11 digits long, and try again.",
+	},
 };

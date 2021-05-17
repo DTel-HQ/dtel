@@ -1,5 +1,5 @@
 import { MessageEmbed } from "discord.js";
-import * as os from ("os");
+import * as os from "os";
 
 module.exports = async(client, msg, suffix) => {
 	const DTS = config.dtsEmoji;

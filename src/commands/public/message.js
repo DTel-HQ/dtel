@@ -19,7 +19,7 @@ module.exports = async(client, msg, suffix) => {
 		.nth(0)
 		.default(null);
 	if (!fromNumberDoc) return msg.channel.send({ embed: embeds.noNumber });
-	if (new Date(fromNumberDoc.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "Your number has expired. You can renew your number by dialling `*233`" } });
+	if (new Date(fromNumberDoc.expiry).getTime() < Date.now()) return msg.channel.send({ embed: embeds.numberExpired });
 
 	toNumber = client.replaceNumber(toNumber);
 	let toNumberDoc = await r.table("Numbers").get(toNumber);

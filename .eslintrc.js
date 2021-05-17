@@ -19,6 +19,7 @@ module.exports = {
 		winston: true,
 		config: true,
 		client: true,
+		embeds: true,
 		r: true,
 		reload: true,
 	},

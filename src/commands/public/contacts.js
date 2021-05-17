@@ -3,7 +3,7 @@ import { MessageEmbed } from "discord.js";
 module.exports = async(client, msg) => {
 	const myNumber = await msg.channel.number;
 	if (!myNumber) return msg.channel.send({ embed: embeds.noNumber });
-	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: { color: config.colors.error, title: "Billing error", description: "This channel's number has expired. Please call `*233` to renew it." } });
+	if (new Date(myNumber.expiry).getTime() < Date.now()) return msg.channel.send({ embed: embeds.numberExpired });
 
 	// Get the user's permissions
 	let perm;
