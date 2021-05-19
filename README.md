@@ -57,9 +57,9 @@ However, hosting the bot isn't free. So if you like what we're doing, have a loo
 [contributing]: ./.github/CONTRIBUTING.md
 
 <!-- shields -->
-[invite-bot-shield]: https://img.shields.io/badge/Discord-Get_The_Bot-7289DA.svg
-[invite-support-shield]: https://img.shields.io/badge/Discord-Support_Server-7289DA.svg
-[invite-test-shield]: https://img.shields.io/badge/Discord-Test_Server-7289DA.svg
+[invite-bot-shield]: https://img.shields.io/badge/Discord-Get_The_Bot-5865F2.svg
+[invite-support-shield]: https://img.shields.io/badge/Discord-Support_Server-5865F2.svg
+[invite-test-shield]: https://img.shields.io/badge/Discord-Test_Server-5865F2.svg
 [website-shield]: https://readthedocs.org/projects/dtel/badge/?version=latest
 [gitlocalize-shield]: https://gitlocalize.com/repo/3993/whole_project/badge.svg
 [codacy-shield]: https://app.codacy.com/project/badge/Grade/04d77bc4c8a44d869bfef5967030e249
