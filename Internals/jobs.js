@@ -69,7 +69,7 @@ scheduleJob("0 0 0 * * *", async() => {
 let lastWarning = 0;
 let WCDiscoin = 0;
 scheduleJob("*/1 * * * *", async() => {
-	if (client.shard.id !== client.shard.shardCount - 1 || !client.done) return;
+	if (client.shard.id != 0 || !client.done) return;
 	
 	let unhandled;
 	try {
