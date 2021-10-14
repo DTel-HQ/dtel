@@ -5,3 +5,6 @@ configuration/auth.js
 rethinkdb.exe
 dist/
 built/
+build/
+
+src/config/auth.ts
