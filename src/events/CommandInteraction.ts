@@ -1,0 +1,51 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+import { CommandInteraction } from "discord.js";
+import config from "../config/config";
+import { PermissionLevel } from "../Interfaces/Command";
+import DTelClient from "../internals/client";
+import Command from "../Internals/Command";
+
+interface Constructable<T> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    new(...args: any) : T;
+}
+
+export default async(client: DTelClient, interaction: CommandInteraction): Promise<void> => {
+	const winston = client.winston;
+	const commandData = client.commands.find(c => c.name === interaction.commandName);
+	if (!commandData) {
+		client.winston.error(`Cannot find command data for registered command ${interaction.commandName}`);
+		interaction.reply(":x: Command not found within bot. Contact a maintainer");
+		return;
+	}
+
+	let commandFile: Constructable<Command>;
+	try {
+		if (config.devMode) {
+			delete require.cache[require.resolve(`${__dirname}/../Commands/${interaction.commandName}`)];
+		}
+		commandFile = require(`${__dirname}/../Commands/${interaction.commandName}`).default;
+		if (!commandFile) throw new Error();
+	} catch {
+		winston.error(`Cannot find command file for command ${interaction.commandName}`);
+		interaction.reply(":x: Command not yet implemented in rewrite.");
+		return;
+	}
+
+	const commandClass = new commandFile(client, interaction, commandData);
+	try {
+		if (commandData.permissionLevel == PermissionLevel.owner) {
+			if (config.maintainers.includes(interaction.user.id)) {
+				winston.info(`Running command ${interaction.commandName}`);
+				commandClass._run();
+			} else {
+				commandClass.notMaintainer();
+			}
+		} else {
+			commandClass._run();
+		}
+	} catch (e) {
+		winston.error(`Error occurred whilst executing command ${interaction.commandName}`, e);
+		interaction.reply(":x: An error occurred whilst executing this command.");
+	}
+};

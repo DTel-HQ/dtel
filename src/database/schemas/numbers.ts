@@ -26,12 +26,11 @@ interface Promote {
 
 export default new Schema<DTelNumber>({
 	_id: {
-		required: true,
-		type: String,
+		type: Schema.Types.String,
 	},
 	channel: {
+		type: Schema.Types.String,
 		required: true,
-		type: String,
 	},
 	blocked: [{
 		default: [],
@@ -41,10 +40,10 @@ export default new Schema<DTelNumber>({
 		default: [],
 		type: Schema.Types.Array,
 	}],
-	expiry: [{
-		default: Schema.Types.Date,
+	expiry: {
+		type: Date,
 		required: true,
-	}],
+	},
 	promote: {
 		embed: Schema.Types.Array,
 		lastEdited: Date,

@@ -1,5 +1,23 @@
-import { Client, Interaction, Guild, Message} from "discord.js";
+import Client from "./internals/client";
+import { Interaction, Guild, Message } from "discord.js";
 import Console from "./Internals/Console";
+import init, { DTelDatabase } from "./database/database";
+
+import ReadyEvent from "./events/Ready";
+
+import InteractionEvent from "./events/interaction";
+
+const winston = Console(`Shard ${process.env.SHARDS}`);
+
+let db: DTelDatabase;
+
+try {
+	db = init();
+	winston.info("Initialized database.");
+} catch (err) {
+	console.error(`Failed to connect to MongoDB.\n ${err.stack}`);
+	process.exit(-1);
+}
 
 const client = new Client({
 	intents: [
@@ -9,13 +27,19 @@ const client = new Client({
 		"DIRECT_MESSAGES",
 	],
 	partials: ["CHANNEL"],
+
+	constantVariables: {
+		db,
+		winston,
+	},
 });
 
-const winston = Console(`Shard ${process.env.SHARDS}`);
 
-client.on("ready", () => ReadyEvent());
+client.on("ready", () => ReadyEvent(client));
 
-client.on("messageCreate", (msg: Message) => MessageCreateEvent(msg));
-client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(interaction));
-client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
-client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
+// client.on("messageCreate", (msg: Message) => MessageCreateEvent(msg));
+client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
+// client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
+// client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
+
+client.login(process.env.TOKEN);
