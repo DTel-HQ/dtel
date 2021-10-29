@@ -1,5 +1,5 @@
 import { CommandInteraction, Interaction, MessageComponentInteraction } from "discord.js";
-import HandleCommandInteraction from "./CommandInteraction";
+import HandleCommandInteraction from "./commandInteraction";
 import DTelClient from "../internals/client";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {

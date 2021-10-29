@@ -1,5 +1,3 @@
 TODO:
-- Command handler handle prefixes
 - Command handler handle staff/admin permissions
-- Command handler handle command folders
 - Command handler handle command cooldowns

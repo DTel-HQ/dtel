@@ -1,12 +1,9 @@
 // import { ApplicationCommandOptionChoice } from "discord.js";
 import DTelClient from "../internals/client";
 import Commands from "../config/commands";
+import { PermissionLevel } from "../interfaces/command";
 
 export default (client: DTelClient): void => {
-	for (const command of Commands) {
-		// This might not be always needed but we'll keep it for now
-		client.commands.push(command);
-	}
 	client.winston.info(`Ready!`);
 	client.winston.info(`Logged in as ${client.user.tag}`);
 

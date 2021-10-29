@@ -4,13 +4,16 @@
 // But not actually copyright do what you want
 
 import { CommandInteraction } from "discord.js";
-import CommandInterface from "../Interfaces/Command";
+import CommandInterface from "../interfaces/command";
 import DTelClient from "../internals/client";
+import config from "../config/config";
 
 class Command {
 	client: DTelClient;
 	interaction: CommandInteraction;
 	commandData: CommandInterface;
+
+	config = config;
 
 	constructor(client: DTelClient, interaction: CommandInteraction, commandData: CommandInterface) {
 		this.client = client;

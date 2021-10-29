@@ -6,9 +6,5 @@
 		"module": "commonjs",
 		"moduleResolution": "Node",
 		"esModuleInterop": true
-	},
-	"include": [
-		"src/*.ts",
-		"src/commands/*.ts",
-	]
+	}
 }

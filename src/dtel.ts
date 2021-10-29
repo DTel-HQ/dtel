@@ -3,7 +3,7 @@ import { Interaction, Guild, Message } from "discord.js";
 import Console from "./Internals/Console";
 import init, { DTelDatabase } from "./database/database";
 
-import ReadyEvent from "./events/Ready";
+import ReadyEvent from "./events/ready";
 
 import InteractionEvent from "./events/interaction";
 

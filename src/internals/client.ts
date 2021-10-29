@@ -18,8 +18,6 @@ class DTelClient extends Client {
 	db: DTelDatabase;
 	winston: Logger;
 
-	commands: Command[] = [];
-
 	constructor(options: DTelClientOptions) {
 		super(options);
 

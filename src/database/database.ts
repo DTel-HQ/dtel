@@ -1,5 +1,5 @@
 import mongoose, { Model } from "mongoose";
-import numberSchema, { DTelNumber } from "./schemas/numbers";
+import numberSchema, { DTelNumber } from "./schemas/number";
 import auth from "../config/auth";
 interface DTelDatabase {
 	numbers: Model<DTelNumber>,
