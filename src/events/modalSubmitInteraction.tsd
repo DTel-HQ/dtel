@@ -39,7 +39,7 @@ export default async(client: DTelClient, interaction: ModalSubmitInteraction): P
 		client.winston.info(`Running interaction: ${interaction.customId}`);
 		processorClass.run();
 	} catch (e) {
-		client.winston.error(`Error occurred whilst executing interaction ${interaction.customId}`, e);
+		client.winston.error(`Error occurred whilst executing interaction ${interaction.customId}`, e.stack);
 		interaction.reply(":x: An error occurred whilst executing this command.");
 	}
 };

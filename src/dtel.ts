@@ -28,6 +28,7 @@ i18next.init({
 	fallbackLng: "en-US",
 	preload: ["en-US"],
 
+	returnObjects: true,
 	resources: i18ndata,
 });
 

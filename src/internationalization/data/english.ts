@@ -27,4 +27,8 @@ export default {
 			},
 		},
 	},
+
+	errors: {
+		unexpected: "An unexpected error occurred.",
+	},
 };

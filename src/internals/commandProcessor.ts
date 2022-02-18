@@ -4,18 +4,18 @@
 // But not actually copyright do what you want
 
 import { CommandInteraction } from "discord.js";
-import CommandInterface from "../interfaces/commandData";
+import CommandDataInterface from "../interfaces/commandData";
 import DTelClient from "./client";
 import Processor from "./processor";
 import i18n, { TFunction } from "i18next";
 
 abstract class CommandProcessor extends Processor {
-	commandData: CommandInterface;
+	commandData: CommandDataInterface;
 	interaction: CommandInteraction;
 	t: TFunction;
 
-	constructor(client: DTelClient, interaction: CommandInteraction, commandData: CommandInterface) {
-		super(client, interaction);
+	constructor(client: DTelClient, interaction: CommandInteraction, commandData: CommandDataInterface) {
+		super(client, interaction, commandData);
 		this.interaction = interaction;
 		this.commandData = commandData;
 
