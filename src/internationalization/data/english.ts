@@ -9,6 +9,10 @@ export default {
 				title: "DTel Phone Number Registry",
 
 				numberLabel: "Enter the number you would like to register:",
+
+				numberInvalid: "Please enter a valid number.",
+				numberBadFormat: "Please enter a number starting with",
+				numberInUse: "That number is already in use. Try another.",
 			},
 
 			introEmbed: {
@@ -23,6 +27,18 @@ export default {
 				}, {
 					name: "🏛️ The legal stuff",
 					value: `Full documentation is located at ${config.siteLink}. \nIt contains important information such as our [Privacy Policy](https://dtel.austinhuang.me/en/latest/Privacy/).`,
+				}],
+			},
+
+			successEmbed: {
+				title: "✅ Success!",
+				description: "Your number has been registered.",
+				fields: [{
+					name: "❓ Whats next?",
+					value: "To learn more about the bot: `>help`, `>info`, `>links`.\nFor information about your number: call `*233`.\nFind other numbers to call at `*411`.",
+				}, {
+					name: "Number",
+					inline: true,
 				}],
 			},
 		},
