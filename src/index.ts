@@ -5,7 +5,7 @@ import Console from "./internals/console";
 
 // Master process -- assigned a variable as it will come in handy later
 // Main IPC process
-const sharder = new ShardingManager(`${__dirname}/DTel.js`, {
+const sharder = new ShardingManager(`${__dirname}/dtel.js`, {
 	totalShards: config.shardCount,
 	token: auth.discord.token,
 });
