@@ -1,16 +1,22 @@
-import Command, { PermissionLevel } from "../Interfaces/Command";
+import Command, { PermissionLevel, CommandType } from "../interfaces/commandData";
 
-const standardCommands: Command[] = [
+const commands: Command[] = [
+	{
+		name: "wizard",
+		description: "Create a number for your channel",
+		guildOnly: false,
+
+		permissionLevel: PermissionLevel.serverAdmin,
+		useType: CommandType.standard,
+	},
 	{
 		name: "help",
 		description: `Gives you help`,
 		guildOnly: false,
 
 		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
 	},
-];
-
-const maintainerCommands: Command[] = [
 	{
 		name: "eval",
 		description: `Evaluates some JS code`,
@@ -23,12 +29,8 @@ const maintainerCommands: Command[] = [
 		guildOnly: false,
 
 		permissionLevel: PermissionLevel.owner,
+		useType: CommandType.standard,
 	},
 ];
-
-const commands = {
-	standard: standardCommands,
-	maintainer: maintainerCommands,
-};
 
 export default commands;
