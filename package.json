@@ -2,7 +2,7 @@
   "name": "dtel",
   "version": "4.0.0",
   "description": "A telephone bot for Discord",
-  "main": "src/index.js",
+  "main": "build/index.js",
   "scripts": {
     "test": "echo \"Error: we haven't set up testing yet.\" && exit 1"
   },
@@ -30,12 +30,12 @@
   "dependencies": {
     "@discoin/scambio": "^2.2.0",
     "bufferutil": "^4.0.3",
-    "discord.js": "^13.1.0",
+    "discord.js": "github:monbrey/discord.js#modals",
     "erlpack": "github:discordapp/erlpack",
     "mongoose": "^6.0.10",
     "node-schedule": "^2.0.0",
-    "re2": "^1.16.0",
-    "url-regex-safe": "^2.0.2",
+    "re2": "^1.17.3",
+    "url-regex-safe": "^3.0.0",
     "utf-8-validate": "^5.0.5",
     "uuid": "^8.3.2",
     "winston": "^3.3.3",

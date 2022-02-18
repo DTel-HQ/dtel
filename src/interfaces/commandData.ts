@@ -9,11 +9,20 @@ enum PermissionLevel {
 	none,
 }
 
-interface Command extends ChatInputApplicationCommandData {
+// eslint-disable-next-line no-shadow
+enum CommandType {
+	standard,
+	call,
+	customerSupport,
+	maintainer,
+}
+
+interface CommandData extends ChatInputApplicationCommandData {
 	guildOnly: boolean;
 
 	permissionLevel: PermissionLevel;
+	useType: CommandType;
 }
-export default Command;
-export { PermissionLevel };
+export default CommandData;
+export { PermissionLevel, CommandType };
 

@@ -1,5 +1,6 @@
 import { CommandInteraction, Interaction, MessageComponentInteraction } from "discord.js";
 import HandleCommandInteraction from "./commandInteraction";
+import HandleMessageComponentInteraction from "./componentInteraction";
 import DTelClient from "../internals/client";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
@@ -9,9 +10,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			break;
 		}
 		case "MESSAGE_COMPONENT": {
-			const interaction = _interaction as MessageComponentInteraction;
-			// if (interaction.customId.startsWith("config")) ConfigCommand.handleMessageComponentInteraction(interaction as SelectMenuInteraction, constants);
+			HandleMessageComponentInteraction(client, _interaction as MessageComponentInteraction);
 			break;
 		}
 	}
 };
+

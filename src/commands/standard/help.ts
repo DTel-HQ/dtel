@@ -1,5 +1,4 @@
-import Command from "../../Internals/Command";
-
+import Command from "../../internals/commandProcessor";
 
 export default class Eval extends Command {
 	async run(): Promise<void> {
@@ -65,15 +64,19 @@ export default class Eval extends Command {
 					},
 				],
 				footer: {
-					text: "DTel V3 • Made with <3 by Austin Huang, Mitchell Rademaker and their team",
+					text: "DTel V3 • Made with <3 by SunburntRock89, Rexogamer and the team",
 				},
 			}],
 		};
 
 		try {
 			await this.interaction.user.send(toSend);
-		} catch (_) {
-			await this.interaction.reply(toSend);
+			this.interaction.reply({
+				ephemeral: true,
+				content: "Sent! 📬",
+			});
+		} catch {
+			await this.interaction.reply({ ...toSend, ephemeral: true });
 		}
 	}
 }

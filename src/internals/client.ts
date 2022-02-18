@@ -1,7 +1,6 @@
-import { Client, ClientOptions } from "discord.js";
+import { Client, ClientOptions, MessageEmbedOptions } from "discord.js";
 import { Logger } from "winston";
 import config from "../config/config";
-import Command from "../Interfaces/Command";
 import { DTelDatabase } from "../database/database";
 // import i18n from "./internationalization/i18n";
 
@@ -23,6 +22,24 @@ class DTelClient extends Client {
 
 		this.db = options.constantVariables.db;
 		this.winston = options.constantVariables.winston;
+	}
+
+	errorEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
+		return {
+			color: config.colors.error,
+			title: "❌ Error!",
+			description,
+			...options,
+		};
+	}
+
+	warningEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
+		return {
+			color: 0xFFFF00,
+			title: "❌ Error!",
+			description,
+			...options,
+		};
 	}
 }
 

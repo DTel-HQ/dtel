@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { MessageAttachment } from "discord.js";
 import { inspect } from "util";
-import Command from "../../Internals/Command";
+import Command from "../../internals/commandProcessor";
 
 const escapeRegex = (str: string) => str.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 
