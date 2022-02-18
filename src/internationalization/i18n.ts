@@ -1,7 +1,7 @@
-type language = "English" | "French" | "Maths";
+import English from "./data/english";
 
-export default class i18n {
-	static getString(stringName: string, language: language) {
-
-	}
-}
+export default {
+	en: {
+		translation: English,
+	},
+};

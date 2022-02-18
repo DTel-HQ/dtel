@@ -103,7 +103,7 @@ module.exports = {
 		"quote-props": ["error", "as-needed"],
 		quotes: ["error", "double", { avoidEscape: true, allowTemplateLiterals: true }],
 		"semi-spacing": "error",
-		semi: "error",
+		"@typescript-eslint/semi": "error",
 		"space-before-blocks": "error",
 		"space-before-function-paren": ["error", "never"],
 		"space-in-parens": "error",
