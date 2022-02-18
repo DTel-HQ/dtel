@@ -5,7 +5,7 @@ import config from "./config/config";
 import init, { DTelDatabase } from "./database/database";
 import i18ndata from "./internationalization/i18n";
 import Client from "./internals/client";
-import Console from "./Internals/Console";
+import Console from "./internals/console";
 
 import ReadyEvent from "./events/ready";
 import InteractionEvent from "./events/interaction";

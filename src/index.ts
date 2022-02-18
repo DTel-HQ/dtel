@@ -1,7 +1,7 @@
 import { ShardingManager } from "discord.js";
 import auth from "./config/auth";
 import config from "./config/config";
-import Console from "./Internals/Console";
+import Console from "./internals/console";
 
 // Master process -- assigned a variable as it will come in handy later
 // Main IPC process

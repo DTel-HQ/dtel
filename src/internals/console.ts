@@ -9,7 +9,7 @@ import chalk from "chalk";
 import moment from "moment";
 import path from "path";
 import util from "util";
-import config from "../Config/Config"; // oh i was just thinking the classes, dte
+import config from "../config/config"; // oh i was just thinking the classes, dte
 
 export default (type = "Master"): Logger => createLogger({
 	levels: {
