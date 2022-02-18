@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import { CommandInteraction, Permissions } from "discord.js";
 import config from "../config/config";
 import Commands from "../config/commands";
-import { PermissionLevel, CommandType } from "../interfaces/commandData";
+import { PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Command from "../internals/commandProcessor";
@@ -17,27 +16,6 @@ export default async(client: DTelClient, interaction: CommandInteraction): Promi
 	}
 
 	// trailing slash is required
-	let commandPath = `${__dirname}/../commands`;
-	switch (commandData.useType) {
-		case CommandType.standard: {
-			commandPath += "/standard";
-			break;
-		}
-		case CommandType.call: {
-			commandPath += "/call";
-			break;
-		}
-		case CommandType.customerSupport: {
-			commandPath += "/support";
-			break;
-		}
-		case CommandType.maintainer: {
-			commandPath += "/maintainer";
-			break;
-		}
-	}
-
-	commandPath += `/${interaction.commandName}`;
 
 	let commandFile: Constructable<Command>;
 	try {

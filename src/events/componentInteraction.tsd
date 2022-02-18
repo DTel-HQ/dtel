@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { MessageComponentInteraction } from "discord.js";
+import Commands from "../config/commands";
+import { PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import ComponentProcessor from "../internals/componentProcessor";
@@ -15,6 +17,8 @@ export default async(client: DTelClient, interaction: MessageComponentInteractio
 	}
 	const commandName = split[0];
 	const interactionName = split[1];
+
+	const commandData = Commands.find(c => c.name === commandName);
 
 	const basePath = `${__dirname}/../interactions/${commandName}/${interactionName}`;
 	console.log(basePath);
@@ -32,8 +36,24 @@ export default async(client: DTelClient, interaction: MessageComponentInteractio
 		return;
 	}
 
+
 	const processorClass = new processorFile(client, interaction);
 	try {
+		switch (commandData.permissionLevel) {
+			case PermissionLevel.owner: {
+				if (!client.config.maintainers.includes(interaction.user.id)) return commandClass.notMaintainer();
+				break;
+			}
+			case PermissionLevel.customerSupport: {
+				// TODO: Handle customer support stuff
+				break;
+			}
+			case PermissionLevel.serverAdmin: {
+				if (!(interaction.member.permissions as unknown as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) return commandClass.permCheckFail();
+				break;
+			}
+		}
+
 		client.winston.info(`Running interaction: ${interaction.customId}`);
 		processorClass.run();
 	} catch (e) {

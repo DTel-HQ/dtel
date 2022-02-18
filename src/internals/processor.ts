@@ -3,18 +3,22 @@
 import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import DTelClient from "./client";
 import config from "../config/config";
+import CommandDataInterface from "../interfaces/commandData";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
 abstract class Processor {
-	client: DTelClient;
-	interaction: ChannelBasedInteraction;
-
 	config = config;
 
-	constructor(client: DTelClient, interaction: ChannelBasedInteraction) {
+	client: DTelClient;
+	interaction: ChannelBasedInteraction;
+	commandData: CommandDataInterface;
+
+
+	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
 		this.client = client;
 		this.interaction = interaction;
+		this.commandData = commandData;
 	}
 
 	checkPermissions(): boolean {
@@ -32,7 +36,11 @@ abstract class Processor {
 		});
 	}
 
-	abstract run(): void;;
+	abstract run(): void;
+
+	_run(): void {
+		this.run();
+	}
 
 	notMaintainer(): void {
 		this.interaction.reply({

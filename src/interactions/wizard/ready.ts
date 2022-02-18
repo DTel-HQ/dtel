@@ -5,7 +5,7 @@ import { TextInputStyles } from "discord.js/typings/enums";
 export default class WizardReady extends ComponentProcessor {
 	async run(): Promise<void> {
 		const interaction = this.interaction as ButtonInteraction;
-		interaction.message.components.forEach(c => { c.disabled = true; });
+
 		const modal = new Modal()
 			.setTitle(this.t("modal.title"))
 			.setCustomId("wizard-modalSubmit");
