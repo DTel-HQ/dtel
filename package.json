@@ -32,6 +32,7 @@
     "bufferutil": "^4.0.3",
     "discord.js": "github:monbrey/discord.js#modals",
     "erlpack": "github:discordapp/erlpack",
+    "i18next": "^21.6.11",
     "mongoose": "^6.0.10",
     "node-schedule": "^2.0.0",
     "re2": "^1.17.3",

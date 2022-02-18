@@ -1,9 +1,13 @@
-import { ModalSubmitInteraction } from "discord.js";
-import ComponentProcessor from "../../internals/componentProcessor";
+import ModalProcessor from "../../internals/modalProcessor";
 
-export default class WizardReady extends ComponentProcessor {
+export default class WizardModalSubmit extends ModalProcessor {
 	async run(): Promise<void> {
 		// TOOD: Modify interaction handler to support this weird type
-		console.log()
+		this.interaction.locale
+		const number = this.interaction.fields.getTextInputValue("wizardNumber");
+		if (isNaN(Number(number))) {
+			this.interaction.reply("Please enter a valid phone number.");
+			return;
+		}
 	}
 }

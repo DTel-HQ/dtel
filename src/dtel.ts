@@ -1,10 +1,13 @@
-import Client from "./internals/client";
-import { Interaction, Guild, Message } from "discord.js";
-import Console from "./Internals/Console";
+import { Interaction } from "discord.js";
+import i18next from "i18next";
+
+import config from "./config/config";
 import init, { DTelDatabase } from "./database/database";
+import i18ndata from "./internationalization/i18n";
+import Client from "./internals/client";
+import Console from "./Internals/Console";
 
 import ReadyEvent from "./events/ready";
-
 import InteractionEvent from "./events/interaction";
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
@@ -18,6 +21,15 @@ try {
 	console.error(`Failed to connect to MongoDB.\n ${err.stack}`);
 	process.exit(-1);
 }
+
+
+i18next.init({
+	debug: config.devMode,
+	fallbackLng: "en-US",
+	preload: ["en-US"],
+
+	resources: i18ndata,
+});
 
 const client = new Client({
 	intents: [

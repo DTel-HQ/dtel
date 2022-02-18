@@ -7,15 +7,19 @@ import { CommandInteraction } from "discord.js";
 import CommandInterface from "../interfaces/commandData";
 import DTelClient from "./client";
 import Processor from "./processor";
+import i18n, { TFunction } from "i18next";
 
 abstract class CommandProcessor extends Processor {
 	commandData: CommandInterface;
 	interaction: CommandInteraction;
+	t: TFunction;
 
 	constructor(client: DTelClient, interaction: CommandInteraction, commandData: CommandInterface) {
 		super(client, interaction);
 		this.interaction = interaction;
 		this.commandData = commandData;
+
+		this.t = i18n.getFixedT(interaction.locale, null, `commands.${interaction.commandName}`);
 	}
 
 	_run(): void {

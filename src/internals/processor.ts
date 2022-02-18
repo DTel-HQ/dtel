@@ -1,10 +1,10 @@
 // File needs a better name
 
-import { CommandInteraction, MessageComponentInteraction } from "discord.js";
+import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import DTelClient from "./client";
 import config from "../config/config";
 
-type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction;
+type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
 abstract class Processor {
 	client: DTelClient;

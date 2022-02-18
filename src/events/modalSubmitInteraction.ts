@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { MessageComponentInteraction } from "discord.js";
+import { ModalSubmitInteraction } from "discord.js";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import ComponentProcessor from "../internals/componentProcessor";
 
-export default async(client: DTelClient, interaction: MessageComponentInteraction): Promise<void> => {
+// Major code repetition in here, for someone else to fix :)
+
+export default async(client: DTelClient, interaction: ModalSubmitInteraction): Promise<void> => {
 	const split = interaction.customId.split("-");
 	if (split.length < 2) {
 		interaction.reply({

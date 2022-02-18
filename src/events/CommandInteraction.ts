@@ -3,13 +3,9 @@ import { CommandInteraction, Permissions } from "discord.js";
 import config from "../config/config";
 import Commands from "../config/commands";
 import { PermissionLevel, CommandType } from "../interfaces/commandData";
+import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Command from "../internals/commandProcessor";
-
-interface Constructable<T> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    new(...args: any) : T;
-}
 
 export default async(client: DTelClient, interaction: CommandInteraction): Promise<void> => {
 	const winston = client.winston;

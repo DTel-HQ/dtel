@@ -1,6 +1,7 @@
-import { CommandInteraction, Interaction, MessageComponentInteraction } from "discord.js";
+import { CommandInteraction, Interaction, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import HandleCommandInteraction from "./commandInteraction";
 import HandleMessageComponentInteraction from "./componentInteraction";
+import HandleModalSubmitInteraction from "./modalSubmitInteraction";
 import DTelClient from "../internals/client";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
@@ -12,6 +13,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		case "MESSAGE_COMPONENT": {
 			HandleMessageComponentInteraction(client, _interaction as MessageComponentInteraction);
 			break;
+		}
+		case "MODAL_SUBMIT": {
+			HandleModalSubmitInteraction(client, _interaction as ModalSubmitInteraction);
 		}
 	}
 };

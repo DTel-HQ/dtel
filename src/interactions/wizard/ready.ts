@@ -1,16 +1,18 @@
 import ComponentProcessor from "../../internals/componentProcessor";
-import { MessageActionRow, Modal, ModalActionRowComponent, TextInputComponent } from "discord.js";
+import { ButtonInteraction, MessageActionRow, Modal, ModalActionRowComponent, TextInputComponent } from "discord.js";
 import { TextInputStyles } from "discord.js/typings/enums";
 
 export default class WizardReady extends ComponentProcessor {
 	async run(): Promise<void> {
+		const interaction = this.interaction as ButtonInteraction;
+		interaction.message.components.forEach(c => { c.disabled = true; });
 		const modal = new Modal()
-			.setTitle("DTel Phone Number Registry")
+			.setTitle(this.t("modal.title"))
 			.setCustomId("wizard-modalSubmit");
 
 		const numberInputComponent = new TextInputComponent()
 			.setCustomId("wizardNumber")
-			.setLabel("Enter the number you would like to register:")
+			.setLabel(this.t("modal.numberLabel"))
 			.setRequired(true)
 			.setMaxLength(11)
 			.setMinLength(11)
@@ -22,6 +24,6 @@ export default class WizardReady extends ComponentProcessor {
 
 		modal.addComponents(row);
 
-		this.interaction.showModal(modal);
+		interaction.showModal(modal);
 	}
 }
