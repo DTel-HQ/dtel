@@ -4,6 +4,7 @@ import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction
 import DTelClient from "./client";
 import config from "../config/config";
 import CommandDataInterface from "../interfaces/commandData";
+import { DTelNumber } from "../database/schemas/number";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -13,6 +14,7 @@ abstract class Processor {
 	client: DTelClient;
 	interaction: ChannelBasedInteraction;
 	commandData: CommandDataInterface;
+	number: DTelNumber;
 
 
 	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
@@ -38,7 +40,10 @@ abstract class Processor {
 
 	abstract run(): void;
 
-	_run(): void {
+	async _run(): Promise<void> {
+		if (this.commandData.numberRequired) {
+			this.number = await this.client.db.numbers.findOne({ channel: this.interaction.channel.id });
+		}
 		this.run();
 	}
 

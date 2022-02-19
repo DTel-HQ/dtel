@@ -3,6 +3,12 @@ import Command from "../../internals/commandProcessor";
 
 export default class Eval extends Command {
 	async run(): Promise<void> {
+		if (this.number) {
+			return this.interaction.reply({
+				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber"))],
+			});
+		}
+
 		this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.yellowbook,

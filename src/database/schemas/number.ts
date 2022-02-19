@@ -24,13 +24,14 @@ interface Promote {
 	lastUsr: Date,
 }
 
-export default new Schema<DTelNumber>({
+const schema = new Schema<DTelNumber>({
 	_id: {
 		type: Schema.Types.String,
 	},
 	channel: {
 		type: Schema.Types.String,
 		required: true,
+		tags: { type: String, index: true, unique: true },
 	},
 	blocked: [{
 		default: [],
@@ -58,3 +59,5 @@ export default new Schema<DTelNumber>({
 	},
 	waiting: Boolean,
 });
+
+export default schema;

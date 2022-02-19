@@ -6,7 +6,7 @@ interface DTelDatabase {
 }
 
 const init = (): DTelDatabase => {
-	mongoose.connect(auth.mongodb.uri);
+	mongoose.connect(auth.mongodb.uri, { autoIndex: true });
 
 	return {
 		numbers: mongoose.model<DTelNumber>("Numbers", numberSchema),

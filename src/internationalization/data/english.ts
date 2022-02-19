@@ -5,21 +5,24 @@ export default {
 
 	commands: {
 		wizard: {
+			errors: {
+				channelHasNumber: "This channel already has a number.",
+				numberInUse: "That number is already in use. Try another.",
+				numberInvalid: "Please enter a valid number.",
+				numberBadFormat: "Please enter a number starting with",
+			},
+
 			modal: {
 				title: "DTel Phone Number Registry",
 
 				numberLabel: "Enter the number you would like to register:",
-
-				numberInvalid: "Please enter a valid number.",
-				numberBadFormat: "Please enter a number starting with",
-				numberInUse: "That number is already in use. Try another.",
 			},
 
 			introEmbed: {
 				title: "DTel Phone Number Registry",
 				description: "📖 __**Read this before continuing:**__",
 				fields: [{
-					name: "🧹 This is a roleplay bot!",
+					name: "🧹 This is a roleplaying bot!",
 					value: "It cannot be used to call real phone numbers. All calls exist within Discord only.",
 				}, {
 					name: "💵 Payment",
@@ -31,13 +34,18 @@ export default {
 			},
 
 			successEmbed: {
-				title: "✅ Success!",
+				title: "✅ Good to go!",
 				description: "Your number has been registered.",
 				fields: [{
 					name: "❓ Whats next?",
 					value: "To learn more about the bot: `>help`, `>info`, `>links`.\nFor information about your number: call `*233`.\nFind other numbers to call at `*411`.",
 				}, {
 					name: "Number",
+					value: "{{ number }}",
+					inline: true,
+				}, {
+					name: "Expiry",
+					value: "{{ expiry }}",
 					inline: true,
 				}],
 			},

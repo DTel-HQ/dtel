@@ -5,19 +5,19 @@ export default class WizardModalSubmit extends ModalProcessor {
 		// TOOD: Modify interaction handler to support this weird type
 		const number = this.interaction.fields.getTextInputValue("wizardNumber");
 		if (isNaN(Number(number))) {
-			this.interaction.reply({ content: this.t("modal.numberInvalid"), ephemeral: true });
+			this.interaction.reply({ content: this.t("errors.numberInvalid"), ephemeral: true });
 			return;
 		}
 
 		if (isNaN(Number(number))) {
-			this.interaction.reply({ content: `${this.t("modal.numberInvalid")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
+			this.interaction.reply({ content: `${this.t("errors.numberInvalid")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
 			return;
 		}
 
 		const dbNumber: DTelNumber = await this.client.db.numbers.findById(number).exec();
 
 		if (dbNumber) {
-			this.interaction.reply({ content: `${this.t("modal.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
+			this.interaction.reply({ content: `${this.t("errors.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
 			return;
 		}
 
@@ -34,7 +34,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			embeds: [{
 				color: this.config.colors.success,
 
-				...this.t("successEmbed", { returnObjects: true }),
+				...this.t("successEmbed", { returnObjects: true, number, expiry }),
 			}],
 		});
 	}

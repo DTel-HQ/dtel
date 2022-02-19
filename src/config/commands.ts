@@ -5,6 +5,7 @@ const commands: Command[] = [
 		name: "wizard",
 		description: "Create a number for your channel",
 		guildOnly: false,
+		numberRequired: true,
 
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
@@ -13,6 +14,7 @@ const commands: Command[] = [
 		name: "help",
 		description: `Gives you help`,
 		guildOnly: false,
+		numberRequired: false,
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
@@ -27,6 +29,7 @@ const commands: Command[] = [
 			type: "STRING",
 		}],
 		guildOnly: false,
+		numberRequired: false,
 
 		permissionLevel: PermissionLevel.owner,
 		useType: CommandType.standard,

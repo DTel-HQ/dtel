@@ -19,6 +19,8 @@ enum CommandType {
 
 interface CommandData extends ChatInputApplicationCommandData {
 	guildOnly: boolean;
+	numberRequired: boolean;
+
 
 	permissionLevel: PermissionLevel;
 	useType: CommandType;

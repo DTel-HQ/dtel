@@ -22,15 +22,14 @@ abstract class CommandProcessor extends Processor {
 		this.t = i18n.getFixedT(interaction.locale, null, `commands.${interaction.commandName}`);
 	}
 
-	_run(): void {
-		if (this.interaction.guild) {
-			if (this.checkPermissions() || this.client.config.maintainers.includes(this.interaction.user.id)) this.run();
-			else this.permCheckFail();
+	async _run(): Promise<void> {
+		if (this.interaction.guild && (!this.checkPermissions() && !this.client.config.maintainers.includes(this.interaction.user.id))) {
+			return this.permCheckFail();
 		} else if (this.commandData.guildOnly) {
 			return this.guildOnly();
-		} else {
-			return this.run();
 		}
+
+		await super._run();
 	}
 }
 export default CommandProcessor;
