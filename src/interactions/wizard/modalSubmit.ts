@@ -20,6 +20,8 @@ export default class WizardModalSubmit extends ModalProcessor {
 			this.interaction.reply({ content: `${this.t("errors.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
 			return;
 		}
+                
+                // TODO check if number's formatting is valid
 
 		const expiry = new Date();
 		expiry.setMonth(expiry.getMonth() + 1);
