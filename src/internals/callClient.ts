@@ -10,6 +10,11 @@ interface CallOptions {
 	random: boolean,
 	startedBy: string,
 	client: DTelClient,
+        vip?: {
+            expiry: Date,
+            hiddenNumberDisplay: boolean,
+            customCallerDisplay: string
+        }
 }
 
 interface ClientCallParticipant extends CallParticipant {
@@ -37,15 +42,34 @@ export default class CallClient implements DTelCall {
 			number: options.from._id,
 			locale: options.from.locale,
 			channelID: options.from.channelID,
-			isVip: options.from.vip.expiry > new Date(),
-			hiddenNumberDisplay: options.from.vip.hiddenNumberDisplay,
-			customCallerDisplay: options.from.vip.customCallerDisplay,
+			isVip: (options.from.vip ? options.from.vip.expiry : new Date()) > new Date(),
+			hiddenNumberDisplay: (options.from.vip ? options.from.vip.hiddenNumberDisplay : false),
+			customCallerDisplay: (options.from.vip ? options.from.vip.customCallerDisplay : ""),
 		};
+                
+                this.to = {
+                    dbNumber: undefined,//this.client.db.numbers.findById(options.to),
+                    locale: undefined,
+                    number: undefined,
+                    channelID: undefined,//this.to.dbNumber.channelID,
+                    hiddenNumberDisplay: undefined,
+                    isVip: undefined,
+                    customCallerDisplay: undefined,
+                };
 
+                /*(async()=>{
+                    this.to.dbNumber = await this.client.db.numbers.findById(options.to);
+                    this.to.number = this.to.dbNumber._id;
+                    this.to.channelID = this.to.dbNumber.channelID;
+                })()*/
 		this.to.number = options.to;
 
 		this.randomCall = options.random;
-		this.started.by = options.startedBy;
+		this.started = {
+                    by: options.startedBy,
+                    at: new Date()
+                }
+                //.by = options.startedBy;
 	}
 
 	async initiate(): Promise<void> {
