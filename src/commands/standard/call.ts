@@ -27,6 +27,7 @@ export default class Call extends Command {
 
 				try {
 					await callObject.initiate();
+                                        this.interaction.reply({embeds:[{description:"TODO, but we have initiated the \"call\"!"}]})
 				} catch (e) {
 					// This works as when we error out in CallClient, we return a translation path instead of an error message
 					// Feel free to change it
