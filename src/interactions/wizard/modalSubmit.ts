@@ -25,7 +25,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		expiry.setMonth(expiry.getMonth() + 1);
 		await this.client.db.numbers.create({
 			_id: number,
-			channel: this.interaction.channel.id,
+			channelID: this.interaction.channel.id,
 			expiry,
 		});
 

@@ -42,7 +42,7 @@ abstract class Processor {
 	abstract run(): void;
 
 	async fetchNumber(): Promise<DTelNumber> {
-		return this.client.db.numbers.findOne({ channel: this.interaction.channel.id });
+		return this.client.db.numbers.findOne({ channelID: this.interaction.channel.id });
 	}
 
 	async _run(): Promise<void> {
