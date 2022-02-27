@@ -5,7 +5,7 @@ const commands: Command[] = [
 		name: "wizard",
 		description: "Create a number for your channel",
 		guildOnly: false,
-		numberRequired: true,
+		numberRequired: false,
 
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
@@ -31,7 +31,22 @@ const commands: Command[] = [
 		guildOnly: false,
 		numberRequired: false,
 
-		permissionLevel: PermissionLevel.owner,
+		permissionLevel: PermissionLevel.maintainer,
+		useType: CommandType.maintainer,
+	},
+	{
+		name: "call",
+		description: `Call another channel or number`,
+		options: [{
+			name: "number",
+			description: "The number you want to call",
+			required: true,
+			type: "STRING",
+		}],
+		guildOnly: false,
+		numberRequired: true,
+
+		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
 	},
 ];

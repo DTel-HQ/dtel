@@ -1,17 +1,18 @@
 import { MessageEmbedOptions } from "discord.js";
 import { Schema } from "mongoose";
+const { Types } = Schema;
 
 export interface DTelNumber {
-	_id: string,
-	channel: string,
+	_id: string, // Actual number
+	channelID: string,
 	blocked: string[],
 	contacts: string[],
 	expiry: Date,
 	promote: Promote,
 	vip: {
 		expiry: Date,
-		hidden: boolean,
-		name: string,
+		hiddenNumberDisplay: boolean,
+		customCallerDisplay: string,
 	},
 	waiting: boolean,
 }
@@ -26,27 +27,26 @@ interface Promote {
 
 const schema = new Schema<DTelNumber>({
 	_id: {
-		type: Schema.Types.String,
+		type: String,
 	},
-	channel: {
-		type: Schema.Types.String,
+	channelID: {
+		type: String,
 		required: true,
 		tags: { type: String, index: true, unique: true },
 	},
 	blocked: [{
-		default: [],
-		type: Schema.Types.Array,
+		type: [String],
 	}],
 	contacts: [{
 		default: [],
-		type: Schema.Types.Array,
+		type: Array,
 	}],
 	expiry: {
 		type: Date,
 		required: true,
 	},
 	promote: {
-		embed: Schema.Types.Array,
+		embed: Types.Mixed,
 		lastEdited: Date,
 		lastPromoted: Date,
 		lastMsg: String,

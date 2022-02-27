@@ -3,9 +3,10 @@ import Command from "../../internals/commandProcessor";
 
 export default class Eval extends Command {
 	async run(): Promise<void> {
-		if (this.number) {
+		const preExistingNumber = await this.fetchNumber();
+		if (preExistingNumber) {
 			return this.interaction.reply({
-				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber"))],
+				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: preExistingNumber._id }))],
 			});
 		}
 

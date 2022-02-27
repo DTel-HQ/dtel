@@ -3,7 +3,7 @@ import { ChatInputApplicationCommandData } from "discord.js";
 
 // eslint-disable-next-line no-shadow
 enum PermissionLevel {
-	owner,
+	maintainer,
 	customerSupport,
 	serverAdmin,
 	none,
@@ -20,7 +20,6 @@ enum CommandType {
 interface CommandData extends ChatInputApplicationCommandData {
 	guildOnly: boolean;
 	numberRequired: boolean;
-
 
 	permissionLevel: PermissionLevel;
 	useType: CommandType;

@@ -1,3 +1,4 @@
+// TODO: Localize
 // File needs a better name
 
 import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
@@ -40,11 +41,30 @@ abstract class Processor {
 
 	abstract run(): void;
 
+	async fetchNumber(): Promise<DTelNumber> {
+		return this.client.db.numbers.findOne({ channel: this.interaction.channel.id });
+	}
+
 	async _run(): Promise<void> {
 		if (this.commandData.numberRequired) {
-			this.number = await this.client.db.numbers.findOne({ channel: this.interaction.channel.id });
+			this.number = await this.fetchNumber();
+			if (!this.number) {
+				return this.noNumberFound();
+			}
 		}
+
 		this.run();
+	}
+
+	noNumberFound(): void {
+		this.interaction.reply({
+			ephemeral: true,
+			embeds: [{
+				color: 0xFF0000,
+				title: ":x: No permission!",
+				description: "You need a number to do this. Ask an admin to run `/wizard` to get one.",
+			}],
+		});
 	}
 
 	notMaintainer(): void {

@@ -45,7 +45,6 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			toRunPath += `/${commandName}`;
 
-			// HandleCommandInteraction(client, interaction as CommandInteraction);
 			break;
 		}
 		case "MESSAGE_COMPONENT":
@@ -84,7 +83,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	const processorClass = new processorFile(client, interaction, commandData);
 	try {
 		switch (commandData.permissionLevel) {
-			case PermissionLevel.owner: {
+			case PermissionLevel.maintainer: {
 				if (!config.maintainers.includes(interaction.user.id)) return processorClass.notMaintainer();
 				break;
 			}

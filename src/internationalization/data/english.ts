@@ -4,9 +4,21 @@ export default {
 	languages: ["en-**"],
 
 	commands: {
+		call: {
+			errors: {
+				thisSideExpired: "Your number has expired. Get an admin to call `*233* and renew this number.",
+				otherSideExpired: "The number you have attempted to call has expired.",
+
+				numberInvalid: "The number you tried to call is invalid!",
+				numberNotFound: "The number you tried to call doesn't exist!",
+
+				otherSideBlockedYou: "The other side has blocked you from calling them.",
+			},
+		},
+
 		wizard: {
 			errors: {
-				channelHasNumber: "This channel already has a number.",
+				channelHasNumber: "This channel already has a number! (`{{ number }}`). You can use `/call` to make a call.",
 				numberInUse: "That number is already in use. Try another.",
 				numberInvalid: "Please enter a valid number.",
 				numberBadFormat: "Please enter a number starting with",

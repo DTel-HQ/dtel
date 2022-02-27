@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@discoin/scambio": "^2.2.0",
+    "@discordjs/rest": "^0.3.0",
     "bufferutil": "^4.0.3",
     "discord.js": "github:monbrey/discord.js#modals",
     "erlpack": "github:discordapp/erlpack",
@@ -50,6 +51,7 @@
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.24.0",
+    "transformer": "^1.2.8",
     "typescript": "^4.2.3"
   }
 }
