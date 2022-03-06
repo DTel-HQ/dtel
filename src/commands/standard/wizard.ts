@@ -1,7 +1,7 @@
 import { MessageActionRow, MessageButton } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
-export default class Eval extends Command {
+export default class Wizard extends Command {
 	async run(): Promise<void> {
 		const preExistingNumber = await this.fetchNumber();
 		if (preExistingNumber) {

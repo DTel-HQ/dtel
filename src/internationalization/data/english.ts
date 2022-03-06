@@ -5,6 +5,9 @@ export default {
 
 	commands: {
 		call: {
+			pickup: "Pick up",
+			hangup: "Hang up",
+
 			errors: {
 				thisSideExpired: "Your number has expired. Get an admin to call `*233* and renew this number.",
 				otherSideExpired: "The number you have attempted to call has expired.",
@@ -13,6 +16,22 @@ export default {
 				numberNotFound: "The number you tried to call doesn't exist!",
 
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
+			},
+
+			initiated: {
+				title: "Dialing `{{ number }}`",
+				description: "You can hang up at any time using `/hangup`, but be sure to give the other side time to pick up!",
+				footer: {
+					text: "ID: {{ callID }}",
+				},
+			},
+
+			incomingCall: {
+				title: "Incoming call",
+				description: "There is an incoming call from `{{ number }}`. Pick it up, hang up or wait it out.",
+				footer: {
+					text: "ID: {{ callID }}",
+				},
 			},
 		},
 

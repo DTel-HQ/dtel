@@ -14,6 +14,14 @@ const winston = Console("Master");
 
 sharder.on("shardCreate", shard => {
 	winston.info(`Spawned shard ID: ${shard.id}`);
+
+	shard.on("message", message => {
+		switch (message.msg) {
+			case "callInitiated": {
+				sharder.broadcast(message);
+			}
+		}
+	});
 });
 
 winston.info("Spawning shards...");

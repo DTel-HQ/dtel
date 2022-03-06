@@ -2,7 +2,7 @@ import ComponentProcessor from "../../internals/componentProcessor";
 import { ButtonInteraction, MessageActionRow, Modal, ModalActionRowComponent, TextInputComponent } from "discord.js";
 import { TextInputStyles } from "discord.js/typings/enums";
 
-export default class WizardReady extends ComponentProcessor {
+export default class WizardReadyButton extends ComponentProcessor {
 	async run(): Promise<void> {
 		const interaction = this.interaction as ButtonInteraction;
 

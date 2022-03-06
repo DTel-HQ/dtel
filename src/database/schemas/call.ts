@@ -3,9 +3,7 @@ import { Schema } from "mongoose";
 export interface CallParticipant {
 	number: string,
 	channelID: string,
-	hiddenNumberDisplay: boolean,
 	isVip: boolean,
-	customCallerDisplay: string
 }
 
 export interface DTelMessage {
@@ -44,22 +42,16 @@ const toOrfrom = { // For codacy
 		required: true,
 		unique: true,
 	},
-	hiddenNumberDisplay: {
-		type: Boolean,
-		default: false,
-	},
 	isVip: {
 		type: Boolean,
 		default: false,
 	},
-	customCallerDisplay: {
-		type: String,
-		required: true,
-	},
 };
 
 const schema = new Schema<DTelCall>({
-	// We'll use the default mongodb _id as a call unique identifier
+	_id: {
+		type: String,
+	},
 	to: toOrfrom,
 	from: toOrfrom,
 	pickedUp: {

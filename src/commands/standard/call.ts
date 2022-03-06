@@ -13,12 +13,8 @@ export default class Call extends Command {
 				break;
 			}
 			default: {
-				const callObject = new CallClient({
-					from: {
-						locale: this.interaction.locale,
-						...this.number,
-					},
-					client: this.client,
+				const callObject = new CallClient(this.client, {
+					from: this.number,
 
 					to: this.interaction.options.getString("number"),
 					startedBy: this.interaction.user.id,
@@ -27,7 +23,15 @@ export default class Call extends Command {
 
 				try {
 					await callObject.initiate();
-                                        this.interaction.reply({embeds:[{description:"TODO, but we have initiated the \"call\"!"}]})
+					this.interaction.reply({
+						embeds: [{
+							color: this.config.colors.info,
+							...this.t("initiated", {
+								number: this.interaction.options.getString("number"),
+								callID: callObject._id,
+							}),
+						}],
+					});
 				} catch (e) {
 					// This works as when we error out in CallClient, we return a translation path instead of an error message
 					// Feel free to change it

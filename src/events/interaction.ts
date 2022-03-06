@@ -53,6 +53,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			if (split.length < 2) {
 				interaction.reply({
 					embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
+					ephemeral: true,
 				});
 				winston.error(`Message component interaction custom ID not valid.`);
 				return;
@@ -100,7 +101,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		processorClass._run();
 	} catch (err) {
 		winston.error(`Error occurred whilst executing interaction for/from command: ${commandName}`, err.stack);
-		interaction.reply(":x: An error occurred whilst executing this command.");
+		interaction.reply({
+			embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
+		});
 	}
 };
 

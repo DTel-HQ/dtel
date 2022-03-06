@@ -2,8 +2,7 @@ import ModalProcessor from "../../internals/modalProcessor";
 import { DTelNumber } from "../../database/schemas/number";
 export default class WizardModalSubmit extends ModalProcessor {
 	async run(): Promise<void> {
-		// TOOD: Modify interaction handler to support this weird type
-		const number = this.interaction.fields.getTextInputValue("wizardNumber");
+		const number = this.client.parseNumber(this.interaction.fields.getTextInputValue("wizardNumber"));
 		if (isNaN(Number(number))) {
 			this.interaction.reply({ content: this.t("errors.numberInvalid"), ephemeral: true });
 			return;
@@ -20,8 +19,8 @@ export default class WizardModalSubmit extends ModalProcessor {
 			this.interaction.reply({ content: `${this.t("errors.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
 			return;
 		}
-                
-                // TODO check if number's formatting is valid
+
+		// TODO check if number's formatting is valid
 
 		const expiry = new Date();
 		expiry.setMonth(expiry.getMonth() + 1);
@@ -36,7 +35,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			embeds: [{
 				color: this.config.colors.success,
 
-				...this.t("successEmbed", { returnObjects: true, number, expiry }),
+				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }),
 			}],
 		});
 	}

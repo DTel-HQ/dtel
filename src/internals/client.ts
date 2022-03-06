@@ -1,10 +1,10 @@
-import { Client, ClientOptions, MessageEmbedOptions } from "discord.js";
+import { Channel, Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, Snowflake, TextChannel } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Logger } from "winston";
 import config from "../config/config";
 import { DTelDatabase } from "../database/database";
+import CallClient from "./callClient";
 // import i18n from "./internationalization/i18n";
-
 
 interface DTelClientOptions extends ClientOptions {
 	constantVariables: {
@@ -19,6 +19,8 @@ class DTelClient extends Client {
 	winston: Logger;
 
 	restAPI: REST;
+
+	calls: CallClient[] = [];
 
 	constructor(options: DTelClientOptions) {
 		super(options);
@@ -61,6 +63,35 @@ class DTelClient extends Client {
 			.replace(/-/ig, "")
 			.replace(/("("|")")/ig, "")
 			.replace(/\s+/g, "");
+	}
+
+	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<string|undefined> {
+		let ch: TextChannel, m: Message;
+		try {
+			ch = await this.channels.fetch(channelID) as TextChannel;
+			m = await ch.send(options);
+			return m.id;
+		} catch {
+			const res: string[] = await this.shard.broadcastEval(async(client, context) => {
+				let channel: Channel;
+				try {
+					channel = await client.channels.fetch(context.channelID) as Channel;
+					const msg = await (channel as TextChannel).send(context.messageOptions as unknown);
+					return msg.id;
+				} catch (e) {
+					return "";
+				}
+			}, {
+				context: {
+					channelID,
+					messageOptions: options,
+				},
+			});
+
+			const toReturn = res.find(r => r !== "");
+			if (!toReturn) throw new Error("Channel not found");
+			return toReturn;
+		}
 	}
 }
 

@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 
-export default class Eval extends Command {
+export default class Help extends Command {
 	async run(): Promise<void> {
 		const avatarURL = await this.client.user.displayAvatarURL();
 		const toSend = {

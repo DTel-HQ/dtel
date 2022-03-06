@@ -9,6 +9,7 @@ import Console from "./internals/console";
 
 import ReadyEvent from "./events/ready";
 import InteractionEvent from "./events/interaction";
+import SharderMessageEvent from "./events/sharderMessage";
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
 
@@ -54,5 +55,7 @@ client.on("ready", () => ReadyEvent(client));
 client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
 // client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
 // client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
+
+process.on("message", msg => SharderMessageEvent(client, msg));
 
 client.login(process.env.TOKEN);

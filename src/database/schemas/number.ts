@@ -15,6 +15,7 @@ export interface DTelNumber {
 		customCallerDisplay: string,
 	},
 	waiting: boolean,
+	locale: string,
 }
 
 interface Promote {
@@ -58,6 +59,11 @@ const schema = new Schema<DTelNumber>({
 		name: String,
 	},
 	waiting: Boolean,
+
+	locale: {
+		type: String,
+		default: "en-US",
+	},
 });
 
 export default schema;
