@@ -14,6 +14,7 @@ export default {
 
 				numberInvalid: "The number you tried to call is invalid!",
 				numberNotFound: "The number you tried to call doesn't exist!",
+				numberMissingChannel: "We can't reach the other side. They probably removed our bot.",
 
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
 			},
@@ -29,6 +30,22 @@ export default {
 			incomingCall: {
 				title: "Incoming call",
 				description: "There is an incoming call from `{{ number }}`. Pick it up, hang up or wait it out.",
+				footer: {
+					text: "ID: {{ callID }}",
+				},
+			},
+
+			thisSidePickedUp: {
+				title: "You picked up the call.",
+				description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
+				footer: {
+					text: "ID: {{ callID }}",
+				},
+			},
+
+			otherSidePickedUp: {
+				title: "The other side picked up!",
+				description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
 				footer: {
 					text: "ID: {{ callID }}",
 				},

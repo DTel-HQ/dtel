@@ -1,4 +1,4 @@
-import { Interaction } from "discord.js";
+import { Interaction, Message } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
@@ -8,7 +8,8 @@ import Client from "./internals/client";
 import Console from "./internals/console";
 
 import ReadyEvent from "./events/ready";
-import InteractionEvent from "./events/interaction";
+import MessageCreateEvent from "./events/messageCreate";
+import InteractionEvent from "./events/interactionCreate";
 import SharderMessageEvent from "./events/sharderMessage";
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
@@ -51,7 +52,7 @@ const client = new Client({
 
 client.on("ready", () => ReadyEvent(client));
 
-// client.on("messageCreate", (msg: Message) => MessageCreateEvent(msg));
+client.on("messageCreate", (msg: Message) => MessageCreateEvent(client, msg));
 client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
 // client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
 // client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));

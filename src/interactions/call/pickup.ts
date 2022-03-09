@@ -1,7 +1,7 @@
-import ModalProcessor from "../../internals/modalProcessor";
+import MessageComponentProcessor from "../../internals/componentProcessor";
 import { t } from "i18next";
 
-export default class CallPickupButton extends ModalProcessor {
+export default class CallPickupButton extends MessageComponentProcessor {
 	async run(): Promise<void> {
 		const callClient = this.client.calls.find(c => c.to.channelID === this.interaction.channel.id);
 		if (!callClient) {
@@ -11,6 +11,6 @@ export default class CallPickupButton extends ModalProcessor {
 			return;
 		}
 
-		callClient.pickup(this.interaction.user.id);
+		callClient.pickup(this.interaction, this.interaction.user.id);
 	}
 }

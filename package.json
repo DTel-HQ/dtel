@@ -31,6 +31,7 @@
     "@discoin/scambio": "^2.2.0",
     "@discordjs/rest": "^0.3.0",
     "bufferutil": "^4.0.3",
+    "discord-api-types": "^0.28.0",
     "discord.js": "github:monbrey/discord.js#modals",
     "erlpack": "github:discordapp/erlpack",
     "i18next": "^21.6.11",

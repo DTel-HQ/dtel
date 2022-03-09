@@ -7,7 +7,7 @@ export default {
 	],
 	devMode: false,
 	devOnlyMode: false,
-	shardCount: 1,
+	shardCount: 2,
 	botID: "377609965554237453",
 
 	// NUMBER ALIASES

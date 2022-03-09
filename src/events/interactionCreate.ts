@@ -1,8 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { CommandInteraction, Permissions, MessageComponentInteraction, ModalSubmitInteraction, Interaction } from "discord.js";
-// import HandleCommandInteraction from "./commandInteraction";
-// import HandleMessageComponentInteraction from "./componentInteraction";
-// import HandleModalSubmitInteraction from "./modalSubmitInteraction";
 import Commands from "../config/commands";
 import { CommandType, PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";

@@ -3,7 +3,7 @@ import { DTelNumber } from "../database/schemas/number";
 import DTelClient from "./client";
 import { t } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { MessageActionRow, MessageButton } from "discord.js";
+import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, ShardClientUtil, TextBasedChannel } from "discord.js";
 
 interface CallOptions {
 	from: DTelNumber,
@@ -23,6 +23,8 @@ interface ClientCallParticipant extends CallParticipant {
 }
 
 export default class CallClient implements DTelCall {
+	primary = false;
+
 	_id: string = uuidv4();
 	to: ClientCallParticipant = {
 		dbNumber: undefined,
@@ -37,13 +39,15 @@ export default class CallClient implements DTelCall {
 	started: { at: Date; by: string; };
 	messages: [DTelMessage];
 
+	otherSideShardID: number;
+
 	client: DTelClient;
 
-	constructor(client: DTelClient, options?: CallOptions, callDoc?: DTelCall) {
+	constructor(client: DTelClient, options?: CallOptions, dbCallDoc?: DTelCall) {
 		this.client = client;
 
-		if (callDoc) {
-			Object.assign(this, callDoc);
+		if (dbCallDoc) {
+			Object.assign(this, dbCallDoc);
 			return;
 		}
 
@@ -65,7 +69,22 @@ export default class CallClient implements DTelCall {
 		};
 	}
 
+	static async byID(client: DTelClient, id: string): Promise<CallClient> {
+		const call = await client.db.calls.findById(id).exec() as DTelCall;
+		if (!call) throw new Error(t("callNotFound"));
+
+		const callManager = new CallClient(client, null, call);
+		callManager.primary = false;
+		callManager.otherSideShardID = await client.shardIdForChannelId(call.from.channelID);
+
+		client.calls.push(callManager);
+
+		return callManager;
+	}
+
 	async initiate(): Promise<void> {
+		this.primary = true;
+
 		if (this.from.dbNumber.expiry < new Date()) throw new Error("thisSideExpired");
 
 		let numberToDial = this.client.parseNumber(this.to.number);
@@ -92,7 +111,7 @@ export default class CallClient implements DTelCall {
 		// TODO: Check for pre-existing calls and do embed stuff
 		// and that includes stuff like call-waiting
 
-		this.client.db.calls.create(this as DTelCall);
+		await this.client.db.calls.create(this as DTelCall);
 		this.client.calls.push(this);
 
 		// Don't bother sending it if we can find it on this shard
@@ -100,9 +119,26 @@ export default class CallClient implements DTelCall {
 			await this.client.channels.fetch(this.to.channelID);
 			throw new Error();
 		} catch {
-			this.client.shard.send({
-				msg: "callInitiated",
-				callDBObject: JSON.stringify(this as DTelCall, (key, value) => key === "client" ? undefined : value),
+			// Send the call to another shard if required
+			// This is probably the best way to do it as it tells us if it was successful
+
+			this.otherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
+
+			if (!this.otherSideShardID) {
+				this.client.db.calls.deleteOne({ _id: this._id }).exec().catch(() => null);
+				throw new Error("numberMissingChannel");
+			}
+
+			// THIS CAN THROW callNotFound
+			await this.client.shard.broadcastEval(async(client: DTelClient, context): Promise<void> => {
+				// eslint-disable-next-line @typescript-eslint/no-var-requires
+				client.calls.push(await require(`${context.dirname}/../internals/callClient`).default.byID(client, context.callID));
+			}, {
+				shard: this.otherSideShardID,
+				context: {
+					callID: this._id,
+					dirname: __dirname,
+				},
 			});
 		}
 
@@ -144,12 +180,65 @@ export default class CallClient implements DTelCall {
 		}, this.to.channelID);
 	}
 
-	async pickup(pickedUpBy: string): Promise<void> {
+	async pickup(interaction: MessageComponentInteraction, pickedUpBy: string): Promise<void> {
 		this.pickedUp = {
 			at: new Date(),
 			by: pickedUpBy,
+		};
+
+		if (this.otherSideShardID) {
+			await this.client.shard.broadcastEval(async(client: DTelClient, context): Promise<void> => {
+				const callHandler = client.calls.find(c => c._id === context.callID);
+				callHandler.pickedUp = {
+					at: new Date(context.pickedUp.at),
+					by: context.pickedUp.by,
+				};
+			}, {
+				shard: this.otherSideShardID,
+				context: {
+					callID: this._id,
+					pickedUp: this.pickedUp,
+				},
+			});
 		}
 
+		this.client.db.calls.updateOne({ _id: this._id }, { pickedUp: this.pickedUp }).exec();
 
+		interaction.reply({
+			embeds: [{
+				color: this.client.config.colors.success,
+
+				...t("commands.call.thisSidePickedUp", {
+					lng: this.to.locale,
+					callID: this._id,
+				}),
+			}],
+		});
+
+		this.client.sendCrossShard({
+			embeds: [{
+				color: this.client.config.colors.success,
+
+				...t("commands.call.otherSidePickedUp", {
+					lng: this.to.locale,
+					callID: this._id,
+				}),
+			}],
+		}, this.from.channelID);
+	}
+
+	async handleMessage(message: Message): Promise<void> {
+		const sideToSendTo = this.primary ? this.to.channelID : this.from.channelID;
+
+		let toSend = `**${message.author.tag}**`;
+
+		// TODO: images, permission based phones, 611 ids
+
+		toSend += "📞 ";
+		toSend += message.content;
+
+		this.client.sendCrossShard({
+			content: toSend,
+		}, sideToSendTo);
 	}
 }

@@ -1,10 +1,10 @@
-import { Channel, Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, Snowflake, TextChannel } from "discord.js";
+import { Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, ShardClientUtil, Snowflake, TextBasedChannel, TextChannel } from "discord.js";
 import { REST } from "@discordjs/rest";
 import { Logger } from "winston";
 import config from "../config/config";
 import { DTelDatabase } from "../database/database";
 import CallClient from "./callClient";
-// import i18n from "./internationalization/i18n";
+import { APITextChannel } from "discord.js/node_modules/discord-api-types/v10";
 
 interface DTelClientOptions extends ClientOptions {
 	constantVariables: {
@@ -65,33 +65,45 @@ class DTelClient extends Client {
 			.replace(/\s+/g, "");
 	}
 
-	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<string|undefined> {
+	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<string|null> {
 		let ch: TextChannel, m: Message;
 		try {
 			ch = await this.channels.fetch(channelID) as TextChannel;
 			m = await ch.send(options);
 			return m.id;
 		} catch {
-			const res: string[] = await this.shard.broadcastEval(async(client, context) => {
-				let channel: Channel;
-				try {
-					channel = await client.channels.fetch(context.channelID) as Channel;
-					const msg = await (channel as TextChannel).send(context.messageOptions as unknown);
-					return msg.id;
-				} catch (e) {
-					return "";
-				}
-			}, {
-				context: {
-					channelID,
-					messageOptions: options,
-				},
-			});
+			const shardID = await this.shardIdForChannelId(channelID);
+			if (!shardID) throw new Error("channelNotFound");
 
-			const toReturn = res.find(r => r !== "");
-			if (!toReturn) throw new Error("Channel not found");
-			return toReturn;
+			let result;
+			try {
+				result = await this.shard.broadcastEval(async(client, context) => {
+					try {
+						const channel = await client.channels.fetch(context.channelID) as TextBasedChannel;
+						const msg = await channel.send(context.messageOptions as MessageOptions);
+						return msg.id;
+					} catch (e) {
+						return null;
+					}
+				}, {
+					context: {
+						channelID,
+						messageOptions: options,
+					},
+					shard: shardID,
+				});
+			} catch {
+				throw new Error("crossShardPermsFail");
+			}
+
+			return result[0];
 		}
+	}
+
+	async shardIdForChannelId(id: string): Promise<number> {
+		const channelObject = await this.restAPI.get(`/channels/${id}`) as APITextChannel;
+
+		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id, Number(process.env.SHARD_COUNT));
 	}
 }
 
