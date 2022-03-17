@@ -14,7 +14,6 @@ export default {
 	aliasNumbers: {
 		"*611": "08007877678",
 	},
-	supportNumber: "08007877678", // 0800SUPPORT
 
 	// SETTINGS
 	prefix: ">",
@@ -22,6 +21,7 @@ export default {
 		boss: 300,
 		manager: 250,
 		support: 200,
+		contributor: 180,
 		donator: 120,
 		default: 80,
 	},
@@ -42,23 +42,33 @@ export default {
 		donator: "<:GoldPhone:709101494242246657>",
 		support: "<:GreenPhone:709101494556819507>",
 		contributor: "<:RedPhone:742293638931021904>",
+		admin: "📞",
 	},
 	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs
-	announcementChannel: "281816926144167946",
-	logsChannel: "282253502779228160",
-	badLogsChannel: "377945714166202368",
-	promoteChannel: "398569181097754624",
-	supportChannel: "281816105289515008",
-	supportGuild: "281815661317980160",
-	offices: "355890256786227210",
 
-	bossRole: "281815725365264385",
-	donatorRole: "324578460183822337",
-	managerRole: "284443515516354560",
-	supportRole: "281815839936741377",
-	contributorRole: "394214123547918336",
+	supportGuild: {
+		id: "281815661317980160",
+		channels: {
+			officesCategory: "355890256786227210",
+
+			announcement: "281816926144167946",
+			logs: "282253502779228160",
+			badLogs: "377945714166202368",
+			promote: "398569181097754624",
+			support: "281816105289515008",
+		},
+		roles: {
+			boss: "281815725365264385",
+			donator: "324578460183822337",
+			manager: "284443515516354560",
+			customerSupport: "281815839936741377",
+			contributor: "394214123547918336",
+		},
+		supportNumber: "08007877678", // 0800SUPPORT
+	},
+
 
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/wHjMpX",

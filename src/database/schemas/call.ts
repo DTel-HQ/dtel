@@ -6,13 +6,6 @@ export interface CallParticipant {
 	isVip: boolean,
 }
 
-export interface DTelMessage {
-	forwardedMessageID: string, // The ID of the message the bot sent to the other side,
-	originalMessageID: string, // The ID of the original message sent by the original user
-	sentAt: Date, // Time the message was sent by the user
-	sender: string, // ID of person who sent the original message
-}
-
 export interface DTelCall {
 	_id: string, // Call ID
 	to: CallParticipant, // Number receiving the call
@@ -26,10 +19,7 @@ export interface DTelCall {
 		at: Date, // Time the call was started at
 		by: string, // User ID of person who started the call
 	},
-
-	messages: [DTelMessage]
 }
-
 
 const toOrfrom = { // For codacy
 	number: {
@@ -71,13 +61,6 @@ const schema = new Schema<DTelCall>({
 			required: true,
 		},
 	},
-
-	messages: [{
-		forwardedMessageID: String,
-		originalMessageID: String,
-		sentAt: Date,
-		sender: String,
-	}],
 });
 
 export default schema;

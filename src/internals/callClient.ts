@@ -1,9 +1,12 @@
-import { CallParticipant, DTelCall, DTelMessage } from "../database/schemas/call";
+import { CallParticipant, DTelCall } from "../database/schemas/call";
 import { DTelNumber } from "../database/schemas/number";
 import DTelClient from "./client";
 import { t } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Message, MessageActionRow, MessageButton, MessageComponentInteraction, ShardClientUtil, TextBasedChannel } from "discord.js";
+import { CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageOptions, Permissions } from "discord.js";
+import { PermissionLevel } from "../interfaces/commandData";
+
+type CallSide = "from" | "to";
 
 interface CallOptions {
 	from: DTelNumber,
@@ -37,7 +40,6 @@ export default class CallClient implements DTelCall {
 	pickedUp: { at: Date; by: string; };
 	randomCall: boolean;
 	started: { at: Date; by: string; };
-	messages: [DTelMessage];
 
 	otherSideShardID: number;
 
@@ -69,13 +71,18 @@ export default class CallClient implements DTelCall {
 		};
 	}
 
-	static async byID(client: DTelClient, id: string): Promise<CallClient> {
-		const call = await client.db.calls.findById(id).exec() as DTelCall;
-		if (!call) throw new Error(t("callNotFound"));
+	static async byID(client: DTelClient, options: { id?: string, doc?: DTelCall, side: CallSide }): Promise<CallClient> {
+		let callDoc: DTelCall;
+		if (options.doc) {
+			callDoc = options.doc;
+		} else {
+			callDoc = await client.db.calls.findById(options.id).exec() as DTelCall;
+			if (!callDoc) throw new Error(t("callNotFound"));
+		}
 
-		const callManager = new CallClient(client, null, call);
-		callManager.primary = false;
-		callManager.otherSideShardID = await client.shardIdForChannelId(call.from.channelID);
+		const callManager = new CallClient(client, null, callDoc);
+		callManager.primary = options.side === "from";
+		callManager.otherSideShardID = await client.shardIdForChannelId(options.side === "from" ? callDoc.to.channelID : callDoc.from.channelID);
 
 		client.calls.push(callManager);
 
@@ -132,7 +139,10 @@ export default class CallClient implements DTelCall {
 			// THIS CAN THROW callNotFound
 			await this.client.shard.broadcastEval(async(client: DTelClient, context): Promise<void> => {
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				client.calls.push(await require(`${context.dirname}/../internals/callClient`).default.byID(client, context.callID));
+				client.calls.push(await require(`${context.dirname}/../internals/callClient`).default.byID(client, {
+					id: context.callID,
+					side: "to",
+				}));
 			}, {
 				shard: this.otherSideShardID,
 				context: {
@@ -202,7 +212,7 @@ export default class CallClient implements DTelCall {
 			});
 		}
 
-		this.client.db.calls.updateOne({ _id: this._id }, { pickedUp: this.pickedUp }).exec();
+		this.client.db.calls.findByIdAndUpdate(this._id, { pickedUp: this.pickedUp }).exec();
 
 		interaction.reply({
 			embeds: [{
@@ -228,17 +238,81 @@ export default class CallClient implements DTelCall {
 	}
 
 	async handleMessage(message: Message): Promise<void> {
-		const sideToSendTo = this.primary ? this.to.channelID : this.from.channelID;
+		const userPerms = await this.client.getPerms(message.author.id);
+		const sideToSendTo = this.from.channelID === message.channel.id ? this.to : this.from;
 
-		let toSend = `**${message.author.tag}**`;
+		const toSend: MessageOptions = { content: `**${message.author.tag}`, embeds: [] };
 
-		// TODO: images, permission based phones, 611 ids
+		// TODO: images
 
-		toSend += "📞 ";
-		toSend += message.content;
+		if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
+			toSend.content += `(${message.author.id})`;
+		}
 
-		this.client.sendCrossShard({
-			content: toSend,
-		}, sideToSendTo);
+		const { callPhones } = this.client.config;
+		let phone = "";
+
+		if (userPerms < PermissionLevel.customerSupport && (message.member.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) {
+			phone = callPhones.admin;
+		} else {
+			switch (userPerms) {
+				default: {
+					phone = callPhones.default;
+					break;
+				}
+
+				case PermissionLevel.donator: {
+					phone = callPhones.donator;
+					break;
+				}
+
+				case PermissionLevel.maintainer:
+				case PermissionLevel.customerSupport: {
+					phone = callPhones.support;
+					break;
+				}
+
+				case PermissionLevel.contributor: {
+					phone = callPhones.contributor;
+					break;
+				}
+			}
+		}
+
+		toSend.content += `** ${phone} `;
+		toSend.content += message.content;
+
+		if (message.attachments.size != 0) {
+			for (const i of message.attachments.values()) {
+				if (i.contentType?.startsWith("image/")) {
+					toSend.embeds.push({
+						image: {
+							url: i.url,
+						},
+					});
+				} else {
+					toSend.embeds.push(this.client.warningEmbed("", {
+						description: `File: **[${i.name}](${i.url})**`,
+						footer: {
+							text: t("commands.call.dontTrustStrangers"),
+						},
+					}));
+				}
+			}
+		}
+
+		const forwardedMessageID = await this.client.sendCrossShard(toSend, sideToSendTo.channelID);
+
+		this.client.db.callMessages.create({
+			callID: this._id,
+			forwardedMessageID,
+			originalMessageID: message.id,
+			sender: message.author.id,
+			sentAt: new Date(),
+		});
+	}
+
+	async hangup(interaction: CommandInteraction): Promise<void> {
+		const sideInitiatingHangup = this.from.channelID === interaction.channel.id ? this.from : this.to;
 	}
 }

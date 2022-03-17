@@ -3,10 +3,12 @@ import { ChatInputApplicationCommandData } from "discord.js";
 
 // eslint-disable-next-line no-shadow
 enum PermissionLevel {
-	maintainer,
-	customerSupport,
-	serverAdmin,
 	none,
+	donator,
+	contributor,
+	serverAdmin,
+	customerSupport,
+	maintainer,
 }
 
 // eslint-disable-next-line no-shadow

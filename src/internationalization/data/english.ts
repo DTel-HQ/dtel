@@ -7,6 +7,7 @@ export default {
 		call: {
 			pickup: "Pick up",
 			hangup: "Hang up",
+			dontTrustStrangers: "Don't trust files from strangers",
 
 			errors: {
 				thisSideExpired: "Your number has expired. Get an admin to call `*233* and renew this number.",

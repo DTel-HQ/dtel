@@ -5,6 +5,8 @@ import config from "../config/config";
 import { DTelDatabase } from "../database/database";
 import CallClient from "./callClient";
 import { APITextChannel } from "discord.js/node_modules/discord-api-types/v10";
+import { PermissionLevel } from "../interfaces/commandData";
+import { APIGuildMember } from "discord.js/node_modules/discord-api-types/v9";
 
 interface DTelClientOptions extends ClientOptions {
 	constantVariables: {
@@ -44,7 +46,6 @@ class DTelClient extends Client {
 	warningEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
 		return {
 			color: 0xFFFF00,
-			title: "❌ Error!",
 			description,
 			...options,
 		};
@@ -104,6 +105,27 @@ class DTelClient extends Client {
 		const channelObject = await this.restAPI.get(`/channels/${id}`) as APITextChannel;
 
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id, Number(process.env.SHARD_COUNT));
+	}
+
+	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
+		// We don't deal with serverAdmin here
+		if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
+
+		let memberInSupportServer: APIGuildMember;
+		try {
+			memberInSupportServer = await this.restAPI.get(`/guilds/${config.supportGuild.id}/members/${userID}`) as APIGuildMember;
+		} catch {
+			return PermissionLevel.none;
+		}
+
+		const roles = memberInSupportServer.roles;
+
+		if (roles.includes(config.supportGuild.roles.boss)) return PermissionLevel.maintainer;
+		else if (roles.includes(config.supportGuild.roles.customerSupport)) return PermissionLevel.customerSupport;
+		else if (roles.includes(config.supportGuild.roles.contributor)) return PermissionLevel.contributor;
+		else if (roles.includes(config.supportGuild.roles.donator)) return PermissionLevel.donator;
+
+		return PermissionLevel.none;
 	}
 }
 

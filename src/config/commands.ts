@@ -49,6 +49,15 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
 	},
+	{
+		name: "hangup",
+		description: `End the call in your channel`,
+		guildOnly: false,
+		numberRequired: true,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.call,
+	},
 ];
 
 export default commands;

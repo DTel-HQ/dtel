@@ -3,6 +3,7 @@ import CallClient from "../../internals/callClient";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
+		// Since we're in here, we can assume that there's no call in progress
 		switch (this.interaction.options.getString("number")) {
 			case "*233": {
 				// TODO: *233

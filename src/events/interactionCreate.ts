@@ -80,13 +80,14 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 	const processorClass = new processorFile(client, interaction, commandData);
 	try {
+		const userPermissions = await client.getPerms(interaction.user.id);
 		switch (commandData.permissionLevel) {
 			case PermissionLevel.maintainer: {
-				if (!config.maintainers.includes(interaction.user.id)) return processorClass.notMaintainer();
+				if (userPermissions != PermissionLevel.maintainer) return processorClass.notMaintainer();
 				break;
 			}
 			case PermissionLevel.customerSupport: {
-				// TODO: Handle customer support stuff
+				if (userPermissions < PermissionLevel.customerSupport) return processorClass.permCheckFail();
 				break;
 			}
 			case PermissionLevel.serverAdmin: {
