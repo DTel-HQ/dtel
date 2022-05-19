@@ -8,27 +8,15 @@ import { APITextChannel } from "discord.js/node_modules/discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { APIGuildMember } from "discord.js/node_modules/discord-api-types/v9";
 
-interface DTelClientOptions extends ClientOptions {
-	constantVariables: {
-		db: DTelDatabase,
-		winston: Logger,
-	}
-}
 
 class DTelClient extends Client {
 	config = config;
-	db: DTelDatabase;
-	winston: Logger;
-
 	restAPI: REST;
 
 	calls: CallClient[] = [];
 
-	constructor(options: DTelClientOptions) {
+	constructor(options: ClientOptions) {
 		super(options);
-
-		this.db = options.constantVariables.db;
-		this.winston = options.constantVariables.winston;
 
 		this.restAPI = new REST();
 		this.restAPI.setToken(this.token);
