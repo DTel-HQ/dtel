@@ -1,12 +1,14 @@
 {
 	"compilerOptions": {
+		"strict": true,
 		"outDir": "./build/",
 		"sourceMap": true,
 		"target": "ES2019",
 		"module": "commonjs",
 		"moduleResolution": "Node",
-		"esModuleInterop": true
+		"esModuleInterop": true,
 	},
+
 	"include": [
 		"src/**/*.ts"
 	]

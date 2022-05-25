@@ -1,15 +1,16 @@
-import { CallParticipant, DTelCall } from "../database/schemas/call";
-import { DTelNumber } from "../database/schemas/number";
 import DTelClient from "./client";
 import { t } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageOptions, Permissions } from "discord.js";
+import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
+import { Calls, Numbers, pickedUp } from "@prisma/client";
+import { db } from "../database/db";
+import config from "../config/config";
 
 type CallSide = "from" | "to";
 
 interface CallOptions {
-	from: DTelNumber,
+	from: string,
 	to: string,
 	random: boolean,
 	startedBy: string,
@@ -20,32 +21,34 @@ interface CallOptions {
 	}
 }
 
-interface ClientCallParticipant extends CallParticipant {
-	dbNumber: DTelNumber,
+interface ClientCallParticipant extends Numbers {
 	locale: string,
 }
 
-export default class CallClient implements DTelCall {
+type CallsWithNumbers = Calls & {
+	to: Numbers,
+	from: Numbers,
+};
+export { CallsWithNumbers };
+
+export default class CallClient implements CallsWithNumbers {
 	primary = false;
 
-	_id: string = uuidv4();
-	to: ClientCallParticipant = {
-		dbNumber: undefined,
-		locale: undefined,
-		number: undefined,
-		channelID: undefined,
-		isVip: undefined,
-	};
-	from: ClientCallParticipant;
-	pickedUp: { at: Date; by: string; };
-	randomCall: boolean;
-	started: { at: Date; by: string; };
+	id: string = uuidv4();
+	toNum = "";
+	fromNum = "";
+	to: ClientCallParticipant = undefined;
+	from: ClientCallParticipant = undefined;
+	pickedUp: { at: Date, by: string } = {};
+	randomCall = false;
+	started: { at: Date, by: string } = {};
+	active = true;
 
-	otherSideShardID: number;
+	otherSideShardID = -1;
 
 	client: DTelClient;
 
-	constructor(client: DTelClient, options?: CallOptions, dbCallDoc?: DTelCall) {
+	constructor(client: DTelClient, options?: CallOptions, dbCallDoc?: Calls) {
 		this.client = client;
 
 		if (dbCallDoc) {
@@ -53,16 +56,8 @@ export default class CallClient implements DTelCall {
 			return;
 		}
 
-		this.from = {
-			dbNumber: options.from, // A number object from the database
-
-			number: options.from._id,
-			locale: options.from.locale,
-			channelID: options.from.channelID,
-			isVip: options.from.vip?.expiry > new Date(),
-		};
-
-		this.to.number = options.to;
+		this.fromNum = options.from;
+		this.toNum = options.to;
 
 		this.randomCall = options.random;
 		this.started = {
@@ -71,12 +66,20 @@ export default class CallClient implements DTelCall {
 		};
 	}
 
-	static async byID(client: DTelClient, options: { id?: string, doc?: DTelCall, side: CallSide }): Promise<CallClient> {
-		let callDoc: DTelCall;
+	static async byID(client: DTelClient, options: { id?: string, doc?: CallsWithNumbers, side: CallSide }): Promise<CallClient> {
+		let callDoc: CallsWithNumbers;
 		if (options.doc) {
 			callDoc = options.doc;
 		} else {
-			callDoc = await client.db.calls.findById(options.id).exec() as DTelCall;
+			callDoc = await client.db.calls.findUnique({
+				where: {
+					id: options.id,
+				},
+				include: {
+					to: true,
+					from: true,
+				},
+			});
 			if (!callDoc) throw new Error(t("callNotFound"));
 		}
 
@@ -92,52 +95,85 @@ export default class CallClient implements DTelCall {
 	async initiate(): Promise<void> {
 		this.primary = true;
 
-		if (this.from.dbNumber.expiry < new Date()) throw new Error("thisSideExpired");
+		// Get the number in the correct format for DB query (all numbers)
+		this.toNum = this.client.parseNumber(this.toNum);
+		if (config.aliasNumbers[this.toNum]) this.toNum = config.aliasNumbers[this.toNum];
+		if (this.toNum.length != 11) throw new Error("numberInvalid");
 
-		let numberToDial = this.client.parseNumber(this.to.number);
-		if (numberToDial == "*611") numberToDial = "08007877678";
+		if (this.fromNum === this.toNum) throw new Error("callingSelf");
 
-		if (numberToDial.length != 11) throw new Error("numberInvalid");
+		// Get both numbers in one query (clean code)
+		const participants = await db.numbers.findMany({
+			where: {
+				OR: [{
+					number: this.toNum,
+				}, {
+					number: this.fromNum,
+				}],
+			},
+			include: {
+				incomingCalls: true,
+				outgoingCalls: true,
+			},
+		});
 
-		const numberFromDB = await this.client.db.numbers.findById(numberToDial).exec() as DTelNumber;
+		// TODO: Find out if the from side is able to call (ie not expired)
+		const fromNumber = participants.find(p => p.number === this.fromNum);
+		if (!fromNumber) throw new Error("invalidFrom");
+		this.from = fromNumber;
+
+		if (this.from.expiry < new Date()) throw new Error("thisSideExpired");
+
+		const toNumber = participants.find(p => p.number === this.toNum);
 
 		// Preflight checks
-		if (!numberFromDB) throw new Error("numberNotFound");
-		if (numberFromDB.expiry < new Date()) throw new Error("otherSideExpired");
-		if (numberFromDB.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
+		if (!toNumber) throw new Error("toNumNotFound");
+		if (toNumber.expiry < new Date()) throw new Error("otherSideExpired");
+		if (toNumber.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
 
-		this.to = {
-			dbNumber: numberFromDB,
-
-			number: numberToDial,
-			locale: numberFromDB.locale,
-			channelID: numberFromDB.channelID,
-			isVip: numberFromDB.vip?.expiry > new Date(),
-		};
+		this.to = toNumber;
 
 		// TODO: Check for pre-existing calls and do embed stuff
 		// and that includes stuff like call-waiting
 
-		await this.client.db.calls.create(this as DTelCall);
+		await db.calls.create({
+			data: {
+				...this,
+				client: undefined,
+				otherSideShardID: undefined,
+				primary: undefined,
+				to: undefined,
+				from: undefined,
+				messages: undefined,
+				pickedUp: {
+					set: {
+						at: null,
+						by: null,
+					},
+				},
+			},
+		});
 		this.client.calls.push(this);
 
 		// Don't bother sending it if we can find it on this shard
 		try {
 			await this.client.channels.fetch(this.to.channelID);
-			throw new Error();
 		} catch {
 			// Send the call to another shard if required
 			// This is probably the best way to do it as it tells us if it was successful
-
 			this.otherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
 
 			if (!this.otherSideShardID) {
-				this.client.db.calls.deleteOne({ _id: this._id }).exec().catch(() => null);
+				await db.calls.delete({
+					where: {
+						id: this.id,
+					},
+				});
 				throw new Error("numberMissingChannel");
 			}
 
 			// THIS CAN THROW callNotFound
-			await this.client.shard.broadcastEval(async(client: DTelClient, context): Promise<void> => {
+			await this.client.shard?.broadcastEval(async(client: DTelClient, context): Promise<void> => {
 				// eslint-disable-next-line @typescript-eslint/no-var-requires
 				client.calls.push(await require(`${context.dirname}/../internals/callClient`).default.byID(client, {
 					id: context.callID,
@@ -146,34 +182,34 @@ export default class CallClient implements DTelCall {
 			}, {
 				shard: this.otherSideShardID,
 				context: {
-					callID: this._id,
+					callID: this.id,
 					dirname: __dirname,
 				},
 			});
 		}
 
 		let fromCallerDisplay = this.from.number;
-		if (this.from.isVip) {
-			if (this.from.dbNumber.vip?.customCallerDisplay) fromCallerDisplay = this.from.dbNumber.vip?.customCallerDisplay;
-			else if (this.from.dbNumber.vip?.hiddenNumberDisplay) fromCallerDisplay = "Hidden";
+		if (Number(this.from.vip?.expiry) > Date.now()) {
+			if (this.from.vip?.name) fromCallerDisplay = this.from.vip?.name;
+			else if (this.from.vip?.hidden) fromCallerDisplay = "Hidden";
 		}
 
 		this.client.sendCrossShard({
 			embeds: [{
 				color: this.client.config.colors.info,
 
-				...t("commands.call.incomingCall", {
+				...(t("commands.call.incomingCall", {
 					lng: this.to.locale,
 					number: fromCallerDisplay,
-					callID: this._id,
-				}),
+					callID: this.id,
+				}) as MessageEmbedOptions),
 			}],
 			components: [
 				new MessageActionRow()
 					.addComponents([
 						new MessageButton({
 							customId: "call-pickup",
-							label: t("commands.call.pickup"),
+							label: t("commands.call.pickup")!,
 							style: "PRIMARY",
 							emoji: "📞",
 						}),
@@ -181,7 +217,7 @@ export default class CallClient implements DTelCall {
 					.addComponents([
 						new MessageButton({
 							customId: "call-hangup",
-							label: t("commands.call.hangup"),
+							label: t("commands.call.hangup")!,
 							style: "SECONDARY",
 							emoji: "☎️",
 						}),
@@ -197,31 +233,42 @@ export default class CallClient implements DTelCall {
 		};
 
 		if (this.otherSideShardID) {
-			await this.client.shard.broadcastEval(async(client: DTelClient, context): Promise<void> => {
-				const callHandler = client.calls.find(c => c._id === context.callID);
+			type ctx = { callID: string, pickedUp: pickedUp };
+			await this.client.shard?.broadcastEval<void, ctx>(async(_client: Client, context): Promise<void> => {
+				const client = _client as DTelClient;
+				const callHandler = client.calls.find(c => c.id === context.callID);
+				if (!callHandler) throw new Error("No handler");
+
 				callHandler.pickedUp = {
-					at: new Date(context.pickedUp.at),
-					by: context.pickedUp.by,
+					at: context.pickedUp.at as unknown as Date,
+					by: context.pickedUp.by as string,
 				};
 			}, {
 				shard: this.otherSideShardID,
 				context: {
-					callID: this._id,
+					callID: this.id,
 					pickedUp: this.pickedUp,
 				},
 			});
 		}
 
-		this.client.db.calls.findByIdAndUpdate(this._id, { pickedUp: this.pickedUp }).exec();
+		await db.calls.update({
+			where: {
+				id: this.id,
+			},
+			data: {
+				pickedUp: this.pickedUp,
+			},
+		});
 
 		interaction.reply({
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...t("commands.call.thisSidePickedUp", {
+				...(t("commands.call.thisSidePickedUp", {
 					lng: this.to.locale,
-					callID: this._id,
-				}),
+					callID: this.id,
+				}) as MessageEmbedOptions),
 			}],
 		});
 
@@ -229,10 +276,10 @@ export default class CallClient implements DTelCall {
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...t("commands.call.otherSidePickedUp", {
+				...(t("commands.call.otherSidePickedUp", {
 					lng: this.to.locale,
-					callID: this._id,
-				}),
+					callID: this.id,
+				}) as MessageEmbedOptions),
 			}],
 		}, this.from.channelID);
 	}
@@ -252,7 +299,7 @@ export default class CallClient implements DTelCall {
 		const { callPhones } = this.client.config;
 		let phone = "";
 
-		if (userPerms < PermissionLevel.customerSupport && (message.member.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) {
+		if (userPerms < PermissionLevel.customerSupport && (message.member?.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) {
 			phone = callPhones.admin;
 		} else {
 			switch (userPerms) {
@@ -285,13 +332,13 @@ export default class CallClient implements DTelCall {
 		if (message.attachments.size != 0) {
 			for (const i of message.attachments.values()) {
 				if (i.contentType?.startsWith("image/")) {
-					toSend.embeds.push({
+					toSend.embeds?.push({
 						image: {
 							url: i.url,
 						},
 					});
 				} else {
-					toSend.embeds.push(this.client.warningEmbed("", {
+					toSend.embeds?.push(this.client.warningEmbed("", {
 						description: `File: **[${i.name}](${i.url})**`,
 						footer: {
 							text: t("commands.call.dontTrustStrangers"),
@@ -303,16 +350,61 @@ export default class CallClient implements DTelCall {
 
 		const forwardedMessageID = await this.client.sendCrossShard(toSend, sideToSendTo.channelID);
 
-		this.client.db.callMessages.create({
-			callID: this._id,
-			forwardedMessageID,
-			originalMessageID: message.id,
-			sender: message.author.id,
-			sentAt: new Date(),
+		await this.client.db.callMessages.create({
+			data: {
+				callID: this.id,
+				forwardedMessageID: forwardedMessageID as string,
+				originalMessageID: message.id,
+				sender: message.author.id,
+				sentAt: new Date(),
+			},
 		});
 	}
 
 	async hangup(interaction: CommandInteraction): Promise<void> {
-		const sideInitiatingHangup = this.from.channelID === interaction.channel.id ? this.from : this.to;
+		const sideInitiatingHangup: CallSide = this.from.channelID === interaction.channel?.id ? "from" : "to";
+
+		await db.calls.update({
+			where: {
+				id: this.id,
+			},
+			data: {
+				active: false,
+			},
+		});
+
+		this.client.calls.splice(this.client.calls.indexOf(this), 1);
+
+		const baseEmbed: MessageEmbedOptions = t("commands.hangup.embeds.baseEmbed", {
+			context: {
+				callID: this.id,
+				time: "",
+			},
+		});
+
+		let thisSideDesc, otherSideDesc;
+		if (this.pickedUp) {
+			thisSideDesc = t("commands.hangup.descriptions.pickedUp.thisSide");
+			otherSideDesc = t("commands.hangup.descriptions.pickedUp.otherSide");
+		} else {
+			thisSideDesc = t("commands.hangup.descriptions.notPickedUp.otherSide");
+			otherSideDesc = t("commands.hangup.descriptions.notPickedUp.otherSide");
+		}
+
+		interaction.reply({
+			embeds: [{
+				...baseEmbed,
+				description: thisSideDesc,
+			}],
+		});
+
+		const otherSideChannelID = sideInitiatingHangup === "to" ? this.to.channelID : this.from.channelID;
+
+		this.client.sendCrossShard({
+			embeds: [{
+				...baseEmbed,
+				description: otherSideDesc,
+			}],
+		}, otherSideChannelID);
 	}
 }

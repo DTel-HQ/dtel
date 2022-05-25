@@ -19,7 +19,7 @@
     "Austin Huang <im@austinhuang.me> (https://austinhuang.me)",
     "Mitchell Rademaker <contact@mitchells.work> (https://mitchells.work)"
   ],
-  "license": "SEE LICENSE.md",
+  "license": "SEE LICENSE IN LICENSE",
   "bugs": {
     "url": "https://github.com/DTel-HQ/dtel/issues"
   },
@@ -30,9 +30,10 @@
   "dependencies": {
     "@discoin/scambio": "^2.2.0",
     "@discordjs/rest": "^0.3.0",
+    "@prisma/client": "^3.14.0",
     "bufferutil": "^4.0.3",
     "discord-api-types": "^0.28.0",
-    "discord.js": "github:monbrey/discord.js#modals",
+    "discord.js": "^13.7.0",
     "erlpack": "github:discordapp/erlpack",
     "i18next": "^21.6.11",
     "mongoose": "^6.0.10",
@@ -44,6 +45,7 @@
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5",
     "zlib-sync": "^0.1.7",
+    "zod": "^3.16.0",
     "zucc": "^0.1.2"
   },
   "devDependencies": {

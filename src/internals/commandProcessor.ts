@@ -19,7 +19,7 @@ abstract class CommandProcessor extends Processor {
 		this.interaction = interaction;
 		this.commandData = commandData;
 
-		this.t = i18n.getFixedT(interaction.locale, null, `commands.${interaction.commandName}`);
+		this.t = i18n.getFixedT(interaction.locale, undefined, `commands.${interaction.commandName}`);
 	}
 
 	async _run(): Promise<void> {

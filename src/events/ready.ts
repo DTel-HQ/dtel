@@ -11,7 +11,7 @@ export default async(client: DTelClient): Promise<void> => {
 	// client.application.commands.set(client.commands);
 	client.application.commands.set(Commands, "385862448747511812");
 
-	const allCalls = await client.db.calls.find().lean();
+	const allCalls = await client.db.calls.findMany({ where: { active: true }, include: { from: true, to: true } });
 	for (const call of allCalls) {
 		CallClient.byID(client, {
 			doc: call,

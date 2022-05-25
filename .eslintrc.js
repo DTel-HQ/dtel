@@ -27,6 +27,7 @@ module.exports = {
 		"require-atomic-updates": 0,
 		"no-compare-neg-zero": "error",
 		"@typescript-eslint/no-extra-parens": ["warn", "all", { nestedBinaryExpressions: false }],
+		"@typescript-eslint/no-non-null-assertion": 0,
 		"no-template-curly-in-string": "error",
 		"no-unsafe-negation": "error",
 		"accessor-pairs": "warn",

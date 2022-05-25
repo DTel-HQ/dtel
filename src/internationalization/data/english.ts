@@ -99,6 +99,29 @@ export default {
 				}],
 			},
 		},
+
+		hangup: {
+			baseEmbed: {
+				thisSide: {
+					color: 0xFF0000,
+					title: "The call has ended!",
+					footer: {
+						text: "{{ callID }}",
+					},
+				},
+			},
+			descriptions: {
+				notPickedUp: {
+					thisSide: "You have ended the call.",
+					otherSide: "The other side ended the call.",
+				},
+				pickedUp: {
+					thisSide: "You have ended the call after {{ time }}.",
+					otherSide: "The other side ended the call after {{ time }}.",
+				},
+			},
+		},
+
 	},
 
 	errors: {

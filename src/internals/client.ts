@@ -1,17 +1,19 @@
-import { Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, ShardClientUtil, Snowflake, TextBasedChannel, TextChannel } from "discord.js";
+import { Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, Serialized, ShardClientUtil, Snowflake, TextBasedChannel, TextChannel } from "discord.js";
 import { REST } from "@discordjs/rest";
-import { Logger } from "winston";
 import config from "../config/config";
-import { DTelDatabase } from "../database/database";
 import CallClient from "./callClient";
-import { APITextChannel } from "discord.js/node_modules/discord-api-types/v10";
+import { APITextChannel, APIGuildMember } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
-import { APIGuildMember } from "discord.js/node_modules/discord-api-types/v9";
-
+import { winston } from "../dtel";
+import { Logger } from "winston";
+import { db } from "../database/db";
 
 class DTelClient extends Client {
 	config = config;
 	restAPI: REST;
+
+	db = db;
+	winston: Logger = winston;
 
 	calls: CallClient[] = [];
 
@@ -19,7 +21,7 @@ class DTelClient extends Client {
 		super(options);
 
 		this.restAPI = new REST();
-		this.restAPI.setToken(this.token);
+		this.restAPI.setToken(this.token || "");
 	}
 
 	errorEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
@@ -64,9 +66,10 @@ class DTelClient extends Client {
 			const shardID = await this.shardIdForChannelId(channelID);
 			if (!shardID) throw new Error("channelNotFound");
 
-			let result;
+			let result: string | null | undefined;
 			try {
-				result = await this.shard.broadcastEval(async(client, context) => {
+				type ctx = { channelID: string; messageOptions: MessageOptions; };
+				result = await this.shard?.broadcastEval<string | null, ctx>(async(client: Client, context) => {
 					try {
 						const channel = await client.channels.fetch(context.channelID) as TextBasedChannel;
 						const msg = await channel.send(context.messageOptions as MessageOptions);
@@ -85,14 +88,15 @@ class DTelClient extends Client {
 				throw new Error("crossShardPermsFail");
 			}
 
-			return result[0];
+			return result as string; // We know it exists as we checked for shard ID earlier
 		}
 	}
 
 	async shardIdForChannelId(id: string): Promise<number> {
+		if (Number(process.env.SHARD_COUNT) == 1) return 0;
 		const channelObject = await this.restAPI.get(`/channels/${id}`) as APITextChannel;
 
-		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id, Number(process.env.SHARD_COUNT));
+		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {

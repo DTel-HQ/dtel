@@ -15,7 +15,7 @@ export default class Call extends Command {
 			}
 			default: {
 				const callObject = new CallClient(this.client, {
-					from: this.number,
+					from: this.number.number,
 
 					to: this.interaction.options.getString("number"),
 					startedBy: this.interaction.user.id,
@@ -29,7 +29,7 @@ export default class Call extends Command {
 							color: this.config.colors.info,
 							...this.t("initiated", {
 								number: this.interaction.options.getString("number"),
-								callID: callObject._id,
+								callID: callObject.id,
 							}),
 						}],
 					});

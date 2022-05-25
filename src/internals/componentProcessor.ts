@@ -15,7 +15,7 @@ abstract class ComponentProcessor extends Processor {
 		super(client, interaction, commandData);
 		this.interaction = interaction;
 
-		this.t = i18n.getFixedT(interaction.locale, null, `commands.${interaction.customId.split("-")[0]}`);
+		this.t = i18n.getFixedT(interaction.locale, undefined, `commands.${interaction.customId.split("-")[0]}`);
 	}
 	abstract run(): void;
 }

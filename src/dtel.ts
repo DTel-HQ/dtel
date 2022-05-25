@@ -15,8 +15,6 @@ import SharderMessageEvent from "./events/sharderMessage";
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
 
-process.env.MONGO_URI = auth.mongodb.uri;
-
 // let db: DTelDatabase;
 
 // try {
@@ -58,4 +56,4 @@ process.on("message", msg => SharderMessageEvent(client, msg));
 
 client.login(process.env.TOKEN);
 
-export { client };
+export { client, winston };

@@ -5,7 +5,8 @@ import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction
 import DTelClient from "./client";
 import config from "../config/config";
 import CommandDataInterface from "../interfaces/commandData";
-import { DTelNumber } from "../database/schemas/number";
+import { Numbers } from "@prisma/client";
+import { db } from "../database/db";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -13,9 +14,10 @@ abstract class Processor {
 	config = config;
 
 	client: DTelClient;
+	db = db;
 	interaction: ChannelBasedInteraction;
 	commandData: CommandDataInterface;
-	number: DTelNumber;
+	number: Numbers | null = null;
 
 
 	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
@@ -41,8 +43,16 @@ abstract class Processor {
 
 	abstract run(): void;
 
-	async fetchNumber(): Promise<DTelNumber> {
-		return this.client.db.numbers.findOne({ channelID: this.interaction.channel.id }).lean();
+	async fetchNumber(): Promise<Numbers | null> {
+		return this.db.numbers.findFirst({
+			where: {
+				channelID: this.interaction.channel?.id,
+			},
+			include: {
+				incomingCalls: true,
+				outgoingCalls: true,
+			},
+		});
 	}
 
 	async _run(): Promise<void> {

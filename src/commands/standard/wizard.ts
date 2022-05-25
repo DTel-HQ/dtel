@@ -6,7 +6,7 @@ export default class Wizard extends Command {
 		const preExistingNumber = await this.fetchNumber();
 		if (preExistingNumber) {
 			return this.interaction.reply({
-				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: preExistingNumber._id }))],
+				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: preExistingNumber.number }))],
 			});
 		}
 

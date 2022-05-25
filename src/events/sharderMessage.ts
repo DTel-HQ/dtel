@@ -1,12 +1,11 @@
 import { TextBasedChannel } from "discord.js";
-import { DTelCall } from "../database/schemas/call";
-import CallClient from "../internals/callClient";
+import CallClient, { CallsWithNumbers } from "../internals/callClient";
 import DTelClient from "../internals/client";
 
 export default async(client: DTelClient, msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
 		case "callInitiated": {
-			const callObject = JSON.parse(msg.callDBObject as string) as DTelCall;
+			const callObject = JSON.parse(msg.callDBObject as string) as CallsWithNumbers;
 			console.log(callObject);
 			let channel: TextBasedChannel;
 			try {
