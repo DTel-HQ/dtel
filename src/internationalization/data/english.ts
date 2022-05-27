@@ -1,3 +1,4 @@
+import { MessageEmbedOptions } from "discord.js";
 import config from "../../config/config";
 
 export default {
@@ -10,6 +11,8 @@ export default {
 			dontTrustStrangers: "Don't trust files from strangers",
 
 			errors: {
+				unexpected: "We couldn't start that call. Try again later.",
+
 				thisSideExpired: "Your number has expired. Get an admin to call `*233* and renew this number.",
 				otherSideExpired: "The number you have attempted to call has expired.",
 

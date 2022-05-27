@@ -1,3 +1,4 @@
+import { MessageEmbedOptions } from "discord.js";
 import ModalProcessor from "../../internals/modalProcessor";
 
 export default class WizardModalSubmit extends ModalProcessor {
@@ -27,7 +28,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		await this.db.numbers.create({
 			data: {
 				number: number,
-				channelID: this.interaction.channel.id,
+				channelID: this.interaction.channel!.id,
 				expiry,
 			},
 		});
@@ -37,7 +38,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			embeds: [{
 				color: this.config.colors.success,
 
-				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }),
+				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }) as MessageEmbedOptions,
 			}],
 		});
 	}

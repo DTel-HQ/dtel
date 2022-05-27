@@ -1,4 +1,4 @@
-import { MessageActionRow, MessageButton } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbedOptions } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 export default class Wizard extends Command {
@@ -14,7 +14,7 @@ export default class Wizard extends Command {
 			embeds: [{
 				color: this.config.colors.yellowbook,
 
-				...this.t("introEmbed", { returnObjects: true }),
+				...this.t("introEmbed", { returnObjects: true }) as MessageEmbedOptions,
 			}],
 			components: [
 				new MessageActionRow().addComponents(new MessageButton().setLabel("I'm ready!").setCustomId("wizard-ready").setEmoji("✔️").setStyle("PRIMARY")),

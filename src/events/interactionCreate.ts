@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { CommandInteraction, Permissions, MessageComponentInteraction, ModalSubmitInteraction, Interaction } from "discord.js";
 import Commands from "../config/commands";
-import { CommandType, PermissionLevel } from "../interfaces/commandData";
+import Command, { CommandType, PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Processor from "../internals/processor";
@@ -13,12 +13,15 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	const { config, winston } = client;
 	let commandName: string;
 	let toRunPath: string;
-	let commandData;
+	let commandData: Command;
 
 	switch (interaction.type) {
 		case "APPLICATION_COMMAND": {
 			commandName = (interaction as CommandInteraction).commandName;
-			commandData = Commands.find(c => c.name === commandName);
+			const cmd = Commands.find(c => c.name === commandName);
+			if (!cmd) throw new Error();
+			commandData = cmd;
+
 			toRunPath = `${__dirname}/../commands`;
 
 			switch (commandData.useType) {
@@ -59,7 +62,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			commandName = split[0];
 			const interactionName = split[1];
 
-			commandData = Commands.find(c => c.name === commandName);
+			const cmd = Commands.find(c => c.name === commandName);
+			if (!cmd) throw new Error();
+			commandData = cmd;
 
 			toRunPath = `${__dirname}/../interactions/${commandName}/${interactionName}`;
 		}
@@ -68,20 +73,20 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	let processorFile: Constructable<Processor>;
 	try {
 		if (client.config.devMode) {
-			delete require.cache[require.resolve(toRunPath)];
+			delete require.cache[require.resolve(toRunPath!)];
 		}
-		processorFile = require(toRunPath).default;
+		processorFile = require(toRunPath!).default;
 		if (!processorFile) throw new Error();
 	} catch {
-		client.winston.error(`Cannot process interaction for/from command: ${commandName}`);
+		client.winston.error(`Cannot process interaction for/from command: ${commandName!}`);
 		interaction.reply(":x: Interaction not yet implemented.");
 		return;
 	}
 
-	const processorClass = new processorFile(client, interaction, commandData);
+	const processorClass = new processorFile(client, interaction, commandData!);
 	try {
 		const userPermissions = await client.getPerms(interaction.user.id);
-		switch (commandData.permissionLevel) {
+		switch (commandData!.permissionLevel) {
 			case PermissionLevel.maintainer: {
 				if (userPermissions != PermissionLevel.maintainer) return processorClass.notMaintainer();
 				break;
@@ -91,14 +96,15 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 				break;
 			}
 			case PermissionLevel.serverAdmin: {
-				if (!(interaction.member.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) return processorClass.permCheckFail();
+				if (!(interaction.member!.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) return processorClass.permCheckFail();
 				break;
 			}
 		}
 
 		processorClass._run();
-	} catch (err) {
-		winston.error(`Error occurred whilst executing interaction for/from command: ${commandName}`, err.stack);
+	} catch (_err) {
+		const err = _err as Error;
+		winston.error(`Error occurred whilst executing interaction for/from command: ${commandName!}`, err.stack);
 		interaction.reply({
 			embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
 		});

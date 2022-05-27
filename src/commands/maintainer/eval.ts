@@ -13,15 +13,15 @@ export default class Eval extends Command {
 		const winston = this.client.winston;
 
 		const hrstart = process.hrtime();
-		let payload = this.interaction.options.get("code").value as string;
+		let payload = this.interaction.options.get("code", true).value as string;
 		try {
 			if (payload.startsWith("```js") && payload.endsWith("```")) payload = payload.substring(5, payload.length - 3);
-			const asyncEval = (code: string, returns) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
+			const asyncEval = (code: string, returns: unknown) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
 			payload = payload
 				.replace("this.constants.client.token", "")
 				.replace(/\.token/g, "");
 			const array = [
-				escapeRegex(this.client.token),
+				escapeRegex(this.client.token!),
 			];
 			const regex = new RegExp(array.join("|"), "g");
 			let result = await eval(asyncEval(payload, payload.includes("return")));
@@ -49,7 +49,8 @@ export default class Eval extends Command {
 					],
 				});
 			}
-		} catch (err) {
+		} catch (_err) {
+			const err = _err as Error;
 			this.interaction.reply({
 				embeds: [{
 					color: 0xFF0000,

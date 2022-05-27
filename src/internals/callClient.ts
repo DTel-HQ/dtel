@@ -37,11 +37,11 @@ export default class CallClient implements CallsWithNumbers {
 	id: string = uuidv4();
 	toNum = "";
 	fromNum = "";
-	to: ClientCallParticipant = undefined;
-	from: ClientCallParticipant = undefined;
-	pickedUp: { at: Date, by: string } = {};
+	to!: ClientCallParticipant;
+	from!: ClientCallParticipant;
+	pickedUp!: { at: Date; by: string; };
 	randomCall = false;
-	started: { at: Date, by: string } = {};
+	started!: { at: Date, by: string };
 	active = true;
 
 	otherSideShardID = -1;
@@ -55,6 +55,7 @@ export default class CallClient implements CallsWithNumbers {
 			Object.assign(this, dbCallDoc);
 			return;
 		}
+		options = options as CallOptions; // Strict mode avoider
 
 		this.fromNum = options.from;
 		this.toNum = options.to;
@@ -71,7 +72,7 @@ export default class CallClient implements CallsWithNumbers {
 		if (options.doc) {
 			callDoc = options.doc;
 		} else {
-			callDoc = await client.db.calls.findUnique({
+			const tempDoc = await client.db.calls.findUnique({
 				where: {
 					id: options.id,
 				},
@@ -80,10 +81,11 @@ export default class CallClient implements CallsWithNumbers {
 					from: true,
 				},
 			});
-			if (!callDoc) throw new Error(t("callNotFound"));
+			if (!tempDoc) throw new Error(t("callNotFound"));
+			else callDoc = tempDoc;
 		}
 
-		const callManager = new CallClient(client, null, callDoc);
+		const callManager = new CallClient(client, undefined, callDoc);
 		callManager.primary = options.side === "from";
 		callManager.otherSideShardID = await client.shardIdForChannelId(options.side === "from" ? callDoc.to.channelID : callDoc.from.channelID);
 
@@ -97,7 +99,8 @@ export default class CallClient implements CallsWithNumbers {
 
 		// Get the number in the correct format for DB query (all numbers)
 		this.toNum = this.client.parseNumber(this.toNum);
-		if (config.aliasNumbers[this.toNum]) this.toNum = config.aliasNumbers[this.toNum];
+		const aliasNumbers = config.aliasNumbers as { [key: string] : string };
+		if (aliasNumbers[this.toNum]) this.toNum = aliasNumbers[this.toNum];
 		if (this.toNum.length != 11) throw new Error("numberInvalid");
 
 		if (this.fromNum === this.toNum) throw new Error("callingSelf");
@@ -173,18 +176,15 @@ export default class CallClient implements CallsWithNumbers {
 			}
 
 			// THIS CAN THROW callNotFound
-			await this.client.shard?.broadcastEval(async(client: DTelClient, context): Promise<void> => {
-				// eslint-disable-next-line @typescript-eslint/no-var-requires
-				client.calls.push(await require(`${context.dirname}/../internals/callClient`).default.byID(client, {
-					id: context.callID,
+			await this.client.shard?.broadcastEval<void, string>(async(_client: Client, context: string): Promise<void> => {
+				const client = _client as DTelClient;
+				client.calls.push(await require(`${__dirname}/../internals/callClient`).default.byID(client, {
+					id: context,
 					side: "to",
 				}));
 			}, {
 				shard: this.otherSideShardID,
-				context: {
-					callID: this.id,
-					dirname: __dirname,
-				},
+				context: this.id,
 			});
 		}
 

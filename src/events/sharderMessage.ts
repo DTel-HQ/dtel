@@ -16,7 +16,7 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 			}
 
 			// From here, we can assume we *do* have the channel and can handle this call
-			const callClient = new CallClient(client, null, callObject);
+			const callClient = new CallClient(client, undefined, callObject);
 			client.calls.push(callClient);
 			break;
 		}

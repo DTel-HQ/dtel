@@ -2,12 +2,12 @@ import Command from "../../internals/commandProcessor";
 
 export default class Help extends Command {
 	async run(): Promise<void> {
-		const avatarURL = await this.client.user.displayAvatarURL();
+		const avatarURL = await this.client.user!.displayAvatarURL();
 		const toSend = {
 			embeds: [{
 				color: this.config.colors.info,
 				author: {
-					name: this.client.user.username,
+					name: this.client.user!.username,
 					icon_url: avatarURL,
 					url: "https://dtel.austinhuang.me",
 				},
