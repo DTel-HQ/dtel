@@ -6,11 +6,11 @@ import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Processor from "../internals/processor";
 import i18n from "i18next";
+import { winston } from "../dtel";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
-	const { config, winston } = client;
 	let commandName: string;
 	let toRunPath: string;
 	let commandData: Command;
@@ -70,6 +70,17 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		}
 	}
 
+	commandData = commandData!; // It definitely exists if it got this far
+	if (commandData.callExclusive) {
+		const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
+		if (call) {
+			interaction.reply({
+				embeds: [client.errorEmbed(i18n.t("errors.callExclusive"))],
+			});
+			return;
+		}
+	}
+
 	let processorFile: Constructable<Processor>;
 	try {
 		if (client.config.devMode) {
@@ -83,10 +94,10 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		return;
 	}
 
-	const processorClass = new processorFile(client, interaction, commandData!);
+	const processorClass = new processorFile(client, interaction, commandData);
 	try {
 		const userPermissions = await client.getPerms(interaction.user.id);
-		switch (commandData!.permissionLevel) {
+		switch (commandData.permissionLevel) {
 			case PermissionLevel.maintainer: {
 				if (userPermissions != PermissionLevel.maintainer) return processorClass.notMaintainer();
 				break;

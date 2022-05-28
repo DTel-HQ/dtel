@@ -139,6 +139,22 @@ export default class CallClient implements CallsWithNumbers {
 		// TODO: Check for pre-existing calls and do embed stuff
 		// and that includes stuff like call-waiting
 
+		const otherSideInCall = await db.calls.findFirst({
+			select: { id: true },
+			where: {
+				OR: [{
+					toNum: this.toNum,
+				}, {
+					fromNum: this.toNum,
+				}],
+			},
+		});
+
+		if (otherSideInCall) {
+			throw new Error("otherSideInCall");
+		}
+
+
 		await db.calls.create({
 			data: {
 				...this,
@@ -362,7 +378,7 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async hangup(interaction: CommandInteraction): Promise<void> {
-		const sideInitiatingHangup: CallSide = this.from.channelID === interaction.channel?.id ? "from" : "to";
+		const sideInitiatingHangup: CallSide = this.from.channelID === interaction.channelId ? "from" : "to";
 
 		await db.calls.update({
 			where: {

@@ -45,6 +45,7 @@ const commands: Command[] = [
 		}],
 		guildOnly: false,
 		numberRequired: true,
+		callExclusive: true,
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,

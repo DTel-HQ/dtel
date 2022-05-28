@@ -93,7 +93,7 @@ class DTelClient extends Client {
 	}
 
 	async shardIdForChannelId(id: string): Promise<number> {
-		if (Number(process.env.SHARD_COUNT) == 1) return 0;
+		if (!process.env.SHARD_COUNT || Number(process.env.SHARD_COUNT) == 1) return 0;
 		const channelObject = await this.restAPI.get(`/channels/${id}`) as APITextChannel;
 
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));

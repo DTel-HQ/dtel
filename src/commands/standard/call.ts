@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { MessageEmbedOptions } from "discord.js";
+import { MessageActionRow, MessageButton, MessageEmbedOptions } from "discord.js";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
@@ -38,6 +38,42 @@ export default class Call extends Command {
 					// This works as when we error out in CallClient, we return a translation path instead of an error message
 					// Feel free to change it
 					if (e instanceof Error) {
+						if (e.message === "otherSideInCall") {
+							this.interaction.reply({
+								embeds: [{
+									color: this.config.colors.info,
+									...this.t("waitPrompt") as MessageEmbedOptions,
+								}],
+								components: [
+									new MessageActionRow()
+										.addComponents([
+											new MessageButton({
+												customId: "call-waitAccept",
+												label: this.t("waitAccept")!,
+												style: "PRIMARY",
+												emoji: "✅",
+											}),
+										])
+										.addComponents([
+											new MessageButton({
+												customId: "call-waitDeny",
+												label: this.t("waitDeny")!,
+												style: "SECONDARY",
+												emoji: "❌",
+											}),
+										]),
+								],
+							});
+
+							setTimeout(() => {
+								this.interaction.deleteReply().catch(() => null);
+							}, 60000);
+
+							// TODO: Deal with call waiting in some way
+
+							return;
+						}
+
 						this.interaction.reply({
 							embeds: [this.client.errorEmbed(this.t(`errors.${e.message}`))],
 							ephemeral: true,

@@ -54,6 +54,15 @@ export default {
 					text: "ID: {{ callID }}",
 				},
 			},
+
+			waitPrompt: {
+				title: "The number you have dialed is busy",
+				description: "Would you like to wait until the number is free? You can leave the queue at any time.",
+			},
+
+			// TODO: Maybe make these more generic? idk, yes/no buttons don't seem great
+			waitAccept: "Yes",
+			waitDeny: "No",
 		},
 
 		wizard: {

@@ -16,7 +16,7 @@ export default class Eval extends Command {
 		let payload = this.interaction.options.get("code", true).value as string;
 		try {
 			if (payload.startsWith("```js") && payload.endsWith("```")) payload = payload.substring(5, payload.length - 3);
-			const asyncEval = (code: string, returns: unknown) => `(async () => {\n${!returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
+			const asyncEval = (code: string, returns: unknown) => `(async () => {\n${returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
 			payload = payload
 				.replace("this.constants.client.token", "")
 				.replace(/\.token/g, "");

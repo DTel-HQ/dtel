@@ -28,7 +28,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		await this.db.numbers.create({
 			data: {
 				number: number,
-				channelID: this.interaction.channel!.id,
+				channelID: this.interaction.channelId!,
 				expiry,
 			},
 		});
