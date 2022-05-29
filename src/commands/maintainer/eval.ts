@@ -16,21 +16,25 @@ export default class Eval extends Command {
 		let payload = this.interaction.options.get("code", true).value as string;
 		try {
 			if (payload.startsWith("```js") && payload.endsWith("```")) payload = payload.substring(5, payload.length - 3);
-			const asyncEval = (code: string, returns: unknown) => `(async () => {\n${returns ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
+
+			const asyncPayload = (code: string) => `(async () => {\n${!payload.includes("return") ? `return ${code.trim()}` : `${code.trim()}`}\n})()`;
+
 			payload = payload
-				.replace("this.constants.client.token", "")
+				.replace("this.client.token", "")
 				.replace(/\.token/g, "");
+
 			const array = [
 				escapeRegex(this.client.token!),
 			];
 			const regex = new RegExp(array.join("|"), "g");
-			let result = await eval(asyncEval(payload, payload.includes("return")));
+			let result = await eval(asyncPayload(payload));
+
 			if (typeof result !== "string") result = inspect(result, false, 2);
 			result = result.replace(regex, "mfa.Jeff");
 			if (result.length <= 1980) {
 				this.interaction.reply({
 					embeds: [{
-						color: 0x00FF00,
+						color: config.colors.success,
 						description: `\`\`\`js\n${result}\`\`\``,
 						footer: {
 							text: `Execution time: ${process.hrtime(hrstart)[0]}s ${Math.floor(process.hrtime(hrstart)[1] / 1000000)}ms`,
@@ -40,7 +44,7 @@ export default class Eval extends Command {
 			} else {
 				this.interaction.reply({
 					embeds: [{
-						color: 0x3669FA,
+						color: config.colors.info,
 						title: `The eval results were too large!`,
 						description: `As such, I've logged them to a file. Here are the results!`,
 					}],

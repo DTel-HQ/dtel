@@ -6,6 +6,7 @@ const commands: Command[] = [
 		description: "Create a number for your channel",
 		guildOnly: false,
 		numberRequired: false,
+		notExecutableInCall: true,
 
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
@@ -45,7 +46,7 @@ const commands: Command[] = [
 		}],
 		guildOnly: false,
 		numberRequired: true,
-		callExclusive: true,
+		notExecutableInCall: true,
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,

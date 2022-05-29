@@ -1,9 +1,10 @@
+import { InteractionReplyOptions } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 export default class Help extends Command {
 	async run(): Promise<void> {
 		const avatarURL = await this.client.user!.displayAvatarURL();
-		const toSend = {
+		const toSend: InteractionReplyOptions = {
 			embeds: [{
 				color: this.config.colors.info,
 				author: {
@@ -64,19 +65,13 @@ export default class Help extends Command {
 					},
 				],
 				footer: {
-					text: "DTel V3 • Made with <3 by SunburntRock89, Rexogamer and the team",
+					text: "DTel V4 • Made with <3 by SunburntRock89, Rexogamer and the team",
 				},
 			}],
+
+			ephemeral: true,
 		};
 
-		try {
-			await this.interaction.user.send(toSend);
-			this.interaction.reply({
-				ephemeral: true,
-				content: "Sent! 📬",
-			});
-		} catch {
-			await this.interaction.reply({ ...toSend, ephemeral: true });
-		}
+		await this.interaction.reply(toSend);
 	}
 }

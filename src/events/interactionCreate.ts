@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CommandInteraction, Permissions, MessageComponentInteraction, ModalSubmitInteraction, Interaction } from "discord.js";
+import { CommandInteraction, Permissions, MessageComponentInteraction, ModalSubmitInteraction, Interaction, SnowflakeUtil } from "discord.js";
 import Commands from "../config/commands";
 import Command, { CommandType, PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
@@ -49,7 +49,18 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		}
 		case "MESSAGE_COMPONENT":
 		case "MODAL_SUBMIT": {
-			const split = (interaction as MessageComponentInteraction|ModalSubmitInteraction).customId.split("-");
+			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
+
+			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
+				interaction.reply({
+					content: i18n.t("This interaction has expired. Try running the command again.", { lng: interaction.locale }),
+					ephemeral: true,
+				});
+
+				return;
+			}
+
+			const split = typedInteraction.customId.split("-");
 			if (split.length < 2) {
 				interaction.reply({
 					embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
@@ -71,14 +82,19 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	}
 
 	commandData = commandData!; // It definitely exists if it got this far
-	if (commandData.callExclusive) {
-		const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
-		if (call) {
-			interaction.reply({
-				embeds: [client.errorEmbed(i18n.t("errors.callExclusive"))],
-			});
-			return;
-		}
+	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
+	if (commandData.useType === CommandType.call && !call) {
+		interaction.reply({
+			embeds: [client.errorEmbed(i18n.t("errors.onlyExecutableInCall"))],
+		});
+		return;
+	}
+
+	if (commandData.notExecutableInCall && call) {
+		interaction.reply({
+			embeds: [client.errorEmbed(i18n.t("errors.notExecutableInCall"))],
+		});
+		return;
 	}
 
 	let processorFile: Constructable<Processor>;

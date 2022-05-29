@@ -11,7 +11,7 @@ type numberPromote {
   embed        Json
   lastEdited   DateTime
   lastPromoted DateTime
-  lastMsg      String 
+  lastMsg      String
   lastUser     DateTime
 }
 
@@ -22,20 +22,23 @@ type numberVIP {
 }
 
 model Numbers {
-  number    String        @id @map("_id")
+  number    String         @id @map("_id")
   channelID String
+  guildID   String?
   blocked   String[]
   contacts  String[]
   expiry    DateTime
   promote   numberPromote?
   vip       numberVIP?
-  waiting   Boolean       @default(false)
+  waiting   Boolean        @default(false)
 
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
+  
+  guild GuildConfigs? @relation(fields: [guildID], references: id) 
 
   locale String @default("en-US")
-  @@index(fields: [channelID], name: "channel")
+  @@unique(fields: [channelID], name: "channel")
 }
 
 // Calls
@@ -50,7 +53,7 @@ type startTime {
 }
 
 model CallMessages {
-  id                 String   @id @map("_id") @db.ObjectId @default(auto())
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   callID             String
   call               Calls    @relation(fields: [callID], references: [id])
   forwardedMessageID String
@@ -69,7 +72,7 @@ model Calls {
   from Numbers @relation(name: "from", fields: [fromNum], references: [number])
 
   pickedUp   pickedUp?
-  randomCall Boolean @default(false)
+  randomCall Boolean   @default(false)
   started    startTime
 
   messages CallMessages[]
@@ -78,4 +81,13 @@ model Calls {
 
   @@index(fields: [toNum, fromNum], name: "participants")
   @@index(fields: [active], name: "active")
+}
+
+model GuildConfigs {
+  id String @id @map("_id")
+
+  whitelisted Boolean @default(false)
+  locale      String  @default("en-US")
+
+  numbers Numbers[]
 }

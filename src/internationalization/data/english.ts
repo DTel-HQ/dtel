@@ -68,6 +68,7 @@ export default {
 		wizard: {
 			errors: {
 				channelHasNumber: "This channel already has a number! (`{{ number }}`). You can use `/call` to make a call.",
+				unwhitelistedGuildHasNumber: "This server already has a number! (`{{ number }}`). Contact Customer Support at `*611` to request another number.",
 				numberInUse: "That number is already in use. Try another.",
 				numberInvalid: "Please enter a valid number.",
 				numberBadFormat: "Please enter a number starting with",
@@ -138,5 +139,7 @@ export default {
 
 	errors: {
 		unexpected: "An unexpected error occurred.",
+		notExecutableInCall: "This command can not be ran whilst in a call.",
+		onlyExecutableInCall: "This command can only be ran whilst in a call.",
 	},
 };

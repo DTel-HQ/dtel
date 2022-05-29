@@ -29,6 +29,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			data: {
 				number: number,
 				channelID: this.interaction.channelId!,
+				guildID: this.interaction.guildId!,
 				expiry,
 			},
 		});

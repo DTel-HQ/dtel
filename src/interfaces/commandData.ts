@@ -26,7 +26,7 @@ interface CommandData extends ChatInputApplicationCommandData {
 	permissionLevel: PermissionLevel;
 	useType: CommandType;
 
-	callExclusive?: boolean;
+	notExecutableInCall?: boolean;
 }
 export default CommandData;
 export { PermissionLevel, CommandType };
