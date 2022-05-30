@@ -21,6 +21,8 @@ export default {
 				numberMissingChannel: "We can't reach the other side. They probably removed our bot.",
 
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
+
+				couldntReachOtherSide: "We couldn't send a message to the other side. This is due to an incorrect configuration on the other end.",
 			},
 
 			initiated: {

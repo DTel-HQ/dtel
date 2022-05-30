@@ -33,6 +33,7 @@ export default class Wizard extends Command {
 				if (number && number.channelID !== this.interaction.channelId) {
 					return this.interaction.reply({
 						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasNumber", { number: number.number }))],
+						ephemeral: true,
 					});
 				}
 			} else {
@@ -43,6 +44,7 @@ export default class Wizard extends Command {
 		if (number) {
 			return this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: number.number }))],
+				ephemeral: true,
 			});
 		}
 

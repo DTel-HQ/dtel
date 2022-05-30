@@ -1,8 +1,8 @@
 import { Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, Serialized, ShardClientUtil, Snowflake, TextBasedChannel, TextChannel } from "discord.js";
-import { REST } from "@discordjs/rest";
+import { RequestData, REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, APIGuildMember } from "discord-api-types/v10";
+import { APITextChannel, APIGuildMember, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
@@ -56,40 +56,50 @@ class DTelClient extends Client {
 			.replace(/\s+/g, "");
 	}
 
-	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<string|null> {
-		let ch: TextChannel, m: Message;
-		try {
-			ch = await this.channels.fetch(channelID) as TextChannel;
-			m = await ch.send(options);
-			return m.id;
-		} catch {
-			const shardID = await this.shardIdForChannelId(channelID);
-			if (!shardID) throw new Error("channelNotFound");
+	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
+		// let ch: TextChannel, m: Message;
+		// try {
+		// 	ch = await this.channels.fetch(channelID) as TextChannel;
+		// 	m = await ch.send(options);
+		// 	return m.id;
+		// } catch {
+		// 	const shardID = await this.shardIdForChannelId(channelID);
+		// 	if (!shardID) throw new Error("channelNotFound");
 
-			let result: string | null | undefined;
-			try {
-				type ctx = { channelID: string; messageOptions: MessageOptions; };
-				result = await this.shard?.broadcastEval<string | null, ctx>(async(client: Client, context) => {
-					try {
-						const channel = await client.channels.fetch(context.channelID) as TextBasedChannel;
-						const msg = await channel.send(context.messageOptions as MessageOptions);
-						return msg.id;
-					} catch (e) {
-						return null;
-					}
-				}, {
-					context: {
-						channelID,
-						messageOptions: options,
-					},
-					shard: shardID,
-				});
-			} catch {
-				throw new Error("crossShardPermsFail");
-			}
+		// 	let result: string | null | undefined;
+		// 	try {
+		// 		type ctx = { channelID: string; messageOptions: MessageOptions; };
+		// 		result = await this.shard?.broadcastEval<string | null, ctx>(async(client: Client, context) => {
+		// 			try {
+		// 				const channel = await client.channels.fetch(context.channelID) as TextBasedChannel;
+		// 				const msg = await channel.send(context.messageOptions as MessageOptions);
+		// 				return msg.id;
+		// 			} catch (e) {
+		// 				return null;
+		// 			}
+		// 		}, {
+		// 			context: {
+		// 				channelID,
+		// 				messageOptions: options,
+		// 			},
+		// 			shard: shardID,
+		// 		});
+		// 	} catch {
+		// 		throw new Error("crossShardPermsFail");
+		// 	}
 
-			return result as string; // We know it exists as we checked for shard ID earlier
-		}
+		// 	return result as string; // We know it exists as we checked for shard ID earlier
+		// }
+
+		return this.restAPI.post(`/channels/${channelID}/messages`, {
+			body: options,
+		}) as Promise<RESTPostAPIChannelMessageResult>;
+	}
+
+	async editCrossShard(options: MessageOptions, channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
+		return this.restAPI.patch(`/channels/${channelID}/messages/${messageID}`, {
+			body: options,
+		}) as Promise<RESTPatchAPIChannelMessageResult>;
 	}
 
 	async shardIdForChannelId(id: string): Promise<number> {

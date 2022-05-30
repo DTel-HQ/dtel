@@ -2,6 +2,7 @@ import DTelClient from "./client";
 import { t } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions } from "discord.js";
+import { DiscordAPIError } from "@discordjs/rest";
 import { PermissionLevel } from "../interfaces/commandData";
 import { Calls, Numbers, pickedUp } from "@prisma/client";
 import { db } from "../database/db";
@@ -31,6 +32,9 @@ type CallsWithNumbers = Calls & {
 };
 export { CallsWithNumbers };
 
+// TODO: Add guild config reference to call documents
+// Use it to set a server wide locale for anything we need to reply to the user about
+
 export default class CallClient implements CallsWithNumbers {
 	primary = false;
 
@@ -44,7 +48,7 @@ export default class CallClient implements CallsWithNumbers {
 	started!: { at: Date, by: string };
 	active = true;
 
-	otherSideShardID = -1;
+	otherSideShardID = 0;
 
 	client: DTelClient;
 
@@ -147,32 +151,14 @@ export default class CallClient implements CallsWithNumbers {
 				}, {
 					fromNum: this.toNum,
 				}],
+
+				active: true,
 			},
 		});
 
 		if (otherSideInCall) {
 			throw new Error("otherSideInCall");
 		}
-
-
-		await db.calls.create({
-			data: {
-				...this,
-				client: undefined,
-				otherSideShardID: undefined,
-				primary: undefined,
-				to: undefined,
-				from: undefined,
-				messages: undefined,
-				pickedUp: {
-					set: {
-						at: null,
-						by: null,
-					},
-				},
-			},
-		});
-		this.client.calls.push(this);
 
 		// Don't bother sending it if we can find it on this shard
 		try {
@@ -210,36 +196,72 @@ export default class CallClient implements CallsWithNumbers {
 			else if (this.from.vip?.hidden) fromCallerDisplay = "Hidden";
 		}
 
-		this.client.sendCrossShard({
-			embeds: [{
-				color: this.client.config.colors.info,
+		try {
+			await this.client.sendCrossShard({
+				embeds: [{
+					color: this.client.config.colors.info,
+	
+					...(t("commands.call.incomingCall", {
+						lng: this.to.locale,
+						number: fromCallerDisplay,
+						callID: this.id,
+					}) as MessageEmbedOptions),
+				}],
+				components: [
+					new MessageActionRow()
+						.addComponents([
+							new MessageButton({
+								customId: "call-pickup",
+								label: t("commands.call.pickup")!,
+								style: "PRIMARY",
+								emoji: "📞",
+							}),
+						])
+						.addComponents([
+							new MessageButton({
+								customId: "call-hangup",
+								label: t("commands.call.hangup")!,
+								style: "SECONDARY",
+								emoji: "☎️",
+							}),
+						]),
+				],
+			}, this.to.channelID);
+		} catch (err: unknown) {
+			this.client.sendCrossShard({
+				embeds: [
+					this.client.errorEmbed(t("commands.call.errors.couldntReachOtherSide", { locale: this.locale } )),
+				],
+			}, this.from.channelID);
 
-				...(t("commands.call.incomingCall", {
-					lng: this.to.locale,
-					number: fromCallerDisplay,
-					callID: this.id,
-				}) as MessageEmbedOptions),
-			}],
-			components: [
-				new MessageActionRow()
-					.addComponents([
-						new MessageButton({
-							customId: "call-pickup",
-							label: t("commands.call.pickup")!,
-							style: "PRIMARY",
-							emoji: "📞",
-						}),
-					])
-					.addComponents([
-						new MessageButton({
-							customId: "call-hangup",
-							label: t("commands.call.hangup")!,
-							style: "SECONDARY",
-							emoji: "☎️",
-						}),
-					]),
-			],
-		}, this.to.channelID);
+			return;
+		}
+
+		await db.calls.create({
+			data: {
+				...this,
+				client: undefined,
+				otherSideShardID: undefined,
+				primary: undefined,
+				to: undefined,
+				from: undefined,
+				messages: undefined,
+				pickedUp: {
+					set: {
+						at: null,
+						by: null,
+					},
+				},
+			},
+		});
+		this.client.calls.push(this);
+	}
+
+
+	async setupPickupTimer(callNotifMsgID: string): Promise<void> {
+		setTimeout(async() => {
+
+		});
 	}
 
 	async pickup(interaction: MessageComponentInteraction, pickedUpBy: string): Promise<void> {
@@ -247,6 +269,12 @@ export default class CallClient implements CallsWithNumbers {
 			at: new Date(),
 			by: pickedUpBy,
 		};
+
+		await this.client.editCrossShard({
+			embeds: interaction.message.embeds,
+			components: [],
+		}, interaction.channelId, interaction.message.id).catch(() => null);
+
 
 		if (this.otherSideShardID) {
 			type ctx = { callID: string, pickedUp: pickedUp };
@@ -301,6 +329,8 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async handleMessage(message: Message): Promise<void> {
+		if (!this.pickedUp.by) return;
+
 		const userPerms = await this.client.getPerms(message.author.id);
 		const sideToSendTo = this.from.channelID === message.channel.id ? this.to : this.from;
 
@@ -369,7 +399,7 @@ export default class CallClient implements CallsWithNumbers {
 		await this.client.db.callMessages.create({
 			data: {
 				callID: this.id,
-				forwardedMessageID: forwardedMessageID as string,
+				forwardedMessageID: forwardedMessageID.id,
 				originalMessageID: message.id,
 				sender: message.author.id,
 				sentAt: new Date(),

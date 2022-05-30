@@ -10,6 +10,7 @@ import { winston } from "../dtel";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
+	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
 
 	let commandName: string;
 	let toRunPath: string;
@@ -21,6 +22,13 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
 			commandData = cmd;
+
+			if (commandData.notExecutableInCall && call) {
+				interaction.reply({
+					embeds: [client.errorEmbed(i18n.t("errors.notExecutableInCall"))],
+				});
+				return;
+			}
 
 			toRunPath = `${__dirname}/../commands`;
 
@@ -82,17 +90,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	}
 
 	commandData = commandData!; // It definitely exists if it got this far
-	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
 	if (commandData.useType === CommandType.call && !call) {
 		interaction.reply({
 			embeds: [client.errorEmbed(i18n.t("errors.onlyExecutableInCall"))],
-		});
-		return;
-	}
-
-	if (commandData.notExecutableInCall && call) {
-		interaction.reply({
-			embeds: [client.errorEmbed(i18n.t("errors.notExecutableInCall"))],
 		});
 		return;
 	}

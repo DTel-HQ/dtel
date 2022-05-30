@@ -79,7 +79,7 @@ abstract class Processor {
 			ephemeral: true,
 			embeds: [{
 				color: 0xFF0000,
-				title: ":x: No permission!",
+				title: ":x: Error!",
 				description: "You need a number to do this. Ask an admin to run `/wizard` to get one.",
 			}],
 		});
