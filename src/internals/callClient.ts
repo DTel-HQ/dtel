@@ -1,12 +1,12 @@
 import DTelClient from "./client";
-import { t } from "i18next";
+import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions } from "discord.js";
-import { DiscordAPIError } from "@discordjs/rest";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, Numbers, pickedUp } from "@prisma/client";
+import { Calls, GuildConfigs, Numbers, pickedUp } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
+import { APIMessage } from "discord-api-types/v10";
 
 type CallSide = "from" | "to";
 
@@ -22,14 +22,26 @@ interface CallOptions {
 	}
 }
 
-interface ClientCallParticipant extends Numbers {
-	locale: string,
-}
-
 type CallsWithNumbers = Calls & {
 	to: Numbers,
 	from: Numbers,
 };
+
+type NumbersWithGuilds = Numbers & {
+	guild?: GuildConfigs | null,
+};
+
+interface ClientCallParticipant extends NumbersWithGuilds {
+	locale: string,
+	t: TFunction,
+}
+
+type CallsWithNumbersAndGuilds = Calls & {
+	to: NumbersWithGuilds,
+	from: NumbersWithGuilds,
+};
+
+
 export { CallsWithNumbers };
 
 // TODO: Add guild config reference to call documents
@@ -43,7 +55,7 @@ export default class CallClient implements CallsWithNumbers {
 	fromNum = "";
 	to!: ClientCallParticipant;
 	from!: ClientCallParticipant;
-	pickedUp!: { at: Date; by: string; };
+	pickedUp: pickedUp | null = null;
 	randomCall = false;
 	started!: { at: Date, by: string };
 	active = true;
@@ -71,8 +83,8 @@ export default class CallClient implements CallsWithNumbers {
 		};
 	}
 
-	static async byID(client: DTelClient, options: { id?: string, doc?: CallsWithNumbers, side: CallSide }): Promise<CallClient> {
-		let callDoc: CallsWithNumbers;
+	static async byID(client: DTelClient, options: { id?: string, doc?: CallsWithNumbersAndGuilds, side: CallSide }): Promise<CallClient> {
+		let callDoc: CallsWithNumbersAndGuilds;
 		if (options.doc) {
 			callDoc = options.doc;
 		} else {
@@ -81,11 +93,19 @@ export default class CallClient implements CallsWithNumbers {
 					id: options.id,
 				},
 				include: {
-					to: true,
-					from: true,
+					to: {
+						include: {
+							guild: true,
+						},
+					},
+					from: {
+						include: {
+							guild: true,
+						},
+					},
 				},
 			});
-			if (!tempDoc) throw new Error(t("callNotFound"));
+			if (!tempDoc) throw new Error("callNotFound");
 			else callDoc = tempDoc;
 		}
 
@@ -93,9 +113,26 @@ export default class CallClient implements CallsWithNumbers {
 		callManager.primary = options.side === "from";
 		callManager.otherSideShardID = await client.shardIdForChannelId(options.side === "from" ? callDoc.to.channelID : callDoc.from.channelID);
 
+
+		const toLocale = callDoc.to.guild?.locale || "en-US";
+		const fromLocale = callDoc.from.guild?.locale || "en-US";
+
+		callManager.to.t = getFixedT(toLocale, undefined, "commands.call");
+		callManager.from.t = getFixedT(fromLocale, undefined, "commands.call");
+
+		callManager.to.locale = toLocale;
+		callManager.from.locale = fromLocale;
+
 		client.calls.push(callManager);
 
 		return callManager;
+	}
+
+	toSend(payload: MessageOptions): Promise<APIMessage> {
+		return this.client.sendCrossShard(payload, this.to.channelID);
+	}
+	fromSend(payload: MessageOptions): Promise<APIMessage> {
+		return this.client.sendCrossShard(payload, this.from.channelID);
 	}
 
 	async initiate(): Promise<void> {
@@ -119,15 +156,29 @@ export default class CallClient implements CallsWithNumbers {
 				}],
 			},
 			include: {
-				incomingCalls: true,
-				outgoingCalls: true,
+				incomingCalls: {
+					where: {
+						active: true,
+					},
+				},
+				outgoingCalls: {
+					where: {
+						active: true,
+					},
+				},
+				guild: true,
 			},
 		});
 
 		// TODO: Find out if the from side is able to call (ie not expired)
 		const fromNumber = participants.find(p => p.number === this.fromNum);
 		if (!fromNumber) throw new Error("invalidFrom");
-		this.from = fromNumber;
+		this.from = {
+			...fromNumber,
+
+			locale: fromNumber.guild?.locale || "en-US",
+			t: getFixedT(fromNumber.guild?.locale || "en-US", undefined, "commands.call"),
+		};
 
 		if (this.from.expiry < new Date()) throw new Error("thisSideExpired");
 
@@ -138,27 +189,19 @@ export default class CallClient implements CallsWithNumbers {
 		if (toNumber.expiry < new Date()) throw new Error("otherSideExpired");
 		if (toNumber.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
 
-		this.to = toNumber;
+		if (toNumber.incomingCalls.length > 0 || toNumber.outgoingCalls.length > 0) {
+			throw new Error("otherSideInCall");
+		}
+
+		this.to = {
+			...toNumber,
+
+			locale: toNumber.guild?.locale || "en-US",
+			t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
+		};
 
 		// TODO: Check for pre-existing calls and do embed stuff
 		// and that includes stuff like call-waiting
-
-		const otherSideInCall = await db.calls.findFirst({
-			select: { id: true },
-			where: {
-				OR: [{
-					toNum: this.toNum,
-				}, {
-					fromNum: this.toNum,
-				}],
-
-				active: true,
-			},
-		});
-
-		if (otherSideInCall) {
-			throw new Error("otherSideInCall");
-		}
 
 		// Don't bother sending it if we can find it on this shard
 		try {
@@ -197,14 +240,15 @@ export default class CallClient implements CallsWithNumbers {
 		}
 
 		try {
-			await this.client.sendCrossShard({
+			await this.toSend({
 				embeds: [{
 					color: this.client.config.colors.info,
-	
-					...(t("commands.call.incomingCall", {
-						lng: this.to.locale,
-						number: fromCallerDisplay,
-						callID: this.id,
+
+					...(this.to.t("incomingCall", {
+						context: {
+							number: fromCallerDisplay,
+							callID: this.id,
+						},
 					}) as MessageEmbedOptions),
 				}],
 				components: [
@@ -212,7 +256,7 @@ export default class CallClient implements CallsWithNumbers {
 						.addComponents([
 							new MessageButton({
 								customId: "call-pickup",
-								label: t("commands.call.pickup")!,
+								label: this.to.t("pickup")!,
 								style: "PRIMARY",
 								emoji: "📞",
 							}),
@@ -220,20 +264,20 @@ export default class CallClient implements CallsWithNumbers {
 						.addComponents([
 							new MessageButton({
 								customId: "call-hangup",
-								label: t("commands.call.hangup")!,
+								label: this.to.t("hangup")!,
 								style: "SECONDARY",
 								emoji: "☎️",
 							}),
 						]),
 				],
-			}, this.to.channelID);
+			});
 		} catch (err: unknown) {
-			this.client.sendCrossShard({
+			this.fromSend({
 				embeds: [
-					this.client.errorEmbed(t("commands.call.errors.couldntReachOtherSide", { locale: this.locale } )),
+					this.client.errorEmbed(this.from.t("errors.couldntReachOtherSide")),
 				],
-			}, this.from.channelID);
-
+			});
+		
 			return;
 		}
 
@@ -258,11 +302,11 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 
-	async setupPickupTimer(callNotifMsgID: string): Promise<void> {
-		setTimeout(async() => {
+	// async setupPickupTimer(callNotifMsgID: string): Promise<void> {
+	// 	setTimeout(async() => {
 
-		});
-	}
+	// 	});
+	// }
 
 	async pickup(interaction: MessageComponentInteraction, pickedUpBy: string): Promise<void> {
 		this.pickedUp = {
@@ -284,8 +328,8 @@ export default class CallClient implements CallsWithNumbers {
 				if (!callHandler) throw new Error("No handler");
 
 				callHandler.pickedUp = {
-					at: context.pickedUp.at as unknown as Date,
-					by: context.pickedUp.by as string,
+					at: new Date(context.pickedUp.at),
+					by: context.pickedUp.by,
 				};
 			}, {
 				shard: this.otherSideShardID,
@@ -309,27 +353,26 @@ export default class CallClient implements CallsWithNumbers {
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...(t("commands.call.thisSidePickedUp", {
+				...(this.from.t("thisSidePickedUp", {
 					lng: this.to.locale,
 					callID: this.id,
 				}) as MessageEmbedOptions),
 			}],
 		});
 
-		this.client.sendCrossShard({
+		this.fromSend({
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...(t("commands.call.otherSidePickedUp", {
-					lng: this.to.locale,
+				...(this.to.t("otherSidePickedUp", {
 					callID: this.id,
 				}) as MessageEmbedOptions),
 			}],
-		}, this.from.channelID);
+		});
 	}
 
 	async handleMessage(message: Message): Promise<void> {
-		if (!this.pickedUp.by) return;
+		if (!this.pickedUp?.by) return;
 
 		const userPerms = await this.client.getPerms(message.author.id);
 		const sideToSendTo = this.from.channelID === message.channel.id ? this.to : this.from;
@@ -387,7 +430,7 @@ export default class CallClient implements CallsWithNumbers {
 					toSend.embeds?.push(this.client.warningEmbed("", {
 						description: `File: **[${i.name}](${i.url})**`,
 						footer: {
-							text: t("commands.call.dontTrustStrangers"),
+							text: sideToSendTo.t("dontTrustStrangers"),
 						},
 					}));
 				}
@@ -409,6 +452,11 @@ export default class CallClient implements CallsWithNumbers {
 
 	async hangup(interaction: CommandInteraction): Promise<void> {
 		const sideInitiatingHangup: CallSide = this.from.channelID === interaction.channelId ? "from" : "to";
+		const thisSide = sideInitiatingHangup === "from" ? this.from : this.to;
+		const otherSide = thisSide === this.from ? this.to : this.from;
+
+		const thisSideT = getFixedT(thisSide.locale, undefined, "commands.hangup");
+		const otherSideT = getFixedT(otherSide.locale, undefined, "commands.hangup");
 
 		await db.calls.update({
 			where: {
@@ -421,36 +469,41 @@ export default class CallClient implements CallsWithNumbers {
 
 		this.client.calls.splice(this.client.calls.indexOf(this), 1);
 
-		const baseEmbed: MessageEmbedOptions = t("commands.hangup.embeds.baseEmbed", {
-			context: {
-				callID: this.id,
-				time: "",
-			},
-		});
-
 		let thisSideDesc, otherSideDesc;
 		if (this.pickedUp) {
-			thisSideDesc = t("commands.hangup.descriptions.pickedUp.thisSide");
-			otherSideDesc = t("commands.hangup.descriptions.pickedUp.otherSide");
+			thisSideDesc = thisSideT("descriptions.pickedUp.thisSide");
+			otherSideDesc = otherSideT("descriptions.pickedUp.otherSide");
 		} else {
-			thisSideDesc = t("commands.hangup.descriptions.notPickedUp.otherSide");
-			otherSideDesc = t("commands.hangup.descriptions.notPickedUp.otherSide");
+			thisSideDesc = thisSideT("descriptions.notPickedUp.otherSide");
+			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide");
 		}
 
 		interaction.reply({
 			embeds: [{
-				...baseEmbed,
+				...(thisSideT("embeds.baseEmbed", {
+					context: {
+						callID: this.id,
+						time: "",
+					},
+				}) as MessageEmbedOptions),
 				description: thisSideDesc,
 			}],
 		});
 
-		const otherSideChannelID = sideInitiatingHangup === "to" ? this.to.channelID : this.from.channelID;
-
 		this.client.sendCrossShard({
 			embeds: [{
-				...baseEmbed,
+				...(otherSideT("embeds.baseEmbed", {
+					context: {
+						callID: this.id,
+						time: "",
+					},
+				}) as MessageEmbedOptions),
 				description: otherSideDesc,
 			}],
-		}, otherSideChannelID);
+		}, otherSide.channelID);
+	}
+
+	async endHandler() {
+		// todo: remove this from db and client.call
 	}
 }

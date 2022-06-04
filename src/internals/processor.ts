@@ -51,10 +51,6 @@ abstract class Processor {
 			where: {
 				channelID: this.interaction.channelId!,
 			},
-			include: {
-				incomingCalls: true,
-				outgoingCalls: true,
-			},
 		});
 	}
 

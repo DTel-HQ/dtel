@@ -37,14 +37,13 @@ model Numbers {
   
   guild GuildConfigs? @relation(fields: [guildID], references: id) 
 
-  locale String @default("en-US")
   @@unique(fields: [channelID], name: "channel")
 }
 
 // Calls
 type pickedUp {
-  at DateTime?
-  by String?
+  at DateTime
+  by String
 }
 
 type startTime {

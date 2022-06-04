@@ -1,5 +1,5 @@
-import { Client, ClientOptions, Message, MessageEmbedOptions, MessageOptions, Serialized, ShardClientUtil, Snowflake, TextBasedChannel, TextChannel } from "discord.js";
-import { RequestData, REST } from "@discordjs/rest";
+import { Client, ClientOptions, MessageEmbedOptions, MessageOptions, ShardClientUtil, Snowflake } from "discord.js";
+import { REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
 import { APITextChannel, APIGuildMember, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
@@ -21,7 +21,7 @@ class DTelClient extends Client {
 		super(options);
 
 		this.restAPI = new REST();
-		this.restAPI.setToken(this.token || "");
+		this.restAPI.setToken(process.env.TOKEN || this.token || "");
 	}
 
 	errorEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
