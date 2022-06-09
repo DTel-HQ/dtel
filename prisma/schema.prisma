@@ -34,19 +34,14 @@ model Numbers {
 
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
-  
-  guild GuildConfigs? @relation(fields: [guildID], references: id) 
+
+  guild GuildConfigs? @relation(fields: [guildID], references: id)
 
   @@unique(fields: [channelID], name: "channel")
 }
 
 // Calls
-type pickedUp {
-  at DateTime
-  by String
-}
-
-type startTime {
+type atAndBy {
   at DateTime @default(now())
   by String
 }
@@ -70,9 +65,10 @@ model Calls {
   to   Numbers @relation(name: "to", fields: [toNum], references: [number])
   from Numbers @relation(name: "from", fields: [fromNum], references: [number])
 
-  pickedUp   pickedUp?
-  randomCall Boolean   @default(false)
-  started    startTime
+  pickedUp   atAndBy?
+  randomCall Boolean  @default(false)
+  started    atAndBy?
+  ended      atAndBy?
 
   messages CallMessages[]
 

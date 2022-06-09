@@ -35,25 +35,41 @@ export default {
 
 			incomingCall: {
 				title: "Incoming call",
-				description: "There is an incoming call from `{{ number }}`. Pick it up, hang up or wait it out.",
+				description: "There is an incoming call from `{{ number }}`. Pick up, hang up or wait it out.",
 				footer: {
 					text: "ID: {{ callID }}",
 				},
 			},
 
-			thisSidePickedUp: {
-				title: "You picked up the call.",
-				description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
-				footer: {
-					text: "ID: {{ callID }}",
+			pickedUp: {
+				toSide: {
+					title: "You picked up the call.",
+					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
+					footer: {
+						text: "ID: {{ callID }}",
+					},
+				},
+
+				fromSide: {
+					title: "The other side picked up!",
+					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
+					footer: {
+						text: "ID: {{ callID }}",
+					},
 				},
 			},
 
-			otherSidePickedUp: {
-				title: "The other side picked up!",
-				description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
-				footer: {
-					text: "ID: {{ callID }}",
+
+			missedCall: {
+				fromSide: {
+					color: 0xFF0000,
+					title: "Call expired",
+					description: "The other side did not pick up (within 2 minutes)",
+				},
+				toSide: {
+					color: 0xFF0000,
+					title: "Call expired",
+					description: "You missed the call (not answered within 2 minutes)",
 				},
 			},
 
@@ -117,12 +133,10 @@ export default {
 
 		hangup: {
 			baseEmbed: {
-				thisSide: {
-					color: 0xFF0000,
-					title: "The call has ended!",
-					footer: {
-						text: "{{ callID }}",
-					},
+				color: 0xFF0000,
+				title: "The call has ended!",
+				footer: {
+					text: "{{ callID }}",
 				},
 			},
 			descriptions: {

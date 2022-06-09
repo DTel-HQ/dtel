@@ -3,10 +3,14 @@ import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, GuildConfigs, Numbers, pickedUp } from "@prisma/client";
+import { Calls, GuildConfigs, Numbers, atAndBy } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
-import { APIMessage } from "discord-api-types/v10";
+import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+
+dayjs.extend(relativeTime);
 
 type CallSide = "from" | "to";
 
@@ -44,9 +48,6 @@ type CallsWithNumbersAndGuilds = Calls & {
 
 export { CallsWithNumbers };
 
-// TODO: Add guild config reference to call documents
-// Use it to set a server wide locale for anything we need to reply to the user about
-
 export default class CallClient implements CallsWithNumbers {
 	primary = false;
 
@@ -55,9 +56,10 @@ export default class CallClient implements CallsWithNumbers {
 	fromNum = "";
 	to!: ClientCallParticipant;
 	from!: ClientCallParticipant;
-	pickedUp: pickedUp | null = null;
+	pickedUp: atAndBy | null = null;
 	randomCall = false;
 	started!: { at: Date, by: string };
+	ended: atAndBy | null = null;
 	active = true;
 
 	otherSideShardID = 0;
@@ -69,6 +71,9 @@ export default class CallClient implements CallsWithNumbers {
 
 		if (dbCallDoc) {
 			Object.assign(this, dbCallDoc);
+
+			if (!this.pickedUp?.by) this.setupPickupTimer();
+
 			return;
 		}
 		options = options as CallOptions; // Strict mode avoider
@@ -123,8 +128,6 @@ export default class CallClient implements CallsWithNumbers {
 		callManager.to.locale = toLocale;
 		callManager.from.locale = fromLocale;
 
-		client.calls.push(callManager);
-
 		return callManager;
 	}
 
@@ -170,7 +173,7 @@ export default class CallClient implements CallsWithNumbers {
 			},
 		});
 
-		// TODO: Find out if the from side is able to call (ie not expired)
+
 		const fromNumber = participants.find(p => p.number === this.fromNum);
 		if (!fromNumber) throw new Error("invalidFrom");
 		this.from = {
@@ -239,16 +242,15 @@ export default class CallClient implements CallsWithNumbers {
 			else if (this.from.vip?.hidden) fromCallerDisplay = "Hidden";
 		}
 
+		let notificationMessageID: string;
 		try {
-			await this.toSend({
+			notificationMessageID = (await this.toSend({
 				embeds: [{
 					color: this.client.config.colors.info,
 
 					...(this.to.t("incomingCall", {
-						context: {
-							number: fromCallerDisplay,
-							callID: this.id,
-						},
+						number: fromCallerDisplay,
+						callID: this.id,
 					}) as MessageEmbedOptions),
 				}],
 				components: [
@@ -270,14 +272,14 @@ export default class CallClient implements CallsWithNumbers {
 							}),
 						]),
 				],
-			});
+			})).id;
 		} catch (err: unknown) {
 			this.fromSend({
 				embeds: [
 					this.client.errorEmbed(this.from.t("errors.couldntReachOtherSide")),
 				],
 			});
-		
+
 			return;
 		}
 
@@ -290,23 +292,43 @@ export default class CallClient implements CallsWithNumbers {
 				to: undefined,
 				from: undefined,
 				messages: undefined,
-				pickedUp: {
-					set: {
-						at: null,
-						by: null,
-					},
-				},
 			},
 		});
 		this.client.calls.push(this);
+
+		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
 	}
 
 
-	// async setupPickupTimer(callNotifMsgID: string): Promise<void> {
-	// 	setTimeout(async() => {
+	async setupPickupTimer(callNotifMsgID?: string): Promise<void> {
+		setTimeout(async() => {
+			if (this.pickedUp?.by) return;
 
-	// 	});
-	// }
+			try {
+				if (callNotifMsgID) {
+					const callMsg = await this.client.restAPI.get(`/channels/${this.to.channelID}/messages/${callNotifMsgID}`) as RESTGetAPIChannelMessageResult;
+					await this.client.editCrossShard({
+						embeds: callMsg.embeds,
+						components: [],
+					}, this.to.channelID, callNotifMsgID);
+				}
+
+				// TODO: Mailbox
+
+
+				this.fromSend({
+					embeds: [this.to.t("missedCall.fromSide") as MessageEmbedOptions],
+				});
+				this.toSend({
+					embeds: [this.to.t("missedCall.toSide") as MessageEmbedOptions],
+				});
+			} catch {
+				// Ignore
+			}
+
+			this.endHandler();
+		}, 2 * 60 * 1000);
+	}
 
 	async pickup(interaction: MessageComponentInteraction, pickedUpBy: string): Promise<void> {
 		this.pickedUp = {
@@ -321,7 +343,7 @@ export default class CallClient implements CallsWithNumbers {
 
 
 		if (this.otherSideShardID) {
-			type ctx = { callID: string, pickedUp: pickedUp };
+			type ctx = { callID: string, pickedUp: atAndBy };
 			await this.client.shard?.broadcastEval<void, ctx>(async(_client: Client, context): Promise<void> => {
 				const client = _client as DTelClient;
 				const callHandler = client.calls.find(c => c.id === context.callID);
@@ -353,7 +375,7 @@ export default class CallClient implements CallsWithNumbers {
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...(this.from.t("thisSidePickedUp", {
+				...(this.from.t("pickedUp.toSide", {
 					lng: this.to.locale,
 					callID: this.id,
 				}) as MessageEmbedOptions),
@@ -364,7 +386,7 @@ export default class CallClient implements CallsWithNumbers {
 			embeds: [{
 				color: this.client.config.colors.success,
 
-				...(this.to.t("otherSidePickedUp", {
+				...(this.to.t("pickedUp.fromSide", {
 					callID: this.id,
 				}) as MessageEmbedOptions),
 			}],
@@ -378,8 +400,6 @@ export default class CallClient implements CallsWithNumbers {
 		const sideToSendTo = this.from.channelID === message.channel.id ? this.to : this.from;
 
 		const toSend: MessageOptions = { content: `**${message.author.tag}`, embeds: [] };
-
-		// TODO: images
 
 		if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
 			toSend.content += `(${message.author.id})`;
@@ -458,15 +478,6 @@ export default class CallClient implements CallsWithNumbers {
 		const thisSideT = getFixedT(thisSide.locale, undefined, "commands.hangup");
 		const otherSideT = getFixedT(otherSide.locale, undefined, "commands.hangup");
 
-		await db.calls.update({
-			where: {
-				id: this.id,
-			},
-			data: {
-				active: false,
-			},
-		});
-
 		this.client.calls.splice(this.client.calls.indexOf(this), 1);
 
 		let thisSideDesc, otherSideDesc;
@@ -478,13 +489,13 @@ export default class CallClient implements CallsWithNumbers {
 			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide");
 		}
 
+		const callLength = dayjs(this.started.at).fromNow(true);
+
 		interaction.reply({
 			embeds: [{
-				...(thisSideT("embeds.baseEmbed", {
-					context: {
-						callID: this.id,
-						time: "",
-					},
+				...(thisSideT("baseEmbed", {
+					callID: this.id,
+					time: callLength,
 				}) as MessageEmbedOptions),
 				description: thisSideDesc,
 			}],
@@ -492,18 +503,29 @@ export default class CallClient implements CallsWithNumbers {
 
 		this.client.sendCrossShard({
 			embeds: [{
-				...(otherSideT("embeds.baseEmbed", {
-					context: {
-						callID: this.id,
-						time: "",
-					},
+				...(otherSideT("baseEmbed", {
+					callID: this.id,
+					time: callLength,
 				}) as MessageEmbedOptions),
 				description: otherSideDesc,
 			}],
 		}, otherSide.channelID);
+
+		this.endHandler(interaction.user.id);
 	}
 
-	async endHandler() {
-		// todo: remove this from db and client.call
+	async endHandler(endedBy = ""): Promise<void> {
+		db.calls.update({
+			where: {
+				id: this.id,
+			},
+			data: {
+				active: false,
+				ended: {
+					at: new Date(),
+					by: endedBy ? endedBy : "system",
+				},
+			},
+		}).catch(() => null);
 	}
 }
