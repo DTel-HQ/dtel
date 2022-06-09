@@ -21,6 +21,33 @@ const commands: Command[] = [
 		useType: CommandType.standard,
 	},
 	{
+		name: "links",
+		description: `Shows all of our links.`,
+		guildOnly: false,
+		numberRequired: false,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
+		name: "invite",
+		description: `Shows the bot invite link`,
+		guildOnly: false,
+		numberRequired: false,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
+		name: "info",
+		description: `Provides information about the bot`,
+		guildOnly: false,
+		numberRequired: false,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
 		name: "eval",
 		description: `Evaluates some JS code`,
 		options: [{

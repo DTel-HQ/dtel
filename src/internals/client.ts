@@ -8,7 +8,7 @@ import { winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
 
-class DTelClient extends Client {
+class DTelClient extends Client<true> {
 	config = config;
 	restAPI: REST;
 

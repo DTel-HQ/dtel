@@ -151,7 +151,171 @@ export default {
 			},
 		},
 
+		help: {
+			embed: {
+				title: "DTel's commands",
+				description: "For more information, use `>info`, `>links` or call Customer Support (`>dial *611`).",
+				fields: [
+					{
+						name: "Get yourself a number to call others!",
+						value: "Use `>wizard` and follow the prompts. Once you've got one, you can...",
+					},
+					{
+						name: ">dial / >call",
+						value: "Dial a specific DTel number you have in mind. Or...",
+					},
+					{
+						name: ">rdial / >rcall",
+						value: "Dial a random number from the yellowpages (`*411`). (To register your number in the yellowpages, `>dial *411`.)",
+					},
+					{
+						name: ">status",
+						value: "See how long a call has been going for, plus the message count and call ID.",
+					},
+					{
+						name: ">block",
+						value: "Block a number from calling you.",
+					},
+					{
+						name: ">contacts",
+						value: "Your personal contact book of DTel numbers.",
+					},
+					{
+						name: ">mention",
+						value: "Get mentioned when there's an incoming call (guild only).",
+					},
+					{
+						name: ">transfer",
+						value: "Transfer the other side of a call to another number.",
+					},
+					{
+						name: "Currency commands",
+						value: "More information about the currency [here](http://dtel.austinhuang.me/en/latest/Payment/).\n• `>dial *233`: Renew your number registration using credits.\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
+					},
+					{
+						name: "Mailbox commands",
+						value: "\n• `>mailbox`: Check mailbox messages or create one.\n• `>message`: Write a message to other number's mailbox.",
+					},
+					{
+						name: ">upgrade",
+						value: "Upgrade your number to a VIP number. Use this to see all the benefits!",
+					},
+					{
+						name: "I don't really need to explain these... right, my master?",
+						value: "`>help`, `>info`, `>invite`, `>links`, `>prefix` and `>ping`",
+					},
+				],
+				footer: {
+					text: "DTel V4 • Made with <3 by SunburntRock89, Rexogamer and the team",
+				},
+			},
+		},
+
+		info: {
+			embed: {
+				title: "📖 DTel Information",
+				description: `For command help, use \`>help\`. More detailed documentation is available at [my website]({{ siteLink }}).`,
+				fields: [
+					{
+						name: "📞 Getting a number",
+						value: "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.",
+					},
+					{
+						name: "✏ Numbers",
+						value: "Most numbers have a prefix of `03XX`, where `XX` represents your shard number. There are some numbers with a prefix of `0900`, which are DM numbers (numbers you can assign in a direct message with the client), and they act the same as `03XX` numbers, which can *also* have the same digits as `03XX` numbers. Numbers starting with `0800` or `0844`, as well as short codes starting with `*` or `#` are for special uses.",
+					},
+					{
+						name: "💰 Credits",
+						value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page]({{ paymentLink }}) for details.\nAfter recharging, dial \`*233\` or \`>balance\` to check balance.`,
+					},
+					{
+						name: "🔖 Phonebook",
+						value: "To use the phonebook, first dial `*411`. You can scroll through the phonebook by pressing `1`, add/edit/remove your number from the phonebook by pressing `2`, and check special numbers by pressing `3`.",
+					},
+					{
+						name: "📥 Invite the bot",
+						value: `Type \`>invite\` or click this button: [<:dl:382568980218511361>]({{ inviteLink }})`,
+					},
+					{
+						name: "📋 Suggest a feature",
+						value: `Suggest a feature for DTel [here]({{ suggestLink }}) and we will take a look at it.`,
+					},
+					{
+						name: "💬 Join our team",
+						value: `Strengthen our support team by [applying]({{ applyLink }}). Applications will be looked at when we're looking to hire, don't ask about the status of it.`,
+					},
+					{
+						name: "📌 Official Server",
+						value: "{{ guildInvite }}",
+					},
+					{
+						name: ":desktop: Official Website",
+						value: "{{ siteLink }}",
+					},
+				],
+				footer: {
+					text: "DTel V3 - made with <3 by SunburntRock89 and the team",
+				},
+			},
+		},
+
+		links: {
+			embed: {
+				title: "List of *all* the links",
+				fields: [
+					{
+						name: "🔗 Invite the bot",
+						value: `[Right here!]({{ botInvite }})`,
+						inline: true,
+					},
+					{
+						name: "🌎 Join our support guild!",
+						value: `[Join now]({{ guildInvite }})`,
+						inline: true,
+					},
+					{
+						name: "💻 Visit our website!",
+						value: `[DTel's website.]({{ siteLink }})`,
+						inline: true,
+					},
+					{
+						name: "📂 View our GitHub",
+						value: `[We are open source!]({{ githubLink }})`,
+						inline: true,
+					},
+					{
+						name: "💖 Support us!",
+						value: `[How to donate?]({{ vipLink }})`,
+						inline: true,
+					},
+					{
+						name: "📋 Vote for us!",
+						value: `[Get your free credits!]({{ voteLink }})`,
+						inline: true,
+					},
+					{
+						name: `{{ donatorPhone }} VIP Numbers`,
+						value: `[How they work]({{ vipLink }})`,
+						inline: true,
+					},
+					{
+						name: "💡 Suggest a feature!",
+						value: `[Suggestions page]({{ suggestLink }})`,
+						inline: true,
+					},
+					{
+						name: "💪 Join our team!",
+						value: `[Apply now!]({{ applyLink }})`,
+						inline: true,
+					},
+				],
+				footer: {
+					text: "DTel V3 - made with <3 by Austin Huang, Mitchell Rademaker and their team",
+				},
+			},
+		},
 	},
+
 
 	errors: {
 		unexpected: "An unexpected error occurred.",

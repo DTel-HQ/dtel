@@ -72,7 +72,7 @@ export default {
 
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/wHjMpX",
-	botInvite: "https://discordapp.com/oauth2/authorize?client_id=377609965554237453&scope=bot&permissions=125953",
+	botInvite: "https://discord.com/api/oauth2/authorize?client_id=377609965554237453&permissions=274877990912&scope=bot%20applications.commands",
 	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
 	githubLink: "https://github.com/DTel-HQ/dtel",
 	guidelink: "https://dtel.austinhuang.me/en/latest/Customer-Support-Guide/",
