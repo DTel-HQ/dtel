@@ -14,15 +14,7 @@ module.exports = {
 		es6: true,
 		node: true,
 	},
-	globals: {
-		aliases: true,
-		winston: true,
-		config: true,
-		client: true,
-		embeds: true,
-		r: true,
-		reload: true,
-	},
+	ignorePatterns: ["build/**", "dist/**", "node_modules/**"],
 	rules: {
 		"require-atomic-updates": 0,
 		"no-compare-neg-zero": "error",

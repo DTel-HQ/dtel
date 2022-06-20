@@ -1,4 +1,3 @@
-import { MessageEmbedOptions } from "discord.js";
 import config from "../../config/config";
 
 export default {

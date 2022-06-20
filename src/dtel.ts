@@ -2,8 +2,6 @@ import { Interaction, Message } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
-// import init, { DTelDatabase } from "./database/database";
-import auth from "./config/auth";
 import i18ndata from "./internationalization/i18n";
 import Client from "./internals/client";
 import Console from "./internals/console";

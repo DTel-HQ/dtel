@@ -1,3 +1,4 @@
+/* eslint-disable */
 // This embed is used in DTel HQ (the support server)'s #info channel.
 const embed = {
 	embed: {

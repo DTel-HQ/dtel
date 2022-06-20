@@ -4,7 +4,7 @@ import config from "../config/config";
 import CallClient from "./callClient";
 import { APITextChannel, APIGuildMember, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult, APIUser, RESTGetAPIUserResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
-import { client, winston } from "../dtel";
+import { winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
 
@@ -57,40 +57,6 @@ class DTelClient extends Client<true> {
 	}
 
 	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
-		// let ch: TextChannel, m: Message;
-		// try {
-		// 	ch = await this.channels.fetch(channelID) as TextChannel;
-		// 	m = await ch.send(options);
-		// 	return m.id;
-		// } catch {
-		// 	const shardID = await this.shardIdForChannelId(channelID);
-		// 	if (!shardID) throw new Error("channelNotFound");
-
-		// 	let result: string | null | undefined;
-		// 	try {
-		// 		type ctx = { channelID: string; messageOptions: MessageOptions; };
-		// 		result = await this.shard?.broadcastEval<string | null, ctx>(async(client: Client, context) => {
-		// 			try {
-		// 				const channel = await client.channels.fetch(context.channelID) as TextBasedChannel;
-		// 				const msg = await channel.send(context.messageOptions as MessageOptions);
-		// 				return msg.id;
-		// 			} catch (e) {
-		// 				return null;
-		// 			}
-		// 		}, {
-		// 			context: {
-		// 				channelID,
-		// 				messageOptions: options,
-		// 			},
-		// 			shard: shardID,
-		// 		});
-		// 	} catch {
-		// 		throw new Error("crossShardPermsFail");
-		// 	}
-
-		// 	return result as string; // We know it exists as we checked for shard ID earlier
-		// }
-
 		return this.restAPI.post(`/channels/${channelID}/messages`, {
 			body: options,
 		}) as Promise<RESTPostAPIChannelMessageResult>;
@@ -135,7 +101,21 @@ class DTelClient extends Client<true> {
 	}
 
 	makeAvatarURL(user: APIUser): string {
-		return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
+		const base = this.options?.http?.cdn;
+
+		let url = `${base}/avatars`;
+		// avatar starts with a_ if animated
+		// return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
+		if (user.avatar) {
+			url += `/${user.id}/${user.avatar}`;
+		} else {
+			url += `/${user.discriminator}`;
+		}
+
+		if (user.avatar?.startsWith("a_")) url += "gif";
+		else url += "png";
+
+		return url;
 	}
 }
 
