@@ -5,6 +5,28 @@ export default {
 	languages: ["en-**"],
 
 	commands: {
+		balance: {
+			errors: {
+				noAccount: "That user doesn't have an account.",
+			},
+
+			embed: {
+				title: "Account information for {{ user }}",
+				fields: [{
+					name: "Credits",
+					value: "{{ creditsEmoji }} {{ account.balance }}",
+					inline: true,
+				}, {
+					name: "VIP Months",
+					value: "{{ account.vipMonthsRemaining }}",
+					inline: true,
+				}, {
+					name: "Get VIP Months",
+					value: "{{ paymentLink }}",
+				}],
+			},
+		},
+
 		call: {
 			pickup: "Pick up",
 			hangup: "Hang up",

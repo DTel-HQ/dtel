@@ -5,7 +5,7 @@ import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction
 import DTelClient from "./client";
 import config from "../config/config";
 import CommandDataInterface, { CommandType } from "../interfaces/commandData";
-import { Numbers } from "@prisma/client";
+import { Numbers, Accounts } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
 
@@ -19,6 +19,7 @@ abstract class Processor {
 	interaction: ChannelBasedInteraction;
 	commandData: CommandDataInterface;
 	number: Numbers | null = null;
+	account: Accounts | null = null;
 
 	call?: CallClient;
 
@@ -47,11 +48,34 @@ abstract class Processor {
 	abstract run(): void;
 
 	async fetchNumber(): Promise<Numbers | null> {
-		return this.db.numbers.findFirst({
+		return this.db.numbers.findUnique({
 			where: {
 				channelID: this.interaction.channelId!,
 			},
 		});
+	}
+
+	async fetchAccount(): Promise<Accounts> {
+		let account = await this.db.accounts.findUnique({
+			where: {
+				id: this.interaction.user.id,
+			},
+		});
+
+		if (!account) {
+			account = await this.db.accounts.create({
+				data: {
+					id: this.interaction.user.id,
+				},
+				select: {
+					id: true,
+					dailyClaimed: true,
+					vipMonthsRemaining: true,
+				},
+			});
+		}
+
+		return account;
 	}
 
 	async _run(): Promise<void> {
@@ -60,10 +84,15 @@ abstract class Processor {
 			if (!this.call) {
 				return this.noCallFound();
 			}
-		} else if (this.commandData.numberRequired) {
-			this.number = await this.fetchNumber();
-			if (!this.number) {
-				return this.noNumberFound();
+		} else {
+			if (this.commandData.numberRequired) {
+				this.number = await this.fetchNumber();
+				if (!this.number) {
+					return this.noNumberFound();
+				}
+			}
+			if (this.commandData.accountRequired) {
+				this.account = await this.fetchAccount();
 			}
 		}
 		this.run();

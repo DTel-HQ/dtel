@@ -2,9 +2,9 @@ import { Client, ClientOptions, MessageEmbedOptions, MessageOptions, ShardClient
 import { REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, APIGuildMember, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APITextChannel, APIGuildMember, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult, APIUser, RESTGetAPIUserResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
-import { winston } from "../dtel";
+import { client, winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
 
@@ -109,6 +109,10 @@ class DTelClient extends Client<true> {
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
+	async getUser(id: string): Promise<APIUser> {
+		return this.restAPI.get(`/users/${id}`) as Promise<RESTGetAPIUserResult>;
+	}
+
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
 		// We don't deal with serverAdmin here
 		if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
@@ -128,6 +132,10 @@ class DTelClient extends Client<true> {
 		else if (roles.includes(config.supportGuild.roles.donator)) return PermissionLevel.donator;
 
 		return PermissionLevel.none;
+	}
+
+	makeAvatarURL(user: APIUser): string {
+		return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
 	}
 }
 

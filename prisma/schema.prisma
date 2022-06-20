@@ -86,3 +86,11 @@ model GuildConfigs {
 
   numbers Numbers[]
 }
+
+model Accounts {
+  id String @id @map("_id")
+
+  balance Int @default(0)
+  dailyClaimed Boolean @default(false)
+  vipMonthsRemaining Int @default(0)
+}

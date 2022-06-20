@@ -5,7 +5,7 @@ export default {
 		"137589790538334208", // Sun
 		"124989722668957700", // Mitchell
 	],
-	devMode: false,
+	devMode: true,
 	devOnlyMode: false,
 	shardCount: 1,
 	botID: "377609965554237453",

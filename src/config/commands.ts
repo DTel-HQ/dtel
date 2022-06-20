@@ -30,6 +30,15 @@ const commands: Command[] = [
 		useType: CommandType.standard,
 	},
 	{
+		name: "ping",
+		description: `Shows the latency between our server and Discord.`,
+		guildOnly: false,
+		numberRequired: false,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
 		name: "invite",
 		description: `Shows the bot invite link`,
 		guildOnly: false,
@@ -37,6 +46,25 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+	},
+	{
+		name: "balance",
+		description: "Shows your account balance",
+		accountRequired: true,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+		options: [{
+			name: "user",
+			description: "User you want to get the balance of (if you're in the same server)",
+			required: false,
+			type: "USER",
+		}, {
+			name: "id",
+			description: "ID of user you want to get the balance of",
+			required: false,
+			type: "STRING",
+		}],
 	},
 	{
 		name: "info",

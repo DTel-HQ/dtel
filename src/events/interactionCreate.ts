@@ -7,6 +7,7 @@ import DTelClient from "../internals/client";
 import Processor from "../internals/processor";
 import i18n from "i18next";
 import { winston } from "../dtel";
+import config from "../config/config";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
@@ -104,7 +105,11 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		}
 		processorFile = require(toRunPath!).default;
 		if (!processorFile) throw new Error();
-	} catch {
+	} catch (e) {
+		if (config.devMode) {
+			console.error(e);
+		}
+
 		client.winston.error(`Cannot process interaction for/from command: ${commandName!}`);
 		interaction.reply(":x: Interaction not yet implemented.");
 		return;

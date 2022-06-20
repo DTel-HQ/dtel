@@ -1,5 +1,5 @@
 ----- Standard ------
-balance
+
 block
 
 coinflip
@@ -15,7 +15,7 @@ mailbox
 mention
 message
 pay
-ping
+
 
 promote
 rcall
