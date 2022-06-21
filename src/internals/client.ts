@@ -41,21 +41,6 @@ class DTelClient extends Client<true> {
 		};
 	}
 
-	// TODO: Convert to re2 somehow
-	parseNumber(input: string): string {
-		return input.replace(/(a|b|c)/ig, "2")
-			.replace(/(d|e|f)/ig, "3")
-			.replace(/(g|h|i)/ig, "4")
-			.replace(/(j|k|l)/ig, "5")
-			.replace(/(m|n|o)/ig, "6")
-			.replace(/(p|q|r|s)/ig, "7")
-			.replace(/(t|u|v)/ig, "8")
-			.replace(/(w|x|y|z)/ig, "9")
-			.replace(/-/ig, "")
-			.replace(/("("|")")/ig, "")
-			.replace(/\s+/g, "");
-	}
-
 	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
 		return this.restAPI.post(`/channels/${channelID}/messages`, {
 			body: options,
@@ -93,6 +78,7 @@ class DTelClient extends Client<true> {
 		const roles = memberInSupportServer.roles;
 
 		if (roles.includes(config.supportGuild.roles.boss)) return PermissionLevel.maintainer;
+		else if (roles.includes(config.supportGuild.roles.manager)) return PermissionLevel.manager;
 		else if (roles.includes(config.supportGuild.roles.customerSupport)) return PermissionLevel.customerSupport;
 		else if (roles.includes(config.supportGuild.roles.contributor)) return PermissionLevel.contributor;
 		else if (roles.includes(config.supportGuild.roles.donator)) return PermissionLevel.donator;

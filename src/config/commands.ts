@@ -50,7 +50,7 @@ const commands: Command[] = [
 	{
 		name: "balance",
 		description: "Shows your account balance",
-		accountRequired: true,
+		accountRequired: false, // Account is grabbed in situ
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
@@ -71,6 +71,16 @@ const commands: Command[] = [
 		description: `Provides information about the bot`,
 		guildOnly: false,
 		numberRequired: false,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
+		name: "daily",
+		description: `Claim your daily credit allowance`,
+		guildOnly: false,
+		numberRequired: false,
+		accountRequired: true,
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,

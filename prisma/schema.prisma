@@ -91,6 +91,6 @@ model Accounts {
   id String @id @map("_id")
 
   balance Int @default(0)
-  dailyClaimed Boolean @default(false)
+  dailyClaimedAt DateTime?
   vipMonthsRemaining Int @default(0)
 }

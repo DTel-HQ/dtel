@@ -6,9 +6,16 @@ import Command from "../../internals/commandProcessor";
 
 export default class Wizard extends Command {
 	async run(): Promise<void> {
-		let number: Numbers | null = null;
+		const number: Numbers | null = await this.fetchNumber();
 
-		if (!number && this.interaction.guild) {
+		if (number) {
+			return this.interaction.reply({
+				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: number.number }))],
+				ephemeral: true,
+			});
+		}
+
+		if (this.interaction.guild) {
 			const guildConf = await this.db.guildConfigs.findUnique({
 				where: {
 					id: this.interaction.guild.id,
@@ -20,32 +27,28 @@ export default class Wizard extends Command {
 
 
 			if (!guildConf?.whitelisted) {
-				if (guildConf?.numbers?.length && guildConf?.numbers?.length > 0) {
-					number = guildConf.numbers[0];
+				let numberCount = 0;
+				if (guildConf?.numbers?.length) {
+					numberCount = guildConf?.numbers?.length;
 				} else {
-					number = await this.db.numbers.findFirst({
+					numberCount = (await this.db.numbers.aggregate({
 						where: {
 							guildID: this.interaction.guild.id,
 						},
-					});
+						_count: {
+							number: true,
+						},
+					}))._count.number;
 				}
 
-				if (number && number.channelID !== this.interaction.channelId) {
+				console.log(numberCount);
+				if (numberCount >= this.config.maxNumbers) {
 					return this.interaction.reply({
-						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasNumber", { number: number.number }))],
+						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasTooManyNumbers"))],
 						ephemeral: true,
 					});
 				}
-			} else {
-				number = null;
 			}
-		}
-
-		if (number) {
-			return this.interaction.reply({
-				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: number.number }))],
-				ephemeral: true,
-			});
 		}
 
 		this.interaction.reply({

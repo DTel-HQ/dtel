@@ -8,6 +8,7 @@ enum PermissionLevel {
 	contributor,
 	serverAdmin,
 	customerSupport,
+	manager,
 	maintainer,
 }
 

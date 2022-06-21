@@ -1,5 +1,3 @@
-// TODO: https://github.com/GoogleChromeLabs/comlink
-
 import { ShardingManager } from "discord.js";
 import auth from "./config/auth";
 import config from "./config/config";

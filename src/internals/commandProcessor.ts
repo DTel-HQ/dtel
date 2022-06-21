@@ -1,8 +1,4 @@
-// Not stolen code
-// © SunburntRock89 2021
-// © theLMGN 2021
-// But not actually copyright do what you want
-
+// This deviates so far from Novus FM that this may as well be classified as new code
 import { CommandInteraction } from "discord.js";
 import CommandDataInterface from "../interfaces/commandData";
 import DTelClient from "./client";

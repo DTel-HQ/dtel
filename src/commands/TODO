@@ -1,3 +1,8 @@
+General:
+  logging everywhere
+  Should we make quick functions to replace "findUnique({ where: { id: } })" ?
+
+Commands:
 ----- Standard ------
 
 block

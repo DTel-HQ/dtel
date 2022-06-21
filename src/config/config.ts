@@ -20,7 +20,7 @@ export default {
 	dailies: { // credits earned from using >daily
 		boss: 300,
 		manager: 250,
-		support: 200,
+		customerSupport: 200,
 		contributor: 180,
 		donator: 120,
 		default: 80,
@@ -61,10 +61,10 @@ export default {
 		},
 		roles: {
 			boss: "281815725365264385",
-			donator: "324578460183822337",
 			manager: "284443515516354560",
 			customerSupport: "281815839936741377",
 			contributor: "394214123547918336",
+			donator: "324578460183822337",
 		},
 		supportNumber: "08007877678", // 0800SUPPORT
 	},

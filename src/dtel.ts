@@ -50,7 +50,7 @@ client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(cl
 // client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
 // client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
 
-process.on("message", msg => SharderMessageEvent(client, msg));
+process.on("message", msg => SharderMessageEvent(client, msg as Record<string, unknown>));
 
 client.login(process.env.TOKEN);
 

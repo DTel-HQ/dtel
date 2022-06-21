@@ -5,23 +5,19 @@ export default {
 
 	commands: {
 		balance: {
-			errors: {
-				noAccount: "That user doesn't have an account.",
-			},
-
 			embed: {
 				title: "Account information for {{ user }}",
 				fields: [{
 					name: "Credits",
-					value: "{{ creditsEmoji }} {{ account.balance }}",
+					value: `${config.dtsEmoji} {{ balance }}`,
 					inline: true,
 				}, {
 					name: "VIP Months",
-					value: "{{ account.vipMonthsRemaining }}",
+					value: "{{ vipMonthsRemaining }}",
 					inline: true,
 				}, {
 					name: "Get VIP Months",
-					value: "{{ paymentLink }}",
+					value: `${config.paymentLink}`,
 				}],
 			},
 		},
@@ -104,10 +100,21 @@ export default {
 			waitDeny: "No",
 		},
 
+		daily: {
+			alreadyClaimedEmbed: {
+				title: "Already claimed",
+				description: `You've already claimed your daily credits! Try again **{{ timeRemaining }}**.\n\nYou can vote for DTel to get **60+ more credits every day**!\nYou can find a list of voting sites [here](${config.voteLink}).`,
+			},
+			claimedSuccessfully: {
+				title: "Claimed your daily credits!",
+				description: `Here's your ${config.dtsEmoji}{{ noNewCredits }}! You now have ${config.dtsEmoji}{{ balance }}.\n\nYou can vote for DTel to get **60+ more credits every day**!\nYou can find a list of voting sites [here](${config.voteLink}).`,
+			},
+		},
+
 		wizard: {
 			errors: {
 				channelHasNumber: "This channel already has a number! (`{{ number }}`). You can use `/call` to make a call.",
-				unwhitelistedGuildHasNumber: "This server already has a number! (`{{ number }}`). Contact Customer Support at `*611` to request another number.",
+				unwhitelistedGuildHasTooManyNumbers: "This server has too many numbers! Contact Customer Support at `*611` to request another number.",
 				numberInUse: "That number is already in use. Try another.",
 				numberInvalid: "Please enter a valid number.",
 				numberBadFormat: "Please enter a number starting with",
@@ -235,7 +242,7 @@ export default {
 		info: {
 			embed: {
 				title: "📖 DTel Information",
-				description: `For command help, use \`>help\`. More detailed documentation is available at [my website]({{ siteLink }}).`,
+				description: `For command help, use \`>help\`. More detailed documentation is available on [our website](${config.siteLink}).`,
 				fields: [
 					{
 						name: "📞 Getting a number",
@@ -247,7 +254,7 @@ export default {
 					},
 					{
 						name: "💰 Credits",
-						value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page]({{ paymentLink }}) for details.\nAfter recharging, dial \`*233\` or \`>balance\` to check balance.`,
+						value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, dial \`*233\` or run \`/balance\` to check balance.`,
 					},
 					{
 						name: "🔖 Phonebook",
@@ -255,23 +262,23 @@ export default {
 					},
 					{
 						name: "📥 Invite the bot",
-						value: `Type \`>invite\` or click this button: [<:dl:382568980218511361>]({{ inviteLink }})`,
+						value: `Type \`>invite\` or click this button: [<:dl:382568980218511361>](${config.botInvite})`,
 					},
 					{
 						name: "📋 Suggest a feature",
-						value: `Suggest a feature for DTel [here]({{ suggestLink }}) and we will take a look at it.`,
+						value: `Suggest a feature for DTel [here](${config.suggestLink}) and we will take a look at it.`,
 					},
 					{
 						name: "💬 Join our team",
-						value: `Strengthen our support team by [applying]({{ applyLink }}). Applications will be looked at when we're looking to hire, don't ask about the status of it.`,
+						value: `Strengthen our support team by [applying](${config.applyLink}). Applications will be looked at when we're looking to hire, don't ask about the status of it.`,
 					},
 					{
 						name: "📌 Official Server",
-						value: "{{ guildInvite }}",
+						value: `${config.guildInvite}`,
 					},
 					{
 						name: ":desktop: Official Website",
-						value: "{{ siteLink }}",
+						value: `${config.siteLink}`,
 					},
 				],
 				footer: {
@@ -286,47 +293,47 @@ export default {
 				fields: [
 					{
 						name: "🔗 Invite the bot",
-						value: `[Right here!]({{ botInvite }})`,
+						value: `[Right here!](${config.botInvite})`,
 						inline: true,
 					},
 					{
 						name: "🌎 Join our support guild!",
-						value: `[Join now]({{ guildInvite }})`,
+						value: `[Join now](${config.guildInvite})`,
 						inline: true,
 					},
 					{
 						name: "💻 Visit our website!",
-						value: `[DTel's website.]({{ siteLink }})`,
+						value: `[DTel's website.](${config.siteLink})`,
 						inline: true,
 					},
 					{
 						name: "📂 View our GitHub",
-						value: `[We are open source!]({{ githubLink }})`,
+						value: `[We are open source!](${config.githubLink})`,
 						inline: true,
 					},
 					{
 						name: "💖 Support us!",
-						value: `[How to donate?]({{ vipLink }})`,
+						value: `[How to donate?](${config.vipLink})`,
 						inline: true,
 					},
 					{
 						name: "📋 Vote for us!",
-						value: `[Get your free credits!]({{ voteLink }})`,
+						value: `[Get your free credits!](${config.voteLink})`,
 						inline: true,
 					},
 					{
-						name: `{{ donatorPhone }} VIP Numbers`,
-						value: `[How they work]({{ vipLink }})`,
+						name: `${config.callPhones.donator} VIP Numbers`,
+						value: `[How they work](${config.vipLink})`,
 						inline: true,
 					},
 					{
 						name: "💡 Suggest a feature!",
-						value: `[Suggestions page]({{ suggestLink }})`,
+						value: `[Suggestions page](${config.suggestLink})`,
 						inline: true,
 					},
 					{
 						name: "💪 Join our team!",
-						value: `[Apply now!]({{ applyLink }})`,
+						value: `[Apply now!](${config.applyLink})`,
 						inline: true,
 					},
 				],
@@ -342,5 +349,6 @@ export default {
 		unexpected: "An unexpected error occurred.",
 		notExecutableInCall: "This command can not be ran whilst in a call.",
 		onlyExecutableInCall: "This command can only be ran whilst in a call.",
+		noAccount: "That user doesn't have an account.",
 	},
 };

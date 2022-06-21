@@ -1,12 +1,13 @@
 import { MessageEmbedOptions } from "discord.js";
 import ModalProcessor from "../../internals/modalProcessor";
+import { parseNumber } from "../../internals/utils";
 
 export default class WizardModalSubmit extends ModalProcessor {
 	async run(): Promise<void> {
-		const number = this.client.parseNumber(this.interaction.fields.getTextInputValue("wizardNumber"));
+		const number = parseNumber(this.interaction.fields.getTextInputValue("wizardNumber"));
 
-		if (isNaN(Number(number))) {
-			this.interaction.reply({ content: `${this.t("errors.numberInvalid")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
+		if (isNaN(Number(number)) || !number.startsWith(this.numberShouldStartWith())) {
+			this.interaction.reply({ content: `${this.t("errors.numberInvalid")} ${this.numberShouldStartWith()}`, ephemeral: true });
 			return;
 		}
 
@@ -20,8 +21,6 @@ export default class WizardModalSubmit extends ModalProcessor {
 			this.interaction.reply({ content: `${this.t("errors.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
 			return;
 		}
-
-		// TODO check if number's formatting is valid
 
 		const expiry = new Date();
 		expiry.setMonth(expiry.getMonth() + 1);

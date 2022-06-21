@@ -1,8 +1,18 @@
 import ComponentProcessor from "../../internals/componentProcessor";
 import { ButtonInteraction, MessageActionRow, Modal, ModalActionRowComponent, TextInputComponent } from "discord.js";
 import { TextInputStyles } from "discord.js/typings/enums";
+import { formatShardNumber } from "../../internals/utils";
 
 export default class WizardReadyButton extends ComponentProcessor {
+	async _run() {
+		super._run();
+
+		this.client.editCrossShard({
+			embeds: this.interaction.message.embeds,
+			components: [],
+		}, this.interaction.channelId, this.interaction.message.id);
+	}
+
 	async run(): Promise<void> {
 		const interaction = this.interaction as ButtonInteraction;
 
@@ -16,7 +26,7 @@ export default class WizardReadyButton extends ComponentProcessor {
 			.setRequired(true)
 			.setMaxLength(11)
 			.setMinLength(11)
-			.setPlaceholder(this.interaction.guild ? "0301xxxxxxx" : "0900xxxxxxx")
+			.setPlaceholder(`${this.numberShouldStartWith()}xxxxxxx`)
 			.setStyle(TextInputStyles.SHORT);
 
 		const row = new MessageActionRow<ModalActionRowComponent>();

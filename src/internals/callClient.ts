@@ -9,6 +9,7 @@ import config from "../config/config";
 import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { parseNumber } from "./utils";
 
 dayjs.extend(relativeTime);
 
@@ -142,7 +143,7 @@ export default class CallClient implements CallsWithNumbers {
 		this.primary = true;
 
 		// Get the number in the correct format for DB query (all numbers)
-		this.toNum = this.client.parseNumber(this.toNum);
+		this.toNum = parseNumber(this.toNum);
 		const aliasNumbers = config.aliasNumbers as { [key: string] : string };
 		if (aliasNumbers[this.toNum]) this.toNum = aliasNumbers[this.toNum];
 		if (this.toNum.length != 11) throw new Error("numberInvalid");

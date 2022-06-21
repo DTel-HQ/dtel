@@ -10,3 +10,5 @@ build/
 src/config/auth.ts
 
 .env
+
+.vscode/
