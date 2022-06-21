@@ -1,10 +1,9 @@
 import ComponentProcessor from "../../internals/componentProcessor";
 import { ButtonInteraction, MessageActionRow, Modal, ModalActionRowComponent, TextInputComponent } from "discord.js";
 import { TextInputStyles } from "discord.js/typings/enums";
-import { formatShardNumber } from "../../internals/utils";
 
 export default class WizardReadyButton extends ComponentProcessor {
-	async _run() {
+	async _run(): Promise<void> {
 		super._run();
 
 		this.client.editCrossShard({
