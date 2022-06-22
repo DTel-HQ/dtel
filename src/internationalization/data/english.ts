@@ -30,7 +30,9 @@ export default {
 			errors: {
 				unexpected: "We couldn't start that call. Try again later.",
 
-				thisSideExpired: "Your number has expired. Get an admin to call `*233* and renew this number.",
+				callingSelf: "You can't call yourself!",
+
+				thisSideExpired: "Your number has expired. Get an admin to call `*233` and renew this number.",
 				otherSideExpired: "The number you have attempted to call has expired.",
 
 				numberInvalid: "The number you tried to call is invalid!",
@@ -117,7 +119,7 @@ export default {
 				unwhitelistedGuildHasTooManyNumbers: "This server has too many numbers! Contact Customer Support at `*611` to request another number.",
 				numberInUse: "That number is already in use. Try another.",
 				numberInvalid: "Please enter a valid number.",
-				numberBadFormat: "Please enter a number starting with",
+				numberBadFormat: "Please enter a number starting with **{{ numberStartsWith }}**.",
 			},
 
 			modal: {
@@ -134,7 +136,7 @@ export default {
 					value: "It cannot be used to call real phone numbers. All calls exist within Discord only.",
 				}, {
 					name: "💵 Payment",
-					value: "Your number must be renewed for **500 credits** each month. To do so, call `*233*`.\nFind ways to get credits [here](https://dtel.austinhuang.me/en/latest/Payment/).\nDon't worry, the first month is **free**!",
+					value: "Your number must be renewed for **500 credits** each month. To do so, call `*233`.\nFind ways to get credits [here](https://dtel.austinhuang.me/en/latest/Payment/).\nDon't worry, the first month is **free**!",
 				}, {
 					name: "🏛️ The legal stuff",
 					value: `Full documentation is located at ${config.siteLink}. \nIt contains important information such as our [Privacy Policy](https://dtel.austinhuang.me/en/latest/Privacy/).`,

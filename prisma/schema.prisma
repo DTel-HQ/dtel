@@ -31,11 +31,13 @@ model Numbers {
   promote   numberPromote?
   vip       numberVIP?
   waiting   Boolean        @default(false)
+  createdAt DateTime       @default(now())
 
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
 
   guild GuildConfigs? @relation(fields: [guildID], references: id)
+
 
   @@unique(fields: [channelID], name: "channel")
 }
@@ -90,7 +92,7 @@ model GuildConfigs {
 model Accounts {
   id String @id @map("_id")
 
-  balance Int @default(0)
-  dailyClaimedAt DateTime?
-  vipMonthsRemaining Int @default(0)
+  balance            Int       @default(0)
+  dailyClaimedAt     DateTime?
+  vipMonthsRemaining Int       @default(0)
 }

@@ -29,10 +29,10 @@ export default async(client: DTelClient): Promise<void> => {
 		},
 	});
 	for (const call of allCalls) {
-		CallClient.byID(client, {
+		client.calls.push(await CallClient.byID(client, {
 			doc: call,
 			side: "to",
-		});
+		}));
 	}
 };
 

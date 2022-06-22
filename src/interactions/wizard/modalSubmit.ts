@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { MessageEmbedOptions } from "discord.js";
 import ModalProcessor from "../../internals/modalProcessor";
 import { parseNumber } from "../../internals/utils";
@@ -6,9 +7,12 @@ export default class WizardModalSubmit extends ModalProcessor {
 	async run(): Promise<void> {
 		const number = parseNumber(this.interaction.fields.getTextInputValue("wizardNumber"));
 
-		if (isNaN(Number(number)) || !number.startsWith(this.numberShouldStartWith())) {
-			this.interaction.reply({ content: `${this.t("errors.numberInvalid")} ${this.numberShouldStartWith()}`, ephemeral: true });
+		if (isNaN(Number(number))) {
+			this.interaction.reply({ content: `${this.t("errors.numberInvalid")}`, ephemeral: true });
 			return;
+		}
+		if (!number.startsWith(this.numberShouldStartWith())) {
+			this.interaction.reply({ content: `${this.t("errors.numberBadFormat", { numberStartsWith: this.numberShouldStartWith() })}`, ephemeral: true });
 		}
 
 		const dbNumber = await this.db.numbers.findUnique({
@@ -22,8 +26,8 @@ export default class WizardModalSubmit extends ModalProcessor {
 			return;
 		}
 
-		const expiry = new Date();
-		expiry.setMonth(expiry.getMonth() + 1);
+		const expiry = dayjs().add(1, "month").toDate();
+
 		await this.db.numbers.create({
 			data: {
 				number: number,

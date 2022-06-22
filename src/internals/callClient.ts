@@ -1,12 +1,12 @@
 import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions } from "discord.js";
+import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
 import { Calls, GuildConfigs, Numbers, atAndBy } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
-import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
+import { APIMessage, RESTGetAPIChannelMessageResult, RESTPostAPIChannelTypingResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { parseNumber } from "./utils";
@@ -513,6 +513,13 @@ export default class CallClient implements CallsWithNumbers {
 		}, otherSide.channelID);
 
 		this.endHandler(interaction.user.id);
+	}
+
+	async typingStart(typing: Typing) {
+		// Get other side
+		const otherSide = typing.channel.id === this.from.channelID ? this.to.channelID : this.from.channelID;
+
+		this.client.restAPI.post(`/channels/${otherSide}/typing`).catch(() => null);
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {
