@@ -6,7 +6,7 @@ import { PermissionLevel } from "../interfaces/commandData";
 import { Calls, GuildConfigs, Numbers, atAndBy } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
-import { APIMessage, RESTGetAPIChannelMessageResult, RESTPostAPIChannelTypingResult } from "discord-api-types/v10";
+import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { parseNumber } from "./utils";
@@ -515,7 +515,7 @@ export default class CallClient implements CallsWithNumbers {
 		this.endHandler(interaction.user.id);
 	}
 
-	async typingStart(typing: Typing) {
+	async typingStart(typing: Typing): Promise<void> {
 		// Get other side
 		const otherSide = typing.channel.id === this.from.channelID ? this.to.channelID : this.from.channelID;
 
