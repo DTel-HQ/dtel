@@ -3,13 +3,14 @@ import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, GuildConfigs, Numbers, atAndBy } from "@prisma/client";
+import { Calls, Numbers, atAndBy } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
 import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { parseNumber } from "./utils";
+import { NumbersWithGuilds } from "../interfaces/numbersWithGuilds";
 
 dayjs.extend(relativeTime);
 
@@ -30,10 +31,6 @@ interface CallOptions {
 type CallsWithNumbers = Calls & {
 	to: Numbers,
 	from: Numbers,
-};
-
-type NumbersWithGuilds = Numbers & {
-	guild?: GuildConfigs | null,
 };
 
 interface ClientCallParticipant extends NumbersWithGuilds {

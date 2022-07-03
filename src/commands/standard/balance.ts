@@ -1,5 +1,4 @@
-import { APIUser } from "discord-api-types/v10";
-import { MessageEmbedOptions } from "discord.js";
+import { MessageEmbedOptions, User } from "discord.js";
 import Command from "../../internals/commandProcessor";
 import { formatBalance, getAccount } from "../../internals/utils";
 
@@ -16,9 +15,9 @@ export default class Balance extends Command {
 		}
 
 		// Ensure we know of the user -- don't share details about users who have left
-		let user: APIUser;
+		let user: User;
 		try {
-			user = await this.client.getUser(accountIDToGet);
+			user = await this.client.users.fetch(accountIDToGet);
 		} catch {
 			return this.noAccount();
 		}
@@ -31,7 +30,7 @@ export default class Balance extends Command {
 				color: this.config.colors.info,
 				author: {
 					name: `${user.username}#${user.discriminator}`,
-					iconURL: this.client.makeAvatarURL(user),
+					iconURL: user.displayAvatarURL(),
 				},
 				...(this.t("embed", {
 					balance: formatBalance(account.balance),

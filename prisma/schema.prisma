@@ -87,6 +87,7 @@ model GuildConfigs {
   locale      String  @default("en-US")
 
   numbers Numbers[]
+  strikes Strikes[]
 }
 
 model Accounts {
@@ -95,4 +96,29 @@ model Accounts {
   balance            Int       @default(0)
   dailyClaimedAt     DateTime?
   vipMonthsRemaining Int       @default(0)
+
+  strikes Strikes[]
+}
+
+enum StrikeOffenderType {
+  USER
+  GUILD
+}
+
+model Strikes {
+  id       String             @id @map("_id")
+  offender String
+  reason   String
+  type     StrikeOffenderType
+
+  created atAndBy
+
+  account     Accounts     @relation(fields: [offender], references: [id])
+  guildConfig GuildConfigs @relation(fields: [offender], references: [id])
+
+  @@index(fields: [offender], name: "offender")
+}
+
+model Blacklist {
+  id String @id @map("_id")
 }

@@ -1,7 +1,7 @@
 /* eslint-disable arrow-body-style */
 // Stuff that's too specific to but put on the client, but still used in multiple places
 
-import { Accounts } from "@prisma/client";
+import { Accounts, Numbers } from "@prisma/client";
 import { db } from "../database/db";
 
 export const formatShardNumber = (shardNumber: number): string => shardNumber < 10 ? `0${shardNumber}` : shardNumber.toString();
@@ -33,6 +33,24 @@ export const getAccount = async(id: string): Promise<Accounts | null> => {
 	return db.accounts.findUnique({
 		where: {
 			id,
+		},
+	});
+};
+
+export const randomString = (length: number): string => {
+	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	let result = "";
+	for (let i = 0; i < length; i++) {
+		result += chars.charAt(Math.floor(Math.random() * chars.length));
+	}
+	return result;
+};
+
+export const fetchNumber = (input: string): Promise<Numbers | null> => {
+	return db.numbers.findUnique({
+		where: {
+			number: input.length === 11 ? input : undefined,
+			channelID: input.length > 11 ? input : undefined,
 		},
 	});
 };

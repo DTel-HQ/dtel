@@ -46,7 +46,7 @@ export default class Eval extends Command {
 					embeds: [{
 						color: config.colors.info,
 						title: `The eval results were too large!`,
-						description: `As such, I've logged them to a file. Here are the results!`,
+						description: `As such, I've saved them to a file. Here are the results!`,
 					}],
 					files: [
 						new MessageAttachment(Buffer.from(result), "eval-results.txt"),

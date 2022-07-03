@@ -1,12 +1,20 @@
-import { Client, ClientOptions, Collection, MessageEmbedOptions, MessageOptions, Role, ShardClientUtil, Snowflake } from "discord.js";
+import { AnyChannel, Client, ClientOptions, Collection, DMChannel, Guild, MessageEmbedOptions, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import { REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult, APIUser, RESTGetAPIUserResult } from "discord-api-types/v10";
+import { APITextChannel, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
+import { Numbers } from "@prisma/client";
+import { fetchNumber, parseNumber } from "./utils";
+
+interface PossibleTypes {
+	user?: User,
+	guild?: Guild,
+	number?: Numbers | null,
+}
 
 class DTelClient extends Client<true> {
 	config = config;
@@ -65,8 +73,22 @@ class DTelClient extends Client<true> {
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
-	async getUser(id: string): Promise<APIUser> {
-		return this.restAPI.get(`/users/${id}`) as Promise<RESTGetAPIUserResult>;
+	// Use these so that we can edit them if we get performance issues
+	async getUser(id: string): Promise<User> {
+		return this.users.fetch(id);
+	}
+	async getGuild(id: string): Promise<Guild> {
+		// Not safe to cache this as we won't get its updates
+		return this.guilds.fetch({
+			guild: id,
+			cache: false,
+		});
+	}
+	async getChannel(id: string): Promise<AnyChannel | null> {
+		// Not safe to cache this as we won't get its updates
+		return this.channels.fetch(id, {
+			cache: false,
+		});
 	}
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
@@ -116,27 +138,69 @@ class DTelClient extends Client<true> {
 			this.permsCache.set(userID, perms);
 		}
 
-
 		return perms;
 	}
 
-	makeAvatarURL(user: APIUser): string {
-		const base = this.options?.http?.cdn;
+	async resolveGuildChannelNumberUser(toResolve: string): Promise<PossibleTypes> {
+		toResolve = parseNumber(toResolve);
+		const possibilities: PossibleTypes = {};
 
-		let url = `${base}/avatars`;
-		// avatar starts with a_ if animated
-		// return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
-		if (user.avatar) {
-			url += `/${user.id}/${user.avatar}`;
+		// THIS IS HELL
+		// But I'm in a rush and it's kinda clean
+		if (toResolve.length == 11) {
+			possibilities.number = await fetchNumber(toResolve);
+
+			if (possibilities.number) {
+				if (possibilities.number?.guildID) {
+					possibilities.guild = await this.getGuild(possibilities.number.guildID);
+				} else {
+					const tempChan = await this.getChannel(possibilities.number.channelID).catch(() => undefined);
+					if (tempChan) {
+						possibilities.user = (tempChan as DMChannel).recipient;
+					}
+				}
+			}
 		} else {
-			url += `/${user.discriminator}`;
+			possibilities.user = await this.getUser(toResolve).catch(() => undefined);
+			// If toResolve is a User
+			if (!possibilities.user) {
+				// Else try again
+				possibilities.guild = await this.getGuild(toResolve).catch(() => undefined);
+			}
+
+			// If the ID is a guild
+			if (!possibilities.guild) {
+				// Else if we still don't know what the toResolve is, try chanel
+				const channel = await this.getChannel(toResolve).catch(() => undefined);
+				if (channel) {
+					if (channel.type === "DM") {
+						possibilities.user = (channel as DMChannel).recipient;
+					} else {
+						possibilities.guild = (channel as TextChannel).guild;
+					}
+				}
+			}
 		}
-
-		if (user.avatar?.startsWith("a_")) url += "gif";
-		else url += "png";
-
-		return url;
+		return possibilities;
 	}
+
+	// makeAvatarURL(user: APIUser): string {
+	// 	const base = this.options?.http?.cdn;
+
+	// 	let url = `${base}/avatars`;
+	// 	// avatar starts with a_ if animated
+	// 	// return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
+	// 	if (user.avatar) {
+	// 		url += `/${user.id}/${user.avatar}`;
+	// 	} else {
+	// 		url += `/${user.discriminator}`;
+	// 	}
+
+	// 	if (user.avatar?.startsWith("a_")) url += "gif";
+	// 	else url += "png";
+
+	// 	return url;
+	// }
 }
 
 export default DTelClient;

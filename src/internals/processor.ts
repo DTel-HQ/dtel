@@ -6,7 +6,7 @@ import CommandDataInterface, { CommandType } from "../interfaces/commandData";
 import { Numbers, Accounts } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
-import { formatShardNumber, getAccount } from "./utils";
+import { fetchNumber, formatShardNumber, getAccount } from "./utils";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -45,21 +45,17 @@ abstract class Processor {
 
 	abstract run(): void;
 
-	async fetchNumber(): Promise<Numbers | null> {
-		return this.db.numbers.findUnique({
-			where: {
-				channelID: this.interaction.channelId!,
-			},
-		});
+	async fetchNumber(number?: string): Promise<Numbers | null> {
+		return fetchNumber(number || this.interaction.channelId!);
 	}
 
-	async fetchAccount(): Promise<Accounts> {
+	async fetchAccount(userID?: string): Promise<Accounts> {
 		let account = await getAccount(this.interaction.user.id);
 
 		if (!account) {
 			account = await this.db.accounts.create({
 				data: {
-					id: this.interaction.user.id,
+					id: userID || this.interaction.user.id,
 				},
 			});
 		}

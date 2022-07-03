@@ -1,5 +1,3 @@
-// import { ApplicationCommandOptionChoice } from "discord.js";
-// import { PermissionLevel } from "../interfaces/command";
 import DTelClient from "../internals/client";
 import Commands from "../config/commands";
 import CallClient from "../internals/callClient";
@@ -35,4 +33,3 @@ export default async(client: DTelClient): Promise<void> => {
 		}));
 	}
 };
-

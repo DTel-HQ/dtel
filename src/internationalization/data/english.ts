@@ -346,7 +346,6 @@ export default {
 		},
 	},
 
-
 	errors: {
 		unexpected: "An unexpected error occurred.",
 		notExecutableInCall: "This command can not be ran whilst in a call.",

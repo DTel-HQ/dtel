@@ -125,6 +125,54 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
 	},
+	{
+		name: "strike",
+		description: `Warn a user or guild that their behavior will not be tolerated. [Support Only]`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "offender",
+			description: "The ID of the number/user/guild/channel you want to strike",
+			required: true,
+			type: "STRING",
+		}, {
+			name: "reason",
+			description: "The reason for the strike",
+			required: true,
+			type: "STRING",
+		}],
+
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
+	},
+	{
+		name: "ninfo",
+		description: `Get information on a number. [Support Only]`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "number_or_channel",
+			description: "The number/channel id you want to find information about",
+			required: true,
+			type: "STRING",
+		}],
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
+	},
+	{
+		name: "uinfo",
+		description: `Get information on a user. [Support Only]`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "user",
+			description: "The ID of the user you want to find information about",
+			required: true,
+			type: "STRING",
+		}],
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
+	},
 ];
 
 export default commands;

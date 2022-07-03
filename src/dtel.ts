@@ -2,7 +2,7 @@ import { Interaction, Message, Typing } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
-import i18ndata from "./internationalization/i18n";
+import i18nData from "./internationalization/i18n";
 import Client from "./internals/client";
 import Console from "./internals/console";
 
@@ -15,32 +15,24 @@ import SharderMessageEvent from "./events/sharderMessage";
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
 
-// let db: DTelDatabase;
-
-// try {
-// 	db = init();
-// 	winston.info("Initialized database.");
-// } catch (err) {
-// 	console.error(`Failed to connect to MongoDB.\n ${err.stack}`);
-// 	process.exit(-1);
-// }
-
 i18next.init({
 	debug: config.devMode,
 	fallbackLng: "en-US",
 	preload: ["en-US"],
 
 	returnObjects: true,
-	resources: i18ndata,
+	resources: i18nData,
 });
 
 const client = new Client({
 	intents: [
-		"GUILD_MESSAGES",
 		"GUILDS",
 		"GUILD_VOICE_STATES",
 		"GUILD_MESSAGE_TYPING",
 		"DIRECT_MESSAGES",
+
+		// Privileged
+		"GUILD_MESSAGES",
 	],
 	partials: ["CHANNEL"],
 });
