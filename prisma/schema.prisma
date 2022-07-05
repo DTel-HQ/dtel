@@ -25,6 +25,7 @@ model Numbers {
   number    String         @id @map("_id")
   channelID String
   guildID   String?
+  userID    String?
   blocked   String[]
   contacts  String[]
   expiry    DateTime
@@ -36,10 +37,11 @@ model Numbers {
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
 
-  guild GuildConfigs? @relation(fields: [guildID], references: id)
-
+  guild GuildConfigs? @relation(fields: guildID, references: id)
 
   @@unique(fields: [channelID], name: "channel")
+  @@index(fields: [guildID], name: "guild")
+  @@index(fields: [userID], name: "user")
 }
 
 // Calls

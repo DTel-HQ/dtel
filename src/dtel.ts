@@ -12,6 +12,9 @@ import InteractionEvent from "./events/interactionCreate";
 import TypingStartEvent from "./events/typingStart";
 
 import SharderMessageEvent from "./events/sharderMessage";
+import { populateBlacklistCache } from "./database/db";
+
+populateBlacklistCache();
 
 const winston = Console(`Shard ${process.env.SHARDS}`);
 

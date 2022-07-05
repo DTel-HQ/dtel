@@ -102,8 +102,8 @@ class DTelClient extends Client<true> {
 			type ctx = { memberID: string, guildID: string };
 			const roles = await this.shard?.broadcastEval(async(client: Client, context: ctx): Promise<Role[]> => {
 				const guild = await client.guilds.fetch(context.guildID);
-				const member = await guild.members.fetch(context.memberID);
-				return Array.from(member.roles.cache.values());
+				const member = await guild.members.fetch(context.memberID).catch(() => null);
+				return member ? Array.from(member.roles.cache.values()) : [];
 			}, {
 				shard: this.shardWithSupportGuild,
 				context: {
@@ -120,8 +120,8 @@ class DTelClient extends Client<true> {
 			// 	return PermissionLevel.none;
 			// }
 
-
-			if (roles.find(r => r.id === config.supportGuild.roles.boss)) perms = PermissionLevel.maintainer;
+			if (roles.length === 0) perms = PermissionLevel.none;
+			else if (roles.find(r => r.id === config.supportGuild.roles.boss)) perms = PermissionLevel.maintainer;
 			else if (roles.find(r => r.id === config.supportGuild.roles.manager)) perms = PermissionLevel.manager;
 			else if (roles.find(r => r.id === config.supportGuild.roles.customerSupport)) perms = PermissionLevel.customerSupport;
 			else if (roles.find(r => r.id === config.supportGuild.roles.contributor)) perms = PermissionLevel.contributor;

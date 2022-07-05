@@ -173,6 +173,20 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
 	},
+	{
+		name: "blacklist",
+		description: `Get information on a user. [Support Only]`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "id",
+			description: "The ID of the number/user/server/channel you want to blacklist",
+			required: true,
+			type: "STRING",
+		}],
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
+	},
 ];
 
 export default commands;

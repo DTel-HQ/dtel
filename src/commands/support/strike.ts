@@ -8,9 +8,9 @@ export default class Strike extends Command {
 		const offender = this.interaction.options.getString("offender", true);
 
 		if (offender === this.interaction.user.id) {
-			this.interaction.reply(`>fire ${this.interaction.user.id}`);
+			return this.interaction.reply(`>fire ${this.interaction.user.id}`);
 		} else if (offender === this.config.supportGuild.id) {
-			this.interaction.reply({
+			return this.interaction.reply({
 				embeds:	[{
 					color: this.config.colors.error,
 					title: "Turning against us?",

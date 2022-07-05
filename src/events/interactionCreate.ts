@@ -8,9 +8,17 @@ import Processor from "../internals/processor";
 import i18n from "i18next";
 import { winston } from "../dtel";
 import config from "../config/config";
+import { blacklistCache } from "../database/db";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
+
+	if (blacklistCache.get(interaction.user.id)) {
+		interaction.reply(i18n.t("errors.blacklisted", {
+			lng: interaction.locale,
+		}));
+		return;
+	}
 	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
 
 	let commandName: string;
