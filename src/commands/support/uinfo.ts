@@ -8,10 +8,7 @@ export default class UInfo extends Command {
 		try {
 			user = await this.client.getUser(toFind);
 		} catch {
-			return this.interaction.reply({
-				ephemeral: true,
-				embeds: [this.client.errorEmbed("Couldn't find that user.")],
-			});
+			return this.targetUserNotFound();
 		}
 
 		const embed: MessageEmbedOptions = {

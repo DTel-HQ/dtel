@@ -352,5 +352,6 @@ export default {
 		onlyExecutableInCall: "This command can only be ran whilst in a call.",
 		noAccount: "That user doesn't have an account.",
 		blacklisted: "❌ You have been blacklisted. You may not use DTel.",
+		userNotFound: "Couldn't find that user.",
 	},
 };

@@ -24,7 +24,7 @@ pay
 
 promote
 rcall
-strikes - P0
+
 update
 upgrade
 
@@ -33,11 +33,11 @@ allow
 backdoor
 cinfo
 handover
-hangup - P0
+
 hold
 ninfo
 pay
-<!-- permcheck - superceded by red colour phone -->
+<!-- permcheck - superseded by red colour phone -->
 pickup - P0
 status
 transfer

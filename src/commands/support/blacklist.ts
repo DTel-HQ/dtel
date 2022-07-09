@@ -62,6 +62,7 @@ export default class Blacklist extends Command {
 		const embed: MessageEmbedOptions = {
 			color: this.config.colors.yellowbook,
 			author: {
+				// eslint-disable-next-line @typescript-eslint/no-extra-parens
 				iconURL: possibilities.user ? possibilities.user.displayAvatarURL() : (possibilities.guild?.icon ? possibilities.guild.iconURL()! : this.client.user.defaultAvatarURL),
 				name: possibilities.user ? possibilities.user.username : possibilities.guild!.name,
 			},

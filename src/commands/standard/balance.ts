@@ -17,7 +17,7 @@ export default class Balance extends Command {
 		// Ensure we know of the user -- don't share details about users who have left
 		let user: User;
 		try {
-			user = await this.client.users.fetch(accountIDToGet);
+			user = await this.client.getUser(accountIDToGet);
 		} catch {
 			return this.noAccount();
 		}

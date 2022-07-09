@@ -7,6 +7,7 @@ import { Numbers, Accounts } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
 import { fetchNumber, formatShardNumber, getAccount } from "./utils";
+import { TFunction } from "i18next";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -21,6 +22,7 @@ abstract class Processor {
 	account: Accounts | null = null;
 
 	call?: CallClient;
+	abstract t: TFunction;
 
 	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
 		this.client = client;
@@ -49,8 +51,8 @@ abstract class Processor {
 		return fetchNumber(number || this.interaction.channelId!);
 	}
 
-	async fetchAccount(userID?: string): Promise<Accounts> {
-		let account = await getAccount(this.interaction.user.id);
+	async fetchAccount(userID = this.interaction.user.id): Promise<Accounts> {
+		let account = await getAccount(userID);
 
 		if (!account) {
 			account = await this.db.accounts.create({
@@ -126,6 +128,13 @@ abstract class Processor {
 
 	numberShouldStartWith(): string {
 		return this.interaction.guild ? `03${formatShardNumber(Number(process.env.SHARDS))}` : "0900";
+	}
+
+	targetUserNotFound(): Promise<void> {
+		return this.interaction.reply({
+			ephemeral: true,
+			embeds: [this.client.errorEmbed(this.t("errors.userNotFound"))],
+		});
 	}
 }
 export default Processor;

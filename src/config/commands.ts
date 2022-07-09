@@ -187,6 +187,25 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
 	},
+	{
+		name: "addcredit",
+		description: `Add extra DTel Credit to a user. [Support Only]`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "user",
+			description: "The ID of the user you want to add credit to",
+			required: true,
+			type: "STRING",
+		}, {
+			name: "credits",
+			description: "The amount of credits you want to add (use negative number to remove)",
+			required: true,
+			type: "INTEGER",
+		}],
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
+	},
 ];
 
 export default commands;
