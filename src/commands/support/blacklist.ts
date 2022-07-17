@@ -1,4 +1,4 @@
-import { MessageEmbedOptions } from "discord.js";
+import { APIEmbed, EmbedBuilder } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";
@@ -11,16 +11,18 @@ export default class Blacklist extends Command {
 
 		if (possibilities.user) {
 			if (possibilities.user.bot) {
-				return this.interaction.reply({
+				this.interaction.reply({
 					embeds: [this.client.errorEmbed("Do not try to blacklist my brothers!", { title: "❌ User is a bot" })],
 				});
+				return;
 			}
 
 			if (await this.client.getPerms(possibilities.user.id) >= PermissionLevel.customerSupport) {
-				return this.interaction.reply({
+				this.interaction.reply({
 					embeds: [this.client.errorEmbed("You can't get rid of someone that easily...", { title: "❌ Unfair competition" })],
 					ephemeral: true,
 				});
+				return;
 			}
 		}
 
@@ -32,18 +34,20 @@ export default class Blacklist extends Command {
 		}
 
 		if (!idToBlacklist) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				embeds: [this.client.errorEmbed("ID could not be resolved to a number, server, user or channel.")],
 				ephemeral: true,
 			});
+			return;
 		}
 
 		if (idToBlacklist === this.interaction.user.id) {
-			return this.interaction.reply({ content: `You dumb :b:oi, don't blacklist yourself!`, ephemeral: true });
+			this.interaction.reply({ content: `You dumb :b:oi, don't blacklist yourself!`, ephemeral: true });
+			return;
 		}
 
 		if (idToBlacklist === this.config.supportGuild.id) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				embeds:	[{
 					color: this.config.colors.error,
 					title: "Turning against us?",
@@ -51,6 +55,7 @@ export default class Blacklist extends Command {
 				}],
 				ephemeral: true,
 			});
+			return;
 		}
 
 		const isBlacklisted = await this.db.blacklist.findUnique({
@@ -59,19 +64,18 @@ export default class Blacklist extends Command {
 			},
 		});
 
-		const embed: MessageEmbedOptions = {
+		const embed: EmbedBuilder = EmbedBuilder.from({
 			color: this.config.colors.yellowbook,
 			author: {
 				// eslint-disable-next-line @typescript-eslint/no-extra-parens
-				iconURL: possibilities.user ? possibilities.user.displayAvatarURL() : (possibilities.guild?.icon ? possibilities.guild.iconURL()! : this.client.user.defaultAvatarURL),
+				icon_url: possibilities.user ? possibilities.user.displayAvatarURL() : (possibilities.guild?.icon ? possibilities.guild.iconURL()! : this.client.user.defaultAvatarURL),
 				name: possibilities.user ? possibilities.user.username : possibilities.guild!.name,
 			},
 			footer: {
-				iconURL: this.interaction.user.displayAvatarURL(),
+				icon_url: this.interaction.user.displayAvatarURL(),
 				text: `By ${this.interaction.user.username} (${this.interaction.user.id})`,
 			},
-			timestamp: new Date(),
-		};
+		}).setTimestamp(new Date());
 
 		const toDM = possibilities.user || await possibilities.guild?.fetchOwner();
 
@@ -82,7 +86,7 @@ export default class Blacklist extends Command {
 				},
 			});
 
-			embed.title = `Added ${possibilities.user ? "user" : "guild"} to the blacklist.`;
+			embed.setTitle(`Added ${possibilities.user ? "user" : "guild"} to the blacklist.`);
 			if (possibilities.guild) {
 				possibilities.guild.leave();
 			}
@@ -106,7 +110,7 @@ export default class Blacklist extends Command {
 				},
 			});
 
-			embed.title = `Removed ${possibilities.user ? "user" : "guild"} from the blacklist.`;
+			embed.setTitle(`Removed ${possibilities.user ? "user" : "guild"} from the blacklist.`);
 			toDM?.send({
 				embeds: [{
 					color: this.config.colors.info,

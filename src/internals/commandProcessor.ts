@@ -1,5 +1,5 @@
 // This deviates so far from Novus FM that this may as well be classified as new code
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import CommandDataInterface from "../interfaces/commandData";
 import DTelClient from "./client";
 import Processor from "./processor";
@@ -7,10 +7,10 @@ import i18n, { TFunction } from "i18next";
 
 abstract class CommandProcessor extends Processor {
 	commandData: CommandDataInterface;
-	interaction: CommandInteraction;
+	interaction: ChatInputCommandInteraction;
 	t: TFunction;
 
-	constructor(client: DTelClient, interaction: CommandInteraction, commandData: CommandDataInterface) {
+	constructor(client: DTelClient, interaction: ChatInputCommandInteraction, commandData: CommandDataInterface) {
 		super(client, interaction, commandData);
 		this.interaction = interaction;
 		this.commandData = commandData;
@@ -20,9 +20,11 @@ abstract class CommandProcessor extends Processor {
 
 	async _run(): Promise<void> {
 		if (this.interaction.guild && (!this.checkPermissions() && !this.client.config.maintainers.includes(this.interaction.user.id))) {
-			return this.permCheckFail();
+			await this.permCheckFail();
+			return;
 		} else if (this.commandData.guildOnly) {
-			return this.guildOnly();
+			await this.guildOnly();
+			return;
 		}
 
 		await super._run();

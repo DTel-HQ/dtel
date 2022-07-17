@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { MessageEmbedOptions } from "discord.js";
+import { APIEmbed } from "discord.js";
 import ModalProcessor from "../../internals/modalProcessor";
 import { parseNumber } from "../../internals/utils";
 
@@ -42,7 +42,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			embeds: [{
 				color: this.config.colors.success,
 
-				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }) as MessageEmbedOptions,
+				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }) as APIEmbed,
 			}],
 		});
 	}

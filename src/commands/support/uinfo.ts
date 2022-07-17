@@ -1,4 +1,4 @@
-import { MessageEmbedOptions, User } from "discord.js";
+import { APIEmbed, User } from "discord.js";
 import Command from "../../internals/commandProcessor";
 export default class UInfo extends Command {
 	async run(): Promise<void> {
@@ -8,13 +8,14 @@ export default class UInfo extends Command {
 		try {
 			user = await this.client.getUser(toFind);
 		} catch {
-			return this.targetUserNotFound();
+			await this.targetUserNotFound();
+			return;
 		}
 
-		const embed: MessageEmbedOptions = {
+		const embed: APIEmbed = {
 			color: this.config.colors.info,
 			author: {
-				iconURL: user.displayAvatarURL(),
+				icon_url: user.displayAvatarURL(),
 				name: `${user.tag} (${user.id})`,
 			},
 			footer: {
@@ -80,6 +81,6 @@ export default class UInfo extends Command {
 			inline: true,
 		}];
 
-		return this.interaction.reply({ embeds: [embed] });
+		this.interaction.reply({ embeds: [embed] });
 	}
 }

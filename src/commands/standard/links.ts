@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import config from "../../config/config";
-import { MessageEmbedOptions } from "discord.js";
+import { APIEmbed } from "discord.js";
 import { t } from "i18next";
 
 export default class Links extends Command {
@@ -13,7 +13,7 @@ export default class Links extends Command {
 					icon_url: this.client.user.displayAvatarURL(),
 					url: config.siteLink,
 				},
-				...(t("commands.links.embed") as MessageEmbedOptions),
+				...(t("commands.links.embed") as APIEmbed),
 			}],
 			ephemeral: true,
 		});

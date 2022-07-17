@@ -1,8 +1,8 @@
-import { AnyChannel, Client, ClientOptions, Collection, DMChannel, Guild, MessageEmbedOptions, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
+import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, APIEmbed, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import { REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
@@ -11,7 +11,7 @@ import { Numbers } from "@prisma/client";
 import { fetchNumber, parseNumber } from "./utils";
 
 interface PossibleTypes {
-	user?: User,
+	user?: User | null,
 	guild?: Guild,
 	number?: Numbers | null,
 }
@@ -37,7 +37,7 @@ class DTelClient extends Client<true> {
 		this.shardWithSupportGuild = ShardClientUtil.shardIdForGuildId(config.supportGuild.id, config.shardCount);
 	}
 
-	errorEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
+	errorEmbed(description: string, options?: APIEmbed): APIEmbed {
 		return {
 			color: config.colors.error,
 			title: "❌ Error!",
@@ -46,7 +46,7 @@ class DTelClient extends Client<true> {
 		};
 	}
 
-	warningEmbed(description: string, options?: MessageEmbedOptions): MessageEmbedOptions {
+	warningEmbed(description: string, options?: APIEmbed): APIEmbed {
 		return {
 			color: 0xFFFF00,
 			description,
@@ -84,7 +84,7 @@ class DTelClient extends Client<true> {
 			cache: false,
 		});
 	}
-	async getChannel(id: string): Promise<AnyChannel | null> {
+	async getChannel(id: string): Promise<Channel | null> {
 		// Not safe to cache this as we won't get its updates
 		return this.channels.fetch(id, {
 			cache: false,
@@ -173,7 +173,7 @@ class DTelClient extends Client<true> {
 				// Else if we still don't know what the toResolve is, try chanel
 				const channel = await this.getChannel(toResolve).catch(() => undefined);
 				if (channel) {
-					if (channel.type === "DM") {
+					if (channel.type === ChannelType.DM) {
 						possibilities.user = (channel as DMChannel).recipient;
 					} else {
 						possibilities.guild = (channel as TextChannel).guild;

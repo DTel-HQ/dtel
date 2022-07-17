@@ -1,4 +1,4 @@
-import { Interaction, Message, Typing } from "discord.js";
+import { Interaction, Message, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
@@ -29,15 +29,15 @@ i18next.init({
 
 const client = new Client({
 	intents: [
-		"GUILDS",
-		"GUILD_VOICE_STATES",
-		"GUILD_MESSAGE_TYPING",
-		"DIRECT_MESSAGES",
+		"Guilds",
+		"GuildVoiceStates",
+		"GuildMessageTyping",
+		"DirectMessages",
 
 		// Privileged
-		"GUILD_MESSAGES",
+		"GuildMessages",
 	],
-	partials: ["CHANNEL"],
+	partials: [Partials.Channel],
 });
 
 

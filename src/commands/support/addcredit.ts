@@ -1,14 +1,15 @@
-import { MessageEmbedOptions, User } from "discord.js";
+import { EmbedBuilder, User } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 
 export default class AddCredit extends Command {
 	async run(): Promise<void> {
 		if (this.interaction.guildId != this.config.supportGuild.id) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("This command cannot be ran outside of the support server.")],
 			});
+			return;
 		}
 
 		const userID = this.interaction.options.getString("user", true);
@@ -17,36 +18,41 @@ export default class AddCredit extends Command {
 		try {
 			user = await this.client.getUser(userID);
 		} catch {
-			return this.targetUserNotFound();
+			this.targetUserNotFound();
+			return;
 		}
 
 		const perms = await this.client.getPerms(userID);
 
 		if (userID === this.client.user.id) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("I already have all the money!")],
 			});
+			return;
 		} else if (user.bot) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Are you sure you want to give them more money?", { title: "AI will destroy humans!!!" })],
 			});
+			return;
 		} else if (perms >= PermissionLevel.customerSupport && perms != PermissionLevel.maintainer) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That's not something you should be trying on the job!", { title: "Seriously?" })],
 			});
+			return;
 		}
 
 		let account = await this.fetchAccount(userID);
 		const amountOfCredits = this.interaction.options.getInteger("credits", true);
 
 		if (amountOfCredits < 0 && (account.balance + amountOfCredits) < 0) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That would bankrupt this user!", { title: "Are you insane?" })],
 			});
+			return;
 		}
 
 		account = await this.db.accounts.update({
@@ -61,16 +67,15 @@ export default class AddCredit extends Command {
 		const creditsAdded = amountOfCredits > 0;
 		const addedOrRemoved = creditsAdded ? "Added" : "Removed";
 
-		const embed: MessageEmbedOptions = {
+		const embed = EmbedBuilder.from({
 			color: this.config.colors.receipt,
 			title: `${addedOrRemoved} credits!`,
 			description: `${addedOrRemoved} ${this.config.dtsEmoji} ${Math.abs(amountOfCredits)} ${creditsAdded ? "to" : "from"} <@${userID}> (${userID})`,
 			footer: {
-				iconURL: this.interaction.user.displayAvatarURL(),
+				icon_url: this.interaction.user.displayAvatarURL(),
 				text: `${this.interaction.user.tag} (${this.interaction.user.id})`,
 			},
-			timestamp: new Date(),
-		};
+		}).setTimestamp(new Date());
 
 		if (this.interaction.channelId != this.config.supportGuild.channels.management) {
 			this.client.sendCrossShard({

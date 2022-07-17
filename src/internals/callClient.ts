@@ -1,12 +1,12 @@
 import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { Client, CommandInteraction, Message, MessageActionRow, MessageButton, MessageComponentInteraction, MessageEmbedOptions, MessageOptions, Permissions, Typing } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PermissionsBitField, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
 import { Calls, Numbers, atAndBy } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
-import { APIMessage, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
+import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { parseNumber } from "./utils";
@@ -253,23 +253,21 @@ export default class CallClient implements CallsWithNumbers {
 					...(this.to.t("incomingCall", {
 						number: fromCallerDisplay,
 						callID: this.id,
-					}) as MessageEmbedOptions),
+					}) as APIEmbed),
 				}],
 				components: [
-					new MessageActionRow()
+					new ActionRowBuilder<ButtonBuilder>()
 						.addComponents([
-							new MessageButton({
+							new ButtonBuilder({
 								customId: "call-pickup",
 								label: this.to.t("pickup")!,
-								style: "PRIMARY",
+								style: ButtonStyle.Primary,
 								emoji: "📞",
 							}),
-						])
-						.addComponents([
-							new MessageButton({
+							new ButtonBuilder({
 								customId: "call-hangup",
 								label: this.to.t("hangup")!,
-								style: "SECONDARY",
+								style: ButtonStyle.Secondary,
 								emoji: "☎️",
 							}),
 						]),
@@ -319,10 +317,10 @@ export default class CallClient implements CallsWithNumbers {
 
 
 				this.fromSend({
-					embeds: [this.to.t("missedCall.fromSide") as MessageEmbedOptions],
+					embeds: [this.to.t("missedCall.fromSide") as APIEmbed],
 				});
 				this.toSend({
-					embeds: [this.to.t("missedCall.toSide") as MessageEmbedOptions],
+					embeds: [this.to.t("missedCall.toSide") as APIEmbed],
 				});
 			} catch {
 				// Ignore
@@ -380,7 +378,7 @@ export default class CallClient implements CallsWithNumbers {
 				...(this.from.t("pickedUp.toSide", {
 					lng: this.to.locale,
 					callID: this.id,
-				}) as MessageEmbedOptions),
+				}) as APIEmbed),
 			}],
 		});
 
@@ -390,7 +388,7 @@ export default class CallClient implements CallsWithNumbers {
 
 				...(this.to.t("pickedUp.fromSide", {
 					callID: this.id,
-				}) as MessageEmbedOptions),
+				}) as APIEmbed),
 			}],
 		});
 	}
@@ -410,7 +408,7 @@ export default class CallClient implements CallsWithNumbers {
 		const { callPhones } = this.client.config;
 		let phone = "";
 
-		if (userPerms < PermissionLevel.customerSupport && (message.member?.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) {
+		if (userPerms < PermissionLevel.customerSupport && message.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)) {
 			phone = callPhones.admin;
 		} else {
 			switch (userPerms) {
@@ -498,7 +496,7 @@ export default class CallClient implements CallsWithNumbers {
 				...(thisSideT("baseEmbed", {
 					callID: this.id,
 					time: callLength,
-				}) as MessageEmbedOptions),
+				}) as APIEmbed),
 				description: thisSideDesc,
 			}],
 		});
@@ -508,7 +506,7 @@ export default class CallClient implements CallsWithNumbers {
 				...(otherSideT("baseEmbed", {
 					callID: this.id,
 					time: callLength,
-				}) as MessageEmbedOptions),
+				}) as APIEmbed),
 				description: otherSideDesc,
 			}],
 		}, otherSide.channelID);

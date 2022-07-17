@@ -1,5 +1,5 @@
 import { Numbers } from "@prisma/client";
-import { MessageActionRow, MessageButton, MessageEmbedOptions } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, APIEmbed, ButtonStyle } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 // If someone could look over the complexity of this command and try to lower it that'd be helpful.
@@ -9,10 +9,11 @@ export default class Wizard extends Command {
 		const number: Numbers | null = await this.fetchNumber();
 
 		if (number) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: number.number }))],
 				ephemeral: true,
 			});
+			return;
 		}
 
 		if (this.interaction.guild) {
@@ -43,10 +44,11 @@ export default class Wizard extends Command {
 
 				console.log(numberCount);
 				if (numberCount >= this.config.maxNumbers) {
-					return this.interaction.reply({
+					this.interaction.reply({
 						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasTooManyNumbers"))],
 						ephemeral: true,
 					});
+					return;
 				}
 			}
 		}
@@ -55,10 +57,15 @@ export default class Wizard extends Command {
 			embeds: [{
 				color: this.config.colors.yellowbook,
 
-				...this.t("introEmbed") as MessageEmbedOptions,
+				...this.t("introEmbed") as APIEmbed,
 			}],
 			components: [
-				new MessageActionRow().addComponents(new MessageButton().setLabel("I'm ready!").setCustomId("wizard-ready").setEmoji("✔️").setStyle("PRIMARY")),
+				new ActionRowBuilder<ButtonBuilder>()
+					.addComponents(new ButtonBuilder()
+						.setLabel("I'm ready!")
+						.setCustomId("wizard-ready")
+						.setEmoji("✔️")
+						.setStyle(ButtonStyle.Primary)),
 			],
 		});
 	}

@@ -1,11 +1,11 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { MessageActionRow, MessageButton, MessageEmbedOptions } from "discord.js";
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle } from "discord.js";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
 		// Since we're in here, we can assume that there's no call in progress
-		switch (this.interaction.options.getString("number")) {
+		switch (this.interaction.options.getString("number", true)) {
 			case "*233": {
 				// TODO: *233
 				break;
@@ -31,7 +31,7 @@ export default class Call extends Command {
 							...this.t("initiated", {
 								number: this.interaction.options.getString("number", true),
 								callID: callObject.id,
-							}) as MessageEmbedOptions,
+							}) as APIEmbed,
 						}],
 					});
 				} catch (e) {
@@ -42,23 +42,21 @@ export default class Call extends Command {
 							this.interaction.reply({
 								embeds: [{
 									color: this.config.colors.info,
-									...this.t("waitPrompt") as MessageEmbedOptions,
+									...this.t("waitPrompt") as APIEmbed,
 								}],
 								components: [
-									new MessageActionRow()
+									new ActionRowBuilder<ButtonBuilder>()
 										.addComponents([
-											new MessageButton({
+											new ButtonBuilder({
 												customId: "call-waitAccept",
 												label: this.t("waitAccept")!,
-												style: "PRIMARY",
+												style: ButtonStyle.Primary,
 												emoji: "✅",
 											}),
-										])
-										.addComponents([
-											new MessageButton({
+											new ButtonBuilder({
 												customId: "call-waitDeny",
 												label: this.t("waitDeny")!,
-												style: "SECONDARY",
+												style: ButtonStyle.Secondary,
 												emoji: "❌",
 											}),
 										]),

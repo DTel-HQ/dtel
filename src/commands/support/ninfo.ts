@@ -1,5 +1,5 @@
 import { APIDMChannel, APIUser } from "discord-api-types/v10";
-import { DMChannel, GuildTextBasedChannel, MessageEmbedOptions, TextBasedChannel, TextChannel, User } from "discord.js";
+import { DMChannel, GuildTextBasedChannel, APIEmbed, TextBasedChannel, TextChannel, User } from "discord.js";
 import { NumbersWithGuilds } from "../../interfaces/numbersWithGuilds";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";
@@ -30,15 +30,16 @@ export default class NInfo extends Command {
 		}
 
 		if (!number) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Couldn't find that number.")],
 			});
+			return;
 		}
 
 		const isVIP = number.vip?.expiry && number.vip?.expiry > new Date();
 
-		const embed: MessageEmbedOptions = {
+		const embed: APIEmbed = {
 			color: isVIP ? this.config.colors.vip : this.config.colors.info,
 			title: `Information about ${number.number}`,
 			description: "Hit the button below for more information",
@@ -48,10 +49,11 @@ export default class NInfo extends Command {
 		// Get the channel details
 		const channel = await this.client.getChannel(number.channelID).catch(() => null) as TextBasedChannel;
 		if (!channel) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("The channel associated with that number couldn't be found.")],
 			});
+			return;
 			// TODO: Delete number
 		}
 
@@ -82,13 +84,13 @@ export default class NInfo extends Command {
 			}
 
 			embed.footer = {
-				iconURL: footerImage,
+				icon_url: footerImage,
 				text: guild.name,
 			};
 		} else {
 			const dmChannel = channel as DMChannel;
 
-			numberOwner = dmChannel.recipient;
+			numberOwner = dmChannel.recipient as User;
 			ownerStrikeCount = await this.db.strikes.count({
 				where: {
 					offender: numberOwner.id,
@@ -99,7 +101,7 @@ export default class NInfo extends Command {
 			channelDescription = `#*DM Channel*\n\`${channel.id}\``;
 
 			embed.footer = {
-				iconURL: numberOwner.displayAvatarURL(),
+				icon_url: numberOwner.displayAvatarURL(),
 				text: `${numberOwner.username}#${numberOwner.discriminator}`,
 			};
 		}

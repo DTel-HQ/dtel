@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { MessageEmbedOptions } from "discord.js";
+import { APIEmbed } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 
@@ -10,15 +10,16 @@ export default class Daily extends Command {
 
 			// If it's too early
 			if (oneDayAfter.isAfter(Date.now())) {
-				return this.interaction.reply({
+				this.interaction.reply({
 					embeds: [{
 						color: this.config.colors.info,
 						...this.t("alreadyClaimedEmbed", {
 							timeRemaining: oneDayAfter.fromNow(false),
-						}) as MessageEmbedOptions,
+						}) as APIEmbed,
 					}],
 					ephemeral: true,
 				});
+				return;
 			}
 		}
 
@@ -65,13 +66,13 @@ export default class Daily extends Command {
 			},
 		});
 
-		return this.interaction.reply({
+		this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				...this.t("claimedSuccessfully", {
 					balance: this.account!.balance,
 					noNewCredits: creditCount,
-				}) as MessageEmbedOptions,
+				}) as APIEmbed,
 			}],
 			ephemeral: true,
 		});

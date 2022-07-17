@@ -1,4 +1,4 @@
-import { InteractionReplyOptions, MessageEmbedOptions } from "discord.js";
+import { InteractionReplyOptions, APIEmbed } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 export default class Help extends Command {
@@ -11,7 +11,7 @@ export default class Help extends Command {
 					icon_url: this.client.user.displayAvatarURL(),
 					url: this.config.siteLink,
 				},
-				...(this.t("embed") as MessageEmbedOptions),
+				...(this.t("embed") as APIEmbed),
 			}],
 
 			ephemeral: true,

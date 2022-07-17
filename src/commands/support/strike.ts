@@ -8,30 +8,34 @@ export default class Strike extends Command {
 		const offender = this.interaction.options.getString("offender", true);
 
 		if (offender === this.interaction.user.id) {
-			return this.interaction.reply(`>fire ${this.interaction.user.id}`);
+			this.interaction.reply(`>fire ${this.interaction.user.id}`);
+			return;
 		} else if (offender === this.config.supportGuild.id) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				embeds:	[{
 					color: this.config.colors.error,
 					title: "Turning against us?",
 					description: "As if we'd would allow you to do this...",
 				}],
 			});
+			return;
 		}
 
 		const possibilities = await this.client.resolveGuildChannelNumberUser(offender);
 
 		if (possibilities.user) {
 			if (possibilities.user.bot) {
-				return this.interaction.reply({
+				this.interaction.reply({
 					embeds: [this.client.errorEmbed("Do not try to strike my brothers!", { title: "❌ User is a bot" })],
 				});
+				return;
 			}
 
 			if (await this.client.getPerms(possibilities.user.id) >= PermissionLevel.customerSupport) {
-				return this.interaction.reply({
+				this.interaction.reply({
 					embeds: [this.client.errorEmbed("You can't get rid of someone that easily...", { title: "❌ Unfair competition" })],
 				});
+				return;
 			}
 		}
 
@@ -50,9 +54,10 @@ export default class Strike extends Command {
 		}
 
 		if (!idToStrike || !type) {
-			return this.interaction.reply({
+			this.interaction.reply({
 				embeds: [this.client.errorEmbed("ID could not be resolved to a number, server, user or channel.")],
 			});
+			return;
 		}
 
 		const reason = this.interaction.options.getString("reason", true);

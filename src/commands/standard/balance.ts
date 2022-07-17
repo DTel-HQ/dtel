@@ -1,4 +1,4 @@
-import { MessageEmbedOptions, User } from "discord.js";
+import { APIEmbed, User } from "discord.js";
 import Command from "../../internals/commandProcessor";
 import { formatBalance, getAccount } from "../../internals/utils";
 
@@ -19,18 +19,22 @@ export default class Balance extends Command {
 		try {
 			user = await this.client.getUser(accountIDToGet);
 		} catch {
-			return this.noAccount();
+			this.noAccount();
+			return;
 		}
 
 		const account = await getAccount(accountIDToGet);
-		if (!account) return this.noAccount();
+		if (!account) {
+			this.noAccount();
+			return;
+		}
 
 		this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.info,
 				author: {
 					name: `${user.username}#${user.discriminator}`,
-					iconURL: user.displayAvatarURL(),
+					icon_url: user.displayAvatarURL(),
 				},
 				...(this.t("embed", {
 					balance: formatBalance(account.balance),
@@ -40,7 +44,7 @@ export default class Balance extends Command {
 					interpolation: {
 						escapeValue: false,
 					},
-				}) as MessageEmbedOptions),
+				}) as APIEmbed),
 			}],
 			ephemeral: true,
 		});

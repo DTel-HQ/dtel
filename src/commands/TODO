@@ -65,7 +65,7 @@ whitelist
 addvip
 announce
 assign
-eval
+
 pull
 restart
 stats

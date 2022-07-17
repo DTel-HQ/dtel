@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import config from "../../config/config";
-import { MessageEmbedOptions } from "discord.js";
+import { APIEmbed } from "discord.js";
 
 export default class Info extends Command {
 	async run(): Promise<void> {
@@ -23,7 +23,7 @@ export default class Info extends Command {
 					interpolation: {
 						escapeValue: false,
 					},
-				}) as MessageEmbedOptions,
+				}) as APIEmbed,
 			}],
 			ephemeral: true,
 		});

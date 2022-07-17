@@ -1,5 +1,5 @@
 // TODO: Localize
-import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
+import { CommandInteraction, InteractionResponse, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import DTelClient from "./client";
 import config from "../config/config";
 import CommandDataInterface, { CommandType } from "../interfaces/commandData";
@@ -34,8 +34,8 @@ abstract class Processor {
 		return true;
 	}
 
-	permCheckFail(): void {
-		this.interaction.reply({
+	permCheckFail(): Promise<InteractionResponse> {
+		return this.interaction.reply({
 			ephemeral: true,
 			embeds: [{
 				color: 0xFF0000,
@@ -70,13 +70,15 @@ abstract class Processor {
 		if (this.commandData.useType === CommandType.call) {
 			this.call = this.client.calls.find(c => c.from.channelID === this.interaction.channelId || c.to.channelID === this.interaction.channelId);
 			if (!this.call) {
-				return this.noCallFound();
+				await this.noCallFound();
+				return;
 			}
 		} else {
 			if (this.commandData.numberRequired) {
 				this.number = await this.fetchNumber();
 				if (!this.number) {
-					return this.noNumberFound();
+					await this.noNumberFound();
+					return;
 				}
 			}
 			if (this.commandData.accountRequired) {
@@ -86,7 +88,7 @@ abstract class Processor {
 		this.run();
 	}
 
-	noNumberFound(): Promise<void> {
+	noNumberFound(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			ephemeral: true,
 			embeds: [{
@@ -97,20 +99,20 @@ abstract class Processor {
 		});
 	}
 
-	noCallFound(): Promise<void> {
+	noCallFound(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			ephemeral: true,
 			embeds: [this.client.errorEmbed("This command only works when in a call. Why not call someone using `/call`?")],
 		});
 	}
-	noAccount(): Promise<void> {
+	noAccount(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			embeds: [this.client.errorEmbed("That user doesn't have an account.")],
 			ephemeral: true,
 		});
 	}
 
-	notMaintainer(): Promise<void> {
+	notMaintainer(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			embeds: [{
 				color: 0xFF0000,
@@ -120,7 +122,7 @@ abstract class Processor {
 		});
 	}
 
-	guildOnly(): Promise<void> {
+	guildOnly(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			embeds: [this.client.errorEmbed("This command can only be ran in a server!")],
 		});
@@ -130,7 +132,7 @@ abstract class Processor {
 		return this.interaction.guild ? `03${formatShardNumber(Number(process.env.SHARDS))}` : "0900";
 	}
 
-	targetUserNotFound(): Promise<void> {
+	targetUserNotFound(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			ephemeral: true,
 			embeds: [this.client.errorEmbed(this.t("errors.userNotFound"))],

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CommandInteraction, Permissions, MessageComponentInteraction, ModalSubmitInteraction, Interaction, SnowflakeUtil } from "discord.js";
+import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction, Interaction, SnowflakeUtil, InteractionType, PermissionsBitField, ChatInputCommandInteraction } from "discord.js";
 import Commands from "../config/commands";
 import Command, { CommandType, PermissionLevel } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
@@ -26,8 +26,8 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	let commandData: Command;
 
 	switch (interaction.type) {
-		case "APPLICATION_COMMAND": {
-			commandName = (interaction as CommandInteraction).commandName;
+		case InteractionType.ApplicationCommand: {
+			commandName = (interaction as ChatInputCommandInteraction).commandName;
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
 			commandData = cmd;
@@ -64,8 +64,8 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			break;
 		}
-		case "MESSAGE_COMPONENT":
-		case "MODAL_SUBMIT": {
+		case InteractionType.MessageComponent:
+		case InteractionType.ModalSubmit: {
 			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
 
 			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
@@ -128,15 +128,24 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		const userPermissions = await client.getPerms(interaction.user.id);
 		switch (commandData.permissionLevel) {
 			case PermissionLevel.maintainer: {
-				if (userPermissions != PermissionLevel.maintainer) return processorClass.notMaintainer();
+				if (userPermissions != PermissionLevel.maintainer) {
+					processorClass.notMaintainer();
+					return;
+				}
 				break;
 			}
 			case PermissionLevel.customerSupport: {
-				if (userPermissions < PermissionLevel.customerSupport) return processorClass.permCheckFail();
+				if (userPermissions < PermissionLevel.customerSupport) {
+					processorClass.permCheckFail();
+					return;
+				}
 				break;
 			}
 			case PermissionLevel.serverAdmin: {
-				if (!(interaction.member!.permissions as Permissions).has(Permissions.FLAGS.MANAGE_GUILD)) return processorClass.permCheckFail();
+				if (!(interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild)) {
+					processorClass.permCheckFail();
+					return;
+				}
 				break;
 			}
 		}

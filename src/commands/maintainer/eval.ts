@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { MessageAttachment } from "discord.js";
+import { AttachmentBuilder } from "discord.js";
 import { inspect } from "util";
 import Command from "../../internals/commandProcessor";
 
@@ -13,7 +13,7 @@ export default class Eval extends Command {
 		const winston = this.client.winston;
 
 		const hrstart = process.hrtime();
-		let payload = this.interaction.options.get("code", true).value as string;
+		let payload = this.interaction.options.getString("code", true);
 		try {
 			if (payload.startsWith("```js") && payload.endsWith("```")) payload = payload.substring(5, payload.length - 3);
 
@@ -49,7 +49,8 @@ export default class Eval extends Command {
 						description: `As such, I've saved them to a file. Here are the results!`,
 					}],
 					files: [
-						new MessageAttachment(Buffer.from(result), "eval-results.txt"),
+						new AttachmentBuilder(Buffer.from(result))
+							.setName("eval-results.txt"),
 					],
 				});
 			}
