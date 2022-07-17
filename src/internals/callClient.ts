@@ -129,6 +129,10 @@ export default class CallClient implements CallsWithNumbers {
 		return callManager;
 	}
 
+	get timeElapsed(): string {
+		return dayjs(this.started.at).fromNow(true);
+	}
+
 	toSend(payload: MessageOptions): Promise<APIMessage> {
 		return this.client.sendCrossShard(payload, this.to.channelID);
 	}
@@ -487,7 +491,7 @@ export default class CallClient implements CallsWithNumbers {
 			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide");
 		}
 
-		const callLength = dayjs(this.started.at).fromNow(true);
+		const callLength = this.timeElapsed;
 
 		interaction.reply({
 			embeds: [{
@@ -517,6 +521,17 @@ export default class CallClient implements CallsWithNumbers {
 		const otherSide = typing.channel.id === this.from.channelID ? this.to.channelID : this.from.channelID;
 
 		this.client.restAPI.post(`/channels/${otherSide}/typing`).catch(() => null);
+	}
+
+	async countMessages(): Promise<number> {
+		return (await db.callMessages.aggregate({
+			where: {
+				callID: this.id,
+			},
+			_count: {
+				_all: true,
+			},
+		}))._count._all;
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {

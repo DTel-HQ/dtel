@@ -206,6 +206,14 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
 	},
+	{
+		name: "status",
+		description: `View the status of a call`,
+		guildOnly: false,
+		numberRequired: false,
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.call,
+	},
 ];
 
 export default commands;

@@ -344,6 +344,23 @@ export default {
 				},
 			},
 		},
+		status: {
+			embed: {
+				title: "Call Status",
+				fields: [{
+					name: "Time elapsed",
+					value: "{{ timeElapsed }}",
+					inline: true,
+				}, {
+					name: "Message count",
+					value: "{{ messageCount }}",
+					inline: true,
+				}],
+				footer: {
+					text: "{{ callID }}",
+				},
+			},
+		},
 	},
 
 	errors: {

@@ -4,6 +4,13 @@ import Command from "../../internals/commandProcessor";
 
 export default class AddCredit extends Command {
 	async run(): Promise<void> {
+		if (this.interaction.guildId != this.config.supportGuild.id) {
+			return this.interaction.reply({
+				ephemeral: true,
+				embeds: [this.client.errorEmbed("This command cannot be ran outside of the support server.")],
+			});
+		}
+
 		const userID = this.interaction.options.getString("user", true);
 
 		let user: User;
@@ -25,7 +32,7 @@ export default class AddCredit extends Command {
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Are you sure you want to give them more money?", { title: "AI will destroy humans!!!" })],
 			});
-		} else if (perms >= PermissionLevel.customerSupport) {
+		} else if (perms >= PermissionLevel.customerSupport && perms != PermissionLevel.maintainer) {
 			return this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That's not something you should be trying on the job!", { title: "Seriously?" })],
@@ -65,9 +72,11 @@ export default class AddCredit extends Command {
 			timestamp: new Date(),
 		};
 
-		this.client.sendCrossShard({
-			embeds: [embed],
-		}, this.config.supportGuild.channels.management);
+		if (this.interaction.channelId != this.config.supportGuild.channels.management) {
+			this.client.sendCrossShard({
+				embeds: [embed],
+			}, this.config.supportGuild.channels.management);
+		}
 
 		this.interaction.reply({
 			embeds: [embed],
