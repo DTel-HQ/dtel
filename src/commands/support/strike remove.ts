@@ -1,7 +1,7 @@
 import { Strikes } from "@prisma/client";
 import Command from "../../internals/commandProcessor";
 
-export default class Strike extends Command {
+export default class StrikeRemove extends Command {
 	async run(): Promise<void> {
 		const strikeID = this.interaction.options.getString("strike_id", true);
 

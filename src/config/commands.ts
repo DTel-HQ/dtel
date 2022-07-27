@@ -244,6 +244,28 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
 	},
+	{
+		name: "mention",
+		description: `Edit the list of people who get mentioned when a call comes through.`,
+		options: [{
+			name: "toggle",
+			description: "Add or remove yourself from the mentions list",
+			type: ApplicationCommandOptionType.Subcommand,
+		}, {
+			name: "list",
+			description: "View the mentions list",
+			type: ApplicationCommandOptionType.Subcommand,
+		}, {
+			name: "remove",
+			description: "Remove someone from the mentions list",
+			type: ApplicationCommandOptionType.Subcommand,
+		}],
+
+		guildOnly: true,
+		numberRequired: true,
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
 ];
 
 export default commands;

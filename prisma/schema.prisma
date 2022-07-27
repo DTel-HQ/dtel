@@ -29,6 +29,7 @@ model Numbers {
   blocked   String[]
   contacts  String[]
   expiry    DateTime
+  mentions String[]
   promote   numberPromote?
   vip       numberVIP?
   waiting   Boolean        @default(false)

@@ -1,7 +1,7 @@
 import Command from "../../internals/commandProcessor";
 import config from "../../config/config";
 
-export default class Links extends Command {
+export default class Ping extends Command {
 	async run(): Promise<void> {
 		// No real point localising a test command
 		const embed = {

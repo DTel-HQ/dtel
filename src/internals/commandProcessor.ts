@@ -19,10 +19,11 @@ abstract class CommandProcessor extends Processor {
 	}
 
 	async _run(): Promise<void> {
+		// Maybe this should be moved into the event handler?
 		if (this.interaction.guild && (!this.checkPermissions() && !this.client.config.maintainers.includes(this.interaction.user.id))) {
 			await this.permCheckFail();
 			return;
-		} else if (this.commandData.guildOnly) {
+		} else if (this.commandData.guildOnly && !this.interaction.guild) {
 			await this.guildOnly();
 			return;
 		}

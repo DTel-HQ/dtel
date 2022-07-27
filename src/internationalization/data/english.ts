@@ -1,3 +1,5 @@
+// Check out context
+// https://www.i18next.com/translation-function/context
 import config from "../../config/config";
 
 export default {
@@ -97,7 +99,6 @@ export default {
 				description: "Would you like to wait until the number is free? You can leave the queue at any time.",
 			},
 
-			// TODO: Maybe make these more generic? idk, yes/no buttons don't seem great
 			waitAccept: "Yes",
 			waitDeny: "No",
 		},
@@ -359,6 +360,19 @@ export default {
 				footer: {
 					text: "{{ callID }}",
 				},
+			},
+		},
+		mention: {
+			selectPrompt: "Select a user to remove",
+			listEmpty: "There are no users being mentioned.",
+			listFull: "The mentions list is full (max 25).",
+			listEmbed: {
+				title: "Mentions List",
+				description: `{{ list }}`,
+			},
+			toggleEmbed: {
+				title: "✅ Success!",
+				description: "You have been **{{ addedOrRemoved }}** the list of mentions!",
 			},
 		},
 	},

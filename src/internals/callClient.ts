@@ -350,7 +350,7 @@ export default class CallClient implements CallsWithNumbers {
 
 		if (this.otherSideShardID) {
 			type ctx = { callID: string, pickedUp: atAndBy };
-			await this.client.shard?.broadcastEval<void, ctx>(async(_client: Client, context): Promise<void> => {
+			await this.client.shard?.broadcastEval<void, ctx>(async(_client, context): Promise<void> => {
 				const client = _client as DTelClient;
 				const callHandler = client.calls.find(c => c.id === context.callID);
 				if (!callHandler) throw new Error("No handler");

@@ -3,7 +3,7 @@ import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 import { randomString } from "../../internals/utils";
 
-export default class Strike extends Command {
+export default class StrikeAdd extends Command {
 	async run(): Promise<void> {
 		const offender = this.interaction.options.getString("offender", true);
 
