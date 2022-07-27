@@ -66,12 +66,12 @@ model Calls {
   toNum   String
   fromNum String
 
-  to   Numbers @relation(name: "to", fields: [toNum], references: [number])
-  from Numbers @relation(name: "from", fields: [fromNum], references: [number])
+  to   Numbers? @relation(name: "to", fields: [toNum], references: [number])
+  from Numbers? @relation(name: "from", fields: [fromNum], references: [number])
 
   pickedUp   atAndBy?
   randomCall Boolean  @default(false)
-  started    atAndBy?
+  started    atAndBy
   ended      atAndBy?
 
   messages CallMessages[]

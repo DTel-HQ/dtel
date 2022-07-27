@@ -25,7 +25,7 @@ pay
 promote
 rcall
 
-update
+<!-- update - superseded by a decent permissions system -->
 upgrade
 
 ----- Call -----
@@ -35,30 +35,30 @@ cinfo
 handover
 
 hold
-ninfo
+<!-- ninfo - needs second page but otherwise complete -->
 pay
 <!-- permcheck - superseded by red colour phone -->
-pickup - P0
-status
+<!-- pickup - superseded by interaction -->
+
 transfer
 
 ----- Support ------ MOSTLY P0
-addcredit
+
 backdoor
-blacklist
+
 broadcast
-cinfo
+
 cshelp
 deassign
 identify
 minfo
-ninfo
-permcheck
+
+<!-- permcheck - Different coloured phones should be fine for this -->
 reassign
-rmstrike
-strike
-uinfo
-unbusy
+
+
+
+<!-- unbusy - I'm not 100% we use this anymore, we don't have interaction menus -->
 whitelist
 
 ----- Maintainer -----

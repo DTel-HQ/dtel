@@ -1,4 +1,4 @@
-import { APIEmbed, EmbedBuilder } from "discord.js";
+import { EmbedBuilder } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";

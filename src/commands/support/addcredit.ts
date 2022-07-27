@@ -4,14 +4,6 @@ import Command from "../../internals/commandProcessor";
 
 export default class AddCredit extends Command {
 	async run(): Promise<void> {
-		if (this.interaction.guildId != this.config.supportGuild.id) {
-			this.interaction.reply({
-				ephemeral: true,
-				embeds: [this.client.errorEmbed("This command cannot be ran outside of the support server.")],
-			});
-			return;
-		}
-
 		const userID = this.interaction.options.getString("user", true);
 
 		let user: User;

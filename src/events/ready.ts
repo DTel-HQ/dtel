@@ -26,6 +26,7 @@ export default async(client: DTelClient): Promise<void> => {
 			},
 		},
 	});
+
 	for (const call of allCalls) {
 		client.calls.push(await CallClient.byID(client, {
 			doc: call,

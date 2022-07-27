@@ -1,4 +1,4 @@
-// TODO: Localize
+// TODO: Localize (use this.t)
 import { CommandInteraction, InteractionResponse, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
 import DTelClient from "./client";
 import config from "../config/config";
@@ -136,6 +136,13 @@ abstract class Processor {
 		return this.interaction.reply({
 			ephemeral: true,
 			embeds: [this.client.errorEmbed(this.t("errors.userNotFound"))],
+		});
+	}
+
+	notInSupportGuild(): Promise<InteractionResponse> {
+		return this.interaction.reply({
+			ephemeral: true,
+			embeds: [this.client.errorEmbed("This command cannot be ran outside of the support server.")],
 		});
 	}
 }

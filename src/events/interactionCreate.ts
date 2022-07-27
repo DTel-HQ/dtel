@@ -27,7 +27,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 	switch (interaction.type) {
 		case InteractionType.ApplicationCommand: {
-			commandName = (interaction as ChatInputCommandInteraction).commandName;
+			const typedInteraction = interaction as ChatInputCommandInteraction;
+
+			commandName = typedInteraction.commandName;
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
 			commandData = cmd;
@@ -58,6 +60,11 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 					toRunPath += "/maintainer";
 					break;
 				}
+			}
+
+			const subCommand = typedInteraction.options.getSubcommand(false);
+			if (subCommand) {
+				commandName = `${commandName} ${subCommand}`;
 			}
 
 			toRunPath += `/${commandName}`;
@@ -137,6 +144,10 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			case PermissionLevel.customerSupport: {
 				if (userPermissions < PermissionLevel.customerSupport) {
 					processorClass.permCheckFail();
+					return;
+				}
+				if (interaction.guildId !== config.supportGuild.id && !config.devMode) {
+					processorClass.notInSupportGuild();
 					return;
 				}
 				break;

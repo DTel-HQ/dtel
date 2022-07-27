@@ -1,4 +1,4 @@
-import { ApplicationCommandOptionType } from "discord.js";
+import { ApplicationCommandOptionType, ApplicationCommandType } from "discord.js";
 import Command, { PermissionLevel, CommandType } from "../interfaces/commandData";
 
 const commands: Command[] = [
@@ -88,7 +88,7 @@ const commands: Command[] = [
 	},
 	{
 		name: "eval",
-		description: `Evaluates some JS code`,
+		description: `Evaluates some JS code [Maintainer only]`,
 		options: [{
 			name: "code",
 			description: "The code you want to evaluate",
@@ -132,15 +132,30 @@ const commands: Command[] = [
 		guildOnly: false,
 		numberRequired: false,
 		options: [{
-			name: "offender",
-			description: "The ID of the number/user/guild/channel you want to strike",
-			required: true,
-			type: ApplicationCommandOptionType.String,
+			name: "add",
+			description: "Add a strike to a user. [Support Only]",
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [{
+				name: "offender",
+				description: "The ID of the number/user/guild/channel you want to strike",
+				required: true,
+				type: ApplicationCommandOptionType.String,
+			}, {
+				name: "reason",
+				description: "The reason for the strike",
+				required: true,
+				type: ApplicationCommandOptionType.String,
+			}],
 		}, {
-			name: "reason",
-			description: "The reason for the strike",
-			required: true,
-			type: ApplicationCommandOptionType.String,
+			name: "remove",
+			description: "Remove a strike from a user. [Support Only]",
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [{
+				name: "strike_id",
+				description: "The ID of the strike you want to remove",
+				required: true,
+				type: ApplicationCommandOptionType.String,
+			}],
 		}],
 
 		permissionLevel: PermissionLevel.customerSupport,
@@ -209,11 +224,25 @@ const commands: Command[] = [
 	},
 	{
 		name: "status",
-		description: `View the status of a call`,
+		description: `View the status of a call.`,
 		guildOnly: false,
 		numberRequired: false,
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
+	},
+	{
+		name: "cinfo",
+		description: `View information about a call. [Support Only]`,
+		options: [{
+			name: "call_id",
+			description: "The ID of the call you want to view information about.",
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		}],
+		guildOnly: false,
+		numberRequired: false,
+		permissionLevel: PermissionLevel.customerSupport,
+		useType: CommandType.customerSupport,
 	},
 ];
 

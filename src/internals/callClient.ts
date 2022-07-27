@@ -86,12 +86,9 @@ export default class CallClient implements CallsWithNumbers {
 		};
 	}
 
-	static async byID(client: DTelClient, options: { id?: string, doc?: CallsWithNumbersAndGuilds, side: CallSide }): Promise<CallClient> {
-		let callDoc: CallsWithNumbersAndGuilds;
-		if (options.doc) {
-			callDoc = options.doc;
-		} else {
-			const tempDoc = await client.db.calls.findUnique({
+	static async byID(client: DTelClient, options: { id?: string, doc?: callMissingChannel | null, side: CallSide }): Promise<CallClient> {
+		if (!options.doc) {
+			options.doc = await client.db.calls.findUnique({
 				where: {
 					id: options.id,
 				},
@@ -108,9 +105,18 @@ export default class CallClient implements CallsWithNumbers {
 					},
 				},
 			});
-			if (!tempDoc) throw new Error("callNotFound");
-			else callDoc = tempDoc;
 		}
+
+		if (!options.doc) {
+			throw new Error("Call not found or not provided");
+		}
+
+		if (!options.doc.to || !options.doc.from) {
+			await CallClient.prematureEnd(options.doc);
+		}
+
+		// Preflight checks done, we are sure there's a call and that we know about both number
+		const callDoc = options.doc as CallsWithNumbersAndGuilds;
 
 		const callManager = new CallClient(client, undefined, callDoc);
 		callManager.primary = options.side === "from";
@@ -533,9 +539,13 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {
+		return CallClient.endHandler(this.id, endedBy);
+	}
+
+	static async endHandler(id: string, endedBy = ""): Promise<void> {
 		db.calls.update({
 			where: {
-				id: this.id,
+				id: id,
 			},
 			data: {
 				active: false,
@@ -546,4 +556,10 @@ export default class CallClient implements CallsWithNumbers {
 			},
 		}).catch(() => null);
 	}
+
+	static async prematureEnd(callDoc: callMissingChannel): Promise<void> {
+		CallClient.endHandler(callDoc.id, "system - number lost");
+	}
 }
+
+type callMissingChannel = Calls & { to: Numbers | null, from: Numbers | null};

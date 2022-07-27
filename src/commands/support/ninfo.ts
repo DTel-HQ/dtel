@@ -1,5 +1,4 @@
-import { APIDMChannel, APIUser } from "discord-api-types/v10";
-import { DMChannel, GuildTextBasedChannel, APIEmbed, TextBasedChannel, TextChannel, User } from "discord.js";
+import { DMChannel, GuildTextBasedChannel, APIEmbed, TextBasedChannel, User } from "discord.js";
 import { NumbersWithGuilds } from "../../interfaces/numbersWithGuilds";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";
