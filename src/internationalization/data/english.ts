@@ -5,10 +5,18 @@ import config from "../../config/config";
 export default {
 	languages: ["en-**"],
 
+	generic: {
+		addedTo: "added to",
+		removedFrom: "removed from",
+	},
+
 	events: {
 		interactionCreate: {
-			expiredInteraction: "This interaction has expired. Try running the command again.",
-		}
+			errors: {
+				expiredInteraction: "This interaction has expired. Try running the command again.",
+				wrongUser: "You didn't send this message!",
+			},
+		},
 	},
 
 	commands: {
@@ -379,6 +387,10 @@ export default {
 			toggleEmbed: {
 				title: "✅ Success!",
 				description: "You have been **{{ addedOrRemoved }}** the list of mentions!",
+			},
+			removeEmbed: {
+				title: "✅ Success!",
+				description: "**{{ user }}** has been removed from the list of mentions!",
 			},
 		},
 	},

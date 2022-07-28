@@ -42,7 +42,6 @@ export default class Wizard extends Command {
 					}))._count.number;
 				}
 
-				console.log(numberCount);
 				if (numberCount >= this.config.maxNumbers) {
 					this.interaction.reply({
 						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasTooManyNumbers"))],

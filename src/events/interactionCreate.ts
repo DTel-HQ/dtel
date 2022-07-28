@@ -1,7 +1,17 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { CommandInteraction, MessageComponentInteraction, ModalSubmitInteraction, Interaction, SnowflakeUtil, InteractionType, PermissionsBitField, ChatInputCommandInteraction } from "discord.js";
+import {
+	CommandInteraction,
+	MessageComponentInteraction,
+	ModalSubmitInteraction,
+	Interaction,
+	SnowflakeUtil,
+	InteractionType,
+	PermissionsBitField,
+	ChatInputCommandInteraction,
+	ApplicationCommandOptionType,
+} from "discord.js";
 import Commands from "../config/commands";
-import Command, { CommandType, PermissionLevel } from "../interfaces/commandData";
+import Command, { CommandType, PermissionLevel, SubcommandData } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Processor from "../internals/processor";
@@ -26,6 +36,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	let commandName: string;
 	let toRunPath: string;
 	let commandData: Command;
+	let permissionLevel: PermissionLevel = PermissionLevel.none;
 
 	switch (interaction.type) {
 		case InteractionType.ApplicationCommand: {
@@ -66,7 +77,13 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			const subCommand = typedInteraction.options.getSubcommand(false);
 			if (subCommand) {
+				const subData = commandData.options?.find(o => o.name === subCommand) as SubcommandData | null;
+				if (!subData) throw new Error();
+
 				commandName = `${commandName} ${subCommand}`;
+				permissionLevel = subData.permissionLevel;
+			} else {
+				permissionLevel = commandData.permissionLevel;
 			}
 
 			toRunPath += `/${commandName}`;
@@ -76,6 +93,11 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		case InteractionType.MessageComponent:
 		case InteractionType.ModalSubmit: {
 			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
+
+			if (interaction.message?.interaction?.user.id != interaction.user.id) {
+				interaction.reply(t("errors.wrongUser"));
+				return;
+			}
 
 			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
 				interaction.reply({
@@ -97,13 +119,30 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			}
 
 			commandName = split[0];
-			const interactionName = split[1];
+			let interactionName: string = split[1];
 
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
 			commandData = cmd;
 
-			toRunPath = `${__dirname}/../interactions/${commandName}/${interactionName}`;
+			toRunPath = `${__dirname}/../interactions/${commandName}`;
+
+			const subCommand = cmd.options?.find(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData | null;
+
+			if (subCommand) {
+				commandName = `${commandName} ${subCommand}`;
+				permissionLevel = subCommand.permissionLevel;
+
+				commandName = `${split[0]} ${split[1]}`;
+				interactionName = split[2];
+
+				toRunPath += `/${split[1]}`;
+			} else {
+				permissionLevel = commandData.permissionLevel;
+			}
+
+
+			toRunPath += `/${interactionName}`;
 		}
 	}
 
@@ -135,7 +174,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	const processorClass = new processorFile(client, interaction, commandData);
 	try {
 		const userPermissions = await client.getPerms(interaction.user.id);
-		switch (commandData.permissionLevel) {
+		switch (permissionLevel) {
 			case PermissionLevel.maintainer: {
 				if (userPermissions != PermissionLevel.maintainer) {
 					processorClass.notMaintainer();

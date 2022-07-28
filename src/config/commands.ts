@@ -259,6 +259,8 @@ const commands: Command[] = [
 			name: "remove",
 			description: "Remove someone from the mentions list",
 			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.serverAdmin,
 		}],
 
 		guildOnly: true,

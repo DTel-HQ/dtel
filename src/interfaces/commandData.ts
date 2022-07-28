@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ChatInputApplicationCommandData } from "discord.js";
+import { ApplicationCommandOptionData, ApplicationCommandSubCommandData, ChatInputApplicationCommandData } from "discord.js";
 
 // eslint-disable-next-line no-shadow
 enum PermissionLevel {
@@ -20,7 +20,16 @@ enum CommandType {
 	maintainer,
 }
 
+interface SubcommandData extends ApplicationCommandSubCommandData {
+	permissionLevel: PermissionLevel;
+	useType: CommandType;
+}
+
+type CommandOptions = ApplicationCommandOptionData | SubcommandData;
+
 interface CommandData extends ChatInputApplicationCommandData {
+	options?: CommandOptions[],
+
 	guildOnly?: boolean;
 	numberRequired?: boolean;
 	accountRequired?: boolean;
@@ -31,5 +40,5 @@ interface CommandData extends ChatInputApplicationCommandData {
 	notExecutableInCall?: boolean;
 }
 export default CommandData;
-export { PermissionLevel, CommandType };
+export { PermissionLevel, CommandType, SubcommandData };
 

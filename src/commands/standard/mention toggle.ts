@@ -30,7 +30,10 @@ export default class MentionToggle extends Command {
 		});
 
 		const embed = EmbedBuilder.from(this.t("toggleEmbed", {
-			addedOrRemoved: indexOfMention === -1 ? "added to" : "removed from",
+			addedOrRemoved: indexOfMention === -1 ? "$t(generic.addedTo)" : "$t(generic.removedFrom)",
+			interpolation: {
+				skipOnVariables: false,
+			},
 		})).setColor(this.config.colors.success);
 
 		this.interaction.reply({
