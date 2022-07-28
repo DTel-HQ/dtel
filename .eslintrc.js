@@ -119,8 +119,8 @@ module.exports = {
 		"prefer-template": "error",
 		"rest-spread-spacing": "error",
 		"template-curly-spacing": "error",
-		"no-console": "off",
+		"no-console": 0,
 		"no-irregular-whitespace": ["error", { skipStrings: true, skipComments: true, skipTemplates: true }],
-		"no-unused-vars": "warn",
+		"no-unused-vars": 0,
 	},
 };
