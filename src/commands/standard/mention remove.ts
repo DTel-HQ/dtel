@@ -16,7 +16,7 @@ export default class MentionRemove extends Command {
 
 		const selectMenu = new SelectMenuBuilder()
 			.setPlaceholder(this.t("selectPrompt"))
-			.setCustomId("mention-remove-selector");
+			.setCustomId("mention-removeSelector");
 
 		for (const i of this.number!.mentions) {
 			const user = await this.client.getUser(i).catch(() => null);

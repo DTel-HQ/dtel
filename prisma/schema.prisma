@@ -125,3 +125,4 @@ model Strikes {
 model Blacklist {
   id String @id @map("_id")
 }
+

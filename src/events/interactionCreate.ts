@@ -5,13 +5,15 @@ import Command, { CommandType, PermissionLevel } from "../interfaces/commandData
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Processor from "../internals/processor";
-import i18n from "i18next";
+import i18n, { getFixedT } from "i18next";
 import { winston } from "../dtel";
 import config from "../config/config";
 import { blacklistCache } from "../database/db";
 
 export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
+
+	const t = getFixedT(interaction.locale, "events.interactionCreate");
 
 	if (blacklistCache.get(interaction.user.id)) {
 		interaction.reply(i18n.t("errors.blacklisted", {
@@ -77,7 +79,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
 				interaction.reply({
-					content: i18n.t("This interaction has expired. Try running the command again.", { lng: interaction.locale }),
+					content: i18n.t("", { lng: interaction.locale }),
 					ephemeral: true,
 				});
 

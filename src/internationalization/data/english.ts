@@ -5,6 +5,12 @@ import config from "../../config/config";
 export default {
 	languages: ["en-**"],
 
+	events: {
+		interactionCreate: {
+			expiredInteraction: "This interaction has expired. Try running the command again.",
+		}
+	},
+
 	commands: {
 		balance: {
 			embed: {
