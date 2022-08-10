@@ -312,7 +312,7 @@ export default class CallClient implements CallsWithNumbers {
 
 			try {
 				if (callNotifMsgID) {
-					const callMsg = await this.client.restAPI.get(`/channels/${this.to.channelID}/messages/${callNotifMsgID}`) as RESTGetAPIChannelMessageResult;
+					const callMsg = await this.client.rest.get(`/channels/${this.to.channelID}/messages/${callNotifMsgID}`) as RESTGetAPIChannelMessageResult;
 					await this.client.editCrossShard({
 						embeds: callMsg.embeds,
 						components: [],
@@ -524,7 +524,7 @@ export default class CallClient implements CallsWithNumbers {
 		// Get other side
 		const otherSide = typing.channel.id === this.from.channelID ? this.to.channelID : this.from.channelID;
 
-		this.client.restAPI.post(`/channels/${otherSide}/typing`).catch(() => null);
+		this.client.rest.post(`/channels/${otherSide}/typing`).catch(() => null);
 	}
 
 	async countMessages(): Promise<number> {

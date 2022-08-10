@@ -1,8 +1,7 @@
 import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, APIEmbed, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
-import { REST } from "@discordjs/rest";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APITextChannel, ChannelType, InteractionType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
@@ -18,7 +17,6 @@ interface PossibleTypes {
 
 class DTelClient extends Client<true> {
 	config = config;
-	restAPI: REST;
 
 	db = db;
 	winston: Logger = winston;
@@ -31,9 +29,6 @@ class DTelClient extends Client<true> {
 
 	constructor(options: ClientOptions) {
 		super(options);
-
-		this.restAPI = new REST();
-		this.restAPI.setToken(process.env.TOKEN || this.token || "");
 		this.shardWithSupportGuild = ShardClientUtil.shardIdForGuildId(config.supportGuild.id, config.shardCount);
 	}
 
@@ -55,20 +50,20 @@ class DTelClient extends Client<true> {
 	}
 
 	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
-		return this.restAPI.post(`/channels/${channelID}/messages`, {
+		return this.rest.post(`/channels/${channelID}/messages`, {
 			body: options,
 		}) as Promise<RESTPostAPIChannelMessageResult>;
 	}
 
 	async editCrossShard(options: MessageOptions, channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
-		return this.restAPI.patch(`/channels/${channelID}/messages/${messageID}`, {
+		return this.rest.patch(`/channels/${channelID}/messages/${messageID}`, {
 			body: options,
 		}) as Promise<RESTPatchAPIChannelMessageResult>;
 	}
 
 	async shardIdForChannelId(id: string): Promise<number> {
 		if (!process.env.SHARD_COUNT || Number(process.env.SHARD_COUNT) == 1) return 0;
-		const channelObject = await this.restAPI.get(`/channels/${id}`) as APITextChannel;
+		const channelObject = await this.rest.get(`/channels/${id}`) as APITextChannel;
 
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}

@@ -268,6 +268,20 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
 	},
+	{
+		name: "block",
+		description: `Prevent a number from calling you`,
+		options: [{
+			name: "number",
+			description: "The number you want to block",
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		}],
+		guildOnly: false,
+		numberRequired: true,
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
 ];
 
 export default commands;

@@ -1,4 +1,4 @@
-import { Interaction, Message, Partials, Typing } from "discord.js";
+import { Interaction, Message, Options, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
@@ -38,6 +38,14 @@ const client = new Client({
 		"GuildMessages",
 	],
 	partials: [Partials.Channel],
+	makeCache: Options.cacheWithLimits({
+		...Options.DefaultMakeCacheSettings,
+		MessageManager: 1,
+		GuildInviteManager: 0,
+		GuildEmojiManager: 0,
+		GuildStickerManager: 0,
+		UserManager: 1000,
+	}),
 });
 
 

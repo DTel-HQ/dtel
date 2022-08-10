@@ -1,9 +1,14 @@
 General:
   logging everywhere (in the support guild)
   Should we make quick functions to replace "findUnique({ where: { id: } })" ?
+  Guild events if needed
+  Message editing and deleting
+  611
+  233
+  411
 
 Commands:
------ Standard ------
+----- Standard ------ 10
 
 block
 
@@ -17,7 +22,7 @@ convert
 
 lottery
 mailbox
-<!-- mention - mention remove interaction needs done -->
+
 message
 pay
 
@@ -28,7 +33,7 @@ rcall
 <!-- update - superseded by a decent permissions system -->
 upgrade
 
------ Call -----
+----- Call ----- 7
 allow
 backdoor
 cinfo
@@ -42,7 +47,7 @@ pay
 
 transfer
 
------ Support ------ MOSTLY P0
+----- Support ------ MOSTLY P0 - 8
 
 backdoor
 
@@ -61,7 +66,7 @@ reassign
 <!-- unbusy - I'm not 100% we use this anymore, we don't have interaction menus -->
 whitelist
 
------ Maintainer -----
+----- Maintainer ----- 7
 addvip
 announce
 assign
