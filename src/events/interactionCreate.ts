@@ -94,7 +94,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		case InteractionType.ModalSubmit: {
 			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
 
-			if (interaction.message?.interaction?.user.id != interaction.user.id) {
+			if (interaction.type === InteractionType.ModalSubmit && interaction.message?.interaction?.user.id != interaction.user.id) {
 				interaction.reply(t("errors.wrongUser"));
 				return;
 			}

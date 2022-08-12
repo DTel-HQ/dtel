@@ -15,6 +15,8 @@ export default class Call extends Command {
 				break;
 			}
 			default: {
+				await this.interaction.deferReply();
+
 				const callObject = new CallClient(this.client, {
 					from: this.number!.number,
 
@@ -25,7 +27,7 @@ export default class Call extends Command {
 
 				try {
 					await callObject.initiate();
-					this.interaction.reply({
+					this.interaction.editReply({
 						embeds: [{
 							color: this.config.colors.info,
 							...this.t("initiated", {
@@ -39,7 +41,7 @@ export default class Call extends Command {
 					// Feel free to change it
 					if (e instanceof Error) {
 						if (e.message === "otherSideInCall") {
-							this.interaction.reply({
+							this.interaction.editReply({
 								embeds: [{
 									color: this.config.colors.info,
 									...this.t("waitPrompt") as APIEmbed,
@@ -72,14 +74,12 @@ export default class Call extends Command {
 							return;
 						}
 
-						this.interaction.reply({
+						this.interaction.editReply({
 							embeds: [this.client.errorEmbed(this.t(`errors.${e.message}`))],
-							ephemeral: true,
 						});
 					} else {
-						this.interaction.reply({
+						this.interaction.editReply({
 							embeds: [this.client.errorEmbed(this.t(`errors.unexpected`))],
-							ephemeral: true,
 						});
 					}
 				}

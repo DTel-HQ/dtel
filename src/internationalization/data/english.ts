@@ -52,8 +52,8 @@ export default {
 				otherSideExpired: "The number you have attempted to call has expired.",
 
 				numberInvalid: "The number you tried to call is invalid!",
-				numberNotFound: "The number you tried to call doesn't exist!",
-				numberMissingChannel: "We can't reach the other side. They probably removed our bot.",
+				otherSideMissingChannel: "We can't reach the other side. They probably removed our bot.",
+				otherSideNotFound: "The number you tried to call doesn't exist!",
 
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
 
@@ -78,8 +78,8 @@ export default {
 
 			pickedUp: {
 				toSide: {
-					title: "You picked up the call.",
-					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
+					title: "You picked up the call",
+					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules).",
 					footer: {
 						text: "ID: {{ callID }}",
 					},
@@ -87,7 +87,7 @@ export default {
 
 				fromSide: {
 					title: "The other side picked up!",
-					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules)",
+					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules).",
 					footer: {
 						text: "ID: {{ callID }}",
 					},
@@ -181,13 +181,13 @@ export default {
 				color: 0xFF0000,
 				title: "The call has ended!",
 				footer: {
-					text: "{{ callID }}",
+					text: "ID: {{ callID }}",
 				},
 			},
 			descriptions: {
 				notPickedUp: {
 					thisSide: "You have ended the call.",
-					otherSide: "The other side ended the call.",
+					otherSide: "The other side rejected the call.",
 				},
 				pickedUp: {
 					thisSide: "You have ended the call after {{ time }}.",
@@ -393,6 +393,20 @@ export default {
 				description: "**{{ user }}** has been removed from the list of mentions!",
 			},
 		},
+		block: {
+			cantBlockSelf: "You can't block yourself! (how would that even work?)\nYou can report yourself by calling `*611` 🙂",
+			invalidBlockingNumber: "Invalid or special number. You can't block special numbers. Please report any abuse by calling `*611`",
+			numberDoesntExist: "We couldn't find that number",
+
+			blockedSuccess: {
+				title: "✅ Blocked!",
+				description: "`{{ numberOrDisplay }}` has been **blocked**!",
+			},
+			unblockedSuccess: {
+				title: "✅ Unblocked!",
+				description: "`{{ numberOrDisplay }}` has been **unblocked**!",
+			},
+		},
 	},
 
 	errors: {
@@ -402,5 +416,6 @@ export default {
 		noAccount: "That user doesn't have an account.",
 		blacklisted: "❌ You have been blacklisted. You may not use DTel.",
 		userNotFound: "Couldn't find that user.",
+		wrongUser: "You can't click buttons on someone elses's message",
 	},
 };

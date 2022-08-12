@@ -31,11 +31,12 @@ const client = new Client({
 	intents: [
 		"Guilds",
 		"GuildVoiceStates",
+		"GuildMessages",
 		"GuildMessageTyping",
 		"DirectMessages",
 
 		// Privileged
-		"GuildMessages",
+		"MessageContent",
 	],
 	partials: [Partials.Channel],
 	makeCache: Options.cacheWithLimits({
@@ -47,7 +48,6 @@ const client = new Client({
 		UserManager: 1000,
 	}),
 });
-
 
 client.on("ready", () => ReadyEvent(client));
 

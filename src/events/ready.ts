@@ -1,6 +1,7 @@
 import DTelClient from "../internals/client";
 import Commands from "../config/commands";
 import CallClient from "../internals/callClient";
+import config from "../config/config";
 
 export default async(client: DTelClient): Promise<void> => {
 	client.winston.info(`Ready!`);
@@ -8,6 +9,7 @@ export default async(client: DTelClient): Promise<void> => {
 
 	// client.application.commands.set(client.commands);
 	client.application!.commands.set(Commands, "385862448747511812");
+	client.application!.commands.set(Commands, "398980667553349649");
 
 	const allCalls = await client.db.calls.findMany({
 		where: {
@@ -33,4 +35,6 @@ export default async(client: DTelClient): Promise<void> => {
 			side: "to",
 		}));
 	}
+
+	if (client.application.installParams) config.botInvite = client.generateInvite(client.application.installParams);
 };

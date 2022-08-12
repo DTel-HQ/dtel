@@ -196,7 +196,7 @@ export default class CallClient implements CallsWithNumbers {
 		const toNumber = participants.find(p => p.number === this.toNum);
 
 		// Preflight checks
-		if (!toNumber) throw new Error("toNumNotFound");
+		if (!toNumber) throw new Error("otherSideNotFound");
 		if (toNumber.expiry < new Date()) throw new Error("otherSideExpired");
 		if (toNumber.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
 
@@ -336,10 +336,10 @@ export default class CallClient implements CallsWithNumbers {
 		}, 2 * 60 * 1000);
 	}
 
-	async pickup(interaction: MessageComponentInteraction, pickedUpBy: string): Promise<void> {
+	async pickup(interaction: MessageComponentInteraction): Promise<void> {
 		this.pickedUp = {
 			at: new Date(),
-			by: pickedUpBy,
+			by: interaction.user.id,
 		};
 
 		await this.client.editCrossShard({
@@ -476,7 +476,7 @@ export default class CallClient implements CallsWithNumbers {
 		});
 	}
 
-	async hangup(interaction: CommandInteraction): Promise<void> {
+	async hangup(interaction: CommandInteraction|MessageComponentInteraction): Promise<void> {
 		const sideInitiatingHangup: CallSide = this.from.channelID === interaction.channelId ? "from" : "to";
 		const thisSide = sideInitiatingHangup === "from" ? this.from : this.to;
 		const otherSide = thisSide === this.from ? this.to : this.from;
@@ -486,22 +486,22 @@ export default class CallClient implements CallsWithNumbers {
 
 		this.client.calls.splice(this.client.calls.indexOf(this), 1);
 
-		let thisSideDesc, otherSideDesc;
+		const callLength = this.timeElapsed;
+
+		let thisSideDesc: string, otherSideDesc: string;
 		if (this.pickedUp) {
-			thisSideDesc = thisSideT("descriptions.pickedUp.thisSide");
-			otherSideDesc = otherSideT("descriptions.pickedUp.otherSide");
+			thisSideDesc = thisSideT("descriptions.pickedUp.thisSide", { time: callLength });
+			otherSideDesc = otherSideT("descriptions.pickedUp.otherSide", { time: callLength });
 		} else {
-			thisSideDesc = thisSideT("descriptions.notPickedUp.otherSide");
-			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide");
+			thisSideDesc = thisSideT("descriptions.notPickedUp.otherSide", { time: callLength });
+			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide", { time: callLength });
 		}
 
-		const callLength = this.timeElapsed;
 
 		interaction.reply({
 			embeds: [{
 				...(thisSideT("baseEmbed", {
 					callID: this.id,
-					time: callLength,
 				}) as APIEmbed),
 				description: thisSideDesc,
 			}],

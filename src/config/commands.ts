@@ -279,7 +279,7 @@ const commands: Command[] = [
 		}],
 		guildOnly: false,
 		numberRequired: true,
-		permissionLevel: PermissionLevel.none,
+		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
 	},
 ];

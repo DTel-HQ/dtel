@@ -1,6 +1,6 @@
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
-export default class CallPickupButton extends MessageComponentProcessor {
+export default class CallHangupButton extends MessageComponentProcessor {
 	async run(): Promise<void> {
 		const callClient = this.client.calls.find(c => c.to.channelID === this.interaction.channelId);
 		if (!callClient) {
@@ -10,6 +10,6 @@ export default class CallPickupButton extends MessageComponentProcessor {
 			return;
 		}
 
-		callClient.pickup(this.interaction);
+		callClient.hangup(this.interaction);
 	}
 }
