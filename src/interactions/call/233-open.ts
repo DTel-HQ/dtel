@@ -1,14 +1,9 @@
-import { SelectMenuOptionBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, ModalBuilder, SelectMenuBuilder } from "discord.js";
+import { ActionRowBuilder, ModalBuilder, SelectMenuBuilder, SelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
 export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor {
 	async run(): Promise<void> {
-		const modal = new ModalBuilder()
-			.setTitle(this.t("twoThreeThree.renewNumber"))
-			.setCustomId("call-233-renew");
-
 		const monthSelectorOptions: SelectMenuOptionBuilder[] = [];
 		// For up to 11 months
 		for (let i = 1; i <= 11; i++) {
@@ -47,14 +42,17 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 			monthSelectorOptions.push(option);
 		}
 
-		modal.addComponents(new ActionRowBuilder<SelectMenuBuilder>().addComponents([
-			new SelectMenuBuilder()
-				.setCustomId("call-233-renew")
-				.setPlaceholder("Months to renew")
-				.addOptions(monthSelectorOptions),
-		]) as never);
-		// ^^ Not technically supported but does work, easy-ish to convert to text anyway
 
-		this.interaction.showModal(modal);
+		this.interaction.reply({
+			ephemeral: true,
+			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents([
+				new SelectMenuBuilder()
+					.setCustomId("call-233-renew")
+					.setPlaceholder(this.t("monthsToRenewLabel"))
+					.addOptions(monthSelectorOptions),
+			])],
+		});
+
+		// this.interaction.showModal(modal);
 	}
 }

@@ -133,7 +133,7 @@ export default {
 					description: `Welcome to *233, where you can find number information and also renew your number.\nOur renewal rate is ${config.dtsEmoji} ${config.renewalRate}/month.$t(commands.call.twoThreeThree.{{ canAfford }})`,
 				},
 
-				canAfford: "", // Intentionally empty
+				canAfford: " ", // Intentionally empty
 				cantAfford: "\nYou **can't** afford to renew your number",
 
 				expiry: "Expiration date",
@@ -145,7 +145,30 @@ export default {
 				vipExpiry: "VIP Expiration Date",
 				vipMonths: "Your VIP Months",
 				renewNumber: "Renew Number",
+				cantAffordAfterSelector: "You can't afford to renew for this many months. Please call again.",
+
+				receiptEmbed: {
+					title: "Your receipt",
+					description: "Your number has been renewed for {{ amountOfTime }}",
+					fields: [{
+						name: "Number",
+						value: "{{ number }}",
+						inline: true,
+					}, {
+						name: "New expiry",
+						value: "{{ expiration }}",
+						inline: true,
+					}, {
+						name: "New balance",
+						value: `${config.dtsEmoji} {{ balance }}`,
+						inline: true,
+					}, {
+						name: "Need to recharge?",
+						value: config.paymentLink,
+					}],
+				},
 			},
+			monthsToRenewLabel: "How long would you like to renew for?",
 		},
 
 		daily: {
