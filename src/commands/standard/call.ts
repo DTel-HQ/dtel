@@ -1,14 +1,16 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle } from "discord.js";
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonComponent, ButtonStyle, EmbedBuilder, EmbedField } from "discord.js";
+import { getFixedT, t } from "i18next";
+import dayjs from "dayjs";
+import { formatBalance } from "../../internals/utils";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
 		// Since we're in here, we can assume that there's no call in progress
 		switch (this.interaction.options.getString("number", true)) {
 			case "*233": {
-				// TODO: *233
-				break;
+				return this.twoThreeThree();
 			}
 			case "*411": {
 				// TODO: *411
@@ -86,4 +88,85 @@ export default class Call extends Command {
 			}
 		}
 	}
+
+	async twoThreeThree(): Promise<void> {
+		const t233 = getFixedT(this.interaction.locale, undefined, "commands.call.twoThreeThree");
+
+		const isVIP = this.number!.vip?.expiry && this.number!.vip?.expiry > new Date();
+		const strikeCount = (await this.db.strikes.aggregate({
+			where: {
+				offender: this.number?.guildID || this.interaction.user.id,
+			},
+			_count: {
+				_all: true,
+			},
+		}))._count._all;
+
+		const embed = EmbedBuilder.from(this.t("twoThreeThree.baseEmbed", {
+			canAfford: this.account!.balance > 500 ? "canAfford" : "cantAfford",
+		}));
+		embed
+			.setColor(isVIP ? this.config.colors.info : this.config.colors.yellowbook)
+			.setAuthor({
+				name: this.interaction.guild?.name || this.interaction.user.username,
+				iconURL: this.interaction.guild?.iconURL() || this.interaction.user.displayAvatarURL(),
+			});
+
+		embed.addFields([{
+			name: t("generic.number"),
+			value: this.number!.number,
+			inline: true,
+		}, {
+			name: t233("expiry"),
+			value: formatDate(this.number!.expiry),
+			inline: true,
+		}, {
+			name: t233("credits"),
+			value: `${this.config.dtsEmoji} ${formatBalance(this.account!.balance)}`,
+			inline: true,
+		}, {
+			name: t233("isVIP"),
+			value: upperFirst(isVIP ? t("generic.yes") : t("generic.no")),
+			inline: true,
+		}, {
+			name: t233("vipExpiry"),
+			value: isVIP ? formatDate(this.number!.vip!.expiry) : t("generic.notApplicable"),
+			inline: true,
+		}, {
+			name: t233("vipMonths"),
+			value: this.account!.vipMonthsRemaining.toString(),
+			inline: true,
+		}, {
+			name: t233("blockedNumbers"),
+			value: this.number!.blocked.length.toString(),
+			inline: true,
+		}, {
+			name: t233("mentions"),
+			value: this.number!.mentions.length.toString(),
+			inline: true,
+		}, {
+			name: t233("strikes"),
+			value: strikeCount.toString(),
+			inline: true,
+		}]);
+
+		const actionRow = new ActionRowBuilder<ButtonBuilder>()
+			.addComponents(
+				new ButtonBuilder()
+					.setStyle(ButtonStyle.Primary)
+					.setCustomId("call-233-open")
+					.setLabel(t233("renewNumber"))
+					.setEmoji("💸")
+					.setDisabled(this.account!.balance < 500),
+			);
+
+		this.interaction.reply({
+			embeds: [embed],
+			components: [actionRow],
+			ephemeral: true,
+		});
+	}
 }
+
+const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
+const upperFirst = (text: string) => `${text[0].toUpperCase()}${text.slice(1, text.length)}`;

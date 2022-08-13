@@ -9,6 +9,7 @@ const sharder = new ShardingManager(`${__dirname}/dtel.js`, {
 	token: auth.discord.token,
 });
 
+
 const winston = Console("Master");
 
 sharder.on("shardCreate", shard => {

@@ -112,6 +112,7 @@ const commands: Command[] = [
 		}],
 		guildOnly: false,
 		numberRequired: true,
+		accountRequired: true,
 		notExecutableInCall: true,
 
 		permissionLevel: PermissionLevel.none,

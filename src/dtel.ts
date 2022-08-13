@@ -33,6 +33,7 @@ const client = new Client({
 		"GuildVoiceStates",
 		"GuildMessages",
 		"GuildMessageTyping",
+		"GuildEmojisAndStickers",
 		"DirectMessages",
 
 		// Privileged

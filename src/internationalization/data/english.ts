@@ -8,6 +8,17 @@ export default {
 	generic: {
 		addedTo: "added to",
 		removedFrom: "removed from",
+		number: "number",
+		yes: "Yes",
+		no: "No",
+		notApplicable: "N/A",
+
+		month_one: "{{ count }} month",
+		month_other: "{{ count }} months",
+		year_one: "{{ count }} year",
+		year_other: "{{ count }} years",
+		credit_one: "{{ count }} credit",
+		credit_other: "{{ count }} credits",
 	},
 
 	events: {
@@ -115,6 +126,26 @@ export default {
 
 			waitAccept: "Yes",
 			waitDeny: "No",
+
+			twoThreeThree: {
+				baseEmbed: {
+					title: "Number Information",
+					description: `Welcome to *233, where you can find number information and also renew your number.\nOur renewal rate is ${config.dtsEmoji} ${config.renewalRate}/month.$t(commands.call.twoThreeThree.{{ canAfford }})`,
+				},
+
+				canAfford: "", // Intentionally empty
+				cantAfford: "\nYou **can't** afford to renew your number",
+
+				expiry: "Expiration date",
+				credits: "Your Balance",
+				isVIP: "VIP Number",
+				mentions: "Mentions",
+				strikes: "Strikes",
+				blockedNumbers: "Blocked Numbers",
+				vipExpiry: "VIP Expiration Date",
+				vipMonths: "Your VIP Months",
+				renewNumber: "Renew Number",
+			},
 		},
 
 		daily: {

@@ -44,6 +44,9 @@ export default {
 		contributor: "<:RedPhone:742293638931021904>",
 		admin: "📞",
 	},
+	// dtsEmoji: "<:DTS:668551813317787659>",
+	// dtsEmojiID: "668551813317787659",
+	// dtsEmojiName: "DTS",
 	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs

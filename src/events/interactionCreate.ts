@@ -119,7 +119,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			}
 
 			commandName = split[0];
-			let interactionName: string = split[1];
+			let interactionName: string = split.slice(1, split.length).join("-");
 
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
@@ -134,7 +134,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 				permissionLevel = subCommand.permissionLevel;
 
 				commandName = `${split[0]} ${split[1]}`;
-				interactionName = split[2];
+				interactionName = split.slice(2, split.length).join("-");
 
 				toRunPath += `/${split[1]}`;
 			} else {
