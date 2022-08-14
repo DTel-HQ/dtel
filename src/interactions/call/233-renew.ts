@@ -1,6 +1,5 @@
 import dayjs from "dayjs";
 import { SelectMenuInteraction } from "discord.js";
-import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
 export default class TwoThreeThreeRenewModal extends MessageComponentProcessor {
@@ -44,7 +43,7 @@ export default class TwoThreeThreeRenewModal extends MessageComponentProcessor {
 			},
 		});
 
-		const amountOfTimeDisplay = t(monthYear === "m" ? "generic.month" : "generic.year", { count: amount });
+		const amountOfTimeDisplay = this.genericT(monthYear === "m" ? "month" : "year", { count: amount });
 
 		this.interaction.reply({
 			embeds: [{

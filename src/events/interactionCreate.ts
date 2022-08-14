@@ -121,6 +121,8 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			commandName = split[0];
 			let interactionName: string = split.slice(1, split.length).join("-");
 
+			if (interactionName.startsWith("dtelnoreg")) return;
+
 			const cmd = Commands.find(c => c.name === commandName);
 			if (!cmd) throw new Error();
 			commandData = cmd;

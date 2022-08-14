@@ -12,6 +12,9 @@ export default {
 		yes: "Yes",
 		no: "No",
 		notApplicable: "N/A",
+		continue: "continue",
+		cancel: "cancel",
+		success: "success",
 
 		month_one: "{{ count }} month",
 		month_other: "{{ count }} months",
@@ -460,6 +463,63 @@ export default {
 				title: "✅ Unblocked!",
 				description: "`{{ numberOrDisplay }}` has been **unblocked**!",
 			},
+		},
+		pay: {
+			wasteOfMoney: "That transfer would be a waste of money 🙂",
+			tooLow: {
+				title: "Transfer amount too low",
+				description: `Payments must be at least ${config.dtsEmoji} ${config.minTransfer}`,
+			},
+			userNotFound: "Couldn't find that user. How are we meant to pay someone we can't find?",
+			cantAfford: "You can't afford to give away that many credits!",
+
+			transactionDetails: "Transaction Details",
+
+			confirmEmbedOptions: {
+				title: "Confirm transaction",
+				description: "Press **confirm** to continue, **cancel** to cancel.",
+			},
+			transactionCompleteEmbedOptions: {
+				title: "💸 $('generic.success', upperFirst)",
+				description: "Your money is on it's way!",
+			},
+			receiptEmbedOptions: {
+				title: "💸 You've got money!",
+				description: "Someone has sent you some credits. Here's your receipt:",
+			},
+
+			embed: {
+				fields: [{
+					name: "Recipient",
+					value: "To: {{ displayName }}",
+				}, {
+					name: "$t(commands.pay.transactionDetails)",
+					value: [
+						`Amount: **${config.dtsEmoji} {{ preFeeToSend }}**`,
+						`Transfer Fee: **${config.dtsEmoji} {{ fee }}**`,
+						`__A fee will be taken for this transaction__ - The recipient will receive **${config.dtsEmoji} {{ postFeeCost, currency }}**`,
+					].join("\n"),
+				}, {
+					name: "New balance",
+					value: `${config.dtsEmoji} {{ newBalance }}`,
+				}, {
+					name: "Message",
+					value: "{{ message }}",
+				}],
+				footer: {
+					text: "This transaction will expire in 60 seconds.",
+				},
+			},
+
+			editedTransactionField: [
+				`Amount: **${config.dtsEmoji} {{ preFeeCost }}**`,
+				`Transfer Fee: **${config.dtsEmoji} {{ fee }}** ({{ feePercentage }}%)`,
+				`__The fee was deducted from the transferred amount.__`,
+			].join("\n"),
+
+			sender: "sender",
+			from: "From: {{ displayName }}",
+			newBalance: "New balance",
 		},
 	},
 

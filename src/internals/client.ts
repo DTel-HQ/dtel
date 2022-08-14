@@ -1,7 +1,7 @@
 import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, APIEmbed, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, ChannelType, InteractionType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";

@@ -2,6 +2,7 @@
 // Stuff that's too specific to but put on the client, but still used in multiple places
 
 import { Accounts, Numbers } from "@prisma/client";
+import dayjs from "dayjs";
 import { db } from "../database/db";
 
 export const formatShardNumber = (shardNumber: number): string => shardNumber < 10 ? `0${shardNumber}` : shardNumber.toString();
@@ -9,7 +10,9 @@ export const formatBalance = (balance: number): string => {
 	// For Discoin decimal compatibility
 	const roundedBal = Math.round(balance * 100) / 100;
 
-	return roundedBal.toLocaleString("en-US");
+	// Adds 0s to decimal values
+	// eslint-disable-next-line @typescript-eslint/no-extra-parens
+	return roundedBal.toLocaleString("en-US", { minimumFractionDigits: (roundedBal % 1 < 0) ? 0 : 2 });
 };
 
 
@@ -54,3 +57,6 @@ export const fetchNumber = (input: string): Promise<Numbers | null> => {
 		},
 	});
 };
+
+export const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
+export const upperFirst = (text: string) => `${text[0].toUpperCase()}${text.slice(1, text.length)}`;

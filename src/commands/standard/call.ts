@@ -1,9 +1,8 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonComponent, ButtonStyle, EmbedBuilder, EmbedField } from "discord.js";
-import { getFixedT, t } from "i18next";
-import dayjs from "dayjs";
-import { formatBalance } from "../../internals/utils";
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
+import { getFixedT } from "i18next";
+import { formatBalance, formatDate, upperFirst } from "../../internals/utils";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
@@ -106,14 +105,14 @@ export default class Call extends Command {
 			canAfford: this.account!.balance > 500 ? "canAfford" : "cantAfford",
 		}));
 		embed
-			.setColor(isVIP ? this.config.colors.info : this.config.colors.yellowbook)
+			.setColor(isVIP ? this.config.colors.yellowbook : this.config.colors.info)
 			.setAuthor({
 				name: this.interaction.guild?.name || this.interaction.user.username,
 				iconURL: this.interaction.guild?.iconURL() || this.interaction.user.displayAvatarURL(),
 			});
 
 		embed.addFields([{
-			name: t("generic.number"),
+			name: this.genericT("number"),
 			value: this.number!.number,
 			inline: true,
 		}, {
@@ -126,11 +125,11 @@ export default class Call extends Command {
 			inline: true,
 		}, {
 			name: t233("isVIP"),
-			value: upperFirst(isVIP ? t("generic.yes") : t("generic.no")),
+			value: upperFirst(this.genericT(isVIP ? "yes" : "no")),
 			inline: true,
 		}, {
 			name: t233("vipExpiry"),
-			value: isVIP ? formatDate(this.number!.vip!.expiry) : t("generic.notApplicable"),
+			value: isVIP ? formatDate(this.number!.vip!.expiry) : this.genericT("notApplicable"),
 			inline: true,
 		}, {
 			name: t233("vipMonths"),
@@ -167,6 +166,3 @@ export default class Call extends Command {
 		});
 	}
 }
-
-const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
-const upperFirst = (text: string) => `${text[0].toUpperCase()}${text.slice(1, text.length)}`;

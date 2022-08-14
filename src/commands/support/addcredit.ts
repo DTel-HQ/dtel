@@ -82,8 +82,8 @@ export default class AddCredit extends Command {
 		user.send({
 			embeds: [{
 				color: this.config.colors.receipt,
-				title: creditsAdded ? "Cash!" : "Your balance changed",
-				description: `A support member has ${addedOrRemoved.toLowerCase()} ${this.config.dtsEmoji}${Math.abs(amountOfCredits)} ${creditsAdded ? "to" : "from"} your account. You now have ${this.config.dtsEmoji}${account.balance}.`,
+				title: creditsAdded ? "💸 Cash!" : "Your balance changed",
+				description: `A support member has ${addedOrRemoved.toLowerCase()} ${this.config.dtsEmoji}${Math.abs(amountOfCredits).toLocaleString()} ${creditsAdded ? "to" : "from"} your account.\nYou now have ${this.config.dtsEmoji}${account.balance}.`,
 			}],
 		}).catch(() => null);
 	}

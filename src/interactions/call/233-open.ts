@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ModalBuilder, SelectMenuBuilder, SelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
 import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
@@ -11,11 +11,11 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 			if (cost > this.account!.balance) break;
 
 			const option = new SelectMenuOptionBuilder()
-				.setLabel(t("generic.month", {
+				.setLabel(this.genericT("month", {
 					count: i,
 					lng: this.interaction.locale,
 				}))
-				.setDescription(t("generic.credit", {
+				.setDescription(this.genericT("credit", {
 					count: cost,
 					lng: this.interaction.locale,
 				}))
@@ -29,11 +29,11 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 			if (cost > this.account!.balance) break;
 
 			const option = new SelectMenuOptionBuilder()
-				.setLabel(t("generic.year", {
+				.setLabel(this.genericT("year", {
 					count: i,
 					lng: this.interaction.locale,
 				}))
-				.setDescription(t("generic.credit", {
+				.setDescription(this.genericT("credit", {
 					count: cost,
 					lng: this.interaction.locale,
 				}))

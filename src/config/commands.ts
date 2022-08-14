@@ -283,6 +283,60 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
 	},
+	{
+		name: "pay",
+		description: `Send DTel Credit to another user.`,
+		guildOnly: false,
+		numberRequired: false,
+		accountRequired: true,
+
+		options: [{
+			name: "id",
+			description: "Send credit to a user by ID",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			options: [{
+				name: "id",
+				description: "The ID of the user you want to send credit to",
+				required: true,
+				type: ApplicationCommandOptionType.String,
+			}, {
+				name: "credits",
+				description: "The amount of credits you want to send",
+				required: true,
+				type: ApplicationCommandOptionType.Integer,
+			}, {
+				name: "message",
+				description: "A message to send along with the credits [optional]",
+				required: false,
+				type: ApplicationCommandOptionType.String,
+			}],
+		}, {
+			name: "user",
+			description: "Send credit to a user by mentioning them",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			options: [{
+				name: "user",
+				description: "The user you want to send credit to",
+				required: true,
+				type: ApplicationCommandOptionType.User,
+			}, {
+				name: "credits",
+				description: "The amount of credits you want to send",
+				required: true,
+				type: ApplicationCommandOptionType.Integer,
+			}, {
+				name: "message",
+				description: "A message to send along with the credits [optional]",
+				required: false,
+				type: ApplicationCommandOptionType.Integer,
+			}],
+		}],
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
 ];
 
 export default commands;

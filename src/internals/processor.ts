@@ -7,7 +7,7 @@ import { Numbers, Accounts } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
 import { fetchNumber, formatShardNumber, getAccount } from "./utils";
-import { TFunction } from "i18next";
+import { getFixedT, TFunction } from "i18next";
 
 type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -23,11 +23,14 @@ abstract class Processor {
 
 	call?: CallClient;
 	abstract t: TFunction;
+	genericT: TFunction;
 
 	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
 		this.client = client;
 		this.interaction = interaction;
 		this.commandData = commandData;
+
+		this.genericT = getFixedT(interaction.locale, undefined, "generic");
 	}
 
 	checkPermissions(): boolean {

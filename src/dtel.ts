@@ -13,6 +13,7 @@ import TypingStartEvent from "./events/typingStart";
 
 import SharderMessageEvent from "./events/sharderMessage";
 import { populateBlacklistCache } from "./database/db";
+import { upperFirst } from "./internals/utils";
 
 populateBlacklistCache();
 
@@ -26,6 +27,7 @@ i18next.init({
 	returnObjects: true,
 	resources: i18nData,
 });
+i18next.services.formatter?.add("upperFirst", value => upperFirst(value));
 
 const client = new Client({
 	intents: [
