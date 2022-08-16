@@ -1,9 +1,9 @@
 import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PermissionsBitField, Typing } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PartialMessage, PermissionsBitField, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, Numbers, atAndBy } from "@prisma/client";
+import { Calls, Numbers, atAndBy, CallMessages } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
@@ -11,6 +11,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { parseNumber } from "./utils";
 import { NumbersWithGuilds } from "../interfaces/numbersWithGuilds";
+import { winston } from "../dtel";
 
 dayjs.extend(relativeTime);
 
@@ -60,6 +61,9 @@ export default class CallClient implements CallsWithNumbers {
 	ended: atAndBy | null = null;
 	active = true;
 
+	// Map of original message ID to message object
+	// Will normally cache only messages handled by this shard unless a restart occurs
+	messageCache = new Map<string, CallMessages>();
 	otherSideShardID = 0;
 
 	client: DTelClient;
@@ -131,6 +135,16 @@ export default class CallClient implements CallsWithNumbers {
 
 		callManager.to.locale = toLocale;
 		callManager.from.locale = fromLocale;
+
+		const allMessages = await db.callMessages.findMany({
+			where: {
+				callID: callDoc.id,
+			},
+		});
+
+		for (const msg of allMessages) {
+			callManager.messageCache.set(msg.originalMessageID, msg);
+		}
 
 		return callManager;
 	}
@@ -234,7 +248,7 @@ export default class CallClient implements CallsWithNumbers {
 			// THIS CAN THROW callNotFound
 			await this.client.shard?.broadcastEval<void, string>(async(_client: Client, context: string): Promise<void> => {
 				const client = _client as DTelClient;
-				client.calls.push(await require(`${__dirname}/../internals/callClient`).default.byID(client, {
+				client.calls.set(context, await require(`${__dirname}/../internals/callClient`).default.byID(client, {
 					id: context,
 					side: "to",
 				}));
@@ -298,9 +312,10 @@ export default class CallClient implements CallsWithNumbers {
 				to: undefined,
 				from: undefined,
 				messages: undefined,
+				messageCache: undefined,
 			},
 		});
-		this.client.calls.push(this);
+		this.client.calls.set(this.id, this);
 
 		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
 	}
@@ -399,11 +414,8 @@ export default class CallClient implements CallsWithNumbers {
 		});
 	}
 
-	async handleMessage(message: Message): Promise<void> {
-		if (!this.pickedUp?.by) return;
-
+	async processContent(message: Message, sideToSendTo: ClientCallParticipant): Promise<MessageOptions> {
 		const userPerms = await this.client.getPerms(message.author.id);
-		const sideToSendTo = this.from.channelID === message.channel.id ? this.to : this.from;
 
 		const toSend: MessageOptions = { content: `**${message.author.tag}`, embeds: [] };
 
@@ -463,9 +475,18 @@ export default class CallClient implements CallsWithNumbers {
 			}
 		}
 
+		return toSend;
+	}
+
+	async messageCreate(message: Message): Promise<void> {
+		if (!this.pickedUp?.by) return;
+		const sideToSendTo = this.getOtherSideByChannel(message.channel.id)!;
+
+		const toSend = await this.processContent(message, sideToSendTo);
+
 		const forwardedMessageID = await this.client.sendCrossShard(toSend, sideToSendTo.channelID);
 
-		await this.client.db.callMessages.create({
+		const msgDoc = await this.client.db.callMessages.create({
 			data: {
 				callID: this.id,
 				forwardedMessageID: forwardedMessageID.id,
@@ -474,6 +495,74 @@ export default class CallClient implements CallsWithNumbers {
 				sentAt: new Date(),
 			},
 		});
+
+		this.messageCache.set(msgDoc.originalMessageID, msgDoc);
+	}
+
+	async messageUpdate(before: Message, after: Message): Promise<void> {
+		if (!this.pickedUp) return;
+		const msgDoc = this.messageCache.get(after.id);
+		if (!msgDoc) return; // Not a message in this call so ignore
+
+		const otherSide = this.getOtherSideByChannel(before.channelId);
+		if (!otherSide) {
+			winston.info(`Couldn't find other side for edited messaged in call ${this.id}`);
+			return;
+		}
+
+		const toSend = await this.processContent(after, otherSide);
+
+		try {
+			await this.client.editCrossShard(toSend, otherSide.channelID, msgDoc.forwardedMessageID);
+		} catch {
+			try {
+				toSend.reply = {
+					messageReference: msgDoc.forwardedMessageID,
+					failIfNotExists: false,
+				};
+				toSend.content += " (edited)";
+
+				await this.client.sendCrossShard(toSend, otherSide.channelID);
+			} catch {
+				CallClient.prematureEnd(this);
+			}
+		}
+	}
+
+	async messageDelete(msg: Message): Promise<void> {
+		if (!this.pickedUp) return;
+		const msgDoc = this.messageCache.get(msg.id);
+		if (!msgDoc) return; // Not a message in this call so ignore
+
+		const otherSide = this.getOtherSideByChannel(msg.channelId);
+		if (!otherSide) {
+			winston.info(`Couldn't find other side for delete messaged in call ${this.id}`);
+			return;
+		}
+
+		try {
+			await this.client.deleteCrossShard(otherSide.channelID, msgDoc.forwardedMessageID);
+		} catch {
+			await this.client.sendCrossShard({
+				content: this.getThisSideByChannel(msg.channelId)!.t("errors.messageDeleted"),
+				reply: {
+					messageReference: msgDoc.forwardedMessageID,
+				},
+			}, otherSide.channelID).catch(() => null);
+		}
+
+		this.messageCache.delete(msg.id);
+	}
+
+	getThisSideByChannel(id: string) {
+		if (this.from.channelID === id) return this.from;
+		if (this.to.channelID === id) return this.to;
+		return null;
+	}
+	getOtherSideByChannel(id: string) {
+		if (this.from.channelID === id) return this.to;
+		if (this.to.channelID === id) return this.from;
+		return null;
 	}
 
 	async hangup(interaction: CommandInteraction|MessageComponentInteraction): Promise<void> {
@@ -484,10 +573,9 @@ export default class CallClient implements CallsWithNumbers {
 		const thisSideT = getFixedT(thisSide.locale, undefined, "commands.hangup");
 		const otherSideT = getFixedT(otherSide.locale, undefined, "commands.hangup");
 
-		this.client.calls.splice(this.client.calls.indexOf(this), 1);
-
 		const callLength = this.timeElapsed;
 
+		// Should convert this to context at some point
 		let thisSideDesc: string, otherSideDesc: string;
 		if (this.pickedUp) {
 			thisSideDesc = thisSideT("descriptions.pickedUp.thisSide", { time: callLength });
@@ -496,7 +584,6 @@ export default class CallClient implements CallsWithNumbers {
 			thisSideDesc = thisSideT("descriptions.notPickedUp.otherSide", { time: callLength });
 			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide", { time: callLength });
 		}
-
 
 		interaction.reply({
 			embeds: [{
@@ -522,12 +609,12 @@ export default class CallClient implements CallsWithNumbers {
 
 	async typingStart(typing: Typing): Promise<void> {
 		// Get other side
-		const otherSide = typing.channel.id === this.from.channelID ? this.to.channelID : this.from.channelID;
+		const otherSide = this.getOtherSideByChannel(typing.channel.id);
 
 		this.client.rest.post(`/channels/${otherSide}/typing`).catch(() => null);
 	}
 
-	async countMessages(): Promise<number> {
+	async countMessages(): Promise<number> { // cannot use cache -- cache is incomplete
 		return (await db.callMessages.aggregate({
 			where: {
 				callID: this.id,
@@ -539,10 +626,20 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {
-		return CallClient.endHandler(this.id, endedBy);
+		CallClient.endInDB(this.id, endedBy);
+
+		this.client.calls.delete(this.id);
+
+		if (this.otherSideShardID) {
+			this.client.shard!.send({
+				msg: "callEnded",
+				callID: this.id,
+				endedBy: "system - number lost",
+			});
+		}
 	}
 
-	static async endHandler(id: string, endedBy = ""): Promise<void> {
+	static async endInDB(id: string, endedBy = ""): Promise<void> {
 		db.calls.update({
 			where: {
 				id: id,
@@ -558,7 +655,7 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	static async prematureEnd(callDoc: callMissingChannel): Promise<void> {
-		CallClient.endHandler(callDoc.id, "system - number lost");
+		CallClient.endInDB(callDoc.id, "system - number lost");
 	}
 }
 

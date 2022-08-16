@@ -21,7 +21,7 @@ class DTelClient extends Client<true> {
 	db = db;
 	winston: Logger = winston;
 
-	calls: CallClient[] = [];
+	calls = new Collection<string, CallClient>();
 
 	shardWithSupportGuild = 0;
 
@@ -59,6 +59,10 @@ class DTelClient extends Client<true> {
 		return this.rest.patch(`/channels/${channelID}/messages/${messageID}`, {
 			body: options,
 		}) as Promise<RESTPatchAPIChannelMessageResult>;
+	}
+
+	async deleteCrossShard(channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
+		return this.rest.delete(`/channels/${channelID}/messages/${messageID}`) as Promise<RESTPatchAPIChannelMessageResult>;
 	}
 
 	async shardIdForChannelId(id: string): Promise<number> {
