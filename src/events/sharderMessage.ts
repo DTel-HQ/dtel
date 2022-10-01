@@ -17,8 +17,18 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 
 			// From here, we can assume we *do* have the channel and can handle this call
 			const callClient = new CallClient(client, undefined, callObject);
-			client.calls.push(callClient);
+			client.calls.set(callClient.id, callClient);
 			break;
+		}
+		case "callEnded": {
+			const typed = msg as unknown as callEnded;
+			client.calls.delete(typed.callID);
 		}
 	}
 };
+
+interface callEnded {
+	msg: string,
+	callID: string,
+	endedBy: string,
+}

@@ -17,8 +17,10 @@ sharder.on("shardCreate", shard => {
 
 	shard.on("message", message => {
 		switch (message.msg) {
+			case "callEnded":
 			case "callInitiated": {
 				sharder.broadcast(message);
+				break;
 			}
 		}
 	});

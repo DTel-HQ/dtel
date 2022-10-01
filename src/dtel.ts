@@ -1,4 +1,4 @@
-import { Interaction, Message, Options, Partials, Typing } from "discord.js";
+import { Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
 import config from "./config/config";
@@ -8,6 +8,8 @@ import Console from "./internals/console";
 
 import ReadyEvent from "./events/ready";
 import MessageCreateEvent from "./events/messageCreate";
+import MessageUpdateEvent from "./events/messageUpdate";
+import MessageDeleteEvent from "./events/messageDelete";
 import InteractionEvent from "./events/interactionCreate";
 import TypingStartEvent from "./events/typingStart";
 
@@ -55,6 +57,8 @@ const client = new Client({
 client.on("ready", () => ReadyEvent(client));
 
 client.on("messageCreate", (msg: Message) => MessageCreateEvent(client, msg));
+client.on("messageUpdate", (before: Message | PartialMessage, after: Message | PartialMessage) => MessageUpdateEvent(client, before as Message, after as Message));
+client.on("messageDelete", (msg: Message | PartialMessage) => MessageDeleteEvent(client, msg as Message));
 client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
 // client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
 // client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
@@ -67,3 +71,7 @@ process.on("message", msg => SharderMessageEvent(client, msg as Record<string, u
 client.login(process.env.TOKEN);
 
 export { client, winston };
+
+setInterval(() => {
+	console.log(`[Calls] ${client.calls.size}`);
+}, 10000);

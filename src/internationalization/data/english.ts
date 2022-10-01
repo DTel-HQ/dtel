@@ -72,6 +72,8 @@ export default {
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
 
 				couldntReachOtherSide: "We couldn't send a message to the other side. This is due to an incorrect configuration on the other end.",
+
+				messageDeleted: "This message was deleted by the other side.",
 			},
 
 			initiated: {
