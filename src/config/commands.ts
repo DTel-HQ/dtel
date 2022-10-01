@@ -337,6 +337,15 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
 	},
+	{
+		name: "hold",
+		description: `Put a call on hold`,
+		guildOnly: false,
+		numberRequired: true,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.call,
+	},
 ];
 
 export default commands;

@@ -2,11 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator erd {
-  provider = "prisma-erd-generator"
-  includeRelationFromFields = true
-  output = "../ERD.svg"
-}
+// generator erd {
+//   provider = "prisma-erd-generator"
+//   includeRelationFromFields = true
+//   output = "../ERD.svg"
+// }
 
 datasource db {
   provider = "mongodb"

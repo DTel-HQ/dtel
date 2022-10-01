@@ -1,9 +1,9 @@
 import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PermissionsBitField, Typing } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, EmbedBuilder, Message, MessageComponentInteraction, PermissionsBitField, Typing, MessageCreateOptions } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, Numbers, atAndBy, CallMessages } from "@prisma/client";
+import { Calls, Numbers, atAndBy, CallMessages, onHold } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
@@ -157,10 +157,10 @@ export default class CallClient implements CallsWithNumbers {
 		return dayjs(this.started.at).fromNow(true);
 	}
 
-	toSend(payload: MessageOptions): Promise<APIMessage> {
+	toSend(payload: MessageCreateOptions): Promise<APIMessage> {
 		return this.client.sendCrossShard(payload, this.to.channelID);
 	}
-	fromSend(payload: MessageOptions): Promise<APIMessage> {
+	fromSend(payload: MessageCreateOptions): Promise<APIMessage> {
 		return this.client.sendCrossShard(payload, this.from.channelID);
 	}
 
@@ -418,10 +418,10 @@ export default class CallClient implements CallsWithNumbers {
 		});
 	}
 
-	async processContent(message: Message, sideToSendTo: ClientCallParticipant): Promise<MessageOptions> {
+	async processContent(message: Message, sideToSendTo: ClientCallParticipant): Promise<MessageCreateOptions> {
 		const userPerms = await this.client.getPerms(message.author.id);
 
-		const toSend: MessageOptions = { content: `**${message.author.tag}`, embeds: [] };
+		const toSend: MessageCreateOptions = { content: `**${message.author.tag}`, embeds: [] };
 
 		if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
 			toSend.content += `(${message.author.id})`;
@@ -646,27 +646,61 @@ export default class CallClient implements CallsWithNumbers {
 			return;
 		}
 
+		const baseEmbed = {
+			color: config.colors.info,
+		};
+
+		const thisSideEmbed = EmbedBuilder.from(baseEmbed);
+		const otherSideEmbed = EmbedBuilder.from(baseEmbed);
 		// Hold call
 		if (!this.hold.onHold) {
 			this.hold = {
 				onHold: true,
 				holdingSide: interaction.channelId,
 			};
+			thisSideEmbed.setDescription("You have put the call on hold. Use `/hold` to resume the call.");
+			otherSideEmbed.setDescription("The other side have put you on hold. Please wait...");
 		// Unhold call
-		} else {
+	} else {
+			console.log(this.hold.holdingSide);
+			console.log(interaction.channelId);
+			if (this.hold.holdingSide != interaction.channelId) {
+				interaction.reply({
+					embeds: [this.client.errorEmbed("You can't release the hold if you didn't start it!")],
+				});
+				return;
+			}
+
 			this.hold = {
 				onHold: false,
 				holdingSide: null,
 			};
+			thisSideEmbed.setDescription("You have released the hold on this call");
+			otherSideEmbed.setDescription("The other side have ended the hold!");
 		}
 
+		thisSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
+		otherSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
+
+		// Send the embeds
 		await interaction.reply({
-			embeds: [{
-				color: config.colors.info,
-				title: `⏳ Call ${this.hold.onHold ? "held" : "resumed"}`,
-				description: `You have put this call on hold. Use `/hold` again to release it.`,
-			}],
+			embeds: [thisSideEmbed],
 		});
+		await this.client.sendCrossShard({
+			embeds: [otherSideEmbed],
+		}, this.getOtherSide(interaction.channelId).channelID);
+
+		const newObject = await db.calls.update({
+			where: {
+				id: this.id,
+			},
+			data: {
+				hold: this.hold,
+			},
+		});
+
+		// Propagate the hold status to the other side
+		this.repropagate(newObject);
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {
@@ -696,6 +730,19 @@ export default class CallClient implements CallsWithNumbers {
 				},
 			},
 		}).catch(() => null);
+	}
+
+	async repropagate(call: Calls) {
+		if (!this.otherSideShardID) return;
+
+		this.client.shard!.send({
+			msg: "callRepropagate",
+			callID: this.id,
+			call,
+		});
+	}
+	handleReprop(call: Calls) {
+		Object.assign(this, call);
 	}
 
 	static async prematureEnd(callDoc: callMissingChannel): Promise<void> {

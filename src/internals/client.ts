@@ -1,7 +1,7 @@
-import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, APIEmbed, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
+import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
@@ -50,13 +50,13 @@ class DTelClient extends Client<true> {
 		};
 	}
 
-	async sendCrossShard(options: MessageOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
+	async sendCrossShard(options: MessageCreateOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
 		return this.rest.post(`/channels/${channelID}/messages`, {
 			body: options,
 		}) as Promise<RESTPostAPIChannelMessageResult>;
 	}
 
-	async editCrossShard(options: MessageOptions, channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
+	async editCrossShard(options: MessageCreateOptions, channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
 		return this.rest.patch(`/channels/${channelID}/messages/${messageID}`, {
 			body: options,
 		}) as Promise<RESTPatchAPIChannelMessageResult>;

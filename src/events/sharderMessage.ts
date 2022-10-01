@@ -1,4 +1,6 @@
+import { Calls } from "@prisma/client";
 import { TextBasedChannel } from "discord.js";
+import { winston } from "../dtel";
 import CallClient, { CallsWithNumbers } from "../internals/callClient";
 import DTelClient from "../internals/client";
 
@@ -20,15 +22,36 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 			client.calls.set(callClient.id, callClient);
 			break;
 		}
+		case "callRepropagate": {
+			// TODO: Efficiency boost?
+			const messageObject = JSON.parse(msg.callDBObject as string) as callRepropagate;
+			const call = client.calls.get(messageObject.callID);
+
+			if (!call) {
+				winston.error(`Call repropagation for ID ${messageObject.callID} failed: Call not found`);
+				return;
+			}
+
+			call.handleReprop(messageObject.call);
+			break;
+		}
 		case "callEnded": {
 			const typed = msg as unknown as callEnded;
 			client.calls.delete(typed.callID);
+			break;
 		}
 	}
 };
 
-interface callEnded {
+interface callBase {
 	msg: string,
 	callID: string,
+}
+
+interface callRepropagate extends callBase {
+	call: Calls
+}
+
+interface callEnded extends callBase {
 	endedBy: string,
 }

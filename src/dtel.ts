@@ -71,7 +71,3 @@ process.on("message", msg => SharderMessageEvent(client, msg as Record<string, u
 client.login(process.env.TOKEN);
 
 export { client, winston };
-
-setInterval(() => {
-	console.log(`[Calls] ${client.calls.size}`);
-}, 10000);
