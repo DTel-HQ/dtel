@@ -3,7 +3,7 @@ import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PermissionsBitField, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, Numbers, atAndBy } from "@prisma/client";
+import { Calls, Numbers, atAndBy, onHold } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
@@ -58,6 +58,10 @@ export default class CallClient implements CallsWithNumbers {
 	randomCall = false;
 	started!: { at: Date, by: string };
 	ended: atAndBy | null = null;
+	hold: onHold = {
+		onHold: false,
+		holdingSide: null,
+	};
 	active = true;
 
 	otherSideShardID = 0;
@@ -536,6 +540,46 @@ export default class CallClient implements CallsWithNumbers {
 				_all: true,
 			},
 		}))._count._all;
+	}
+
+	getSide(channelID: string): ClientCallParticipant {
+		return this.to.channelID === channelID ? this.to : this.from;
+	}
+
+	getOtherSide(channelID: string): ClientCallParticipant {
+		return this.to.channelID === channelID ? this.from : this.to;
+	}
+
+	// TODO: i18n
+	async putOnHold(interaction: CommandInteraction): Promise<void> {
+		if (!this.pickedUp) {
+			interaction.reply({
+				embeds: [this.client.errorEmbed("You can't hold a call that hasn't been picked up yet!")],
+			});
+			return;
+		}
+
+		// Hold call
+		if (!this.hold.onHold) {
+			this.hold = {
+				onHold: true,
+				holdingSide: interaction.channelId,
+			};
+		// Unhold call
+		} else {
+			this.hold = {
+				onHold: false,
+				holdingSide: null,
+			};
+		}
+
+		await interaction.reply({
+			embeds: [{
+				color: config.colors.info,
+				title: `⏳ Call ${this.hold.onHold ? "held" : "resumed"}`,
+				description: `You have put this call on hold. Use `/hold` again to release it.`,
+			}],
+		});
 	}
 
 	async endHandler(endedBy = ""): Promise<void> {

@@ -51,6 +51,11 @@ type atAndBy {
   by String
 }
 
+type onHold {
+  onHold Boolean
+  holdingSide String? // channel ID of holding side (maybe change this later)
+}
+
 model CallMessages {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   callID             String
@@ -74,6 +79,7 @@ model Calls {
   randomCall Boolean  @default(false)
   started    atAndBy
   ended      atAndBy?
+  hold       onHold
 
   messages CallMessages[]
 

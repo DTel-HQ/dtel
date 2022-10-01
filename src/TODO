@@ -4,8 +4,9 @@ General:
   Guild events if needed
   Message editing and deleting
   611
-
+  Finish localization
   411
+  ** Rush Rollout ASAP **
 
 Commands:
 ----- Standard ------ 10
@@ -36,7 +37,7 @@ upgrade
 ----- Call ----- 7
 allow
 backdoor
-cinfo
+<!-- cinfo - standard command should be usable --- ensure tested -->
 handover
 
 hold
@@ -75,3 +76,6 @@ pull
 restart
 stats
 unvip
+
+----- Pipe Dream -----
+refactor command types to have their own specific classes, perhaps building in their own permission checking
