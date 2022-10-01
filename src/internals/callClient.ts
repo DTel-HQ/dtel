@@ -1,7 +1,7 @@
 import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
-import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PartialMessage, PermissionsBitField, Typing } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, Message, MessageComponentInteraction, MessageOptions, PermissionsBitField, Typing } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
 import { Calls, Numbers, atAndBy, CallMessages } from "@prisma/client";
 import { db } from "../database/db";

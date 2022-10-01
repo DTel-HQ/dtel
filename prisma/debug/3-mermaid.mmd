@@ -1,0 +1,102 @@
+erDiagram
+
+        StrikeOffenderType {
+            USER USER
+GUILD GUILD
+        }
+    
+  Numbers {
+    String z_id PK 
+    String channelID  
+    String guildID  "nullable"
+    String userID  "nullable"
+    String blocked  
+    String contacts  
+    DateTime expiry  
+    String mentions  
+    Boolean waiting  
+    DateTime createdAt  
+    }
+  
+
+  CallMessages {
+    String z_id PK 
+    String callID  
+    String forwardedMessageID  
+    String originalMessageID  
+    DateTime sentAt  
+    String sender  
+    }
+  
+
+  Calls {
+    String z_id PK 
+    String toNum  
+    String fromNum  
+    Boolean randomCall  
+    Boolean active  
+    }
+  
+
+  GuildConfigs {
+    String z_id PK 
+    Boolean whitelisted  
+    String locale  
+    }
+  
+
+  Accounts {
+    String z_id PK 
+    Int balance  
+    DateTime dailyClaimedAt  "nullable"
+    Int vipMonthsRemaining  
+    }
+  
+
+  Strikes {
+    String z_id PK 
+    String offender  
+    String reason  
+    StrikeOffenderType type  
+    }
+  
+
+  Blacklist {
+    String z_id PK 
+    }
+  
+
+  numberPromote {
+    Json embed  
+    DateTime lastEdited  
+    DateTime lastPromoted  
+    String lastMsg  
+    DateTime lastUser  
+    }
+  
+
+  numberVIP {
+    DateTime expiry  
+    Boolean hidden  
+    String name  
+    }
+  
+
+  atAndBy {
+    DateTime at  
+    String by  
+    }
+  
+    Numbers |o--|o numberPromote : "promote"
+    Numbers |o--|o numberVIP : "vip"
+    Numbers o{--|o GuildConfigs : "guild"
+    CallMessages o{--|| Calls : "call"
+    Calls o{--|o Numbers : "to"
+    Calls o{--|o Numbers : "from"
+    Calls |o--|o atAndBy : "pickedUp"
+    Calls ||--|| atAndBy : "started"
+    Calls |o--|o atAndBy : "ended"
+    Strikes o|--|| StrikeOffenderType : "enum:type"
+    Strikes ||--|| atAndBy : "created"
+    Strikes o{--|| Accounts : "account"
+    Strikes o{--|| GuildConfigs : "guildConfig"

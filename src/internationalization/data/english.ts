@@ -482,7 +482,7 @@ export default {
 				description: "Press **confirm** to continue, **cancel** to cancel.",
 			},
 			transactionCompleteEmbedOptions: {
-				title: "💸 $('generic.success', upperFirst)",
+				title: "💸 $t('generic.success', upperFirst)",
 				description: "Your money is on it's way!",
 			},
 			receiptEmbedOptions: {
@@ -499,7 +499,7 @@ export default {
 					value: [
 						`Amount: **${config.dtsEmoji} {{ preFeeToSend }}**`,
 						`Transfer Fee: **${config.dtsEmoji} {{ fee }}**`,
-						`__A fee will be taken for this transaction__ - The recipient will receive **${config.dtsEmoji} {{ postFeeCost, currency }}**`,
+						`__A fee will be taken for this transaction__ - The recipient will receive **${config.dtsEmoji} {{ postFeeCost }}**`,
 					].join("\n"),
 				}, {
 					name: "New balance",
@@ -513,7 +513,7 @@ export default {
 				},
 			},
 
-			editedTransactionField: [
+			editedTransactionDescription: [
 				`Amount: **${config.dtsEmoji} {{ preFeeCost }}**`,
 				`Transfer Fee: **${config.dtsEmoji} {{ fee }}** ({{ feePercentage }}%)`,
 				`__The fee was deducted from the transferred amount.__`,

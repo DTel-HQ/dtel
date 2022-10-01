@@ -160,6 +160,6 @@ export default abstract class PayCommonFunctions extends Command {
 		// Try to DM the user
 		user.send({
 			embeds: [embed],
-		}).catch(null);
+		}).catch(() => null);
 	}
 }

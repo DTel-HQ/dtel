@@ -45,5 +45,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }) as APIEmbed,
 			}],
 		});
+
+		this.client.log(`📘 Number \`${number}\` has been self-assigned to \`${this.interaction.channelId}\` by \`${this.interaction.user.username}\` \`${this.interaction.user.id}\``);
 	}
 }

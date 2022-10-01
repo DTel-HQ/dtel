@@ -76,5 +76,7 @@ export default class Daily extends Command {
 			}],
 			ephemeral: true,
 		});
+
+		this.client.log(`📆 \`${this.interaction.user.username}\` (${this.interaction.user.id}) has claimed their \`${creditCount}\` daily credits.`);
 	}
 }

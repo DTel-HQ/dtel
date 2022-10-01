@@ -1,8 +1,6 @@
 General:
   logging everywhere (in the support guild)
-  Should we make quick functions to replace "findUnique({ where: { id: } })" ?
   Guild events if needed
-  Message editing and deleting
   611
   Finish localization
   411
@@ -25,7 +23,7 @@ lottery
 mailbox
 
 message
-pay
+
 
 
 promote
@@ -42,7 +40,7 @@ handover
 
 hold
 <!-- ninfo - needs second page but otherwise complete -->
-pay
+<!-- pay - please test -->
 <!-- permcheck - superseded by red colour phone -->
 <!-- pickup - superseded by interaction -->
 

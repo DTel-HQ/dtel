@@ -1,13 +1,14 @@
 import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, APIEmbed, MessageOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "../config/config";
 import CallClient from "./callClient";
-import { APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
 import { winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
 import { Numbers } from "@prisma/client";
 import { fetchNumber, parseNumber } from "./utils";
+import dayjs from "dayjs";
 
 interface PossibleTypes {
 	user?: User | null,
@@ -183,23 +184,15 @@ class DTelClient extends Client<true> {
 		return possibilities;
 	}
 
-	// makeAvatarURL(user: APIUser): string {
-	// 	const base = this.options?.http?.cdn;
+	// Sends to the support guild's log channel
+	async log(message: string): Promise<APIMessage> {
+		winston.verbose(message);
 
-	// 	let url = `${base}/avatars`;
-	// 	// avatar starts with a_ if animated
-	// 	// return user.avatar ? `${this.options?.http?.cdn}/avatars/${user.id}/${user.avatar}.png` : `${this.options?.http?.cdn}/avatars/${user.discriminator}.png`;
-	// 	if (user.avatar) {
-	// 		url += `/${user.id}/${user.avatar}`;
-	// 	} else {
-	// 		url += `/${user.discriminator}`;
-	// 	}
-
-	// 	if (user.avatar?.startsWith("a_")) url += "gif";
-	// 	else url += "png";
-
-	// 	return url;
-	// }
+		const time = dayjs().format("HH:mm:ss");
+		return this.sendCrossShard({
+			content: `\`[${time}]\` ${message}`,
+		}, this.config.supportGuild.channels.logs);
+	}
 }
 
 export default DTelClient;
