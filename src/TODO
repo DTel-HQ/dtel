@@ -1,7 +1,6 @@
 General:
   logging everywhere (in the support guild)
   Guild events if needed
-  611
   Finish localization
   411
   ** Rush Rollout ASAP **
@@ -36,9 +35,9 @@ upgrade
 allow
 backdoor
 <!-- cinfo - standard command should be usable --- ensure tested -->
-handover
+<!-- handover - think we stopped using this -->
 
-hold
+<!-- hold - needs testing -->
 <!-- ninfo - needs second page but otherwise complete -->
 <!-- pay - please test -->
 <!-- permcheck - superseded by red colour phone -->
@@ -77,3 +76,5 @@ unvip
 
 ----- Pipe Dream -----
 refactor command types to have their own specific classes, perhaps building in their own permission checking
+030x xxx xxxx formatting
+  i18next@latest

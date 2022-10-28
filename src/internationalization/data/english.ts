@@ -55,6 +55,9 @@ export default {
 		call: {
 			pickup: "Pick up",
 			hangup: "Hang up",
+			mailbox: "Mailbox",
+			answeringMachine: "📠 Answering Machine",
+			sendMessage: "Send Message",
 			dontTrustStrangers: "Don't trust files from strangers",
 
 			errors: {
@@ -85,7 +88,7 @@ export default {
 			},
 
 			incomingCall: {
-				title: "Incoming call",
+				title: "📞 Incoming call",
 				description: "There is an incoming call from `{{ number }}`. Pick up, hang up or wait it out.",
 				footer: {
 					text: "ID: {{ callID }}",

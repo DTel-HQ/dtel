@@ -94,7 +94,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		case InteractionType.ModalSubmit: {
 			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
 
-			if (interaction.type === InteractionType.ModalSubmit && interaction.message?.interaction?.user.id != interaction.user.id) {
+			if (interaction.type === InteractionType.ModalSubmit && interaction.message?.interaction && interaction.message?.interaction?.user.id != interaction.user.id) {
 				interaction.reply(t("errors.wrongUser"));
 				return;
 			}
@@ -129,15 +129,13 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			toRunPath = `${__dirname}/../interactions/${commandName}`;
 
-			const subCommand = cmd.options?.find(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData | null;
+			const subCommand = cmd.options?.filter(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData[];
 
-			if (subCommand) {
-				commandName = `${commandName} ${subCommand}`;
-				permissionLevel = subCommand.permissionLevel;
-
+			if (subCommand.length > 0) {
 				commandName = `${split[0]} ${split[1]}`;
-				interactionName = split.slice(2, split.length).join("-");
+				interactionName = split[2];
 
+				permissionLevel = subCommand.find(c => c.name == split[1])?.permissionLevel || PermissionLevel.none;
 				toRunPath += `/${split[1]}`;
 			} else {
 				permissionLevel = commandData.permissionLevel;

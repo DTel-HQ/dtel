@@ -103,7 +103,7 @@ export default class Call extends Command {
 
 		const embed = EmbedBuilder.from(this.t("twoThreeThree.baseEmbed", {
 			canAfford: this.account!.balance > 500 ? "canAfford" : "cantAfford",
-		}));
+		}) as APIEmbed);
 		embed
 			.setColor(isVIP ? this.config.colors.yellowbook : this.config.colors.info)
 			.setAuthor({

@@ -1,4 +1,4 @@
-import { ActionRowBuilder, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, APIEmbed, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
 export default class MentionRemoveSelector extends ComponentProcessor {
@@ -34,7 +34,7 @@ export default class MentionRemoveSelector extends ComponentProcessor {
 				color: 0x00FF00,
 				...this.t("removeEmbed", {
 					user: selectedUserTag,
-				}),
+				}) as APIEmbed,
 			}],
 		});
 	}

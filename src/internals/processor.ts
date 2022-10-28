@@ -3,7 +3,7 @@ import { CommandInteraction, InteractionResponse, MessageComponentInteraction, M
 import DTelClient from "./client";
 import config from "../config/config";
 import CommandDataInterface, { CommandType } from "../interfaces/commandData";
-import { Numbers, Accounts } from "@prisma/client";
+import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
 import { fetchNumber, formatShardNumber, getAccount } from "./utils";
@@ -67,6 +67,18 @@ abstract class Processor {
 
 		// We can be sure there's an account here
 		return account!;
+	}
+
+	async fetchMailbox(number: string = this.number!.number): Promise<Mailbox> {
+		return this.db.mailbox.upsert({
+			create: {
+				number,
+			},
+			where: {
+				number,
+			},
+			update: {},
+		});
 	}
 
 	async _run(): Promise<void> {

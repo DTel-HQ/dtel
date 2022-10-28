@@ -27,6 +27,25 @@ type numberVIP {
   name   String
 }
 
+type mailboxMessage {
+  id      String
+  from    String
+  message String
+
+  sent atAndBy
+}
+
+model Mailbox {
+  number String @id @map("_id")
+
+  autoreply String           @default(value: "Sorry, I am currently unavailable. Please call again later.")
+  receiving Boolean          @default(value: true)
+  messages  mailboxMessage[]
+
+
+  numberDoc   Numbers?
+}
+
 model Numbers {
   number    String         @id @map("_id")
   channelID String
@@ -35,11 +54,13 @@ model Numbers {
   blocked   String[]
   contacts  String[]
   expiry    DateTime
-  mentions String[]
+  mentions  String[]
   promote   numberPromote?
   vip       numberVIP?
   waiting   Boolean        @default(false)
   createdAt DateTime       @default(now())
+
+  mailbox Mailbox? @relation(fields: [number], references: [number])
 
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
@@ -58,7 +79,7 @@ type atAndBy {
 }
 
 type onHold {
-  onHold Boolean
+  onHold      Boolean
   holdingSide String? // channel ID of holding side (maybe change this later)
 }
 

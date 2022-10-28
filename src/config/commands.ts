@@ -346,6 +346,40 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
 	},
+	{
+		name: "mailbox",
+		description: `Manage your store of messages.`,
+		options: [{
+			name: "clear",
+			description: "Clear all messages from mailbox",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.serverAdmin,
+		}, {
+			name: "messages",
+			description: "View all of the messages in your mailbox",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.none,
+		}, {
+			name: "remove",
+			description: "Remove a specific message from your mailbox",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.serverAdmin,
+		}, {
+			name: "settings",
+			description: "Change settings about your mailbox",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.serverAdmin,
+		}],
+
+		guildOnly: true,
+		numberRequired: true,
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
 ];
 
 export default commands;

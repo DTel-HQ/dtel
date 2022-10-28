@@ -45,6 +45,7 @@ class DTelClient extends Client<true> {
 	warningEmbed(description: string, options?: APIEmbed): APIEmbed {
 		return {
 			color: 0xFFFF00,
+			title: "⚠️ Warning!",
 			description,
 			...options,
 		};

@@ -271,6 +271,8 @@ export default class CallClient implements CallsWithNumbers {
 		let notificationMessageID: string;
 		try {
 			notificationMessageID = (await this.toSend({
+				content: this.to.number === config.aliasNumbers["*611"] ? `<@${config.supportGuild.roles.customerSupport}>` : "",
+
 				embeds: [{
 					color: this.client.config.colors.info,
 
@@ -338,21 +340,49 @@ export default class CallClient implements CallsWithNumbers {
 					}, this.to.channelID, callNotifMsgID);
 				}
 
-				// TODO: Mailbox
-
-
-				this.fromSend({
-					embeds: [this.to.t("missedCall.fromSide") as APIEmbed],
-				});
 				this.toSend({
 					embeds: [this.to.t("missedCall.toSide") as APIEmbed],
+				});
+
+				const fromEmbed = EmbedBuilder.from(this.from.t("missedCall.fromSide") as APIEmbed);
+				const toMailbox = await db.mailbox.findFirst({
+					where: {
+						number: this.to.number,
+					},
+				});
+
+				if (toMailbox) {
+					const mailboxFull = toMailbox?.messages.length > 25;
+
+					let reply = `${toMailbox.autoreply}`;
+
+					if (mailboxFull) reply += " (Mailbox full)";
+
+					fromEmbed.addFields([{
+						name: this.from.t("answeringMachine"),
+						value: reply,
+					}]);
+				}
+
+				const canSendMessage = toMailbox?.receiving && toMailbox?.messages.length < 25;
+
+				this.fromSend({
+					embeds: [fromEmbed],
+					components: canSendMessage ? [new ActionRowBuilder<ButtonBuilder>().addComponents([
+						new ButtonBuilder()
+							.setCustomId(`mailbox-send-initiate-${this.toNum}`)
+							.setEmoji("📬")
+							.setLabel(this.from.t("sendMessage"))
+							.setStyle(ButtonStyle.Primary),
+					])] : undefined,
 				});
 			} catch {
 				// Ignore
 			}
 
-			this.endHandler();
-		}, 2 * 60 * 1000);
+			this.endHandler("missed");
+		// }, 2 * 60 * 1000);
+		}, 0.001 * 60 * 1000);
 	}
 
 	async pickup(interaction: MessageComponentInteraction): Promise<void> {
@@ -469,12 +499,13 @@ export default class CallClient implements CallsWithNumbers {
 						},
 					});
 				} else {
-					toSend.embeds?.push(this.client.warningEmbed("", {
+					toSend.embeds?.push({
+						color: config.colors.yellowbook,
 						description: `File: **[${i.name}](${i.url})**`,
 						footer: {
 							text: sideToSendTo.t("dontTrustStrangers"),
 						},
-					}));
+					});
 				}
 			}
 		}
@@ -661,7 +692,7 @@ export default class CallClient implements CallsWithNumbers {
 			thisSideEmbed.setDescription("You have put the call on hold. Use `/hold` to resume the call.");
 			otherSideEmbed.setDescription("The other side have put you on hold. Please wait...");
 		// Unhold call
-	} else {
+		} else {
 			console.log(this.hold.holdingSide);
 			console.log(interaction.channelId);
 			if (this.hold.holdingSide != interaction.channelId) {
@@ -703,7 +734,7 @@ export default class CallClient implements CallsWithNumbers {
 		this.repropagate(newObject);
 	}
 
-	async endHandler(endedBy = ""): Promise<void> {
+	async endHandler(endedBy = "system - number lost"): Promise<void> {
 		CallClient.endInDB(this.id, endedBy);
 
 		this.client.calls.delete(this.id);
@@ -712,7 +743,7 @@ export default class CallClient implements CallsWithNumbers {
 			this.client.shard!.send({
 				msg: "callEnded",
 				callID: this.id,
-				endedBy: "system - number lost",
+				endedBy: endedBy,
 			});
 		}
 	}
