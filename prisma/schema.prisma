@@ -42,7 +42,6 @@ model Mailbox {
   receiving Boolean          @default(value: true)
   messages  mailboxMessage[]
 
-
   numberDoc   Numbers?
 }
 
