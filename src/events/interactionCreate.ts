@@ -99,9 +99,10 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 				return;
 			}
 
+			// Interaction expiry after 2 minutes
 			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
 				interaction.reply({
-					content: i18n.t("", { lng: interaction.locale }),
+					content: i18n.t("events.interactionCreate.errors.expiredInteraction", { lng: interaction.locale }),
 					ephemeral: true,
 				});
 

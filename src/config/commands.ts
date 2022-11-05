@@ -362,8 +362,8 @@ const commands: Command[] = [
 
 			permissionLevel: PermissionLevel.none,
 		}, {
-			name: "remove",
-			description: "Remove a specific message from your mailbox",
+			name: "delete",
+			description: "Delete a specific message from your mailbox",
 			type: ApplicationCommandOptionType.Subcommand,
 
 			permissionLevel: PermissionLevel.serverAdmin,
@@ -379,6 +379,46 @@ const commands: Command[] = [
 		numberRequired: true,
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+	},
+	{
+		name: "discoin",
+		description: `Convert DTS to other currencies`,
+		guildOnly: false,
+		numberRequired: false,
+
+		options: [{
+			name: "convert",
+			description: "Convert from DTS to other currencies via Discoin",
+			type: ApplicationCommandOptionType.Subcommand,
+			options: [{
+				name: "currency",
+				description: "The currency you want to convert to",
+				required: true,
+				choices: [],
+				type: ApplicationCommandOptionType.String,
+			},
+			{
+				name: "amount",
+				description: "The amount of DTS you wish to convert",
+				required: true,
+				minValue: 0,
+				type: ApplicationCommandOptionType.Integer,
+			}],
+
+			permissionLevel: PermissionLevel.serverAdmin,
+		}, {
+			name: "currencies",
+			description: "View the exchange rates of all available currencies",
+			type: ApplicationCommandOptionType.Subcommand,
+
+			permissionLevel: PermissionLevel.none,
+		}],
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+		accountRequired: true,
+		dmPermission: true,
+		notExecutableInCall: false,
 	},
 ];
 

@@ -50,14 +50,14 @@ export default {
 	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs
-
+	// TODO: Return IDs to their original values
 	supportGuild: {
-		id: "281815661317980160",
+		id: "385862448747511812",
 		channels: {
 			officesCategory: "355890256786227210",
 
 			announcement: "281816926144167946",
-			logs: "282253502779228160",
+			logs: "385870073442598912",
 			badLogs: "377945714166202368",
 			promote: "398569181097754624",
 			support: "281816105289515008",
@@ -72,12 +72,15 @@ export default {
 		},
 		supportNumber: "08007877678", // 0800SUPPORT
 	},
-
+	discoin: {
+		guideLink: "https://discoin.gitbook.io/docs/users-guide",
+		guildID: "347859709711089674",
+		apiEndpoint: "https://dash.discoin.zws.im/#",
+	},
 
 	// LINKS
 	applyLink: "https://discordtel.typeform.com/to/wHjMpX",
 	botInvite: "https://discord.com/api/oauth2/authorize?client_id=377609965554237453&permissions=274877990912&scope=bot%20applications.commands",
-	discoinLink: "https://discoin.gitbook.io/docs/users-guide",
 	githubLink: "https://github.com/DTel-HQ/dtel",
 	guidelink: "https://dtel.austinhuang.me/en/latest/Customer-Support-Guide/",
 	guildInvite: "https://discord.gg/DcayXMc",
