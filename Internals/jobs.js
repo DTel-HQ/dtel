@@ -66,53 +66,53 @@ scheduleJob("0 0 0 * * *", async() => {
 // });
 
 // Get Discoin transactions
-let lastWarning = 0;
-let WCDiscoin = 0;
-scheduleJob("*/1 * * * *", async() => {
-	if (client.shard.id != 0 || !client.done) return;
+// let lastWarning = 0;
+// let WCDiscoin = 0;
+// scheduleJob("*/1 * * * *", async() => {
+// 	if (client.shard.id != 0 || !client.done) return;
 	
-	let unhandled;
-	try {
-		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS.replace("inL", "$in"));
-	} catch (e) {
-		lastWarning = Date.now();
-		WCDiscoin++;
-		if (WCDiscoin % 300 == 10) client.apiSend(`<@210024244766179329> There seems to be a problem with Discoin`, "348832329525100554");
-		client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
-		return;
-	}
-	WCDiscoin--;
+// 	let unhandled;
+// 	try {
+// 		unhandled = await DClient.transactions.getMany(DClient.commonQueries.UNHANDLED_TRANSACTIONS.replace("inL", "$in"));
+// 	} catch (e) {
+// 		lastWarning = Date.now();
+// 		WCDiscoin++;
+// 		if (WCDiscoin % 300 == 10) client.apiSend(`<@210024244766179329> There seems to be a problem with Discoin`, "348832329525100554");
+// 		client.apiSend(`<:Discoin:740372337047896105> Couldn't connect to Discoin server...`, "703693562365345933");
+// 		return;
+// 	}
+// 	WCDiscoin--;
 
-	if (!unhandled.length) return;
+// 	if (!unhandled.length) return;
 
-	for (const transaction of unhandled) {
-		// Try to fetch user
-		let user = await client.users.fetch(transaction.user)
-			.catch(() => {
-				client.apiSend(`[Discoin] couldn't find user ${transaction.user}`, "326075875466412033");
-				return null;
-			});
+// 	for (const transaction of unhandled) {
+// 		// Try to fetch user
+// 		let user = await client.users.fetch(transaction.user)
+// 			.catch(() => {
+// 				client.apiSend(`[Discoin] couldn't find user ${transaction.user}`, "326075875466412033");
+// 				return null;
+// 			});
 
-		// patch
-		transaction.update({ handled: true })
-			.catch(async e => {
-				client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
-				let dmChannel = await user.createDM().catch(_ => null);
-				if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-				return null;
-			});
+// 		// patch
+// 		transaction.update({ handled: true })
+// 			.catch(async e => {
+// 				client.apiSend(`Yo, there might be something wrong with the Discoin API.\n\`\`\`\n${e}\n\`\`\``, "348832329525100554");
+// 				let dmChannel = await user.createDM().catch(_ => null);
+// 				if (dmChannel) dmChannel.send({ embed: { color: config.colors.error, title: "Tried processing your transaction...", description: `Some error popped up instead:\n\`\`\`json\n${e.stack}\n\`\`\`\nSee [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+// 				return null;
+// 			});
 
-		// add amount
-		let account = await user.account(true);
-		account.balance += transaction.payout;
-		await r.table("Accounts").get(account.id).update({ balance: account.balance });
+// 		// add amount
+// 		let account = await user.account(true);
+// 		account.balance += transaction.payout;
+// 		await r.table("Accounts").get(account.id).update({ balance: account.balance });
 
-		// Send msgs
-		let dmChannel = await user.createDM().catch(() => null);
-		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `<:DTS:668551813317787659>${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
-		client.log(`:repeat: ${user.username} (${user.id}) received ${config.dtsEmoji}${transaction.payout} from Discoin.`);
-	}
-});
+// 		// Send msgs
+// 		let dmChannel = await user.createDM().catch(() => null);
+// 		if (dmChannel) dmChannel.send({ embed: { color: config.colors.receipt, title: "You received credits from Discoin", description: `<:DTS:668551813317787659>${transaction.payout} has been added to your account through Discoin. See [here](https://dash.discoin.zws.im/#/transactions/${transaction.id}/show) for transaction details.`, timestamp: new Date(), author: { name: client.user.username, icon_url: client.user.displayAvatarURL() } } });
+// 		client.log(`:repeat: ${user.username} (${user.id}) received ${config.dtsEmoji}${transaction.payout} from Discoin.`);
+// 	}
+// });
 
 // Vote check
 let WCVotes = 0;
