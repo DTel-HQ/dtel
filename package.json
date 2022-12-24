@@ -33,16 +33,15 @@
     "delay": 100
   },
   "dependencies": {
-    "@discoin/scambio": "^2.2.0",
-    "@prisma/client": "^4.5.0",
+    "@prisma/client": "^4.8.0",
     "bufferutil": "^4.0.7",
-    "dayjs": "^1.11.6",
-    "discord-api-types": "^0.37.15",
-    "discord.js": "^14.6.0",
+    "dayjs": "^1.11.7",
+    "discord-api-types": "^0.37.24",
+    "discord.js": "^14.7.1",
     "erlpack": "github:discordapp/erlpack",
     "i18next": "^21.10.0",
     "node-schedule": "^2.1.0",
-    "re2": "^1.17.7",
+    "re2": "^1.18.0",
     "url-regex-safe": "^3.0.0",
     "utf-8-validate": "^5.0.10",
     "uuid": "^9.0.0",
@@ -52,18 +51,18 @@
     "zucc": "^0.1.2"
   },
   "devDependencies": {
-    "@mermaid-js/mermaid-cli": "^9.1.7",
+    "@mermaid-js/mermaid-cli": "^9.2.2",
     "@tsconfig/node18": "^1.0.1",
-    "@types/node": "^18.11.7",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.41.0",
-    "@typescript-eslint/parser": "^5.41.0",
+    "@types/node": "^18.11.17",
+    "@types/uuid": "^9.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.47.0",
+    "@typescript-eslint/parser": "^5.47.0",
     "cross-env": "^7.0.3",
-    "eslint": "^8.26.0",
-    "prisma": "^4.5.0",
-    "prisma-erd-generator": "^1.2.1",
+    "eslint": "^8.30.0",
+    "prisma": "^4.8.0",
+    "prisma-erd-generator": "^1.2.4",
     "safe-regex": "^2.1.1",
     "transformer": "^1.2.8",
-    "typescript": "^4.8.4"
+    "typescript": "^4.9.4"
   }
 }

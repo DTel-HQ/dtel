@@ -13,31 +13,6 @@ export default async(client: DTelClient): Promise<void> => {
 
 	// client.application.commands.set(client.commands);
 	if (process.env.SHARDS === "0") {
-		const discoinCommand = Commands.find(c => c.name === "discoin")!;
-		const convertCommand = discoinCommand.options!.find(o => o.name === "convert") as ApplicationCommandSubCommand;
-		const firstOption = convertCommand!.options![0] as ApplicationCommandStringOption;
-
-		// Query is a leftover from DTel v3 -- anyone know what it does?
-		const allCurrencies = await discoin.currencies.getMany("filter=name||$excl||Test&sort=id,ASC").catch(() => null) as Currency[] | null;
-		const allBots = await discoin.bots.getMany("filter=name||$excl||Test&sort=name,ASC").catch(() => null) as Bot[] | null;
-
-		if (!allCurrencies || !allBots) {
-			winston.warn("[Discoin] Failed to fetch currencies from Discoin API");
-		} else {
-			for (const c of allCurrencies) {
-				if (c.id === "DTS") continue;
-				const bot = allBots.find(b => b.currencies.find(bc => c.id === bc.id));
-
-				const name = bot ? `${bot.name} (${c.id})` : "Unknown";
-
-				firstOption.choices!.push({
-					name,
-					value: c.id,
-				});
-			}
-		}
-
-
 		client.application!.commands.set(Commands, "385862448747511812");
 		client.application!.commands.set(Commands, "398980667553349649");
 	}

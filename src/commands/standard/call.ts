@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, EmbedBuilder } from "discord.js";
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, Embed, EmbedBuilder, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
 import { getFixedT } from "i18next";
 import { formatBalance, formatDate, upperFirst } from "../../internals/utils";
 
@@ -12,7 +12,7 @@ export default class Call extends Command {
 				return this.twoThreeThree();
 			}
 			case "*411": {
-				// TODO: *411
+				return this.fourOneOne();
 				break;
 			}
 			default: {
@@ -163,6 +163,57 @@ export default class Call extends Command {
 			embeds: [embed],
 			components: [actionRow],
 			ephemeral: true,
+		});
+	}
+
+	async fourOneOne(): Promise<void> {
+		const embed = new EmbedBuilder()
+			.setColor(this.config.colors.yellowbook)
+			.setTitle("Welcome to the DTel Yellowbook!")
+			.setDescription("Please select an option below");
+
+		const actionRow = new ActionRowBuilder<SelectMenuBuilder>();
+		actionRow.addComponents([
+			new SelectMenuBuilder()
+				.setCustomId("call-411-selector")
+				.setPlaceholder("Options")
+				.setOptions([
+					new SelectMenuOptionBuilder()
+						.setLabel("Search")
+						.setDescription("Search through the Yellowbook")
+						.setEmoji("🔍")
+						.setValue("search"),
+					new SelectMenuOptionBuilder()
+						.setLabel("Edit")
+						.setDescription("Edit your Yellowbook entry")
+						.setEmoji("➕")
+						.setValue("edit"),
+					new SelectMenuOptionBuilder()
+						.setLabel("Special Numbers")
+						.setDescription("Find information about our special numbers")
+						.setEmoji("📲")
+						.setValue("special"),
+					new SelectMenuOptionBuilder()
+						.setLabel("Customer Support")
+						.setDescription("Call Customer Support")
+						.setEmoji("📞")
+						.setValue("support"),
+					new SelectMenuOptionBuilder()
+						.setLabel("VIP Options")
+						.setDescription("Access special VIP options")
+						.setEmoji("🌟")
+						.setValue("vip"),
+					new SelectMenuOptionBuilder()
+						.setLabel("Exit")
+						.setDescription("Close this menu")
+						.setEmoji("❌")
+						.setValue("exit"),
+				]),
+		]);
+
+		this.interaction.reply({
+			embeds: [embed],
+			components: [actionRow],
 		});
 	}
 }

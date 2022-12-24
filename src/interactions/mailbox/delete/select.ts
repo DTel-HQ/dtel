@@ -6,8 +6,10 @@ export default class MailboxDeleteSelect extends ComponentProcessor {
 		const interaction = this.interaction as SelectMenuInteraction;
 		const origSelectMenu = interaction.component as SelectMenuComponent;
 
+		// Get this number's mailbox
 		const mailbox = await this.fetchMailbox();
 
+		// See if the message actually exists
 		const message = mailbox.messages.find(m => m.id === interaction.values[0]);
 		if (!message) {
 			this.interaction.reply({
@@ -17,10 +19,11 @@ export default class MailboxDeleteSelect extends ComponentProcessor {
 			return;
 		}
 
-
 		const selectedMessageID = interaction.values[0];
+		// "Disable" the select menu
 		const selectedMessageContent = origSelectMenu.options.find(o => o.value === selectedMessageID)!.label;
 
+		// Build a new menu with no components and some placeholder text
 		const selector = new SelectMenuBuilder(origSelectMenu.data)
 			.setPlaceholder(selectedMessageContent)
 			.setDisabled(true);

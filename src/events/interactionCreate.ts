@@ -142,6 +142,24 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 				permissionLevel = commandData.permissionLevel;
 			}
 
+			const paramsToSend: string[] = [];
+
+			console.log(interactionName);
+
+			if (interactionName.includes("-params-")) {
+				const paramSplit = interactionName.split("-params-");
+				interactionName = paramSplit[0];
+				const params = paramSplit[1];
+
+				if (params) {
+					const parsedParams = params.split("-");
+					for (let i = 0; i < parsedParams.length; i++) {
+						paramsToSend.push(parsedParams[i]);
+					}
+				}
+			}
+
+			commandData.params = paramsToSend;
 
 			toRunPath += `/${interactionName}`;
 		}

@@ -2,19 +2,19 @@ import { Interaction, Message, Options, PartialMessage, Partials, Typing } from 
 import i18next from "i18next";
 
 import config from "./config/config";
-import i18nData from "./internationalization/i18n";
 import Client from "./internals/client";
 import Console from "./internals/console";
+import i18nData from "./internationalization/i18n";
 
-import ReadyEvent from "./events/ready";
-import MessageCreateEvent from "./events/messageCreate";
-import MessageUpdateEvent from "./events/messageUpdate";
-import MessageDeleteEvent from "./events/messageDelete";
 import InteractionEvent from "./events/interactionCreate";
+import MessageCreateEvent from "./events/messageCreate";
+import MessageDeleteEvent from "./events/messageDelete";
+import MessageUpdateEvent from "./events/messageUpdate";
+import ReadyEvent from "./events/ready";
 import TypingStartEvent from "./events/typingStart";
 
-import SharderMessageEvent from "./events/sharderMessage";
 import { populateBlacklistCache } from "./database/db";
+import SharderMessageEvent from "./events/sharderMessage";
 import { upperFirst } from "./internals/utils";
 
 populateBlacklistCache();
@@ -71,3 +71,4 @@ process.on("message", msg => SharderMessageEvent(client, msg as Record<string, u
 client.login(process.env.TOKEN);
 
 export { client, winston };
+

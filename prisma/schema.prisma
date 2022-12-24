@@ -42,7 +42,7 @@ model Mailbox {
   receiving Boolean          @default(value: true)
   messages  mailboxMessage[]
 
-  numberDoc   Numbers?
+  numberDoc Numbers?
 }
 
 model Numbers {
@@ -64,7 +64,8 @@ model Numbers {
   outgoingCalls Calls[] @relation("to")
   incomingCalls Calls[] @relation("from")
 
-  guild GuildConfigs? @relation(fields: guildID, references: id)
+  guild     GuildConfigs? @relation(fields: guildID, references: id)
+  phonebook Phonebook?
 
   @@unique(fields: [channelID], name: "channel")
   @@index(fields: [guildID], name: "guild")
@@ -156,4 +157,11 @@ model Strikes {
 
 model Blacklist {
   id String @id @map("_id")
+}
+
+model Phonebook {
+  number    String  @id @map("_id")
+  description String
+
+  numberDoc Numbers @relation(fields: [number], references: [number])
 }
