@@ -1,6 +1,7 @@
+import { ButtonInteraction } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
-export default class MailboxClearConfirm extends ComponentProcessor {
+export default class MailboxClearConfirm extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
 		await this.db.mailbox.update({
 			where: {

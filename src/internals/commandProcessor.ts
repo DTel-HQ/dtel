@@ -5,7 +5,7 @@ import DTelClient from "./client";
 import Processor from "./processor";
 import i18n, { TFunction } from "i18next";
 
-abstract class CommandProcessor extends Processor {
+abstract class CommandProcessor extends Processor<ChatInputCommandInteraction> {
 	commandData: CommandDataInterface;
 	interaction: ChatInputCommandInteraction;
 	t: TFunction;

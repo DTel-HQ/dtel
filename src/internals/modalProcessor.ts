@@ -6,7 +6,7 @@ import Processor from "./processor";
 import i18n, { TFunction } from "i18next";
 import CommandDataInterface from "../interfaces/commandData";
 
-abstract class ModalProcessor extends Processor {
+abstract class ModalProcessor extends Processor<ModalSubmitInteraction> {
 	interaction: ModalSubmitInteraction;
 	t: TFunction;
 

@@ -2,10 +2,6 @@ import DTelClient from "../internals/client";
 import Commands from "../config/commands";
 import CallClient from "../internals/callClient";
 import config from "../config/config";
-import discoin, { Bot, Currency } from "@discoin/scambio";
-import auth from "../config/auth";
-import { ApplicationCommandStringOption, ApplicationCommandSubCommand } from "discord.js";
-import { winston } from "../dtel";
 
 export default async(client: DTelClient): Promise<void> => {
 	client.winston.info(`Ready!`);

@@ -14,7 +14,7 @@ import Commands from "../config/commands";
 import Command, { CommandType, PermissionLevel, SubcommandData } from "../interfaces/commandData";
 import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
-import Processor from "../internals/processor";
+import Processor, { ChannelBasedInteraction } from "../internals/processor";
 import i18n, { getFixedT } from "i18next";
 import { winston } from "../dtel";
 import config from "../config/config";
@@ -44,7 +44,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			commandName = typedInteraction.commandName;
 			const cmd = Commands.find(c => c.name === commandName);
-			if (!cmd) throw new Error();
+			if (!cmd) throw new Error(`Could not find command data for command ${commandName}`);
 			commandData = cmd;
 
 			if (commandData.notExecutableInCall && call) {
@@ -125,7 +125,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			if (commandName.startsWith("dtelnoreg")) return;
 
 			const cmd = Commands.find(c => c.name === commandName);
-			if (!cmd) throw new Error();
+			if (!cmd) throw new Error(`Could not find command data for command ${commandName}`);
 			commandData = cmd;
 
 			toRunPath = `${__dirname}/../interactions/${commandName}`;
@@ -143,8 +143,6 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			}
 
 			const paramsToSend: string[] = [];
-
-			console.log(interactionName);
 
 			if (interactionName.includes("-params-")) {
 				const paramSplit = interactionName.split("-params-");
@@ -173,7 +171,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		return;
 	}
 
-	let processorFile: Constructable<Processor>;
+	let processorFile: Constructable<Processor<ChannelBasedInteraction>>;
 	try {
 		if (client.config.devMode) {
 			delete require.cache[require.resolve(toRunPath!)];

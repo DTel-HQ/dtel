@@ -2,10 +2,9 @@ import dayjs from "dayjs";
 import { SelectMenuInteraction } from "discord.js";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
-export default class TwoThreeThreeRenewModal extends MessageComponentProcessor {
+export default class TwoThreeThreeRenewModal extends MessageComponentProcessor<SelectMenuInteraction> {
 	async run() {
-		const interaction = this.interaction as SelectMenuInteraction;
-		const selected = interaction.values[0]; // eg m-1, m-2, y-1
+		const selected = this.interaction.values[0]; // eg m-1, m-2, y-1
 
 		const split = selected.split("-");
 		const monthYear = split[0];

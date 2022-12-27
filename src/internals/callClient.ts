@@ -693,8 +693,6 @@ export default class CallClient implements CallsWithNumbers {
 			otherSideEmbed.setDescription("The other side have put you on hold. Please wait...");
 		// Unhold call
 		} else {
-			console.log(this.hold.holdingSide);
-			console.log(interaction.channelId);
 			if (this.hold.holdingSide != interaction.channelId) {
 				interaction.reply({
 					embeds: [this.client.errorEmbed("You can't release the hold if you didn't start it!")],

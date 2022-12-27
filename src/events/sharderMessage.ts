@@ -8,7 +8,6 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 	switch (msg.msg) {
 		case "callInitiated": {
 			const callObject = JSON.parse(msg.callDBObject as string) as CallsWithNumbers;
-			console.log(callObject);
 			let channel: TextBasedChannel;
 			try {
 				channel = (await client.channels.fetch(callObject.to.channelID)) as TextBasedChannel;

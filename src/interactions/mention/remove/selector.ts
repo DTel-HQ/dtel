@@ -1,12 +1,11 @@
 import { ActionRowBuilder, APIEmbed, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
-export default class MentionRemoveSelector extends ComponentProcessor {
+export default class MentionRemoveSelector extends ComponentProcessor<SelectMenuInteraction> {
 	async run(): Promise<void> {
-		const interaction = this.interaction as SelectMenuInteraction;
-		const origSelectMenu = interaction.component as SelectMenuComponent;
+		const origSelectMenu = this.interaction.component as SelectMenuComponent;
 
-		const selectedID = interaction.values[0];
+		const selectedID = this.interaction.values[0];
 		const selectedUserTag = origSelectMenu.options.find(o => o.value === selectedID)!.label;
 
 		const selector = new SelectMenuBuilder(origSelectMenu.data)

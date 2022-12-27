@@ -1,8 +1,8 @@
 import { ModalBuilder, TextInputBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, TextInputStyle } from "discord.js";
+import { ActionRowBuilder, ButtonInteraction, TextInputStyle } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
-export default class MailboxSendInitiate extends ComponentProcessor {
+export default class MailboxSendInitiate extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
 		const toSendNum = this.interaction.customId.replace("mailbox-send-initiate-", "");
 

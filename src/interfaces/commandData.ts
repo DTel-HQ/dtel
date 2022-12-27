@@ -39,7 +39,7 @@ interface CommandData extends ChatInputApplicationCommandData {
 
 	notExecutableInCall?: boolean;
 
-	params: string[];
+	params?: string[];
 }
 export default CommandData;
 export { PermissionLevel, CommandType, SubcommandData };

@@ -1,7 +1,7 @@
 import ComponentProcessor from "../../internals/componentProcessor";
 import { TextInputBuilder, ModalBuilder, ActionRowBuilder, ButtonInteraction, TextInputStyle } from "discord.js";
 
-export default class WizardReadyButton extends ComponentProcessor {
+export default class WizardReadyButton extends ComponentProcessor<ButtonInteraction> {
 	async _run(): Promise<void> {
 		super._run();
 
@@ -12,8 +12,6 @@ export default class WizardReadyButton extends ComponentProcessor {
 	}
 
 	async run(): Promise<void> {
-		const interaction = this.interaction as ButtonInteraction;
-
 		const modal = new ModalBuilder()
 			.setTitle(this.t("modal.title"))
 			.setCustomId("wizard-modalSubmit");
@@ -32,6 +30,6 @@ export default class WizardReadyButton extends ComponentProcessor {
 
 		modal.addComponents(row);
 
-		interaction.showModal(modal);
+		this.interaction.showModal(modal);
 	}
 }

@@ -9,14 +9,14 @@ import CallClient from "./callClient";
 import { fetchNumber, formatShardNumber, getAccount } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 
-type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
+export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
-abstract class Processor {
+abstract class Processor<T extends ChannelBasedInteraction> {
 	config = config;
 
 	client: DTelClient;
 	db = db;
-	interaction: ChannelBasedInteraction;
+	interaction: T;
 	commandData: CommandDataInterface;
 	number: Numbers | null = null;
 	account: Accounts | null = null;
@@ -25,7 +25,7 @@ abstract class Processor {
 	abstract t: TFunction;
 	genericT: TFunction;
 
-	constructor(client: DTelClient, interaction: ChannelBasedInteraction, commandData: CommandDataInterface) {
+	constructor(client: DTelClient, interaction: T, commandData: CommandDataInterface) {
 		this.client = client;
 		this.interaction = interaction;
 		this.commandData = commandData;

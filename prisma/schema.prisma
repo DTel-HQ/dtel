@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["fullTextIndex"]
 }
 
 // generator erd {
@@ -164,4 +165,6 @@ model Phonebook {
   description String
 
   numberDoc Numbers @relation(fields: [number], references: [number])
+
+  @@fulltext([description])
 }

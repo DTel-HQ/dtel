@@ -1,8 +1,8 @@
-import { ActionRowBuilder, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonInteraction, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
 import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
-export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor {
+export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
 		const monthSelectorOptions: SelectMenuOptionBuilder[] = [];
 		// For up to 11 months
