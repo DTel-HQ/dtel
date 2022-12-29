@@ -1,16 +1,16 @@
-import { ActionRowBuilder, ButtonInteraction, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
 export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
-		const monthSelectorOptions: SelectMenuOptionBuilder[] = [];
+		const monthSelectorOptions: StringSelectMenuOptionBuilder[] = [];
 		// For up to 11 months
 		for (let i = 1; i <= 11; i++) {
 			const cost = this.config.renewalRate * i;
 			if (cost > this.account!.balance) break;
 
-			const option = new SelectMenuOptionBuilder()
+			const option = new StringSelectMenuOptionBuilder()
 				.setLabel(this.genericT("month", {
 					count: i,
 					lng: this.interaction.locale,
@@ -28,7 +28,7 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 			const cost = this.config.renewalRate * i * 12;
 			if (cost > this.account!.balance) break;
 
-			const option = new SelectMenuOptionBuilder()
+			const option = new StringSelectMenuOptionBuilder()
 				.setLabel(this.genericT("year", {
 					count: i,
 					lng: this.interaction.locale,
@@ -45,8 +45,8 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 
 		this.interaction.reply({
 			ephemeral: true,
-			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents([
-				new SelectMenuBuilder()
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
+				new StringSelectMenuBuilder()
 					.setCustomId("call-233-renew")
 					.setPlaceholder(this.t("monthsToRenewLabel"))
 					.addOptions(monthSelectorOptions),

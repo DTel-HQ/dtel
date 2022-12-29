@@ -13,7 +13,7 @@ Commands:
 
 coinflip
 contacts
-convert
+
 
 
 
@@ -66,14 +66,14 @@ reassign
 whitelist
 
 ----- Maintainer ----- 7
-addvip
+<!-- addvip
 announce
 assign
 
 pull
 restart
-stats
-unvip
+unvip - Literally all of these can just be done by me logging in/evalling -->
+
 
 ----- Pipe Dream -----
 refactor command types to have their own specific classes, perhaps building in their own permission checking

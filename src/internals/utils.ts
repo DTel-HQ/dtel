@@ -12,7 +12,7 @@ export const formatBalance = (balance: number): string => {
 
 	// Adds 0s to decimal values
 	// eslint-disable-next-line @typescript-eslint/no-extra-parens
-	return roundedBal.toLocaleString("en-US", { minimumFractionDigits: (roundedBal % 1 < 0) ? 0 : 2 });
+	return roundedBal.toLocaleString("en-US", { minimumFractionDigits: (roundedBal % 1 < 0) ? 2 : 0 });
 };
 
 

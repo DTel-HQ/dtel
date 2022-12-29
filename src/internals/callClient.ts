@@ -381,8 +381,7 @@ export default class CallClient implements CallsWithNumbers {
 			}
 
 			this.endHandler("missed");
-		// }, 2 * 60 * 1000);
-		}, 0.001 * 60 * 1000);
+		}, 2 * 60 * 1000);
 	}
 
 	async pickup(interaction: MessageComponentInteraction): Promise<void> {

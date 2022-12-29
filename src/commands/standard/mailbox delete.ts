@@ -1,10 +1,10 @@
-import { SelectMenuOptionBuilder } from "@discordjs/builders";
-import { ActionRowBuilder, SelectMenuBuilder } from "discord.js";
+import { StringSelectMenuOptionBuilder } from "@discordjs/builders";
+import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 export default class MailboxDelete extends Command {
 	async run(): Promise<void> {
-		const selectMenu = new SelectMenuBuilder()
+		const selectMenu = new StringSelectMenuBuilder()
 			.setCustomId("mailbox-delete-select")
 			.setPlaceholder("Select a message to delete")
 			.setMaxValues(1);
@@ -19,7 +19,7 @@ export default class MailboxDelete extends Command {
 
 		for (let i = 0; i < mailbox.messages.length && i < 25; i++) {
 			const message = mailbox.messages[i];
-			const opt = new SelectMenuOptionBuilder();
+			const opt = new StringSelectMenuOptionBuilder();
 			opt.setLabel(message.id);
 			opt.setDescription(message.message);
 			opt.setValue(message.id);
@@ -39,7 +39,7 @@ export default class MailboxDelete extends Command {
 				title: "📭 Delete Messages",
 				description: description,
 			}],
-			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents([selectMenu])],
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([selectMenu])],
 		});
 	}
 }

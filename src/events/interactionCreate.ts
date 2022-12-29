@@ -130,9 +130,9 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 
 			toRunPath = `${__dirname}/../interactions/${commandName}`;
 
-			const subCommand = cmd.options?.filter(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData[];
+			const subCommand = cmd.options?.filter(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData[] | null;
 
-			if (subCommand.length > 0) {
+			if (subCommand && subCommand.length > 0) {
 				commandName = `${split[0]} ${split[1]}`;
 				interactionName = split[2];
 
@@ -177,13 +177,13 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 			delete require.cache[require.resolve(toRunPath!)];
 		}
 		processorFile = require(toRunPath!).default;
-		if (!processorFile) throw new Error();
+		if (!processorFile) throw new Error("Processor file not found");
 	} catch (e) {
 		if (config.devMode) {
 			console.error(e);
 		}
 
-		client.winston.error(`Cannot process interaction for/from command: ${commandName!}`);
+		client.winston.error(`Cannot process interaction ${toRunPath.split("/").pop()} for/from command: ${commandName!}`);
 		interaction.reply(":x: Interaction not yet implemented.");
 		return;
 	}

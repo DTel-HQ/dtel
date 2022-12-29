@@ -1,4 +1,4 @@
-import { ActionRowBuilder, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import Command from "../../internals/commandProcessor";
 
 export default class MentionRemove extends Command {
@@ -14,14 +14,14 @@ export default class MentionRemove extends Command {
 
 		await this.interaction.deferReply();
 
-		const selectMenu = new SelectMenuBuilder()
+		const selectMenu = new StringSelectMenuBuilder()
 			.setPlaceholder(this.t("selectPrompt"))
 			.setCustomId("mention-remove-selector");
 
 		for (const i of this.number!.mentions) {
 			const user = await this.client.getUser(i).catch(() => null);
 			selectMenu.options.push(
-				new SelectMenuOptionBuilder()
+				new StringSelectMenuOptionBuilder()
 					.setLabel(`${user?.tag || i}`)
 					.setValue(i)
 					.setDescription(i),
@@ -29,7 +29,7 @@ export default class MentionRemove extends Command {
 		}
 
 		await this.interaction.followUp({
-			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents(selectMenu)],
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents(selectMenu)],
 		});
 	}
 }

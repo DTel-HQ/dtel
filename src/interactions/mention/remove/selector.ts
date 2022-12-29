@@ -1,4 +1,4 @@
-import { ActionRowBuilder, APIEmbed, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, APIEmbed, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
 export default class MentionRemoveSelector extends ComponentProcessor<SelectMenuInteraction> {
@@ -8,12 +8,12 @@ export default class MentionRemoveSelector extends ComponentProcessor<SelectMenu
 		const selectedID = this.interaction.values[0];
 		const selectedUserTag = origSelectMenu.options.find(o => o.value === selectedID)!.label;
 
-		const selector = new SelectMenuBuilder(origSelectMenu.data)
+		const selector = new StringSelectMenuBuilder(origSelectMenu.data)
 			.setPlaceholder(selectedUserTag)
 			.setDisabled(true);
 
 		this.interaction.message?.edit({
-			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents([selector])],
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([selector])],
 		});
 
 		const mentionsList = this.number!.mentions;

@@ -380,6 +380,12 @@ const commands: Command[] = [
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
 	},
+	{
+		name: "stats",
+		description: `View statistics about the bot. [Maintainer Only]`,
+		permissionLevel: PermissionLevel.maintainer,
+		useType: CommandType.maintainer,
+	},
 ];
 
 export default commands;

@@ -1,5 +1,5 @@
-import { Phonebook } from "@prisma/client";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, MessageEditOptions, ModalSubmitInteraction, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction, SelectMenuOptionBuilder } from "discord.js";
+import { Numbers, Phonebook } from "@prisma/client";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, MessageEditOptions, ModalBuilder, ModalSubmitInteraction, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder } from "discord.js";
 import Call from "../../commands/standard/call";
 import config from "../../config/config";
 import { db } from "../../database/db";
@@ -11,10 +11,11 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 
 		switch (selected) {
 			case "search": {
-				this.search();
+				FourOneOneSearch.initialEmbed(this.interaction);
 				break;
 			}
-			case "edit": {
+			case "manage": {
+				FourOneOneManage.handleInitialInteraction(this.interaction);
 				break;
 			}
 			case "special": {
@@ -53,33 +54,28 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 	}
 
 	// Disable the menu
-	async disableMenu(): Promise<void> {
-		if (this.interaction.message.editable) {
-			const origMenuData = this.interaction.component as SelectMenuComponent;
-			const optionData = origMenuData.options.find(o => o.value === this.interaction.values[0])!;
+	static async disableMenu(interaction: SelectMenuInteraction): Promise<void> {
+		if (!interaction.message.editable) return;
+		const origMenuData = interaction.component as SelectMenuComponent;
+		const optionData = origMenuData.options.find(o => o.value === interaction.values[0])!;
 
-			const newMenu = new SelectMenuBuilder()
-				.setCustomId("dtelnoreg-411-fake-selector")
-				.setDisabled(true)
-				.addOptions([
-					SelectMenuOptionBuilder.from(optionData)
-						.setDefault(true),
-				]);
+		const newMenu = new StringSelectMenuBuilder()
+			.setCustomId("dtelnoreg-411-fake-selector")
+			.setDisabled(true)
+			.addOptions([
+				// TODO: StringSelectMenuOptionBuilder (requires fixed typings)
+				SelectMenuOptionBuilder.from(optionData)
+					.setDefault(true),
+			]);
 
-			await this.interaction.message.edit({
-				embeds: this.interaction.message!.embeds,
-				components: [new ActionRowBuilder<SelectMenuBuilder>().setComponents([newMenu])],
-			}).catch(() => null);
-		}
-	}
-
-	async search(): Promise<void> {
-		FourOneOneSearch.initialEmbed(this.interaction);
+		await interaction.message.edit({
+			embeds: interaction.message!.embeds,
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().setComponents([newMenu])],
+		}).catch(() => null);
 	}
 }
 
-// TODO: Perhaps make not static?
-// Regardless, this needs redone when my head is in a better place and I'm not just rushing to make it work.
+// TODO: This needs redone when my head is in a better place and I'm not just rushing to make it work.
 class FourOneOneSearch {
 	static entriesPerPage = 7;
 
@@ -168,7 +164,7 @@ class FourOneOneSearch {
 			new ButtonBuilder()
 				.setCustomId(`${customIdPrefix}-exit`)
 				.setLabel(`Exit`)
-				.setEmoji(`❌`)
+				.setEmoji(`✖️`)
 				.setStyle(ButtonStyle.Danger),
 		);
 
@@ -195,7 +191,14 @@ class FourOneOneSearch {
 		}
 
 		const embed = payload.embeds![0] as EmbedBuilder;
-		embed.data.footer!.text += ` - Search: *${query}*`;
+
+		if (embed.data.footer) {
+			embed.data.footer.text += ` - Search: *${query}*`;
+		} else {
+			embed.setFooter({
+				text: `Search: *${query}*`,
+			});
+		}
 
 		interaction.message!.edit(payload);
 
@@ -277,5 +280,151 @@ interface rawSearchRes {
 	description: string,
 }
 
+class FourOneOneManage {
+	static async handleInitialInteraction(interaction: SelectMenuInteraction) {
+		interaction.deferUpdate();
 
-export { FourOneOneSearch };
+		const thisEntry = await db.numbers.findUnique({
+			where: {
+				channelID: interaction.channel!.id,
+			},
+			include: {
+				phonebook: true,
+			},
+		});
+
+		const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>();
+		const selectMenu = new StringSelectMenuBuilder()
+			.setPlaceholder("Options")
+			.setCustomId("call-411-edit-selector");
+		actionRow.addComponents(selectMenu);
+
+		if (thisEntry!.phonebook) {
+			selectMenu.addOptions(
+				new StringSelectMenuOptionBuilder()
+					.setEmoji({ name: `✍️` })
+					.setLabel("Edit")
+					.setDescription("Edit your Yellowbook entry")
+					.setValue("edit"),
+				new StringSelectMenuOptionBuilder()
+					.setEmoji({ name: `❌` })
+					.setLabel("Delete")
+					.setDescription("Remove your number from the Yellowbook")
+					.setValue("delete"),
+			);
+		} else {
+			selectMenu.addOptions(
+				new StringSelectMenuOptionBuilder()
+					.setEmoji({ name: `➕` })
+					.setLabel("Add")
+					.setDescription("Add your number to the Yellowbook")
+					.setValue("add"),
+			);
+		}
+
+		const embed = new EmbedBuilder()
+			.setColor(config.colors.yellowbook)
+			.setTitle("Manage your DTel Yellowbook")
+			.setDescription("Please select an option from the dropdown menu below.");
+
+		interaction.message!.edit({
+			components: [actionRow],
+			embeds: [embed],
+		});
+	}
+
+	static handleAddInteraction(interaction: SelectMenuInteraction) {
+		FourOneOneSelector.disableMenu(interaction);
+
+		const modal = new ModalBuilder()
+			.setCustomId("call-411-manage-add-modal")
+			.setTitle("Add your number to the Yellowbook")
+			.addComponents(
+				new ActionRowBuilder<TextInputBuilder>().addComponents(
+					new TextInputBuilder()
+						.setCustomId("description")
+						.setLabel("Description")
+						.setMaxLength(200)
+						.setMinLength(10)
+						.setPlaceholder("Enter a description for your number.")
+						.setRequired(true)
+						.setStyle(TextInputStyle.Short),
+				),
+			);
+
+		interaction.showModal(modal);
+	}
+
+	static async handleEditInteraction(interaction: SelectMenuInteraction) {
+		FourOneOneSelector.disableMenu(interaction);
+
+		let number: Numbers & {
+			phonebook: Phonebook | null;
+		};
+
+		try {
+			number = await db.numbers.findUniqueOrThrow({
+				where: {
+					channelID: interaction.channel!.id,
+				},
+				include: {
+					phonebook: true,
+				},
+			});
+		} catch {
+			interaction.reply({
+				content: "Something went wrong. Please try again.",
+				ephemeral: true,
+			});
+			return;
+		}
+
+		const modal = new ModalBuilder()
+			.setCustomId("call-411-manage-edit-modal")
+			.setTitle("Add your number to the Yellowbook")
+			.addComponents(
+				new ActionRowBuilder<TextInputBuilder>().addComponents(
+					new TextInputBuilder()
+						.setCustomId("description")
+						.setLabel("Description")
+						.setMaxLength(200)
+						.setMinLength(10)
+						.setPlaceholder("Enter a description for your number. (This will be seen by other users)")
+						.setRequired(true)
+						.setValue(number!.phonebook!.description)
+						.setStyle(TextInputStyle.Short),
+				),
+			);
+
+		interaction.showModal(modal);
+	}
+	static handleDeleteInteraction(interaction: SelectMenuInteraction) {
+		interaction.deferUpdate();
+
+		const embed = new EmbedBuilder()
+			.setColor(config.colors.yellowbook)
+			.setTitle("⚠️ Are you sure?")
+			.setDescription("Remove your number from the Yellowbook?");
+
+		const actionRow = new ActionRowBuilder<ButtonBuilder>().addComponents(
+			new ButtonBuilder()
+				.setCustomId("call-411-manage-delete-confirm")
+				.setEmoji("✔️")
+				.setLabel("Confirm")
+				.setStyle(ButtonStyle.Danger),
+			new ButtonBuilder()
+				.setCustomId("call-411-manage-delete-cancel")
+				.setEmoji("❌")
+				.setLabel("Cancel")
+				.setStyle(ButtonStyle.Secondary),
+		);
+
+		interaction.message.edit({
+			embeds: [embed],
+			components: [actionRow],
+		});
+	}
+}
+
+
+export { FourOneOneSearch, FourOneOneManage as FourOneOneEdit };

@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["fullTextIndex"]
 }
 
@@ -67,6 +67,7 @@ model Numbers {
 
   guild     GuildConfigs? @relation(fields: guildID, references: id)
   phonebook Phonebook?
+  Promote   Promote[]
 
   @@unique(fields: [channelID], name: "channel")
   @@index(fields: [guildID], name: "guild")
@@ -161,10 +162,34 @@ model Blacklist {
 }
 
 model Phonebook {
-  number    String  @id @map("_id")
+  number      String @id @map("_id")
   description String
 
   numberDoc Numbers @relation(fields: [number], references: [number])
 
   @@fulltext([description])
+}
+
+model Promote {
+  number String @id @map("_id")
+
+  renderableNumber String
+
+  embed discordEmbed
+
+  lastEdited   atAndBy
+  lastPromoted atAndBy
+
+  numberDoc Numbers @relation(fields: [number], references: [number])
+}
+
+type discordEmbed {
+  title       String
+  description String
+  fields      discordEmbedField[]
+}
+
+type discordEmbedField {
+  name  String
+  value String
 }

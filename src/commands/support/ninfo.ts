@@ -52,8 +52,17 @@ export default class NInfo extends Command {
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("The channel associated with that number couldn't be found.")],
 			});
+
+			await this.db.numbers.delete({
+				where: {
+					number: number.channelID,
+				},
+				include: {
+					phonebook: true,
+					mailbox: true,
+				},
+			}).catch(() => null);
 			return;
-			// TODO: Delete number
 		}
 
 		let numberOwner: User;

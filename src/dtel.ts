@@ -22,7 +22,7 @@ populateBlacklistCache();
 const winston = Console(`Shard ${process.env.SHARDS}`);
 
 i18next.init({
-	debug: config.devMode,
+	// debug: config.devMode,
 	fallbackLng: "en-US",
 	preload: ["en-US"],
 

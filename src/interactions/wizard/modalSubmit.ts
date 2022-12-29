@@ -13,6 +13,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		}
 		if (!number.startsWith(this.numberShouldStartWith())) {
 			this.interaction.reply({ content: `${this.t("errors.numberBadFormat", { numberStartsWith: this.numberShouldStartWith() })}`, ephemeral: true });
+			return;
 		}
 
 		const dbNumber = await this.db.numbers.findUnique({
@@ -42,7 +43,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 			embeds: [{
 				color: this.config.colors.success,
 
-				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber"), expiry }) as APIEmbed,
+				...this.t("successEmbed", { returnObjects: true, number: this.interaction.fields.getTextInputValue("wizardNumber").toUpperCase(), expiry }) as APIEmbed,
 			}],
 		});
 

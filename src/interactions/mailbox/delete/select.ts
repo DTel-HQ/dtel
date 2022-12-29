@@ -1,4 +1,4 @@
-import { ActionRowBuilder, SelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
+import { ActionRowBuilder, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
 import ComponentProcessor from "../../../internals/componentProcessor";
 
 export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuInteraction> {
@@ -23,12 +23,12 @@ export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuIn
 		const selectedMessageContent = origSelectMenu.options.find(o => o.value === selectedMessageID)!.label;
 
 		// Build a new menu with no components and some placeholder text
-		const selector = new SelectMenuBuilder(origSelectMenu.data)
+		const selector = new StringSelectMenuBuilder(origSelectMenu.data)
 			.setPlaceholder(selectedMessageContent)
 			.setDisabled(true);
 
 		this.interaction.message?.edit({
-			components: [new ActionRowBuilder<SelectMenuBuilder>().addComponents([selector])],
+			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([selector])],
 		});
 
 		const allMessages = mailbox.messages;

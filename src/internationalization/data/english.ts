@@ -73,6 +73,7 @@ export default {
 				otherSideNotFound: "The number you tried to call doesn't exist!",
 
 				otherSideBlockedYou: "The other side has blocked you from calling them.",
+				otherSideInCall: "The other side is already in a call.",
 
 				couldntReachOtherSide: "We couldn't send a message to the other side. This is due to an incorrect configuration on the other end.",
 

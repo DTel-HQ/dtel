@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, SelectMenuBuilder, SelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { getFixedT } from "i18next";
 import { formatBalance, formatDate, upperFirst } from "../../internals/utils";
 import { client } from "../../dtel";
@@ -58,36 +58,38 @@ export default class Call extends Command {
 			if (e instanceof Error) {
 				if (e.message === "otherSideInCall") {
 					interaction.editReply({
-						embeds: [{
-							color: config.colors.info,
-							...t("waitPrompt") as APIEmbed,
-						}],
-						components: [
-							new ActionRowBuilder<ButtonBuilder>()
-								.addComponents([
-									new ButtonBuilder({
-										customId: "call-waitAccept",
-										label: t("waitAccept")!,
-										style: ButtonStyle.Primary,
-										emoji: "✅",
-									}),
-									new ButtonBuilder({
-										customId: "call-waitDeny",
-										label: t("waitDeny")!,
-										style: ButtonStyle.Secondary,
-										emoji: "❌",
-									}),
-								]),
-						],
+						embeds: [client.errorEmbed(t("errors.otherSideInCall")!)],
 					});
 
-					setTimeout(() => {
-						interaction.deleteReply().catch(() => null);
-					}, 60000);
+					// interaction.editReply({
+					// 	embeds: [{
+					// 		color: config.colors.info,
+					// 		...t("waitPrompt") as APIEmbed,
+					// 	}],
+					// 	components: [
+					// 		new ActionRowBuilder<ButtonBuilder>()
+					// 			.addComponents([
+					// 				new ButtonBuilder({
+					// 					customId: "call-waitAccept",
+					// 					label: t("waitAccept")!,
+					// 					style: ButtonStyle.Primary,
+					// 					emoji: "✅",
+					// 				}),
+					// 				new ButtonBuilder({
+					// 					customId: "call-waitDeny",
+					// 					label: t("waitDeny")!,
+					// 					style: ButtonStyle.Secondary,
+					// 					emoji: "❌",
+					// 				}),
+					// 			]),
+					// 	],
+					// });
+
+					// setTimeout(() => {
+					// 	interaction.deleteReply().catch(() => null);
+					// }, 60000);
 
 					// TODO: Deal with call waiting in some way
-
-					throw new Error("Client encountered an error.");
 				}
 
 				interaction.editReply({
@@ -184,43 +186,43 @@ export default class Call extends Command {
 		const embed = new EmbedBuilder()
 			.setColor(this.config.colors.yellowbook)
 			.setTitle("Welcome to the DTel Yellowbook!")
-			.setDescription("Please select an option below");
+			.setDescription("Please select an option.");
 
-		const actionRow = new ActionRowBuilder<SelectMenuBuilder>();
+		const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>();
 		actionRow.addComponents([
-			new SelectMenuBuilder()
+			new StringSelectMenuBuilder()
 				.setCustomId("call-411-selector")
 				.setPlaceholder("Options")
 				.setOptions([
-					new SelectMenuOptionBuilder()
+					new StringSelectMenuOptionBuilder()
 						.setLabel("Search")
 						.setDescription("Search through the Yellowbook")
-						.setEmoji("🔍")
+						.setEmoji({ name: "🔍" })
 						.setValue("search"),
-					new SelectMenuOptionBuilder()
-						.setLabel("Edit")
-						.setDescription("Edit your Yellowbook entry")
-						.setEmoji("➕")
-						.setValue("edit"),
-					new SelectMenuOptionBuilder()
+					new StringSelectMenuOptionBuilder()
+						.setLabel("Manage")
+						.setDescription("Create, edit or delete your Yellowbook entry")
+						.setEmoji({ name: "✍️" })
+						.setValue("manage"),
+					new StringSelectMenuOptionBuilder()
 						.setLabel("Special Numbers")
 						.setDescription("Find information about our special numbers")
-						.setEmoji("📲")
+						.setEmoji({ name: "📲" })
 						.setValue("special"),
-					new SelectMenuOptionBuilder()
+					new StringSelectMenuOptionBuilder()
 						.setLabel("Customer Support")
 						.setDescription("Call Customer Support")
-						.setEmoji("📞")
+						.setEmoji({ name: "📞" })
 						.setValue("support"),
-					new SelectMenuOptionBuilder()
+					new StringSelectMenuOptionBuilder()
 						.setLabel("VIP Options")
 						.setDescription("Access special VIP options")
-						.setEmoji("🌟")
+						.setEmoji({ name: "🌟" })
 						.setValue("vip"),
-					new SelectMenuOptionBuilder()
+					new StringSelectMenuOptionBuilder()
 						.setLabel("Exit")
 						.setDescription("Close this menu")
-						.setEmoji("❌")
+						.setEmoji({ name: "❌" })
 						.setValue("exit"),
 				]),
 		]);
