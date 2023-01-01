@@ -1,5 +1,5 @@
 import { SelectMenuInteraction } from "discord.js";
-import MessageComponentProcessor from "../../internals/ComponentProcessor";
+import MessageComponentProcessor from "../../internals/componentProcessor";
 import { FourOneOneEdit } from "./411-selector";
 
 export default class Call411EditSelectorSelect extends MessageComponentProcessor<SelectMenuInteraction> {
