@@ -14,14 +14,6 @@ datasource db {
   url      = env("MONGO_URI")
 }
 
-type numberPromote {
-  embed        Json
-  lastEdited   DateTime
-  lastPromoted DateTime
-  lastMsg      String
-  lastUser     DateTime
-}
-
 type numberVIP {
   expiry DateTime
   hidden Boolean
@@ -46,16 +38,21 @@ model Mailbox {
   numberDoc Numbers?
 }
 
+type Contact {
+  name String
+  number String
+  description String
+}
+
 model Numbers {
   number    String         @id @map("_id")
   channelID String
   guildID   String?
   userID    String?
   blocked   String[]
-  contacts  String[]
+  contacts  Contact[]
   expiry    DateTime
   mentions  String[]
-  promote   numberPromote?
   vip       numberVIP?
   waiting   Boolean        @default(false)
   createdAt DateTime       @default(now())
@@ -67,7 +64,7 @@ model Numbers {
 
   guild     GuildConfigs? @relation(fields: guildID, references: id)
   phonebook Phonebook?
-  Promote   Promote[]
+  // promote   Promote?
 
   @@unique(fields: [channelID], name: "channel")
   @@index(fields: [guildID], name: "guild")
@@ -131,7 +128,7 @@ model GuildConfigs {
 model Accounts {
   id String @id @map("_id")
 
-  balance            Int       @default(0)
+  balance            Float       @default(0)
   dailyClaimedAt     DateTime?
   vipMonthsRemaining Int       @default(0)
 
@@ -159,6 +156,7 @@ model Strikes {
 
 model Blacklist {
   id String @id @map("_id")
+  reason String?
 }
 
 model Phonebook {
@@ -175,12 +173,14 @@ model Promote {
 
   renderableNumber String
 
-  embed discordEmbed
+  // embed discordEmbed
 
-  lastEdited   atAndBy
-  lastPromoted atAndBy
+  // lastEdited   atAndBy
+  // lastPromoted atAndBy
 
-  numberDoc Numbers @relation(fields: [number], references: [number])
+  lastPromoMsgID String?
+
+  // numberDoc Numbers @relation(fields: [number], references: [number])
 }
 
 type discordEmbed {
@@ -192,4 +192,5 @@ type discordEmbed {
 type discordEmbedField {
   name  String
   value String
+  n Int
 }

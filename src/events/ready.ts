@@ -11,6 +11,8 @@ export default async(client: DTelClient): Promise<void> => {
 	if (process.env.SHARDS === "0") {
 		client.application!.commands.set(Commands, "385862448747511812");
 		client.application!.commands.set(Commands, "398980667553349649");
+
+		require("../internals/jobs");
 	}
 
 	const allCalls = await client.db.calls.findMany({

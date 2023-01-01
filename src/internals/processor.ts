@@ -33,10 +33,6 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 		this.genericT = getFixedT(interaction.locale, undefined, "generic");
 	}
 
-	checkPermissions(): boolean {
-		return true;
-	}
-
 	permCheckFail(): Promise<InteractionResponse> {
 		return this.interaction.reply({
 			ephemeral: true,

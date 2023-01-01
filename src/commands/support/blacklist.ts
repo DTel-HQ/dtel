@@ -80,9 +80,12 @@ export default class Blacklist extends Command {
 		const toDM = possibilities.user || await possibilities.guild?.fetchOwner();
 
 		if (!isBlacklisted) {
+			const reason = this.interaction.options.getString("reason", false);
+
 			await this.db.blacklist.create({
 				data: {
 					id: idToBlacklist,
+					reason: reason || undefined,
 				},
 			});
 

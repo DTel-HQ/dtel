@@ -163,13 +163,28 @@ const commands: Command[] = [
 		useType: CommandType.customerSupport,
 	},
 	{
+		name: "strikes",
+		description: `View your strikes.`,
+		guildOnly: false,
+		numberRequired: false,
+		options: [{
+			name: "offender",
+			description: "The server/user ID for which you want to find strikes about. [Support Only]",
+			required: false,
+			type: ApplicationCommandOptionType.String,
+		}],
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
 		name: "ninfo",
 		description: `Get information on a number. [Support Only]`,
 		guildOnly: false,
 		numberRequired: false,
 		options: [{
 			name: "number_or_channel",
-			description: "The number/channel id you want to find information about",
+			description: "The number/channel ID you want to find information about",
 			required: true,
 			type: ApplicationCommandOptionType.String,
 		}],
@@ -199,6 +214,11 @@ const commands: Command[] = [
 			name: "id",
 			description: "The ID of the number/user/server/channel you want to blacklist",
 			required: true,
+			type: ApplicationCommandOptionType.String,
+		}, {
+			name: "reason",
+			description: "The reason for this object's addition to the blacklist",
+			required: false,
 			type: ApplicationCommandOptionType.String,
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
