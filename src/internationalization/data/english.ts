@@ -225,8 +225,8 @@ export default {
 				title: "✅ Good to go!",
 				description: "Your number has been registered.",
 				fields: [{
-					name: "❓ Whats next?",
-					value: "To learn more about the bot: `>help`, `>info`, `>links`.\nFor information about your number: call `*233`.\nFind other numbers to call at `*411`.",
+					name: "❓ What's next?",
+					value: "To learn more about the bot: `/help`, `/info`, `/links`.\nFor information about your number: call `*233`.\nFind other numbers to call at `*411`.\nSet up an answering machine with `/mailbox`.",
 				}, {
 					name: "Number",
 					value: "{{ number }}",

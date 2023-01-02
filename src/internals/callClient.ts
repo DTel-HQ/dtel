@@ -352,7 +352,7 @@ export default class CallClient implements CallsWithNumbers {
 				});
 
 				if (toMailbox) {
-					const mailboxFull = toMailbox?.messages.length > 25;
+					const mailboxFull = toMailbox?.messages.length > 50;
 
 					let reply = `${toMailbox.autoreply}`;
 

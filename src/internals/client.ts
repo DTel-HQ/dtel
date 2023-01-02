@@ -100,29 +100,12 @@ class DTelClient extends Client<true> {
 		let perms = this.permsCache.get(userID);
 
 		if (!perms) {
-			type ctx = { memberID: string, guildID: string };
-			const roles = await this.shard?.broadcastEval(async(client: Client, context: ctx): Promise<Role[]> => {
-				const guild = await client.guilds.fetch(context.guildID);
-				const member = await guild.members.fetch(context.memberID).catch(() => null);
-				return member ? Array.from(member.roles.cache.values()) : [];
-			}, {
-				shard: this.shardWithSupportGuild,
-				context: {
-					memberID: userID,
-					guildID: config.supportGuild.id,
-				},
-			}) as Role[];
+			const supportGuild = await this.guilds.fetch(config.supportGuild.id);
+			const member = await supportGuild.members.fetch(userID).catch(() => null);
 
-			// This would work, but it will hammer the Discord API for quite a while
-			// let memberInSupportServer: APIGuildMember;
-			// try {
-			// 	memberInSupportServer = await this.restAPI.get(`/guilds/${config.supportGuild.id}/members/${userID}`) as APIGuildMember;
-			// } catch {
-			// 	return PermissionLevel.none;
-			// }
+			const roles = member?.roles.cache;
 
-			if (roles.length === 0) perms = PermissionLevel.none;
-			else if (roles.find(r => r.id === config.supportGuild.roles.boss)) perms = PermissionLevel.maintainer;
+			if (!roles || roles.size === 0) perms = PermissionLevel.none;
 			else if (roles.find(r => r.id === config.supportGuild.roles.manager)) perms = PermissionLevel.manager;
 			else if (roles.find(r => r.id === config.supportGuild.roles.customerSupport)) perms = PermissionLevel.customerSupport;
 			else if (roles.find(r => r.id === config.supportGuild.roles.contributor)) perms = PermissionLevel.contributor;

@@ -1,5 +1,4 @@
-import { ActivityType } from "discord.js";
-import { scheduleJob } from "node-schedule";
+import { Range, scheduleJob } from "node-schedule";
 import { client, winston } from "../dtel";
 
 interface playingCtx {
@@ -7,7 +6,9 @@ interface playingCtx {
 	userCount: number
 }
 
-const playingJob = scheduleJob("*/60 * * * * *", async() => {
+const playingJob = scheduleJob({
+	minute: new Range(0, 59, 15),
+}, async() => {
 	const guildCount = (await client.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
 
 	const userCount = (await client.shard!.fetchClientValues("users.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;

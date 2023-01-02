@@ -1,3 +1,4 @@
+import { Accounts } from "@prisma/client";
 import { APIEmbed, User } from "discord.js";
 import Command from "../../internals/commandProcessor";
 import { formatBalance, getAccount } from "../../internals/utils";
@@ -23,7 +24,11 @@ export default class Balance extends Command {
 			return;
 		}
 
-		const account = await getAccount(accountIDToGet);
+		let account: Accounts | null;
+
+		if (accountIDToGet == this.interaction.user.id) account = await this.fetchAccount();
+
+		account = await getAccount(accountIDToGet);
 		if (!account) {
 			this.noAccount();
 			return;
