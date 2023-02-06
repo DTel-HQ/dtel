@@ -296,7 +296,7 @@ class FourOneOneManage {
 		const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>();
 		const selectMenu = new StringSelectMenuBuilder()
 			.setPlaceholder("Options")
-			.setCustomId("call-411-edit-selector");
+			.setCustomId("call-411-manage-selector");
 		actionRow.addComponents(selectMenu);
 
 		if (thisEntry!.phonebook) {
