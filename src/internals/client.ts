@@ -168,6 +168,33 @@ class DTelClient extends Client<true> {
 		return possibilities;
 	}
 
+	// TODO: THIS WILL BREAK REFERENTIAL INTEGRITY
+	async deleteNumber(number: string) {
+		// let doc: Numbers;
+		// try {
+		// 	doc = await this.db.numbers.delete({
+		// 		where: {
+		// 			number,
+		// 		},
+		// 	});
+		// } catch {
+		// 	return false;
+		// }
+
+		// this.db.phonebook.delete({
+		// 	where: {
+		// 		number: doc.number,
+		// 	},
+		// });
+		// this.db.mailbox.delete({
+		// 	where: {
+		// 		number: doc.number,
+		// 	},
+		// });
+
+		// doc
+	}
+
 	// Sends to the support guild's log channel
 	async log(message: string): Promise<APIMessage> {
 		winston.verbose(message);

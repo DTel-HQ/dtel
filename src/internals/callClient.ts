@@ -459,7 +459,7 @@ export default class CallClient implements CallsWithNumbers {
 		const { callPhones } = this.client.config;
 		let phone = "";
 
-		if (userPerms < PermissionLevel.customerSupport && message.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)) {
+		if (userPerms as number < PermissionLevel.customerSupport && message.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)) {
 			phone = callPhones.admin;
 		} else {
 			switch (userPerms) {

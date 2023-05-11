@@ -17,7 +17,7 @@ export default class Blacklist extends Command {
 				return;
 			}
 
-			if (await this.client.getPerms(possibilities.user.id) >= PermissionLevel.customerSupport) {
+			if (await this.client.getPerms(possibilities.user.id) as number >= PermissionLevel.customerSupport) {
 				this.interaction.reply({
 					embeds: [this.client.errorEmbed("You can't get rid of someone that easily...", { title: "❌ Unfair competition" })],
 					ephemeral: true,

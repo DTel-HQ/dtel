@@ -119,6 +119,17 @@ const commands: Command[] = [
 		useType: CommandType.standard,
 	},
 	{
+		name: "rcall",
+		description: `Call a random number in the Yellowbook`,
+		guildOnly: false,
+		numberRequired: true,
+		accountRequired: true,
+		notExecutableInCall: true,
+
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
+	{
 		name: "hangup",
 		description: `End the call in your channel`,
 		guildOnly: false,
@@ -405,6 +416,24 @@ const commands: Command[] = [
 		description: `View statistics about the bot. [Maintainer Only]`,
 		permissionLevel: PermissionLevel.maintainer,
 		useType: CommandType.maintainer,
+	},
+	{
+		name: "addvip",
+		description: "Give VIP months to a user following their donation. [Maintainer Only]",
+		permissionLevel: PermissionLevel.maintainer,
+		useType: CommandType.maintainer,
+
+		options: [{
+			name: "user",
+			description: "The ID of the user you want to add months to",
+			required: true,
+			type: ApplicationCommandOptionType.String,
+		}, {
+			name: "months",
+			description: "The number of months you wish to add (use negative number to remove)",
+			required: true,
+			type: ApplicationCommandOptionType.Integer,
+		}],
 	},
 ];
 

@@ -29,9 +29,9 @@ export default class Call extends Command {
 	}
 
 	// TODO: Remove fromNum and have this be standalone?
-	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers): Promise<CallClient> {
+	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers, alreadyReplied = false): Promise<CallClient> {
 		const t = getFixedT(interaction.locale, undefined, `commands.call`);
-		await interaction.deferReply();
+		if (!alreadyReplied) await interaction.deferReply();
 
 		const callObject = new CallClient(client, {
 			from: fromNum.number,

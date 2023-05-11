@@ -31,7 +31,8 @@ export default class TwoThreeThreeRenewModal extends MessageComponentProcessor<S
 			},
 		});
 
-		const newExpiry = dayjs(this.number!.expiry).add(amount, monthYear === "y" ? "year" : "month");
+		let newExpiry = dayjs(this.number!.expiry).add(amount, monthYear === "y" ? "year" : "month");
+		if (this.number!.expiry < new Date()) newExpiry = dayjs().add(amount, monthYear === "y" ? "year" : "month");
 
 		await this.db.numbers.update({
 			where: {

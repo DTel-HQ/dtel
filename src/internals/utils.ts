@@ -40,6 +40,21 @@ export const getAccount = async(id: string): Promise<Accounts | null> => {
 	});
 };
 
+export const getOrCreateAccount = async(id: string): Promise<Accounts> => {
+	let account = await getAccount(id);
+
+	if (!account) {
+		account = await db.accounts.create({
+			data: {
+				id,
+			},
+		});
+	}
+
+	// We can be sure there's an account here
+	return account!;
+};
+
 export const randomString = (length: number): string => {
 	const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	let result = "";

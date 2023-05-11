@@ -30,7 +30,7 @@ export default abstract class PayCommonFunctions extends Command {
 		const senderPerms = await this.client.getPerms(this.interaction.user.id);
 		const recipientPerms = await this.client.getPerms(user.id);
 
-		const transferRate = recipientPerms >= PermissionLevel.donator || senderPerms >= PermissionLevel.donator ? this.config.vipTransferRate : this.config.normalTransferRate;
+		const transferRate = recipientPerms as PermissionLevel >= PermissionLevel.donator || senderPerms as PermissionLevel >= PermissionLevel.donator ? this.config.vipTransferRate : this.config.normalTransferRate;
 
 		const totalReceived = transferRate * totalCost;
 		const fee = Math.round(totalCost - totalReceived);

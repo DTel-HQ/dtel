@@ -200,7 +200,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 				break;
 			}
 			case PermissionLevel.customerSupport: {
-				if (userPermissions < PermissionLevel.customerSupport) {
+				if (userPermissions as number < PermissionLevel.customerSupport) {
 					processorClass.permCheckFail();
 					return;
 				}

@@ -1,12 +1,12 @@
 // TODO: Localize (use this.t)
-import { CommandInteraction, InteractionResponse, MessageComponentInteraction, ModalSubmitInteraction } from "discord.js";
+import { CommandInteraction, InteractionResponse, MessageComponentInteraction, ModalSubmitInteraction, PermissionsBitField } from "discord.js";
 import DTelClient from "./client";
 import config from "../config/config";
-import CommandDataInterface, { CommandType } from "../interfaces/commandData";
+import CommandDataInterface, { CommandType, PermissionLevel } from "../interfaces/commandData";
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
-import { fetchNumber, formatShardNumber, getAccount } from "./utils";
+import { fetchNumber, formatShardNumber, getAccount, getOrCreateAccount } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
@@ -44,6 +44,17 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 		});
 	}
 
+	async getPerms(userID = this.interaction.user.id): Promise<PermissionLevel> {
+		let userPermissions = await this.client.getPerms(userID) as PermissionLevel;
+		const isServerAdmin = (this.interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild);
+
+		if (isServerAdmin && userPermissions as number < PermissionLevel.customerSupport) {
+			userPermissions = PermissionLevel.serverAdmin;
+		}
+
+		return userPermissions;
+	}
+
 	abstract run(): void;
 
 	async fetchNumber(number?: string): Promise<Numbers | null> {
@@ -51,18 +62,7 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 	}
 
 	async fetchAccount(userID = this.interaction.user.id): Promise<Accounts> {
-		let account = await getAccount(userID);
-
-		if (!account) {
-			account = await this.db.accounts.create({
-				data: {
-					id: userID || this.interaction.user.id,
-				},
-			});
-		}
-
-		// We can be sure there's an account here
-		return account!;
+		return getOrCreateAccount(userID);
 	}
 
 	async fetchMailbox(number: string = this.number!.number): Promise<Mailbox> {

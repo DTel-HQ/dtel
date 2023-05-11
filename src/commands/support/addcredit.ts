@@ -28,7 +28,7 @@ export default class AddCredit extends Command {
 				embeds: [this.client.errorEmbed("Are you sure you want to give them more money?", { title: "AI will destroy humans!!!" })],
 			});
 			return;
-		} else if (perms >= PermissionLevel.customerSupport && perms != PermissionLevel.maintainer) {
+		} else if (perms as number >= PermissionLevel.customerSupport && perms != PermissionLevel.maintainer) {
 			this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That's not something you should be trying on the job!", { title: "Seriously?" })],

@@ -1,9 +1,12 @@
+// TODO: Refactor this long long long file
 import { Numbers, Phonebook } from "@prisma/client";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, MessageEditOptions, ModalBuilder, ModalSubmitInteraction, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, MessageEditOptions, ModalBuilder, ModalSubmitInteraction, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder, InteractionResponse } from "discord.js";
 import Call from "../../commands/standard/call";
 import config from "../../config/config";
 import { db } from "../../database/db";
 import MessageComponentProcessor from "../../internals/componentProcessor";
+import FourOneOneVIP from "../../internals/411/vip";
+import { PermissionLevel } from "../../interfaces/commandData";
 
 export default class FourOneOneSelector extends MessageComponentProcessor<SelectMenuInteraction> {
 	async run(): Promise<void> {
@@ -15,6 +18,15 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 				break;
 			}
 			case "manage": {
+				if (await this.getPerms() < PermissionLevel.serverAdmin) {
+					this.interaction.reply({
+						ephemeral: true,
+						content: "You don't have permission to do this. Contact a server admin to change these settings.",
+					});
+
+					return;
+				}
+
 				FourOneOneManage.handleInitialInteraction(this.interaction);
 				break;
 			}
@@ -44,6 +56,46 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 				break;
 			}
 			case "vip": {
+				const acc = await this.fetchAccount();
+				if (await this.getPerms() < PermissionLevel.serverAdmin) {
+					this.interaction.reply({
+						ephemeral: true,
+						content: "You don't have permission to do this. Contact a server admin to change these settings.",
+					});
+
+					return;
+				}
+
+				// If they can't upgrade and the number isn't VIP
+				if (acc.vipMonthsRemaining == 0 && (this.number!.vip && this.number!.vip!.expiry < new Date())) {
+					const embed = new EmbedBuilder()
+						.setColor(config.colors.yellowbook)
+						.setTitle("Upgrade your number")
+						.setDescription(`You don't have any VIP months on your account.\nClick [here](${config.vipLink}) for information on buying VIP Months.`)
+						.addFields([{
+							name: "VIP Perks",
+							value: `\
+								**[• Disable number recognition](${config.paymentLink})**\
+								\nThis will make your number and the names of those speaking hidden from the other side and the public logs in our [server](${config.guildInvite}).\
+								\n\n**[• Custom name](${config.paymentLink})**\
+								\nYou can set a custom name that will show up next to (or instead of) your number when calling.\
+								\n\n**[• VIP Emote](${config.paymentLink})**\
+								\nYour messages will have the VIP emote: ${config.callPhones.donator} instead of the default emote: ${config.callPhones.default}\
+								\n\n**[• Change your number](${config.paymentLink})**\
+								\nRequesting a number change/move (by dialing \`*611\`) won't delete your data.\
+								\n\n**[• And more!](${config.paymentLink})**\
+								\nSee [the site](${config.vipLink}) for a full list of perks.`,
+						}]);
+
+					this.interaction.message!.edit({
+						embeds: [embed],
+						components: [],
+					});
+
+					return;
+				}
+
+				FourOneOneVIP.handleInitialInteraction(this.interaction);
 				break;
 			}
 			case "exit": {
@@ -63,8 +115,7 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 			.setCustomId("dtelnoreg-411-fake-selector")
 			.setDisabled(true)
 			.addOptions([
-				// TODO: StringSelectMenuOptionBuilder (requires fixed typings)
-				SelectMenuOptionBuilder.from(optionData)
+				StringSelectMenuOptionBuilder.from(optionData)
 					.setDefault(true),
 			]);
 
@@ -281,7 +332,16 @@ interface rawSearchRes {
 }
 
 class FourOneOneManage {
+	static wrongInteractionUserEmbed(interaction: SelectMenuInteraction): Promise<InteractionResponse> {
+		return interaction.reply({
+			ephemeral: true,
+			content: "❌ You can't use this menu as you didn't open it.",
+		});
+	}
+
 	static async handleInitialInteraction(interaction: SelectMenuInteraction) {
+		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
+
 		interaction.deferUpdate();
 
 		const thisEntry = await db.numbers.findUnique({
@@ -334,6 +394,8 @@ class FourOneOneManage {
 	}
 
 	static handleAddInteraction(interaction: SelectMenuInteraction) {
+		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
+
 		FourOneOneSelector.disableMenu(interaction);
 
 		const modal = new ModalBuilder()
@@ -356,6 +418,8 @@ class FourOneOneManage {
 	}
 
 	static async handleEditInteraction(interaction: SelectMenuInteraction) {
+		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
+
 		FourOneOneSelector.disableMenu(interaction);
 
 		let number: Numbers & {
@@ -399,6 +463,8 @@ class FourOneOneManage {
 		interaction.showModal(modal);
 	}
 	static handleDeleteInteraction(interaction: SelectMenuInteraction) {
+		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
+
 		interaction.deferUpdate();
 
 		const embed = new EmbedBuilder()
@@ -425,6 +491,5 @@ class FourOneOneManage {
 		});
 	}
 }
-
 
 export { FourOneOneSearch, FourOneOneManage as FourOneOneEdit };

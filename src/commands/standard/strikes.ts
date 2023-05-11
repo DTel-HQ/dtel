@@ -6,7 +6,7 @@ export default class Strikes extends Command {
 	async run() {
 		const offender = this.interaction.options.getString("offender", false) || this.interaction.user.id;
 
-		if (offender != this.interaction.user.id && await this.client.getPerms(this.interaction.user.id) < PermissionLevel.customerSupport) {
+		if (offender != this.interaction.user.id && await this.client.getPerms(this.interaction.user.id) as number < PermissionLevel.customerSupport) {
 			this.interaction.reply({
 				embeds: [this.client.errorEmbed("You don't have permission to check the strikes of others!")],
 			});
