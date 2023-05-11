@@ -1,5 +1,5 @@
 import { Numbers } from "@prisma/client";
-import { ActionRowBuilder, EmbedBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, EmbedBuilder, ModalBuilder, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { db } from "../../database/db";
 import { client } from "../../dtel";
 import config from "../../config/config";
@@ -76,11 +76,10 @@ class FourOneOneVIP {
 			return;
 		}
 
-		interaction.deferUpdate();
-
 		console.log(interaction.values[0]);
 		switch (interaction.values[0]) {
 			case "upgrade": {
+				interaction.deferUpdate();
 				return this.handleSelectorUpgradeSelectionInteraction(interaction);
 			}
 			case "hide": {
@@ -220,8 +219,26 @@ class FourOneOneVIP {
 		// TODO: IMPLEMENT
 	}
 
-	static handleSelectorCustomNameSelectionInteraction(interaction: StringSelectMenuInteraction) {
+	static async handleSelectorCustomNameSelectionInteraction(interaction: StringSelectMenuInteraction) {
+		const number = await fetchNumber(interaction.channelId);
 
+		const modal = new ModalBuilder()
+			.setTitle("VIP Custom Name")
+			.setCustomId("call-411-vip-customname")
+			.setComponents([
+				new ActionRowBuilder<TextInputBuilder>().addComponents([
+					new TextInputBuilder()
+						.setCustomId("name")
+						.setPlaceholder("Display Name")
+						.setLabel("Display Name")
+						.setStyle(TextInputStyle.Short)
+						.setMinLength(0)
+						.setRequired(true)
+						.setValue(number?.vip?.name || ""),
+				]),
+			]);
+
+		interaction.showModal(modal);
 	}
 }
 

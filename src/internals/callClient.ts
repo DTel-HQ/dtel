@@ -274,7 +274,7 @@ export default class CallClient implements CallsWithNumbers {
 				content: this.to.number === config.aliasNumbers["*611"] ? `<@${config.supportGuild.roles.customerSupport}>` : "",
 
 				embeds: [{
-					color: this.client.config.colors.info,
+					color: (this.from.vip?.expiry || 0) > new Date() ? this.client.config.colors.vip : this.client.config.colors.info,
 
 					...(this.to.t("incomingCall", {
 						number: fromCallerDisplay,

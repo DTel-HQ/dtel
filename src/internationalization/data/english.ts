@@ -89,7 +89,7 @@ export default {
 			},
 
 			incomingCall: {
-				title: "📞 Incoming call",
+				title: "<:DTelPhone:709100612935221289> Incoming call",
 				description: "There is an incoming call from `{{ number }}`. Pick up, hang up or wait it out.",
 				footer: {
 					text: "ID: {{ callID }}",
