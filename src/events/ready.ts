@@ -15,10 +15,7 @@ export default async(client: DTelClient): Promise<void> => {
 		require("../internals/jobs");
 	}
 
-	const allCalls = await client.db.calls.findMany({
-		where: {
-			active: true,
-		},
+	const allCalls = await client.db.activeCalls.findMany({
 		include: {
 			to: {
 				include: {

@@ -1,4 +1,4 @@
-import { Calls } from "@prisma/client";
+import { ActiveCalls } from "@prisma/client";
 import { TextBasedChannel } from "discord.js";
 import { winston } from "../dtel";
 import CallClient, { CallsWithNumbers } from "../internals/callClient";
@@ -48,7 +48,7 @@ interface callBase {
 }
 
 interface callRepropagate extends callBase {
-	call: Calls
+	call: ActiveCalls
 }
 
 interface callEnded extends callBase {

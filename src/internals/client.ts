@@ -1,4 +1,4 @@
-import { Channel, Client, ClientOptions, Collection, DMChannel, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
+import { Channel, Client, ClientOptions, Collection, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "../config/config";
 import CallClient from "./callClient";
 import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
@@ -168,31 +168,69 @@ class DTelClient extends Client<true> {
 		return possibilities;
 	}
 
-	// TODO: THIS WILL BREAK REFERENTIAL INTEGRITY
-	async deleteNumber(number: string) {
-		// let doc: Numbers;
-		// try {
-		// 	doc = await this.db.numbers.delete({
-		// 		where: {
-		// 			number,
-		// 		},
-		// 	});
-		// } catch {
-		// 	return false;
-		// }
+	async deleteNumber(number: string): Promise<boolean> {
+		const numberDoc = await this.db.numbers.findUnique({
+			where: {
+				number,
+			},
+			include: {
+				incomingCalls: true,
+				outgoingCalls: true,
+			},
+		});
+		if (!numberDoc)	return false;
 
-		// this.db.phonebook.delete({
-		// 	where: {
-		// 		number: doc.number,
-		// 	},
-		// });
-		// this.db.mailbox.delete({
-		// 	where: {
-		// 		number: doc.number,
-		// 	},
-		// });
+		// Delete the phonebook entry and the mailbox first
+		await this.db.phonebook.delete({
+			where: {
+				number: number,
+			},
+		}).catch(() => null);
+		await this.db.mailbox.delete({
+			where: {
+				number: number,
+			},
+		}).catch(() => null);
 
-		// doc
+		if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
+			for (const call of this.calls.filter(c => c.from.number === number || c.to.number === number)) {
+				call[1].endHandler("system - number deleted");
+
+				this.sendCrossShard({
+					content: "The number you were calling has been deleted and as such this call has been terminated.",
+				}, call[1].getOtherSide(numberDoc.channelID).channelID).catch(() => null);
+			}
+		}
+
+
+		let ownerDMChannel: DMChannel | null | undefined;
+
+		if (numberDoc.guildID) {
+			const guild = await this.getGuild(numberDoc.guildID).catch(() => null);
+			const owner = await guild?.fetchOwner().catch(() => null);
+
+			ownerDMChannel = owner?.dmChannel;
+		} else {
+			const channel = await this.getChannel(numberDoc.channelID).catch(() => null) as DMChannel | null;
+
+			ownerDMChannel = channel;
+		}
+
+		if (ownerDMChannel) {
+			const ownerEmbed = new EmbedBuilder()
+				.setColor(this.config.colors.info)
+				.setDescription([
+					`One of our staff members has removed the number in ${numberDoc.guildID ? `<#${numberDoc.channelID}>` : "your DMs"}.`,
+					"",
+					"If this action wasn't requested, and you feel like it is unjust, you can dispute the removal in our support server (`/links`)",
+				].join("\n"))
+				.setTimestamp(new Date());
+
+			ownerDMChannel.send({
+				embeds: [ownerEmbed],
+			}).catch(() => null);
+		}
+		return true;
 	}
 
 	// Sends to the support guild's log channel

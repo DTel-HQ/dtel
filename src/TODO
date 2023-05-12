@@ -1,8 +1,12 @@
+Final Rollout Stuff:
+  Voting
+  assign command
+  Call Archive (OldCalls table required because of proper referential integrity) 
+
 General:
   logging everywhere (in the support guild)
   Guild events if needed
   Finish localization
-  411
   Jobs
   ** Rush Rollout ASAP **
 

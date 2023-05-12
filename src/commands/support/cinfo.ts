@@ -1,12 +1,14 @@
-import { Numbers } from "@prisma/client";
+import { ActiveCalls, ArchivedCalls, Numbers } from "@prisma/client";
 import { EmbedBuilder } from "discord.js";
 import Command from "../../internals/commandProcessor";
+
+type activeOrArchivedCallWithNumbers = (ActiveCalls | ArchivedCalls);
 
 export default class CInfo extends Command {
 	async run(): Promise<void> {
 		const callID = this.interaction.options.getString("call_id", true);
 
-		const call = await this.db.calls.findUnique({
+		let call: activeOrArchivedCallWithNumbers | null = await this.db.activeCalls.findUnique({
 			where: {
 				id: callID,
 			},
@@ -17,11 +19,32 @@ export default class CInfo extends Command {
 		});
 
 		if (!call) {
+			call = await this.db.archivedCalls.findUnique({
+				where: {
+					id: callID,
+				},
+			});
+		}
+
+		if (!call) {
 			this.interaction.reply({
 				embeds: [this.client.errorEmbed("Couldn't find a call with that ID")],
 			});
 			return;
 		}
+
+		const from = await this.db.numbers.findUnique({
+			where: {
+				number: call.fromNum,
+			},
+		});
+
+		const to = await this.db.numbers.findUnique({
+			where: {
+				number: call.toNum,
+			},
+		});
+
 
 		const startedUser = await this.client.getUser(call.started.by).catch(() => null);
 		const pickedUpUser = call.pickedUp?.by ? await this.client.getUser(call.pickedUp.by).catch(() => null) : null;
@@ -37,11 +60,11 @@ export default class CInfo extends Command {
 			].join("\n"))
 			.addFields([{
 				name: "From",
-				value: createNumberDetails(call.from),
+				value: createNumberDetails(from),
 				inline: true,
 			}, {
 				name: "To",
-				value: createNumberDetails(call!.to),
+				value: createNumberDetails(to),
 				inline: true,
 			}, {
 				name: "Information",

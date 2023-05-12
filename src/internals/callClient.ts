@@ -3,7 +3,7 @@ import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, EmbedBuilder, Message, MessageComponentInteraction, PermissionsBitField, Typing, MessageCreateOptions } from "discord.js";
 import { PermissionLevel } from "../interfaces/commandData";
-import { Calls, Numbers, atAndBy, CallMessages, onHold } from "@prisma/client";
+import { ActiveCalls, Numbers, atAndBy, CallMessages, onHold } from "@prisma/client";
 import { db } from "../database/db";
 import config from "../config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
@@ -29,7 +29,7 @@ interface CallOptions {
 	}
 }
 
-type CallsWithNumbers = Calls & {
+type CallsWithNumbers = ActiveCalls & {
 	to: Numbers,
 	from: Numbers,
 };
@@ -39,7 +39,7 @@ interface ClientCallParticipant extends NumbersWithGuilds {
 	t: TFunction,
 }
 
-type CallsWithNumbersAndGuilds = Calls & {
+type CallsWithNumbersAndGuilds = ActiveCalls & {
 	to: NumbersWithGuilds,
 	from: NumbersWithGuilds,
 };
@@ -72,7 +72,7 @@ export default class CallClient implements CallsWithNumbers {
 
 	client: DTelClient;
 
-	constructor(client: DTelClient, options?: CallOptions, dbCallDoc?: Calls) {
+	constructor(client: DTelClient, options?: CallOptions, dbCallDoc?: ActiveCalls) {
 		this.client = client;
 
 		if (dbCallDoc) {
@@ -96,7 +96,7 @@ export default class CallClient implements CallsWithNumbers {
 
 	static async byID(client: DTelClient, options: { id?: string, doc?: callMissingChannel | null, side: CallSide }): Promise<CallClient> {
 		if (!options.doc) {
-			options.doc = await client.db.calls.findUnique({
+			options.doc = await client.db.activeCalls.findUnique({
 				where: {
 					id: options.id,
 				},
@@ -185,16 +185,8 @@ export default class CallClient implements CallsWithNumbers {
 				}],
 			},
 			include: {
-				incomingCalls: {
-					where: {
-						active: true,
-					},
-				},
-				outgoingCalls: {
-					where: {
-						active: true,
-					},
-				},
+				incomingCalls: true,
+				outgoingCalls: true,
 				guild: true,
 			},
 		});
@@ -241,7 +233,7 @@ export default class CallClient implements CallsWithNumbers {
 			this.otherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
 
 			if (!this.otherSideShardID) {
-				await db.calls.delete({
+				await db.activeCalls.delete({
 					where: {
 						id: this.id,
 					},
@@ -316,7 +308,7 @@ export default class CallClient implements CallsWithNumbers {
 			return;
 		}
 
-		await db.calls.create({
+		await db.activeCalls.create({
 			data: {
 				...this,
 				client: undefined,
@@ -423,7 +415,7 @@ export default class CallClient implements CallsWithNumbers {
 			});
 		}
 
-		await db.calls.update({
+		await db.activeCalls.update({
 			where: {
 				id: this.id,
 			},
@@ -646,7 +638,7 @@ export default class CallClient implements CallsWithNumbers {
 				}) as APIEmbed),
 				description: otherSideDesc,
 			}],
-		}, otherSide.channelID);
+		}, otherSide.channelID).catch(() => null);
 
 		this.endHandler(interaction.user.id);
 	}
@@ -728,7 +720,7 @@ export default class CallClient implements CallsWithNumbers {
 			embeds: [otherSideEmbed],
 		}, this.getOtherSide(interaction.channelId).channelID);
 
-		const newObject = await db.calls.update({
+		const newObject = await db.activeCalls.update({
 			where: {
 				id: this.id,
 			},
@@ -756,21 +748,34 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	static async endInDB(id: string, endedBy = ""): Promise<void> {
-		db.calls.update({
+		const callDetails = await db.activeCalls.update({
 			where: {
-				id: id,
+				id,
 			},
 			data: {
-				active: false,
 				ended: {
 					at: new Date(),
 					by: endedBy ? endedBy : "system",
 				},
 			},
 		}).catch(() => null);
+
+		if (!callDetails) return;
+
+		await db.archivedCalls.create({
+			data: {
+				...callDetails,
+			},
+		});
+
+		await db.activeCalls.delete({
+			where: {
+				id,
+			},
+		});
 	}
 
-	async repropagate(call: Calls) {
+	async repropagate(call: ActiveCalls) {
 		if (!this.otherSideShardID) return;
 
 		this.client.shard!.send({
@@ -779,7 +784,7 @@ export default class CallClient implements CallsWithNumbers {
 			call,
 		});
 	}
-	handleReprop(call: Calls) {
+	handleReprop(call: ActiveCalls) {
 		Object.assign(this, call);
 	}
 
@@ -788,4 +793,4 @@ export default class CallClient implements CallsWithNumbers {
 	}
 }
 
-type callMissingChannel = Calls & { to: Numbers | null, from: Numbers | null};
+type callMissingChannel = ActiveCalls & { to: Numbers | null, from: Numbers | null};

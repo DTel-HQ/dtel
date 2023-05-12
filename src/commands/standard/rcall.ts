@@ -37,16 +37,8 @@ export default class RCall extends Command {
 					number: randomEntry._id as string,
 				},
 				include: {
-					incomingCalls: {
-						where: {
-							active: true,
-						},
-					},
-					outgoingCalls: {
-						where: {
-							active: true,
-						},
-					},
+					incomingCalls: true,
+					outgoingCalls: true,
 				},
 			});
 
@@ -65,15 +57,10 @@ export default class RCall extends Command {
 
 			const channel = await this.client.getChannel(number.channelID);
 			if (!channel) {
-				await this.db.phonebook.delete({
-					where: {
-						number: number.number,
-					},
-				});
+				this.client.deleteNumber(number.number);
 				continue;
 			}
 
-			console.log(number.channelID);
 			if (number.expiry < new Date() || (this.number?.blocked && this.number.blocked.includes(number.number))) continue;
 
 			toCall = number;

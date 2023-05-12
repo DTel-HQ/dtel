@@ -116,7 +116,6 @@ class FourOneOneVIP {
 			return;
 		}
 
-		console.log(interaction.values[0]);
 		switch (interaction.values[0]) {
 			case "upgrade": {
 				interaction.deferUpdate();

@@ -3,12 +3,6 @@ generator client {
   previewFeatures = ["fullTextIndex"]
 }
 
-// generator erd {
-//   provider = "prisma-erd-generator"
-//   includeRelationFromFields = true
-//   output = "../ERD.svg"
-// }
-
 datasource db {
   provider = "mongodb"
   url      = env("MONGO_URI")
@@ -59,8 +53,8 @@ model Numbers {
 
   mailbox Mailbox? @relation(fields: [number], references: [number])
 
-  outgoingCalls Calls[] @relation("to")
-  incomingCalls Calls[] @relation("from")
+  outgoingCalls ActiveCalls[] @relation("to")
+  incomingCalls ActiveCalls[] @relation("from")
 
   guild     GuildConfigs? @relation(fields: guildID, references: id)
   phonebook Phonebook?
@@ -85,14 +79,13 @@ type onHold {
 model CallMessages {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   callID             String
-  call               Calls    @relation(fields: [callID], references: [id])
-  forwardedMessageID String
-  originalMessageID  String
+  forwardedMessageID String @unique
+  originalMessageID  String @unique
   sentAt             DateTime
   sender             String
 }
 
-model Calls {
+model ActiveCalls {
   id String @id @map("_id")
 
   toNum   String
@@ -107,13 +100,24 @@ model Calls {
   ended      atAndBy?
   hold       onHold
 
-  messages CallMessages[]
+  @@index(fields: [toNum, fromNum], name: "participants")
+}
 
-  active Boolean @default(true)
+model ArchivedCalls {
+  id String @id @map("_id")
+
+  toNum   String
+  fromNum String
+
+  pickedUp   atAndBy?
+  randomCall Boolean  @default(false)
+  started    atAndBy
+  ended      atAndBy?
+  hold       onHold
 
   @@index(fields: [toNum, fromNum], name: "participants")
-  @@index(fields: [active], name: "active")
 }
+
 
 model GuildConfigs {
   id String @id @map("_id")
