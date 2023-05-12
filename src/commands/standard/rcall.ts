@@ -1,7 +1,5 @@
 import Command from "../../internals/commandProcessor";
-import config from "../../config/config";
-import { APIEmbed } from "discord.js";
-import { Numbers, Phonebook, Prisma } from "@prisma/client";
+import { Numbers, Prisma } from "@prisma/client";
 import CallCommand from "./call";
 
 export default class RCall extends Command {

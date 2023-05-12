@@ -15,9 +15,9 @@ datasource db {
 }
 
 type numberVIP {
-  expiry DateTime
-  hidden Boolean
-  name   String
+  expiry DateTime @default("1970-01-01T00:00:00.000Z")
+  hidden Boolean @default(false)
+  name   String @default("")
 }
 
 type mailboxMessage {

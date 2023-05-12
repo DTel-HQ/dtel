@@ -263,9 +263,16 @@ export default class CallClient implements CallsWithNumbers {
 		}
 
 		let fromCallerDisplay = this.from.number;
-		if (Number(this.from.vip?.expiry) > Date.now()) {
-			if (this.from.vip?.name) fromCallerDisplay = this.from.vip?.name;
-			else if (this.from.vip?.hidden) fromCallerDisplay = "Hidden";
+		if (this.from.vip && Number(this.from.vip.expiry) > Date.now()) {
+			if (this.from.vip.name != "") fromCallerDisplay = `${this.from.vip.name}`;
+
+			if (this.from.vip.hidden) {
+				if (!this.from.vip.name) {
+					fromCallerDisplay = "Hidden";
+				}
+			} else {
+				fromCallerDisplay += ` (${this.from.number})`;
+			}
 		}
 
 		let notificationMessageID: string;
@@ -452,6 +459,9 @@ export default class CallClient implements CallsWithNumbers {
 
 		const toSend: MessageCreateOptions = { content: `**${message.author.tag}`, embeds: [] };
 
+		const thisSide = this.getThisSideByChannel(message.channelId)!;
+		if (thisSide.vip?.hidden) toSend.content = `**Anonymous#${message.author.id.slice(-4)}`;
+
 		if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
 			toSend.content += `(${message.author.id})`;
 		}
@@ -615,7 +625,7 @@ export default class CallClient implements CallsWithNumbers {
 			thisSideDesc = thisSideT("descriptions.pickedUp.thisSide", { time: callLength });
 			otherSideDesc = otherSideT("descriptions.pickedUp.otherSide", { time: callLength });
 		} else {
-			thisSideDesc = thisSideT("descriptions.notPickedUp.otherSide", { time: callLength });
+			thisSideDesc = thisSideT("descriptions.notPickedUp.thisSide", { time: callLength });
 			otherSideDesc = otherSideT("descriptions.notPickedUp.otherSide", { time: callLength });
 		}
 

@@ -95,11 +95,12 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 					return;
 				}
 
-				FourOneOneVIP.handleInitialInteraction(this.interaction);
+				FourOneOneVIP.mainMenu(this.interaction);
 				break;
 			}
 			case "exit": {
 				this.interaction.message.delete().catch(() => null);
+				this.interaction.deferUpdate();
 				break;
 			}
 		}
@@ -381,6 +382,14 @@ class FourOneOneManage {
 					.setValue("add"),
 			);
 		}
+
+		selectMenu.addOptions(
+			new StringSelectMenuOptionBuilder()
+				.setEmoji({ name: `⬅️` })
+				.setLabel("Back")
+				.setDescription("Go back to the Main Menu.")
+				.setValue("back"),
+		);
 
 		const embed = new EmbedBuilder()
 			.setColor(config.colors.yellowbook)

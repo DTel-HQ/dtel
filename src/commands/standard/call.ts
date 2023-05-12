@@ -1,6 +1,6 @@
 import Command from "../../internals/commandProcessor";
 import CallClient from "../../internals/callClient";
-import { ActionRowBuilder, APIEmbed, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
+import { ActionRowBuilder, APIEmbed, BaseMessageOptions, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { getFixedT } from "i18next";
 import { formatBalance, formatDate, upperFirst } from "../../internals/utils";
 import { client } from "../../dtel";
@@ -181,55 +181,56 @@ export default class Call extends Command {
 			ephemeral: true,
 		});
 	}
-
 	async fourOneOne(): Promise<void> {
-		const embed = new EmbedBuilder()
-			.setColor(this.config.colors.yellowbook)
-			.setTitle("Welcome to the DTel Yellowbook!")
-			.setDescription("Please select an option.");
-
-		const actionRow = new ActionRowBuilder<StringSelectMenuBuilder>();
-		actionRow.addComponents([
-			new StringSelectMenuBuilder()
-				.setCustomId("call-411-selector")
-				.setPlaceholder("Options")
-				.setOptions([
-					new StringSelectMenuOptionBuilder()
-						.setLabel("Search")
-						.setDescription("Search through the Yellowbook")
-						.setEmoji({ name: "🔍" })
-						.setValue("search"),
-					new StringSelectMenuOptionBuilder()
-						.setLabel("Manage")
-						.setDescription("Create, edit or delete your Yellowbook entry")
-						.setEmoji({ name: "✍️" })
-						.setValue("manage"),
-					new StringSelectMenuOptionBuilder()
-						.setLabel("Special Numbers")
-						.setDescription("Find information about our special numbers")
-						.setEmoji({ name: "📲" })
-						.setValue("special"),
-					new StringSelectMenuOptionBuilder()
-						.setLabel("Customer Support")
-						.setDescription("Call Customer Support")
-						.setEmoji({ name: "📞" })
-						.setValue("support"),
-					new StringSelectMenuOptionBuilder()
-						.setLabel("VIP Options")
-						.setDescription("Access special VIP options")
-						.setEmoji({ name: "🌟" })
-						.setValue("vip"),
-					new StringSelectMenuOptionBuilder()
-						.setLabel("Exit")
-						.setDescription("Close this menu")
-						.setEmoji({ name: "❌" })
-						.setValue("exit"),
-				]),
-		]);
-
-		this.interaction.reply({
-			embeds: [embed],
-			components: [actionRow],
-		});
+		this.interaction.reply(fourOneOneMainMenu);
 	}
 }
+
+const mainMenuEmbed = new EmbedBuilder()
+	.setColor(config.colors.yellowbook)
+	.setTitle("Welcome to the DTel Yellowbook!")
+	.setDescription("Please select an option.");
+
+const mainMenuRow = new ActionRowBuilder<StringSelectMenuBuilder>();
+mainMenuRow.addComponents([
+	new StringSelectMenuBuilder()
+		.setCustomId("call-411-selector")
+		.setPlaceholder("Options")
+		.setOptions([
+			new StringSelectMenuOptionBuilder()
+				.setLabel("Search")
+				.setDescription("Search through the Yellowbook")
+				.setEmoji({ name: "🔍" })
+				.setValue("search"),
+			new StringSelectMenuOptionBuilder()
+				.setLabel("Manage")
+				.setDescription("Create, edit or delete your Yellowbook entry")
+				.setEmoji({ name: "✍️" })
+				.setValue("manage"),
+			new StringSelectMenuOptionBuilder()
+				.setLabel("Special Numbers")
+				.setDescription("Find information about our special numbers")
+				.setEmoji({ name: "📲" })
+				.setValue("special"),
+			new StringSelectMenuOptionBuilder()
+				.setLabel("Customer Support")
+				.setDescription("Call Customer Support")
+				.setEmoji({ name: "📞" })
+				.setValue("support"),
+			new StringSelectMenuOptionBuilder()
+				.setLabel("VIP Options")
+				.setDescription("Access special VIP options")
+				.setEmoji({ name: "🌟" })
+				.setValue("vip"),
+			new StringSelectMenuOptionBuilder()
+				.setLabel("Exit")
+				.setDescription("Close this menu")
+				.setEmoji({ name: "❌" })
+				.setValue("exit"),
+		]),
+]);
+
+export const fourOneOneMainMenu: BaseMessageOptions = {
+	embeds: [mainMenuEmbed],
+	components: [mainMenuRow],
+};
