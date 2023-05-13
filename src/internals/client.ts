@@ -51,9 +51,13 @@ class DTelClient extends Client<true> {
 		};
 	}
 
-	async sendCrossShard(options: MessageCreateOptions, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
+	async sendCrossShard(options: MessageCreateOptions | string, channelID: Snowflake | string): Promise<RESTPostAPIChannelMessageResult> {
+		const body = options instanceof Object ? options : {
+			content: options,
+		};
+
 		return this.rest.post(`/channels/${channelID}/messages`, {
-			body: options,
+			body,
 		}) as Promise<RESTPostAPIChannelMessageResult>;
 	}
 

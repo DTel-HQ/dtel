@@ -68,6 +68,6 @@ export default class RCall extends Command {
 
 		this.interaction.editReply("☎️ Found a number! Dialling...");
 
-		CallCommand.call(this.interaction, toCall.number, this.number!, true);
+		CallCommand.call(this.interaction, toCall.number, this.number!, true, true);
 	}
 }

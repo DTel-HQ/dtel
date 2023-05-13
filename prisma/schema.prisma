@@ -10,8 +10,8 @@ datasource db {
 
 type numberVIP {
   expiry DateTime @default("1970-01-01T00:00:00.000Z")
-  hidden Boolean @default(false)
-  name   String @default("")
+  hidden Boolean  @default(false)
+  name   String   @default("")
 }
 
 type mailboxMessage {
@@ -33,13 +33,13 @@ model Mailbox {
 }
 
 type Contact {
-  name String
-  number String
+  name        String
+  number      String
   description String
 }
 
 model Numbers {
-  number    String         @id @map("_id")
+  number    String     @id @map("_id")
   channelID String
   guildID   String?
   userID    String?
@@ -48,8 +48,10 @@ model Numbers {
   expiry    DateTime
   mentions  String[]
   vip       numberVIP?
-  waiting   Boolean        @default(false)
-  createdAt DateTime       @default(now())
+  waiting   Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  fka String[] @default([])
 
   mailbox Mailbox? @relation(fields: [number], references: [number])
 
@@ -79,8 +81,8 @@ type onHold {
 model CallMessages {
   id                 String   @id @default(auto()) @map("_id") @db.ObjectId
   callID             String
-  forwardedMessageID String @unique
-  originalMessageID  String @unique
+  forwardedMessageID String   @unique
+  originalMessageID  String   @unique
   sentAt             DateTime
   sender             String
 }
@@ -112,12 +114,11 @@ model ArchivedCalls {
   pickedUp   atAndBy?
   randomCall Boolean  @default(false)
   started    atAndBy
-  ended      atAndBy?
+  ended      atAndBy
   hold       onHold
 
   @@index(fields: [toNum, fromNum], name: "participants")
 }
-
 
 model GuildConfigs {
   id String @id @map("_id")
@@ -132,11 +133,12 @@ model GuildConfigs {
 model Accounts {
   id String @id @map("_id")
 
-  balance            Float       @default(0)
+  balance            Float     @default(0)
   dailyClaimedAt     DateTime?
   vipMonthsRemaining Int       @default(0)
 
   strikes Strikes[]
+  Votes   Votes?
 }
 
 enum StrikeOffenderType {
@@ -159,7 +161,7 @@ model Strikes {
 }
 
 model Blacklist {
-  id String @id @map("_id")
+  id     String  @id @map("_id")
   reason String?
 }
 
@@ -187,6 +189,13 @@ model Promote {
   // numberDoc Numbers @relation(fields: [number], references: [number])
 }
 
+model Votes {
+  userID String @id @map("_id")
+  count Int @default(0)
+
+  account Accounts @relation(fields: [userID], references: [id])
+}
+
 type discordEmbed {
   title       String
   description String
@@ -196,5 +205,5 @@ type discordEmbed {
 type discordEmbedField {
   name  String
   value String
-  n Int
+  n     Int
 }

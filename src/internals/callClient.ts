@@ -765,6 +765,8 @@ export default class CallClient implements CallsWithNumbers {
 		await db.archivedCalls.create({
 			data: {
 				...callDetails,
+
+				ended: callDetails.ended!,
 			},
 		});
 

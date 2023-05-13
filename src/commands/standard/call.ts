@@ -29,7 +29,7 @@ export default class Call extends Command {
 	}
 
 	// TODO: Remove fromNum and have this be standalone?
-	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers, alreadyReplied = false): Promise<CallClient> {
+	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers, random = false, alreadyReplied = false): Promise<CallClient> {
 		const t = getFixedT(interaction.locale, undefined, `commands.call`);
 		if (!alreadyReplied) await interaction.deferReply();
 
@@ -38,7 +38,7 @@ export default class Call extends Command {
 
 			to: toNum,
 			startedBy: interaction.user.id,
-			random: false,
+			random,
 		});
 
 		try {
