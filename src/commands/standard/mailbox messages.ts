@@ -1,4 +1,4 @@
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, CommandInteraction, EmbedBuilder, EmbedField, MessageComponentInteraction } from "discord.js";
+import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder, EmbedField, MessageComponentInteraction } from "discord.js";
 import config from "../../config/config";
 import { db } from "../../database/db";
 import { client } from "../../dtel";

@@ -37,6 +37,12 @@ const moveNumbers = async() => {
 
 	for (const number of allNumbers) {
 		try {
+			const preExist = toInsert.find(n => n.channelID === number.channel);
+			if (preExist) {
+				console.log("!!");
+				console.log(preExist);
+			}
+
 			toInsert.push({
 				number: number.id,
 				channelID: number.channel,
@@ -453,21 +459,29 @@ const moveVotes = async() => {
 	const rpool = await r.connectPool({
 		server: "localhost",
 		user: "admin",
-		password: "y4pYRcZ6UBMR",
+		password: "",
 		db: "DiscordTel",
 	});
 
+	await r.table("Numbers").get("03012103214").delete().run();
+	await r.table("Phonebook").get("03012103214").delete().run();
+	await r.table("Mailbox").get("03012103214").delete().run();
+
+	await r.table("Numbers").get("03015626666").delete().run();
+	await r.table("Phonebook").get("03015626666").delete().run();
+	await r.table("Mailbox").get("03015626666").delete().run();
+
 	await prisma.activeCalls.deleteMany();
 	await prisma.archivedCalls.deleteMany();
-	await prisma.numbers.deleteMany();
 	await prisma.blacklist.deleteMany();
 	await prisma.strikes.deleteMany();
+	await prisma.votes.deleteMany();
 	await prisma.accounts.deleteMany();
+	await prisma.phonebook.deleteMany();
+	await prisma.numbers.deleteMany();
 	await prisma.mailbox.deleteMany();
 	await prisma.callMessages.deleteMany();
 	await prisma.guildConfigs.deleteMany();
-	await prisma.phonebook.deleteMany();
-	await prisma.votes.deleteMany();
 
 
 	await moveNumbers();
