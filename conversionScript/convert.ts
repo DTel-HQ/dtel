@@ -364,8 +364,11 @@ const moveCalls = async() => {
 
 	console.info("[Call Messages] Pushing to DB...");
 	try {
-		const messagesRes = await prisma.callMessages.createMany({ data: callMessagesToInsert });
-		console.info(`[Call Messages] Successfully pushed ${messagesRes.count} records to DB.`);
+		for (let i = 0; i < callMessagesToInsert.length; i += 1000) {
+			const records = callMessagesToInsert.slice(i, i + 1000);
+			await prisma.callMessages.createMany({ data: records });
+		}
+		console.log("[Archived Calls] Successfully pushed all records to DB.");
 	} catch (e: unknown) {
 		await writeFile("callMessageError.json", (e as object).toString());
 		console.log(e);
