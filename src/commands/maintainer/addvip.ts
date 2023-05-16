@@ -1,5 +1,4 @@
 import { EmbedBuilder, User } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 
 export default class AddCredit extends Command {
@@ -13,8 +12,6 @@ export default class AddCredit extends Command {
 			this.targetUserNotFound();
 			return;
 		}
-
-		const perms = await this.client.getPerms(userID);
 
 		if (userID === this.client.user.id) {
 			this.interaction.reply({

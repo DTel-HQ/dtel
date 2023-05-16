@@ -6,7 +6,6 @@ import config from "../../config/config";
 import { fetchNumber, getOrCreateAccount } from "../utils";
 import { getFixedT } from "i18next";
 import dayjs from "dayjs";
-import FourOneOneSelector from "../../interactions/call/411-selector";
 import { fourOneOneMainMenu } from "../../commands/standard/call";
 
 class FourOneOneVIP {

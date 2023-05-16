@@ -6,7 +6,7 @@ import CommandDataInterface, { CommandType, PermissionLevel } from "../interface
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
-import { fetchNumber, formatShardNumber, getAccount, getOrCreateAccount } from "./utils";
+import { fetchNumber, formatShardNumber, getOrCreateAccount } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;

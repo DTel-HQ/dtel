@@ -1,6 +1,23 @@
 // TODO: Refactor this long long long file
 import { Numbers, Phonebook } from "@prisma/client";
-import { ActionRowBuilder, ButtonBuilder, ButtonInteraction, ButtonStyle, ComponentType, EmbedBuilder, MessageEditOptions, ModalBuilder, ModalSubmitInteraction, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle, SelectMenuOptionBuilder, InteractionResponse } from "discord.js";
+import {
+	ActionRowBuilder,
+	ButtonBuilder,
+	ButtonInteraction,
+	ButtonStyle,
+	ComponentType,
+	EmbedBuilder,
+	MessageEditOptions,
+	ModalBuilder,
+	ModalSubmitInteraction,
+	StringSelectMenuBuilder,
+	TextInputBuilder,
+	TextInputStyle,
+	InteractionResponse,
+	StringSelectMenuInteraction,
+	StringSelectMenuOptionBuilder,
+	StringSelectMenuComponent,
+} from "discord.js";
 import Call from "../../commands/standard/call";
 import config from "../../config/config";
 import { db } from "../../database/db";
@@ -8,7 +25,7 @@ import MessageComponentProcessor from "../../internals/componentProcessor";
 import FourOneOneVIP from "../../internals/411/vip";
 import { PermissionLevel } from "../../interfaces/commandData";
 
-export default class FourOneOneSelector extends MessageComponentProcessor<SelectMenuInteraction> {
+export default class FourOneOneSelector extends MessageComponentProcessor<StringSelectMenuInteraction> {
 	async run(): Promise<void> {
 		const selected = this.interaction.values[0];
 
@@ -107,9 +124,9 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 	}
 
 	// Disable the menu
-	static async disableMenu(interaction: SelectMenuInteraction): Promise<void> {
+	static async disableMenu(interaction: StringSelectMenuInteraction): Promise<void> {
 		if (!interaction.message.editable) return;
-		const origMenuData = interaction.component as SelectMenuComponent;
+		const origMenuData = interaction.component as StringSelectMenuComponent;
 		const optionData = origMenuData.options.find(o => o.value === interaction.values[0])!;
 
 		const newMenu = new StringSelectMenuBuilder()
@@ -131,11 +148,11 @@ export default class FourOneOneSelector extends MessageComponentProcessor<Select
 class FourOneOneSearch {
 	static entriesPerPage = 7;
 
-	static async initialEmbed(interaction: SelectMenuInteraction | ButtonInteraction): Promise<void> {
+	static async initialEmbed(interaction: StringSelectMenuInteraction | ButtonInteraction): Promise<void> {
 		this.page(interaction, 1, null, true);
 	}
 
-	static async page(interaction: ButtonInteraction | SelectMenuInteraction, page: number, cursor: string | null, next: boolean): Promise<void> {
+	static async page(interaction: ButtonInteraction | StringSelectMenuInteraction, page: number, cursor: string | null, next: boolean): Promise<void> {
 		const numberOfEntries = await db.phonebook.count();
 		interaction.deferUpdate();
 
@@ -333,14 +350,14 @@ interface rawSearchRes {
 }
 
 class FourOneOneManage {
-	static wrongInteractionUserEmbed(interaction: SelectMenuInteraction): Promise<InteractionResponse> {
+	static wrongInteractionUserEmbed(interaction: StringSelectMenuInteraction): Promise<InteractionResponse> {
 		return interaction.reply({
 			ephemeral: true,
 			content: "❌ You can't use this menu as you didn't open it.",
 		});
 	}
 
-	static async handleInitialInteraction(interaction: SelectMenuInteraction) {
+	static async handleInitialInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
 		interaction.deferUpdate();
@@ -402,7 +419,7 @@ class FourOneOneManage {
 		});
 	}
 
-	static handleAddInteraction(interaction: SelectMenuInteraction) {
+	static handleAddInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
 		FourOneOneSelector.disableMenu(interaction);
@@ -426,7 +443,7 @@ class FourOneOneManage {
 		interaction.showModal(modal);
 	}
 
-	static async handleEditInteraction(interaction: SelectMenuInteraction) {
+	static async handleEditInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
 		FourOneOneSelector.disableMenu(interaction);
@@ -471,7 +488,7 @@ class FourOneOneManage {
 
 		interaction.showModal(modal);
 	}
-	static handleDeleteInteraction(interaction: SelectMenuInteraction) {
+	static handleDeleteInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
 		interaction.deferUpdate();

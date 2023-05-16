@@ -1,5 +1,4 @@
 import { ActionRowBuilder, ButtonInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import { t } from "i18next";
 import MessageComponentProcessor from "../../internals/componentProcessor";
 
 export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor<ButtonInteraction> {

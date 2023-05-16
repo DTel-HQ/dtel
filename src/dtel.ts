@@ -1,7 +1,6 @@
 import { Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
-import config from "./config/config";
 import Client from "./internals/client";
 import Console from "./internals/console";
 import i18nData from "./internationalization/i18n";
