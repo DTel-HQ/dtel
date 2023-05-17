@@ -519,7 +519,7 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async messageCreate(message: Message): Promise<void> {
-		if (!this.pickedUp?.by) return;
+		if (!this.pickedUp?.by || message.content.startsWith(">")) return;
 		const sideToSendTo = this.getOtherSideByChannel(message.channel.id)!;
 
 		const toSend = await this.processContent(message, sideToSendTo);
