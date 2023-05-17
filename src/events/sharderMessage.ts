@@ -3,6 +3,7 @@ import { TextBasedChannel } from "discord.js";
 import { winston } from "../dtel";
 import CallClient, { CallsWithNumbers } from "../internals/callClient";
 import DTelClient from "../internals/client";
+import allShardsReady from "./allShardsReady";
 
 export default async(client: DTelClient, msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
@@ -22,7 +23,6 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 			break;
 		}
 		case "callRepropagate": {
-			// TODO: Efficiency boost?
 			const messageObject = JSON.parse(msg.callDBObject as string) as callRepropagate;
 			const call = client.calls.get(messageObject.callID);
 
@@ -37,6 +37,43 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 		case "callEnded": {
 			const typed = msg as unknown as callEnded;
 			client.calls.delete(typed.callID);
+			break;
+		}
+
+		case "allShardsSpawned": {
+			allShardsReady(client);
+			break;
+		}
+
+		case "resume": {
+			if (msg.shardID === Number(process.env.SHARDS)) {
+				allShardsReady(client);
+				winston.info("Received all clear for resume! Starting calls...");
+			}
+			break;
+		}
+
+		case "callResume": {
+			const callDoc = msg.callDoc as CallsWithNumbers;
+
+			if (msg.fromShard != Number(process.env.SHARDS) && msg.toShard != Number(process.env.SHARDS)) {
+				return;
+			} else if (msg.fromShard === msg.toShard) {
+				if (client.calls.get(callDoc.id)) {
+					winston.info(`Call ${callDoc.id} already exists on this shard, ignoring.`);
+					return;
+				}
+			}
+
+			winston.info(`Recovering call ID: ${callDoc.id}`);
+
+			const call = await CallClient.byID(client, {
+				side: msg.fromShard === Number(process.env.SHARDS) ? "from" : "to",
+				doc: callDoc,
+				id: callDoc.id,
+			});
+			client.calls.set(call.id, call);
+
 			break;
 		}
 	}

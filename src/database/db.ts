@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Collection } from "discord.js";
+import { Collection } from "@discordjs/collection";
 import { winston } from "../dtel";
 const prisma = new PrismaClient();
 

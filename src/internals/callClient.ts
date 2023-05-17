@@ -63,7 +63,6 @@ export default class CallClient implements CallsWithNumbers {
 		onHold: false,
 		holdingSide: null,
 	};
-	active = true;
 
 	// Map of original message ID to message object
 	// Will normally cache only messages handled by this shard unless a restart occurs
@@ -82,16 +81,17 @@ export default class CallClient implements CallsWithNumbers {
 
 			return;
 		}
-		options = options as CallOptions; // Strict mode avoider
 
-		this.fromNum = options.from;
-		this.toNum = options.to;
+		if (options) {
+			this.fromNum = options.from;
+			this.toNum = options.to;
 
-		this.randomCall = options.random;
-		this.started = {
-			by: options.startedBy,
-			at: new Date(),
-		};
+			this.randomCall = options.random;
+			this.started = {
+				by: options.startedBy,
+				at: new Date(),
+			};
+		}
 	}
 
 	static async byID(client: DTelClient, options: { id?: string, doc?: callMissingChannel | null, side: CallSide }): Promise<CallClient> {
@@ -118,9 +118,9 @@ export default class CallClient implements CallsWithNumbers {
 		if (!options.doc) {
 			throw new Error("Call not found or not provided");
 		}
-
 		if (!options.doc.to || !options.doc.from) {
 			await CallClient.prematureEnd(options.doc);
+			throw new Error("Call missing one or both sides");
 		}
 
 		// Preflight checks done, we are sure there's a call and that we know about both number
@@ -221,15 +221,25 @@ export default class CallClient implements CallsWithNumbers {
 			t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
 		};
 
-		// TODO: Check for pre-existing calls and do embed stuff
-		// and that includes stuff like call-waiting
+
+		await db.activeCalls.create({
+			data: {
+				...this,
+				client: undefined,
+				otherSideShardID: undefined,
+				primary: undefined,
+				to: undefined,
+				from: undefined,
+				messages: undefined,
+				messageCache: undefined,
+			},
+		});
 
 		// Don't bother sending it if we can find it on this shard
-		try {
-			await this.client.channels.fetch(this.to.channelID);
-		} catch {
+		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
+
+		if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
 			// Send the call to another shard if required
-			// This is probably the best way to do it as it tells us if it was successful
 			this.otherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
 
 			if (!this.otherSideShardID) {
@@ -241,16 +251,23 @@ export default class CallClient implements CallsWithNumbers {
 				throw new Error("numberMissingChannel");
 			}
 
+			winston.debug(`Other side is: ${this.otherSideShardID}`);
+
+			const thisFile = `${__dirname}/callClient`;
 			// THIS CAN THROW callNotFound
-			await this.client.shard?.broadcastEval<void, string>(async(_client: Client, context: string): Promise<void> => {
+			type ctx = { callID: string, fileLocation: string };
+			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
 				const client = _client as DTelClient;
-				client.calls.set(context, await require(`${__dirname}/../internals/callClient`).default.byID(client, {
-					id: context,
+				client.calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
+					id: context.callID,
 					side: "to",
 				}));
 			}, {
 				shard: this.otherSideShardID,
-				context: this.id,
+				context: {
+					callID: this.id,
+					fileLocation: thisFile,
+				},
 			});
 		}
 
@@ -270,7 +287,7 @@ export default class CallClient implements CallsWithNumbers {
 		let notificationMessageID: string;
 		try {
 			notificationMessageID = (await this.toSend({
-				content: this.to.number === config.aliasNumbers["*611"] ? `<@${config.supportGuild.roles.customerSupport}>` : "",
+				content: this.to.number === config.aliasNumbers["*611"] ? `<@&${config.supportGuild.roles.customerSupport}>` : "",
 
 				embeds: [{
 					color: (this.from.vip?.expiry || 0) > new Date() ? this.client.config.colors.vip : this.client.config.colors.info,
@@ -308,18 +325,6 @@ export default class CallClient implements CallsWithNumbers {
 			return;
 		}
 
-		await db.activeCalls.create({
-			data: {
-				...this,
-				client: undefined,
-				otherSideShardID: undefined,
-				primary: undefined,
-				to: undefined,
-				from: undefined,
-				messages: undefined,
-				messageCache: undefined,
-			},
-		});
 		this.client.calls.set(this.id, this);
 
 		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
@@ -393,7 +398,6 @@ export default class CallClient implements CallsWithNumbers {
 			embeds: interaction.message.embeds,
 			components: [],
 		}, interaction.channelId, interaction.message.id).catch(() => null);
-
 
 		if (this.otherSideShardID) {
 			type ctx = { callID: string, pickedUp: atAndBy };

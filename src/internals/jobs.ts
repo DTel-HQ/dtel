@@ -34,11 +34,11 @@ const playingJob = scheduleJob({
 	});
 
 
-	winston.verbose("[ScheduleJob] Updated status.");
+	winston.verbose("[Jobs] Updated playing status.");
 });
 
 let WCVotes = 0;
-const votingJob = scheduleJob("*/1 * * * *", async() => {
+const votingJob = !config.devMode && scheduleJob("*/1 * * * *", async() => {
 	const guildCount = await getGuildCount();
 
 	const updateResults = await fetch("https://discord.austinhuang.me/dtel", {
@@ -51,16 +51,23 @@ const votingJob = scheduleJob("*/1 * * * *", async() => {
 	}).catch(e => {
 		// From V3, no idea what this does
 		WCVotes++;
-		if (WCVotes % 300 == 10) client.sendCrossShard(`<@${config.supportGuild.roles.boss}> Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, config.supportGuild.channels.management);
+		if (WCVotes % 300 == 10) client.sendCrossShard(`<@&${config.supportGuild.roles.boss}> Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, config.supportGuild.channels.management);
 		client.sendCrossShard(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, config.supportGuild.channels.management);
 		return null;
 	});
 	if (!updateResults) return;
 
-	const responseBody = await updateResults.json(); // Array of User IDs
+	let responseBody;
+	try {
+		responseBody = await updateResults.json(); // Array of User IDs
+	} catch (e) {
+		await client.sendCrossShard(`Yo, there might be something wrong with the votes API.\n\`\`\`\n${e}\n\`\`\``, config.supportGuild.channels.management);
+		return;
+	}
+
 	const userIDs = Object.keys(responseBody);
 
-	for (const id of responseBody) {
+	for (const id of userIDs) {
 		const user = await client.getUser(id);
 		if (!user) {
 			continue;
@@ -241,5 +248,3 @@ scheduleJob("0 0 0 * * *", async() => {
 
 	client.log(`📖 Cleared ${result.count} messages from ${calls.length} calls.`);
 });
-
-playingJob.invoke();

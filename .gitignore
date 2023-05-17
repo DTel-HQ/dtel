@@ -7,7 +7,9 @@ dist/
 built/
 build/
 
+src/config/auth-*.ts
 src/config/auth.ts
+src/config/config-*.ts
 
 .env
 

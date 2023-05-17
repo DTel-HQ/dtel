@@ -1,41 +1,23 @@
 import DTelClient from "../internals/client";
 import Commands from "../config/commands";
-import CallClient from "../internals/callClient";
 import config from "../config/config";
 
 export default async(client: DTelClient): Promise<void> => {
 	client.winston.info(`Ready!`);
 	client.winston.info(`Logged in as ${client.user!.tag}`);
 
-	// client.application.commands.set(client.commands);
-	if (process.env.SHARDS === "0") {
-		client.application!.commands.set(Commands, "385862448747511812");
-		client.application!.commands.set(Commands, "398980667553349649");
-
-		require("../internals/jobs");
-	}
-
-	const allCalls = await client.db.activeCalls.findMany({
-		include: {
-			to: {
-				include: {
-					guild: true,
-				},
-			},
-			from: {
-				include: {
-					guild: true,
-				},
-			},
-		},
+	client.user!.setActivity({
+		name: `[${process.env.SHARDS}] Starting up...`,
 	});
 
-	for (const call of allCalls) {
-		client.calls.set(call.id, await CallClient.byID(client, {
-			doc: call,
-			side: "to",
-		}));
+	// client.application.commands.set(client.commands);
+	if (process.env.SHARDS === "0") {
+		client.application!.commands.set(Commands);
+		if (client.application.installParams) config.botInvite = client.generateInvite(client.application.installParams);
+
+		// client.application!.commands.set(Commands, "385862448747511812");
+		// client.application!.commands.set(Commands, "398980667553349649");
 	}
 
-	if (client.application.installParams) config.botInvite = client.generateInvite(client.application.installParams);
+	client.shard!.send({ msg: "ready", shardID: Number(process.env.SHARDS) });
 };

@@ -5,10 +5,9 @@ export default {
 		"137589790538334208", // Sun
 		"124989722668957700", // Mitchell
 	],
-	devMode: true,
+	devMode: false,
 	devOnlyMode: false,
-	shardCount: 1,
-	botID: "377609965554237453",
+	shardCount: 7,
 
 	// NUMBER ALIASES
 	aliasNumbers: {
@@ -52,16 +51,16 @@ export default {
 	// IDs
 	// TODO: Return IDs to their original values
 	supportGuild: {
-		id: "385862448747511812",
+		id: "281815661317980160",
 		channels: {
 			officesCategory: "355890256786227210",
 
 			announcement: "281816926144167946",
-			logs: "385870073442598912",
+			logs: "282253502779228160",
 			badLogs: "377945714166202368",
 			promote: "398569181097754624",
 			support: "281816105289515008",
-			management: "385862448747511814",
+			management: "326075875466412033",
 		},
 		roles: {
 			boss: "281815725365264385",
@@ -106,12 +105,5 @@ export default {
 	winston: {
 		consoleLevel: "silly",
 		fileLevel: "silly",
-	},
-
-	// Cooldown times (s)
-	cooldowns: {
-		default: 5,
-		call: 20,
-		message: 120,
 	},
 };
