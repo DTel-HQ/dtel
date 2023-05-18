@@ -38,7 +38,7 @@ const votingJob = !config.devMode && scheduleJob("*/1 * * * *", async() => {
 	const guildCount = await client.getGuildCount();
 
 	const updateResults = await fetch("https://discord.austinhuang.me/dtel", {
-		method: "POST",
+		method: "GET",
 		headers: {
 			Authorization: auth.blspace,
 			"Content-Type": "application/json",
