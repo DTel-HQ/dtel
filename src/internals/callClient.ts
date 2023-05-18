@@ -325,6 +325,10 @@ export default class CallClient implements CallsWithNumbers {
 			return;
 		}
 
+		if (this.randomCall) {
+			this.client.log(`☎️ Random Call \`${this.from.channelID} → ${this.to.channelID}\` has been established by ID: \`${this.started.by}\`\nCall ID: \`${this.id}\``);
+		}
+
 		this.client.calls.set(this.id, this);
 
 		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
@@ -384,6 +388,9 @@ export default class CallClient implements CallsWithNumbers {
 				// Ignore
 			}
 
+			if (this.randomCall) {
+				this.client.log(`❎ Random Call \`${this.from.channelID} → ${this.to.channelID}\` was not picked up.\nCall ID: \`${this.id}\``);
+			}
 			this.endHandler("missed");
 		}, 2 * 60 * 1000);
 	}

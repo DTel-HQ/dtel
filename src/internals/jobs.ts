@@ -2,22 +2,18 @@ import { Range, scheduleJob } from "node-schedule";
 import { client, winston } from "../dtel";
 import auth from "../config/auth";
 import config from "../config/config";
-import { getOrCreateAccount } from "./utils";
 import { db } from "../database/db";
-import { EmbedBuilder, TextChannel } from "discord.js";
-import { ArchivedCalls } from "@prisma/client";
+import { EmbedBuilder } from "discord.js";
 
 interface playingCtx {
 	guildCount: number
 	userCount: number
 }
 
-const getGuildCount = async() => (await client.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
-
 const playingJob = scheduleJob({
 	minute: new Range(0, 59, 15),
 }, async() => {
-	const guildCount = await getGuildCount();
+	const guildCount = await client.getGuildCount();
 
 	const userCount = (await client.shard!.fetchClientValues("users.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
 
@@ -39,7 +35,7 @@ const playingJob = scheduleJob({
 
 let WCVotes = 0;
 const votingJob = !config.devMode && scheduleJob("*/1 * * * *", async() => {
-	const guildCount = await getGuildCount();
+	const guildCount = await client.getGuildCount();
 
 	const updateResults = await fetch("https://discord.austinhuang.me/dtel", {
 		method: "POST",

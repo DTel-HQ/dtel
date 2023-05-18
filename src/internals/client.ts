@@ -247,6 +247,10 @@ class DTelClient extends Client<true> {
 			content: `\`[${time}]\` ${message}`,
 		}, this.config.supportGuild.channels.logs);
 	}
+
+	async getGuildCount(): Promise<number> {
+		return (await this.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
+	}
 }
 
 export default DTelClient;

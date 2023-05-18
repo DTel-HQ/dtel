@@ -1,4 +1,4 @@
-import { Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
+import { Guild, Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
 import Client from "./internals/client";
@@ -9,6 +9,8 @@ import InteractionEvent from "./events/interactionCreate";
 import MessageCreateEvent from "./events/messageCreate";
 import MessageDeleteEvent from "./events/messageDelete";
 import MessageUpdateEvent from "./events/messageUpdate";
+import GuildCreateEvent from "./events/guildCreate";
+import GuildDeleteEvent from "./events/guildDelete";
 import ReadyEvent from "./events/ready";
 import TypingStartEvent from "./events/typingStart";
 
@@ -59,8 +61,8 @@ client.on("messageCreate", (msg: Message) => MessageCreateEvent(client, msg));
 client.on("messageUpdate", (before: Message | PartialMessage, after: Message | PartialMessage) => MessageUpdateEvent(client, before as Message, after as Message));
 client.on("messageDelete", (msg: Message | PartialMessage) => MessageDeleteEvent(client, msg as Message));
 client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
-// client.on("guildCreate", (guild: Guild) => GuildCreateEvent(guild));
-// client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(guild));
+client.on("guildCreate", (guild: Guild) => GuildCreateEvent(client, guild));
+client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(client, guild));
 
 client.on("typingStart", (typing: Typing) => TypingStartEvent(client, typing));
 
