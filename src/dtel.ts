@@ -22,7 +22,7 @@ const winston = Console(`Shard ${process.env.SHARDS}`);
 
 i18next.init({
 	// debug: config.devMode,
-	fallbackLng: "en-US",
+	fallbackLng: "en",
 	preload: ["en-US"],
 
 	returnObjects: true,
