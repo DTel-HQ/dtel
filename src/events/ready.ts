@@ -13,7 +13,7 @@ export default async(client: DTelClient): Promise<void> => {
 	// client.application.commands.set(client.commands);
 	if (process.env.SHARDS === "0") {
 		client.application!.commands.set(Commands);
-		if (client.application.installParams) config.botInvite = client.generateInvite(client.application.installParams);
+		if (client.application.installParams) config.botInvite = client.generateInvite((await client.application.fetch()).installParams!);
 
 		// client.application!.commands.set(Commands, "385862448747511812");
 		// client.application!.commands.set(Commands, "398980667553349649");
