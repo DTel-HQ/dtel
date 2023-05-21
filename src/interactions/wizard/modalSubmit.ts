@@ -23,7 +23,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		});
 
 		if (dbNumber) {
-			this.interaction.reply({ content: `${this.t("errors.numberInUse")} ${this.interaction.guild ? "0301" : "0900"}`, ephemeral: true });
+			this.interaction.reply({ content: `${this.t("errors.numberInUse")}`, ephemeral: true });
 			return;
 		}
 
