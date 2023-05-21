@@ -4,7 +4,7 @@ import { parseNumber } from "../../internals/utils";
 
 export default class Deassign extends Command {
 	async run(): Promise<void> {
-		this.interaction.deferReply();
+		await this.interaction.deferReply();
 
 		const numberToDeassign = parseNumber(this.interaction.options.getString("number_or_channel", true));
 
