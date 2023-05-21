@@ -30,7 +30,16 @@ export default class Deassign extends Command {
 			return;
 		}
 
-		this.client.deleteNumber(number.number);
+		try {
+			const res = await this.client.deleteNumber(number.number);
+
+			if (res === false) throw new Error();
+		} catch {
+			this.interaction.editReply({
+				embeds: [this.client.errorEmbed("Couldn't delete that number.")],
+			});
+			return;
+		}
 
 		this.interaction.editReply({
 			embeds: [{

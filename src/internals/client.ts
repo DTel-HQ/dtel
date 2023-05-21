@@ -208,6 +208,12 @@ class DTelClient extends Client<true> {
 		}
 
 
+		await db.numbers.delete({
+			where: {
+				number: numberDoc.number,
+			},
+		});
+
 		let ownerDMChannel: DMChannel | null | undefined;
 
 		if (numberDoc.guildID) {
