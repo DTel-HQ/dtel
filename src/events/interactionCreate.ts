@@ -191,31 +191,34 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 	const processorClass = new processorFile(client, interaction, commandData);
 	try {
 		const userPermissions = await client.getPerms(interaction.user.id);
-		switch (permissionLevel) {
-			case PermissionLevel.maintainer: {
-				if (userPermissions != PermissionLevel.maintainer) {
-					processorClass.notMaintainer();
-					return;
+		// Bypass checks if ran by a maintainer
+		if (userPermissions != PermissionLevel.maintainer) {
+			switch (permissionLevel) {
+				case PermissionLevel.maintainer: {
+					if (userPermissions != PermissionLevel.maintainer) {
+						processorClass.notMaintainer();
+						return;
+					}
+					break;
 				}
-				break;
-			}
-			case PermissionLevel.customerSupport: {
-				if (userPermissions as number < PermissionLevel.customerSupport) {
-					processorClass.permCheckFail();
-					return;
+				case PermissionLevel.customerSupport: {
+					if (userPermissions as number < PermissionLevel.customerSupport) {
+						processorClass.permCheckFail();
+						return;
+					}
+					if (interaction.guildId !== config.supportGuild.id && !config.devMode) {
+						processorClass.notInSupportGuild();
+						return;
+					}
+					break;
 				}
-				if (interaction.guildId !== config.supportGuild.id && !config.devMode) {
-					processorClass.notInSupportGuild();
-					return;
+				case PermissionLevel.serverAdmin: {
+					if (!(interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild)) {
+						processorClass.permCheckFail();
+						return;
+					}
+					break;
 				}
-				break;
-			}
-			case PermissionLevel.serverAdmin: {
-				if (!(interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild)) {
-					processorClass.permCheckFail();
-					return;
-				}
-				break;
 			}
 		}
 

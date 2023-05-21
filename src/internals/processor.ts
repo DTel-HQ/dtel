@@ -46,7 +46,7 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 
 	async getPerms(userID = this.interaction.user.id): Promise<PermissionLevel> {
 		let userPermissions = await this.client.getPerms(userID) as PermissionLevel;
-		const isServerAdmin = (this.interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild);
+		const isServerAdmin = this.interaction.channel?.isDMBased() || (this.interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild);
 
 		if (isServerAdmin && userPermissions as number < PermissionLevel.customerSupport) {
 			userPermissions = PermissionLevel.serverAdmin;
