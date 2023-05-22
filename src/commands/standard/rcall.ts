@@ -55,9 +55,14 @@ export default class RCall extends Command {
 			// Number is in a call, try again
 			if (number?.outgoingCalls.length > 0 || number.incomingCalls.length > 0) continue;
 
-			const channel = await this.client.getChannel(number.channelID);
-			if (!channel) {
-				this.client.deleteNumber(number.number);
+			try {
+				const channel = await this.client.getChannel(number.channelID);
+				if (!channel) {
+					this.client.deleteNumber(number.number);
+					continue;
+				}
+			} catch {
+				// Don't delete if there's potential for an unavailable guild to delete a number
 				continue;
 			}
 

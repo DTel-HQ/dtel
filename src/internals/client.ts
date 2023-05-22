@@ -96,7 +96,7 @@ class DTelClient extends Client<true> {
 		// Not safe to cache this as we won't get its updates
 		return this.channels.fetch(id, {
 			cache: false,
-		}).catch(() => null);
+		});
 	}
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
