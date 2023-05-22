@@ -221,6 +221,8 @@ export default class CallClient implements CallsWithNumbers {
 			t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
 		};
 
+		// Don't bother sending it if we can find it on this shard
+		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
 
 		await db.activeCalls.create({
 			data: {
@@ -234,9 +236,6 @@ export default class CallClient implements CallsWithNumbers {
 				messageCache: undefined,
 			},
 		});
-
-		// Don't bother sending it if we can find it on this shard
-		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
 
 		if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
 			// Send the call to another shard if required
@@ -320,6 +319,12 @@ export default class CallClient implements CallsWithNumbers {
 				embeds: [
 					this.client.errorEmbed(this.from.t("errors.couldntReachOtherSide")),
 				],
+			});
+
+			await db.activeCalls.delete({
+				where: {
+					id: this.id,
+				},
 			});
 
 			return;

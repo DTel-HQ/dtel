@@ -76,6 +76,8 @@ class DTelClient extends Client<true> {
 		if (!process.env.SHARD_COUNT || Number(process.env.SHARD_COUNT) == 1) return 0;
 		const channelObject = await this.rest.get(`/channels/${id}`) as APITextChannel;
 
+		if (channelObject && !channelObject.guild_id) return 0;
+
 		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
@@ -94,7 +96,7 @@ class DTelClient extends Client<true> {
 		// Not safe to cache this as we won't get its updates
 		return this.channels.fetch(id, {
 			cache: false,
-		});
+		}).catch(() => null);
 	}
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
@@ -213,6 +215,8 @@ class DTelClient extends Client<true> {
 				number: numberDoc.number,
 			},
 		});
+
+		this.log(`📕 Number \`${number}\` has been automatically deassigned as its channel has been deleted.`);
 
 		let ownerDMChannel: DMChannel | null | undefined;
 
