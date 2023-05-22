@@ -58,7 +58,7 @@ export default class RCall extends Command {
 			try {
 				const channel = await this.client.getChannel(number.channelID);
 				if (!channel) {
-					this.client.deleteNumber(number.number);
+					// this.client.deleteNumber(number.number); this feels unsafe
 					continue;
 				}
 			} catch {
