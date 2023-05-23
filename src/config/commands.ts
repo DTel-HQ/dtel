@@ -479,6 +479,14 @@ const commands: Command[] = [
 			type: ApplicationCommandOptionType.Integer,
 		}],
 	},
+	{
+		name: "vote",
+		description: `View information about voting for DTel`,
+		guildOnly: false,
+		numberRequired: false,
+		permissionLevel: PermissionLevel.none,
+		useType: CommandType.standard,
+	},
 ];
 
 export default commands;

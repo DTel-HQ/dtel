@@ -262,55 +262,47 @@ export default {
 		help: {
 			embed: {
 				title: "DTel's commands",
-				description: "For more information, use `>info`, `>links` or call Customer Support (`>dial *611`).",
+				description: "For more information, use `/info`, `/links` or call Customer Support (`/call *611`).",
 				fields: [
 					{
 						name: "Get yourself a number to call others!",
-						value: "Use `>wizard` and follow the prompts. Once you've got one, you can...",
+						value: "Use `/wizard` and follow the prompts. Once you've got one, you can...",
 					},
 					{
-						name: ">dial / >call",
+						name: "/call",
 						value: "Dial a specific DTel number you have in mind. Or...",
 					},
 					{
-						name: ">rdial / >rcall",
-						value: "Dial a random number from the yellowpages (`*411`). (To register your number in the yellowpages, `>dial *411`.)",
+						name: "/rcall",
+						value: "Dial a random number from the Yellowbook (`*411`). (To register your number in the Yellowbook, /call *411`.)",
 					},
 					{
-						name: ">status",
+						name: "/status",
 						value: "See how long a call has been going for, plus the message count and call ID.",
 					},
 					{
-						name: ">block",
+						name: "/block",
 						value: "Block a number from calling you.",
 					},
 					{
-						name: ">contacts",
-						value: "Your personal contact book of DTel numbers.",
-					},
-					{
-						name: ">mention",
+						name: "/mention",
 						value: "Get mentioned when there's an incoming call (guild only).",
 					},
 					{
-						name: ">transfer",
-						value: "Transfer the other side of a call to another number.",
-					},
-					{
 						name: "Currency commands",
-						value: "More information about the currency [here](http://dtel.austinhuang.me/en/latest/Payment/).\n• `>dial *233`: Renew your number registration using credits.\n• `>convert`: Convert your credits into other bot currency via [Discoin](https://discoin.gitbook.io/docs/users-guide).\n• `>daily`: Get daily credits.\n• `>vote`: Vote for us to get more credits!\n• `>pay`: Send money to others (Fees apply).\n• `>lottery`: Daily jackpot!",
+						value: "More information about the currency [here](http://dtel.austinhuang.me/en/latest/Payment/).\n• `/call *233`: Renew your number registration using credits.\n• `/daily`: Get daily credits.\n• `/vote`: Vote for us to get more credits!\n• `/pay`: Send money to others (Fees apply).",
 					},
 					{
 						name: "Mailbox commands",
-						value: "\n• `>mailbox`: Check mailbox messages or create one.\n• `>message`: Write a message to other number's mailbox.",
+						value: "\n• `/mailbox`: Check mailbox messages or create one.\n• `/message`: Write a message to other number's mailbox.",
 					},
 					{
-						name: ">upgrade",
-						value: "Upgrade your number to a VIP number. Use this to see all the benefits!",
+						name: "VIP Features",
+						value: "Call *411 to upgrade your number to a VIP number or view the benefits!",
 					},
 					{
 						name: "I don't really need to explain these... right, my master?",
-						value: "`>help`, `>info`, `>invite`, `>links`, `>prefix` and `>ping`",
+						value: "`/help`, `/info`, `/invite`, `/links`, and `/ping`",
 					},
 				],
 				footer: {
@@ -322,11 +314,11 @@ export default {
 		info: {
 			embed: {
 				title: "📖 DTel Information",
-				description: `For command help, use \`>help\`. More detailed documentation is available on [our website](${config.siteLink}).`,
+				description: `For command help, use \`/help\`. More detailed documentation is available on [our website](${config.siteLink}).`,
 				fields: [
 					{
 						name: "📞 Getting a number",
-						value: "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `>wizard` command in the channel to get a number.",
+						value: "Before getting a number, you need to reserve a channel for your phone. Once you have done this, you'll have to run the `/wizard` command in the channel to get a number.",
 					},
 					{
 						name: "✏ Numbers",
@@ -334,7 +326,7 @@ export default {
 					},
 					{
 						name: "💰 Credits",
-						value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, dial \`*233\` or run \`/balance\` to check balance.`,
+						value: `You can either earn credits using this bot, transfer credits from other clients, or donate to DTel's development in exchange of credits. See [this page](${config.paymentLink}) for details.\nAfter recharging, call \`*233\` or run \`/balance\` to check balance.`,
 					},
 					{
 						name: "🔖 Phonebook",
@@ -342,7 +334,7 @@ export default {
 					},
 					{
 						name: "📥 Invite the bot",
-						value: `Type \`>invite\` or click this button: [<:dl:382568980218511361>](${config.botInvite})`,
+						value: `Type \`/invite\` or click this button: [<:dl:382568980218511361>](${config.botInvite})`,
 					},
 					{
 						name: "📋 Suggest a feature",
@@ -362,7 +354,7 @@ export default {
 					},
 				],
 				footer: {
-					text: "DTel V3 - made with <3 by SunburntRock89 and the team",
+					text: "DTel V4 - made with <3 by SunburntRock89 and the team",
 				},
 			},
 		},

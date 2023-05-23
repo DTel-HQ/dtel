@@ -52,6 +52,10 @@ export default class RCall extends Command {
 				continue;
 			}
 
+			if (this.config.aliasNumbers["*611"] === number.number) {
+				continue;
+			}
+
 			// Number is in a call, try again
 			if (number?.outgoingCalls.length > 0 || number.incomingCalls.length > 0) continue;
 
