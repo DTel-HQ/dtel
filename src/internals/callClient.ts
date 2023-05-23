@@ -287,7 +287,11 @@ export default class CallClient implements CallsWithNumbers {
 
 		// Mentions
 		for (const user of this.to.mentions) {
-			notificationContent += `<@${user}> `;
+			if (user.startsWith("<")) {
+				notificationContent += `${user} `;
+			} else {
+				notificationContent += `<@${user}> `;
+			}
 		}
 
 		let notificationMessageID: string;
