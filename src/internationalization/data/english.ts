@@ -274,7 +274,7 @@ export default {
 					},
 					{
 						name: "/rcall",
-						value: "Dial a random number from the Yellowbook (`*411`). (To register your number in the Yellowbook, /call *411`.)",
+						value: "Dial a random number from the Yellowbook (`*411`). (To register your number in the Yellowbook, `/call *411`.)",
 					},
 					{
 						name: "/status",
