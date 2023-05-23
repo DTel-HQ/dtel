@@ -283,10 +283,17 @@ export default class CallClient implements CallsWithNumbers {
 			}
 		}
 
+		let notificationContent = this.to.number === config.aliasNumbers["*611"] ? `<@&${config.supportGuild.roles.customerSupport}>` : "";
+
+		// Mentions
+		for (const user of this.to.mentions) {
+			notificationContent += `<@${user}> `;
+		}
+
 		let notificationMessageID: string;
 		try {
 			notificationMessageID = (await this.toSend({
-				content: this.to.number === config.aliasNumbers["*611"] ? `<@&${config.supportGuild.roles.customerSupport}>` : "",
+				content: notificationContent,
 
 				embeds: [{
 					color: (this.from.vip?.expiry || 0) > new Date() ? this.client.config.colors.vip : this.client.config.colors.info,

@@ -6,7 +6,7 @@ export default class MentionList extends Command {
 		const mentions = this.number!.mentions;
 
 		const embed = EmbedBuilder.from(this.t("listEmbed", {
-			list: mentions.length ? mentions.map(m => `<@${m}>`).join(", ") : this.t("listEmpty"),
+			list: mentions.length ? mentions.map(m => m.toString()).join(", ") : this.t("listEmpty"),
 			interpolation: {
 				escapeValue: false,
 			},
