@@ -222,7 +222,7 @@ export default class CallClient implements CallsWithNumbers {
 		};
 
 		// Don't bother sending it if we can find it on this shard
-		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
+		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
 
 		await db.activeCalls.create({
 			data: {
@@ -237,22 +237,24 @@ export default class CallClient implements CallsWithNumbers {
 			},
 		});
 
+		// Send the call to another shard if required
+
+		if (eventReceivingOtherSideShardID === null) {
+			await db.activeCalls.delete({
+				where: {
+					id: this.id,
+				},
+			});
+			throw new Error("otherSideMissingChannel");
+		}
+
+		winston.debug(`Other side is: ${this.otherSideShardID}`);
+
 		if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
-			// Send the call to another shard if required
-			this.otherSideShardID = await this.client.shardIdForChannelId(this.to.channelID);
-
-			if (!this.otherSideShardID) {
-				await db.activeCalls.delete({
-					where: {
-						id: this.id,
-					},
-				});
-				throw new Error("numberMissingChannel");
-			}
-
-			winston.debug(`Other side is: ${this.otherSideShardID}`);
-
 			const thisFile = `${__dirname}/callClient`;
+
+			this.otherSideShardID = eventReceivingOtherSideShardID;
+
 			// THIS CAN THROW callNotFound
 			type ctx = { callID: string, fileLocation: string };
 			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
