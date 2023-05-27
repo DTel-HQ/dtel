@@ -138,14 +138,14 @@ scheduleJob("0 20 * * 0", async() => {
 	const usernames: string[] = [];
 
 	for (const voteDescription of topVoters) {
-		const user = await client.getUser(voteDescription.userID);
+		const user = await client.getUser(voteDescription.userID).catch(() => null);
 		if (!user) client.sendCrossShard(`<@${config.supportGuild.roles.customerSupport}> couldn't fetch vote winner ${voteDescription.userID}`, config.supportGuild.channels.badLogs);
 
 		usernames.push(user?.username || "Unknown");
 
 		await db.accounts.upsert({
 			where: {
-				id: user.id,
+				id: voteDescription.userID,
 			},
 			update: {
 				vipMonthsRemaining: {
@@ -153,10 +153,12 @@ scheduleJob("0 20 * * 0", async() => {
 				},
 			},
 			create: {
-				id: user.id,
+				id: voteDescription.userID,
 				vipMonthsRemaining: prizeMonths,
 			},
 		});
+
+		if (!user) return;
 
 		const dmChannel = await user.createDM().catch(() => null);
 		if (!dmChannel) continue;

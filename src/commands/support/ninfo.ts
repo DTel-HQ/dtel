@@ -98,7 +98,7 @@ export default class NInfo extends Command {
 		} else {
 			const dmChannel = channel as DMChannel;
 
-			numberOwner = dmChannel.recipient as User;
+			numberOwner = await this.client.getUser(dmChannel.recipientId); // This should always be visible to us as we're in the server
 			ownerStrikeCount = await this.db.strikes.count({
 				where: {
 					offender: numberOwner.id,
