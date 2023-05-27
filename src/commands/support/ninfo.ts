@@ -73,8 +73,8 @@ export default class NInfo extends Command {
 		// If this is a guild channel
 		// We know we can see the channel at this point, so we can definitely see both the guild and the owner
 		// If there is no guild, since we can see the channel we can see the user;
-		if (number.guildID) {
-			const guild = await this.client.getGuild(number.guildID);
+		if (!channel.isDMBased()) {
+			const guild = await channel.guild.fetch();
 			ownerStrikeCount = await this.db.strikes.count({
 				where: {
 					offender: guild.ownerId,
