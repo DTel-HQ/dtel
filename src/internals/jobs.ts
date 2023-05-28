@@ -171,7 +171,7 @@ scheduleJob("0 20 * * 0", async() => {
 				text: "You can now make any number of your choice VIP by dialing *411 and selecting VIP Options.",
 			});
 
-		user.send({ embeds: [winningEmbed] });
+		user.send({ embeds: [winningEmbed] }).catch(() => null);
 	}
 
 	const announcementEmbed = new EmbedBuilder()
@@ -196,7 +196,7 @@ scheduleJob("0 20 * * 0", async() => {
 
 	announcementEmbed.addFields([{
 		name: `Top ${givenToTop}`,
-		value: topVoters.map((v, i) => `${i + 1}. ${v.count} votes - <@${usernames[i]}>`).join("\n"),
+		value: topVoters.map((v, i) => `${i + 1}. ${v.count} vote${v.count == 1 ? "" : "s"} - ${usernames[i]}`).join("\n"),
 	}]);
 
 	try {
