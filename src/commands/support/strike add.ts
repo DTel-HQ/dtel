@@ -101,7 +101,7 @@ export default class StrikeAdd extends Command {
 			// Guild definitely exists if user doesn't at this point
 			const userToDM = possibilities.user || await this.client.getUser(possibilities.guild!.ownerId);
 			// We can't tell what language they speak here.
-			userToDM.send({
+			await userToDM.send({
 				embeds: [{
 					color: this.config.colors.yellowbook,
 					title: "⚠️ Warning",
