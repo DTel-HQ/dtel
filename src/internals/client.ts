@@ -143,11 +143,13 @@ class DTelClient extends Client<true> {
 
 			if (possibilities.number) {
 				if (possibilities.number?.guildID) {
-					possibilities.guild = await this.getGuild(possibilities.number.guildID);
+					possibilities.guild = await this.getGuild(possibilities.number.guildID).catch(() => undefined);
 				} else {
 					const tempChan = await this.getChannel(possibilities.number.channelID).catch(() => undefined);
-					if (tempChan) {
+					if (tempChan?.isDMBased()) {
 						possibilities.user = (tempChan as DMChannel).recipient;
+					} else {
+						possibilities.guild = (tempChan as TextChannel | null | undefined)?.guild;
 					}
 				}
 			}
