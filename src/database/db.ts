@@ -14,7 +14,7 @@ const populateBlacklistCache = () => {
 prisma.$use(async(params, next) => {
 	// Check incoming query type
 	if (params.action === "deleteMany" || params.action === "updateMany") {
-		if (params.args.where === undefined) {
+		if (params.args.where === undefined && params.model !== "Votes") {
 			winston.error("INCREDIBLY UNSAFE QUERY DETECTED!");
 			return;
 		}

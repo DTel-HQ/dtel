@@ -174,6 +174,9 @@ scheduleJob("0 20 * * 0", async() => {
 		user.send({ embeds: [winningEmbed] }).catch(() => null);
 	}
 
+	// Delete all votes
+	await db.votes.deleteMany({});
+
 	const announcementEmbed = new EmbedBuilder()
 		.setColor(config.colors.vip)
 		.setTitle("This week's top voters")
