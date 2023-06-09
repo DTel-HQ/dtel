@@ -29,6 +29,8 @@ class DTelClient extends Client<true> {
 
 	permsCache: Collection<string, PermissionLevel> = new Collection();
 
+	allShardsSpawned = false;
+
 	constructor(options: ClientOptions) {
 		super(options);
 		this.shardWithSupportGuild = ShardClientUtil.shardIdForGuildId(config.supportGuild.id, config.shardCount);
@@ -261,6 +263,8 @@ class DTelClient extends Client<true> {
 	}
 
 	async getGuildCount(): Promise<number> {
+		if (!this.allShardsSpawned) return -1;
+
 		return (await this.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
 	}
 }

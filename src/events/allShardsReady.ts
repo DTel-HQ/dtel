@@ -5,6 +5,8 @@ import DTelClient from "../internals/client";
 export default async(client: DTelClient): Promise<void> => {
 	winston.info("Received the all clear! Starting calls...");
 
+	client.allShardsSpawned = true;
+
 	// const allCalls = await client.db.activeCalls.findMany({
 	// 	include: {
 	// 		to: {
