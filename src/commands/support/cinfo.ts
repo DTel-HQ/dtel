@@ -1,6 +1,7 @@
 import { ActiveCalls, ArchivedCalls, Numbers } from "@prisma/client";
 import { EmbedBuilder } from "discord.js";
 import Command from "../../internals/commandProcessor";
+import { getUsername } from "../../internals/utils";
 
 type activeOrArchivedCallWithNumbers = (ActiveCalls | ArchivedCalls);
 
@@ -71,10 +72,10 @@ export default class CInfo extends Command {
 				value: [
 					`**Picked up**:`,
 					`- At: ${blockFormat(call.pickedUp?.at.toString() || "N/A")}`,
-					`- By: ${blockFormat(call.pickedUp ? `${pickedUpUser?.tag} (${pickedUpUser?.id})` : "N/A")}`,
+					`- By: ${blockFormat(call.pickedUp ? `${pickedUpUser ? getUsername(pickedUpUser) : "Unknown"} (${pickedUpUser?.id})` : "N/A")}`,
 					`**Ended**:`,
 					`- At: ${blockFormat(call.ended?.at.toString() || "N/A")}`,
-					`- By: ${blockFormat(call.ended ? `${endedUser?.tag} (${endedUser?.id})` : "N/A")}`,
+					`- By: ${blockFormat(call.ended ? `${endedUser ? getUsername(endedUser) : "Unknown"} (${endedUser?.id})` : "N/A")}`,
 					`**Random**: ${blockFormat(call.randomCall ? "Yes" : "No")}`,
 					// `Transferred by: ${blockFormat(call. ? "Yes" : "No")}`,
 					`**Started**:`,

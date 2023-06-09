@@ -1,5 +1,6 @@
 import { APIEmbed, User } from "discord.js";
 import Command from "../../internals/commandProcessor";
+import { getUsername } from "../../internals/utils";
 export default class UInfo extends Command {
 	async run(): Promise<void> {
 		const toFind = this.interaction.options.getString("user", true);
@@ -16,7 +17,7 @@ export default class UInfo extends Command {
 			color: this.config.colors.info,
 			author: {
 				icon_url: user.displayAvatarURL(),
-				name: `${user.tag} (${user.id})`,
+				name: `${getUsername(user)} (${user.id})`,
 			},
 			footer: {
 				text: `Use /strikes for more information. Server management permissions indicated by red phone..`,

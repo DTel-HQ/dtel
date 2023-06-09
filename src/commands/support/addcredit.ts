@@ -65,7 +65,7 @@ export default class AddCredit extends Command {
 			description: `${addedOrRemoved} ${this.config.dtsEmoji} ${Math.abs(amountOfCredits)} ${creditsAdded ? "to" : "from"} <@${userID}> (${userID})`,
 			footer: {
 				icon_url: this.interaction.user.displayAvatarURL(),
-				text: `${this.interaction.user.tag} (${this.interaction.user.id})`,
+				text: `${this.userDisplayName} (${this.interaction.user.id})`,
 			},
 		}).setTimestamp(new Date());
 

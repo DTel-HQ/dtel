@@ -9,7 +9,7 @@ import config from "../config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { parseNumber } from "./utils";
+import { getUsername, parseNumber } from "./utils";
 import { NumbersWithGuilds } from "../interfaces/numbersWithGuilds";
 import { winston } from "../dtel";
 
@@ -478,7 +478,7 @@ export default class CallClient implements CallsWithNumbers {
 	async processContent(message: Message, sideToSendTo: ClientCallParticipant): Promise<MessageCreateOptions> {
 		const userPerms = await this.client.getPerms(message.author.id);
 
-		const toSend: MessageCreateOptions = { content: `**${message.author.tag}`, embeds: [] };
+		const toSend: MessageCreateOptions = { content: `**${getUsername(message.author)}`, embeds: [] };
 
 		const thisSide = this.getThisSideByChannel(message.channelId)!;
 		if (thisSide.vip?.hidden) toSend.content = `**Anonymous#${message.author.id.slice(-4)}`;

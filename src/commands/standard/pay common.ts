@@ -4,7 +4,7 @@ import { Accounts } from "@prisma/client";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, User } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
-import { formatBalance, upperFirst } from "../../internals/utils";
+import { formatBalance, getUsername, upperFirst } from "../../internals/utils";
 
 export default abstract class PayCommonFunctions extends Command {
 	async payUser(toPay: Accounts, user: User): Promise<void> {
@@ -42,16 +42,19 @@ export default abstract class PayCommonFunctions extends Command {
 			return;
 		}
 
+		const authorTag = this.userDisplayName;
+		const recipientTag = getUsername(user);
+
 		const embed = EmbedBuilder.from({
 			color: this.config.colors.info,
 			author: {
-				name: this.interaction.user.tag,
+				name: authorTag,
 				icon_url: this.interaction.user.displayAvatarURL(),
 			},
 
 			...this.t("confirmEmbedOptions"),
 			...this.t("embed", {
-				displayName: `${user.tag} (${user.id})`,
+				displayName: `${recipientTag} (${user.id})`,
 				preFeeToSend: totalCost,
 				fee: formatBalance(fee),
 				postFeeCost: formatBalance(totalReceived),
@@ -154,7 +157,7 @@ export default abstract class PayCommonFunctions extends Command {
 		});
 		embed.spliceFields(2, 1, {
 			name: this.t("sender"),
-			value: `${this.interaction.user.tag}`,
+			value: authorTag,
 		});
 
 		// Try to DM the user

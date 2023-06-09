@@ -83,7 +83,7 @@ export default class NInfo extends Command {
 
 			numberOwner = await this.client.getUser(guild.ownerId);
 
-			guildDescription = `${guild.name}\n\`${guild.id}\`\nWhitelisted: ${number.guild?.whitelisted}`;
+			guildDescription = `${guild.name}\n\`${guild.id}\`\nWhitelisted: ${number.guild?.whitelisted ? "Yes" : "No"}`;
 			channelDescription = `#${(channel as GuildTextBasedChannel).name}\n\`${channel.id}\``;
 
 			let footerImage = this.client.user.displayAvatarURL();

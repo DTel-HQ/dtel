@@ -108,7 +108,7 @@ export default class Deassign extends Command {
 				return;
 			}
 
-			const discordChannel = await this.client.getChannel(newChannel);
+			const discordChannel = await this.client.getChannel(newChannel).catch(() => null);
 			if (!discordChannel) {
 				this.interaction.editReply({
 					embeds: [this.client.errorEmbed("Couldn't find the new channel.")],

@@ -1,5 +1,6 @@
 import { Strikes } from "@prisma/client";
 import Command from "../../internals/commandProcessor";
+import { getUsername } from "../../internals/utils";
 
 export default class StrikeRemove extends Command {
 	async run(): Promise<void> {
@@ -34,7 +35,7 @@ export default class StrikeRemove extends Command {
 			embeds: [{
 				color: this.config.colors.success,
 				title: "✅ Strike removed",
-				description: `Strike removed from **${offender.user?.tag || offender.guild?.name || "Unknown Offender"}** (${strike.offender})`,
+				description: `Strike removed from **${(offender.user ? getUsername(offender.user) : null) || offender.guild?.name || "Unknown Offender"}** (${strike.offender})`,
 				footer: {
 					text: `They now have ${strikeCount} ${strikeCount > 1 ? "strikes" : "strike"}`,
 				},

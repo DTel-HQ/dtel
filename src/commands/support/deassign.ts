@@ -45,7 +45,7 @@ export default class Deassign extends Command {
 			embeds: [{
 				color: this.config.colors.success,
 				author: {
-					name: this.interaction.user.tag,
+					name: this.userDisplayName,
 					icon_url: this.interaction.user.displayAvatarURL(),
 				},
 				title: "R.I.P",

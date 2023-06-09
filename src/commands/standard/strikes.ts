@@ -1,6 +1,7 @@
 import { EmbedField } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
+import { getUsername } from "../../internals/utils";
 
 export default class Strikes extends Command {
 	async run() {
@@ -35,10 +36,10 @@ export default class Strikes extends Command {
 		const fields: EmbedField[] = [];
 
 		for (const strike of strikes) {
-			const staff = await this.client.users.fetch(strike.created.by).catch(() => null) || { tag: "Unknown#0000" };
+			const staff = await this.client.users.fetch(strike.created.by).catch(() => null);
 
 			fields.push({
-				name: `Strike \`${strike.id}\` by ${staff.tag}`,
+				name: `Strike \`${strike.id}\` by ${staff ? getUsername(staff) : `Unknown (${strike.created.by})`}`,
 				value: `• **Reason**: ${truncate(strike.reason, 800) || "No reason provided"}\n• **ID**: ${strike.id}`,
 				inline: false,
 			});

@@ -4,6 +4,7 @@
 import { Accounts, Numbers } from "@prisma/client";
 import dayjs from "dayjs";
 import { db } from "../database/db";
+import { User } from "discord.js";
 
 export const formatShardNumber = (shardNumber: number): string => shardNumber < 10 ? `0${shardNumber}` : shardNumber.toString();
 export const formatBalance = (balance: number): string => {
@@ -75,3 +76,8 @@ export const fetchNumber = (input: string): Promise<Numbers | null> => {
 
 export const formatDate = (date: Date) => dayjs(date).format("YYYY-MM-DD");
 export const upperFirst = (text: string) => `${text[0].toUpperCase()}${text.slice(1, text.length)}`;
+
+export const getUsername = (user: User) => {
+	if (user.discriminator == "0") return `${user.username}`;
+	return `${user.username}#${user.discriminator}}`;
+};

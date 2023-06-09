@@ -6,7 +6,7 @@ import CommandDataInterface, { CommandType, PermissionLevel } from "../interface
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "../database/db";
 import CallClient from "./callClient";
-import { fetchNumber, formatShardNumber, getOrCreateAccount } from "./utils";
+import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
@@ -155,6 +155,10 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 			ephemeral: true,
 			embeds: [this.client.errorEmbed("This command cannot be ran outside of the support server.")],
 		});
+	}
+
+	get userDisplayName() {
+		return getUsername(this.interaction.user);
 	}
 }
 export default Processor;

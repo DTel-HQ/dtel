@@ -3,7 +3,8 @@ import Command from "../../internals/commandProcessor";
 
 export default class MentionToggle extends Command {
 	async run(): Promise<void> {
-		const indexOfMention = this.number!.mentions.indexOf(this.interaction.user.id);
+		let indexOfMention = this.number!.mentions.indexOf(this.interaction.user.id);
+		if (indexOfMention === -1) indexOfMention = this.number!.mentions.indexOf(`<@${this.interaction.user.id}>`);
 
 		// If they're already being mentioned
 		if (indexOfMention > -1) {
