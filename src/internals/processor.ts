@@ -8,6 +8,7 @@ import { db } from "../database/db";
 import CallClient from "./callClient";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
+import { calls } from "../dtel";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -79,7 +80,7 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 
 	async _run(): Promise<void> {
 		if (this.commandData.useType === CommandType.call) {
-			this.call = this.client.calls.find(c => c.from.channelID === this.interaction.channelId || c.to.channelID === this.interaction.channelId);
+			this.call = calls.find(c => c.from.channelID === this.interaction.channelId || c.to.channelID === this.interaction.channelId);
 			if (!this.call) {
 				await this.noCallFound();
 				return;

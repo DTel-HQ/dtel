@@ -4,7 +4,7 @@ import CallClient from "./callClient";
 import { Collection } from "@discordjs/collection";
 import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "../interfaces/commandData";
-import { winston } from "../dtel";
+import { calls, winston } from "../dtel";
 import { Logger } from "winston";
 import { db } from "../database/db";
 import { Numbers } from "@prisma/client";
@@ -22,8 +22,6 @@ class DTelClient extends Client<true> {
 
 	db = db;
 	winston: Logger = winston;
-
-	calls = new Collection<string, CallClient>();
 
 	shardWithSupportGuild = 0;
 
@@ -204,7 +202,7 @@ class DTelClient extends Client<true> {
 		}).catch(() => null);
 
 		if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
-			for (const call of this.calls.filter(c => c.from.number === number || c.to.number === number)) {
+			for (const call of calls.filter(c => c.from.number === number || c.to.number === number)) {
 				call[1].endHandler("system - number deleted");
 
 				this.sendCrossShard({
@@ -266,6 +264,13 @@ class DTelClient extends Client<true> {
 		if (!this.allShardsSpawned) return -1;
 
 		return (await this.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
+	}
+
+	getCall(id: string) {
+		return calls.get(id);
+	}
+	deleteCall(id: string) {
+		return calls.delete(id);
 	}
 }
 

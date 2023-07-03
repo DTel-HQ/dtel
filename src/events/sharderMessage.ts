@@ -1,6 +1,6 @@
 import { ActiveCalls } from "@prisma/client";
 import { TextBasedChannel } from "discord.js";
-import { winston } from "../dtel";
+import { calls, winston } from "../dtel";
 import CallClient, { CallsWithNumbers } from "../internals/callClient";
 import DTelClient from "../internals/client";
 import allShardsReady from "./allShardsReady";
@@ -19,12 +19,12 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 
 			// From here, we can assume we *do* have the channel and can handle this call
 			const callClient = new CallClient(client, undefined, callObject);
-			client.calls.set(callClient.id, callClient);
+			calls.set(callClient.id, callClient);
 			break;
 		}
 		case "callRepropagate": {
 			const messageObject = JSON.parse(msg.callDBObject as string) as callRepropagate;
-			const call = client.calls.get(messageObject.callID);
+			const call = calls.get(messageObject.callID);
 
 			if (!call) {
 				winston.error(`Call repropagation for ID ${messageObject.callID} failed: Call not found`);
@@ -36,7 +36,7 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 		}
 		case "callEnded": {
 			const typed = msg as unknown as callEnded;
-			client.calls.delete(typed.callID);
+			calls.delete(typed.callID);
 			break;
 		}
 
@@ -59,7 +59,7 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 			if (msg.fromShard != Number(process.env.SHARDS) && msg.toShard != Number(process.env.SHARDS)) {
 				return;
 			} else if (msg.fromShard === msg.toShard) {
-				if (client.calls.get(callDoc.id)) {
+				if (calls.get(callDoc.id)) {
 					winston.info(`Call ${callDoc.id} already exists on this shard, ignoring.`);
 					return;
 				}
@@ -72,7 +72,7 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 				doc: callDoc,
 				id: callDoc.id,
 			});
-			client.calls.set(call.id, call);
+			calls.set(call.id, call);
 
 			break;
 		}

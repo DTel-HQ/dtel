@@ -11,7 +11,7 @@ import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getUsername, parseNumber } from "./utils";
 import { NumbersWithGuilds } from "../interfaces/numbersWithGuilds";
-import { winston } from "../dtel";
+import { calls, winston } from "../dtel";
 
 dayjs.extend(relativeTime);
 
@@ -259,7 +259,7 @@ export default class CallClient implements CallsWithNumbers {
 			type ctx = { callID: string, fileLocation: string };
 			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
 				const client = _client as DTelClient;
-				client.calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
+				calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
 					id: context.callID,
 					side: "to",
 				}));
@@ -347,7 +347,7 @@ export default class CallClient implements CallsWithNumbers {
 			this.client.log(`☎️ Random Call \`${this.from.channelID} → ${this.to.channelID}\` has been established by ID: \`${this.started.by}\`\nCall ID: \`${this.id}\``);
 		}
 
-		this.client.calls.set(this.id, this);
+		calls.set(this.id, this);
 
 		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
 	}
@@ -428,7 +428,7 @@ export default class CallClient implements CallsWithNumbers {
 			type ctx = { callID: string, pickedUp: atAndBy };
 			await this.client.shard?.broadcastEval<void, ctx>(async(_client, context): Promise<void> => {
 				const client = _client as DTelClient;
-				const callHandler = client.calls.find(c => c.id === context.callID);
+				const callHandler = calls.find(c => c.id === context.callID);
 				if (!callHandler) throw new Error("No handler");
 
 				callHandler.pickedUp = {
@@ -765,7 +765,7 @@ export default class CallClient implements CallsWithNumbers {
 	async endHandler(endedBy = "system - number lost"): Promise<void> {
 		CallClient.endInDB(this.id, endedBy);
 
-		this.client.calls.delete(this.id);
+		calls.delete(this.id);
 
 		if (this.otherSideShardID) {
 			this.client.shard!.send({
@@ -821,6 +821,10 @@ export default class CallClient implements CallsWithNumbers {
 
 	static async prematureEnd(callDoc: callMissingChannel): Promise<void> {
 		CallClient.endInDB(callDoc.id, "system - number lost");
+	}
+
+	pushToCollection() {
+		calls.set(this.id, this);
 	}
 }
 

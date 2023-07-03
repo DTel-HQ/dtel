@@ -16,7 +16,7 @@ import Constructable from "../interfaces/constructable";
 import DTelClient from "../internals/client";
 import Processor, { ChannelBasedInteraction } from "../internals/processor";
 import i18n, { getFixedT } from "i18next";
-import { winston } from "../dtel";
+import { calls, winston } from "../dtel";
 import config from "../config/config";
 import { blacklistCache } from "../database/db";
 
@@ -31,7 +31,7 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		}));
 		return;
 	}
-	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
+	const call = calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
 
 	let commandName: string;
 	let toRunPath: string;

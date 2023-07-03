@@ -1,4 +1,4 @@
-import { Guild, Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
+import { Collection, Guild, Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
 import i18next from "i18next";
 
 import Client from "./internals/client";
@@ -17,6 +17,7 @@ import TypingStartEvent from "./events/typingStart";
 import { populateBlacklistCache } from "./database/db";
 import SharderMessageEvent from "./events/sharderMessage";
 import { upperFirst } from "./internals/utils";
+import CallClient from "./internals/callClient";
 
 populateBlacklistCache();
 
@@ -71,5 +72,8 @@ process.on("message", msg => SharderMessageEvent(client, msg as Record<string, u
 
 client.login(process.env.TOKEN);
 
-export { client, winston };
+// Moving calls here because of a potential hard lock on a shard using a collection - ruling out using an extended client as the issue
+const calls = new Collection<string, CallClient>();
+
+export { client, winston, calls };
 
