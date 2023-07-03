@@ -37,6 +37,8 @@ let WCVotes = 0;
 const votingJob = !config.devMode && scheduleJob("*/1 * * * *", async() => {
 	const guildCount = await client.getGuildCount();
 
+	if (guildCount === -1) return;
+
 	const updateResults = await fetch("https://discord.austinhuang.me/dtel", {
 		method: "GET",
 		headers: {
