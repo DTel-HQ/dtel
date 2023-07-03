@@ -8,6 +8,8 @@ const escapeRegex = (str: string) => str.replace(/[|\\{}()[\]^$+*?.]/g, "\\$&");
 
 export default class Eval extends Command {
 	async run(): Promise<void> {
+		await this.interaction.deferReply();
+
 		const client = this.client;
 		const config = this.client.config;
 		const winston = this.client.winston;
@@ -32,7 +34,7 @@ export default class Eval extends Command {
 			if (typeof result !== "string") result = inspect(result, false, 2);
 			result = result.replace(regex, "mfa.Jeff");
 			if (result.length <= 1980) {
-				this.interaction.reply({
+				this.interaction.editReply({
 					embeds: [{
 						color: config.colors.success,
 						description: `\`\`\`js\n${result}\`\`\``,
@@ -42,7 +44,7 @@ export default class Eval extends Command {
 					}],
 				});
 			} else {
-				this.interaction.reply({
+				this.interaction.editReply({
 					embeds: [{
 						color: config.colors.info,
 						title: `The eval results were too large!`,
