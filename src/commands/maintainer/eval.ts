@@ -58,7 +58,7 @@ export default class Eval extends Command {
 			}
 		} catch (_err) {
 			const err = _err as Error;
-			this.interaction.reply({
+			this.interaction.editReply({
 				embeds: [{
 					color: 0xFF0000,
 					description: `\`\`\`js\n${err.stack}\`\`\``,
