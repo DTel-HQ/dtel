@@ -48,7 +48,7 @@ type CallsWithNumbersAndGuilds = ActiveCalls & {
 export { CallsWithNumbers };
 
 export default class CallClient implements CallsWithNumbers {
-	primary = false;
+	oneSharded = false;
 
 	id: string = uuidv4();
 	toNum = "";
@@ -76,8 +76,6 @@ export default class CallClient implements CallsWithNumbers {
 
 		if (dbCallDoc) {
 			Object.assign(this, dbCallDoc);
-
-			if (!this.pickedUp?.by) this.setupPickupTimer();
 
 			return;
 		}
@@ -127,9 +125,10 @@ export default class CallClient implements CallsWithNumbers {
 		const callDoc = options.doc as CallsWithNumbersAndGuilds;
 
 		const callManager = new CallClient(client, undefined, callDoc);
-		callManager.primary = options.side === "from";
+
 		callManager.otherSideShardID = await client.shardIdForChannelId(options.side === "from" ? callDoc.to.channelID : callDoc.from.channelID);
 
+		callManager.oneSharded = callManager.otherSideShardID === Number(process.env.SHARDS);
 
 		const toLocale = callDoc.to.guild?.locale || "en-US";
 		const fromLocale = callDoc.from.guild?.locale || "en-US";
@@ -146,12 +145,14 @@ export default class CallClient implements CallsWithNumbers {
 			},
 		});
 
-		for (const msg of allMessages) {
-			callManager.messageCache.set(msg.originalMessageID, msg);
+		// Start pickup timer if we're on the to side or this call is one-sided
+		if (!callManager.pickedUp && (options.side === "to" || callManager.oneSharded)) {
+			winston.verbose(`Setting pickup timer for call ${callManager.id}`);
+			callManager.setupPickupTimer();
 		}
 
-		if (!callManager.pickedUp && callManager.primary) {
-			callManager.setupPickupTimer();
+		for (const msg of allMessages) {
+			callManager.messageCache.set(msg.originalMessageID, msg);
 		}
 
 		return callManager;
@@ -169,8 +170,6 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async initiate(): Promise<void> {
-		this.primary = true;
-
 		// Get the number in the correct format for DB query (all numbers)
 		this.toNum = parseNumber(this.toNum);
 		const aliasNumbers = config.aliasNumbers as { [key: string] : string };
@@ -274,6 +273,8 @@ export default class CallClient implements CallsWithNumbers {
 					fileLocation: thisFile,
 				},
 			});
+		} else {
+			this.oneSharded = true;
 		}
 
 		let fromCallerDisplay = this.from.number;
@@ -353,7 +354,8 @@ export default class CallClient implements CallsWithNumbers {
 
 		calls.set(this.id, this);
 
-		if (!this.primary || config.shardCount == 1) this.setupPickupTimer(notificationMessageID);
+
+		if (this.oneSharded) this.setupPickupTimer(notificationMessageID);
 	}
 
 
