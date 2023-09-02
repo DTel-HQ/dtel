@@ -232,11 +232,11 @@ export default class CallClient implements CallsWithNumbers {
 				...this,
 				client: undefined,
 				otherSideShardID: undefined,
-				primary: undefined,
 				to: undefined,
 				from: undefined,
 				messages: undefined,
 				messageCache: undefined,
+				oneSharded: undefined,
 			},
 		});
 
