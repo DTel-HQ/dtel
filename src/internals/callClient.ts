@@ -150,6 +150,10 @@ export default class CallClient implements CallsWithNumbers {
 			callManager.messageCache.set(msg.originalMessageID, msg);
 		}
 
+		if (!callManager.pickedUp && callManager.primary) {
+			callManager.setupPickupTimer();
+		}
+
 		return callManager;
 	}
 
