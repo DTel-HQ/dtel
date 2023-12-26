@@ -255,13 +255,14 @@ export default class CallClient implements CallsWithNumbers {
 
 		if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
 			const thisFile = `${__dirname}/callClient`;
+			const mainFile = `${__dirname}/../dtel`;
 
 			this.otherSideShardID = eventReceivingOtherSideShardID;
 
 			// THIS CAN THROW callNotFound
 			type ctx = { callID: string, fileLocation: string };
 			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
-				const client = _client as DTelClient;
+				const calls = require(mainFile).calls;
 				calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
 					id: context.callID,
 					side: "to",
