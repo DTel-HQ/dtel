@@ -228,6 +228,8 @@ export default class CallClient implements CallsWithNumbers {
 		// Don't bother sending it if we can find it on this shard
 		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
 
+		// TODO: Continue from here
+
 		await db.activeCalls.create({
 			data: {
 				...this,

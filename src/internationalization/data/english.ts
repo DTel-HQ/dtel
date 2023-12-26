@@ -1,6 +1,6 @@
 // Check out context
 // https://www.i18next.com/translation-function/context
-import config from "../../config/config";
+import config from "@src/config/config";
 
 export default {
 	languages: ["en-**"],

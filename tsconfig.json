@@ -1,7 +1,6 @@
 {
 	"compilerOptions": {
 		"strict": true,
-		"outDir": "./build/",
 		"sourceMap": true,
 		"target": "ES2020",
 		"module": "CommonJS",
@@ -12,7 +11,8 @@
 			"@src/*": [
 				"./src/*"
 			]
-		}
+		},
+		"noEmit": true
 	},
 
 	"include": [
