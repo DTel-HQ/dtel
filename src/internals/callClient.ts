@@ -263,7 +263,7 @@ export default class CallClient implements CallsWithNumbers {
 			type ctx = { callID: string, fileLocation: string };
 			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
 				const calls = require(mainFile).calls;
-				calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
+				calls.set(context.callID, await require(context.fileLocation).default.byID(_client, {
 					id: context.callID,
 					side: "to",
 				}));
