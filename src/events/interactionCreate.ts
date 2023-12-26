@@ -10,17 +10,18 @@ import {
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
-import Commands from "../config/commands";
-import Command, { CommandType, PermissionLevel, SubcommandData } from "../interfaces/commandData";
-import Constructable from "../interfaces/constructable";
-import DTelClient from "../internals/client";
-import Processor, { ChannelBasedInteraction } from "../internals/processor";
+import Commands from "@src/config/commands";
+import Command, { CommandType, PermissionLevel, SubcommandData } from "@src/interfaces/commandData";
+import Constructable from "@src/interfaces/constructable";
+import DTelClient from "@src/internals/client";
+import Processor, { ChannelBasedInteraction } from "@src/internals/processor";
 import i18n, { getFixedT } from "i18next";
-import { calls, winston } from "../dtel";
-import config from "../config/config";
-import { blacklistCache } from "../database/db";
+import { calls } from "@src/dtel";
+import { winston } from "@src/instances/winston";
+import config from "@src/config/config";
+import { blacklistCache } from "@src/database/db";
 
-export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
+export const interactionCreateHandler = async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
 	const t = getFixedT(interaction.locale, "events.interactionCreate");

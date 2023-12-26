@@ -1,12 +1,12 @@
 import { Numbers } from "@prisma/client";
 import { ActionRowBuilder, BaseMessageOptions, EmbedBuilder, ModalBuilder, ModalSubmitInteraction, StringSelectMenuBuilder, StringSelectMenuInteraction, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import { db } from "../../database/db";
-import { client } from "../../dtel";
-import config from "../../config/config";
-import { fetchNumber, getOrCreateAccount } from "../utils";
+import { db } from "@src/database/db";
+import { client } from "@src/instances/client";
+import config from "@src/config/config";
+import { fetchNumber, getOrCreateAccount } from "@src/internals/utils";
 import { getFixedT } from "i18next";
 import dayjs from "dayjs";
-import { fourOneOneMainMenu } from "../../commands/standard/call";
+import { fourOneOneMainMenu } from "@src/commands/standard/call";
 
 class FourOneOneVIP {
 	static makeMenuEmbed(number: Numbers, settingsChanged = false): BaseMessageOptions {

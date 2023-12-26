@@ -5,7 +5,7 @@ import config from "../config/config";
 import CommandDataInterface, { CommandType, PermissionLevel } from "../interfaces/commandData";
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "../database/db";
-import CallClient from "./callClient";
+import CallClient from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 import { calls } from "../dtel";

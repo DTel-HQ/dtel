@@ -1,10 +1,10 @@
 import { EmbedBuilder, Message } from "discord.js";
-import { blacklistCache } from "../database/db";
-import DTelClient from "../internals/client";
-import config from "../config/config";
-import { calls } from "../dtel";
+import { blacklistCache } from "@src/database/db";
+import DTelClient from "@src/internals/client";
+import config from "@src/config/config";
+import { calls } from "@src/dtel";
 
-export default async(client: DTelClient, message: Message): Promise<void> => {
+export const messageCreateHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (message.author.id === client.user!.id || blacklistCache.get(message.author.id)) return; // Don't cause loopback & ignore blacklist
 
 	const call = calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);

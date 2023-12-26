@@ -1,8 +1,8 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, EmbedBuilder, EmbedField, MessageComponentInteraction } from "discord.js";
-import config from "../../config/config";
-import { db } from "../../database/db";
-import { client } from "../../dtel";
-import Command from "../../internals/commandProcessor";
+import config from "@src/config/config";
+import { db } from "@src/database/db";
+import Command from "@src/internals/commandProcessor";
+import { client } from "@src/instances/client";
 
 export default class MailboxMessages extends Command {
 	async run(): Promise<void> {

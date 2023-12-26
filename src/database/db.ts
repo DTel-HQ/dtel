@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { Collection } from "@discordjs/collection";
-import { winston } from "../dtel";
+import { winston } from "@src/instances/winston";
 const prisma = new PrismaClient();
 
 const blacklistCache = new Collection();

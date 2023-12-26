@@ -1,9 +1,10 @@
 import { Range, scheduleJob } from "node-schedule";
-import { client, winston } from "../dtel";
-import auth from "../config/auth";
-import config from "../config/config";
-import { db } from "../database/db";
+import auth from "@src/config/auth";
+import config from "@src/config/config";
+import { db } from "@src/database/db";
 import { EmbedBuilder } from "discord.js";
+import { client } from "@src/instances/client";
+import { winston } from "@src/instances/winston";
 
 interface playingCtx {
 	guildCount: number

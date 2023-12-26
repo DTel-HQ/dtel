@@ -1,12 +1,13 @@
 import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
-import config from "../config/config";
-import CallClient from "./callClient";
+import config from "@src/config/config";
+import CallClient from "./callClient.old";
 import { Collection } from "@discordjs/collection";
 import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
-import { PermissionLevel } from "../interfaces/commandData";
-import { calls, winston } from "../dtel";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import { calls } from "@src/dtel";
+import { winston } from "@src/instances/winston";
 import { Logger } from "winston";
-import { db } from "../database/db";
+import { db } from "@src/database/db";
 import { Numbers } from "@prisma/client";
 import { fetchNumber, parseNumber } from "./utils";
 import dayjs from "dayjs";

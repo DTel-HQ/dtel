@@ -1,27 +1,14 @@
-import { Collection, Guild, Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
 import i18next from "i18next";
-
-import Client from "./internals/client";
-import Console from "./internals/console";
 import i18nData from "./internationalization/i18n";
-
-import InteractionEvent from "./events/interactionCreate";
-import MessageCreateEvent from "./events/messageCreate";
-import MessageDeleteEvent from "./events/messageDelete";
-import MessageUpdateEvent from "./events/messageUpdate";
-import GuildCreateEvent from "./events/guildCreate";
-import GuildDeleteEvent from "./events/guildDelete";
-import ReadyEvent from "./events/ready";
-import TypingStartEvent from "./events/typingStart";
-
 import { populateBlacklistCache } from "./database/db";
 import SharderMessageEvent from "./events/sharderMessage";
 import { upperFirst } from "./internals/utils";
-import CallClient from "./internals/callClient";
+import CallClient from "./internals/callClient.old";
+import { Collection } from "discord.js";
+import { prepareClient } from "./instances/client";
 
 populateBlacklistCache();
-
-const winston = Console(`Shard ${process.env.SHARDS}`);
+prepareClient();
 
 i18next.init({
 	// debug: config.devMode,
@@ -33,47 +20,10 @@ i18next.init({
 });
 i18next.services.formatter?.add("upperFirst", value => upperFirst(value));
 
-const client = new Client({
-	intents: [
-		"Guilds",
-		"GuildVoiceStates",
-		"GuildMessages",
-		"GuildMessageTyping",
-		"GuildEmojisAndStickers",
-		"DirectMessages",
-
-		// Privileged
-		"MessageContent",
-	],
-	partials: [Partials.Channel],
-	makeCache: Options.cacheWithLimits({
-		...Options.DefaultMakeCacheSettings,
-		MessageManager: 1,
-		GuildInviteManager: 0,
-		GuildEmojiManager: 0,
-		GuildStickerManager: 0,
-		UserManager: 1000,
-	}),
-});
-
-client.on("ready", () => ReadyEvent(client));
-
-client.on("messageCreate", (msg: Message) => MessageCreateEvent(client, msg));
-client.on("messageUpdate", (before: Message | PartialMessage, after: Message | PartialMessage) => MessageUpdateEvent(client, before as Message, after as Message));
-client.on("messageDelete", (msg: Message | PartialMessage) => MessageDeleteEvent(client, msg as Message));
-client.on("interactionCreate", (interaction: Interaction) => InteractionEvent(client, interaction));
-client.on("guildCreate", (guild: Guild) => GuildCreateEvent(client, guild));
-client.on("guildDelete", (guild: Guild) => GuildDeleteEvent(client, guild));
-
-client.on("typingStart", (typing: Typing) => TypingStartEvent(client, typing));
-
-
-process.on("message", msg => SharderMessageEvent(client, msg as Record<string, unknown>));
-
-client.login(process.env.TOKEN);
+process.on("message", msg => SharderMessageEvent(msg as Record<string, unknown>));
 
 // Moving calls here because of a potential hard lock on a shard using a collection - ruling out using an extended client as the issue
 const calls = new Collection<string, CallClient>();
 
-export { client, winston, calls };
+export { calls };
 

@@ -1,8 +1,8 @@
-import { winston } from "../dtel";
-import CallClient from "../internals/callClient";
-import DTelClient from "../internals/client";
+import { winston } from "@src/instances/winston";
+// import CallClient from "@src/internals/callClient.old";
+import DTelClient from "@src/internals/client";
 
-export default async(client: DTelClient): Promise<void> => {
+export const allShardsReadyHandler = async(client: DTelClient): Promise<void> => {
 	winston.info("Received the all clear! Starting calls...");
 
 	client.allShardsSpawned = true;

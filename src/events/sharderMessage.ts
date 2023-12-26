@@ -1,11 +1,12 @@
 import { ActiveCalls } from "@prisma/client";
 import { TextBasedChannel } from "discord.js";
-import { calls, winston } from "../dtel";
-import CallClient, { CallsWithNumbers } from "../internals/callClient";
-import DTelClient from "../internals/client";
-import allShardsReady from "./allShardsReady";
+import { calls } from "@src/dtel";
+import CallClient, { CallsWithNumbers } from "@src/internals/callClient.old";
+import { allShardsReadyHandler } from "./allShardsReady";
+import { client } from "@src/instances/client";
+import { winston } from "@src/instances/winston";
 
-export default async(client: DTelClient, msg: Record<string, unknown>): Promise<void> => {
+export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
 		case "callInitiated": {
 			const callObject = JSON.parse(msg.callDBObject as string) as CallsWithNumbers;
@@ -41,13 +42,13 @@ export default async(client: DTelClient, msg: Record<string, unknown>): Promise<
 		}
 
 		case "allShardsSpawned": {
-			allShardsReady(client);
+			allShardsReadyHandler(client);
 			break;
 		}
 
 		case "resume": {
 			if (msg.shardID === Number(process.env.SHARDS)) {
-				allShardsReady(client);
+				allShardsReadyHandler(client);
 				winston.info("Received all clear for resume! Starting calls...");
 			}
 			break;

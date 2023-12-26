@@ -2,16 +2,17 @@ import DTelClient from "./client";
 import { getFixedT, TFunction } from "i18next";
 import { v4 as uuidv4 } from "uuid";
 import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, EmbedBuilder, Message, MessageComponentInteraction, PermissionsBitField, Typing, MessageCreateOptions } from "discord.js";
-import { PermissionLevel } from "../interfaces/commandData";
+import { PermissionLevel } from "@src/interfaces/commandData";
 import { ActiveCalls, Numbers, atAndBy, CallMessages, onHold } from "@prisma/client";
-import { db } from "../database/db";
-import config from "../config/config";
+import { db } from "@src/database/db";
+import config from "@src/config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { getUsername, parseNumber } from "./utils";
-import { NumbersWithGuilds } from "../interfaces/numbersWithGuilds";
-import { calls, winston } from "../dtel";
+import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
+import { calls } from "@src/dtel";
+import { winston } from "@src/instances/winston";
 
 dayjs.extend(relativeTime);
 

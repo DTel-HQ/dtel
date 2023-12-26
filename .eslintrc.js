@@ -6,6 +6,7 @@ module.exports = {
 	parser: "@typescript-eslint/parser",
 	plugins: [
 		"@typescript-eslint",
+		"no-relative-import-paths",
 	],
 	parserOptions: {
 		ecmaVersion: 2017,
@@ -16,6 +17,10 @@ module.exports = {
 	},
 	ignorePatterns: ["build/**", "dist/**", "node_modules/**"],
 	rules: {
+		"no-relative-import-paths/no-relative-import-paths": [
+			"warn",
+			{ allowSameFolder: true, rootDir: "src", prefix: "@src" },
+		],
 		"require-atomic-updates": 0,
 		"no-compare-neg-zero": "error",
 		"@typescript-eslint/no-extra-parens": ["warn", "all", { nestedBinaryExpressions: false }],
