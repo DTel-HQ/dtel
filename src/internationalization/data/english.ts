@@ -117,12 +117,12 @@ export default {
 
 			missedCall: {
 				fromSide: {
-					color: 0xFF0000,
+					color: 0xff3333,
 					title: "Call expired",
 					description: "The other side did not pick up (within 2 minutes)",
 				},
 				toSide: {
-					color: 0xFF0000,
+					color: 0xff3333,
 					title: "Call expired",
 					description: "You missed the call (not answered within 2 minutes)",
 				},

@@ -13,7 +13,7 @@ export const propagateCall = async(call: ActiveCalls, to: CallParticipant, notif
 	winston.debug(`Other side is: ${eventReceivingOtherSideShardID}`);
 
 	if (isThisShardID(eventReceivingOtherSideShardID)) {
-		startPickupTimer(call, notificationMessageID);
+		startPickupTimer(call.id, notificationMessageID);
 		return;
 	}
 

@@ -1,6 +1,9 @@
 import { ActiveCalls } from "@prisma/client";
 import { getCallById } from "@src/internals/calls/get-from-db-by-id/GetCallById";
+import { sendMissedCallFromSideEmbed } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/from/send-message/SendMissedCallFromSideEmbed";
+import { sendMissedCallMessageToSide } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/to/send-message/SendMissedCallMessageToSide";
 import { removeComponentsFromMessage } from "@src/internals/calls/utils/remove-components-from-message/RemoveComponentsFromMessage";
+import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";
 
 export const startPickupTimer = async(callId: ActiveCalls["id"], notificationMessageId?: string) => {
 	setTimeout(async() => {
@@ -10,46 +13,19 @@ export const startPickupTimer = async(callId: ActiveCalls["id"], notificationMes
 		// TODO: Delete and propagate
 		if (!updatedCall.to || !updatedCall.from) return;
 
+		const toTranslationLocale = await getNumberLocale(updatedCall.to);
+		const fromTranslationLocale = await getNumberLocale(updatedCall.from);
+
 		try {
 			if (notificationMessageId) {
 				await removeComponentsFromMessage(updatedCall.to?.channelID, notificationMessageId);
 			}
 
-			this.toSend({
-				embeds: [this.to.t("missedCall.toSide") as APIEmbed],
-			});
-
-			const fromEmbed = EmbedBuilder.from(this.from.t("missedCall.fromSide") as APIEmbed);
-			const toMailbox = await db.mailbox.findFirst({
-				where: {
-					number: this.to.number,
-				},
-			});
-
-			if (toMailbox) {
-				const mailboxFull = toMailbox?.messages.length > 50;
-
-				let reply = `${toMailbox.autoreply}`;
-
-				if (mailboxFull) reply += " (Mailbox full)";
-
-				fromEmbed.addFields([{
-					name: this.from.t("answeringMachine"),
-					value: reply,
-				}]);
-			}
-
-			const canSendMessage = toMailbox?.receiving && toMailbox?.messages.length < 25;
-
-			this.fromSend({
-				embeds: [fromEmbed],
-				components: canSendMessage ? [new ActionRowBuilder<ButtonBuilder>().addComponents([
-					new ButtonBuilder()
-						.setCustomId(`mailbox-send-initiate-${this.toNum}`)
-						.setEmoji("📬")
-						.setLabel(this.from.t("sendMessage"))
-						.setStyle(ButtonStyle.Primary),
-				])] : undefined,
+			await sendMissedCallMessageToSide(updatedCall.to, toTranslationLocale);
+			await sendMissedCallFromSideEmbed({
+				from: updatedCall.from,
+				to: updatedCall.to,
+				fromLocale: fromTranslationLocale,
 			});
 		} catch {
 			// Ignore
