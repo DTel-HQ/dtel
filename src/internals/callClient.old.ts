@@ -172,196 +172,198 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async initiate(): Promise<void> {
-		// Get the number in the correct format for DB query (all numbers)
-		this.toNum = parseNumber(this.toNum);
-		const aliasNumbers = config.aliasNumbers as { [key: string] : string };
-		if (aliasNumbers[this.toNum]) this.toNum = aliasNumbers[this.toNum];
-		if (this.toNum.length != 11) throw new Error("numberInvalid");
+		// Defunct!
+		// Replaced by system found in @src/internals/calls/initiate.ts
 
-		if (this.fromNum === this.toNum) throw new Error("callingSelf");
+		// // Get the number in the correct format for DB query (all numbers)
+		// this.toNum = parseNumber(this.toNum);
+		// const aliasNumbers = config.aliasNumbers as { [key: string] : string };
+		// if (aliasNumbers[this.toNum]) this.toNum = aliasNumbers[this.toNum];
+		// if (this.toNum.length != 11) throw new Error("numberInvalid");
 
-		// Get both numbers in one query (clean code)
-		const participants = await db.numbers.findMany({
-			where: {
-				OR: [{
-					number: this.toNum,
-				}, {
-					number: this.fromNum,
-				}],
-			},
-			include: {
-				incomingCalls: true,
-				outgoingCalls: true,
-				guild: true,
-			},
-		});
+		// if (this.fromNum === this.toNum) throw new Error("callingSelf");
 
-
-		const fromNumber = participants.find(p => p.number === this.fromNum);
-		if (!fromNumber) throw new Error("invalidFrom");
-		this.from = {
-			...fromNumber,
-
-			locale: fromNumber.guild?.locale || "en-US",
-			t: getFixedT(fromNumber.guild?.locale || "en-US", undefined, "commands.call"),
-		};
-
-		if (this.from.expiry < new Date()) throw new Error("thisSideExpired");
-
-		const toNumber = participants.find(p => p.number === this.toNum);
-
-		// Preflight checks
-		if (!toNumber) throw new Error("otherSideNotFound");
-		if (toNumber.expiry < new Date()) throw new Error("otherSideExpired");
-		if (toNumber.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
-
-		if (toNumber.incomingCalls.length > 0 || toNumber.outgoingCalls.length > 0) {
-			throw new Error("otherSideInCall");
-		}
-
-		this.to = {
-			...toNumber,
-
-			locale: toNumber.guild?.locale || "en-US",
-			t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
-		};
+		// // Get both numbers in one query (clean code)
+		// const participants = await db.numbers.findMany({
+		// 	where: {
+		// 		OR: [{
+		// 			number: this.toNum,
+		// 		}, {
+		// 			number: this.fromNum,
+		// 		}],
+		// 	},
+		// 	include: {
+		// 		incomingCalls: true,
+		// 		outgoingCalls: true,
+		// 		guild: true,
+		// 	},
+		// });
 
 
-		await db.activeCalls.create({
-			data: {
-				...this,
-				client: undefined,
-				otherSideShardID: undefined,
-				to: undefined,
-				from: undefined,
-				messages: undefined,
-				messageCache: undefined,
-				oneSharded: undefined,
-			},
-		});
+		// const fromNumber = participants.find(p => p.number === this.fromNum);
+		// if (!fromNumber) throw new Error("invalidFrom");
+		// this.from = {
+		// 	...fromNumber,
 
-		// TODO: Continue from here
-		// Don't bother sending it if we can find it on this shard
-		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
+		// 	locale: fromNumber.guild?.locale || "en-US",
+		// 	t: getFixedT(fromNumber.guild?.locale || "en-US", undefined, "commands.call"),
+		// };
 
-		// Send the call to another shard if required
+		// if (this.from.expiry < new Date()) throw new Error("thisSideExpired");
 
-		if (eventReceivingOtherSideShardID === null) {
-			await db.activeCalls.delete({
-				where: {
-					id: this.id,
-				},
-			});
-			throw new Error("otherSideMissingChannel");
-		}
+		// const toNumber = participants.find(p => p.number === this.toNum);
 
-		winston.debug(`Other side is: ${this.otherSideShardID}`);
+		// // Preflight checks
+		// if (!toNumber) throw new Error("otherSideNotFound");
+		// if (toNumber.expiry < new Date()) throw new Error("otherSideExpired");
+		// if (toNumber.blocked.includes(this.from.number)) throw new Error("otherSideBlockedYou");
 
-		if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
-			const thisFile = `${__dirname}/callClient`;
+		// if (toNumber.incomingCalls.length > 0 || toNumber.outgoingCalls.length > 0) {
+		// 	throw new Error("otherSideInCall");
+		// }
 
-			this.otherSideShardID = eventReceivingOtherSideShardID;
+		// this.to = {
+		// 	...toNumber,
 
-			// THIS CAN THROW callNotFound
-			type ctx = { callID: string, fileLocation: string };
-			await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
-				const client = _client as DTelClient;
-				calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
-					id: context.callID,
-					side: "to",
-				}));
-			}, {
-				shard: this.otherSideShardID,
-				context: {
-					callID: this.id,
-					fileLocation: thisFile,
-				},
-			});
-		} else {
-			this.oneSharded = true;
-		}
-
-		let fromCallerDisplay = this.from.number;
-		if (this.from.vip && Number(this.from.vip.expiry) > Date.now()) {
-			if (this.from.vip.name != "") fromCallerDisplay = `${this.from.vip.name}`;
-
-			if (this.from.vip.hidden) {
-				if (!this.from.vip.name) {
-					fromCallerDisplay = "Hidden";
-				}
-			} else {
-				fromCallerDisplay += ` (${this.from.number})`;
-			}
-		}
-
-		let notificationContent = this.to.number === config.aliasNumbers["*611"] ? `<@&${config.supportGuild.roles.customerSupport}>` : "";
-
-		// Mentions
-		for (const user of this.to.mentions) {
-			if (user.startsWith("<")) {
-				notificationContent += `${user} `;
-			} else {
-				notificationContent += `<@${user}> `;
-			}
-		}
-
-		let notificationMessageID: string;
-		try {
-			notificationMessageID = (await this.toSend({
-				content: notificationContent,
-
-				embeds: [{
-					color: (this.from.vip?.expiry || 0) > new Date() ? this.client.config.colors.vip : this.client.config.colors.info,
-
-					...(this.to.t("incomingCall", {
-						number: fromCallerDisplay,
-						callID: this.id,
-					}) as APIEmbed),
-				}],
-				components: [
-					new ActionRowBuilder<ButtonBuilder>()
-						.addComponents([
-							new ButtonBuilder({
-								customId: "call-pickup",
-								label: this.to.t("pickup")!,
-								style: ButtonStyle.Primary,
-								emoji: "📞",
-							}),
-							new ButtonBuilder({
-								customId: "call-hangup",
-								label: this.to.t("hangup")!,
-								style: ButtonStyle.Secondary,
-								emoji: "☎️",
-							}),
-						]),
-				],
-			})).id;
-		} catch (err: unknown) {
-			this.fromSend({
-				embeds: [
-					this.client.errorEmbed(this.from.t("errors.couldntReachOtherSide")),
-				],
-			});
-
-			await db.activeCalls.delete({
-				where: {
-					id: this.id,
-				},
-			});
-
-			return;
-		}
-
-		if (this.randomCall) {
-			this.client.log(`☎️ Random Call \`${this.from.channelID} → ${this.to.channelID}\` has been established by ID: \`${this.started.by}\`\nCall ID: \`${this.id}\``);
-		}
-
-		calls.set(this.id, this);
+		// 	locale: toNumber.guild?.locale || "en-US",
+		// 	t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
+		// };
 
 
-		if (this.oneSharded) this.setupPickupTimer(notificationMessageID);
+		// await db.activeCalls.create({
+		// 	data: {
+		// 		...this,
+		// 		client: undefined,
+		// 		otherSideShardID: undefined,
+		// 		to: undefined,
+		// 		from: undefined,
+		// 		messages: undefined,
+		// 		messageCache: undefined,
+		// 		oneSharded: undefined,
+		// 	},
+		// });
+
+		// // TODO: Continue from here
+		// // Don't bother sending it if we can find it on this shard
+		// const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
+
+		// // Send the call to another shard if required
+
+		// if (eventReceivingOtherSideShardID === null) {
+		// 	await db.activeCalls.delete({
+		// 		where: {
+		// 			id: this.id,
+		// 		},
+		// 	});
+		// 	throw new Error("otherSideMissingChannel");
+		// }
+
+		// winston.debug(`Other side is: ${this.otherSideShardID}`);
+
+		// if (eventReceivingOtherSideShardID !== Number(process.env.SHARDS)) {
+		// 	const thisFile = `${__dirname}/callClient`;
+
+		// 	this.otherSideShardID = eventReceivingOtherSideShardID;
+
+		// 	// THIS CAN THROW callNotFound
+		// 	type ctx = { callID: string, fileLocation: string };
+		// 	await this.client.shard!.broadcastEval<void, ctx>(async(_client: Client, context: ctx): Promise<void> => {
+		// 		const client = _client as DTelClient;
+		// 		calls.set(context.callID, await require(context.fileLocation).default.byID(client, {
+		// 			id: context.callID,
+		// 			side: "to",
+		// 		}));
+		// 	}, {
+		// 		shard: this.otherSideShardID,
+		// 		context: {
+		// 			callID: this.id,
+		// 			fileLocation: thisFile,
+		// 		},
+		// 	});
+		// } else {
+		// 	this.oneSharded = true;
+		// }
+
+		// let fromCallerDisplay = this.from.number;
+		// if (this.from.vip && Number(this.from.vip.expiry) > Date.now()) {
+		// 	if (this.from.vip.name != "") fromCallerDisplay = `${this.from.vip.name}`;
+
+		// 	if (this.from.vip.hidden) {
+		// 		if (!this.from.vip.name) {
+		// 			fromCallerDisplay = "Hidden";
+		// 		}
+		// 	} else {
+		// 		fromCallerDisplay += ` (${this.from.number})`;
+		// 	}
+		// }
+
+		// let notificationContent = this.to.number === config.aliasNumbers["*611"] ? `<@&${config.supportGuild.roles.customerSupport}>` : "";
+
+		// // Mentions
+		// for (const user of this.to.mentions) {
+		// 	if (user.startsWith("<")) {
+		// 		notificationContent += `${user} `;
+		// 	} else {
+		// 		notificationContent += `<@${user}> `;
+		// 	}
+		// }
+
+		// let notificationMessageID: string;
+		// try {
+		// 	notificationMessageID = (await this.toSend({
+		// 		content: notificationContent,
+
+		// 		embeds: [{
+		// 			color: (this.from.vip?.expiry || 0) > new Date() ? this.client.config.colors.vip : this.client.config.colors.info,
+
+		// 			...(this.to.t("incomingCall", {
+		// 				number: fromCallerDisplay,
+		// 				callID: this.id,
+		// 			}) as APIEmbed),
+		// 		}],
+		// 		components: [
+		// 			new ActionRowBuilder<ButtonBuilder>()
+		// 				.addComponents([
+		// 					new ButtonBuilder({
+		// 						customId: "call-pickup",
+		// 						label: this.to.t("pickup")!,
+		// 						style: ButtonStyle.Primary,
+		// 						emoji: "📞",
+		// 					}),
+		// 					new ButtonBuilder({
+		// 						customId: "call-hangup",
+		// 						label: this.to.t("hangup")!,
+		// 						style: ButtonStyle.Secondary,
+		// 						emoji: "☎️",
+		// 					}),
+		// 				]),
+		// 		],
+		// 	})).id;
+		// } catch (err: unknown) {
+		// 	this.fromSend({
+		// 		embeds: [
+		// 			this.client.errorEmbed(this.from.t("errors.couldntReachOtherSide")),
+		// 		],
+		// 	});
+
+		// 	await db.activeCalls.delete({
+		// 		where: {
+		// 			id: this.id,
+		// 		},
+		// 	});
+
+		// 	return;
+		// }
+
+		// if (this.randomCall) {
+		// 	this.client.log(`☎️ Random Call \`${this.from.channelID} → ${this.to.channelID}\` has been established by ID: \`${this.started.by}\`\nCall ID: \`${this.id}\``);
+		// }
+
+		// calls.set(this.id, this);
+
+
+		// if (this.oneSharded) this.setupPickupTimer(notificationMessageID);
 	}
-
 
 	async setupPickupTimer(callNotifMsgID?: string): Promise<void> {
 		setTimeout(async() => {

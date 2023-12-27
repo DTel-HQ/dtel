@@ -8,6 +8,9 @@ import { createCallInDb } from "./create-in-db/CreateInDb";
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { propagateCall } from "./propagate/Propagate";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
+import { locallyCacheCall } from "@src/internals/calls/locally-cache-call/LocallyCacheCall";
+import { shardIdForChannelId } from "@src/internals/calls/propagate/utils/ShardIdForChannelId";
+import { isThisShardID } from "@src/internals/utils/IsThisShardID";
 
 export interface CallInitiationParams {
 	toNum: string,
@@ -53,10 +56,13 @@ export const initiateCall = async({
 		},
 	});
 
-	propagateCall(callInDb, dbCallRecipient, dbCallSender);
-	notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
+	await locallyCacheCall(callInDb, dbCallRecipient, dbCallSender);
+	const notificationMessageID = await notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
+	await propagateCall(callInDb, dbCallRecipient, notificationMessageID);
 
 	// TODO: Propagate call
+
+	// TODO: Pickup timer
 
 	return callInDb;
 };

@@ -6,6 +6,7 @@ import { advanceTo } from "jest-date-mock";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
+import { calls } from "@src/instances/calls";
 
 jest.mock("@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers");
 jest.mock("@src/internals/utils/generateUUID");
@@ -42,6 +43,23 @@ beforeEach(() => {
 	getParticipantsFromNumbersMock.mockResolvedValue({
 		to: toParticipant,
 		from: fromParticipant,
+	});
+
+	createInDbMock.mockResolvedValue({
+		id: "uuid",
+		toNum: "03010000001",
+		fromNum: "03010000002",
+		randomCall: false,
+		started: {
+			at: new Date(),
+			by: "me",
+		},
+		pickedUp: null,
+		ended: null,
+		hold: {
+			holdingSide: null,
+			onHold: false,
+		},
 	});
 });
 
@@ -175,6 +193,10 @@ describe("successes", () => {
 		await target.initiateCall(initiateTestParams);
 
 		expect(notifyCallRecipientsMock).toHaveBeenCalled();
+	});
+
+	it("should cache the call on this shard", () => {
+		expect(calls.keys().next().value).toStrictEqual("uuid");
 	});
 });
 
