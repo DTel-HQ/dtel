@@ -1,16 +1,16 @@
-import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
+import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "@src/config/config";
-import CallClient from "./callClient.old";
 import { Collection } from "@discordjs/collection";
-import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { APIEmbed, APIMessage, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "@src/interfaces/commandData";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
 import { Logger } from "winston";
 import { db } from "@src/database/db";
 import { Numbers } from "@prisma/client";
-import { fetchNumber, parseNumber } from "./utils";
+import { fetchNumber } from "./utils";
 import dayjs from "dayjs";
+import { parseNumber } from "./calls/utils/parse-number/ParseNumber";
 
 interface PossibleTypes {
 	user?: User | null,
@@ -71,15 +71,6 @@ class DTelClient extends Client<true> {
 
 	async deleteCrossShard(channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
 		return this.rest.delete(`/channels/${channelID}/messages/${messageID}`) as Promise<RESTPatchAPIChannelMessageResult>;
-	}
-
-	async shardIdForChannelId(id: string): Promise<number> {
-		if (!process.env.SHARD_COUNT || Number(process.env.SHARD_COUNT) == 1) return 0;
-		const channelObject = await this.rest.get(`/channels/${id}`) as APITextChannel;
-
-		if (channelObject && !channelObject.guild_id) return 0;
-
-		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
 	// Use these so that we can edit them if we get performance issues
@@ -249,6 +240,10 @@ class DTelClient extends Client<true> {
 			}).catch(() => null);
 		}
 		return true;
+	}
+
+	async shardIdForChannelId(_: string): Promise<number> {
+		throw new Error("Not implemented");
 	}
 
 	// Sends to the support guild's log channel

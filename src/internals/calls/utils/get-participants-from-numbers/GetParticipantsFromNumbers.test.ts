@@ -1,4 +1,4 @@
-import { prismaMock } from "@src/mocks/prisma";
+import { prismaMock } from "@src/mocks/prisma.test";
 import * as target from "./GetParticipantsFromNumbers";
 import { CallParticipant } from "./GetParticipantsFromNumbers";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";

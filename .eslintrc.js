@@ -114,7 +114,6 @@ module.exports = {
 		"arrow-body-style": "error",
 		"arrow-parens": ["error", "as-needed"],
 		"arrow-spacing": "error",
-		"no-duplicate-imports": "error",
 		"no-useless-computed-key": "error",
 		"no-useless-constructor": "error",
 		"prefer-arrow-callback": "error",

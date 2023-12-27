@@ -1,6 +1,6 @@
 import { ActiveCalls } from "@prisma/client";
 import { TextBasedChannel } from "discord.js";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 import CallClient, { CallsWithNumbers } from "@src/internals/callClient.old";
 import { allShardsReadyHandler } from "./allShardsReady";
 import { client } from "@src/instances/client";

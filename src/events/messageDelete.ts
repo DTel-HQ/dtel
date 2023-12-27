@@ -1,7 +1,7 @@
 import { Message } from "discord.js";
 import { blacklistCache } from "@src/database/db";
 import DTelClient from "@src/internals/client";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 
 export const messageDeleteHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (!message.author) return;

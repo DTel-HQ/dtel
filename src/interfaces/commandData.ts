@@ -42,5 +42,5 @@ interface CommandData extends ChatInputApplicationCommandData {
 	params?: string[];
 }
 export default CommandData;
-export { PermissionLevel, CommandType, SubcommandData };
+export { PermissionLevel, CommandType, type SubcommandData };
 

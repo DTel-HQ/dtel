@@ -16,7 +16,7 @@ import Constructable from "@src/interfaces/constructable";
 import DTelClient from "@src/internals/client";
 import Processor, { ChannelBasedInteraction } from "@src/internals/processor";
 import i18n, { getFixedT } from "i18next";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
 import config from "@src/config/config";
 import { blacklistCache } from "@src/database/db";

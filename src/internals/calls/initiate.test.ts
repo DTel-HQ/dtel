@@ -1,19 +1,21 @@
 import { createCallInDb } from "@src/internals/calls/create-in-db/CreateInDb";
-// import type { CallInitiationParams } from "./initiate";
 import * as target from "./initiate";
 import { CallParticipant, getParticipantsFromNumbers } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { buildTestParticipant } from "@src/internals/calls/utils/build-test-participant/BuildTestParticipant";
 import { advanceTo } from "jest-date-mock";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { generateUUID } from "@src/internals/utils/generateUUID";
-import { ActiveCalls } from "@prisma/client";
+import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
 
 jest.mock("@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers");
 jest.mock("@src/internals/utils/generateUUID");
 jest.mock("@src/internals/calls/create-in-db/CreateInDb");
+jest.mock("@src/internals/calls/propagate/Propagate");
+jest.mock("@src/internals/calls/notify-recipients/NotifyCallRecipients");
 
 const getParticipantsFromNumbersMock = jest.mocked(getParticipantsFromNumbers);
 const generateUUIDMock = jest.mocked(generateUUID);
+const notifyCallRecipientsMock = jest.mocked(notifyCallRecipients);
 const createInDbMock = jest.mocked(createCallInDb);
 
 let initiateTestParams: target.CallInitiationParams;
@@ -167,6 +169,12 @@ describe("successes", () => {
 				by: "me",
 			},
 		});
+	});
+
+	it("should attempt to send a notification message", async() => {
+		await target.initiateCall(initiateTestParams);
+
+		expect(notifyCallRecipientsMock).toHaveBeenCalled();
 	});
 });
 

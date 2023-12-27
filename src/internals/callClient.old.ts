@@ -9,10 +9,11 @@ import config from "@src/config/config";
 import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
-import { getUsername, parseNumber } from "./utils";
+import { getUsername } from "./utils";
 import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
+import { parseNumber } from "./calls/utils/parse-number/ParseNumber";
 
 dayjs.extend(relativeTime);
 
@@ -225,10 +226,6 @@ export default class CallClient implements CallsWithNumbers {
 			t: getFixedT(toNumber.guild?.locale || "en-US", undefined, "commands.call"),
 		};
 
-		// Don't bother sending it if we can find it on this shard
-		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
-
-		// TODO: Continue from here
 
 		await db.activeCalls.create({
 			data: {
@@ -242,6 +239,10 @@ export default class CallClient implements CallsWithNumbers {
 				oneSharded: undefined,
 			},
 		});
+
+		// TODO: Continue from here
+		// Don't bother sending it if we can find it on this shard
+		const eventReceivingOtherSideShardID = await this.client.shardIdForChannelId(this.to.channelID).catch(() => null);
 
 		// Send the call to another shard if required
 

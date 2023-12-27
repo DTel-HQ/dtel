@@ -1,4 +1,4 @@
-import { prismaMock } from "@src/mocks/prisma";
+import { prismaMock } from "@src/mocks/prisma.test";
 import * as target from "./CreateInDb";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 

@@ -1,14 +1,14 @@
 // TODO: Localize (use this.t)
 import { CommandInteraction, InteractionResponse, MessageComponentInteraction, ModalSubmitInteraction, PermissionsBitField } from "discord.js";
 import DTelClient from "./client";
-import config from "../config/config";
-import CommandDataInterface, { CommandType, PermissionLevel } from "../interfaces/commandData";
+import config from "@src/config/config";
+import CommandDataInterface, { CommandType, PermissionLevel } from "@src/interfaces/commandData";
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
-import { db } from "../database/db";
+import { db } from "@src/database/db";
 import CallClient from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
-import { calls } from "../dtel";
+import { calls } from "@src/instances/calls";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 

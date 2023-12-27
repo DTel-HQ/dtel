@@ -1,5 +1,5 @@
 import { Guild, Interaction, Message, Options, PartialMessage, Partials, Typing } from "discord.js";
-import Client from "@src/internals/client";
+import DTelClient from "@src/internals/client";
 import { guildDeleteHandler } from "@src/events/guildDelete";
 import { readyHandler } from "@src/events/ready";
 import { messageCreateHandler } from "@src/events/messageCreate";
@@ -9,7 +9,7 @@ import { interactionCreateHandler } from "@src/events/interactionCreate";
 import { guildCreateHandler } from "@src/events/guildCreate";
 import { typingStartHandler } from "@src/events/typingStart";
 
-export const client = new Client({
+export const client = new DTelClient({
 	intents: [
 		"Guilds",
 		"GuildVoiceStates",

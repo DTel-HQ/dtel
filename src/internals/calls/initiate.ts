@@ -6,6 +6,8 @@ import { hasNumberExpired } from "./utils/has-number-expired/HasNumberExpired";
 import { isParticipantInCall } from "./utils/is-participant-in-call/IsParticipantInCall";
 import { createCallInDb } from "./create-in-db/CreateInDb";
 import { generateUUID } from "@src/internals/utils/generateUUID";
+import { propagateCall } from "./propagate/Propagate";
+import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
 
 export interface CallInitiationParams {
 	toNum: string,
@@ -50,6 +52,11 @@ export const initiateCall = async({
 			by: startedBy,
 		},
 	});
+
+	propagateCall(callInDb, dbCallRecipient, dbCallSender);
+	notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
+
+	// TODO: Propagate call
 
 	return callInDb;
 };

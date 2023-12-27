@@ -1,6 +1,6 @@
 import { Typing } from "discord.js";
 import DTelClient from "@src/internals/client";
-import { calls } from "@src/dtel";
+import { calls } from "@src/instances/calls";
 
 export const typingStartHandler = (client: DTelClient, typing: Typing): void => {
 	if (typing.user.bot) return;

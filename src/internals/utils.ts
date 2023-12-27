@@ -3,8 +3,11 @@
 
 import { Accounts, Numbers } from "@prisma/client";
 import dayjs from "dayjs";
-import { db } from "../database/db";
+import { db } from "@src/database/db";
 import { User } from "discord.js";
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export const parseNumber = (_: string): string => "UNDEFINED";
 
 export const formatShardNumber = (shardNumber: number): string => shardNumber < 10 ? `0${shardNumber}` : shardNumber.toString();
 export const formatBalance = (balance: number): string => {
