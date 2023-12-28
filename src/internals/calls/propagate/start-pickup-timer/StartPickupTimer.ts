@@ -2,6 +2,7 @@ import { ActiveCalls } from "@prisma/client";
 import { winston } from "@src/instances/winston";
 import { getCallById } from "@src/internals/calls/get-from-db-by-id/GetCallById";
 import { endMissedCall } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/EndMissedCall";
+import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 import { sendMissedCallFromSideEmbed } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/from/send-message/SendMissedCallFromSideEmbed";
 import { logMissedCall } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/log/LogMissedCall";
 import { sendMissedCallMessageToSide } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/to/send-message/SendMissedCallMessageToSide";
@@ -10,33 +11,40 @@ import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumbe
 
 export const startPickupTimer = async(callId: ActiveCalls["id"], notificationMessageId?: string): Promise<void> => {
 	winston.verbose(`Starting pickup timer for call ${callId}`);
-	setTimeout(async() => {
-		const updatedCall = await getCallById(callId);
-		if (!updatedCall || updatedCall.pickedUp?.by) return;
+	setTimeout(() => {
+		onPickupTimerTimeout(callId, notificationMessageId);
+	}, 2 * 60 * 1000);
+};
 
-		// TODO: Delete and propagate
-		if (!updatedCall.to || !updatedCall.from) return;
+export const onPickupTimerTimeout = async(callId: ActiveCalls["id"], notificationMessageId?: string) => {
+	const updatedCall = await getCallById(callId);
+	if (!updatedCall || updatedCall.pickedUp?.by) return;
 
-		const toTranslationLocale = await getNumberLocale(updatedCall.to);
-		const fromTranslationLocale = await getNumberLocale(updatedCall.from);
+	// TODO: Propagate this failure - maybe needs a endCall specific function?
+	if (!updatedCall.to || !updatedCall.from) {
+		endMissedCallInDb(updatedCall).catch(() => null);
+		return;
+	}
 
-		try {
-			if (notificationMessageId) {
-				await removeComponentsFromMessage(updatedCall.to?.channelID, notificationMessageId);
-			}
+	const toTranslationLocale = await getNumberLocale(updatedCall.to);
+	const fromTranslationLocale = await getNumberLocale(updatedCall.from);
 
-			await sendMissedCallMessageToSide(updatedCall.to, toTranslationLocale);
-			await sendMissedCallFromSideEmbed({
-				from: updatedCall.from,
-				to: updatedCall.to,
-				fromLocale: fromTranslationLocale,
-			});
-		} catch {
-			// Ignore
+	try {
+		if (notificationMessageId) {
+			await removeComponentsFromMessage(updatedCall.to?.channelID, notificationMessageId);
 		}
 
-		logMissedCall(updatedCall, updatedCall.to, updatedCall.from);
+		await sendMissedCallMessageToSide(updatedCall.to, toTranslationLocale);
+		await sendMissedCallFromSideEmbed({
+			from: updatedCall.from,
+			to: updatedCall.to,
+			fromLocale: fromTranslationLocale,
+		});
+	} catch {
+		// Ignore
+	}
 
-		endMissedCall(updatedCall);
-	}, 2 * 60 * 1000);
+	logMissedCall(updatedCall, updatedCall.to, updatedCall.from);
+
+	endMissedCall(updatedCall);
 };
