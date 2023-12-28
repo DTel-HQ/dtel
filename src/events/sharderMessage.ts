@@ -29,10 +29,9 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 
 			if (!call) {
 				winston.error(`Call repropagation for ID ${messageObject.callID} failed: Call not found`);
-				return;
 			}
 
-			call.handleReprop(messageObject.call);
+			// call.handleReprop(messageObject.call);
 			break;
 		}
 		case "callEnded": {
@@ -55,6 +54,8 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 		}
 
 		case "callResume": {
+			// TODO:
+			return;
 			const callDoc = msg.callDoc as CallsWithNumbers;
 
 			if (msg.fromShard != Number(process.env.SHARDS) && msg.toShard != Number(process.env.SHARDS)) {

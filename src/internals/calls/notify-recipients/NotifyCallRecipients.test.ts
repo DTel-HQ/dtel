@@ -33,8 +33,8 @@ it("should send a notification embed if successful", async() => {
 	expect(result).toEqual("an ID");
 });
 
-it("should send a failed embed if unsuccessful", async() => {
-	const result = target.notifyCallRecipients(call, to, from);
+it("should throw an error if unsuccessful", async() => {
+	const resultGenerator = () => target.notifyCallRecipients(call, to, from);
 
-	expect(result).rejects.toThrow("callNotFound");
+	expect(resultGenerator).rejects.toThrow(Error);
 });

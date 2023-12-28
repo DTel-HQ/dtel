@@ -5,7 +5,7 @@ import config from "@src/config/config";
 import CommandDataInterface, { CommandType, PermissionLevel } from "@src/interfaces/commandData";
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "@src/database/db";
-import CallClient from "./callClient.old";
+import CallClient, { CallsWithNumbers } from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 import { calls } from "@src/instances/calls";
@@ -22,7 +22,7 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 	number: Numbers | null = null;
 	account: Accounts | null = null;
 
-	call?: CallClient;
+	call?: CallsWithNumbers;
 	abstract t: TFunction;
 	genericT: TFunction;
 

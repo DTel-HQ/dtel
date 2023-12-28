@@ -47,7 +47,7 @@ type CallsWithNumbersAndGuilds = ActiveCalls & {
 };
 
 
-export { CallsWithNumbers };
+export type { CallsWithNumbers };
 
 export default class CallClient implements CallsWithNumbers {
 	oneSharded = false;

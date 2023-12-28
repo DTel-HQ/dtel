@@ -10,5 +10,6 @@ export const messageDeleteHandler = async(client: DTelClient, message: Message):
 	const call = calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	call.messageDelete(message);
+	// TODO: This
+	// call.messageDelete(message);
 };

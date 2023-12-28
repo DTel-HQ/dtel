@@ -193,15 +193,17 @@ class DTelClient extends Client<true> {
 			},
 		}).catch(() => null);
 
-		if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
-			for (const call of calls.filter(c => c.from.number === number || c.to.number === number)) {
-				call[1].endHandler("system - number deleted");
+		// TODO: This
 
-				this.sendCrossShard({
-					content: "The number you were calling has been deleted and as such this call has been terminated.",
-				}, call[1].getOtherSide(numberDoc.channelID).channelID).catch(() => null);
-			}
-		}
+		// if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
+		// 	for (const call of calls.filter(c => c.from.number === number || c.to.number === number)) {
+		// 		call[1].endHandler("system - number deleted");
+
+		// 		this.sendCrossShard({
+		// 			content: "The number you were calling has been deleted and as such this call has been terminated.",
+		// 		}, call[1].getOtherSide(numberDoc.channelID).channelID).catch(() => null);
+		// 	}
+		// }
 
 
 		await db.numbers.delete({
@@ -247,13 +249,17 @@ class DTelClient extends Client<true> {
 	}
 
 	// Sends to the support guild's log channel
-	async log(message: string): Promise<APIMessage> {
+	async log(message: string): Promise<APIMessage | undefined> {
 		winston.verbose(message);
 
 		const time = dayjs().format("HH:mm:ss");
-		return this.sendCrossShard({
-			content: `\`[${time}]\` ${message}`,
-		}, this.config.supportGuild.channels.logs);
+		try {
+			return await this.sendCrossShard({
+				content: `\`[${time}]\` ${message}`,
+			}, this.config.supportGuild.channels.logs);
+		} catch {
+			// Nothing
+		}
 	}
 
 	async getGuildCount(): Promise<number> {

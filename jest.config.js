@@ -14,5 +14,9 @@ module.exports = {
 	setupFilesAfterEnv: ["<rootDir>/src/mocks/prisma.test.ts", "<rootDir>/src/mocks/DiscordClient.test.ts"],
 	clearMocks: true,
 	moduleFileExtensions: ["js", "jsx", "json", "ts", "tsx"],
-	transform: { "^.+\\.(js|ts|tsx)$": "ts-jest" },
+	transform: {
+		"^.+\\.(js|ts|tsx)$": ["ts-jest", {
+			isolatedModules: true,
+		}],
+	},
 };

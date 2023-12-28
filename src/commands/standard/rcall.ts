@@ -1,4 +1,4 @@
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 import { Numbers, Prisma } from "@prisma/client";
 import CallCommand from "./call";
 

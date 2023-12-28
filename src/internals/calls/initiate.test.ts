@@ -7,17 +7,29 @@ import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildT
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
 import { calls } from "@src/instances/calls";
+import { deleteCallById } from "@src/internals/calls/delete-from-db-by-id/DeleteCallById";
+import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
+import { APIMessage } from "discord.js";
+import { ActiveCalls } from "@prisma/client";
+import { propagateCall } from "@src/internals/calls/propagate/Propagate";
+import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 
 jest.mock("@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers");
 jest.mock("@src/internals/utils/generateUUID");
 jest.mock("@src/internals/calls/create-in-db/CreateInDb");
 jest.mock("@src/internals/calls/propagate/Propagate");
 jest.mock("@src/internals/calls/notify-recipients/NotifyCallRecipients");
+jest.mock("@src/internals/calls/delete-from-db-by-id/DeleteCallById");
+jest.mock("@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall");
+jest.mock("@src/internals/calls/propagate/Propagate");
 
 const getParticipantsFromNumbersMock = jest.mocked(getParticipantsFromNumbers);
 const generateUUIDMock = jest.mocked(generateUUID);
 const notifyCallRecipientsMock = jest.mocked(notifyCallRecipients);
 const createInDbMock = jest.mocked(createCallInDb);
+const deleteCallByIdMock = jest.mocked(deleteCallById);
+const sendFailedToStartCallMock = jest.mocked(sendFailedToStartCall);
+const propagateCallMock = jest.mocked(propagateCall);
 
 let initiateTestParams: target.CallInitiationParams;
 let fromParticipant: CallParticipant;
@@ -61,6 +73,11 @@ beforeEach(() => {
 			onHold: false,
 		},
 	});
+
+	notifyCallRecipientsMock.mockResolvedValue("notification_message_id");
+
+	sendFailedToStartCallMock.mockResolvedValue(undefined as unknown as APIMessage);
+	deleteCallByIdMock.mockResolvedValue(undefined as unknown as ActiveCalls);
 });
 
 advanceTo(new Date("2023-12-26T15:35:18.705Z"));
@@ -171,12 +188,48 @@ describe("fails", () => {
 			});
 		});
 	});
+
+	describe("if notifyCallRecipients throws an error", () => {
+		beforeEach(() => {
+			notifyCallRecipientsMock.mockRejectedValue(new Error());
+		});
+
+		it("should throw 'couldntReachOtherSide'", () => {
+			expect(getTestableFunc()).rejects.toThrow(Error);
+		});
+
+		describe("actions after failing to notify", () => {
+			beforeEach(async() => {
+				try {
+					await getTestableFunc()();
+				} catch {
+					// Ignore
+				}
+			});
+
+			it("should send the failed to start call embed", () => {
+				expect(sendFailedToStartCallMock).toHaveBeenCalled();
+			});
+
+			it("should ignore failure of sendFailedToStartCall", () => {
+				sendFailedToStartCallMock.mockRejectedValue(new Error());
+
+				expect(deleteCallByIdMock).toHaveBeenCalled();
+			});
+
+			it("should delete the call", () => {
+				expect(endMissedCallInDb).toHaveBeenCalled();
+			});
+		});
+	});
 });
 
 describe("successes", () => {
-	it("should create a call in the db if all inputs are valid", async() => {
+	beforeEach(async() => {
 		await target.initiateCall(initiateTestParams);
+	});
 
+	it("should create a call in the db if all inputs are valid", async() => {
 		expect(createCallInDb).toHaveBeenCalledWith({
 			id: "uuid",
 			fromNum: fromParticipant.number,
@@ -190,13 +243,15 @@ describe("successes", () => {
 	});
 
 	it("should attempt to send a notification message", async() => {
-		await target.initiateCall(initiateTestParams);
-
 		expect(notifyCallRecipientsMock).toHaveBeenCalled();
 	});
 
 	it("should cache the call on this shard", () => {
 		expect(calls.keys().next().value).toStrictEqual("uuid");
+	});
+
+	it("should propagate the call", () => {
+		expect(propagateCallMock).toHaveBeenCalled();
 	});
 });
 

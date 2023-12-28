@@ -5,7 +5,10 @@ import Console from "./internals/console";
 import { PrismaClient } from "@prisma/client";
 
 // Main IPC process
-const sharder = new ShardingManager(`${__dirname}/dtel.js`, {
+process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
+process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;
+process.env.TS_NODE_CWD = `${__dirname}/../`;
+const sharder = new ShardingManager(`${__dirname}/dtel.ts`, {
 	totalShards: config.shardCount,
 	token: auth.discord.token,
 });

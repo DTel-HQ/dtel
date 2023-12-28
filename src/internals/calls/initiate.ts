@@ -11,6 +11,9 @@ import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/Not
 import { locallyCacheCall } from "@src/internals/calls/locally-cache-call/LocallyCacheCall";
 import { shardIdForChannelId } from "@src/internals/calls/propagate/utils/ShardIdForChannelId";
 import { isThisShardID } from "@src/internals/utils/IsThisShardID";
+import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
+import { deleteCallById } from "@src/internals/calls/delete-from-db-by-id/DeleteCallById";
+import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 
 export interface CallInitiationParams {
 	toNum: string,
@@ -57,8 +60,19 @@ export const initiateCall = async({
 	});
 
 	await locallyCacheCall(callInDb, dbCallRecipient, dbCallSender);
-	const notificationMessageID = await notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
-	await propagateCall(callInDb, dbCallRecipient, notificationMessageID);
+
+	let notificationMessageId: string;
+
+	try {
+		notificationMessageId = await notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
+	} catch (err) {
+		await sendFailedToStartCall(dbCallSender).catch(() => undefined);
+		await endMissedCallInDb(callInDb);
+
+		throw new Error("couldntReachOtherSide");
+	}
+
+	await propagateCall(callInDb, dbCallRecipient, notificationMessageId);
 
 	// TODO: Propagate call
 

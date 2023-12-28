@@ -1,11 +1,13 @@
 import Command from "@src/internals/commandProcessor";
-import CallClient from "@src/internals/callClient.old";
+import { default as CallClient, CallsWithNumbers } from "@src/internals/callClient.old";
 import { ActionRowBuilder, APIEmbed, BaseMessageOptions, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { getFixedT } from "i18next";
 import { formatBalance, formatDate, upperFirst } from "@src/internals/utils";
 import { client } from "@src/instances/client";
-import { Numbers } from "@prisma/client";
+import { ActiveCalls, Numbers } from "@prisma/client";
 import config from "@src/config/config";
+import { getCallTranslator } from "@src/internals/calls/utils/get-call-translator/GetCallTranslator";
+import { initiateCall } from "@src/internals/calls/initiate";
 
 export default class Call extends Command {
 	async run(): Promise<void> {
@@ -29,36 +31,45 @@ export default class Call extends Command {
 	}
 
 	// TODO: Remove fromNum and have this be standalone?
-	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers, random = false, alreadyReplied = false): Promise<CallClient> {
-		const t = getFixedT(interaction.locale, undefined, `commands.call`);
+	static async call(interaction: ChatInputCommandInteraction | MessageComponentInteraction, toNum: string, fromNum: Numbers, random = false, alreadyReplied = false): Promise<ActiveCalls | undefined> {
+		const translator = getCallTranslator(interaction.locale);
 		if (!alreadyReplied) await interaction.deferReply();
 
-		const callObject = new CallClient(client, {
-			from: fromNum.number,
+		// const callObject = new CallClient(client, {
+		// 	from: fromNum.number,
 
-			to: toNum,
-			startedBy: interaction.user.id,
-			random,
-		});
+		// 	to: toNum,
+		// 	startedBy: interaction.user.id,
+		// 	random,
+		// });
 
+		// TODO: Move this to the call function or another function? (startCall())
 		try {
-			await callObject.initiate();
+			const callObject = await initiateCall({
+				fromNum: fromNum.number,
+				toNum,
+				isRandom: random,
+				startedBy: interaction.user.id,
+			});
+
 			interaction.editReply({
 				embeds: [{
 					color: config.colors.info,
-					...t("initiated", {
+					...translator("initiated", {
 						number: toNum,
 						callID: callObject.id,
 					}) as APIEmbed,
 				}],
 			});
+
+			return callObject;
 		} catch (e) {
 			// This works as when we error out in CallClient, we return a translation path instead of an error message
 			// Feel free to change it
 			if (e instanceof Error) {
 				if (e.message === "otherSideInCall") {
 					interaction.editReply({
-						embeds: [client.errorEmbed(t("errors.otherSideInCall")!)],
+						embeds: [client.errorEmbed(translator("errors.otherSideInCall")!)],
 					});
 
 					// interaction.editReply({
@@ -93,15 +104,14 @@ export default class Call extends Command {
 				}
 
 				interaction.editReply({
-					embeds: [client.errorEmbed(t(`errors.${e.message}`))],
+					embeds: [client.errorEmbed(translator(`errors.${e.message}`))],
 				});
 			} else {
 				interaction.editReply({
-					embeds: [client.errorEmbed(t(`errors.unexpected`))],
+					embeds: [client.errorEmbed(translator(`errors.unexpected`))],
 				});
 			}
 		}
-		return callObject;
 	}
 
 	async twoThreeThree(): Promise<void> {

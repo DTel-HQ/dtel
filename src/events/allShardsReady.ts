@@ -32,6 +32,7 @@ export const allShardsReadyHandler = async(client: DTelClient): Promise<void> =>
 	// }
 
 	if (process.env.SHARDS == "0") {
-		require("../internals/jobs");
+		// TODO: Jobs
+		// require("../internals/jobs");
 	}
 };

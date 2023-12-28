@@ -2,7 +2,7 @@
   "name": "dtel",
   "version": "4.0.0",
   "description": "A telephone bot for Discord",
-  "main": "build/index.js",
+  "main": "src/index.ts",
   "scripts": {
     "test": "jest",
     "postinstall": "prisma generate",
@@ -30,7 +30,8 @@
     "node": ">=16"
   },
   "nodemonConfig": {
-    "delay": 100
+    "delay": 100,
+    "interpreter": "ts-node"
   },
   "dependencies": {
     "@prisma/client": "^4.14.1",
@@ -77,6 +78,7 @@
     "ts-jest": "^29.1.1",
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.0.4"
   }
 }

@@ -7,5 +7,6 @@ export const typingStartHandler = (client: DTelClient, typing: Typing): void => 
 	const call = calls.find(c => c.from.channelID === typing.channel.id || c.to.channelID === typing.channel.id);
 	if (!call) return;
 
-	call.typingStart(typing);
+	// TODO: This
+	// call.typingStart(typing);
 };

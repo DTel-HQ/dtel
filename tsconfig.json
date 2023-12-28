@@ -13,7 +13,8 @@
 				"./src/*"
 			]
 		},
-		"noEmit": true
+		"noEmit": true,
+		"baseUrl": "."
 	},
 
 	"include": [

@@ -7,8 +7,6 @@ import { getMentionsString } from "@src/internals/calls/notify-recipients/get-me
 import { generateNotificationEmbed } from "@src/internals/calls/notify-recipients/message-payload/notification-embed/NotificationEmbed";
 import { client } from "@src/instances/client";
 import { generateNotificationMessageButtons } from "@src/internals/calls/notify-recipients/message-payload/message-buttons/NotificationMessageButtons";
-import { deleteCallById } from "@src/internals/calls/delete-from-db-by-id/DeleteCallById";
-import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
 
 export const notifyCallRecipients = async(call: ActiveCalls, to: CallParticipant, from: CallParticipant): Promise<string> => {
 	const callerDisplay = getCallerDisplay(from);
@@ -20,24 +18,17 @@ export const notifyCallRecipients = async(call: ActiveCalls, to: CallParticipant
 
 	notificationMessageContent += getMentionsString(to.mentions);
 
-	try {
-		const messagePostResponse = await client.sendCrossShard({
-			content: notificationMessageContent,
+	const messagePostResponse = await client.sendCrossShard({
+		content: notificationMessageContent,
 
-			embeds: [generateNotificationEmbed({
-				call,
-				callerDisplay,
-				from,
-				to,
-			})],
-			components: [generateNotificationMessageButtons(to)],
-		}, to.channelID);
+		embeds: [generateNotificationEmbed({
+			call,
+			callerDisplay,
+			from,
+			to,
+		})],
+		components: [generateNotificationMessageButtons(to)],
+	}, to.channelID);
 
-		return messagePostResponse.id;
-	} catch (err: unknown) {
-		sendFailedToStartCall(from);
-		await deleteCallById(call.id);
-
-		throw new Error("callNotFound");
-	}
+	return messagePostResponse.id;
 };

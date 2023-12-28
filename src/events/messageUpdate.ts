@@ -10,5 +10,6 @@ export const messageUpdateHandler = async(client: DTelClient, before: Message, a
 	const call = calls.find(c => c.to.channelID === after.channel.id || c.from.channelID === after.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	call.messageUpdate(before, after);
+	// TODO: This
+	// call.messageUpdate(before, after);
 };

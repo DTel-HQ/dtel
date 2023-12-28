@@ -18,8 +18,8 @@ export const messageCreateHandler = async(client: DTelClient, message: Message):
 				embeds: [embed],
 			}).catch(() => null);
 		}
-		return;
 	} // We don't need to handle messages we have nothing to do with
 
-	call.messageCreate(message);
+	// TODO: This
+	// call.messageCreate(message);
 };
