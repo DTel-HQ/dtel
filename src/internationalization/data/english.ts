@@ -101,7 +101,7 @@ export default {
 					title: "You picked up the call",
 					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`\nRemember to follow the [rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules).",
 					footer: {
-						text: "ID: {{ callID }}",
+						text: "ID: {{ callId }}",
 					},
 				},
 
@@ -109,7 +109,7 @@ export default {
 					title: "The other side picked up!",
 					description: "You can now talk to the other side, put the call on hold `/hold` or hang up `/hangup`.\n[rules](https://dtel.austinhuang.me/en/latest/FAQ/#rules).",
 					footer: {
-						text: "ID: {{ callID }}",
+						text: "ID: {{ callId }}",
 					},
 				},
 			},

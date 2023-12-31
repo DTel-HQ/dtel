@@ -1,4 +1,4 @@
-import { createCallInDb } from "@src/internals/calls/create-in-db/CreateInDb";
+import { createCallInDb } from "@src/internals/calls/db/create-in-db/CreateInDb";
 import * as target from "./initiate";
 import { CallParticipant, getParticipantsFromNumbers } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { buildTestParticipant } from "@src/internals/calls/utils/build-test-participant/BuildTestParticipant";
@@ -7,7 +7,7 @@ import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildT
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
 import { calls } from "@src/instances/calls";
-import { deleteCallById } from "@src/internals/calls/delete-from-db-by-id/DeleteCallById";
+import { deleteCallById } from "@src/internals/calls/db/delete-from-db-by-id/DeleteCallById";
 import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
 import { APIMessage } from "discord.js";
 import { ActiveCalls } from "@prisma/client";

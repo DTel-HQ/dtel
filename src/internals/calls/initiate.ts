@@ -4,7 +4,7 @@ import { parseNumber } from "./utils/parse-number/ParseNumber";
 import { replaceNumberAlias } from "./utils/replace-number-alias/ReplaceNumberAlias";
 import { hasNumberExpired } from "./utils/has-number-expired/HasNumberExpired";
 import { isParticipantInCall } from "./utils/is-participant-in-call/IsParticipantInCall";
-import { createCallInDb } from "./create-in-db/CreateInDb";
+import { createCallInDb } from "./db/create-in-db/CreateInDb";
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { propagateCall } from "./propagate/Propagate";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
@@ -12,7 +12,7 @@ import { locallyCacheCall } from "@src/internals/calls/locally-cache-call/Locall
 import { shardIdForChannelId } from "@src/internals/calls/propagate/utils/ShardIdForChannelId";
 import { isThisShardID } from "@src/internals/utils/IsThisShardID";
 import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
-import { deleteCallById } from "@src/internals/calls/delete-from-db-by-id/DeleteCallById";
+import { deleteCallById } from "@src/internals/calls/db/delete-from-db-by-id/DeleteCallById";
 import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 
 export interface CallInitiationParams {

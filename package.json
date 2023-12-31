@@ -4,6 +4,8 @@
   "description": "A telephone bot for Discord",
   "main": "src/index.ts",
   "scripts": {
+    "start": "ts-node .",
+    "watch": "nodemon",
     "test": "jest",
     "postinstall": "prisma generate",
     "diagram": "prisma generate erd"

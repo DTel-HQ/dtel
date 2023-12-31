@@ -20,5 +20,5 @@
 	"include": [
 		"src/**/*.ts",
 		"types/**/*.d.ts"
-	]
+, "src/internals/numbers/get-from-db-by-channel"	]
 }

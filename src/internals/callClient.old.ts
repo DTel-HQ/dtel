@@ -171,6 +171,7 @@ export default class CallClient implements CallsWithNumbers {
 		return this.client.sendCrossShard(payload, this.from.channelID);
 	}
 
+	// #region Replaced Functions
 	async initiate(): Promise<void> {
 		// Defunct!
 		// Replaced by system found in @src/internals/calls/initiate.ts
@@ -366,64 +367,68 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async setupPickupTimer(callNotifMsgID?: string): Promise<void> {
-		setTimeout(async() => {
-			if (this.pickedUp?.by) return;
+		// Defunct!
+		// Superseded by new functional approach
 
-			try {
-				if (callNotifMsgID) {
-					const callMsg = await this.client.rest.get(`/channels/${this.to.channelID}/messages/${callNotifMsgID}`) as RESTGetAPIChannelMessageResult;
-					await this.client.editCrossShard({
-						embeds: callMsg.embeds,
-						components: [],
-					}, this.to.channelID, callNotifMsgID);
-				}
+		// setTimeout(async() => {
+		// 	if (this.pickedUp?.by) return;
 
-				this.toSend({
-					embeds: [this.to.t("missedCall.toSide") as APIEmbed],
-				});
+		// 	try {
+		// 		if (callNotifMsgID) {
+		// 			const callMsg = await this.client.rest.get(`/channels/${this.to.channelID}/messages/${callNotifMsgID}`) as RESTGetAPIChannelMessageResult;
+		// 			await this.client.editCrossShard({
+		// 				embeds: callMsg.embeds,
+		// 				components: [],
+		// 			}, this.to.channelID, callNotifMsgID);
+		// 		}
 
-				const fromEmbed = EmbedBuilder.from(this.from.t("missedCall.fromSide") as APIEmbed);
-				const toMailbox = await db.mailbox.findFirst({
-					where: {
-						number: this.to.number,
-					},
-				});
+		// 		this.toSend({
+		// 			embeds: [this.to.t("missedCall.toSide") as APIEmbed],
+		// 		});
 
-				if (toMailbox) {
-					const mailboxFull = toMailbox?.messages.length > 50;
+		// 		const fromEmbed = EmbedBuilder.from(this.from.t("missedCall.fromSide") as APIEmbed);
+		// 		const toMailbox = await db.mailbox.findFirst({
+		// 			where: {
+		// 				number: this.to.number,
+		// 			},
+		// 		});
 
-					let reply = `${toMailbox.autoreply}`;
+		// 		if (toMailbox) {
+		// 			const mailboxFull = toMailbox?.messages.length > 50;
 
-					if (mailboxFull) reply += " (Mailbox full)";
+		// 			let reply = `${toMailbox.autoreply}`;
 
-					fromEmbed.addFields([{
-						name: this.from.t("answeringMachine"),
-						value: reply,
-					}]);
-				}
+		// 			if (mailboxFull) reply += " (Mailbox full)";
 
-				const canSendMessage = toMailbox?.receiving && toMailbox?.messages.length < 25;
+		// 			fromEmbed.addFields([{
+		// 				name: this.from.t("answeringMachine"),
+		// 				value: reply,
+		// 			}]);
+		// 		}
 
-				this.fromSend({
-					embeds: [fromEmbed],
-					components: canSendMessage ? [new ActionRowBuilder<ButtonBuilder>().addComponents([
-						new ButtonBuilder()
-							.setCustomId(`mailbox-send-initiate-${this.toNum}`)
-							.setEmoji("📬")
-							.setLabel(this.from.t("sendMessage"))
-							.setStyle(ButtonStyle.Primary),
-					])] : undefined,
-				});
-			} catch {
-				// Ignore
-			}
+		// 		const canSendMessage = toMailbox?.receiving && toMailbox?.messages.length < 25;
 
-			if (this.randomCall) {
-				this.client.log(`❎ Random Call \`${this.from.channelID} → ${this.to.channelID}\` was not picked up.\nCall ID: \`${this.id}\``);
-			}
-			this.endHandler("missed");
-		}, 2 * 60 * 1000);
+		// 		this.fromSend({
+		// 			embeds: [fromEmbed],
+		// 			components: canSendMessage ? [new ActionRowBuilder<ButtonBuilder>().addComponents([
+		// 				new ButtonBuilder()
+		// 					.setCustomId(`mailbox-send-initiate-${this.toNum}`)
+		// 					.setEmoji("📬")
+		// 					.setLabel(this.from.t("sendMessage"))
+		// 					.setStyle(ButtonStyle.Primary),
+		// 			])] : undefined,
+		// 		});
+		// 	} catch {
+		// 		// Ignore
+		// 	}
+
+		// 	if (this.randomCall) {
+		// 		this.client.log(`❎ Random Call \`${this.from.channelID} → ${this.to.channelID}\` was not picked up.\nCall ID: \`${this.id}\``);
+		// 	}
+		// 	this.endHandler("missed");
+		// }, 2 * 60 * 1000);
 	}
+	// #endregion
 
 	async pickup(interaction: MessageComponentInteraction): Promise<void> {
 		this.pickedUp = {
@@ -789,33 +794,36 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	static async endInDB(id: string, endedBy = ""): Promise<void> {
-		const callDetails = await db.activeCalls.update({
-			where: {
-				id,
-			},
-			data: {
-				ended: {
-					at: new Date(),
-					by: endedBy ? endedBy : "system",
-				},
-			},
-		}).catch(() => null);
+		// Defunct!
+		// Replaced by functional approach
 
-		if (!callDetails) return;
+		// const callDetails = await db.activeCalls.update({
+		// 	where: {
+		// 		id,
+		// 	},
+		// 	data: {
+		// 		ended: {
+		// 			at: new Date(),
+		// 			by: endedBy ? endedBy : "system",
+		// 		},
+		// 	},
+		// }).catch(() => null);
 
-		await db.archivedCalls.create({
-			data: {
-				...callDetails,
+		// if (!callDetails) return;
 
-				ended: callDetails.ended!,
-			},
-		});
+		// await db.archivedCalls.create({
+		// 	data: {
+		// 		...callDetails,
 
-		await db.activeCalls.delete({
-			where: {
-				id,
-			},
-		});
+		// 		ended: callDetails.ended!,
+		// 	},
+		// });
+
+		// await db.activeCalls.delete({
+		// 	where: {
+		// 		id,
+		// 	},
+		// });
 	}
 
 	async repropagate(call: ActiveCalls) {
@@ -827,6 +835,7 @@ export default class CallClient implements CallsWithNumbers {
 			call,
 		});
 	}
+
 	handleReprop(call: ActiveCalls) {
 		Object.assign(this, call);
 	}

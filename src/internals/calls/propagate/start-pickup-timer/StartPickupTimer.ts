@@ -1,6 +1,6 @@
 import { ActiveCalls } from "@prisma/client";
 import { winston } from "@src/instances/winston";
-import { getCallById } from "@src/internals/calls/get-from-db-by-id/GetCallById";
+import { getCallById } from "@src/internals/calls/db/get-from-db-by-id/GetCallById";
 import { endMissedCall } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/EndMissedCall";
 import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 import { sendMissedCallFromSideEmbed } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/from/send-message/SendMissedCallFromSideEmbed";

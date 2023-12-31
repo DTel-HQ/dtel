@@ -2,7 +2,7 @@ import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumbe
 import * as target from "./StartPickupTimer";
 import { initInternationalization } from "@src/internationalization/i18n";
 import { removeComponentsFromMessage } from "@src/internals/calls/utils/remove-components-from-message/RemoveComponentsFromMessage";
-import { getCallById } from "@src/internals/calls/get-from-db-by-id/GetCallById";
+import { getCallById } from "@src/internals/calls/db/get-from-db-by-id/GetCallById";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { sendMissedCallMessageToSide } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/to/send-message/SendMissedCallMessageToSide";
