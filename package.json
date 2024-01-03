@@ -1,10 +1,12 @@
 {
   "name": "dtel",
+  "packageManager": "yarn@4.0.2",
   "version": "4.0.0",
   "description": "A telephone bot for Discord",
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node .",
+    "debug": "node --inspect -r ts-node/register -r tsconfig-paths/register src/index.ts",
     "watch": "nodemon",
     "test": "jest",
     "postinstall": "prisma generate",

@@ -1,13 +1,14 @@
-import { EmbedBuilder, Message } from "discord.js";
-import { blacklistCache } from "@src/database/db";
-import DTelClient from "@src/internals/client";
 import config from "@src/config/config";
+import { blacklistCache } from "@src/database/db";
 import { calls } from "@src/instances/calls";
+import { handleCallMessageCreate } from "@src/internals/calls/messages/create/HandleCallMessageCreate";
+import DTelClient from "@src/internals/client";
+import { EmbedBuilder, Message } from "discord.js";
 
 export const messageCreateHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (message.author.id === client.user!.id || blacklistCache.get(message.author.id)) return; // Don't cause loopback & ignore blacklist
 
-	const call = calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);
+	const call = calls.find(c => [c.to.channelID, c.from.channelID].includes(message.channel.id));
 	if (!call) {
 		if (message.content.startsWith(">ping") || message.content.startsWith(">call") || message.content.startsWith(">dial") || message.content.startsWith(">rdial") || message.content.startsWith(">daily")) {
 			const embed = new EmbedBuilder()
@@ -18,8 +19,9 @@ export const messageCreateHandler = async(client: DTelClient, message: Message):
 				embeds: [embed],
 			}).catch(() => null);
 		}
-	} // We don't need to handle messages we have nothing to do with
 
-	// TODO: This
-	// call.messageCreate(message);
+		return;
+	}
+
+	handleCallMessageCreate(message, call);
 };

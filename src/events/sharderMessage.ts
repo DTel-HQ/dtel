@@ -1,10 +1,11 @@
 import { ActiveCalls } from "@prisma/client";
-import { TextBasedChannel } from "discord.js";
 import { calls } from "@src/instances/calls";
-import CallClient, { CallsWithNumbers } from "@src/internals/callClient.old";
-import { allShardsReadyHandler } from "./allShardsReady";
 import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";
+import CallClient, { CallsWithNumbers } from "@src/internals/callClient.old";
+import { getCallById } from "@src/internals/calls/db/get-from-db-by-id/GetCallById";
+import { TextBasedChannel } from "discord.js";
+import { allShardsReadyHandler } from "./allShardsReady";
 
 export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
@@ -54,7 +55,12 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 		}
 
 		case "callResume": {
-			// TODO:
+			const message = msg as unknown as callResume;
+			// TODO: Make this work properly and not a bodge fix
+			const cll = await getCallById(message.callDoc.id);
+			if (!cll) throw new Error();
+			calls.set(cll?.id, cll as CallsWithNumbers);
+
 			return;
 			const callDoc = msg.callDoc as CallsWithNumbers;
 
@@ -88,6 +94,10 @@ interface callBase {
 
 interface callRepropagate extends callBase {
 	call: ActiveCalls
+}
+
+interface callResume extends callBase {
+	callDoc: ActiveCalls
 }
 
 interface callEnded extends callBase {

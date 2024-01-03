@@ -1,19 +1,18 @@
-import DTelClient from "./client";
-import { getFixedT, TFunction } from "i18next";
-import { v4 as uuidv4 } from "uuid";
-import { ActionRowBuilder, ButtonBuilder, Client, CommandInteraction, EmbedBuilder, Message, MessageComponentInteraction, PermissionsBitField, Typing, MessageCreateOptions } from "discord.js";
-import { PermissionLevel } from "@src/interfaces/commandData";
-import { ActiveCalls, Numbers, atAndBy, CallMessages, onHold } from "@prisma/client";
-import { db } from "@src/database/db";
+import { ActiveCalls, atAndBy, CallMessages, Numbers, onHold } from "@prisma/client";
 import config from "@src/config/config";
-import { APIEmbed, APIMessage, ButtonStyle, RESTGetAPIChannelMessageResult } from "discord-api-types/v10";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
-import { getUsername } from "./utils";
-import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
+import { db } from "@src/database/db";
 import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
-import { parseNumber } from "./calls/utils/parse-number/ParseNumber";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import { APIEmbed, APIMessage } from "discord-api-types/v10";
+import { CommandInteraction, EmbedBuilder, Message, MessageComponentInteraction, MessageCreateOptions, PermissionsBitField, Typing } from "discord.js";
+import { getFixedT, TFunction } from "i18next";
+import { v4 as uuidv4 } from "uuid";
+import DTelClient from "./client";
+import { getUsername } from "./utils";
 
 dayjs.extend(relativeTime);
 
@@ -561,24 +560,25 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async messageCreate(message: Message): Promise<void> {
-		if (!this.pickedUp?.by || message.content.startsWith(">")) return;
-		const sideToSendTo = this.getOtherSideByChannel(message.channel.id)!;
+		// Redundant
+		// if (!this.pickedUp?.by || message.content.startsWith(">")) return;
+		// const sideToSendTo = this.getOtherSideByChannel(message.channel.id)!;
 
-		const toSend = await this.processContent(message, sideToSendTo);
+		// const toSend = await this.processContent(message, sideToSendTo);
 
-		const forwardedMessageID = await this.client.sendCrossShard(toSend, sideToSendTo.channelID);
+		// const forwardedMessageID = await this.client.sendCrossShard(toSend, sideToSendTo.channelID);
 
-		const msgDoc = await this.client.db.callMessages.create({
-			data: {
-				callID: this.id,
-				forwardedMessageID: forwardedMessageID.id,
-				originalMessageID: message.id,
-				sender: message.author.id,
-				sentAt: new Date(),
-			},
-		});
+		// const msgDoc = await this.client.db.callMessages.create({
+		// 	data: {
+		// 		callID: this.id,
+		// 		forwardedMessageID: forwardedMessageID.id,
+		// 		originalMessageID: message.id,
+		// 		sender: message.author.id,
+		// 		sentAt: new Date(),
+		// 	},
+		// });
 
-		this.messageCache.set(msgDoc.originalMessageID, msgDoc);
+		// this.messageCache.set(msgDoc.originalMessageID, msgDoc);
 	}
 
 	async messageUpdate(before: Message, after: Message): Promise<void> {

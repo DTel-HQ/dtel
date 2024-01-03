@@ -1,11 +1,11 @@
+import { PrismaClient } from "@prisma/client";
 import { APITextChannel, REST, ShardClientUtil, ShardingManager } from "discord.js";
 import auth from "./config/auth";
 import config from "./config/config";
 import Console from "./internals/console";
-import { PrismaClient } from "@prisma/client";
 
 // Main IPC process
-process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
+process.env.NODE_OPTIONS = `--inspect=0 -r ts-node/register --no-warnings -r tsconfig-paths/register`;
 process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;
 process.env.TS_NODE_CWD = `${__dirname}/../`;
 const sharder = new ShardingManager(`${__dirname}/dtel.ts`, {

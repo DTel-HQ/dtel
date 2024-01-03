@@ -5,7 +5,7 @@ import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildT
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";
 import { EmbedBuilder, Message, User } from "discord.js";
-import * as target from "./BuildFowardedMessageOptions";
+import * as target from "./BuildForwardedMessageOptions";
 
 jest.mock("@src/internals/calls/messages/utils/build-forwarded-message-content/BuildForwardedMessageContent");
 jest.mock("@src/internals/utils/get-number-locale/GetNumberLocale");

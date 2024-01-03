@@ -1,5 +1,5 @@
-import * as target from "./GetDisplayableUsername";
 import { User } from "discord.js";
+import * as target from "./GetDisplayableUsername";
 
 let user: User;
 
@@ -9,7 +9,9 @@ beforeEach(() => {
 
 it("should return the user's Discord username if they have a discriminator of 0", () => {
 	user.discriminator = "0";
-	user.username = "username_123";
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	user.displayName = "username_123";
 
 	const result = target.getDisplayableUsername(user);
 

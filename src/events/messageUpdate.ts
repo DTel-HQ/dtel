@@ -1,7 +1,8 @@
-import { Message } from "discord.js";
 import { blacklistCache } from "@src/database/db";
-import DTelClient from "@src/internals/client";
 import { calls } from "@src/instances/calls";
+import { handleCallMessageUpdate } from "@src/internals/calls/messages/update/HandleMessageUpdate";
+import DTelClient from "@src/internals/client";
+import { Message } from "discord.js";
 
 export const messageUpdateHandler = async(client: DTelClient, before: Message, after: Message): Promise<void> => {
 	if (!after.author) return;
@@ -10,6 +11,5 @@ export const messageUpdateHandler = async(client: DTelClient, before: Message, a
 	const call = calls.find(c => c.to.channelID === after.channel.id || c.from.channelID === after.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	// TODO: This
-	// call.messageUpdate(before, after);
+	handleCallMessageUpdate(before, after, call);
 };
