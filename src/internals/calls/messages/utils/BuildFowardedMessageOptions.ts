@@ -1,32 +1,16 @@
-import config from "@src/config/config";
 import { CallsWithNumbers } from "@src/instances/calls";
-import { messageHasAttachments } from "@src/internals/utils/message-has-attachments/MessageHasAttachments";
+import { buildForwardedMessageContent } from "@src/internals/calls/messages/utils/build-forwarded-message-content/BuildForwardedMessageContent";
+import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/utils/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
+import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";
+import { splitCallSidesByChannel } from "@src/internals/utils/split-sides-by-channel/SplitSidesByChannel";
 import { Message, MessageCreateOptions } from "discord.js";
 
 export const buildForwardedMessageOptions = async(message: Message, call: CallsWithNumbers): Promise<MessageCreateOptions> => {
-	const toSend: MessageCreateOptions = {
-		embeds: [],
+	const { otherSide } = splitCallSidesByChannel(call, message.channelId);
+	const otherSideLocale = await getNumberLocale(otherSide);
+
+	return {
+		embeds: buildForwardedMessageFileEmbeds(message, otherSideLocale),
+		content: await buildForwardedMessageContent(message, call),
 	};
-
-	if (messageHasAttachments(message)) {
-		for (const i of message.attachments.values()) {
-			if (i.contentType?.startsWith("image/")) {
-				toSend.embeds?.push({
-					image: {
-						url: i.url,
-					},
-				});
-			} else {
-				toSend.embeds?.push({
-					color: config.colors.yellowbook,
-					description: `File: **[${i.name}](${i.url})**`,
-					footer: {
-						text: sideToSendTo.t("dontTrustStrangers"),
-					},
-				});
-			}
-		}
-	}
-
-	return toSend;
 };
