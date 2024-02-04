@@ -1,8 +1,8 @@
 import { winston } from "@src/instances/winston";
 import { getCallByNumber } from "@src/internals/calls/db/get-from-db-by-number/GetCallByNumber";
-import { pickupCall } from "@src/internals/calls/pickup/PickupCall";
-import { sendPickupInteractionReply } from "@src/internals/calls/pickup/messages/interaction-reply/send/SendPickupInteractionReply";
-import { sendPickupNotificationEmbed } from "@src/internals/calls/pickup/messages/picked-up-notification/send/SendPickupNotificationEmbed";
+import { pickupCall } from "@src/internals/calls/pickup/perform-pickup/PickupCall";
+import { sendPickupInteractionReply } from "@src/internals/calls/pickup/perform-pickup/messages/interaction-reply/send/SendPickupInteractionReply";
+import { sendPickupNotificationEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/picked-up-notification/send/SendPickupNotificationEmbed";
 import { generateErrorEmbed } from "@src/internals/calls/utils/generate-error-embed/GenerateErrorEmbed";
 import { getNumberFromDbByChannel } from "@src/internals/numbers/get-from-db-by-channel/GetNumberFromDbByChannel";
 import { MessageComponentInteraction } from "discord.js";

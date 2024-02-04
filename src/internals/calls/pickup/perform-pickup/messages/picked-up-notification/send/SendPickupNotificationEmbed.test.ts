@@ -1,4 +1,4 @@
-import { buildPickupNotificationEmbed } from "@src/internals/calls/pickup/messages/picked-up-notification/embed/BuildPickupNotificationEmbed";
+import { buildPickupNotificationEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/picked-up-notification/embed/BuildPickupNotificationEmbed";
 import * as target from "./SendPickupNotificationEmbed";
 import { EmbedBuilder } from "discord.js";
 import { discordClientMock } from "@src/mocks/DiscordClient.test";

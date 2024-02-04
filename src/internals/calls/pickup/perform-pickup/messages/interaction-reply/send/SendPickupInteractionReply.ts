@@ -1,4 +1,4 @@
-import { buildPickupInteractionReplyEmbed } from "@src/internals/calls/pickup/messages/interaction-reply/embed/PickupInteractionReplyEmbed";
+import { buildPickupInteractionReplyEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/interaction-reply/embed/PickupInteractionReplyEmbed";
 import { InteractionResponse, MessageComponentInteraction } from "discord.js";
 
 export const sendPickupInteractionReply = (interaction: MessageComponentInteraction, callId: string): Promise<InteractionResponse> => interaction.reply({

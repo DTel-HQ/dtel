@@ -1,6 +1,6 @@
 import * as target from "./SendPickupInteractionReply";
 import { EmbedBuilder, MessageComponentInteraction } from "discord.js";
-import { buildPickupInteractionReplyEmbed } from "@src/internals/calls/pickup/messages/interaction-reply/embed/PickupInteractionReplyEmbed";
+import { buildPickupInteractionReplyEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/interaction-reply/embed/PickupInteractionReplyEmbed";
 
 jest.mock("@src/internals/calls/pickup/messages/interaction-reply/embed/PickupInteractionReplyEmbed");
 
