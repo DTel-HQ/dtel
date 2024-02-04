@@ -430,133 +430,136 @@ export default class CallClient implements CallsWithNumbers {
 	// #endregion
 
 	async pickup(interaction: MessageComponentInteraction): Promise<void> {
-		this.pickedUp = {
-			at: new Date(),
-			by: interaction.user.id,
-		};
+		// this.pickedUp = {
+		// 	at: new Date(),
+		// 	by: interaction.user.id,
+		// };
 
-		await this.client.editCrossShard({
-			embeds: interaction.message.embeds,
-			components: [],
-		}, interaction.channelId, interaction.message.id).catch(() => null);
+		// await this.client.editCrossShard({
+		// 	embeds: interaction.message.embeds,
+		// 	components: [],
+		// }, interaction.channelId, interaction.message.id).catch(() => null);
 
-		if (this.otherSideShardID) {
-			type ctx = { callID: string, pickedUp: atAndBy };
-			await this.client.shard?.broadcastEval<void, ctx>(async(_client, context): Promise<void> => {
-				const client = _client as DTelClient;
-				const callHandler = calls.find(c => c.id === context.callID);
-				if (!callHandler) throw new Error("No handler");
+		// if (this.otherSideShardID) {
+		// 	type ctx = { callID: string, pickedUp: atAndBy };
+		// 	await this.client.shard?.broadcastEval<void, ctx>(async(_client, context): Promise<void> => {
+		// 		const client = _client as DTelClient;
+		// 		const callHandler = calls.find(c => c.id === context.callID);
+		// 		if (!callHandler) throw new Error("No handler");
 
-				callHandler.pickedUp = {
-					at: new Date(context.pickedUp.at),
-					by: context.pickedUp.by,
-				};
-			}, {
-				shard: this.otherSideShardID,
-				context: {
-					callID: this.id,
-					pickedUp: this.pickedUp,
-				},
-			});
-		}
+		// 		callHandler.pickedUp = {
+		// 			at: new Date(context.pickedUp.at),
+		// 			by: context.pickedUp.by,
+		// 		};
+		// 	}, {
+		// 		shard: this.otherSideShardID,
+		// 		context: {
+		// 			callID: this.id,
+		// 			pickedUp: this.pickedUp,
+		// 		},
+		// 	});
+		// }
 
-		await db.activeCalls.update({
-			where: {
-				id: this.id,
-			},
-			data: {
-				pickedUp: this.pickedUp,
-			},
-		});
+		// await db.activeCalls.update({
+		// 	where: {
+		// 		id: this.id,
+		// 	},
+		// 	data: {
+		// 		pickedUp: this.pickedUp,
+		// 	},
+		// });
 
-		interaction.reply({
-			embeds: [{
-				color: this.client.config.colors.success,
+		// interaction.reply({
+		// 	embeds: [{
+		// 		color: this.client.config.colors.success,
 
-				...(this.from.t("pickedUp.toSide", {
-					lng: this.to.locale,
-					callID: this.id,
-				}) as APIEmbed),
-			}],
-		});
+		// 		...(this.from.t("pickedUp.toSide", {
+		// 			lng: this.to.locale,
+		// 			callID: this.id,
+		// 		}) as APIEmbed),
+		// 	}],
+		// });
 
-		this.fromSend({
-			embeds: [{
-				color: this.client.config.colors.success,
+		// this.fromSend({
+		// 	embeds: [{
+		// 		color: this.client.config.colors.success,
 
-				...(this.to.t("pickedUp.fromSide", {
-					callID: this.id,
-				}) as APIEmbed),
-			}],
-		});
+		// 		...(this.to.t("pickedUp.fromSide", {
+		// 			callID: this.id,
+		// 		}) as APIEmbed),
+		// 	}],
+		// });
 	}
 
+	// #endregion
+
 	async processContent(message: Message, sideToSendTo: ClientCallParticipant): Promise<MessageCreateOptions> {
-		const userPerms = await this.client.getPerms(message.author.id);
+		return {};
+		// const userPerms = await this.client.getPerms(message.author.id);
 
-		const toSend: MessageCreateOptions = { content: `**${getUsername(message.author)}`, embeds: [] };
+		// const toSend: MessageCreateOptions = { content: `**${getUsername(message.author)}`, embeds: [] };
 
-		const thisSide = this.getThisSideByChannel(message.channelId)!;
-		if (thisSide.vip?.hidden) toSend.content = `**Anonymous#${message.author.id.slice(-4)}`;
+		// const thisSide = this.getThisSideByChannel(message.channelId)!;
+		// if (thisSide.vip?.hidden) toSend.content = `**Anonymous#${message.author.id.slice(-4)}`;
 
-		if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
-			toSend.content += `(${message.author.id})`;
-		}
+		// if (sideToSendTo.number === this.client.config.supportGuild.supportNumber) {
+		// 	toSend.content += `(${message.author.id})`;
+		// }
 
-		const { callPhones } = this.client.config;
-		let phone = "";
+		// const { callPhones } = this.client.config;
+		// let phone = "";
 
-		if (userPerms as number < PermissionLevel.customerSupport && message.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)) {
-			phone = callPhones.admin;
-		} else {
-			switch (userPerms) {
-				default: {
-					phone = callPhones.default;
-					break;
-				}
+		// if (userPerms as number < PermissionLevel.customerSupport && message.member?.permissions?.has(PermissionsBitField.Flags.ManageGuild)) {
+		// 	phone = callPhones.admin;
+		// } else {
+		// 	switch (userPerms) {
+		// 		default: {
+		// 			phone = callPhones.default;
+		// 			break;
+		// 		}
 
-				case PermissionLevel.donator: {
-					phone = callPhones.donator;
-					break;
-				}
+		// 		case PermissionLevel.donator: {
+		// 			phone = callPhones.donator;
+		// 			break;
+		// 		}
 
-				case PermissionLevel.maintainer:
-				case PermissionLevel.customerSupport: {
-					phone = callPhones.support;
-					break;
-				}
+		// 		case PermissionLevel.maintainer:
+		// 		case PermissionLevel.customerSupport: {
+		// 			phone = callPhones.support;
+		// 			break;
+		// 		}
 
-				case PermissionLevel.contributor: {
-					phone = callPhones.contributor;
-					break;
-				}
-			}
-		}
+		// 		case PermissionLevel.contributor: {
+		// 			phone = callPhones.contributor;
+		// 			break;
+		// 		}
+		// 	}
+		// }
 
-		toSend.content += `** ${phone} `;
-		toSend.content += message.content;
+		// toSend.content += `** ${phone} `;
+		// toSend.content += message.content;
 
-		if (message.attachments.size != 0) {
-			for (const i of message.attachments.values()) {
-				if (i.contentType?.startsWith("image/")) {
-					toSend.embeds?.push({
-						image: {
-							url: i.url,
-						},
-					});
-				} else {
-					toSend.embeds?.push({
-						color: config.colors.yellowbook,
-						description: `File: **[${i.name}](${i.url})**`,
-						footer: {
-							text: sideToSendTo.t("dontTrustStrangers"),
-						},
-					});
-				}
-			}
-		}
+		// if (message.attachments.size != 0) {
+		// 	for (const i of message.attachments.values()) {
+		// 		if (i.contentType?.startsWith("image/")) {
+		// 			toSend.embeds?.push({
+		// 				image: {
+		// 					url: i.url,
+		// 				},
+		// 			});
+		// 		} else {
+		// 			toSend.embeds?.push({
+		// 				color: config.colors.yellowbook,
+		// 				description: `File: **[${i.name}](${i.url})**`,
+		// 				footer: {
+		// 					text: sideToSendTo.t("dontTrustStrangers"),
+		// 				},
+		// 			});
+		// 		}
+		// 	}
+		// }
 
-		return toSend;
+		// return toSend;
 	}
 
 	async messageCreate(message: Message): Promise<void> {
@@ -582,68 +585,68 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	async messageUpdate(before: Message, after: Message): Promise<void> {
-		if (!this.pickedUp) return;
-		const msgDoc = this.messageCache.get(after.id);
-		if (!msgDoc) return; // Not a message in this call so ignore
+		// if (!this.pickedUp) return;
+		// const msgDoc = this.messageCache.get(after.id);
+		// if (!msgDoc) return; // Not a message in this call so ignore
 
-		const otherSide = this.getOtherSideByChannel(before.channelId);
-		if (!otherSide) {
-			winston.info(`Couldn't find other side for edited messaged in call ${this.id}`);
-			return;
-		}
+		// const otherSide = this.getOtherSideByChannel(before.channelId);
+		// if (!otherSide) {
+		// 	winston.info(`Couldn't find other side for edited messaged in call ${this.id}`);
+		// 	return;
+		// }
 
-		const toSend = await this.processContent(after, otherSide);
+		// const toSend = await this.processContent(after, otherSide);
 
-		try {
-			await this.client.editCrossShard(toSend, otherSide.channelID, msgDoc.forwardedMessageID);
-		} catch {
-			try {
-				toSend.reply = {
-					messageReference: msgDoc.forwardedMessageID,
-					failIfNotExists: false,
-				};
-				toSend.content += " (edited)";
+		// try {
+		// 	await this.client.editCrossShard(toSend, otherSide.channelID, msgDoc.forwardedMessageID);
+		// } catch {
+		// 	try {
+		// 		toSend.reply = {
+		// 			messageReference: msgDoc.forwardedMessageID,
+		// 			failIfNotExists: false,
+		// 		};
+		// 		toSend.content += " (edited)";
 
-				await this.client.sendCrossShard(toSend, otherSide.channelID);
-			} catch {
-				CallClient.prematureEnd(this);
-			}
-		}
+		// 		await this.client.sendCrossShard(toSend, otherSide.channelID);
+		// 	} catch {
+		// 		CallClient.prematureEnd(this);
+		// 	}
+		// }
 	}
 
 	async messageDelete(msg: Message): Promise<void> {
-		if (!this.pickedUp) return;
-		const msgDoc = this.messageCache.get(msg.id);
-		if (!msgDoc) return; // Not a message in this call so ignore
+		// if (!this.pickedUp) return;
+		// const msgDoc = this.messageCache.get(msg.id);
+		// if (!msgDoc) return; // Not a message in this call so ignore
 
-		const otherSide = this.getOtherSideByChannel(msg.channelId);
-		if (!otherSide) {
-			winston.info(`Couldn't find other side for delete messaged in call ${this.id}`);
-			return;
-		}
+		// const otherSide = this.getOtherSideByChannel(msg.channelId);
+		// if (!otherSide) {
+		// 	winston.info(`Couldn't find other side for delete messaged in call ${this.id}`);
+		// 	return;
+		// }
 
-		try {
-			await this.client.deleteCrossShard(otherSide.channelID, msgDoc.forwardedMessageID);
-		} catch {
-			await this.client.sendCrossShard({
-				content: this.getThisSideByChannel(msg.channelId)!.t("errors.messageDeleted"),
-				reply: {
-					messageReference: msgDoc.forwardedMessageID,
-				},
-			}, otherSide.channelID).catch(() => null);
-		}
+		// try {
+		// 	await this.client.deleteCrossShard(otherSide.channelID, msgDoc.forwardedMessageID);
+		// } catch {
+		// 	await this.client.sendCrossShard({
+		// 		content: this.getThisSideByChannel(msg.channelId)!.t("errors.messageDeleted"),
+		// 		reply: {
+		// 			messageReference: msgDoc.forwardedMessageID,
+		// 		},
+		// 	}, otherSide.channelID).catch(() => null);
+		// }
 
-		this.messageCache.delete(msg.id);
+		// this.messageCache.delete(msg.id);
 	}
 
 	getThisSideByChannel(id: string) {
-		if (this.from.channelID === id) return this.from;
-		if (this.to.channelID === id) return this.to;
+	// 	if (this.from.channelID === id) return this.from;
+	// 	if (this.to.channelID === id) return this.to;
 		return null;
 	}
 	getOtherSideByChannel(id: string) {
-		if (this.from.channelID === id) return this.to;
-		if (this.to.channelID === id) return this.from;
+		// if (this.from.channelID === id) return this.to;
+		// if (this.to.channelID === id) return this.from;
 		return null;
 	}
 

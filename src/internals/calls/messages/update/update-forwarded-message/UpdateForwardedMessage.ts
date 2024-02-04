@@ -15,7 +15,6 @@ export const updateForwardedMessage = async(newMessage: Message, call: CallsWith
 		await doCallMessageEdit(updatedMessagePayload, otherSide.channelID, forwardedMessageID);
 	} catch {
 		winston.silly(`Couldn't edit message ID '${newMessage.id}' for call ID '${call.id}'`);
-		// TODO: End call prematurely
 		return false;
 	}
 

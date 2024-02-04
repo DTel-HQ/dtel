@@ -2,6 +2,7 @@ import { Message } from "discord.js";
 import { blacklistCache } from "@src/database/db";
 import DTelClient from "@src/internals/client";
 import { calls } from "@src/instances/calls";
+import { handleCallMessageDelete } from "@src/internals/calls/messages/delete/HandleMessageDelete";
 
 export const messageDeleteHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (!message.author) return;
@@ -10,6 +11,5 @@ export const messageDeleteHandler = async(client: DTelClient, message: Message):
 	const call = calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	// TODO: This
-	// call.messageDelete(message);
+	handleCallMessageDelete(message, call);
 };
