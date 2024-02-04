@@ -1,6 +1,6 @@
 import { CallsWithNumbers } from "@src/internals/callClient.old";
-import { buildForwardedMessageContent } from "@src/internals/calls/messages/utils/build-forwarded-message-content/BuildForwardedMessageContent";
-import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/utils/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
+import { buildForwardedMessageContent } from "@src/internals/calls/messages/create/send-forwarded-message/build-message/build-forwarded-message-content/BuildForwardedMessageContent";
+import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/create/send-forwarded-message/build-message/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";

@@ -1,6 +1,6 @@
 import { CallsWithNumbers } from "@src/instances/calls";
+import { sendForwardedMessage } from "@src/internals/calls/messages/create/send-forwarded-message/SendForwardedMessage";
 import { createCallMessageInDb } from "@src/internals/calls/messages/db/CreateCallMessageInDb";
-import { sendForwardedMessage } from "@src/internals/calls/messages/utils/send-forwarded-message/SendForwardedMessage";
 import { Message } from "discord.js";
 
 export const handleCallMessageCreate = async(message: Message, call: CallsWithNumbers): Promise<void> => {
@@ -11,7 +11,7 @@ export const handleCallMessageCreate = async(message: Message, call: CallsWithNu
 	await createCallMessageInDb({
 		callID: call.id,
 		forwardedMessageID: forwardedMessageId,
-		originalMessageID: message.channelId,
+		originalMessageID: message.id,
 		sender: message.author.id,
 	});
 };
