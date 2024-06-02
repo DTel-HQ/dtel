@@ -4,7 +4,7 @@ export const buildTestCall = (details?: Partial<ActiveCalls>): ActiveCalls => ({
 	id: "call_id",
 	ended: null,
 	fromNum: "03010000001",
-	toNum: "03010000001",
+	toNum: "03010000002",
 	hold: {
 		onHold: false,
 		holdingSide: null,

@@ -244,7 +244,7 @@ export default {
 				color: 0xFF0000,
 				title: "The call has ended!",
 				footer: {
-					text: "ID: {{ callID }}",
+					text: "ID: {{ callId }}",
 				},
 			},
 			descriptions: {

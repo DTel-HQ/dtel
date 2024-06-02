@@ -5,10 +5,11 @@ import config from "@src/config/config";
 import CommandDataInterface, { CommandType, PermissionLevel } from "@src/interfaces/commandData";
 import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "@src/database/db";
-import CallClient, { CallsWithNumbers } from "./callClient.old";
+import { CallsWithNumbers } from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 import { calls } from "@src/instances/calls";
+import console from "console";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -85,18 +86,20 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 				await this.noCallFound();
 				return;
 			}
-		} else {
-			if (this.commandData.numberRequired) {
-				this.number = await this.fetchNumber();
-				if (!this.number) {
-					await this.noNumberFound();
-					return;
-				}
-			}
-			if (this.commandData.accountRequired) {
-				this.account = await this.fetchAccount();
+		}
+
+		if (this.commandData.numberRequired) {
+			this.number = await this.fetchNumber();
+			if (!this.number) {
+				await this.noNumberFound();
+				return;
 			}
 		}
+
+		if (this.commandData.accountRequired) {
+			this.account = await this.fetchAccount();
+		}
+
 		this.run();
 	}
 

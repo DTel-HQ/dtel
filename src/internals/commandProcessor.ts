@@ -1,6 +1,6 @@
 // This deviates so far from Novus FM that this may as well be classified as new code
 import { ChatInputCommandInteraction } from "discord.js";
-import CommandDataInterface from "../interfaces/commandData";
+import CommandDataInterface from "@src/interfaces/commandData";
 import DTelClient from "./client";
 import Processor from "./processor";
 import i18n, { TFunction } from "i18next";
@@ -20,7 +20,7 @@ abstract class CommandProcessor extends Processor<ChatInputCommandInteraction> {
 
 	async _run(): Promise<void> {
 		// Maybe this should be moved into the event handler?
-		if (this.config.devOnlyMode && this.interaction.guild && (!this.client.config.maintainers.includes(this.interaction.user.id))) {
+		if (this.config.devOnlyMode && this.interaction.guild && !this.client.config.maintainers.includes(this.interaction.user.id)) {
 			await this.permCheckFail();
 			return;
 		} else if (this.commandData.guildOnly && !this.interaction.guild) {
