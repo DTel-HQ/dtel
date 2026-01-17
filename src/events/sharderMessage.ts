@@ -10,6 +10,7 @@ import { allShardsReadyHandler } from "./allShardsReady";
 export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
 		case "callInitiated": {
+			console.log("Received call initiated message");
 			const callObject = JSON.parse(msg.callDBObject as string) as CallsWithNumbers;
 			let channel: TextBasedChannel;
 			try {

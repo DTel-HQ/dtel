@@ -14,15 +14,5 @@ export async function unholdCall(
 		},
 	});
 
-
-	calls.set(call.id, {
-		...call,
-		hold: {
-			onHold: false,
-			holdingSide: null,
-		},
-	});
-
-
 	// TODO: Propagate to the other side if it is on another shard
 }

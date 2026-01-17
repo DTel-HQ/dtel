@@ -177,6 +177,8 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 		if (client.config.devMode) {
 			delete require.cache[require.resolve(toRunPath!)];
 		}
+
+
 		processorFile = require(toRunPath!).default;
 		if (!processorFile) throw new Error("Processor file not found");
 	} catch (e) {

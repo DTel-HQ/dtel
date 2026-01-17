@@ -14,14 +14,5 @@ export async function putCallOnHold(
 			},
 		},
 	});
-
-	calls.set(call.id, {
-		...call,
-		hold: {
-			onHold: true,
-			holdingSide: initiatingSideChannelId,
-		},
-	});
-
 	// TODO: Propagate to the other side if it is on another shard
 }
