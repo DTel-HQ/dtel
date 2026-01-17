@@ -720,66 +720,66 @@ export default class CallClient implements CallsWithNumbers {
 
 	// TODO: i18n
 	async putOnHold(interaction: CommandInteraction): Promise<void> {
-		if (!this.pickedUp) {
-			interaction.reply({
-				embeds: [this.client.errorEmbed("You can't hold a call that hasn't been picked up yet!")],
-			});
-			return;
-		}
+		// if (!this.pickedUp) {
+		// 	interaction.reply({
+		// 		embeds: [this.client.errorEmbed("You can't hold a call that hasn't been picked up yet!")],
+		// 	});
+		// 	return;
+		// }
 
-		const baseEmbed = {
-			color: config.colors.info,
-		};
+		// const baseEmbed = {
+		// 	color: config.colors.info,
+		// };
 
-		const thisSideEmbed = EmbedBuilder.from(baseEmbed);
-		const otherSideEmbed = EmbedBuilder.from(baseEmbed);
-		// Hold call
-		if (!this.hold.onHold) {
-			this.hold = {
-				onHold: true,
-				holdingSide: interaction.channelId,
-			};
-			thisSideEmbed.setDescription("You have put the call on hold. Use `/hold` to resume the call.");
-			otherSideEmbed.setDescription("The other side have put you on hold. Please wait...");
-		// Unhold call
-		} else {
-			if (this.hold.holdingSide != interaction.channelId) {
-				interaction.reply({
-					embeds: [this.client.errorEmbed("You can't release the hold if you didn't start it!")],
-				});
-				return;
-			}
+		// const thisSideEmbed = EmbedBuilder.from(baseEmbed);
+		// const otherSideEmbed = EmbedBuilder.from(baseEmbed);
+		// // Hold call
+		// if (!this.hold.onHold) {
+		// 	this.hold = {
+		// 		onHold: true,
+		// 		holdingSide: interaction.channelId,
+		// 	};
+		// 	thisSideEmbed.setDescription("You have put the call on hold. Use `/hold` to resume the call.");
+		// 	otherSideEmbed.setDescription("The other side have put you on hold. Please wait...");
+		// // Unhold call
+		// } else {
+		// 	if (this.hold.holdingSide != interaction.channelId) {
+		// 		interaction.reply({
+		// 			embeds: [this.client.errorEmbed("You can't release the hold if you didn't start it!")],
+		// 		});
+		// 		return;
+		// 	}
 
-			this.hold = {
-				onHold: false,
-				holdingSide: null,
-			};
-			thisSideEmbed.setDescription("You have released the hold on this call");
-			otherSideEmbed.setDescription("The other side have ended the hold!");
-		}
+		// 	this.hold = {
+		// 		onHold: false,
+		// 		holdingSide: null,
+		// 	};
+		// 	thisSideEmbed.setDescription("You have released the hold on this call");
+		// 	otherSideEmbed.setDescription("The other side have ended the hold!");
+		// }
 
-		thisSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
-		otherSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
+		// thisSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
+		// otherSideEmbed.setTitle(`⏳ Call ${this.hold.onHold ? "held" : "resumed"}`);
 
-		// Send the embeds
-		await interaction.reply({
-			embeds: [thisSideEmbed],
-		});
-		await this.client.sendCrossShard({
-			embeds: [otherSideEmbed],
-		}, this.getOtherSide(interaction.channelId).channelID);
+		// // Send the embeds
+		// await interaction.reply({
+		// 	embeds: [thisSideEmbed],
+		// });
+		// await this.client.sendCrossShard({
+		// 	embeds: [otherSideEmbed],
+		// }, this.getOtherSide(interaction.channelId).channelID);
 
-		const newObject = await db.activeCalls.update({
-			where: {
-				id: this.id,
-			},
-			data: {
-				hold: this.hold,
-			},
-		});
+		// const newObject = await db.activeCalls.update({
+		// 	where: {
+		// 		id: this.id,
+		// 	},
+		// 	data: {
+		// 		hold: this.hold,
+		// 	},
+		// });
 
-		// Propagate the hold status to the other side
-		this.repropagate(newObject);
+		// // Propagate the hold status to the other side
+		// this.repropagate(newObject);
 	}
 
 	async endHandler(endedBy = "system - number lost"): Promise<void> {
