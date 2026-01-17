@@ -5,4 +5,4 @@ import { CallMessages } from "@prisma/client";
 import { Collection } from "discord.js";
 
 export const callMessagesCache = new Collection<string, CallMessages>();
-
+export const callReminderIntervals = new Collection<string, NodeJS.Timeout>();

@@ -82,23 +82,22 @@ const allShardsReady = async(): Promise<void> => {
 		if (!call.from || !call.to) continue;
 		console.log(`Processing ${call.id} on sharder`);
 
-		let fromShard: number, toShard: number;
+		let fromShard: number;
+		// , toShard: number;
 
 		try {
 			fromShard = await shardIdForChannelId(call.from.channelID); // Primary shard
 
-			toShard = await shardIdForChannelId(call.to.channelID); // Secondary shard
+			// toShard = await shardIdForChannelId(call.to.channelID); // Secondary shard
 		} catch {
 			console.log(`Failed to get shard for ${call.id}. It needs to be ended.`);
 			continue;
 		}
 
 		sharder.broadcast({
-			msg: "callResume",
+			msg: "resetOngoingCallReminder",
 			callDoc: call,
-
-			fromShard,
-			toShard,
+			targetShard: fromShard,
 		});
 	}
 
