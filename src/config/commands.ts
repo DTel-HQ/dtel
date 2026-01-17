@@ -1,5 +1,5 @@
 import { ApplicationCommandOptionType } from "discord.js";
-import Command, { PermissionLevel, CommandType } from "../interfaces/commandData";
+import Command, { PermissionLevel, CommandType } from "@src/interfaces/commandData";
 
 const commands: Command[] = [
 	{

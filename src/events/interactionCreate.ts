@@ -10,17 +10,18 @@ import {
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
-import Commands from "../config/commands";
-import Command, { CommandType, PermissionLevel, SubcommandData } from "../interfaces/commandData";
-import Constructable from "../interfaces/constructable";
-import DTelClient from "../internals/client";
-import Processor, { ChannelBasedInteraction } from "../internals/processor";
+import Commands from "@src/config/commands";
+import Command, { CommandType, PermissionLevel, SubcommandData } from "@src/interfaces/commandData";
+import Constructable from "@src/interfaces/constructable";
+import DTelClient from "@src/internals/client";
+import Processor, { ChannelBasedInteraction } from "@src/internals/processor";
 import i18n, { getFixedT } from "i18next";
-import { winston } from "../dtel";
-import config from "../config/config";
-import { blacklistCache } from "../database/db";
+import { winston } from "@src/instances/winston";
+import config from "@src/config/config";
+import { blacklistCache } from "@src/database/db";
+import { getCallByChannel } from "@src/internals/calls/db/get-by-channel/GetCallByChannel";
 
-export default async(client: DTelClient, _interaction: Interaction): Promise<void> => {
+export const interactionCreateHandler = async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
 	const t = getFixedT(interaction.locale, "events.interactionCreate");
@@ -31,7 +32,8 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		}));
 		return;
 	}
-	const call = client.calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
+
+	const call = interaction.channelId ? await getCallByChannel(interaction.channelId) : null;
 
 	let commandName: string;
 	let toRunPath: string;
@@ -176,6 +178,8 @@ export default async(client: DTelClient, _interaction: Interaction): Promise<voi
 		if (client.config.devMode) {
 			delete require.cache[require.resolve(toRunPath!)];
 		}
+
+
 		processorFile = require(toRunPath!).default;
 		if (!processorFile) throw new Error("Processor file not found");
 	} catch (e) {

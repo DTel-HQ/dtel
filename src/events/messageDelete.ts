@@ -1,13 +1,15 @@
 import { Message } from "discord.js";
-import { blacklistCache } from "../database/db";
-import DTelClient from "../internals/client";
+import { blacklistCache } from "@src/database/db";
+import DTelClient from "@src/internals/client";
+import { handleCallMessageDelete } from "@src/internals/calls/messages/delete/HandleMessageDelete";
+import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
 
-export default async(client: DTelClient, message: Message): Promise<void> => {
+export const messageDeleteHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (!message.author) return;
 	if (message.author.id === client.user!.id || blacklistCache.get(message.author.id)) return; // Don't cause loopback & ignore blacklist
 
-	const call = client.calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);
+	const call = await getCallByChannelOrEndIfASideDoesNotExist(message.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	call.messageDelete(message);
+	handleCallMessageDelete(message, call);
 };

@@ -5,9 +5,9 @@ export default {
 		"137589790538334208", // Sun
 		"124989722668957700", // Mitchell
 	],
-	devMode: false,
+	devMode: true,
 	devOnlyMode: false,
-	shardCount: 7,
+	shardCount: 2,
 
 	// NUMBER ALIASES
 	aliasNumbers: {
@@ -49,7 +49,6 @@ export default {
 	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs
-	// TODO: Return IDs to their original values
 	supportGuild: {
 		id: "281815661317980160",
 		channels: {

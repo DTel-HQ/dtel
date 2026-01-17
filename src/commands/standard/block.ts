@@ -1,5 +1,5 @@
-import Command from "../../internals/commandProcessor";
-import { parseNumber } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { parseNumber } from "@src/internals/utils";
 
 export default class Block extends Command {
 	async run(): Promise<void> {

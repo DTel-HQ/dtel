@@ -1,8 +1,8 @@
 import { Guild } from "discord.js";
-import DTelClient from "../internals/client";
-import { winston } from "../dtel";
+import DTelClient from "@src/internals/client";
+import { winston } from "@src/instances/winston";
 
-export default async(client: DTelClient, guild: Guild): Promise<void> => {
+export const guildDeleteHandler = async(client: DTelClient, guild: Guild): Promise<void> => {
 	if (!guild.available) {
 		winston.error(`Guild ${guild.name} (${guild.id}) is unavailable. Ignoring Guild Delete event.`);
 	}

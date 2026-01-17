@@ -1,10 +1,14 @@
 import { Typing } from "discord.js";
-import DTelClient from "../internals/client";
+import DTelClient from "@src/internals/client";
+import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
+import { splitCallSidesByChannel } from "@src/internals/utils/split-sides-by-channel/SplitSidesByChannel";
 
-export default (client: DTelClient, typing: Typing): void => {
+export const typingStartHandler = async(client: DTelClient, typing: Typing): Promise<void> => {
 	if (typing.user.bot) return;
-	const call = client.calls.find(c => c.from.channelID === typing.channel.id || c.to.channelID === typing.channel.id);
+	const call = await getCallByChannelOrEndIfASideDoesNotExist(typing.channel.id);
 	if (!call) return;
 
-	call.typingStart(typing);
+	const { otherSide } = splitCallSidesByChannel(call, typing.channel.id);
+
+	client.rest.post(`/channels/${otherSide.channelID}/typing`).catch(() => null);
 };

@@ -1,15 +1,15 @@
-import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, Role, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
-import config from "../config/config";
-import CallClient from "./callClient";
+import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
+import config from "@src/config/config";
 import { Collection } from "@discordjs/collection";
-import { APIEmbed, APIMessage, APITextChannel, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
-import { PermissionLevel } from "../interfaces/commandData";
-import { winston } from "../dtel";
+import { APIEmbed, APIMessage, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import { winston } from "@src/instances/winston";
 import { Logger } from "winston";
-import { db } from "../database/db";
+import { db } from "@src/database/db";
 import { Numbers } from "@prisma/client";
-import { fetchNumber, parseNumber } from "./utils";
+import { fetchNumber } from "./utils";
 import dayjs from "dayjs";
+import { parseNumber } from "./calls/utils/parse-number/ParseNumber";
 
 interface PossibleTypes {
 	user?: User | null,
@@ -22,8 +22,6 @@ class DTelClient extends Client<true> {
 
 	db = db;
 	winston: Logger = winston;
-
-	calls = new Collection<string, CallClient>();
 
 	shardWithSupportGuild = 0;
 
@@ -72,15 +70,6 @@ class DTelClient extends Client<true> {
 
 	async deleteCrossShard(channelID: string, messageID: string): Promise<RESTPatchAPIChannelMessageResult> {
 		return this.rest.delete(`/channels/${channelID}/messages/${messageID}`) as Promise<RESTPatchAPIChannelMessageResult>;
-	}
-
-	async shardIdForChannelId(id: string): Promise<number> {
-		if (!process.env.SHARD_COUNT || Number(process.env.SHARD_COUNT) == 1) return 0;
-		const channelObject = await this.rest.get(`/channels/${id}`) as APITextChannel;
-
-		if (channelObject && !channelObject.guild_id) return 0;
-
-		return ShardClientUtil.shardIdForGuildId(channelObject.guild_id as string, Number(process.env.SHARD_COUNT));
 	}
 
 	// Use these so that we can edit them if we get performance issues
@@ -203,15 +192,17 @@ class DTelClient extends Client<true> {
 			},
 		}).catch(() => null);
 
-		if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
-			for (const call of this.calls.filter(c => c.from.number === number || c.to.number === number)) {
-				call[1].endHandler("system - number deleted");
+		// TODO: This
 
-				this.sendCrossShard({
-					content: "The number you were calling has been deleted and as such this call has been terminated.",
-				}, call[1].getOtherSide(numberDoc.channelID).channelID).catch(() => null);
-			}
-		}
+		// if (numberDoc.outgoingCalls.length > 0 || numberDoc.incomingCalls.length > 0) {
+		// 	for (const call of calls.filter(c => c.from.number === number || c.to.number === number)) {
+		// 		call[1].endHandler("system - number deleted");
+
+		// 		this.sendCrossShard({
+		// 			content: "The number you were calling has been deleted and as such this call has been terminated.",
+		// 		}, call[1].getOtherSide(numberDoc.channelID).channelID).catch(() => null);
+		// 	}
+		// }
 
 
 		await db.numbers.delete({
@@ -252,14 +243,22 @@ class DTelClient extends Client<true> {
 		return true;
 	}
 
+	async shardIdForChannelId(_: string): Promise<number> {
+		throw new Error("Not implemented");
+	}
+
 	// Sends to the support guild's log channel
-	async log(message: string): Promise<APIMessage> {
+	async log(message: string): Promise<APIMessage | undefined> {
 		winston.verbose(message);
 
 		const time = dayjs().format("HH:mm:ss");
-		return this.sendCrossShard({
-			content: `\`[${time}]\` ${message}`,
-		}, this.config.supportGuild.channels.logs);
+		try {
+			return await this.sendCrossShard({
+				content: `\`[${time}]\` ${message}`,
+			}, this.config.supportGuild.channels.logs);
+		} catch {
+			// Nothing
+		}
 	}
 
 	async getGuildCount(): Promise<number> {

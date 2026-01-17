@@ -1,12 +1,14 @@
+import config from "@src/config/config";
+import { blacklistCache } from "@src/database/db";
+import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
+import { handleCallMessageCreate } from "@src/internals/calls/messages/create/HandleCallMessageCreate";
+import DTelClient from "@src/internals/client";
 import { EmbedBuilder, Message } from "discord.js";
-import { blacklistCache } from "../database/db";
-import DTelClient from "../internals/client";
-import config from "../config/config";
 
-export default async(client: DTelClient, message: Message): Promise<void> => {
+export const messageCreateHandler = async(client: DTelClient, message: Message): Promise<void> => {
 	if (message.author.id === client.user!.id || blacklistCache.get(message.author.id)) return; // Don't cause loopback & ignore blacklist
 
-	const call = client.calls.find(c => c.to.channelID === message.channel.id || c.from.channelID === message.channel.id);
+	const call = await getCallByChannelOrEndIfASideDoesNotExist(message.channel.id);
 	if (!call) {
 		if (message.content.startsWith(">ping") || message.content.startsWith(">call") || message.content.startsWith(">dial") || message.content.startsWith(">rdial") || message.content.startsWith(">daily")) {
 			const embed = new EmbedBuilder()
@@ -17,8 +19,11 @@ export default async(client: DTelClient, message: Message): Promise<void> => {
 				embeds: [embed],
 			}).catch(() => null);
 		}
-		return;
-	} // We don't need to handle messages we have nothing to do with
 
-	call.messageCreate(message);
+		return;
+	}
+
+	if (call.hold.onHold) return;
+
+	handleCallMessageCreate(message, call);
 };

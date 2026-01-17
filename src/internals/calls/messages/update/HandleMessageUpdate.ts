@@ -1,0 +1,13 @@
+import { callMessagesCache } from "@src/instances/calls";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
+import { updateForwardedMessage } from "@src/internals/calls/messages/update/update-forwarded-message/UpdateForwardedMessage";
+import { Message } from "discord.js";
+
+export const handleCallMessageUpdate = async(originalMessage: Message, updatedMessage: Message, call: CallsWithNumbers): Promise<void> => {
+	if (!call.pickedUp) return;
+
+	const messageFromCache = callMessagesCache.find(message => message.originalMessageID === originalMessage.id);
+	if (!messageFromCache) return;
+
+	await updateForwardedMessage(updatedMessage, call, messageFromCache.forwardedMessageID);
+};

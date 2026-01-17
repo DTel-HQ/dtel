@@ -1,8 +1,8 @@
-import DTelClient from "../internals/client";
-import Commands from "../config/commands";
-import config from "../config/config";
+import DTelClient from "@src/internals/client";
+import Commands from "@src/config/commands";
+import config from "@src/config/config";
 
-export default async(client: DTelClient): Promise<void> => {
+export const readyHandler = async(client: DTelClient): Promise<void> => {
 	client.winston.info(`Ready!`);
 	client.winston.info(`Logged in as ${client.user!.tag}`);
 
