@@ -49,7 +49,6 @@ export default {
 	dtsEmoji: "<:DTS:668551813317787659>",
 
 	// IDs
-	// TODO: Return IDs to their original values
 	supportGuild: {
 		id: "281815661317980160",
 		channels: {
