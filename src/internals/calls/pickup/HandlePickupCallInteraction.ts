@@ -6,6 +6,7 @@ import { generateErrorEmbed } from "@src/internals/calls/utils/generate-error-em
 import { getNumberFromDbByChannel } from "@src/internals/numbers/get-from-db-by-channel/GetNumberFromDbByChannel";
 import { MessageComponentInteraction } from "discord.js";
 import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
+import { hangupInDb } from "@src/internals/calls/db/hangup-in-db/HangupInDb";
 
 export const handlePickupCallInteraction = async(interaction: MessageComponentInteraction): Promise<void> => {
 	const number = await getNumberFromDbByChannel(interaction.channelId);
@@ -40,7 +41,9 @@ export const handlePickupCallInteraction = async(interaction: MessageComponentIn
 		await sendPickupNotificationEmbed(callData.from.channelID, "en", callData.id);
 	} catch {
 		winston.warn("Caught an error when sending interaction reply");
-		// TODO: End failed call
+		hangupInDb(callData, "notification-failure").catch(() => null);
+		interaction.channel?.send("❌ An error occurred while trying to notify the other side that the call was picked up. The call has been ended. Please try your call again.").catch(() => null);
+		return;
 	}
 
 	winston.verbose(`Call ID ${callData.id} was picked up by ${interaction.user.username} (${interaction.user.id})`);

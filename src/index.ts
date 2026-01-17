@@ -1,8 +1,12 @@
+import { register } from "tsconfig-paths";
+register();
+
 import { PrismaClient } from "@prisma/client";
 import { APITextChannel, REST, ShardClientUtil, ShardingManager } from "discord.js";
 import auth from "./config/auth";
 import config from "./config/config";
 import Console from "./internals/console";
+import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 
 // Main IPC process
 process.env.NODE_OPTIONS = `--inspect=0 -r ts-node/register --no-warnings -r tsconfig-paths/register`;
@@ -82,27 +86,40 @@ const allShardsReady = async(): Promise<void> => {
 		if (!call.from || !call.to) continue;
 		console.log(`Processing ${call.id} on sharder`);
 
-		let fromShard: number;
-		// , toShard: number;
+		let fromShard: number | undefined;
+		let toShard: number | undefined;
 
 		try {
 			fromShard = await shardIdForChannelId(call.from.channelID); // Primary shard
-
-			// toShard = await shardIdForChannelId(call.to.channelID); // Secondary shard
+			// Check to make sure we still have both sides
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
+			toShard = await shardIdForChannelId(call.to.channelID); // Primary shard
+			sharder.broadcast({
+				msg: "resetCallReminderAndCache",
+				callDoc: call,
+				targetShard: fromShard,
+			});
 		} catch {
-			console.log(`Failed to get shard for ${call.id}. It needs to be ended.`);
+			console.log(`Failed to get shard for ${call.id}`);
+			hangupInDb(call, "shard-lookup-failure").catch(() => null);
+
+			await sendFailMessageToChannel(call.from.channelID, "Failed to get shard for this call. The call will be ended.").catch(() => null);
+			await sendFailMessageToChannel(call.to.channelID, "Failed to get shard for this call. The call will be ended.").catch(() => null);
+
 			continue;
 		}
-
-		sharder.broadcast({
-			msg: "resetOngoingCallReminder",
-			callDoc: call,
-			targetShard: fromShard,
-		});
 	}
 
 	db.$disconnect();
 };
+
+function sendFailMessageToChannel(channelId: string, message: string): Promise<unknown> {
+	return rest.post(`/channels/${channelId}/messages`, {
+		body: {
+			content: message,
+		},
+	});
+}
 
 winston.info("Spawning shards...");
 sharder.spawn();

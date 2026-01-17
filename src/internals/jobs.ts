@@ -6,6 +6,7 @@ import { EmbedBuilder } from "discord.js";
 import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";
 
+export const startJobs = () => {
 interface playingCtx {
 	guildCount: number
 	userCount: number
@@ -252,3 +253,4 @@ scheduleJob("0 0 0 * * *", async() => {
 
 	client.log(`📖 Cleared ${result.count} messages from ${calls.length} calls.`);
 });
+};

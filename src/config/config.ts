@@ -7,7 +7,7 @@ export default {
 	],
 	devMode: true,
 	devOnlyMode: false,
-	shardCount: 1,
+	shardCount: 2,
 
 	// NUMBER ALIASES
 	aliasNumbers: {

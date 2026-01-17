@@ -5,6 +5,7 @@ import { allShardsReadyHandler } from "./allShardsReady";
 import call from "@src/commands/standard/call";
 import { startOngoingCallReminder } from "@src/internals/calls/ongoing-call-reminder/StartOngoingCallReminder";
 import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";
 
 export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
@@ -86,21 +87,21 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 		// 		break;
 		// 	}
 
-		case "resetOngoingCallReminder": {
-			const message = msg as unknown as resetOngoingCallReminder;
+		case "resetCallReminderAndCache": {
+			const message = msg as unknown as resetCallReminderAndCache;
 			if (message.targetShard !== Number(process.env.SHARDS)) return;
-
 			const callDoc = message.callDoc as CallsWithNumbers;
 
-			winston.info(`Resetting ongoing call reminder for call ID: ${callDoc.id}`);
+			winston.info(`Resetting call reminder and cache for call ID: ${callDoc.id}`);
 
 			startOngoingCallReminder(callDoc);
+			updateCacheWithCall(callDoc);
 		}
 	}
 };
 
-interface resetOngoingCallReminder {
-	msg: "resetOngoingCallReminder",
+interface resetCallReminderAndCache {
+	msg: "resetCallReminderAndCache",
 	callDoc: CallsWithNumbers,
 	targetShard: number,
 }

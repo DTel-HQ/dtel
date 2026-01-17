@@ -4,6 +4,7 @@ import { createCallMessageInDb } from "@src/internals/calls/messages/db/CreateCa
 import { Message } from "discord.js";
 import { client } from "@src/instances/client";
 import { hangupInDb } from "@src/internals/calls/db/hangup-in-db/HangupInDb";
+import { splitCallSidesByChannel } from "@src/internals/utils/split-sides-by-channel/SplitSidesByChannel";
 
 export const handleCallMessageCreate = async(
 	message: Message,
@@ -11,11 +12,13 @@ export const handleCallMessageCreate = async(
 ): Promise<void> => {
 	if (!call.pickedUp || message.content.startsWith(">")) return;
 
-	const toChannel =
-    client.channels.cache.get(call.to.channelID) ??
-    await client.channels.fetch(call.to.channelID).catch(() => null);
+	const { otherSide } = splitCallSidesByChannel(call, message.channelId);
 
-	if (!toChannel) {
+	const otherSideChannel =
+    client.channels.cache.get(otherSide.channelID) ??
+    await client.channels.fetch(otherSide.channelID).catch(() => null);
+
+	if (!otherSideChannel) {
 		message.reply(
 			"❌ We lost connection to the other side. The call may has been ended.",
 		);

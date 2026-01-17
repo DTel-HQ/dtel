@@ -1,6 +1,8 @@
 import { db } from "@src/database/db";
+import { CallsWithNumbers } from "@src/internals/callClient.old";
 import { CallsWithPotentialNumbers } from "@src/internals/calls/db/get-by-id/GetCallById";
 import { getCallFromCacheForChannel } from "@src/redis/operations/GetCallFromCacheForChannel";
+import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";
 
 export const getCallByChannel = async(channelId: string): Promise<CallsWithPotentialNumbers | null> => {
 	const redisCacheHit = await getCallFromCacheForChannel(channelId);
@@ -22,6 +24,12 @@ export const getCallByChannel = async(channelId: string): Promise<CallsWithPoten
 			to: true,
 		},
 	});
+
+
+	if (result && result.from && result.to) {
+		updateCacheWithCall(result as CallsWithNumbers);
+	}
+
 
 	return result;
 };

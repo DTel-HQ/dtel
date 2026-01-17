@@ -1,6 +1,6 @@
 import { Numbers } from "@prisma/client";
 import { getCallByNumber } from "@src/internals/calls/db/get-by-number/GetCallByNumber";
-import { hangupInDb } from "@src/internals/calls/hangup/hangup-in-db/HangupInDb";
+import { hangupInDb } from "@src/internals/calls/db/hangup-in-db/HangupInDb";
 import { sendHangupInteractionReplyForPickedUpCall } from "@src/internals/calls/hangup/messages/picked-up/send-interaction-reply/SendHangupInteractionReplyForPickedUpCall";
 import { generateErrorEmbed } from "@src/internals/calls/utils/generate-error-embed/GenerateErrorEmbed";
 import { CommandInteraction, MessageComponentInteraction } from "discord.js";
