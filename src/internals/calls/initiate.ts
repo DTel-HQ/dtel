@@ -56,7 +56,7 @@ export const initiateCall = async({
 		},
 	});
 
-	await locallyCacheCall(callInDb, dbCallRecipient, dbCallSender);
+	locallyCacheCall(callInDb, dbCallRecipient, dbCallSender);
 
 	let notificationMessageId: string;
 
@@ -70,8 +70,6 @@ export const initiateCall = async({
 	}
 
 	await propagateCall(callInDb, dbCallRecipient, notificationMessageId);
-
-	// TODO: Propagate call
 
 	// TODO: Pickup timer
 

@@ -57,6 +57,7 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 		case "callResume": {
 			const message = msg as unknown as callResume;
 			// TODO: Make this work properly and not a bodge fix
+			// TODO: Figure out why me from a few years ago thought this was a bodge fix, lgtm
 			const cll = await getCallById(message.callDoc.id);
 			if (!cll) throw new Error();
 			calls.set(cll?.id, cll as CallsWithNumbers);
