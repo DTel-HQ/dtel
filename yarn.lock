@@ -1612,13 +1612,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-colors@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "ansi-colors@npm:4.1.3"
-  checksum: ec87a2f59902f74e61eada7f6e6fe20094a628dab765cfdbd03c3477599368768cffccdb5d3bb19a1b6c99126783a143b1fee31aab729b31ffe5836c7e5e28b9
-  languageName: node
-  linkType: hard
-
 "ansi-escapes@npm:^4.2.1":
   version: 4.3.2
   resolution: "ansi-escapes@npm:4.3.2"
@@ -1923,15 +1916,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bindings@npm:^1.5.0":
-  version: 1.5.0
-  resolution: "bindings@npm:1.5.0"
-  dependencies:
-    file-uri-to-path: "npm:1.0.0"
-  checksum: 3dab2491b4bb24124252a91e656803eac24292473e56554e35bbfe3cc1875332cfa77600c3bac7564049dc95075bf6fcc63a4609920ff2d64d0fe405fcf0d4ba
-  languageName: node
-  linkType: hard
-
 "bl@npm:^4.0.3":
   version: 4.1.0
   resolution: "bl@npm:4.1.0"
@@ -2024,16 +2008,6 @@ __metadata:
     base64-js: "npm:^1.3.1"
     ieee754: "npm:^1.1.13"
   checksum: 27cac81cff434ed2876058d72e7c4789d11ff1120ef32c9de48f59eab58179b66710c488987d295ae89a228f835fc66d088652dffeb8e3ba8659f80eb091d55e
-  languageName: node
-  linkType: hard
-
-"bufferutil@npm:^4.0.7":
-  version: 4.0.8
-  resolution: "bufferutil@npm:4.0.8"
-  dependencies:
-    node-gyp: "npm:latest"
-    node-gyp-build: "npm:^4.3.0"
-  checksum: 36cdc5b53a38d9f61f89fdbe62029a2ebcd020599862253fefebe31566155726df9ff961f41b8c97b02b4c12b391ef97faf94e2383392654cf8f0ed68f76e47c
   languageName: node
   linkType: hard
 
@@ -2193,15 +2167,6 @@ __metadata:
   version: 2.2.0
   resolution: "clean-stack@npm:2.2.0"
   checksum: 1f90262d5f6230a17e27d0c190b09d47ebe7efdd76a03b5a1127863f7b3c9aec4c3e6c8bb3a7bbf81d553d56a1fd35728f5a8ef4c63f867ac8d690109742a8c1
-  languageName: node
-  linkType: hard
-
-"cli-progress@npm:^3.12.0":
-  version: 3.12.0
-  resolution: "cli-progress@npm:3.12.0"
-  dependencies:
-    string-width: "npm:^4.2.3"
-  checksum: f464cb19ebde2f3880620a2adfaeeefaec6cb15c8e610c8a659ca1047ee90d69f3bf2fdabbb1fe33ac408678e882e3e0eecdb84ab5df0edf930b269b8a72682d
   languageName: node
   linkType: hard
 
@@ -2365,18 +2330,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:^7.0.3":
-  version: 7.0.3
-  resolution: "cross-env@npm:7.0.3"
-  dependencies:
-    cross-spawn: "npm:^7.0.1"
-  bin:
-    cross-env: src/bin/cross-env.js
-    cross-env-shell: src/bin/cross-env-shell.js
-  checksum: f3765c25746c69fcca369655c442c6c886e54ccf3ab8c16847d5ad0e91e2f337d36eedc6599c1227904bf2a228d721e690324446876115bc8e7b32a866735ecf
-  languageName: node
-  linkType: hard
-
 "cross-fetch@npm:3.1.5":
   version: 3.1.5
   resolution: "cross-fetch@npm:3.1.5"
@@ -2386,7 +2339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.1, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
+"cross-spawn@npm:^7.0.0, cross-spawn@npm:^7.0.2, cross-spawn@npm:^7.0.3":
   version: 7.0.3
   resolution: "cross-spawn@npm:7.0.3"
   dependencies:
@@ -2604,10 +2557,6 @@ __metadata:
     "@types/uuid": "npm:^9.0.1"
     "@typescript-eslint/eslint-plugin": "npm:^5.57.1"
     "@typescript-eslint/parser": "npm:^5.57.1"
-    ansi-colors: "npm:^4.1.3"
-    bufferutil: "npm:^4.0.7"
-    cli-progress: "npm:^3.12.0"
-    cross-env: "npm:^7.0.3"
     dayjs: "npm:^1.11.7"
     discord-api-types: "npm:^0.37.38"
     discord.js: "npm:^14.11.0"
@@ -2622,9 +2571,7 @@ __metadata:
     nodemon: "npm:^3.0.3"
     prisma: "npm:^4.14.1"
     prisma-erd-generator: "npm:^1.5.4"
-    re2: "npm:^1.18.0"
     redis: "npm:^5.10.0"
-    rethinkdb-ts: "npm:^2.5.4"
     safe-regex: "npm:^2.1.1"
     transformer: "npm:^1.2.8"
     ts-jest: "npm:^29.1.1"
@@ -2637,8 +2584,6 @@ __metadata:
     uuid: "npm:^9.0.0"
     winston: "npm:^3.8.2"
     winston-daily-rotate-file: "npm:^4.7.1"
-    zlib-sync: "npm:^0.1.8"
-    zucc: "npm:^0.1.2"
   languageName: unknown
   linkType: soft
 
@@ -3167,13 +3112,6 @@ __metadata:
   dependencies:
     moment: "npm:^2.29.1"
   checksum: ebb53cc22a33b0b57457c49df96ac96d8f7bace5e495f19577b37c4d87712b5fbe3539724de384852f2f6221aa0f2045e81e1f09a991fcf190f8954ef83caca1
-  languageName: node
-  linkType: hard
-
-"file-uri-to-path@npm:1.0.0":
-  version: 1.0.0
-  resolution: "file-uri-to-path@npm:1.0.0"
-  checksum: 3b545e3a341d322d368e880e1c204ef55f1d45cdea65f7efc6c6ce9e0c4d22d802d5629320eb779d006fe59624ac17b0e848d83cc5af7cd101f206cb704f5519
   languageName: node
   linkType: hard
 
@@ -3715,16 +3653,6 @@ __metadata:
   version: 2.0.4
   resolution: "inherits@npm:2.0.4"
   checksum: 4e531f648b29039fb7426fb94075e6545faa1eb9fe83c29f0b6d9e7263aceb4289d2d4557db0d428188eeb449cc7c5e77b0a0b2c4e248ff2a65933a0dee49ef2
-  languageName: node
-  linkType: hard
-
-"install-artifact-from-github@npm:^1.3.5":
-  version: 1.3.5
-  resolution: "install-artifact-from-github@npm:1.3.5"
-  bin:
-    install-from-cache: bin/install-from-cache.js
-    save-to-github-cache: bin/save-to-github-cache.js
-  checksum: b8d9597dbdc422789ea2ed6c0ef534441577bb9dbca0eac5131e55985e2e0ae7bb63743ffeebb0d2a4082426701b9a1afe7acb1540f729583fac5d2e2567093a
   languageName: node
   linkType: hard
 
@@ -4985,15 +4913,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nan@npm:^2.18.0":
-  version: 2.18.0
-  resolution: "nan@npm:2.18.0"
-  dependencies:
-    node-gyp: "npm:latest"
-  checksum: 9209d80134fdb98c0afe35c1372d2b930a0a8d3c52706cb5e4257a27e9845c375f7a8daedadadec8d6403ca2eebb3b37d362ff5d1ec03249462abf65fef2a148
-  languageName: node
-  linkType: hard
-
 "natural-compare-lite@npm:^1.4.0":
   version: 1.4.0
   resolution: "natural-compare-lite@npm:1.4.0"
@@ -5012,15 +4931,6 @@ __metadata:
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
   checksum: 3ec9fd413e7bf071c937ae60d572bc67155262068ed522cf4b3be5edbe6ddf67d095ec03a3a14ebf8fc8e95f8e1d61be4869db0dbb0de696f6b837358bd43fc2
-  languageName: node
-  linkType: hard
-
-"node-addon-api@npm:^1.6.3":
-  version: 1.7.2
-  resolution: "node-addon-api@npm:1.7.2"
-  dependencies:
-    node-gyp: "npm:latest"
-  checksum: bcf526f2ce788182730d3c3df5206585873d1e837a6e1378ff84abccf2f19cf3f93a8274f9c1245af0de63a0dbd1bb95ca2f767ecf5c678d6930326aaf396c4e
   languageName: node
   linkType: hard
 
@@ -5049,7 +4959,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"node-gyp@npm:^10.0.1, node-gyp@npm:latest":
+"node-gyp@npm:latest":
   version: 10.0.1
   resolution: "node-gyp@npm:10.0.1"
   dependencies:
@@ -5603,17 +5513,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"re2@npm:^1.18.0":
-  version: 1.20.9
-  resolution: "re2@npm:1.20.9"
-  dependencies:
-    install-artifact-from-github: "npm:^1.3.5"
-    nan: "npm:^2.18.0"
-    node-gyp: "npm:^10.0.1"
-  checksum: 45c566e71bee8b284ed7880bdeaadcc362a89fb4a58ec11b714502f4d20422c1487d05750c8c5ee98eb0a3fbbade2917a37a07202079a8dc56e1fc64d41b01ee
-  languageName: node
-  linkType: hard
-
 "react-is@npm:^18.0.0":
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
@@ -5741,13 +5640,6 @@ __metadata:
   bin:
     resolve: bin/resolve
   checksum: 0446f024439cd2e50c6c8fa8ba77eaa8370b4180f401a96abf3d1ebc770ac51c1955e12764cde449fde3fff480a61f84388e3505ecdbab778f4bef5f8212c729
-  languageName: node
-  linkType: hard
-
-"rethinkdb-ts@npm:^2.5.4":
-  version: 2.6.0
-  resolution: "rethinkdb-ts@npm:2.6.0"
-  checksum: 8f9b2313a857a64f0427ab637d5fea675029844946ac1763876142944875f7221a0fb14539409c735260bb62ababf8408524f10a0751805e54e5cd15ba2facc1
   languageName: node
   linkType: hard
 
@@ -7036,26 +6928,5 @@ __metadata:
   version: 0.1.0
   resolution: "yocto-queue@npm:0.1.0"
   checksum: dceb44c28578b31641e13695d200d34ec4ab3966a5729814d5445b194933c096b7ced71494ce53a0e8820685d1d010df8b2422e5bf2cdea7e469d97ffbea306f
-  languageName: node
-  linkType: hard
-
-"zlib-sync@npm:^0.1.8":
-  version: 0.1.9
-  resolution: "zlib-sync@npm:0.1.9"
-  dependencies:
-    nan: "npm:^2.18.0"
-    node-gyp: "npm:latest"
-  checksum: 1c05fdc5140f4c9afb931bfca01fc9f26ddfe242eb5c8c06ffc93b53d5103f0a99e8b8048697446001eb4a92c12febd270bcb4cda3fa3de9bf822e6ba0664902
-  languageName: node
-  linkType: hard
-
-"zucc@npm:^0.1.2":
-  version: 0.1.2
-  resolution: "zucc@npm:0.1.2"
-  dependencies:
-    bindings: "npm:^1.5.0"
-    node-addon-api: "npm:^1.6.3"
-    node-gyp: "npm:latest"
-  checksum: 74e14e835823e4408d73c4dc23fd76ceee5b654729e11b2063166105ba835d27bf3d1bae0182549010b89460dcb385f1a5b3ecb2ba6b3ff7fe0ca26abd547c4a
   languageName: node
   linkType: hard

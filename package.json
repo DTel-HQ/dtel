@@ -44,7 +44,6 @@
     "discord.js": "^14.11.0",
     "i18next": "^21.10.0",
     "node-schedule": "^2.1.1",
-    "re2": "^1.18.0",
     "redis": "^5.10.0",
     "url-regex-safe": "^3.0.0",
     "utf-8-validate": "^6.0.3",
