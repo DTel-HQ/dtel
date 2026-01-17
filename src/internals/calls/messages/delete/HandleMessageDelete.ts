@@ -1,5 +1,5 @@
 import { callMessagesCache } from "@src/instances/calls";
-import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { deleteForwardedMessage } from "@src/internals/calls/messages/delete/delete-forwarded-message/DeleteForwardedMessage";
 import { Message } from "discord.js";
 

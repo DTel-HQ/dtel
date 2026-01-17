@@ -6,7 +6,7 @@ import { Message } from "discord.js";
 export const handleCallMessageUpdate = async(originalMessage: Message, updatedMessage: Message, call: CallsWithNumbers): Promise<void> => {
 	if (!call.pickedUp) return;
 
-	const messageFromCache = await callMessagesCache.find(message => message.originalMessageID === originalMessage.id);
+	const messageFromCache = callMessagesCache.find(message => message.originalMessageID === originalMessage.id);
 	if (!messageFromCache) return;
 
 	await updateForwardedMessage(updatedMessage, call, messageFromCache.forwardedMessageID);

@@ -1,4 +1,4 @@
-import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { winston } from "@src/instances/winston";
 import { doCallMessageEdit } from "@src/internals/calls/messages/update/update-forwarded-message/do-edit/DoCallMessageEdit";
 import { buildForwardedMessageOptions } from "@src/internals/calls/messages/utils/BuildForwardedMessageOptions";
