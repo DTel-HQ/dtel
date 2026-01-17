@@ -13,3 +13,6 @@ beforeEach(() => {
 });
 
 export const prismaMock = db as unknown as DeepMockProxy<PrismaClient>;
+
+// Ignore 'test suite has no tests' warning
+test.skip("Workaround", () => { true; });

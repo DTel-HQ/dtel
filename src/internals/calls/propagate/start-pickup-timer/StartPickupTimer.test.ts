@@ -9,7 +9,7 @@ import { sendMissedCallMessageToSide } from "@src/internals/calls/propagate/star
 import { sendMissedCallFromSideEmbed } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/from/send-message/SendMissedCallFromSideEmbed";
 
 jest.useFakeTimers();
-jest.mock("@src/internals/calls/get-from-db-by-id/GetCallById");
+jest.mock("@src/internals/calls/db/get-by-id/GetCallById");
 jest.mock("@src/internals/utils/get-number-locale/GetNumberLocale");
 jest.mock("@src/internals/calls/utils/remove-components-from-message/RemoveComponentsFromMessage");
 jest.mock("@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/to/send-message/SendMissedCallMessageToSide");

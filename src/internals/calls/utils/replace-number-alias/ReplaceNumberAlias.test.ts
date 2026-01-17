@@ -4,7 +4,8 @@ import * as target from "./ReplaceNumberAlias";
 jest.mock("@src/config/config");
 jest.replaceProperty(config, "aliasNumbers", {
 	"*611": "08007877678",
-});
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+} as any);
 
 it("should replace an alias", () => {
 	const result = target.replaceNumberAlias("*611");

@@ -6,22 +6,19 @@ import { advanceTo } from "jest-date-mock";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
-import { calls } from "@src/instances/calls";
 import { deleteCallById } from "@src/internals/calls/db/delete-from-db-by-id/DeleteCallById";
 import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
 import { APIMessage } from "discord.js";
 import { ActiveCalls } from "@prisma/client";
-import { propagateCall } from "@src/internals/calls/propagate/Propagate";
 import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 
 jest.mock("@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers");
 jest.mock("@src/internals/utils/generateUUID");
-jest.mock("@src/internals/calls/create-in-db/CreateInDb");
-jest.mock("@src/internals/calls/propagate/Propagate");
+jest.mock("@src/internals/calls/db/create-in-db/CreateInDb");
 jest.mock("@src/internals/calls/notify-recipients/NotifyCallRecipients");
-jest.mock("@src/internals/calls/delete-from-db-by-id/DeleteCallById");
+jest.mock("@src/internals/calls/db/delete-from-db-by-id/DeleteCallById");
 jest.mock("@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall");
-jest.mock("@src/internals/calls/propagate/Propagate");
+jest.mock("@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb");
 
 const getParticipantsFromNumbersMock = jest.mocked(getParticipantsFromNumbers);
 const generateUUIDMock = jest.mocked(generateUUID);
@@ -29,7 +26,7 @@ const notifyCallRecipientsMock = jest.mocked(notifyCallRecipients);
 const createInDbMock = jest.mocked(createCallInDb);
 const deleteCallByIdMock = jest.mocked(deleteCallById);
 const sendFailedToStartCallMock = jest.mocked(sendFailedToStartCall);
-const propagateCallMock = jest.mocked(propagateCall);
+const endMissedCallInDbMock = jest.mocked(endMissedCallInDb);
 
 let initiateTestParams: target.CallInitiationParams;
 let fromParticipant: CallParticipant;
@@ -211,14 +208,8 @@ describe("fails", () => {
 				expect(sendFailedToStartCallMock).toHaveBeenCalled();
 			});
 
-			it("should ignore failure of sendFailedToStartCall", () => {
-				sendFailedToStartCallMock.mockRejectedValue(new Error());
-
-				expect(deleteCallByIdMock).toHaveBeenCalled();
-			});
-
 			it("should delete the call", () => {
-				expect(endMissedCallInDb).toHaveBeenCalled();
+				expect(endMissedCallInDbMock).toHaveBeenCalled();
 			});
 		});
 	});
@@ -244,14 +235,6 @@ describe("successes", () => {
 
 	it("should attempt to send a notification message", async() => {
 		expect(notifyCallRecipientsMock).toHaveBeenCalled();
-	});
-
-	it("should cache the call on this shard", () => {
-		expect(calls.keys().next().value).toStrictEqual("uuid");
-	});
-
-	it("should propagate the call", () => {
-		expect(propagateCallMock).toHaveBeenCalled();
 	});
 });
 

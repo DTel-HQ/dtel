@@ -1,16 +1,15 @@
 import { ActiveCalls } from "@prisma/client";
-import { locallyCacheCall } from "@src/internals/calls/locally-cache-call/LocallyCacheCall";
 import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/NotifyCallRecipients";
 import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
 import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 import { generateUUID } from "@src/internals/utils/generateUUID";
 import { createCallInDb } from "./db/create-in-db/CreateInDb";
-import { propagateCall } from "./propagate/Propagate";
 import { getParticipantsFromNumbers } from "./utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { hasNumberExpired } from "./utils/has-number-expired/HasNumberExpired";
 import { isParticipantInCall } from "./utils/is-participant-in-call/IsParticipantInCall";
 import { parseNumber } from "./utils/parse-number/ParseNumber";
 import { replaceNumberAlias } from "./utils/replace-number-alias/ReplaceNumberAlias";
+import { startPickupTimer } from "./propagate/start-pickup-timer/StartPickupTimer";
 
 export interface CallInitiationParams {
 	toNum: string,
@@ -56,22 +55,22 @@ export const initiateCall = async({
 		},
 	});
 
-	locallyCacheCall(callInDb, dbCallRecipient, dbCallSender);
-
 	let notificationMessageId: string;
 
 	try {
 		notificationMessageId = await notifyCallRecipients(callInDb, dbCallRecipient, dbCallSender);
 	} catch (err) {
 		await sendFailedToStartCall(dbCallSender).catch(() => undefined);
-		await endMissedCallInDb(callInDb);
+		await endMissedCallInDb({
+			...callInDb,
+			from: dbCallSender,
+			to: dbCallRecipient,
+		});
 
 		throw new Error("couldntReachOtherSide");
 	}
 
-	await propagateCall(callInDb, dbCallRecipient, notificationMessageId);
-
-	// TODO: Pickup timer
+	startPickupTimer(callInDb.id, notificationMessageId);
 
 	return callInDb;
 };

@@ -8,9 +8,7 @@ import { db } from "@src/database/db";
 import { CallsWithNumbers } from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
-import { getCallByChannel } from "./calls/db/get-by-channel/GetCallByChannel";
-import { deleteCallById } from "./calls/db/delete-from-db-by-id/DeleteCallById";
-import { getCallByChannelOrEndIfNotExists } from "./calls/db/get-by-channel/GetCallByChannelOrEndIfNotExists";
+import { getCallByChannelOrEndIfASideDoesNotExist } from "./calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -82,7 +80,7 @@ abstract class Processor<T extends ChannelBasedInteraction> {
 
 	async _run(): Promise<void> {
 		if (this.commandData.useType === CommandType.call) {
-			this.call = await getCallByChannelOrEndIfNotExists(this.interaction.channelId!);
+			this.call = await getCallByChannelOrEndIfASideDoesNotExist(this.interaction.channelId!);
 
 			if (!this.call) {
 				await this.noCallFound();

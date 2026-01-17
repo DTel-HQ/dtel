@@ -1,7 +1,8 @@
 import { ActiveCalls, ArchivedCalls, Numbers } from "@prisma/client";
 import { EmbedBuilder } from "discord.js";
-import Command from "../../internals/commandProcessor";
-import { getUsername } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { getUsername } from "@src/internals/utils";
+import { getCallById } from "@src/internals/calls/db/get-by-id/GetCallById";
 
 type activeOrArchivedCallWithNumbers = (ActiveCalls | ArchivedCalls);
 
@@ -9,15 +10,7 @@ export default class CInfo extends Command {
 	async run(): Promise<void> {
 		const callID = this.interaction.options.getString("call_id", true);
 
-		let call: activeOrArchivedCallWithNumbers | null = await this.db.activeCalls.findUnique({
-			where: {
-				id: callID,
-			},
-			include: {
-				from: true,
-				to: true,
-			},
-		});
+		let call: activeOrArchivedCallWithNumbers | null = await getCallById(callID);
 
 		if (!call) {
 			call = await this.db.archivedCalls.findUnique({

@@ -3,7 +3,7 @@ import * as target from "./SendPickupNotificationEmbed";
 import { EmbedBuilder } from "discord.js";
 import { discordClientMock } from "@src/mocks/DiscordClient.test";
 
-jest.mock("@src/internals/calls/pickup/messages/picked-up-notification/embed/BuildPickupNotificationEmbed");
+jest.mock("@src/internals/calls/pickup/perform-pickup/messages/picked-up-notification/embed/BuildPickupNotificationEmbed");
 
 const buildPickupNotificationEmbedMock = jest.mocked(buildPickupNotificationEmbed);
 const embed = new EmbedBuilder();

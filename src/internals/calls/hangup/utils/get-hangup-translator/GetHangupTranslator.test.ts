@@ -6,7 +6,7 @@ beforeEach(() => {
 });
 
 it("should return the English call translations", () => {
-	const result = target.getCallTranslator("en");
+	const result = target.getHangupTranslator("en");
 
 	expect(result("descriptions.notPickedUp.thisSide")).toStrictEqual("You have ended the call.");
 });

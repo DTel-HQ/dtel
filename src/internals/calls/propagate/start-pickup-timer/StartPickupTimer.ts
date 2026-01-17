@@ -20,7 +20,6 @@ export const onPickupTimerTimeout = async(callId: ActiveCalls["id"], notificatio
 	const updatedCall = await getCallById(callId);
 	if (!updatedCall || updatedCall.pickedUp?.by) return;
 
-	// TODO: Propagate this failure - maybe needs a endCall specific function?
 	if (!updatedCall.to || !updatedCall.from) {
 		endMissedCallInDb(updatedCall).catch(() => null);
 		return;

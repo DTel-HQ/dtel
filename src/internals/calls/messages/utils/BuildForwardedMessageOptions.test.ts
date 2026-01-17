@@ -1,15 +1,15 @@
 import { CallsWithNumbers } from "@src/internals/callClient.old";
-import { buildForwardedMessageContent } from "@src/internals/calls/messages/create/send-forwarded-message/build-message/build-forwarded-message-content/BuildForwardedMessageContent";
-import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/create/send-forwarded-message/build-message/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";
 import { EmbedBuilder, Message, User } from "discord.js";
 import * as target from "./BuildForwardedMessageOptions";
+import { buildForwardedMessageContent } from "@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-content/BuildForwardedMessageContent";
+import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
 
-jest.mock("@src/internals/calls/messages/utils/build-forwarded-message-content/BuildForwardedMessageContent");
+jest.mock("@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-content/BuildForwardedMessageContent");
 jest.mock("@src/internals/utils/get-number-locale/GetNumberLocale");
-jest.mock("@src/internals/calls/messages/utils/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds");
+jest.mock("@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds");
 
 const buildForwardedMessageContentMock = jest.mocked(buildForwardedMessageContent);
 const getNumberLocaleMock = jest.mocked(getNumberLocale);

@@ -1,12 +1,12 @@
-import { ActiveCalls } from "@prisma/client";
 import { db } from "@src/database/db";
-import { calls } from "@src/instances/calls";
+import { CallsWithPotentialNumbers } from "@src/internals/calls/db/get-by-id/GetCallById";
+import { deleteCallFromCache } from "@src/redis/operations/DeleteCallFromCache";
 
-export const endMissedCallInDb = async(call: ActiveCalls): Promise<void> => {
-	calls.delete(call.id);
+export const endMissedCallInDb = async(call: CallsWithPotentialNumbers): Promise<void> => {
+	await deleteCallFromCache(call);
 
 	// Strip the extra fields from any potentially passed call type
-	call = {
+	const updatedCall = {
 		id: call.id,
 		ended: call.ended,
 		fromNum: call.fromNum,
@@ -19,7 +19,7 @@ export const endMissedCallInDb = async(call: ActiveCalls): Promise<void> => {
 
 	await db.archivedCalls.create({
 		data: {
-			...call,
+			...updatedCall,
 			ended: {
 				at: new Date(),
 				by: "missed",

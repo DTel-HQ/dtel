@@ -14,3 +14,5 @@ beforeEach(() => {
 });
 
 export const discordClientMock = client as unknown as DeepMockProxy<DTelClient>;
+// Ignore 'test suite has no tests' warning
+test.skip("Workaround", () => { true; });

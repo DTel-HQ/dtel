@@ -16,18 +16,11 @@ beforeEach(() => {
 	prismaMock.mailbox.findUnique.mockResolvedValue(mailbox);
 });
 
-it("should return empty array if no mailbox", () => {
-	prismaMock.mailbox.findUnique.mockResolvedValue(null);
-
-	const result = target.generateMailboxField(number, "en");
-
-	expect(result).resolves.toEqual([]);
-});
 
 it("should generate mailbox fields", () => {
 	prismaMock.mailbox.findUnique.mockResolvedValue(mailbox);
 
-	const result = target.generateMailboxField(number, "en");
+	const result = target.generateMailboxField(number, mailbox, "en");
 
 	expect(result).resolves.toEqual([{
 		name: "📠 Answering Machine",
@@ -40,7 +33,7 @@ it("should include mailbox full if the mailbox has too many messages", () => {
 	mailbox.messages = Array(50);
 	prismaMock.mailbox.findUnique.mockResolvedValue(mailbox);
 
-	const result = target.generateMailboxField(number, "en");
+	const result = target.generateMailboxField(number, mailbox, "en");
 
 	expect(result).resolves.toEqual([{
 		name: "📠 Answering Machine",

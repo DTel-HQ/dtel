@@ -12,7 +12,6 @@ export default {
 	// NUMBER ALIASES
 	aliasNumbers: {
 		"*611": "08007877678",
-		"*dev1": "03000000000",
 	},
 
 	// SETTINGS

@@ -1,11 +1,11 @@
 import { winston } from "@src/instances/winston";
-import { getCallByNumber } from "@src/internals/calls/db/get-by-number/GetCallByNumber";
 import { pickupCall } from "@src/internals/calls/pickup/perform-pickup/PickupCall";
 import { sendPickupInteractionReply } from "@src/internals/calls/pickup/perform-pickup/messages/interaction-reply/send/SendPickupInteractionReply";
 import { sendPickupNotificationEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/picked-up-notification/send/SendPickupNotificationEmbed";
 import { generateErrorEmbed } from "@src/internals/calls/utils/generate-error-embed/GenerateErrorEmbed";
 import { getNumberFromDbByChannel } from "@src/internals/numbers/get-from-db-by-channel/GetNumberFromDbByChannel";
 import { MessageComponentInteraction } from "discord.js";
+import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
 
 export const handlePickupCallInteraction = async(interaction: MessageComponentInteraction): Promise<void> => {
 	const number = await getNumberFromDbByChannel(interaction.channelId);
@@ -17,19 +17,13 @@ export const handlePickupCallInteraction = async(interaction: MessageComponentIn
 		return;
 	}
 
-	const callData = await getCallByNumber(number.number);
+	const callData = await getCallByChannelOrEndIfASideDoesNotExist(number.channelID);
 	if (!callData) {
 		winston.warn(`Attempted to pick up unknown call for number ${number.number}`);
 		await interaction.reply({
 			// TODO: i18n
 			embeds: [generateErrorEmbed("Couldn't find that call. Try again later.")],
 		});
-		return;
-	}
-
-	if (!callData.to || !callData.from) {
-		winston.warn(`Lost one of the sides of call ${callData.id}`);
-		// TODO: End failed call
 		return;
 	}
 

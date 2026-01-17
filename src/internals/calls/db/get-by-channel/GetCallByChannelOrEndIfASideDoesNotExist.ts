@@ -3,7 +3,7 @@ import { getCallByChannel } from "./GetCallByChannel";
 import { client } from "@src/instances/client";
 import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
-export const getCallByChannelOrEndIfNotExists = async(channelId: string): Promise<CallsWithNumbers | undefined> => {
+export const getCallByChannelOrEndIfASideDoesNotExist = async(channelId: string): Promise<CallsWithNumbers | undefined> => {
 	const potentialNumbers = await getCallByChannel(channelId);
 	if (!potentialNumbers) return undefined;
 

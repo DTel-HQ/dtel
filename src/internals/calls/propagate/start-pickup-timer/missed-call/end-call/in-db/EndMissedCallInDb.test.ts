@@ -2,23 +2,22 @@ import { DeepMockProxy, mockDeep, mockReset } from "jest-mock-extended";
 import { ActiveCalls } from "@prisma/client";
 import * as target from "./EndMissedCallInDb";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
-import { calls } from "@src/instances/calls";
 import { prismaMock } from "@src/mocks/prisma.test";
+import { deleteCallFromCache } from "@src/redis/operations/DeleteCallFromCache";
+import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 
-jest.mock("@src/instances/calls", () => ({
-	calls: mockDeep<typeof calls>(),
-}));
+jest.mock("@src/redis/operations/DeleteCallFromCache");
+const deleteCallFromCacheMock = jest.mocked(deleteCallFromCache);
 
-const callsMock = calls as DeepMockProxy<typeof calls>;
-
-beforeEach(() => {
-	mockReset(callsMock);
-});
-
-let call: ActiveCalls;
+let call: CallsWithNumbers;
 
 beforeEach(() => {
-	call = buildTestCall();
+	call = {
+		...buildTestCall(),
+		to: buildTestNumber(),
+		from: buildTestNumber(),
+	};
 });
 
 describe("when the function is called", () => {
@@ -27,7 +26,7 @@ describe("when the function is called", () => {
 	});
 
 	it("should delete the call from the calls cache", () => {
-		expect(callsMock.delete).toHaveBeenCalledWith(call.id);
+		expect(deleteCallFromCacheMock).toHaveBeenCalledWith(call.id);
 	});
 
 	it("should create an archived call", () => {

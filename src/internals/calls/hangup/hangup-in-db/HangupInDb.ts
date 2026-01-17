@@ -1,12 +1,19 @@
 import { ActiveCalls, ArchivedCalls } from "@prisma/client";
 import { db } from "@src/database/db";
+import { deleteCallFromCache } from "@src/redis/operations/DeleteCallFromCache";
 
 export const hangupInDb = async(call: ActiveCalls, endedBy: string): Promise<ArchivedCalls> => {
-	await db.activeCalls.delete({
+	const callWithNumbers = await db.activeCalls.delete({
 		where: {
 			id: call.id,
 		},
+		include: {
+			from: true,
+			to: true,
+		},
 	});
+
+	await deleteCallFromCache(callWithNumbers);
 
 	return db.archivedCalls.create({
 		data: {
