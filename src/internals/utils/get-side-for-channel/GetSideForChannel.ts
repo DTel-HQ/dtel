@@ -1,4 +1,4 @@
-import { CallsWithNumbers } from "@src/instances/calls";
+import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
 
 export function getSideForChannel(call: CallsWithNumbers, channelId: string): "to" | "from" | null {
 	if (call.to.channelID === channelId) {

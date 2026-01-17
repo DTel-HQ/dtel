@@ -1,4 +1,4 @@
-import { CallsWithNumbers } from "@src/instances/calls";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { sendForwardedMessage } from "@src/internals/calls/messages/create/send-forwarded-message/SendForwardedMessage";
 import { createCallMessageInDb } from "@src/internals/calls/messages/db/CreateCallMessageInDb";
 import { Message } from "discord.js";

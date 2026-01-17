@@ -1,5 +1,5 @@
 import { winston } from "@src/instances/winston";
-import { getCallByNumber } from "@src/internals/calls/db/get-from-db-by-number/GetCallByNumber";
+import { getCallByNumber } from "@src/internals/calls/db/get-by-number/GetCallByNumber";
 import { pickupCall } from "@src/internals/calls/pickup/perform-pickup/PickupCall";
 import { sendPickupInteractionReply } from "@src/internals/calls/pickup/perform-pickup/messages/interaction-reply/send/SendPickupInteractionReply";
 import { sendPickupNotificationEmbed } from "@src/internals/calls/pickup/perform-pickup/messages/picked-up-notification/send/SendPickupNotificationEmbed";

@@ -1,4 +1,4 @@
-import { CallsWithNumbers } from "@src/instances/calls";
+import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
 import { buildForwardedMessageContent } from "@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-content/BuildForwardedMessageContent";
 import { buildForwardedMessageFileEmbeds } from "@src/internals/calls/messages/create/send-forwarded-message/build-forwarded-message/build-forwarded-message-file-embeds/BuildForwardedMessageFileEmbeds";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";

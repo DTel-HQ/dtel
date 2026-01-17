@@ -1,7 +1,7 @@
 import { ActiveCalls, atAndBy, CallMessages, Numbers, onHold } from "@prisma/client";
 import config from "@src/config/config";
 import { db } from "@src/database/db";
-import { calls } from "@src/instances/calls";
+// import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
 import { PermissionLevel } from "@src/interfaces/commandData";
 import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
@@ -785,7 +785,7 @@ export default class CallClient implements CallsWithNumbers {
 	async endHandler(endedBy = "system - number lost"): Promise<void> {
 		CallClient.endInDB(this.id, endedBy);
 
-		calls.delete(this.id);
+		// calls.delete(this.id);
 
 		if (this.otherSideShardID) {
 			this.client.shard!.send({
@@ -848,7 +848,7 @@ export default class CallClient implements CallsWithNumbers {
 	}
 
 	pushToCollection() {
-		calls.set(this.id, this);
+		// calls.set(this.id, this);
 	}
 }
 

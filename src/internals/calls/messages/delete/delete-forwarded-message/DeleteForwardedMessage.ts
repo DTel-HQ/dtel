@@ -1,5 +1,5 @@
 import { CallMessages } from "@prisma/client";
-import { CallsWithNumbers } from "@src/instances/calls";
+import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
 import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";
 import { splitCallSidesByChannel } from "@src/internals/utils/split-sides-by-channel/SplitSidesByChannel";

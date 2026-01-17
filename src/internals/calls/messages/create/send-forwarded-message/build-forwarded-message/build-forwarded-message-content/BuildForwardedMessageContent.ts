@@ -1,5 +1,5 @@
 import config from "@src/config/config";
-import { CallsWithNumbers } from "@src/instances/calls";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { PermissionLevel } from "@src/interfaces/commandData";
 import { getPhone } from "@src/internals/calls/messages/utils/get-phone/GetPhone";
 import { isVIP } from "@src/internals/calls/notify-recipients/is-vip/isVIP";

@@ -16,10 +16,10 @@ import Constructable from "@src/interfaces/constructable";
 import DTelClient from "@src/internals/client";
 import Processor, { ChannelBasedInteraction } from "@src/internals/processor";
 import i18n, { getFixedT } from "i18next";
-import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
 import config from "@src/config/config";
 import { blacklistCache } from "@src/database/db";
+import { getCallByChannel } from "@src/internals/calls/db/get-by-channel/GetCallByChannel";
 
 export const interactionCreateHandler = async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
@@ -32,7 +32,8 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 		}));
 		return;
 	}
-	const call = calls.find(c => c.from.channelID === interaction.channelId || c.to.channelID === interaction.channelId);
+
+	const call = interaction.channelId ? await getCallByChannel(interaction.channelId) : null;
 
 	let commandName: string;
 	let toRunPath: string;

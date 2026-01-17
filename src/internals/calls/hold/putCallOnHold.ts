@@ -1,5 +1,5 @@
 import { db } from "@src/database/db";
-import { calls, CallsWithNumbers } from "@src/instances/calls";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
 export async function putCallOnHold(
 	call: CallsWithNumbers,
@@ -14,5 +14,4 @@ export async function putCallOnHold(
 			},
 		},
 	});
-	// TODO: Propagate to the other side if it is on another shard
 }

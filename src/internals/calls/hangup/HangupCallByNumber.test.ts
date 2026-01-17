@@ -1,20 +1,17 @@
 import * as target from "./HangupCallByNumber";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
-import { getCallByNumber } from "@src/internals/calls/db/get-from-db-by-number/GetCallByNumber";
+import { getCallByNumber } from "@src/internals/calls/db/get-by-number/GetCallByNumber";
 import { buildTestParticipant } from "@src/internals/calls/utils/build-test-participant/BuildTestParticipant";
 import { ReplyableInteraction } from "@src/types/ReplyableInteraction";
-import { calls, type CallsWithNumbers } from "@src/instances/calls";
+import { type CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { discordClientMock } from "@src/mocks/DiscordClient.test";
 import { User } from "discord.js";
 import { prismaMock } from "@src/mocks/prisma.test";
 
-jest.mock("@src/internals/calls/db/get-from-db-by-number/GetCallByNumber");
+jest.mock("@src/internals/calls/db/get-by-number/GetCallByNumber");
 jest.useFakeTimers();
 jest.setSystemTime(new Date(2024, 5, 2));
 
-jest.mock("@src/instances/calls", () => ({
-	calls: new Map<string, CallsWithNumbers>(),
-}));
 
 const getCallByNumberMock = jest.mocked(getCallByNumber);
 
@@ -33,9 +30,6 @@ describe("given the call exists", () => {
 	interaction.reply = jest.fn();
 	interaction.user = {} as User;
 	interaction.user.id = "user-id";
-
-	calls.set(call.id, call);
-	expect(calls.size).toBe(1);
 
 	beforeEach(() => {
 		getCallByNumberMock.mockResolvedValue(call);
@@ -80,10 +74,6 @@ describe("given the call exists", () => {
 					id: call.id,
 				},
 			});
-		});
-
-		it("should remove the call from the cache", () => {
-			expect(calls.size).toBe(0);
 		});
 	});
 });

@@ -3,7 +3,6 @@ import config from "@src/config/config";
 import { Collection } from "@discordjs/collection";
 import { APIEmbed, APIMessage, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "@src/interfaces/commandData";
-import { calls } from "@src/instances/calls";
 import { winston } from "@src/instances/winston";
 import { Logger } from "winston";
 import { db } from "@src/database/db";
@@ -266,13 +265,6 @@ class DTelClient extends Client<true> {
 		if (!this.allShardsSpawned) return -1;
 
 		return (await this.shard!.fetchClientValues("guilds.cache.size")).reduce((a, b) => (a as number) + (b as number), 0) as number;
-	}
-
-	getCall(id: string) {
-		return calls.get(id);
-	}
-	deleteCall(id: string) {
-		return calls.delete(id);
 	}
 }
 
