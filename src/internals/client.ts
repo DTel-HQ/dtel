@@ -237,10 +237,6 @@ class DTelClient extends Client<true> {
 		return true;
 	}
 
-	async shardIdForChannelId(_: string): Promise<number> {
-		throw new Error("Not implemented");
-	}
-
 	// Sends to the support guild's log channel
 	async log(message: string): Promise<APIMessage | undefined> {
 		winston.verbose(message);

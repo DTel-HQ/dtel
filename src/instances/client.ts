@@ -28,7 +28,12 @@ export const client = new DTelClient({
 		GuildInviteManager: 0,
 		GuildEmojiManager: 0,
 		GuildStickerManager: 0,
-		UserManager: 1000,
+		UserManager: 200,
+		GuildMessageManager: 200,
+		GuildMemberManager: {
+			maxSize: 200,
+			keepOverLimit: (member): boolean => member.id === client.user.id,
+		},
 	}),
 });
 
