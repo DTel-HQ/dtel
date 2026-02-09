@@ -9,7 +9,11 @@ import Console from "./internals/console";
 import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 
 // Main IPC process
-process.env.NODE_OPTIONS = `--inspect=0 -r ts-node/register --no-warnings -r tsconfig-paths/register`;
+process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
+if (process.env.NODE_ENV !== "production") {
+	process.env.NODE_OPTIONS += "--inspect=0";
+}
+
 process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;
 process.env.TS_NODE_CWD = `${__dirname}/../`;
 const sharder = new ShardingManager(`${__dirname}/dtel.ts`, {
