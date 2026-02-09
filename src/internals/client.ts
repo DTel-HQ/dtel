@@ -78,15 +78,16 @@ class DTelClient extends Client<true> {
 	}
 	async getGuild(id: string): Promise<Guild> {
 		// Not safe to cache this as we won't get its updates
-		return this.guilds.fetch({
+		return this.guilds.cache.get(id) ?? this.guilds.fetch({
 			guild: id,
 			cache: false,
 		});
 	}
 	async getChannel(id: string): Promise<Channel | null> {
 		// Not safe to cache this as we won't get its updates
-		return this.channels.fetch(id, {
+		return this.channels.cache.get(id) ?? this.channels.fetch(id, {
 			cache: false,
+			allowUnknownGuild: true,
 		});
 	}
 

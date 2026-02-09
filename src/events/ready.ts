@@ -1,6 +1,7 @@
 import DTelClient from "@src/internals/client";
 import Commands from "@src/config/commands";
 import config from "@src/config/config";
+import { winston } from "@src/instances/winston";
 
 export const readyHandler = async(client: DTelClient): Promise<void> => {
 	client.winston.info(`Ready!`);

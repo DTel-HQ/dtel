@@ -99,8 +99,8 @@ const allShardsReady = async(): Promise<void> => {
 				callDoc: call,
 				targetShard: fromShard,
 			});
-		} catch {
-			console.log(`Failed to get shard for ${call.id}`);
+		} catch (error) {
+			console.log(`Failed to get shard for ${call.id}`, error);
 			hangupInDb(call, "shard-lookup-failure").catch(() => null);
 
 			await sendFailMessageToChannel(call.from.channelID, "Failed to get shard for this call. The call will be ended.").catch(() => null);

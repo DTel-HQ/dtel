@@ -14,9 +14,10 @@ export const handleCallMessageCreate = async(
 
 	const { otherSide } = splitCallSidesByChannel(call, message.channelId);
 
-	const otherSideChannel =
-    client.channels.cache.get(otherSide.channelID) ??
-    await client.channels.fetch(otherSide.channelID).catch(() => null);
+	const otherSideChannel = await client.getChannel(otherSide.channelID).catch(error => {
+		client.winston.error(`Failed to fetch channel ${otherSide.channelID} for call ${call.id}:`, error);
+		return null;
+	});
 
 	if (!otherSideChannel) {
 		message.reply(
