@@ -1,5 +1,6 @@
-import { register } from "tsconfig-paths";
-register();
+if (process.env.NODE_ENV !== "production") {
+	require("tsconfig-paths").register();
+}
 
 import { PrismaClient } from "./database/generated/client";
 import { APITextChannel, REST, ShardClientUtil, ShardingManager } from "discord.js";
@@ -8,16 +9,18 @@ import config from "./config/config";
 import Console from "./internals/console";
 import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 import { updateCacheWithBlacklistItem } from "./redis/operations/blacklist/UpdateCacheWithBlacklistItem";
+import {register} from "module";
 
 // Main IPC process
-process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
+// process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
 if (process.env.NODE_ENV !== "production") {
-	process.env.NODE_OPTIONS += " --inspect=0";
+	process.env.NODE_OPTIONS = " --inspect=0 --expose-gc";
 }
 
-process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;
-process.env.TS_NODE_CWD = `${__dirname}/../`;
-const sharder = new ShardingManager(`${__dirname}/dtel.ts`, {
+// process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;
+// process.env.TS_NODE_CWD = `${__dirname}/../`;
+const fileName = process.env.NODE_ENV === "production" ? "dtel.js" : "dtel.ts";
+const sharder = new ShardingManager(`${__dirname}/${fileName}`, {
 	totalShards: config.shardCount,
 	token: auth.discord.token,
 });
