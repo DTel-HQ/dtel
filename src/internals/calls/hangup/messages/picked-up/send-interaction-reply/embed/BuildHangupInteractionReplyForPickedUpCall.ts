@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import config from "@src/config/config";
 import { timeSince } from "@src/internals/calls/hangup/messages/utils/TimeSince";
 import { getHangupTranslator } from "@src/internals/calls/hangup/utils/get-hangup-translator/GetHangupTranslator";

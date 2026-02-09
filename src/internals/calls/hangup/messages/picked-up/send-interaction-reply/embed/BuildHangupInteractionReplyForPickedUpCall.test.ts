@@ -2,7 +2,7 @@ import { initInternationalization } from "@src/internationalization/i18n";
 import * as target from "./BuildHangupInteractionReplyForPickedUpCall";
 import config from "@src/config/config";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 
 jest.useFakeTimers();
 

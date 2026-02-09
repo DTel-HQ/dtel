@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import * as target from "./isVIP";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 

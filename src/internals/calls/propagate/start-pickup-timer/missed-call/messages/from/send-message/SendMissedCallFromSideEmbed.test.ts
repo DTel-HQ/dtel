@@ -1,4 +1,4 @@
-import { Mailbox, Numbers } from "@prisma/client";
+import { Mailbox, Numbers } from "@src/database/generated";
 import * as target from "./SendMissedCallFromSideEmbed";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { buildTestMailbox } from "@src/internals/mailbox/build-test-mailbox/BuildTestMailbox";

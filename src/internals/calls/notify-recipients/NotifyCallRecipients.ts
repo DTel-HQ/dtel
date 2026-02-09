@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { CallParticipant } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { getCallerDisplay } from "@src/internals/calls/notify-recipients/get-caller-display/GetCallerDisplay";
 import { replaceNumberAlias } from "@src/internals/calls/utils/replace-number-alias/ReplaceNumberAlias";

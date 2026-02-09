@@ -1,0 +1,209 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/database/generated"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("MONGO_URI")
+}
+
+type numberVIP {
+  expiry DateTime @default("1970-01-01T00:00:00.000Z")
+  hidden Boolean  @default(false)
+  name   String   @default("")
+}
+
+type mailboxMessage {
+  id      String
+  from    String
+  message String
+
+  sent atAndBy
+}
+
+model Mailbox {
+  number String @id @map("_id")
+
+  autoreply String           @default(value: "Sorry, I am currently unavailable. Please call again later.")
+  receiving Boolean          @default(value: true)
+  messages  mailboxMessage[]
+
+  numberDoc Numbers?
+}
+
+type Contact {
+  name        String
+  number      String
+  description String
+}
+
+model Numbers {
+  number    String     @id @map("_id")
+  channelID String
+  guildID   String?
+  userID    String?
+  blocked   String[]
+  contacts  Contact[]
+  expiry    DateTime
+  mentions  String[]
+  vip       numberVIP?
+  waiting   Boolean    @default(false)
+  createdAt DateTime   @default(now())
+
+  fka String[] @default([])
+
+  mailbox Mailbox? @relation(fields: [number], references: [number])
+
+  outgoingCalls ActiveCalls[] @relation("to")
+  incomingCalls ActiveCalls[] @relation("from")
+
+  guild     GuildConfigs? @relation(fields: guildID, references: id)
+  phonebook Phonebook?
+  // promote   Promote?
+
+  @@unique(fields: [channelID], name: "channel")
+  @@index(fields: [guildID], name: "guild")
+  @@index(fields: [userID], name: "user")
+}
+
+// Calls
+type atAndBy {
+  at DateTime @default(now())
+  by String
+}
+
+type onHold {
+  onHold      Boolean
+  holdingSide String? // channel ID of holding side (maybe change this later)
+}
+
+model CallMessages {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  callID             String
+  forwardedMessageID String   @unique
+  originalMessageID  String   @unique
+  sentAt             DateTime
+  sender             String
+}
+
+model ActiveCalls {
+  id String @id @map("_id")
+
+  toNum   String
+  fromNum String
+
+  to   Numbers? @relation(name: "to", fields: [toNum], references: [number])
+  from Numbers? @relation(name: "from", fields: [fromNum], references: [number])
+
+  pickedUp   atAndBy?
+  randomCall Boolean  @default(false)
+  started    atAndBy
+  ended      atAndBy?
+  hold       onHold
+
+  @@index(fields: [toNum, fromNum], name: "participants")
+}
+
+model ArchivedCalls {
+  id String @id @map("_id")
+
+  toNum   String
+  fromNum String
+
+  pickedUp   atAndBy?
+  randomCall Boolean  @default(false)
+  started    atAndBy
+  ended      atAndBy
+  hold       onHold
+
+  @@index(fields: [toNum, fromNum], name: "participants")
+}
+
+model GuildConfigs {
+  id String @id @map("_id")
+
+  whitelisted Boolean @default(false)
+  locale      String  @default("en-US")
+
+  numbers Numbers[]
+  strikes Strikes[]
+}
+
+model Accounts {
+  id String @id @map("_id")
+
+  balance            Float     @default(0)
+  dailyClaimedAt     DateTime?
+  vipMonthsRemaining Int       @default(0)
+
+  strikes Strikes[]
+  Votes   Votes?
+}
+
+enum StrikeOffenderType {
+  USER
+  GUILD
+}
+
+model Strikes {
+  id       String             @id @map("_id")
+  offender String
+  reason   String
+  type     StrikeOffenderType
+
+  created atAndBy
+
+  account     Accounts     @relation(fields: [offender], references: [id])
+  guildConfig GuildConfigs @relation(fields: [offender], references: [id])
+
+  @@index(fields: [offender], name: "offender")
+}
+
+model Blacklist {
+  id     String  @id @map("_id")
+  reason String?
+}
+
+model Phonebook {
+  number      String @id @map("_id")
+  description String
+
+  numberDoc Numbers @relation(fields: [number], references: [number])
+
+  @@fulltext([description])
+}
+
+model Promote {
+  number String @id @map("_id")
+
+  renderableNumber String
+
+  // embed discordEmbed
+
+  // lastEdited   atAndBy
+  // lastPromoted atAndBy
+
+  lastPromoMsgID String?
+
+  // numberDoc Numbers @relation(fields: [number], references: [number])
+}
+
+model Votes {
+  userID String @id @map("_id")
+  count  Int    @default(0)
+
+  account Accounts @relation(fields: [userID], references: [id])
+}
+
+type discordEmbed {
+  title       String
+  description String
+  fields      discordEmbedField[]
+}
+
+type discordEmbedField {
+  name  String
+  value String
+  n     Int
+}

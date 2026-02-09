@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { ActionRowBuilder, ButtonBuilder, APIEmbed, ButtonStyle } from "discord.js";
 import Command from "../../internals/commandProcessor";
 

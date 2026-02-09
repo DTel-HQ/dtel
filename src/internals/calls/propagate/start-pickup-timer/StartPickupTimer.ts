@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { winston } from "@src/instances/winston";
 import { getCallById } from "@src/internals/calls/db/get-by-id/GetCallById";
 import { endMissedCall } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/EndMissedCall";

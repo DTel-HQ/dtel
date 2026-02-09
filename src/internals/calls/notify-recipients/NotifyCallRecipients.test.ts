@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import * as target from "./NotifyCallRecipients";
 import { CallParticipant } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";

@@ -1,6 +1,6 @@
 import { CallParticipant } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import * as target from "./LogMissedCall";
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestParticipant } from "@src/internals/calls/utils/build-test-participant/BuildTestParticipant";
 import { discordClientMock } from "@src/mocks/DiscordClient.test";

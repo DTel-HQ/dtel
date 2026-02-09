@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import config from "@src/config/config";
 import { client } from "@src/instances/client";
 import { CallParticipant } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";

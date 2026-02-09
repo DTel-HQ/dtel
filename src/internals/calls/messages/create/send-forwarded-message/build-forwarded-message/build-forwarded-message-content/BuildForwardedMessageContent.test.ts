@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import config from "@src/config/config";
 import { PermissionLevel } from "@src/interfaces/commandData";
 import { CallsWithNumbers } from "@src/internals/callClient.old";

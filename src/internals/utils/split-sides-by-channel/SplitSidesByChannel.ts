@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { CallsWithNumbers } from "@src/internals/callClient.old";
 
 interface SplitCallSidesResult {

@@ -1,5 +1,5 @@
 import * as target from "./GenerateMailboxField";
-import { Mailbox, Numbers } from "@prisma/client";
+import { Mailbox, Numbers } from "@src/database/generated";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { buildTestMailbox } from "@src/internals/mailbox/build-test-mailbox/BuildTestMailbox";
 import { initInternationalization } from "@src/internationalization/i18n";

@@ -1,4 +1,4 @@
-import { ActiveCalls, GuildConfigs, Numbers } from "@prisma/client";
+import { ActiveCalls, GuildConfigs, Numbers } from "@src/database/generated";
 import { db } from "@src/database/db";
 
 export type CallParticipant = Numbers & {

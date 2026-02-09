@@ -1,11 +1,11 @@
 /* eslint-disable arrow-body-style */
 // Stuff that's too specific to but put on the client, but still used in multiple places
 
-import { Accounts, Numbers } from "@prisma/client";
 import dayjs from "dayjs";
 import { db } from "@src/database/db";
 import { User } from "discord.js";
 import { parseNumber as parseNumberFunc } from "@src/internals/calls/utils/parse-number/ParseNumber";
+import { Accounts, Numbers } from "@src/database/generated";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const parseNumber = parseNumberFunc;

@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 
 export const getMentionsString = (mentions: Numbers["mentions"]): string => mentions.map(mention => idOrMentionToMention(mention)).join(" ");
 

@@ -1,6 +1,6 @@
 // This command's embed editing kinda spiraled out of control
 // Feel free to refactor
-import { Accounts } from "@prisma/client";
+import { Accounts } from "@src/database/generated";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, User } from "discord.js";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";

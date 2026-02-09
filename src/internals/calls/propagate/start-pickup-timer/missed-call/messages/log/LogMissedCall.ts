@@ -1,4 +1,4 @@
-import { ActiveCalls, Numbers } from "@prisma/client";
+import { ActiveCalls, Numbers } from "@src/database/generated";
 import { client } from "@src/instances/client";
 import { APIMessage } from "discord.js";
 

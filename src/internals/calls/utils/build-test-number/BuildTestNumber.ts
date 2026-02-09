@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 
 export const buildTestNumber = (details?: Partial<Numbers>): Numbers => ({
 	number: "03010000001",

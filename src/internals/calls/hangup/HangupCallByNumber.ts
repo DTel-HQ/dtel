@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { getCallByNumber } from "@src/internals/calls/db/get-by-number/GetCallByNumber";
 import { hangupInDb } from "@src/internals/calls/db/hangup-in-db/HangupInDb";
 import { sendHangupInteractionReplyForPickedUpCall } from "@src/internals/calls/hangup/messages/picked-up/send-interaction-reply/SendHangupInteractionReplyForPickedUpCall";

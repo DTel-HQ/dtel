@@ -1,7 +1,7 @@
 import { initInternationalization } from "@src/internationalization/i18n";
 import * as target from "./MissedCallFromSideButtons";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType } from "discord.js";
-import { Mailbox, Numbers } from "@prisma/client";
+import { Mailbox, Numbers } from "@src/database/generated";
 import { buildTestMailbox } from "@src/internals/mailbox/build-test-mailbox/BuildTestMailbox";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 

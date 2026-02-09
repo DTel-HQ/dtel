@@ -1,4 +1,4 @@
-import { CallMessages } from "@prisma/client";
+import { CallMessages } from "@src/database/generated";
 import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";

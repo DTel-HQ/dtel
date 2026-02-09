@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 
 export const buildTestCall = (details?: Partial<ActiveCalls>): ActiveCalls => ({
 	id: "call_id",

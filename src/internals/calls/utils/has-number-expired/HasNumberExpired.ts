@@ -1,3 +1,3 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 
 export const hasNumberExpired = (number: Numbers) => number.expiry < new Date();

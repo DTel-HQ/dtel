@@ -1,5 +1,5 @@
 // TODO: Refactor this long long long file
-import { Numbers, Phonebook } from "@prisma/client";
+import { Numbers, Phonebook } from "@src/database/generated";
 import {
 	ActionRowBuilder,
 	ButtonBuilder,

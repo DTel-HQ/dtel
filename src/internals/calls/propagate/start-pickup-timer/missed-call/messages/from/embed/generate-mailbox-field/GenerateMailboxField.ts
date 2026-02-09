@@ -1,4 +1,4 @@
-import { Mailbox, Numbers } from "@prisma/client";
+import { Mailbox, Numbers } from "@src/database/generated";
 import { getCallTranslator } from "@src/internals/calls/utils/get-call-translator/GetCallTranslator";
 import { EmbedField } from "discord.js";
 

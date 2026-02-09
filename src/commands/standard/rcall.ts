@@ -1,5 +1,5 @@
 import Command from "@src/internals/commandProcessor";
-import { Numbers, Prisma } from "@prisma/client";
+import { Numbers, Prisma } from "@src/database/generated";
 import CallCommand from "./call";
 
 export default class RCall extends Command {

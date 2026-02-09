@@ -39,7 +39,7 @@
     "interpreter": "ts-node"
   },
   "dependencies": {
-    "@prisma/client": "^4.14.1",
+    "@prisma/client": "6.19.2",
     "dayjs": "^1.11.7",
     "discord-api-types": "^0.37.38",
     "discord.js": "^14.11.0",
@@ -70,7 +70,7 @@
     "jest-date-mock": "^1.0.8",
     "jest-mock-extended": "^3.0.5",
     "nodemon": "^3.0.3",
-    "prisma": "^4.14.1",
+    "prisma": "6.19.2",
     "prisma-erd-generator": "^1.5.4",
     "safe-regex": "^2.1.1",
     "transformer": "^1.2.8",
@@ -78,6 +78,6 @@
     "ts-jest-resolver": "^2.0.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.0.4"
+    "typescript": "5.9.3"
   }
 }

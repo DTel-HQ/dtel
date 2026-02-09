@@ -1,4 +1,4 @@
-import { CallMessages } from "@prisma/client";
+import { CallMessages } from "@src/database/generated";
 import { db } from "@src/database/db";
 import { callMessagesCache } from "@src/instances/calls";
 

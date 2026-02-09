@@ -1,7 +1,7 @@
-// import { ActiveCalls, CallMessages, Numbers } from "@prisma/client";
+// import { ActiveCalls, CallMessages, Numbers } from "@src/database/generated";
 // import { Collection } from "discord.js";
 
-import { CallMessages } from "@prisma/client";
+import { CallMessages } from "@src/database/generated";
 import { Collection } from "discord.js";
 
 export const callMessagesCache = new Collection<string, CallMessages>();

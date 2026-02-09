@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { db } from "@src/database/db";
 import { CallsWithNumbers } from "@src/internals/callClient.old";
 import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";

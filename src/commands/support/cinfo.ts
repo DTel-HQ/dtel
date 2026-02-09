@@ -1,4 +1,4 @@
-import { ActiveCalls, ArchivedCalls, Numbers } from "@prisma/client";
+import { ActiveCalls, ArchivedCalls, Numbers } from "@src/database/generated";
 import { EmbedBuilder } from "discord.js";
 import Command from "@src/internals/commandProcessor";
 import { getUsername } from "@src/internals/utils";

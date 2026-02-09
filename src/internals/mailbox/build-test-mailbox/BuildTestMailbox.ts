@@ -1,4 +1,4 @@
-import { Mailbox } from "@prisma/client";
+import { Mailbox } from "@src/database/generated";
 
 export const buildTestMailbox = (details?: Partial<Mailbox>): Mailbox => ({
 	number: "03010000001",

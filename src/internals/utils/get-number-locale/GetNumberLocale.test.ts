@@ -1,6 +1,6 @@
 import * as target from "./GetNumberLocale";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
-import { GuildConfigs, Numbers } from "@prisma/client";
+import { GuildConfigs, Numbers } from "@src/database/generated";
 import { prismaMock } from "@src/mocks/prisma.test";
 
 let number: Numbers;

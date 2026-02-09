@@ -14,7 +14,7 @@
 			]
 		},
 		"baseUrl": ".",
-		"outDir": "build"
+		"noEmit": true
 	},
 
 	"include": [

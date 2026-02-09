@@ -1,4 +1,4 @@
-import { ActiveCalls, Mailbox, Numbers, Phonebook } from "@prisma/client";
+import { ActiveCalls, Mailbox, Numbers, Phonebook } from "@src/database/generated";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";
 import { PermissionLevel } from "../../interfaces/commandData";

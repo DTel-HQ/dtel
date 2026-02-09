@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { client } from "@src/instances/client";
 import { missedCallToSideEmbed } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/messages/to/embed/MissedCallToSideEmbed";
 

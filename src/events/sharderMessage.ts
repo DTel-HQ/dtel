@@ -1,8 +1,6 @@
-import { ActiveCalls } from "@prisma/client";
 import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";
 import { allShardsReadyHandler } from "./allShardsReady";
-import call from "@src/commands/standard/call";
 import { startOngoingCallReminder } from "@src/internals/calls/ongoing-call-reminder/StartOngoingCallReminder";
 import { CallsWithNumbers } from "@src/internals/callClient.old";
 import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";

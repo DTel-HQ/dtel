@@ -1,5 +1,5 @@
-import { ActiveCalls, ArchivedCalls } from "@prisma/client";
 import { db } from "@src/database/db";
+import { ActiveCalls, ArchivedCalls } from "@src/database/generated";
 import { deleteCallFromCache } from "@src/redis/operations/DeleteCallFromCache";
 
 export const hangupInDb = async(call: ActiveCalls, endedBy: string): Promise<ArchivedCalls> => {

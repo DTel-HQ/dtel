@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { ReplyableInteraction } from "@src/types/ReplyableInteraction";
 import { APIEmbed, EmbedBuilder, InteractionResponse } from "discord.js";
 import { getHangupTranslator } from "@src/internals/calls/hangup/utils/get-hangup-translator/GetHangupTranslator";

@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { db } from "@src/database/db";
 import { CallsWithPotentialNumbers } from "@src/internals/calls/db/get-by-id/GetCallById";
 

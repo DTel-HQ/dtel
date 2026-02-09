@@ -1,4 +1,4 @@
-import { ActiveCalls, Numbers } from "@prisma/client";
+import {Numbers, ActiveCalls} from "@src/database/generated";
 
 
 export type CallsWithNumbers = ActiveCalls & {

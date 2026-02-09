@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { isVIP } from "@src/internals/calls/notify-recipients/is-vip/isVIP";
 
 export const getCallerDisplay = (details: Numbers): string => {

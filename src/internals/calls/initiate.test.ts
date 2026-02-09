@@ -9,7 +9,7 @@ import { notifyCallRecipients } from "@src/internals/calls/notify-recipients/Not
 import { deleteCallById } from "@src/internals/calls/db/delete-from-db-by-id/DeleteCallById";
 import { sendFailedToStartCall } from "@src/internals/calls/notify-recipients/message-payload/failed-to-start-call/send-embed/SendFailedToStartCall";
 import { APIMessage } from "discord.js";
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { endMissedCallInDb } from "@src/internals/calls/propagate/start-pickup-timer/missed-call/end-call/in-db/EndMissedCallInDb";
 
 jest.mock("@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers");

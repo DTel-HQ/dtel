@@ -1,4 +1,4 @@
-import { StrikeOffenderType } from "@prisma/client";
+import { StrikeOffenderType } from "@src/database/generated";
 import { PermissionLevel } from "../../interfaces/commandData";
 import Command from "../../internals/commandProcessor";
 import { randomString } from "../../internals/utils";

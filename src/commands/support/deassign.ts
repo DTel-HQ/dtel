@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import Command from "../../internals/commandProcessor";
 import { parseNumber } from "../../internals/utils";
 

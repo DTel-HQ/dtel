@@ -1,7 +1,7 @@
-import { Accounts } from "@prisma/client";
 import { APIEmbed, User } from "discord.js";
-import Command from "../../internals/commandProcessor";
-import { formatBalance, getAccount } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { formatBalance, getAccount } from "@src/internals/utils";
+import { Accounts } from "@src/database/generated";
 
 export default class Balance extends Command {
 	async run(): Promise<void> {

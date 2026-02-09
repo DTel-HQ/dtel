@@ -1,7 +1,7 @@
 import { register } from "tsconfig-paths";
 register();
 
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from "./database/generated/client";
 import { APITextChannel, REST, ShardClientUtil, ShardingManager } from "discord.js";
 import auth from "./config/auth";
 import config from "./config/config";
@@ -11,7 +11,7 @@ import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 // Main IPC process
 process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
 if (process.env.NODE_ENV !== "production") {
-	process.env.NODE_OPTIONS += "--inspect=0";
+	process.env.NODE_OPTIONS += " --inspect=0";
 }
 
 process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;

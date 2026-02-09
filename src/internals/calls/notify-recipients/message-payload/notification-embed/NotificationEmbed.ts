@@ -1,4 +1,4 @@
-import { ActiveCalls } from "@prisma/client";
+import { ActiveCalls } from "@src/database/generated";
 import { getCallTranslator } from "@src/internals/calls/utils/get-call-translator/GetCallTranslator";
 import { CallParticipant } from "@src/internals/calls/utils/get-participants-from-numbers/GetParticipantsFromNumbers";
 import { EmbedBuilder } from "discord.js";

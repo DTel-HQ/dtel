@@ -6,7 +6,7 @@ import { PermissionLevel } from "@src/interfaces/commandData";
 import { winston } from "@src/instances/winston";
 import { Logger } from "winston";
 import { db } from "@src/database/db";
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import { fetchNumber } from "./utils";
 import dayjs from "dayjs";
 import { parseNumber } from "./calls/utils/parse-number/ParseNumber";

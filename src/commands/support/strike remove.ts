@@ -1,4 +1,4 @@
-import { Strikes } from "@prisma/client";
+import { Strikes } from "@src/database/generated";
 import Command from "../../internals/commandProcessor";
 import { getUsername } from "../../internals/utils";
 

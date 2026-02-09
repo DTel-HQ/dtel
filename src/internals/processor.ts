@@ -3,12 +3,12 @@ import { CommandInteraction, InteractionResponse, MessageComponentInteraction, M
 import DTelClient from "./client";
 import config from "@src/config/config";
 import CommandDataInterface, { CommandType, PermissionLevel } from "@src/interfaces/commandData";
-import { Numbers, Accounts, Mailbox } from "@prisma/client";
 import { db } from "@src/database/db";
 import { CallsWithNumbers } from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 import { getCallByChannelOrEndIfASideDoesNotExist } from "./calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
+import { Numbers, Accounts, Mailbox } from "@src/database/generated";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 

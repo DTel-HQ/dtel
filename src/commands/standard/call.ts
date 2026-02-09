@@ -1,13 +1,12 @@
 import Command from "@src/internals/commandProcessor";
-import { default as CallClient, CallsWithNumbers } from "@src/internals/callClient.old";
 import { ActionRowBuilder, APIEmbed, BaseMessageOptions, ButtonBuilder, ButtonStyle, ChatInputCommandInteraction, EmbedBuilder, MessageComponentInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
 import { getFixedT } from "i18next";
 import { formatBalance, formatDate, upperFirst } from "@src/internals/utils";
 import { client } from "@src/instances/client";
-import { ActiveCalls, Numbers } from "@prisma/client";
 import config from "@src/config/config";
 import { getCallTranslator } from "@src/internals/calls/utils/get-call-translator/GetCallTranslator";
 import { initiateCall } from "@src/internals/calls/initiate";
+import { Numbers, ActiveCalls } from "@src/database/generated";
 
 export default class Call extends Command {
 	async run(): Promise<void> {

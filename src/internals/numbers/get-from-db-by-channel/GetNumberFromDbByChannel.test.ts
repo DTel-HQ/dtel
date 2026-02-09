@@ -1,4 +1,4 @@
-import { Numbers } from "@prisma/client";
+import { Numbers } from "@src/database/generated";
 import * as target from "./GetNumberFromDbByChannel";
 import { prismaMock } from "@src/mocks/prisma.test";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";

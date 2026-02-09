@@ -1,4 +1,4 @@
-import { ActiveCalls, atAndBy, CallMessages, Numbers, onHold } from "@prisma/client";
+import { ActiveCalls, atAndBy, CallMessages, Numbers, onHold } from "@src/database/generated";
 import config from "@src/config/config";
 import { db } from "@src/database/db";
 // import { calls } from "@src/instances/calls";
