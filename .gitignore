@@ -16,3 +16,4 @@ src/config/config-*.ts
 .vscode/
 
 Git-Exclude/
+.yarn
