@@ -4,6 +4,6 @@ import { FourOneOneSearch } from "./411-selector";
 
 export default class Call411SearchNext extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
-		FourOneOneSearch.exit(this.interaction);
+		await FourOneOneSearch.exit(this.interaction);
 	}
 }

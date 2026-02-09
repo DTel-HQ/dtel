@@ -25,5 +25,5 @@ export const messageCreateHandler = async(client: DTelClient, message: Message):
 
 	if (call.hold.onHold) return;
 
-	handleCallMessageCreate(message, call);
+	await handleCallMessageCreate(message, call);
 };

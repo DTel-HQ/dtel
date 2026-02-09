@@ -4,7 +4,7 @@ import ComponentProcessor from "@src/internals/componentProcessor";
 export default class Call411EditDeleteConfirm extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {
 		if (this.interaction.message.interaction?.user.id != this.interaction.user.id) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				content: "❌ You can't use this menu as you didn't open it.",
 			});

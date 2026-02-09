@@ -24,7 +24,7 @@ export default class Deassign extends Command {
 		}
 
 		if (!number) {
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [this.client.errorEmbed("Couldn't find that number.")],
 			});
 			return;
@@ -35,13 +35,13 @@ export default class Deassign extends Command {
 
 			if (res === false) throw new Error();
 		} catch {
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [this.client.errorEmbed("Couldn't delete that number.")],
 			});
 			return;
 		}
 
-		this.interaction.editReply({
+		await this.interaction.editReply({
 			embeds: [{
 				color: this.config.colors.success,
 				author: {

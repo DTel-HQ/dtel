@@ -20,6 +20,6 @@ export default class MailboxSendInitiate extends ComponentProcessor<ButtonIntera
 				]),
 			]);
 
-		this.interaction.showModal(modal);
+		await this.interaction.showModal(modal);
 	}
 }

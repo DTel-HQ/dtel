@@ -3,6 +3,6 @@ import ModalProcessor from "@src/internals/modalProcessor";
 
 export default class Call411VIPCustomNameModal extends ModalProcessor {
 	async run(): Promise<void> {
-		FourOneOneVIP.customNameModalSubmit(this.interaction);
+		await FourOneOneVIP.customNameModalSubmit(this.interaction);
 	}
 }

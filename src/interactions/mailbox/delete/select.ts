@@ -11,7 +11,7 @@ export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuIn
 		// See if the message actually exists
 		const message = mailbox.messages.find(m => m.id === this.interaction.values[0]);
 		if (!message) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("That message doesn't exist!")],
 				ephemeral: true,
 			});
@@ -27,7 +27,7 @@ export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuIn
 			.setPlaceholder(selectedMessageContent)
 			.setDisabled(true);
 
-		this.interaction.message?.edit({
+		await this.interaction.message?.edit({
 			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([selector])],
 		});
 
@@ -43,7 +43,7 @@ export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuIn
 			},
 		});
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: 0x00FF00,
 				title: "📭 Message Deleted",

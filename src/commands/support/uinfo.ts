@@ -82,6 +82,6 @@ export default class UInfo extends Command {
 			inline: true,
 		}];
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 	}
 }

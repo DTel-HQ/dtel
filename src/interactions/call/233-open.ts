@@ -42,7 +42,7 @@ export default class TwoThreeThreeOpenModalButton extends MessageComponentProces
 		}
 
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			ephemeral: true,
 			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
 				new StringSelectMenuBuilder()

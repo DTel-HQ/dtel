@@ -3,7 +3,7 @@ import { winston } from "@src/instances/winston";
 import { allShardsReadyHandler } from "./allShardsReady";
 import { startOngoingCallReminder } from "@src/internals/calls/ongoing-call-reminder/StartOngoingCallReminder";
 import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";
-import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
 export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
@@ -41,13 +41,13 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 		// }
 
 		case "allShardsSpawned": {
-			allShardsReadyHandler(client);
+			await allShardsReadyHandler(client);
 			break;
 		}
 
 		case "resume": {
 			if (msg.shardID === Number(process.env.SHARDS)) {
-				allShardsReadyHandler(client);
+				await allShardsReadyHandler(client);
 				winston.info("Received all clear for resume! Starting calls...");
 			}
 			break;
@@ -92,7 +92,7 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 
 			winston.info(`Resetting call reminder and cache for call ID: ${callDoc.id}`);
 
-			
+
 			startOngoingCallReminder(callDoc);
 			await updateCacheWithCall(callDoc);
 		}

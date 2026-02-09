@@ -14,7 +14,7 @@ export default class StrikeRemove extends Command {
 				},
 			});
 		} catch {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("Strike could not be removed (make sure it exists).")],
 			});
 			return;
@@ -31,7 +31,7 @@ export default class StrikeRemove extends Command {
 
 		const offender = await this.client.resolveGuildChannelNumberUser(strike.offender);
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				title: "✅ Strike removed",

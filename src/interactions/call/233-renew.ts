@@ -14,7 +14,7 @@ export default class TwoThreeThreeRenewModal extends MessageComponentProcessor<S
 		const cost = this.config.renewalRate * amount * (monthYear === "y" ? 12 : 1);
 
 		if (cost > this.account!.balance) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("twoThreeThree.cantAffordAfterSelector"))],
 			});
 			return;
@@ -45,7 +45,7 @@ export default class TwoThreeThreeRenewModal extends MessageComponentProcessor<S
 
 		const amountOfTimeDisplay = this.genericT(monthYear === "m" ? "month" : "year", { count: amount });
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.receipt,
 				author: {

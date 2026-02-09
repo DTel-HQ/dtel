@@ -7,11 +7,12 @@ import { winston } from "./instances/winston";
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 initInternationalization();
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 prepareClient();
 
 process.on("message", msg => SharderMessageEvent(msg as Record<string, unknown>));
 
-const handleFatalError = async(error: unknown, type: "exception" | "rejection"): void => {
+const handleFatalError = async(error: unknown, type: "exception" | "rejection"): Promise<void> => {
 	const err = error instanceof Error ?
 		error :
 		new Error(typeof error === "string" ? error : JSON.stringify(error));

@@ -12,7 +12,7 @@ export default class MailboxClearConfirm extends ComponentProcessor<ButtonIntera
 			},
 		});
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				title: "📪 Cleared!",

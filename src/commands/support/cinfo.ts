@@ -21,7 +21,7 @@ export default class CInfo extends Command {
 		}
 
 		if (!call) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("Couldn't find a call with that ID")],
 			});
 			return;
@@ -78,7 +78,7 @@ export default class CInfo extends Command {
 				inline: false,
 			}]);
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 	}
 }
 

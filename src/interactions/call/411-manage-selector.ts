@@ -9,20 +9,20 @@ export default class Call411EditSelectorSelect extends MessageComponentProcessor
 
 		switch (selected) {
 			case "add": {
-				FourOneOneEdit.handleAddInteraction(this.interaction);
+				await FourOneOneEdit.handleAddInteraction(this.interaction);
 				break;
 			}
 			case "edit": {
-				FourOneOneEdit.handleEditInteraction(this.interaction);
+				await FourOneOneEdit.handleEditInteraction(this.interaction);
 				break;
 			}
 			case "delete": {
-				FourOneOneEdit.handleDeleteInteraction(this.interaction);
+				await FourOneOneEdit.handleDeleteInteraction(this.interaction);
 				break;
 			}
 			case "back": {
-				this.interaction.deferUpdate();
-				this.interaction.message!.edit(fourOneOneMainMenu);
+				await this.interaction.deferUpdate();
+				await this.interaction.message!.edit(fourOneOneMainMenu);
 				break;
 			}
 		}

@@ -27,7 +27,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 	const t = getFixedT(interaction.locale, "events.interactionCreate");
 
 	if (await isBlacklisted(interaction.user.id)) {
-		interaction.reply(i18n.t("errors.blacklisted", {
+		await interaction.reply(i18n.t("errors.blacklisted", {
 			lng: interaction.locale,
 		}));
 		return;
@@ -50,7 +50,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 			commandData = cmd;
 
 			if (commandData.notExecutableInCall && call) {
-				interaction.reply({
+				await interaction.reply({
 					embeds: [client.errorEmbed(i18n.t("errors.notExecutableInCall"))],
 				});
 				return;
@@ -97,13 +97,13 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 			const typedInteraction = interaction as MessageComponentInteraction|ModalSubmitInteraction;
 
 			if (interaction.type === InteractionType.ModalSubmit && interaction.message?.interaction && interaction.message?.interaction?.user.id != interaction.user.id) {
-				interaction.reply(t("errors.wrongUser"));
+				await interaction.reply(t("errors.wrongUser"));
 				return;
 			}
 
 			// Interaction expiry after 2 minutes
 			if (typedInteraction.message && (Date.now() - SnowflakeUtil.timestampFrom(typedInteraction.message.id)) > (2 * 60 * 1000)) {
-				interaction.reply({
+				await interaction.reply({
 					content: i18n.t("events.interactionCreate.errors.expiredInteraction", { lng: interaction.locale }),
 					ephemeral: true,
 				});
@@ -113,7 +113,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 
 			const split = typedInteraction.customId.split("-");
 			if (split.length < 2) {
-				interaction.reply({
+				await interaction.reply({
 					embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
 					ephemeral: true,
 				});
@@ -167,7 +167,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 
 	commandData = commandData!; // It definitely exists if it got this far
 	if (commandData.useType === CommandType.call && !call) {
-		interaction.reply({
+		await interaction.reply({
 			embeds: [client.errorEmbed(i18n.t("errors.onlyExecutableInCall"))],
 		});
 		return;
@@ -188,7 +188,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 		}
 
 		client.winston.error(`Cannot process interaction ${toRunPath.split("/").pop()} for/from command: ${commandName!}`);
-		interaction.reply(":x: Interaction not yet implemented.");
+		await interaction.reply(":x: Interaction not yet implemented.");
 		return;
 	}
 
@@ -200,25 +200,25 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 			switch (permissionLevel) {
 				case PermissionLevel.maintainer: {
 					if (userPermissions != PermissionLevel.maintainer) {
-						processorClass.notMaintainer();
+						await processorClass.notMaintainer();
 						return;
 					}
 					break;
 				}
 				case PermissionLevel.customerSupport: {
 					if (userPermissions as number < PermissionLevel.customerSupport) {
-						processorClass.permCheckFail();
+						await processorClass.permCheckFail();
 						return;
 					}
 					if (interaction.guildId !== config.supportGuild.id && !config.devMode) {
-						processorClass.notInSupportGuild();
+						await processorClass.notInSupportGuild();
 						return;
 					}
 					break;
 				}
 				case PermissionLevel.serverAdmin: {
 					if (!(interaction.member!.permissions as PermissionsBitField).has(PermissionsBitField.Flags.ManageGuild)) {
-						processorClass.permCheckFail();
+						await processorClass.permCheckFail();
 						return;
 					}
 					break;
@@ -226,11 +226,11 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 			}
 		}
 
-		processorClass._run();
+		await processorClass._run();
 	} catch (_err) {
 		const err = _err as Error;
 		winston.error(`Error occurred whilst executing interaction for/from command: ${commandName!}`, err.stack);
-		interaction.reply({
+		await interaction.reply({
 			embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
 		});
 	}

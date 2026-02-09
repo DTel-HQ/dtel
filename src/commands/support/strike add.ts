@@ -8,10 +8,10 @@ export default class StrikeAdd extends Command {
 		const offender = this.interaction.options.getString("offender", true);
 
 		if (offender === this.interaction.user.id) {
-			this.interaction.reply(`>fire ${this.interaction.user.id}`);
+			await this.interaction.reply(`>fire ${this.interaction.user.id}`);
 			return;
 		} else if (offender === this.config.supportGuild.id) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds:	[{
 					color: this.config.colors.error,
 					title: "Turning against us?",
@@ -25,14 +25,14 @@ export default class StrikeAdd extends Command {
 
 		if (possibilities.user) {
 			if (possibilities.user.bot) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [this.client.errorEmbed("Do not try to strike my brothers!", { title: "❌ User is a bot" })],
 				});
 				return;
 			}
 
 			if (await this.client.getPerms(possibilities.user.id) as number >= PermissionLevel.customerSupport) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [this.client.errorEmbed("You can't get rid of someone that easily...", { title: "❌ Unfair competition" })],
 				});
 				return;
@@ -54,7 +54,7 @@ export default class StrikeAdd extends Command {
 		}
 
 		if (!idToStrike || !type) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("ID could not be resolved to a number, server, user or channel.")],
 			});
 			return;
@@ -88,7 +88,7 @@ export default class StrikeAdd extends Command {
 			}).catch(() => null);
 		}
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				title: "✅ User stricken",

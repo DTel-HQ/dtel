@@ -48,7 +48,7 @@ export const client = new DTelClient({
 	},
 });
 
-export const prepareClient = (): void => {
+export const prepareClient = async(): Promise<void> => {
 	client.on("ready", () => readyHandler(client));
 
 	client.on("messageCreate", (msg: Message) => messageCreateHandler(client, msg));
@@ -60,6 +60,6 @@ export const prepareClient = (): void => {
 
 	client.on("typingStart", (typing: Typing) => typingStartHandler(client, typing));
 
-	client.login(process.env.TOKEN);
+	await client.login(process.env.TOKEN);
 };
 

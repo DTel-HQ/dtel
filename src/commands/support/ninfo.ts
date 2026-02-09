@@ -29,7 +29,7 @@ export default class NInfo extends Command {
 		}
 
 		if (!number) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Couldn't find that number.")],
 			});
@@ -48,7 +48,7 @@ export default class NInfo extends Command {
 		// Get the channel details
 		const channel = await this.client.getChannel(number.channelID).catch(() => null) as TextBasedChannel;
 		if (!channel) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("The channel associated with that number couldn't be found.")],
 			});
@@ -149,7 +149,7 @@ export default class NInfo extends Command {
 			inline: false,
 		}];
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 
 		// TODO: 2nd page extra info
 	}

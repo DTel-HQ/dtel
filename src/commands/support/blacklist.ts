@@ -13,14 +13,14 @@ export default class Blacklist extends Command {
 
 		if (possibilities.user) {
 			if (possibilities.user.bot) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [this.client.errorEmbed("Do not try to blacklist my brothers!", { title: "❌ User is a bot" })],
 				});
 				return;
 			}
 
 			if (await this.client.getPerms(possibilities.user.id) as number >= PermissionLevel.customerSupport) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [this.client.errorEmbed("You can't get rid of someone that easily...", { title: "❌ Unfair competition" })],
 					ephemeral: true,
 				});
@@ -36,7 +36,7 @@ export default class Blacklist extends Command {
 		}
 
 		if (!idToBlacklist) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("ID could not be resolved to a number, server, user or channel.")],
 				ephemeral: true,
 			});
@@ -44,12 +44,12 @@ export default class Blacklist extends Command {
 		}
 
 		if (idToBlacklist === this.interaction.user.id) {
-			this.interaction.reply({ content: `You dumb :b:oi, don't blacklist yourself!`, ephemeral: true });
+			await this.interaction.reply({ content: `You dumb :b:oi, don't blacklist yourself!`, ephemeral: true });
 			return;
 		}
 
 		if (idToBlacklist === this.config.supportGuild.id) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds:	[{
 					color: this.config.colors.error,
 					title: "Turning against us?",
@@ -93,7 +93,7 @@ export default class Blacklist extends Command {
 
 			embed.setTitle(`Added ${possibilities.user ? "user" : "guild"} to the blacklist.`);
 			if (possibilities.guild) {
-				possibilities.guild.leave();
+				await possibilities.guild.leave();
 			}
 			await this.db.numbers.deleteMany({
 				where: {
@@ -130,6 +130,6 @@ export default class Blacklist extends Command {
 			}).catch(() => null);
 		}
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 	}
 }

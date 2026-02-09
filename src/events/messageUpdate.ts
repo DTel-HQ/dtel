@@ -11,5 +11,5 @@ export const messageUpdateHandler = async(client: DTelClient, before: Message, a
 	const call = await getCallByChannelOrEndIfASideDoesNotExist(after.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	handleCallMessageUpdate(before, after, call);
+	await handleCallMessageUpdate(before, after, call);
 };

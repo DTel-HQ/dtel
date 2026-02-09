@@ -4,7 +4,7 @@ import ModalProcessor from "@src/internals/modalProcessor";
 
 export default class Call411EditAddModal extends ModalProcessor {
 	async run(): Promise<void> {
-		this.interaction.deferUpdate();
+		await this.interaction.deferUpdate();
 
 		const description = this.interaction.fields.getTextInputValue("description");
 

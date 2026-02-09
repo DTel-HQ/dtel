@@ -31,12 +31,12 @@ export default class FourOneOneSelector extends MessageComponentProcessor<String
 
 		switch (selected) {
 			case "search": {
-				FourOneOneSearch.initialEmbed(this.interaction);
+				await FourOneOneSearch.initialEmbed(this.interaction);
 				break;
 			}
 			case "manage": {
 				if (await this.getPerms() < PermissionLevel.serverAdmin) {
-					this.interaction.reply({
+					await this.interaction.reply({
 						ephemeral: true,
 						content: "You don't have permission to do this. Contact a server admin to change these settings.",
 					});
@@ -44,11 +44,11 @@ export default class FourOneOneSelector extends MessageComponentProcessor<String
 					return;
 				}
 
-				FourOneOneManage.handleInitialInteraction(this.interaction);
+				await FourOneOneManage.handleInitialInteraction(this.interaction);
 				break;
 			}
 			case "special": {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [{
 						title: "📞 Special numbers",
 						description: "This is a list of all currently operational special numbers",
@@ -68,14 +68,14 @@ export default class FourOneOneSelector extends MessageComponentProcessor<String
 				break;
 			}
 			case "support": {
-				Call.call(this.interaction, "*611", this.number!);
+				await Call.call(this.interaction, "*611", this.number!);
 
 				break;
 			}
 			case "vip": {
 				const acc = await this.fetchAccount();
 				if (await this.getPerms() < PermissionLevel.serverAdmin) {
-					this.interaction.reply({
+					await this.interaction.reply({
 						ephemeral: true,
 						content: "You don't have permission to do this. Contact a server admin to change these settings.",
 					});
@@ -104,7 +104,7 @@ export default class FourOneOneSelector extends MessageComponentProcessor<String
 								\nSee [the site](${config.vipLink}) for a full list of perks.`,
 						}]);
 
-					this.interaction.message!.edit({
+					await this.interaction.message!.edit({
 						embeds: [embed],
 						components: [],
 					});
@@ -112,12 +112,12 @@ export default class FourOneOneSelector extends MessageComponentProcessor<String
 					return;
 				}
 
-				FourOneOneVIP.mainMenu(this.interaction);
+				await FourOneOneVIP.mainMenu(this.interaction);
 				break;
 			}
 			case "exit": {
 				this.interaction.message.delete().catch(() => null);
-				this.interaction.deferUpdate();
+				await this.interaction.deferUpdate();
 				break;
 			}
 		}
@@ -149,12 +149,12 @@ class FourOneOneSearch {
 	static entriesPerPage = 7;
 
 	static async initialEmbed(interaction: StringSelectMenuInteraction | ButtonInteraction): Promise<void> {
-		this.page(interaction, 1, null, true);
+		await this.page(interaction, 1, null, true);
 	}
 
 	static async page(interaction: ButtonInteraction | StringSelectMenuInteraction, page: number, cursor: string | null, next: boolean): Promise<void> {
 		const numberOfEntries = await db.phonebook.count();
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 
 		const thisPageEntries = await db.phonebook.findMany({
@@ -170,7 +170,7 @@ class FourOneOneSearch {
 
 		const payload = await this.generatePageMessage(numberOfEntries, thisPageEntries, page);
 
-		interaction.message.edit(payload);
+		await interaction.message.edit(payload);
 	}
 
 	static generatePageMessage(numberOfEntries: number, thisPageEntries: Phonebook[], page: number, customIdPrefix = "call-411-search", clear = false): MessageEditOptions {
@@ -244,7 +244,7 @@ class FourOneOneSearch {
 	}
 
 	static async handleSearchInteraction(interaction: ModalSubmitInteraction) {
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 		const query = interaction.fields.getTextInputValue("search-query");
 
@@ -252,7 +252,7 @@ class FourOneOneSearch {
 		try {
 			payload = await this.search(query);
 		} catch (e) {
-			interaction.reply({
+			await interaction.reply({
 				content: "❌ No results found.",
 				ephemeral: true,
 			});
@@ -269,7 +269,7 @@ class FourOneOneSearch {
 			});
 		}
 
-		interaction.message!.edit(payload);
+		await interaction.message!.edit(payload);
 
 		const collector = interaction.message!.createMessageComponentCollector<ComponentType.Button>({
 			filter: i => i.customId.startsWith("dtelnoreg-search"),
@@ -285,9 +285,9 @@ class FourOneOneSearch {
 				return this.initialEmbed(i);
 			} else if (shortID.startsWith("exit")) {
 				collector.stop();
-				this.exit(i);
+				await this.exit(i);
 			} else if (shortID.startsWith("prev") || shortID.startsWith("next")) {
-				i.deferUpdate();
+				await i.deferUpdate();
 				const params = shortID.split("-params-")[1].split("-");
 				const page = parseInt(params[0]);
 
@@ -334,7 +334,7 @@ class FourOneOneSearch {
 	}
 
 	static async exit(interaction: ButtonInteraction) {
-		interaction.message.edit({
+		await interaction.message.edit({
 			components: [],
 		});
 	}
@@ -360,7 +360,7 @@ class FourOneOneManage {
 	static async handleInitialInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 		const thisEntry = await db.numbers.findUnique({
 			where: {
@@ -413,16 +413,16 @@ class FourOneOneManage {
 			.setTitle("Manage your DTel Yellowbook")
 			.setDescription("Please select an option from the dropdown menu below.");
 
-		interaction.message!.edit({
+		await interaction.message!.edit({
 			components: [actionRow],
 			embeds: [embed],
 		});
 	}
 
-	static handleAddInteraction(interaction: StringSelectMenuInteraction) {
+	static async handleAddInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
-		FourOneOneSelector.disableMenu(interaction);
+		await FourOneOneSelector.disableMenu(interaction);
 
 		const modal = new ModalBuilder()
 			.setCustomId("call-411-manage-add-modal")
@@ -440,13 +440,13 @@ class FourOneOneManage {
 				),
 			);
 
-		interaction.showModal(modal);
+		await interaction.showModal(modal);
 	}
 
 	static async handleEditInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
-		FourOneOneSelector.disableMenu(interaction);
+		await FourOneOneSelector.disableMenu(interaction);
 
 		let number: Numbers & {
 			phonebook: Phonebook | null;
@@ -462,7 +462,7 @@ class FourOneOneManage {
 				},
 			});
 		} catch {
-			interaction.reply({
+			await interaction.reply({
 				content: "Something went wrong. Please try again.",
 				ephemeral: true,
 			});
@@ -486,12 +486,12 @@ class FourOneOneManage {
 				),
 			);
 
-		interaction.showModal(modal);
+		await interaction.showModal(modal);
 	}
-	static handleDeleteInteraction(interaction: StringSelectMenuInteraction) {
+	static async handleDeleteInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 		const embed = new EmbedBuilder()
 			.setColor(config.colors.yellowbook)
@@ -511,7 +511,7 @@ class FourOneOneManage {
 				.setStyle(ButtonStyle.Secondary),
 		);
 
-		interaction.message.edit({
+		await interaction.message.edit({
 			embeds: [embed],
 			components: [actionRow],
 		});

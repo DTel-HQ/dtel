@@ -35,7 +35,7 @@ export default class MailboxSettingsUpdate extends ModalProcessor {
 		});
 
 		// TODO: Localize
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.info,
 				title: "📬 Success!",

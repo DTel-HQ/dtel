@@ -4,6 +4,6 @@ import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class Call411VIPHideSelector extends ComponentProcessor<StringSelectMenuInteraction> {
 	async run(): Promise<void> {
-		FourOneOneVIP.hideCallerIDSelector(this.interaction);
+		await FourOneOneVIP.hideCallerIDSelector(this.interaction);
 	}
 }

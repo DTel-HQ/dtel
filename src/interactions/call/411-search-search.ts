@@ -20,6 +20,6 @@ export default class Call411SearchNext extends ComponentProcessor<ButtonInteract
 			),
 		);
 
-		this.interaction.showModal(modal);
+		await this.interaction.showModal(modal);
 	}
 }

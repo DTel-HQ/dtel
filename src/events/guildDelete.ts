@@ -6,5 +6,5 @@ export const guildDeleteHandler = async(client: DTelClient, guild: Guild): Promi
 	if (!guild.available) {
 		winston.error(`Guild ${guild.name} (${guild.id}) is unavailable. Ignoring Guild Delete event.`);
 	}
-	client.log(`📤 Left guild \`${guild.name}\` (\`${guild.id}\`). Currently in \`${client.guilds.cache.size}\` servers on Shard ${process.env.SHARDS} and \`${await client.getGuildCount()}\` servers total.`);
+	await client.log(`📤 Left guild \`${guild.name}\` (\`${guild.id}\`). Currently in \`${client.guilds.cache.size}\` servers on Shard ${process.env.SHARDS} and \`${await client.getGuildCount()}\` servers total.`);
 };

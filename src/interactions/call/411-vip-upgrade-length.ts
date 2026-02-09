@@ -4,6 +4,6 @@ import FourOneOneVIP from "@src/internals/411/vip";
 
 export default class Call411VIPSelector extends ComponentProcessor<StringSelectMenuInteraction> {
 	async run(): Promise<void> {
-		FourOneOneVIP.handleUpgradeLengthSelectionInteraction(this.interaction);
+		await FourOneOneVIP.handleUpgradeLengthSelectionInteraction(this.interaction);
 	}
 }

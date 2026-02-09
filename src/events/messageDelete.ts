@@ -11,5 +11,5 @@ export const messageDeleteHandler = async(client: DTelClient, message: Message):
 	const call = await getCallByChannelOrEndIfASideDoesNotExist(message.channel.id);
 	if (!call) return; // We don't need to handle messages we have nothing to do with
 
-	handleCallMessageDelete(message, call);
+	await handleCallMessageDelete(message, call);
 };
