@@ -12,10 +12,22 @@ prepareClient();
 
 process.on("message", msg => SharderMessageEvent(msg as Record<string, unknown>));
 
+const handleFatalError = (error: unknown): void => {
+  const err = error instanceof Error
+    ? error
+    : new Error(typeof error === 'string' ? error : JSON.stringify(error))
 
-process.setUncaughtExceptionCaptureCallback((error: Error) => {
-	winston.error(`Uncaught Exception: ${error.message}\n${error.stack}`);
-	client.sendCrossShard({
-		embeds: [new EmbedBuilder().setTitle("Uncaught Exception").setDescription(`\`\`\`${error.message}\n${error.stack}\`\`\``).setColor(0xFF0000)],
-	}, config.supportGuild.channels.badLogs);
-});
+  winston.error(`Uncaught Exception: ${err.message}\n${err.stack}`)
+
+  void client.sendCrossShard({
+    embeds: [
+      new EmbedBuilder()
+        .setTitle('Uncaught Exception')
+        .setDescription(`\`\`\`${err.message}\n${err.stack ?? ''}\`\`\``)
+        .setColor(0xff0000)
+    ]
+  }, config.supportGuild.channels.badLogs)
+};
+
+process.on('uncaughtException', handleFatalError);
+process.on('unhandledRejection', handleFatalError);
