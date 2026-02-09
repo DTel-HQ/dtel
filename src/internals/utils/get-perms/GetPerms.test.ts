@@ -26,8 +26,6 @@ jest.mock<typeof config>("@src/config/config", () => ({
 }));
 
 beforeEach(() => {
-	target.permsCache.clear();
-
 	allGuildMembers = new Collection<string, GuildMember>();
 
 	supportGuild = {

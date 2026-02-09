@@ -1,6 +1,5 @@
 import { Channel, Client, ClientOptions, DMChannel, EmbedBuilder, Guild, MessageCreateOptions, ShardClientUtil, Snowflake, TextChannel, User } from "discord.js";
 import config from "@src/config/config";
-import { Collection } from "@discordjs/collection";
 import { APIEmbed, APIMessage, ChannelType, RESTPatchAPIChannelMessageResult, RESTPostAPIChannelMessageResult } from "discord-api-types/v10";
 import { PermissionLevel } from "@src/interfaces/commandData";
 import { winston } from "@src/instances/winston";
@@ -10,6 +9,8 @@ import { Numbers } from "@src/database/generated";
 import { fetchNumber } from "./utils";
 import dayjs from "dayjs";
 import { parseNumber } from "./calls/utils/parse-number/ParseNumber";
+import { getPermissionsFromCache } from "@src/redis/operations/permissions/GetPermissionsFromCache";
+import { updateCacheWithPermissions } from "@src/redis/operations/permissions/UpdateCacheWithPermissions";
 
 interface PossibleTypes {
 	user?: User | null,
@@ -24,8 +25,6 @@ class DTelClient extends Client<true> {
 	winston: Logger = winston;
 
 	shardWithSupportGuild = 0;
-
-	permsCache: Collection<string, PermissionLevel> = new Collection();
 
 	allShardsSpawned = false;
 
@@ -93,12 +92,12 @@ class DTelClient extends Client<true> {
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
 		// We don't deal with serverAdmin here
-		if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
+		// if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
 
 		// Get perms from cache
-		let perms = this.permsCache.get(userID);
+		let perms = await getPermissionsFromCache(userID);
 
-		if (!perms) {
+		if (perms === undefined) {
 			const supportGuild = await this.guilds.fetch(config.supportGuild.id);
 			const member = await supportGuild.members.fetch(userID).catch(() => null);
 
@@ -111,14 +110,8 @@ class DTelClient extends Client<true> {
 			else if (roles.find(r => r.id === config.supportGuild.roles.donator)) perms = PermissionLevel.donator;
 			else perms = PermissionLevel.none;
 
-			// Rolling cache, I have a strange feeling this will cause issues in the future
-			if (this.permsCache.size > 200) {
-				for (const i of this.permsCache.lastKey(200 - this.permsCache.size)!) {
-					this.permsCache.delete(i);
-				}
-			}
-			// Cache user if they're not cached on this shard already
-			this.permsCache.set(userID, perms);
+			console.log("updating perms cache");
+			await updateCacheWithPermissions(userID, perms).catch(() => null); // Don't care if this fails, the cache will update on next request anyway
 		}
 
 		return perms;

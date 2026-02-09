@@ -1,12 +1,12 @@
 import config from "@src/config/config";
-import { blacklistCache } from "@src/database/db";
 import { getCallByChannelOrEndIfASideDoesNotExist } from "@src/internals/calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
 import { handleCallMessageCreate } from "@src/internals/calls/messages/create/HandleCallMessageCreate";
 import DTelClient from "@src/internals/client";
+import { isBlacklisted } from "@src/redis/operations/blacklist/GetBlacklistFromCache";
 import { EmbedBuilder, Message } from "discord.js";
 
 export const messageCreateHandler = async(client: DTelClient, message: Message): Promise<void> => {
-	if (message.author.id === client.user!.id || blacklistCache.get(message.author.id)) return; // Don't cause loopback & ignore blacklist
+	if (message.author.id === client.user!.id || await isBlacklisted(message.author.id)) return; // Don't cause loopback & ignore blacklist
 
 	const call = await getCallByChannelOrEndIfASideDoesNotExist(message.channel.id);
 	if (!call) {

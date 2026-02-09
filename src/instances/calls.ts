@@ -1,6 +1,3 @@
-// import { ActiveCalls, CallMessages, Numbers } from "@src/database/generated";
-// import { Collection } from "discord.js";
-
 import { CallMessages } from "@src/database/generated";
 import { Collection } from "discord.js";
 

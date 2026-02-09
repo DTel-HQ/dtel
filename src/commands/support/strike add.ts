@@ -1,7 +1,7 @@
 import { StrikeOffenderType } from "@src/database/generated";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
-import { randomString } from "../../internals/utils";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
+import { randomString } from "@src/internals/utils";
 
 export default class StrikeAdd extends Command {
 	async run(): Promise<void> {

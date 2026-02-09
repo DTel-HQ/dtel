@@ -40,7 +40,7 @@ type Contact {
 
 model Numbers {
   number    String     @id @map("_id")
-  channelID String
+  channelID String     @unique()
   guildID   String?
   userID    String?
   blocked   String[]
@@ -62,7 +62,6 @@ model Numbers {
   phonebook Phonebook?
   // promote   Promote?
 
-  @@unique(fields: [channelID], name: "channel")
   @@index(fields: [guildID], name: "guild")
   @@index(fields: [userID], name: "user")
 }

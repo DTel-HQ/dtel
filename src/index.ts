@@ -7,6 +7,7 @@ import auth from "./config/auth";
 import config from "./config/config";
 import Console from "./internals/console";
 import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
+import { updateCacheWithBlacklistItem } from "./redis/operations/blacklist/UpdateCacheWithBlacklistItem";
 
 // Main IPC process
 process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
@@ -112,6 +113,14 @@ const allShardsReady = async(): Promise<void> => {
 
 			continue;
 		}
+	}
+
+	try {
+		db.blacklist.findMany().then(allBlacklist => {
+			allBlacklist.map(item => updateCacheWithBlacklistItem(item.id));
+		});
+	} catch (error) {
+		winston.error("Failed to populate blacklist cache on startup", error);
 	}
 
 	db.$disconnect();

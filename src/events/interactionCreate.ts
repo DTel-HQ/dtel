@@ -18,15 +18,15 @@ import Processor, { ChannelBasedInteraction } from "@src/internals/processor";
 import i18n, { getFixedT } from "i18next";
 import { winston } from "@src/instances/winston";
 import config from "@src/config/config";
-import { blacklistCache } from "@src/database/db";
 import { getCallByChannel } from "@src/internals/calls/db/get-by-channel/GetCallByChannel";
+import { isBlacklisted } from "@src/redis/operations/blacklist/GetBlacklistFromCache";
 
 export const interactionCreateHandler = async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
 	const t = getFixedT(interaction.locale, "events.interactionCreate");
 
-	if (blacklistCache.get(interaction.user.id)) {
+	if (await isBlacklisted(interaction.user.id)) {
 		interaction.reply(i18n.t("errors.blacklisted", {
 			lng: interaction.locale,
 		}));

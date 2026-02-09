@@ -1,16 +1,8 @@
-import { Blacklist, PrismaClient } from "./generated/client";
-import { Collection } from "@discordjs/collection";
+import { PrismaClient } from "./generated/client";
 import { winston } from "@src/instances/winston";
 
 const prisma = new PrismaClient({});
 
-const blacklistCache = new Collection<string, Blacklist>();
-
-const populateBlacklistCache = () => {
-	prisma.blacklist.findMany().then(allBlacklist => {
-		allBlacklist.map(m => blacklistCache.set(m.id, m));
-	});
-};
 
 prisma.$extends({
 	query: {
@@ -33,4 +25,4 @@ prisma.$extends({
 	},
 });
 
-export { prisma as db, blacklistCache, populateBlacklistCache };
+export { prisma as db };

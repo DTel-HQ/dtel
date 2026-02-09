@@ -17,4 +17,4 @@ src/config/config-*.ts
 
 Git-Exclude/
 .yarn
-database/generated
+src/database/generated

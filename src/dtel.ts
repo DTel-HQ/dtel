@@ -1,5 +1,4 @@
 import { initInternationalization } from "@src/internationalization/i18n";
-import { populateBlacklistCache } from "./database/db";
 import SharderMessageEvent from "./events/sharderMessage";
 import { client, prepareClient } from "@src/instances/client";
 import { EmbedBuilder } from "discord.js";
@@ -7,7 +6,6 @@ import config from "./config/config";
 import { winston } from "./instances/winston";
 
 initInternationalization();
-populateBlacklistCache();
 prepareClient();
 
 process.on("message", msg => SharderMessageEvent(msg as Record<string, unknown>));

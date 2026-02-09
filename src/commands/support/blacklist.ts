@@ -1,7 +1,9 @@
 import { EmbedBuilder } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
-import { parseNumber } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { parseNumber } from "@src/internals/utils";
+import { updateCacheWithBlacklistItem } from "@src/redis/operations/blacklist/UpdateCacheWithBlacklistItem";
+import { deleteBlacklistItemFromCache } from "@src/redis/operations/blacklist/DeleteBlacklistItemFromCache";
+import { PermissionLevel } from "@src/interfaces/commandData";
 
 export default class Blacklist extends Command {
 	async run(): Promise<void> {
@@ -99,6 +101,9 @@ export default class Blacklist extends Command {
 					userID: possibilities.user ? possibilities.user.id : undefined,
 				},
 			});
+
+			await updateCacheWithBlacklistItem(idToBlacklist);
+
 			toDM?.send({
 				embeds: [{
 					color: this.config.colors.error,
@@ -112,6 +117,8 @@ export default class Blacklist extends Command {
 					id: idToBlacklist,
 				},
 			});
+
+			await deleteBlacklistItemFromCache(idToBlacklist);
 
 			embed.setTitle(`Removed ${possibilities.user ? "user" : "guild"} from the blacklist.`);
 			toDM?.send({

@@ -53,11 +53,10 @@ export const randomString = (length: number): string => {
 };
 
 export const fetchNumber = (input: string): Promise<Numbers | null> => {
+	const where = input.length === 11 ? { number: input } : { channelID: input };
+
 	return db.numbers.findUnique({
-		where: {
-			number: input.length === 11 ? input : undefined,
-			channelID: input.length > 11 ? input : undefined,
-		},
+		where,
 	});
 };
 

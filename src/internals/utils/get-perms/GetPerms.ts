@@ -1,17 +1,16 @@
 import config from "@src/config/config";
 import { client } from "@src/instances/client";
 import { PermissionLevel } from "@src/interfaces/commandData";
-import { Collection } from "discord.js";
-
-export const permsCache = new Collection<string, PermissionLevel>();
+import { getPermissionsFromCache } from "@src/redis/operations/permissions/GetPermissionsFromCache";
+import { updateCacheWithPermissions } from "@src/redis/operations/permissions/UpdateCacheWithPermissions";
 
 export const getPerms = async(userId: string): Promise<PermissionLevel> => {
 	// We don't deal with serverAdmin here
 	if (config.maintainers.includes(userId)) return PermissionLevel.maintainer;
 
 	// Get perms from cache
-	const permsFromCache = permsCache.get(userId);
-	if (permsFromCache) return permsFromCache;
+	const permsFromCache = await getPermissionsFromCache(userId);
+	if (permsFromCache !== undefined) return permsFromCache as PermissionLevel;
 
 	const supportGuild = await client.guilds.fetch(config.supportGuild.id);
 	const member = await supportGuild.members.fetch(userId).catch(() => null);
@@ -26,14 +25,7 @@ export const getPerms = async(userId: string): Promise<PermissionLevel> => {
 	else if (roles.get(config.supportGuild.roles.donator)) permsFromGuild = PermissionLevel.donator;
 	else permsFromGuild = PermissionLevel.none;
 
-	// Rolling cache, I have a strange feeling this will cause issues in the future
-	if (permsCache.size > 200) {
-		for (const i of permsCache.lastKey(200 - permsCache.size)!) {
-			permsCache.delete(i);
-		}
-	}
-	// Cache user if they're not cached on this shard already
-	permsCache.set(userId, permsFromGuild);
+	await updateCacheWithPermissions(userId, permsFromGuild).catch(() => null); // Don't care if this fails, the cache will update on next request anyway
 
 	return permsFromGuild;
 };
