@@ -92,7 +92,7 @@ class DTelClient extends Client<true> {
 
 	async getPerms(userID: string): Promise<Omit<PermissionLevel, "serverAdmin">> {
 		// We don't deal with serverAdmin here
-		// if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
+		if (config.maintainers.includes(userID)) return PermissionLevel.maintainer;
 
 		// Get perms from cache
 		let perms = await getPermissionsFromCache(userID);
