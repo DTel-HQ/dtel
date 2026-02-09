@@ -1,11 +1,11 @@
-import Command from "../../internals/commandProcessor";
-import config from "../../config/config";
+import Command from "@src/internals/commandProcessor";
+import config from "@src/config/config";
 import { APIEmbed } from "discord.js";
 import { t } from "i18next";
 
 export default class Links extends Command {
 	async run(): Promise<void> {
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: config.colors.info,
 				author: {

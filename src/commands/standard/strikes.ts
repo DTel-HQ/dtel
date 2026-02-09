@@ -1,14 +1,14 @@
 import { EmbedField } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
-import { getUsername } from "../../internals/utils";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
+import { getUsername } from "@src/internals/utils";
 
 export default class Strikes extends Command {
 	async run() {
 		const offender = this.interaction.options.getString("offender", false) || this.interaction.user.id;
 
 		if (offender != this.interaction.user.id && await this.client.getPerms(this.interaction.user.id) as number < PermissionLevel.customerSupport) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("You don't have permission to check the strikes of others!")],
 			});
 			return;
@@ -23,7 +23,7 @@ export default class Strikes extends Command {
 		});
 
 		if (strikes.length === 0) {
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [{
 					color: this.config.colors.success,
 					title: "✨ Clean!",

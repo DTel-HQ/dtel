@@ -21,7 +21,7 @@ export default class Call extends Command {
 			}
 			default: {
 				try {
-					Call.call(this.interaction, this.interaction.options.getString("number", true), this.number!);
+					await Call.call(this.interaction, this.interaction.options.getString("number", true), this.number!);
 				} catch {
 					// Ignore
 				}
@@ -51,7 +51,7 @@ export default class Call extends Command {
 				startedBy: interaction.user.id,
 			});
 
-			interaction.editReply({
+			await interaction.editReply({
 				embeds: [{
 					color: config.colors.info,
 					...translator("initiated", {
@@ -67,7 +67,7 @@ export default class Call extends Command {
 			// Feel free to change it
 			if (e instanceof Error) {
 				if (e.message === "otherSideInCall") {
-					interaction.editReply({
+					await interaction.editReply({
 						embeds: [client.errorEmbed(translator("errors.otherSideInCall")!)],
 					});
 
@@ -102,11 +102,11 @@ export default class Call extends Command {
 					// TODO: Deal with call waiting in some way
 				}
 
-				interaction.editReply({
+				await interaction.editReply({
 					embeds: [client.errorEmbed(translator(`errors.${e.message}`))],
 				});
 			} else {
-				interaction.editReply({
+				await interaction.editReply({
 					embeds: [client.errorEmbed(translator(`errors.unexpected`))],
 				});
 			}
@@ -184,14 +184,14 @@ export default class Call extends Command {
 					.setDisabled(this.account!.balance < 500),
 			);
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [embed],
 			components: [actionRow],
 			ephemeral: true,
 		});
 	}
-	async fourOneOne(): Promise<void> {
-		this.interaction.reply(fourOneOneMainMenu);
+	async fourOneOne() {
+		return this.interaction.reply(fourOneOneMainMenu);
 	}
 }
 

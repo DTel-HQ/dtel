@@ -1,6 +1,6 @@
 import { ActionRowBuilder } from "@discordjs/builders";
 import { ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class MailboxSettings extends Command {
 	async run(): Promise<void> {
@@ -32,6 +32,6 @@ export default class MailboxSettings extends Command {
 				]),
 			]);
 
-		this.interaction.showModal(modal);
+		await this.interaction.showModal(modal);
 	}
 }

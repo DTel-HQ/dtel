@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import ModalProcessor from "../../internals/modalProcessor";
+import ModalProcessor from "@src/internals/modalProcessor";
 
 
 export default class Call411EditAddModal extends ModalProcessor {

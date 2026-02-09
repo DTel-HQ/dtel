@@ -20,10 +20,10 @@ export const handleCallMessageCreate = async(
 	});
 
 	if (!otherSideChannel) {
-		message.reply(
+		await message.reply(
 			"❌ We lost connection to the other side. The call may has been ended.",
 		);
-		hangupInDb(call, "call-lost");
+		await hangupInDb(call, "call-lost");
 		return;
 	}
 

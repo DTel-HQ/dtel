@@ -7,13 +7,13 @@ import config from "@src/config/config";
 
 let participant: CallParticipant;
 
-beforeEach(() => {
-	initInternationalization();
+beforeEach(async() => {
+	await initInternationalization();
 	participant = buildTestParticipant();
 });
 
-it("should send the missed call embed to the provided participant", () => {
-	target.sendMissedCallMessageToSide(participant, "en");
+it("should send the missed call embed to the provided participant", async() => {
+	await target.sendMissedCallMessageToSide(participant, "en");
 
 	expect(discordClientMock.sendCrossShard).toHaveBeenCalledWith({
 		embeds: [expect.objectContaining({

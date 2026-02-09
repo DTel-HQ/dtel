@@ -1,7 +1,7 @@
 import { DMChannel, GuildTextBasedChannel, APIEmbed, TextBasedChannel, User } from "discord.js";
-import { NumbersWithGuilds } from "../../interfaces/numbersWithGuilds";
-import Command from "../../internals/commandProcessor";
-import { parseNumber } from "../../internals/utils";
+import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
+import Command from "@src/internals/commandProcessor";
+import { parseNumber } from "@src/internals/utils";
 
 export default class NInfo extends Command {
 	async run(): Promise<void> {

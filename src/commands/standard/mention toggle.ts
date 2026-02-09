@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class MentionToggle extends Command {
 	async run(): Promise<void> {
@@ -11,7 +11,7 @@ export default class MentionToggle extends Command {
 			this.number!.mentions.splice(indexOfMention, 1);
 		} else {
 			if (this.number!.mentions.length >= 25) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [
 						this.client.errorEmbed(this.t("listFull")),
 					],
@@ -37,7 +37,7 @@ export default class MentionToggle extends Command {
 			},
 		})).setColor(this.config.colors.success);
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [embed],
 			ephemeral: true,
 		});

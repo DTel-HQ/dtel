@@ -1,6 +1,6 @@
 import { discordClientMock } from "@src/mocks/DiscordClient.test";
 import * as target from "./RemoveComponentsFromMessage";
-import { APIMessage, ComponentType, MessageCreateOptions, RESTPatchAPIChannelMessageJSONBody } from "discord.js";
+import { APIMessage, ComponentType, MessageCreateOptions } from "discord.js";
 
 let channelId: string;
 let messageId: string;

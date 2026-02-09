@@ -7,7 +7,7 @@ export default class Block extends Command {
 		const toBlock = parseNumber(rawInput);
 
 		if (toBlock === this.number!.number) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("cantBlockSelf"))],
 				ephemeral: true,
 			});
@@ -15,7 +15,7 @@ export default class Block extends Command {
 		}
 
 		if (isNaN(Number(toBlock))) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("invalidBlockingNumber"))],
 				ephemeral: true,
 			});
@@ -29,7 +29,7 @@ export default class Block extends Command {
 		});
 
 		if (!toBlockDoc) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("numberDoesntExist"))],
 				ephemeral: true,
 			});
@@ -55,7 +55,7 @@ export default class Block extends Command {
 			},
 		});
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				...this.t(blockedNumberIndex === -1 ? "blockedSuccess" : "unblockedSuccess", {

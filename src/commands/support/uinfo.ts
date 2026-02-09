@@ -1,6 +1,6 @@
 import { APIEmbed, User } from "discord.js";
-import Command from "../../internals/commandProcessor";
-import { getUsername } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { getUsername } from "@src/internals/utils";
 export default class UInfo extends Command {
 	async run(): Promise<void> {
 		const toFind = this.interaction.options.getString("user", true);

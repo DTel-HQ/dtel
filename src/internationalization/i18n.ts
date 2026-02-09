@@ -8,8 +8,8 @@ export const translations = {
 	},
 };
 
-export const initInternationalization = () => {
-	i18next.init({
+export const initInternationalization = async() => {
+	await i18next.init({
 		// debug: config.devMode,
 		fallbackLng: "en",
 		preload: ["en-US"],

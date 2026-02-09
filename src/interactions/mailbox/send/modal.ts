@@ -1,5 +1,5 @@
-import ModalProcessor from "../../../internals/modalProcessor";
-import { randomString } from "../../../internals/utils";
+import ModalProcessor from "@src/internals/modalProcessor";
+import { randomString } from "@src/internals/utils";
 
 export default class MailboxSendModalResponse extends ModalProcessor {
 	async run(): Promise<void> {
@@ -33,9 +33,9 @@ export default class MailboxSendModalResponse extends ModalProcessor {
 			},
 		});
 
-		this.interaction.reply("📫 Sent!");
+		await this.interaction.reply("📫 Sent!");
 
-		this.client.sendCrossShard({
+		await this.client.sendCrossShard({
 			embeds: [{
 				color: this.config.colors.info,
 				title: "📫 New message!",

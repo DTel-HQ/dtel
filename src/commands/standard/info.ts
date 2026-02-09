@@ -1,10 +1,10 @@
-import Command from "../../internals/commandProcessor";
-import config from "../../config/config";
+import Command from "@src/internals/commandProcessor";
+import config from "@src/config/config";
 import { APIEmbed } from "discord.js";
 
 export default class Info extends Command {
 	async run(): Promise<void> {
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: config.colors.info,
 				author: {

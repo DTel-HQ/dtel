@@ -1,7 +1,7 @@
 import { ActiveCalls } from "@src/database/generated";
 import { db } from "@src/database/db";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
 import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
 export const pickupInDb = async(call: CallsWithNumbers, pickedUpBy: string): Promise<ActiveCalls> => {
 	const updatedCall = {
@@ -21,7 +21,7 @@ export const pickupInDb = async(call: CallsWithNumbers, pickedUpBy: string): Pro
 		},
 	});
 
-	updateCacheWithCall(updatedCall);
+	await updateCacheWithCall(updatedCall);
 
 	return updatedCall;
 };

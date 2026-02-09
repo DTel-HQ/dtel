@@ -1,6 +1,6 @@
 import { EmbedBuilder, User } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
 
 export default class AddCredit extends Command {
 	async run(): Promise<void> {
@@ -10,26 +10,26 @@ export default class AddCredit extends Command {
 		try {
 			user = await this.client.getUser(userID);
 		} catch {
-			this.targetUserNotFound();
+			await this.targetUserNotFound();
 			return;
 		}
 
 		const perms = await this.client.getPerms(userID);
 
 		if (userID === this.client.user.id) {
-			this.interaction.reply({
+			await	this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("I already have all the money!")],
 			});
 			return;
 		} else if (user.bot) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Are you sure you want to give them more money?", { title: "AI will destroy humans!!!" })],
 			});
 			return;
 		} else if (perms as number >= PermissionLevel.customerSupport && perms != PermissionLevel.maintainer) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That's not something you should be trying on the job!", { title: "Seriously?" })],
 			});
@@ -40,7 +40,7 @@ export default class AddCredit extends Command {
 		const amountOfCredits = this.interaction.options.getInteger("credits", true);
 
 		if (amountOfCredits < 0 && (account.balance + amountOfCredits) < 0) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That would bankrupt this user!", { title: "Are you insane?" })],
 			});
@@ -70,12 +70,12 @@ export default class AddCredit extends Command {
 		}).setTimestamp(new Date());
 
 		if (this.interaction.channelId != this.config.supportGuild.channels.management) {
-			this.client.sendCrossShard({
+			await this.client.sendCrossShard({
 				embeds: [embed],
 			}, this.config.supportGuild.channels.management);
 		}
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [embed],
 		});
 

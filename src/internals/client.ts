@@ -205,7 +205,7 @@ class DTelClient extends Client<true> {
 			},
 		});
 
-		this.log(`📕 Number \`${number}\` has been automatically deassigned as its channel has been deleted.`);
+		await this.log(`📕 Number \`${number}\` has been automatically deassigned as its channel has been deleted.`);
 
 		let ownerDMChannel: DMChannel | null | undefined;
 

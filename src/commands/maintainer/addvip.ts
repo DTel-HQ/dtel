@@ -1,5 +1,5 @@
 import { EmbedBuilder, User } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class AddCredit extends Command {
 	async run(): Promise<void> {
@@ -9,18 +9,18 @@ export default class AddCredit extends Command {
 		try {
 			user = await this.client.getUser(userID);
 		} catch {
-			this.targetUserNotFound();
+			await this.targetUserNotFound();
 			return;
 		}
 
 		if (userID === this.client.user.id) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("I am *the* VIP, don't forget that!")],
 			});
 			return;
 		} else if (user.bot) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("Not sure, but I think it'll break stuff", { title: "Probably shouldn't do that." })],
 			});
@@ -31,7 +31,7 @@ export default class AddCredit extends Command {
 		const monthsToAdd = this.interaction.options.getInteger("months", true);
 
 		if (monthsToAdd < 0 && (account.vipMonthsRemaining + monthsToAdd) < 0) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				ephemeral: true,
 				embeds: [this.client.errorEmbed("That would make this user a negative VIP!", { title: "Are you insane?", footer: { text: "User does not have enough months to remove this many" } })],
 			});
@@ -61,12 +61,12 @@ export default class AddCredit extends Command {
 		}).setTimestamp(new Date());
 
 		if (this.interaction.channelId != this.config.supportGuild.channels.management) {
-			this.client.sendCrossShard({
+			await this.client.sendCrossShard({
 				embeds: [embed],
 			}, this.config.supportGuild.channels.management);
 		}
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [embed],
 		});
 

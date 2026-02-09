@@ -34,7 +34,7 @@ export default class Eval extends Command {
 			if (typeof result !== "string") result = inspect(result, false, 2);
 			result = result.replace(regex, "mfa.Jeff");
 			if (result.length <= 1980) {
-				this.interaction.editReply({
+				await this.interaction.editReply({
 					embeds: [{
 						color: config.colors.success,
 						description: `\`\`\`js\n${result}\`\`\``,
@@ -44,7 +44,7 @@ export default class Eval extends Command {
 					}],
 				});
 			} else {
-				this.interaction.editReply({
+				await this.interaction.editReply({
 					embeds: [{
 						color: config.colors.info,
 						title: `The eval results were too large!`,
@@ -58,7 +58,7 @@ export default class Eval extends Command {
 			}
 		} catch (_err) {
 			const err = _err as Error;
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [{
 					color: 0xFF0000,
 					description: `\`\`\`js\n${err.stack}\`\`\``,

@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import { SelectMenuInteraction } from "discord.js";
-import MessageComponentProcessor from "../../internals/componentProcessor";
+import MessageComponentProcessor from "@src/internals/componentProcessor";
 
 export default class TwoThreeThreeRenewModal extends MessageComponentProcessor<SelectMenuInteraction> {
 	async run() {

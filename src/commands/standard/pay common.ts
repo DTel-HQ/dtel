@@ -2,14 +2,14 @@
 // Feel free to refactor
 import { Accounts } from "@src/database/generated";
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder, User } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
-import { formatBalance, getUsername, upperFirst } from "../../internals/utils";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
+import { formatBalance, getUsername, upperFirst } from "@src/internals/utils";
 
 export default abstract class PayCommonFunctions extends Command {
 	async payUser(toPay: Accounts, user: User): Promise<void> {
 		if (user.bot) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("wasteOfMoney"))],
 			});
 			return;
@@ -18,7 +18,7 @@ export default abstract class PayCommonFunctions extends Command {
 		const totalCost = this.interaction.options.getInteger("credits", true);
 
 		if (totalCost < this.config.minTransfer) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [{
 					color: this.config.colors.error,
 					...this.t("tooLow"),
@@ -36,7 +36,7 @@ export default abstract class PayCommonFunctions extends Command {
 		const fee = Math.round(totalCost - totalReceived);
 
 		if (totalCost > this.account!.balance) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("cantAfford"))],
 			});
 			return;

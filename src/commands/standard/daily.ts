@@ -1,7 +1,7 @@
 import dayjs from "dayjs";
 import { APIEmbed } from "discord.js";
-import { PermissionLevel } from "../../interfaces/commandData";
-import Command from "../../internals/commandProcessor";
+import { PermissionLevel } from "@src/interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
 
 export default class Daily extends Command {
 	async run(): Promise<void> {
@@ -10,7 +10,7 @@ export default class Daily extends Command {
 
 			// If it's too early
 			if (oneDayAfter.isAfter(Date.now())) {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [{
 						color: this.config.colors.info,
 						...this.t("alreadyClaimedEmbed", {
@@ -66,7 +66,7 @@ export default class Daily extends Command {
 			},
 		});
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 				...this.t("claimedSuccessfully", {
@@ -77,6 +77,6 @@ export default class Daily extends Command {
 			ephemeral: true,
 		});
 
-		this.client.log(`📆 \`${this.interaction.user.username}\` (${this.interaction.user.id}) has claimed their \`${creditCount}\` daily credits.`);
+		await this.client.log(`📆 \`${this.interaction.user.username}\` (${this.interaction.user.id}) has claimed their \`${creditCount}\` daily credits.`);
 	}
 }

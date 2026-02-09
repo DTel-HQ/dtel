@@ -1,7 +1,7 @@
 import { SelectMenuInteraction } from "discord.js";
-import MessageComponentProcessor from "../../internals/componentProcessor";
+import MessageComponentProcessor from "@src/internals/componentProcessor";
 import { FourOneOneEdit } from "./411-selector";
-import { fourOneOneMainMenu } from "../../commands/standard/call";
+import { fourOneOneMainMenu } from "@src/commands/standard/call";
 
 export default class Call411EditSelectorSelect extends MessageComponentProcessor<SelectMenuInteraction> {
 	async run(): Promise<void> {

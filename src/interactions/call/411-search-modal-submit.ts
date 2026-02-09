@@ -1,4 +1,4 @@
-import ModalProcessor from "../../internals/modalProcessor";
+import ModalProcessor from "@src/internals/modalProcessor";
 import { FourOneOneSearch } from "./411-selector";
 
 export default class Call411SearchModalSubmit extends ModalProcessor {

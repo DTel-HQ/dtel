@@ -5,7 +5,7 @@ import { timeSince } from "@src/internals/calls/hangup/messages/utils/TimeSince"
 
 export default class Status extends Command {
 	async run(): Promise<void> {
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [EmbedBuilder.from({
 				color: this.config.colors.info,
 				...(this.t("embed", {

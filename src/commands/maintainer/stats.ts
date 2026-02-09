@@ -1,7 +1,7 @@
 import { EmbedBuilder } from "@discordjs/builders";
-import config from "../../config/config";
-import Command from "../../internals/commandProcessor";
-import { formatBalance } from "../../internals/utils";
+import config from "@src/config/config";
+import Command from "@src/internals/commandProcessor";
+import { formatBalance } from "@src/internals/utils";
 import os from "os";
 
 export default class Stats extends Command {
@@ -120,6 +120,6 @@ export default class Stats extends Command {
 			.setTimestamp();
 
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 	}
 }

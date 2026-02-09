@@ -1,6 +1,6 @@
 import { Numbers } from "@src/database/generated";
-import Command from "../../internals/commandProcessor";
-import { parseNumber } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { parseNumber } from "@src/internals/utils";
 
 export default class Deassign extends Command {
 	async run(): Promise<void> {

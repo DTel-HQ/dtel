@@ -1,4 +1,4 @@
-import {Numbers, ActiveCalls} from "@src/database/generated";
+import { Numbers, ActiveCalls } from "@src/database/generated";
 import { db } from "@src/database/db";
 
 export type CallsWithPotentialNumbers = ActiveCalls & {

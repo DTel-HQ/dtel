@@ -1,5 +1,5 @@
 import { ActionRowBuilder, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
-import ComponentProcessor from "../../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class MailboxDeleteSelect extends ComponentProcessor<SelectMenuInteraction> {
 	async run(): Promise<void> {

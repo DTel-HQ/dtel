@@ -85,7 +85,7 @@ class FourOneOneVIP {
 	}
 
 	static async mainMenu(interaction: StringSelectMenuInteraction) {
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 		let number: Numbers;
 		try {
@@ -95,19 +95,19 @@ class FourOneOneVIP {
 				},
 			});
 		} catch {
-			interaction.message.edit({
+			await interaction.message.edit({
 				embeds: [client.errorEmbed("An unexpected error occurred. Please try again")],
 				components: [],
 			});
 			return;
 		}
 
-		interaction.message!.edit(this.makeMenuEmbed(number));
+		await interaction.message!.edit(this.makeMenuEmbed(number));
 	}
 
 	static async handleSelectorSelectionInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) {
-			interaction.reply({
+			await interaction.reply({
 				ephemeral: true,
 				content: "❌ You can't use this menu as you didn't open it.",
 			});
@@ -117,7 +117,7 @@ class FourOneOneVIP {
 
 		switch (interaction.values[0]) {
 			case "upgrade": {
-				interaction.deferUpdate();
+				await interaction.deferUpdate();
 				return this.handleSelectorUpgradeSelectionInteraction(interaction);
 			}
 			case "hide": {
@@ -127,8 +127,8 @@ class FourOneOneVIP {
 				return this.handleSelectorCustomNameSelectionInteraction(interaction);
 			}
 			case "back": {
-				interaction.deferUpdate();
-				interaction.message.edit(fourOneOneMainMenu);
+				await interaction.deferUpdate();
+				await interaction.message.edit(fourOneOneMainMenu);
 			}
 		}
 	}
@@ -166,7 +166,7 @@ class FourOneOneVIP {
 				.setTitle("VIP Upgrade")
 				.setDescription("Please select the length of your VIP experience from the dropdown menu below.");
 
-			interaction.message!.edit({
+			await interaction.message!.edit({
 				components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([
 					new StringSelectMenuBuilder()
 						.setCustomId("call-411-vip-upgrade-length")
@@ -205,12 +205,12 @@ class FourOneOneVIP {
 			},
 		});
 
-		interaction.message!.edit(this.makeMenuEmbed(number, true));
+		await interaction.message!.edit(this.makeMenuEmbed(number, true));
 	}
 
 	static async handleUpgradeLengthSelectionInteraction(interaction: StringSelectMenuInteraction) {
 		if (interaction.message.interaction?.user.id != interaction.user.id) {
-			interaction.reply({
+			await interaction.reply({
 				ephemeral: true,
 				content: "❌ You can't use this menu as you didn't open it.",
 			});
@@ -218,7 +218,7 @@ class FourOneOneVIP {
 			return;
 		}
 
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
 		let account = await getOrCreateAccount(interaction.user.id);
 		let number = (await fetchNumber(interaction.channelId))!;
@@ -226,7 +226,7 @@ class FourOneOneVIP {
 		const selected = Number(interaction.values[0]);
 
 		if (selected > account.vipMonthsRemaining) {
-			interaction.message!.edit({
+			await interaction.message!.edit({
 				components: [],
 				embeds: [client.errorEmbed("Something went wrong. Please try again.")],
 			});
@@ -289,7 +289,7 @@ class FourOneOneVIP {
 		});
 	}
 
-	static handleSelectorHideSelectionInteraction(interaction: StringSelectMenuInteraction) {
+	static async handleSelectorHideSelectionInteraction(interaction: StringSelectMenuInteraction) {
 		const embed = new EmbedBuilder()
 			.setColor(config.colors.yellowbook)
 			.setTitle("VIP Anonymous Mode")
@@ -314,8 +314,8 @@ class FourOneOneVIP {
 			]).setCustomId("call-411-vip-hide-selector").setPlaceholder("Hide Caller Details?"),
 		]);
 
-		interaction.deferUpdate();
-		interaction.message!.edit({
+		await interaction.deferUpdate();
+		await interaction.message!.edit({
 			embeds: [embed],
 			components: [actionRow],
 		});
@@ -346,7 +346,7 @@ class FourOneOneVIP {
 				]),
 			]);
 
-		interaction.showModal(modal);
+		await interaction.showModal(modal);
 	}
 
 	static async customNameModalSubmit(interaction: ModalSubmitInteraction) {
@@ -374,9 +374,9 @@ class FourOneOneVIP {
 			},
 		});
 
-		interaction.deferUpdate();
+		await interaction.deferUpdate();
 
-		interaction.message!.edit(this.makeMenuEmbed(numberDoc, true));
+		await interaction.message!.edit(this.makeMenuEmbed(numberDoc, true));
 	}
 }
 

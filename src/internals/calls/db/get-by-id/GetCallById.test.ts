@@ -1,6 +1,6 @@
 import { prismaMock } from "@src/mocks/prisma.test";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
-import {Numbers, ActiveCalls} from "@src/database/generated";
+import { Numbers, ActiveCalls } from "@src/database/generated";
 import * as target from "./GetCallById";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 

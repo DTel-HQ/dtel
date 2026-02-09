@@ -1,5 +1,5 @@
 import { InteractionReplyOptions, APIEmbed } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class Help extends Command {
 	async run(): Promise<void> {
@@ -17,6 +17,6 @@ export default class Help extends Command {
 			ephemeral: true,
 		};
 
-		this.interaction.reply(toSend);
+		await this.interaction.reply(toSend);
 	}
 }

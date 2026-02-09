@@ -1,5 +1,5 @@
 import { ButtonInteraction } from "discord.js";
-import ComponentProcessor from "../../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class MailboxClearConfirm extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {

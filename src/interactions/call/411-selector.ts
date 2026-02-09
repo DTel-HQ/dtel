@@ -18,12 +18,12 @@ import {
 	StringSelectMenuOptionBuilder,
 	StringSelectMenuComponent,
 } from "discord.js";
-import Call from "../../commands/standard/call";
-import config from "../../config/config";
-import { db } from "../../database/db";
-import MessageComponentProcessor from "../../internals/componentProcessor";
-import FourOneOneVIP from "../../internals/411/vip";
-import { PermissionLevel } from "../../interfaces/commandData";
+import Call from "@src/commands/standard/call";
+import config from "@src/config/config";
+import { db } from "@src/database/db";
+import MessageComponentProcessor from "@src/internals/componentProcessor";
+import FourOneOneVIP from "@src/internals/411/vip";
+import { PermissionLevel } from "@src/interfaces/commandData";
 
 export default class FourOneOneSelector extends MessageComponentProcessor<StringSelectMenuInteraction> {
 	async run(): Promise<void> {

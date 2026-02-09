@@ -1,4 +1,4 @@
-import ModalProcessor from "../../../internals/modalProcessor";
+import ModalProcessor from "@src/internals/modalProcessor";
 
 export default class MailboxSettingsUpdate extends ModalProcessor {
 	async run(): Promise<void> {
@@ -17,7 +17,7 @@ export default class MailboxSettingsUpdate extends ModalProcessor {
 				break;
 			}
 			default: {
-				this.interaction.reply({
+				await this.interaction.reply({
 					embeds: [this.client.errorEmbed("Invalid value for receiving messages. Please enter either `ON` or `OFF`.")],
 				});
 				return;

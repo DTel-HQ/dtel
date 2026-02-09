@@ -1,11 +1,11 @@
-import ComponentProcessor from "../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 import { TextInputBuilder, ModalBuilder, ActionRowBuilder, ButtonInteraction, TextInputStyle } from "discord.js";
 
 export default class WizardReadyButton extends ComponentProcessor<ButtonInteraction> {
 	async _run(): Promise<void> {
-		super._run();
+		await super._run();
 
-		this.client.editCrossShard({
+		await this.client.editCrossShard({
 			embeds: this.interaction.message.embeds,
 			components: [],
 		}, this.interaction.channelId, this.interaction.message.id);
@@ -30,6 +30,6 @@ export default class WizardReadyButton extends ComponentProcessor<ButtonInteract
 
 		modal.addComponents(row);
 
-		this.interaction.showModal(modal);
+		await this.interaction.showModal(modal);
 	}
 }

@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonInteraction, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import MessageComponentProcessor from "../../internals/componentProcessor";
+import MessageComponentProcessor from "@src/internals/componentProcessor";
 
 export default class TwoThreeThreeOpenModalButton extends MessageComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {

@@ -9,11 +9,9 @@ import { sendMissedCallMessageToSide } from "@src/internals/calls/propagate/star
 import { removeComponentsFromMessage } from "@src/internals/calls/utils/remove-components-from-message/RemoveComponentsFromMessage";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";
 
-export const startPickupTimer = async(callId: ActiveCalls["id"], notificationMessageId?: string): Promise<void> => {
+export const startPickupTimer = (callId: ActiveCalls["id"], notificationMessageId?: string): void => {
 	winston.verbose(`Starting pickup timer for call ${callId}`);
-	setTimeout(() => {
-		onPickupTimerTimeout(callId, notificationMessageId);
-	}, 2 * 60 * 1000);
+	setTimeout(onPickupTimerTimeout, 2 * 60 * 1000, callId, notificationMessageId);
 };
 
 export const onPickupTimerTimeout = async(callId: ActiveCalls["id"], notificationMessageId?: string) => {
@@ -21,7 +19,7 @@ export const onPickupTimerTimeout = async(callId: ActiveCalls["id"], notificatio
 	if (!updatedCall || updatedCall.pickedUp?.by) return;
 
 	if (!updatedCall.to || !updatedCall.from) {
-		endMissedCallInDb(updatedCall).catch(() => null);
+		await endMissedCallInDb(updatedCall).catch(() => null);
 		return;
 	}
 
@@ -43,7 +41,7 @@ export const onPickupTimerTimeout = async(callId: ActiveCalls["id"], notificatio
 		// Ignore
 	}
 
-	logMissedCall(updatedCall, updatedCall.to, updatedCall.from);
+	await logMissedCall(updatedCall, updatedCall.to, updatedCall.from);
 
-	endMissedCall(updatedCall);
+	await endMissedCall(updatedCall);
 };

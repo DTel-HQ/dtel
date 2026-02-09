@@ -6,7 +6,7 @@ import { client } from "@src/instances/client";
 
 export default class MailboxMessages extends Command {
 	async run(): Promise<void> {
-		MailboxMessages.displayMessages(this.interaction, this.number!.number, 1);
+		await MailboxMessages.displayMessages(this.interaction, this.number!.number, 1);
 	}
 
 	static async displayMessages(interaction: CommandInteraction|MessageComponentInteraction, number: string, page = 1) {
@@ -21,7 +21,7 @@ export default class MailboxMessages extends Command {
 		});
 
 		if (mailbox.messages.length === 0) {
-			interaction.reply({
+			await interaction.reply({
 				embeds: [client.errorEmbed("Your mailbox is empty.")],
 				ephemeral: true,
 			});
@@ -37,7 +37,7 @@ export default class MailboxMessages extends Command {
 		const pages = Math.ceil(mailbox.messages.length / itemsPerPage);
 
 		if (offset > (itemsPerPage * page) || offset > mailbox.messages.length) {
-			interaction.reply({
+			await interaction.reply({
 				embeds: [client.errorEmbed("Your mailbox is not sufficiently full.")],
 				ephemeral: true,
 			});
@@ -86,14 +86,14 @@ export default class MailboxMessages extends Command {
 
 
 		if (interaction instanceof MessageComponentInteraction) {
-			interaction.message.edit({
+			await interaction.message.edit({
 				embeds: [embed],
 				components: [actionRow],
 			});
 
-			interaction.deferUpdate();
+			await interaction.deferUpdate();
 		} else {
-			interaction.reply({
+			await interaction.reply({
 				embeds: [embed],
 				components: [actionRow],
 			});

@@ -27,20 +27,20 @@ beforeEach(() => {
 	});
 });
 
-it("should log a missed random call", () => {
+it("should log a missed random call", async() => {
 	const expected = `❎ Random Call \`${from.channelID} → ${to.channelID}\` was not picked up.\nCall ID: \`${call.id}\``;
 	call.randomCall = true;
 
-	target.logMissedCall(call, to, from);
+	await target.logMissedCall(call, to, from);
 
 	expect(discordClientMock.log).toHaveBeenCalledWith(expected);
 });
 
-it("should log a random call", () => {
+it("should log a random call", async() => {
 	const expected = `❎ Call \`${from.channelID} → ${to.channelID}\` was not picked up.\nCall ID: \`${call.id}\``;
 	call.randomCall = false;
 
-	target.logMissedCall(call, to, from);
+	await target.logMissedCall(call, to, from);
 
 	expect(discordClientMock.log).toHaveBeenCalledWith(expected);
 });

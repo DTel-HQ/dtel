@@ -4,7 +4,7 @@ import i18n, { TFunction } from "i18next";
 
 import DTelClient from "./client";
 import Processor from "./processor";
-import CommandDataInterface from "../interfaces/commandData";
+import CommandDataInterface from "@src/interfaces/commandData";
 import { MessageComponentInteraction } from "discord.js";
 
 abstract class ComponentProcessor<T extends MessageComponentInteraction> extends Processor<T> {

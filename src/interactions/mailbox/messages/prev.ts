@@ -1,5 +1,5 @@
-import ComponentProcessor from "../../../internals/componentProcessor";
-import MailboxMessages from "../../../commands/standard/mailbox messages";
+import ComponentProcessor from "@src/internals/componentProcessor";
+import MailboxMessages from "@src/commands/standard/mailbox messages";
 import { ButtonInteraction } from "discord.js";
 
 export default class MailboxMessagesPrev extends ComponentProcessor<ButtonInteraction> {

@@ -19,6 +19,8 @@
 
 	"include": [
 		"src/**/*.ts",
-		"types/**/*.d.ts"
+		"types/**/*.d.ts",
+		"prisma.config.ts",
+		".eslintrc.js"
 	]
 }

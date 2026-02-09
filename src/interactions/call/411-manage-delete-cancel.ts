@@ -1,5 +1,5 @@
 import { ButtonInteraction, EmbedBuilder } from "discord.js";
-import ComponentProcessor from "../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class Call411EditDeleteConfirm extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {

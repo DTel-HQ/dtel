@@ -21,7 +21,7 @@ beforeEach(() => {
 	getShardCountMock.mockReturnValue(5);
 });
 
-it("should return 0 for a DM channel", () => {
+it("should return 0 for a DM channel", async() => {
 	discordClientMock.rest.get.mockResolvedValue({
 		type: ChannelType.DM,
 	});
@@ -29,10 +29,10 @@ it("should return 0 for a DM channel", () => {
 	const result = target.shardIdForChannelId("channelID");
 
 	expect(discordClientMock.rest.get).toHaveBeenCalled();
-	expect(result).resolves.toStrictEqual(0);
+	await expect(result).resolves.toStrictEqual(0);
 });
 
-it("should return a shard ID", () => {
+it("should return a shard ID", async() => {
 	discordClientMock.rest.get.mockResolvedValue({
 		type: ChannelType.GuildText,
 		guild_id: "guildID",
@@ -41,5 +41,5 @@ it("should return a shard ID", () => {
 	const result = target.shardIdForChannelId("channelID");
 
 	expect(discordClientMock.rest.get).toHaveBeenCalled();
-	expect(result).resolves.toStrictEqual(4);
+	await expect(result).resolves.toStrictEqual(4);
 });

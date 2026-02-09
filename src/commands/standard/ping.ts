@@ -1,5 +1,5 @@
-import Command from "../../internals/commandProcessor";
-import config from "../../config/config";
+import Command from "@src/internals/commandProcessor";
+import config from "@src/config/config";
 
 export default class Ping extends Command {
 	async run(): Promise<void> {
@@ -10,6 +10,6 @@ export default class Ping extends Command {
 			description: `API Latency: ${this.client.ws.ping}ms\nMeasured time: ${Date.now() - Number(this.interaction.createdAt)}ms`,
 		};
 
-		this.interaction.reply({ embeds: [embed] });
+		await this.interaction.reply({ embeds: [embed] });
 	}
 }

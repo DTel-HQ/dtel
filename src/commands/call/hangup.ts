@@ -9,6 +9,6 @@ export default class HangUp extends Command {
 			return;
 		}
 
-		hangupCallByNumber(this.number, this.interaction);
+		await hangupCallByNumber(this.number, this.interaction);
 	}
 }

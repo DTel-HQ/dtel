@@ -4,7 +4,7 @@ import { ModalSubmitInteraction } from "discord.js";
 import DTelClient from "./client";
 import Processor from "./processor";
 import i18n, { TFunction } from "i18next";
-import CommandDataInterface from "../interfaces/commandData";
+import CommandDataInterface from "@src/interfaces/commandData";
 
 abstract class ModalProcessor extends Processor<ModalSubmitInteraction> {
 	interaction: ModalSubmitInteraction;

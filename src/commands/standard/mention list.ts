@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class MentionList extends Command {
 	async run(): Promise<void> {
@@ -12,7 +12,7 @@ export default class MentionList extends Command {
 			},
 		})).setColor(this.config.colors.info);
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [embed],
 			ephemeral: true,
 		});

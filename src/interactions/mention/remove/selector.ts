@@ -1,5 +1,5 @@
 import { ActionRowBuilder, APIEmbed, StringSelectMenuBuilder, SelectMenuComponent, SelectMenuInteraction } from "discord.js";
-import ComponentProcessor from "../../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class MentionRemoveSelector extends ComponentProcessor<SelectMenuInteraction> {
 	async run(): Promise<void> {
@@ -12,7 +12,7 @@ export default class MentionRemoveSelector extends ComponentProcessor<SelectMenu
 			.setPlaceholder(selectedUserTag)
 			.setDisabled(true);
 
-		this.interaction.message?.edit({
+		await this.interaction.message?.edit({
 			components: [new ActionRowBuilder<StringSelectMenuBuilder>().addComponents([selector])],
 		});
 
@@ -28,7 +28,7 @@ export default class MentionRemoveSelector extends ComponentProcessor<SelectMenu
 			},
 		});
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: 0x00FF00,
 				...this.t("removeEmbed", {

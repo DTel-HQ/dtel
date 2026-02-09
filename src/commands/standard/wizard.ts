@@ -1,6 +1,6 @@
 import { Numbers } from "@src/database/generated";
 import { ActionRowBuilder, ButtonBuilder, APIEmbed, ButtonStyle } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 // If someone could look over the complexity of this command and try to lower it that'd be helpful.
 
@@ -9,7 +9,7 @@ export default class Wizard extends Command {
 		const number: Numbers | null = await this.fetchNumber();
 
 		if (number) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("errors.channelHasNumber", { number: number.number }))],
 				ephemeral: true,
 			});
@@ -43,7 +43,7 @@ export default class Wizard extends Command {
 				}
 
 				if (numberCount >= this.config.maxNumbers) {
-					this.interaction.reply({
+					await this.interaction.reply({
 						embeds: [this.client.errorEmbed(this.t("errors.unwhitelistedGuildHasTooManyNumbers"))],
 						ephemeral: true,
 					});
@@ -52,7 +52,7 @@ export default class Wizard extends Command {
 			}
 		}
 
-		this.interaction.reply({
+		await	this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.yellowbook,
 

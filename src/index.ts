@@ -9,7 +9,6 @@ import config from "./config/config";
 import Console from "./internals/console";
 import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 import { updateCacheWithBlacklistItem } from "./redis/operations/blacklist/UpdateCacheWithBlacklistItem";
-import {register} from "module";
 
 // Main IPC process
 // process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
@@ -31,26 +30,26 @@ const shardsReady: number[] = [];
 sharder.on("shardCreate", shard => {
 	winston.info(`Spawned shard ID: ${shard.id}`);
 
-	shard.on("message", message => {
+	shard.on("message", async message => {
 		switch (message.msg) {
 			case "callEnded":
 			case "callInitiated": {
-				sharder.broadcast(message);
+				await sharder.broadcast(message);
 				break;
 			}
 
 			case "ready": {
 				if (shardsReady.includes(message.shardID)) {
 					winston.info(`Shard ${message.shardID} is recovering from an issue...`);
-					sharder.broadcast({ msg: "resume", shardID: message.shardID });
+					await sharder.broadcast({ msg: "resume", shardID: message.shardID });
 				} else {
 					shardsReady.push(message.shardID);
 
 					if (shardsReady.length === config.shardCount) {
 						winston.info("All shards spawned, starting calls and jobs...");
-						sharder.broadcast({ msg: "allShardsSpawned" });
+						await sharder.broadcast({ msg: "allShardsSpawned" });
 
-						allShardsReady();
+						await allShardsReady();
 					}
 				}
 
@@ -102,7 +101,7 @@ const allShardsReady = async(): Promise<void> => {
 			// Check to make sure we still have both sides
 			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			toShard = await shardIdForChannelId(call.to.channelID); // Primary shard
-			sharder.broadcast({
+			await sharder.broadcast({
 				msg: "resetCallReminderAndCache",
 				callDoc: call,
 				targetShard: fromShard,
@@ -119,14 +118,14 @@ const allShardsReady = async(): Promise<void> => {
 	}
 
 	try {
-		db.blacklist.findMany().then(allBlacklist => {
+		await db.blacklist.findMany().then(allBlacklist => {
 			allBlacklist.map(item => updateCacheWithBlacklistItem(item.id));
 		});
 	} catch (error) {
 		winston.error("Failed to populate blacklist cache on startup", error);
 	}
 
-	db.$disconnect();
+	await db.$disconnect();
 };
 
 function sendFailMessageToChannel(channelId: string, message: string): Promise<unknown> {
@@ -138,4 +137,4 @@ function sendFailMessageToChannel(channelId: string, message: string): Promise<u
 }
 
 winston.info("Spawning shards...");
-sharder.spawn();
+void sharder.spawn();

@@ -1,6 +1,6 @@
 import { Strikes } from "@src/database/generated";
-import Command from "../../internals/commandProcessor";
-import { getUsername } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { getUsername } from "@src/internals/utils";
 
 export default class StrikeRemove extends Command {
 	async run(): Promise<void> {

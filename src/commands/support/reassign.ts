@@ -1,9 +1,8 @@
 import { ActiveCalls, Mailbox, Numbers, Phonebook } from "@src/database/generated";
-import Command from "../../internals/commandProcessor";
-import { parseNumber } from "../../internals/utils";
-import { PermissionLevel } from "../../interfaces/commandData";
+import Command from "@src/internals/commandProcessor";
+import { parseNumber } from "@src/internals/utils";
+import { PermissionLevel } from "@src/interfaces/commandData";
 import { DMChannel } from "discord.js";
-
 
 type sourceNumber = (Numbers & {
     incomingCalls: ActiveCalls[];
@@ -14,7 +13,7 @@ type sourceNumber = (Numbers & {
 
 export default class Deassign extends Command {
 	async run(): Promise<void> {
-		this.interaction.deferReply();
+		await this.interaction.deferReply();
 
 		const from = parseNumber(this.interaction.options.getString("source", true));
 		const rawNumber = this.interaction.options.getString("newChannel", false);
@@ -51,7 +50,7 @@ export default class Deassign extends Command {
 		}
 
 		if (!fromDoc) {
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [this.client.errorEmbed("Source number not found.")],
 			});
 			return;
@@ -60,7 +59,7 @@ export default class Deassign extends Command {
 		// Check that the source is a VIP number
 		const srcIsVIP = fromDoc.vip ? fromDoc.vip.expiry.getTime() > Date.now() : false;
 		if (!srcIsVIP && await this.getPerms() < PermissionLevel.manager) {
-			this.interaction.editReply({
+			await this.interaction.editReply({
 				embeds: [{
 					color: this.config.colors.error,
 					title: "Not VIP",
@@ -81,7 +80,7 @@ export default class Deassign extends Command {
 			});
 
 			if (newDoc) {
-				this.interaction.editReply({
+				await this.interaction.editReply({
 					embeds: [this.client.errorEmbed("New number is already in use. Confirm ownership and deassign it first.")],
 				});
 				return;
@@ -102,7 +101,7 @@ export default class Deassign extends Command {
 			});
 
 			if (newDoc) {
-				this.interaction.editReply({
+				await this.interaction.editReply({
 					embeds: [this.client.errorEmbed("New channel is already in use. Confirm ownership and deassign its number first.")],
 				});
 				return;
@@ -110,7 +109,7 @@ export default class Deassign extends Command {
 
 			const discordChannel = await this.client.getChannel(newChannel).catch(() => null);
 			if (!discordChannel) {
-				this.interaction.editReply({
+				await this.interaction.editReply({
 					embeds: [this.client.errorEmbed("Couldn't find the new channel.")],
 				});
 				return;
@@ -120,7 +119,7 @@ export default class Deassign extends Command {
 			else newGuildID = discordChannel.guildId;
 		}
 
-		const duplicatedDBEntry = await this.db.numbers.create({
+		await this.db.numbers.create({
 			data: {
 				number: newNumber || fromDoc.number,
 				channelID: newChannel || fromDoc.channelID,

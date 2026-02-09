@@ -7,8 +7,8 @@ import { prismaMock } from "@src/mocks/prisma.test";
 
 let number: Numbers;
 let mailbox: Mailbox;
-beforeEach(() => {
-	initInternationalization();
+beforeEach(async() => {
+	await initInternationalization();
 
 	number = buildTestNumber();
 	mailbox = buildTestMailbox();
@@ -17,25 +17,25 @@ beforeEach(() => {
 });
 
 
-it("should generate mailbox fields", () => {
+it("should generate mailbox fields", async() => {
 	prismaMock.mailbox.findUnique.mockResolvedValue(mailbox);
 
 	const result = target.generateMailboxField(number, mailbox, "en");
 
-	expect(result).resolves.toEqual([{
+	await expect(result).resolves.toEqual([{
 		name: "📠 Answering Machine",
 		value: "auto_reply",
 		inline: false,
 	}]);
 });
 
-it("should include mailbox full if the mailbox has too many messages", () => {
+it("should include mailbox full if the mailbox has too many messages", async() => {
 	mailbox.messages = Array(50);
 	prismaMock.mailbox.findUnique.mockResolvedValue(mailbox);
 
 	const result = target.generateMailboxField(number, mailbox, "en");
 
-	expect(result).resolves.toEqual([{
+	await expect(result).resolves.toEqual([{
 		name: "📠 Answering Machine",
 		value: "auto_reply (Mailbox full)",
 		inline: false,

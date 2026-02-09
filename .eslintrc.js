@@ -10,6 +10,7 @@ module.exports = {
 	],
 	parserOptions: {
 		ecmaVersion: 2017,
+		project: "./tsconfig.json",
 	},
 	env: {
 		es6: true,
@@ -17,6 +18,7 @@ module.exports = {
 	},
 	ignorePatterns: ["build/**", "dist/**", "node_modules/**"],
 	rules: {
+		"@typescript-eslint/no-floating-promises": "warn",
 		"no-relative-import-paths/no-relative-import-paths": [
 			"warn",
 			{ allowSameFolder: true, rootDir: "src", prefix: "@src" },
@@ -52,8 +54,7 @@ module.exports = {
 		"no-useless-concat": "error",
 		"no-useless-escape": "error",
 		"no-useless-return": "error",
-		"no-void": "error",
-		"no-warning-comments": "warn",
+		"no-void": ["error", { allowAsStatement: true }],
 		"prefer-promise-reject-errors": "error",
 		"wrap-iife": "error",
 		yoda: "error",
@@ -127,4 +128,12 @@ module.exports = {
 		"no-irregular-whitespace": ["error", { skipStrings: true, skipComments: true, skipTemplates: true }],
 		"no-unused-vars": 0,
 	},
+	overrides: [
+		{
+			files: ["*.test.ts"],
+			rules: {
+				"@typescript-eslint/no-floating-promises": "off",
+			},
+		},
+	],
 };

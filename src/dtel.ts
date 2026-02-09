@@ -5,27 +5,29 @@ import { EmbedBuilder } from "discord.js";
 import config from "./config/config";
 import { winston } from "./instances/winston";
 
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 initInternationalization();
 prepareClient();
 
 process.on("message", msg => SharderMessageEvent(msg as Record<string, unknown>));
 
-const handleFatalError = (error: unknown): void => {
+const handleFatalError = async(error: unknown, type: "exception" | "rejection"): void => {
 	const err = error instanceof Error ?
 		error :
 		new Error(typeof error === "string" ? error : JSON.stringify(error));
 
-	winston.error(`Uncaught Exception: ${err.message}\n${err.stack}`);
+	const title = type === "exception" ? "Uncaught Exception" : "Unhandled Rejection";
+	winston.error(`${title}: ${err.message}\n${err.stack}`);
 
-	client.sendCrossShard({
+	await client.sendCrossShard({
 		embeds: [
 			new EmbedBuilder()
-				.setTitle("Uncaught Exception")
+				.setTitle(title)
 				.setDescription(`\`\`\`${err.message}\n${err.stack ?? ""}\`\`\``)
 				.setColor(0xff0000),
 		],
 	}, config.supportGuild.channels.badLogs);
 };
 
-process.on("uncaughtException", handleFatalError);
-process.on("unhandledRejection", handleFatalError);
+process.on("uncaughtException", error => handleFatalError(error, "exception"));
+process.on("unhandledRejection", error => handleFatalError(error, "rejection"));

@@ -1,5 +1,5 @@
 import { ActionRowBuilder, ButtonInteraction, ModalBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
-import ComponentProcessor from "../../internals/componentProcessor";
+import ComponentProcessor from "@src/internals/componentProcessor";
 
 export default class Call411SearchNext extends ComponentProcessor<ButtonInteraction> {
 	async run(): Promise<void> {

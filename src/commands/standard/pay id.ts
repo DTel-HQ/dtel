@@ -6,7 +6,7 @@ export default class Pay extends PayCommonFunctions {
 		const user = await this.client.getUser(userID);
 
 		if (!user) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed(this.t("userNotFound"))],
 			});
 			return;

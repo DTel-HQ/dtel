@@ -20,7 +20,7 @@ export default class Balance extends Command {
 		try {
 			user = await this.client.getUser(accountIDToGet);
 		} catch {
-			this.noAccount();
+			await this.noAccount();
 			return;
 		}
 
@@ -30,11 +30,11 @@ export default class Balance extends Command {
 
 		account = await getAccount(accountIDToGet);
 		if (!account) {
-			this.noAccount();
+			await this.noAccount();
 			return;
 		}
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.info,
 				author: {

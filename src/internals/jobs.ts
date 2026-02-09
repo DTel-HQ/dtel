@@ -13,7 +13,7 @@ export const startJobs = () => {
     userCount: number;
   }
 
-  const playingJob = scheduleJob(
+  scheduleJob(
   	{
   		minute: new Range(0, 59, 15),
   	},
@@ -24,7 +24,7 @@ export const startJobs = () => {
         await client.shard!.fetchClientValues("users.cache.size")
       ).reduce((a, b) => (a as number) + (b as number), 0) as number;
 
-      client.shard!.broadcastEval<void, playingCtx>(
+  		await client.shard!.broadcastEval<void, playingCtx>(
       	(c, ctx) => {
           c.user!.setActivity({
           	name: `${ctx.guildCount.toString()} servers and ${ctx.userCount.toString()} users | /help`,
@@ -37,16 +37,14 @@ export const startJobs = () => {
       			userCount: userCount,
       		},
       	},
-      );
+  		);
 
-      winston.verbose("[Jobs] Updated playing status.");
+  		winston.verbose("[Jobs] Updated playing status.");
   	},
   );
 
-  const WCVotes = 0;
-  const votingJob =
-    !config.devMode &&
-    scheduleJob("*/1 * * * *", async() => {
+
+  scheduleJob("*/1 * * * *", async() => {
     	const guildCount = await client.getGuildCount();
 
     	if (guildCount === -1) return;
@@ -136,13 +134,13 @@ export const startJobs = () => {
     		const dmChannel = await user.createDM().catch(() => null);
     		if (dmChannel) dmChannel.send({ embeds: [dmEmbed] }).catch(() => null);
 
-    		client.log(
+    		await client.log(
     			`:ballot_box: ${user.username} (${user.id}) received ${
     				config.dtsEmoji
     			}${responseBody[user.id]} from voting.`,
     		);
     	}
-    });
+  });
 };
 
 // Job to give out weekly VIP voting prize
@@ -168,7 +166,7 @@ scheduleJob("0 20 * * 0", async() => {
 	for (const voteDescription of topVoters) {
 		const user = await client.getUser(voteDescription.userID).catch(() => null);
 		if (!user) {
-			client.sendCrossShard(
+			await client.sendCrossShard(
 				`<@${config.supportGuild.roles.customerSupport}> couldn't fetch vote winner ${voteDescription.userID}`,
 				config.supportGuild.channels.badLogs,
 			);
@@ -272,7 +270,7 @@ scheduleJob("0 20 * * 0", async() => {
 		);
 	} catch (e) {
 		console.error(e);
-		client.sendCrossShard(
+		await client.sendCrossShard(
 			`<@${config.supportGuild.roles.customerSupport}> Couldn't send voting leaderboard announcement.`,
 			config.supportGuild.channels.badLogs,
 		);
@@ -320,5 +318,5 @@ scheduleJob("0 0 0 * * *", async() => {
 		},
 	});
 
-	client.log(`📖 Cleared ${result.count} messages from ${calls.length} calls.`);
+	await client.log(`📖 Cleared ${result.count} messages from ${calls.length} calls.`);
 });

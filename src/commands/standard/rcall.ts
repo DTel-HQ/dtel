@@ -13,7 +13,7 @@ export default class RCall extends Command {
 		while (!toCall) {
 			cycle++;
 			if (cycle > 100) {
-				this.interaction.editReply("❌ Couldn't find a number to call.");
+				await this.interaction.editReply("❌ Couldn't find a number to call.");
 				return;
 			}
 
@@ -75,8 +75,8 @@ export default class RCall extends Command {
 			toCall = number;
 		}
 
-		this.interaction.editReply("☎️ Found a number! Dialling...");
+		await this.interaction.editReply("☎️ Found a number! Dialling...");
 
-		CallCommand.call(this.interaction, toCall.number, this.number!, true, true);
+		await CallCommand.call(this.interaction, toCall.number, this.number!, true, true);
 	}
 }

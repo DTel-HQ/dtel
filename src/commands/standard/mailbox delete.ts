@@ -1,6 +1,6 @@
 import { StringSelectMenuOptionBuilder } from "@discordjs/builders";
 import { ActionRowBuilder, StringSelectMenuBuilder } from "discord.js";
-import Command from "../../internals/commandProcessor";
+import Command from "@src/internals/commandProcessor";
 
 export default class MailboxDelete extends Command {
 	async run(): Promise<void> {
@@ -11,7 +11,7 @@ export default class MailboxDelete extends Command {
 
 		const mailbox = await this.fetchMailbox();
 		if (mailbox.messages.length === 0) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [this.client.errorEmbed("Your mailbox is empty!")],
 			});
 			return;
@@ -33,7 +33,7 @@ export default class MailboxDelete extends Command {
 			description += " Can't see some messages? Only the first 25 messages are shown.";
 		}
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.info,
 				title: "📭 Delete Messages",

@@ -1,18 +1,18 @@
 import dayjs from "dayjs";
 import { APIEmbed } from "discord.js";
-import ModalProcessor from "../../internals/modalProcessor";
-import { parseNumber } from "../../internals/utils";
+import ModalProcessor from "@src/internals/modalProcessor";
+import { parseNumber } from "@src/internals/utils";
 
 export default class WizardModalSubmit extends ModalProcessor {
 	async run(): Promise<void> {
 		const number = parseNumber(this.interaction.fields.getTextInputValue("wizardNumber"));
 
 		if (isNaN(Number(number))) {
-			this.interaction.reply({ content: `${this.t("errors.numberInvalid")}`, ephemeral: true });
+			await this.interaction.reply({ content: `${this.t("errors.numberInvalid")}`, ephemeral: true });
 			return;
 		}
 		if (!number.startsWith(this.numberShouldStartWith())) {
-			this.interaction.reply({ content: `${this.t("errors.numberBadFormat", { numberStartsWith: this.numberShouldStartWith() })}`, ephemeral: true });
+			await this.interaction.reply({ content: `${this.t("errors.numberBadFormat", { numberStartsWith: this.numberShouldStartWith() })}`, ephemeral: true });
 			return;
 		}
 
@@ -23,7 +23,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		});
 
 		if (dbNumber) {
-			this.interaction.reply({ content: `${this.t("errors.numberInUse")}`, ephemeral: true });
+			await this.interaction.reply({ content: `${this.t("errors.numberInUse")}`, ephemeral: true });
 			return;
 		}
 
@@ -39,7 +39,7 @@ export default class WizardModalSubmit extends ModalProcessor {
 		});
 
 
-		this.interaction.reply({
+		await this.interaction.reply({
 			embeds: [{
 				color: this.config.colors.success,
 
@@ -47,6 +47,6 @@ export default class WizardModalSubmit extends ModalProcessor {
 			}],
 		});
 
-		this.client.log(`📘 Number \`${number}\` has been self-assigned to \`${this.interaction.channelId}\` by \`${this.interaction.user.username}\` \`${this.interaction.user.id}\``);
+		await this.client.log(`📘 Number \`${number}\` has been self-assigned to \`${this.interaction.channelId}\` by \`${this.interaction.user.username}\` \`${this.interaction.user.id}\``);
 	}
 }

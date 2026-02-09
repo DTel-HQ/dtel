@@ -2,8 +2,8 @@ import { client } from "@src/instances/client";
 import { winston } from "@src/instances/winston";
 import { allShardsReadyHandler } from "./allShardsReady";
 import { startOngoingCallReminder } from "@src/internals/calls/ongoing-call-reminder/StartOngoingCallReminder";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
 import { updateCacheWithCall } from "@src/redis/operations/UpdateCacheWithCall";
+import {CallsWithNumbers} from "@src/types/CallsWithNumbers";
 
 export default async(msg: Record<string, unknown>): Promise<void> => {
 	switch (msg.msg) {
@@ -92,8 +92,9 @@ export default async(msg: Record<string, unknown>): Promise<void> => {
 
 			winston.info(`Resetting call reminder and cache for call ID: ${callDoc.id}`);
 
+			
 			startOngoingCallReminder(callDoc);
-			updateCacheWithCall(callDoc);
+			await updateCacheWithCall(callDoc);
 		}
 	}
 };

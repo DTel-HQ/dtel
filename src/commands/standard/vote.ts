@@ -1,9 +1,9 @@
 import { EmbedBuilder } from "@discordjs/builders";
-import CommandProcessor from "../../internals/commandProcessor";
+import CommandProcessor from "@src/internals/commandProcessor";
 
 export default class Vote extends CommandProcessor {
 	async run() {
-		this.interaction.reply({
+		await this.interaction.reply({
 			ephemeral: true,
 			embeds: [
 				new EmbedBuilder()

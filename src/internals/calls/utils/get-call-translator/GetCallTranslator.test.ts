@@ -1,8 +1,8 @@
 import { initInternationalization } from "@src/internationalization/i18n";
 import * as target from "./GetCallTranslator";
 
-beforeEach(() => {
-	initInternationalization();
+beforeEach(async() => {
+	await initInternationalization();
 });
 
 it("should return the English call translations", () => {

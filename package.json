@@ -7,6 +7,7 @@
   "scripts": {
     "start": "node -r ts-node/register -r tsconfig-paths/register src/index.ts",
     "build": "tsc",
+    "lint": "eslint . --ext .ts",
     "debug": "node --inspect -r ts-node/register -r tsconfig-paths/register src/index.ts",
     "watch": "nodemon",
     "test": "jest",

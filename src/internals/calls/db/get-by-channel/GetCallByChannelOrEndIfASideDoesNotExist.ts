@@ -21,7 +21,7 @@ export const getCallByChannelOrEndIfASideDoesNotExist = async(channelId: string)
 		}
 
 		client.winston.warn(`Call ${callWithPotentialNumbers.id} is missing a side, deleted from active calls.`);
-		client.sendCrossShard("❌ We lost contact with the other side. This call has been ended. Please try your call again", sideWeProbablyStillHave?.channelID);
+		await client.sendCrossShard("❌ We lost contact with the other side. This call has been ended. Please try your call again", sideWeProbablyStillHave?.channelID);
 		return undefined;
 	}
 

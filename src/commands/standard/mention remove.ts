@@ -1,11 +1,11 @@
 import { ActionRowBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
-import Command from "../../internals/commandProcessor";
-import { getUsername } from "../../internals/utils";
+import Command from "@src/internals/commandProcessor";
+import { getUsername } from "@src/internals/utils";
 
 export default class MentionRemove extends Command {
 	async run(): Promise<void> {
 		if (this.number?.mentions.length === 0) {
-			this.interaction.reply({
+			await this.interaction.reply({
 				embeds: [
 					this.client.errorEmbed(this.t("listEmpty")),
 				],
