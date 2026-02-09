@@ -13,7 +13,8 @@
 				"./src/*"
 			]
 		},
-		"baseUrl": "."
+		"baseUrl": ".",
+		"outDir": "build"
 	},
 
 	"include": [
