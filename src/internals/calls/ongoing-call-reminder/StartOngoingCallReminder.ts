@@ -38,7 +38,7 @@ export const startOngoingCallReminder = (call: CallsWithNumbers): void => {
 			await client.sendCrossShard(reminderMessage, call.from.channelID);
 			await client.sendCrossShard(reminderMessage, call.to.channelID);
 		} catch (error) {
-			if (error instanceof DiscordAPIError && error.code === RESTJSONErrorCodes.MissingPermissions) {
+			if (error instanceof DiscordAPIError && (error.code === RESTJSONErrorCodes.MissingPermissions || error.code === RESTJSONErrorCodes.MissingAccess)) {
 				winston.warn(`Missing access to send reminder for call ID: ${call.id} in channel ${call.from.channelID} or ${call.to.channelID}. Stopping reminders.`);
 				clearInterval(interval);
 				callReminderIntervals.delete(call.id);
