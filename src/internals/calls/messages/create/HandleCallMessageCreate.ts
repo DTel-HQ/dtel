@@ -20,14 +20,19 @@ export const handleCallMessageCreate = async(
 	});
 
 	if (!otherSideChannel) {
-		await message.reply(
-			"❌ We lost connection to the other side. The call may has been ended.",
-		);
-		await hangupInDb(call, "call-lost");
+		await lostConnectionReply(message, call);
 		return;
 	}
 
-	const forwardedMessageId = await sendForwardedMessage(message, call);
+	// Normally we'd just wrap everything in the try-catch but I only want to throw if the forwarding fails
+	// A DB fail is a real problem that shouldn't end a call
+	let forwardedMessageId: string | null = null;
+	try {
+		forwardedMessageId = await sendForwardedMessage(message, call);
+	} catch {
+		await lostConnectionReply(message, call);
+		return;
+	}
 
 	await createCallMessageInDb({
 		callID: call.id,
@@ -36,3 +41,10 @@ export const handleCallMessageCreate = async(
 		sender: message.author.id,
 	});
 };
+
+async function lostConnectionReply(message: Message, call: CallsWithNumbers): Promise<void> {
+	await message.reply(
+		"❌ We lost connection to the other side. The call may has been ended.",
+	);
+	await hangupInDb(call, "call-lost");
+}
