@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import {
 	CommandInteraction,
 	MessageComponentInteraction,
@@ -21,6 +20,80 @@ import config from "@src/config/config";
 import { getCallByChannel } from "@src/internals/calls/db/get-by-channel/GetCallByChannel";
 import { isBlacklisted } from "@src/redis/operations/blacklist/GetBlacklistFromCache";
 
+// Call interactions
+import Call233Open from "@src/interactions/call/233-open";
+import Call233Renew from "@src/interactions/call/233-renew";
+import Call411ManageAddModal from "@src/interactions/call/411-manage-add-modal";
+import Call411ManageDeleteCancel from "@src/interactions/call/411-manage-delete-cancel";
+import Call411ManageDeleteConfirm from "@src/interactions/call/411-manage-delete-confirm";
+import Call411ManageEditModal from "@src/interactions/call/411-manage-edit-modal";
+import Call411ManageSelector from "@src/interactions/call/411-manage-selector";
+import Call411SearchExit from "@src/interactions/call/411-search-exit";
+import Call411SearchModalSubmit from "@src/interactions/call/411-search-modal-submit";
+import Call411SearchNext from "@src/interactions/call/411-search-next";
+import Call411SearchPrev from "@src/interactions/call/411-search-prev";
+import Call411SearchSearch from "@src/interactions/call/411-search-search";
+import Call411Selector from "@src/interactions/call/411-selector";
+import Call411VipCustomnameModalSubmit from "@src/interactions/call/411-vip-customname-modal-submit";
+import Call411VipHideSelector from "@src/interactions/call/411-vip-hide-selector";
+import Call411VipSelector from "@src/interactions/call/411-vip-selector";
+import Call411VipUpgradeLength from "@src/interactions/call/411-vip-upgrade-length";
+import CallHangup from "@src/interactions/call/hangup";
+import CallPickup from "@src/interactions/call/pickup";
+
+// Mailbox interactions
+import MailboxClearConfirm from "@src/interactions/mailbox/clear/confirm";
+import MailboxDeleteSelect from "@src/interactions/mailbox/delete/select";
+import MailboxMessagesNext from "@src/interactions/mailbox/messages/next";
+import MailboxMessagesPrev from "@src/interactions/mailbox/messages/prev";
+import MailboxSendInitiate from "@src/interactions/mailbox/send/initiate";
+import MailboxSendModal from "@src/interactions/mailbox/send/modal";
+import MailboxSettingsUpdate from "@src/interactions/mailbox/settings/update";
+
+// Mention interactions
+import MentionRemoveSelector from "@src/interactions/mention/remove/selector";
+
+// Wizard interactions
+import WizardModalSubmit from "@src/interactions/wizard/modalSubmit";
+import WizardReady from "@src/interactions/wizard/ready";
+
+// Static mapping of interaction paths to processor classes
+const INTERACTION_PROCESSORS: Record<string, Constructable<Processor<ChannelBasedInteraction>>> = {
+	// Call interactions
+	"call/233-open": Call233Open,
+	"call/233-renew": Call233Renew,
+	"call/411-manage-add-modal": Call411ManageAddModal,
+	"call/411-manage-delete-cancel": Call411ManageDeleteCancel,
+	"call/411-manage-delete-confirm": Call411ManageDeleteConfirm,
+	"call/411-manage-edit-modal": Call411ManageEditModal,
+	"call/411-manage-selector": Call411ManageSelector,
+	"call/411-search-exit": Call411SearchExit,
+	"call/411-search-modal-submit": Call411SearchModalSubmit,
+	"call/411-search-next": Call411SearchNext,
+	"call/411-search-prev": Call411SearchPrev,
+	"call/411-search-search": Call411SearchSearch,
+	"call/411-selector": Call411Selector,
+	"call/411-vip-customname-modal-submit": Call411VipCustomnameModalSubmit,
+	"call/411-vip-hide-selector": Call411VipHideSelector,
+	"call/411-vip-selector": Call411VipSelector,
+	"call/411-vip-upgrade-length": Call411VipUpgradeLength,
+	"call/hangup": CallHangup,
+	"call/pickup": CallPickup,
+	// Mailbox interactions
+	"mailbox/clear/confirm": MailboxClearConfirm,
+	"mailbox/delete/select": MailboxDeleteSelect,
+	"mailbox/messages/next": MailboxMessagesNext,
+	"mailbox/messages/prev": MailboxMessagesPrev,
+	"mailbox/send/initiate": MailboxSendInitiate,
+	"mailbox/send/modal": MailboxSendModal,
+	"mailbox/settings/update": MailboxSettingsUpdate,
+	// Mention interactions
+	"mention/remove/selector": MentionRemoveSelector,
+	// Wizard interactions
+	"wizard/modalSubmit": WizardModalSubmit,
+	"wizard/ready": WizardReady,
+};
+
 export const interactionCreateHandler = async(client: DTelClient, _interaction: Interaction): Promise<void> => {
 	const interaction = _interaction as CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 
@@ -36,7 +109,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 	const call = interaction.channelId ? await getCallByChannel(interaction.channelId) : null;
 
 	let commandName: string;
-	let toRunPath: string;
+	let processor: Constructable<Processor<ChannelBasedInteraction>>;
 	let commandData: Command;
 	let permissionLevel: PermissionLevel = PermissionLevel.none;
 
@@ -56,39 +129,20 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 				return;
 			}
 
-			toRunPath = `${__dirname}/../commands`;
-
-			switch (commandData.useType) {
-				case CommandType.standard: {
-					toRunPath += "/standard";
-					break;
-				}
-				case CommandType.call: {
-					toRunPath += "/call";
-					break;
-				}
-				case CommandType.customerSupport: {
-					toRunPath += "/support";
-					break;
-				}
-				case CommandType.maintainer: {
-					toRunPath += "/maintainer";
-					break;
-				}
-			}
 
 			const subCommand = typedInteraction.options.getSubcommand(false);
 			if (subCommand) {
 				const subData = commandData.options?.find(o => o.name === subCommand) as SubcommandData | null;
 				if (!subData) throw new Error();
 
+				processor = subData.processor ?? commandData.processor;
+
 				commandName = `${commandName} ${subCommand}`;
 				permissionLevel = subData.permissionLevel;
 			} else {
+				processor = commandData.processor;
 				permissionLevel = commandData.permissionLevel;
 			}
-
-			toRunPath += `/${commandName}`;
 
 			break;
 		}
@@ -130,18 +184,18 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 			if (!cmd) throw new Error(`Could not find command data for command ${commandName}`);
 			commandData = cmd;
 
-			toRunPath = `${__dirname}/../interactions/${commandName}`;
-
 			const subCommand = cmd.options?.filter(o => o.type === ApplicationCommandOptionType.Subcommand) as SubcommandData[] | null;
 
+			let processorPath: string;
 			if (subCommand && subCommand.length > 0) {
 				commandName = `${split[0]} ${split[1]}`;
 				interactionName = split[2];
 
 				permissionLevel = subCommand.find(c => c.name == split[1])?.permissionLevel || PermissionLevel.none;
-				toRunPath += `/${split[1]}`;
+				processorPath = `${split[0]}/${split[1]}/${interactionName}`;
 			} else {
 				permissionLevel = commandData.permissionLevel;
+				processorPath = `${split[0]}/${interactionName}`;
 			}
 
 			const paramsToSend: string[] = [];
@@ -157,11 +211,21 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 						paramsToSend.push(parsedParams[i]);
 					}
 				}
+				// Rebuild processor path without params
+				if (subCommand && subCommand.length > 0) {
+					processorPath = `${split[0]}/${split[1]}/${interactionName}`;
+				} else {
+					processorPath = `${split[0]}/${interactionName}`;
+				}
 			}
 
 			commandData.params = paramsToSend;
 
-			toRunPath += `/${interactionName}`;
+			// Get processor from static mapping
+			processor = INTERACTION_PROCESSORS[processorPath];
+			if (!processor) {
+				throw new Error(`Could not find processor for interaction path: ${processorPath}`);
+			}
 		}
 	}
 
@@ -173,26 +237,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 		return;
 	}
 
-	let processorFile: Constructable<Processor<ChannelBasedInteraction>>;
-	try {
-		if (client.config.devMode) {
-			delete require.cache[require.resolve(toRunPath!)];
-		}
-
-
-		processorFile = require(toRunPath!).default;
-		if (!processorFile) throw new Error("Processor file not found");
-	} catch (e) {
-		if (config.devMode) {
-			console.error(e);
-		}
-
-		client.winston.error(`Cannot process interaction ${toRunPath.split("/").pop()} for/from command: ${commandName!}`);
-		await interaction.reply(":x: Interaction not yet implemented.");
-		return;
-	}
-
-	const processorClass = new processorFile(client, interaction, commandData);
+	const processorClass = new processor(client, interaction, commandData);
 	try {
 		const userPermissions = await client.getPerms(interaction.user.id);
 		// Bypass checks if ran by a maintainer

@@ -1,6 +1,50 @@
 import { ApplicationCommandOptionType } from "discord.js";
 import Command, { PermissionLevel, CommandType } from "@src/interfaces/commandData";
 
+// Standard commands
+import Wizard from "@src/commands/standard/wizard";
+import Help from "@src/commands/standard/help";
+import Links from "@src/commands/standard/links";
+import Ping from "@src/commands/standard/ping";
+import Invite from "@src/commands/standard/invite";
+import Balance from "@src/commands/standard/balance";
+import Info from "@src/commands/standard/info";
+import Daily from "@src/commands/standard/daily";
+import Call from "@src/commands/standard/call";
+import Rcall from "@src/commands/standard/rcall";
+import Strikes from "@src/commands/standard/strikes";
+import MentionToggle from "@src/commands/standard/mention toggle";
+import MentionList from "@src/commands/standard/mention list";
+import MentionRemove from "@src/commands/standard/mention remove";
+import Block from "@src/commands/standard/block";
+import PayId from "@src/commands/standard/pay id";
+import PayUser from "@src/commands/standard/pay user";
+import MailboxClear from "@src/commands/standard/mailbox clear";
+import MailboxMessages from "@src/commands/standard/mailbox messages";
+import MailboxDelete from "@src/commands/standard/mailbox delete";
+import MailboxSettings from "@src/commands/standard/mailbox settings";
+import Vote from "@src/commands/standard/vote";
+
+// Call commands
+import Hangup from "@src/commands/call/hangup";
+import Status from "@src/commands/call/status";
+import Hold from "@src/commands/call/hold";
+
+// Maintainer commands
+import Eval from "@src/commands/maintainer/eval";
+import Stats from "@src/commands/maintainer/stats";
+import Addvip from "@src/commands/maintainer/addvip";
+
+// Support commands
+import Ninfo from "@src/commands/support/ninfo";
+import Deassign from "@src/commands/support/deassign";
+import Uinfo from "@src/commands/support/uinfo";
+import Blacklist from "@src/commands/support/blacklist";
+import Addcredit from "@src/commands/support/addcredit";
+import Cinfo from "@src/commands/support/cinfo";
+import StrikeAdd from "@src/commands/support/strike add";
+import StrikeRemove from "@src/commands/support/strike remove";
+
 const commands: Command[] = [
 	{
 		name: "wizard",
@@ -11,6 +55,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
+		processor: Wizard,
 	},
 	{
 		name: "help",
@@ -20,6 +65,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Help,
 	},
 	{
 		name: "links",
@@ -29,6 +75,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Links,
 	},
 	{
 		name: "ping",
@@ -38,6 +85,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Ping,
 	},
 	{
 		name: "invite",
@@ -47,6 +95,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Invite,
 	},
 	{
 		name: "balance",
@@ -55,6 +104,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Balance,
 		options: [{
 			name: "user",
 			description: "User you want to get the balance of (if you're in the same server)",
@@ -75,6 +125,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Info,
 	},
 	{
 		name: "daily",
@@ -85,6 +136,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Daily,
 	},
 	{
 		name: "eval",
@@ -100,6 +152,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.maintainer,
 		useType: CommandType.maintainer,
+		processor: Eval,
 	},
 	{
 		name: "call",
@@ -117,6 +170,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Call,
 	},
 	{
 		name: "rcall",
@@ -128,6 +182,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Rcall,
 	},
 	{
 		name: "hangup",
@@ -137,16 +192,19 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
+		processor: Hangup,
 	},
 	{
 		name: "strike",
 		description: `Warn a user or guild that their behavior will not be tolerated. [Support Only]`,
 		guildOnly: false,
 		numberRequired: false,
+		processor: StrikeAdd,
 		options: [{
 			name: "add",
 			description: "Add a strike to a user. [Support Only]",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: StrikeAdd,
 			options: [{
 				name: "offender",
 				description: "The ID of the number/user/guild/channel you want to strike",
@@ -162,6 +220,7 @@ const commands: Command[] = [
 			name: "remove",
 			description: "Remove a strike from a user. [Support Only]",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: StrikeRemove,
 			options: [{
 				name: "strike_id",
 				description: "The ID of the strike you want to remove",
@@ -187,6 +246,7 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Strikes,
 	},
 	{
 		name: "ninfo",
@@ -202,6 +262,7 @@ const commands: Command[] = [
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Ninfo,
 	},
 	// {
 	// 	name: "reassign",
@@ -245,6 +306,7 @@ const commands: Command[] = [
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Deassign,
 	},
 	{
 		name: "uinfo",
@@ -259,6 +321,7 @@ const commands: Command[] = [
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Uinfo,
 	},
 	{
 		name: "blacklist",
@@ -278,6 +341,7 @@ const commands: Command[] = [
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Blacklist,
 	},
 	{
 		name: "addcredit",
@@ -297,6 +361,7 @@ const commands: Command[] = [
 		}],
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Addcredit,
 	},
 	{
 		name: "status",
@@ -305,6 +370,7 @@ const commands: Command[] = [
 		numberRequired: false,
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
+		processor: Status,
 	},
 	{
 		name: "cinfo",
@@ -319,22 +385,27 @@ const commands: Command[] = [
 		numberRequired: false,
 		permissionLevel: PermissionLevel.customerSupport,
 		useType: CommandType.customerSupport,
+		processor: Cinfo,
 	},
 	{
 		name: "mention",
 		description: `Edit the list of people who get mentioned when a call comes through.`,
+		processor: MentionToggle,
 		options: [{
 			name: "toggle",
 			description: "Add or remove yourself from the mentions list",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MentionToggle,
 		}, {
 			name: "list",
 			description: "View the mentions list",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MentionList,
 		}, {
 			name: "remove",
 			description: "Remove someone from the mentions list",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MentionRemove,
 
 			permissionLevel: PermissionLevel.serverAdmin,
 		}],
@@ -357,6 +428,7 @@ const commands: Command[] = [
 		numberRequired: true,
 		permissionLevel: PermissionLevel.serverAdmin,
 		useType: CommandType.standard,
+		processor: Block,
 	},
 	{
 		name: "pay",
@@ -364,11 +436,13 @@ const commands: Command[] = [
 		guildOnly: false,
 		numberRequired: false,
 		accountRequired: true,
+		processor: PayId,
 
 		options: [{
 			name: "id",
 			description: "Send credit to a user by ID",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: PayId,
 
 			options: [{
 				name: "id",
@@ -390,6 +464,7 @@ const commands: Command[] = [
 			name: "user",
 			description: "Send credit to a user by mentioning them",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: PayUser,
 
 			options: [{
 				name: "user",
@@ -420,32 +495,38 @@ const commands: Command[] = [
 
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.call,
+		processor: Hold,
 	},
 	{
 		name: "mailbox",
 		description: `Manage your store of messages.`,
+		processor: MailboxClear,
 		options: [{
 			name: "clear",
 			description: "Clear all messages from mailbox",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MailboxClear,
 
 			permissionLevel: PermissionLevel.serverAdmin,
 		}, {
 			name: "messages",
 			description: "View all of the messages in your mailbox",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MailboxMessages,
 
 			permissionLevel: PermissionLevel.none,
 		}, {
 			name: "delete",
 			description: "Delete a specific message from your mailbox",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MailboxDelete,
 
 			permissionLevel: PermissionLevel.serverAdmin,
 		}, {
 			name: "settings",
 			description: "Change settings about your mailbox",
 			type: ApplicationCommandOptionType.Subcommand,
+			processor: MailboxSettings,
 
 			permissionLevel: PermissionLevel.serverAdmin,
 		}],
@@ -460,12 +541,14 @@ const commands: Command[] = [
 		description: `View statistics about the bot. [Maintainer Only]`,
 		permissionLevel: PermissionLevel.maintainer,
 		useType: CommandType.maintainer,
+		processor: Stats,
 	},
 	{
 		name: "addvip",
 		description: "Give VIP months to a user following their donation. [Maintainer Only]",
 		permissionLevel: PermissionLevel.maintainer,
 		useType: CommandType.maintainer,
+		processor: Addvip,
 
 		options: [{
 			name: "user",
@@ -486,6 +569,7 @@ const commands: Command[] = [
 		numberRequired: false,
 		permissionLevel: PermissionLevel.none,
 		useType: CommandType.standard,
+		processor: Vote,
 	},
 ];
 

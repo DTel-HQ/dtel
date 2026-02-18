@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import CommandProcessor from "@src/internals/commandProcessor";
+import Constructable from "@src/interfaces/constructable";
 import { ApplicationCommandOptionData, ApplicationCommandSubCommandData, ChatInputApplicationCommandData } from "discord.js";
 
 // eslint-disable-next-line no-shadow
@@ -23,11 +25,13 @@ enum CommandType {
 interface SubcommandData extends ApplicationCommandSubCommandData {
 	permissionLevel: PermissionLevel;
 	useType: CommandType;
+	processor?: Constructable<CommandProcessor>;
 }
 
 type CommandOptions = ApplicationCommandOptionData | SubcommandData;
 
 interface CommandData extends ChatInputApplicationCommandData {
+	processor: Constructable<CommandProcessor>;
 	options?: CommandOptions[],
 
 	guildOnly?: boolean;
