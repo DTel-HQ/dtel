@@ -1,5 +1,5 @@
 import { Numbers } from "@src/database/generated";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
 interface SplitCallSidesResult {
 	thisSide: Numbers;

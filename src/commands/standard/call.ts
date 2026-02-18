@@ -16,7 +16,7 @@ export default class Call extends Command {
 				return this.twoThreeThree();
 			}
 			case "*411": {
-				return this.fourOneOne();
+				await this.fourOneOne();
 				break;
 			}
 			default: {

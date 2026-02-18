@@ -75,6 +75,11 @@ class DTelClient extends Client<true> {
 	async getUser(id: string): Promise<User> {
 		return this.users.fetch(id);
 	}
+
+	async getUserOrNull(id: string): Promise<User | null> {
+		return this.users.fetch(id).catch(() => null);
+	}
+
 	async getGuild(id: string): Promise<Guild> {
 		// Not safe to cache this as we won't get its updates
 		return this.guilds.cache.get(id) ?? this.guilds.fetch({

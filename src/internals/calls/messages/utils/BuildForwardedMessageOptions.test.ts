@@ -1,4 +1,4 @@
-import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 import { getNumberLocale } from "@src/internals/utils/get-number-locale/GetNumberLocale";

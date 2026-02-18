@@ -4,11 +4,11 @@ import DTelClient from "./client";
 import config from "@src/config/config";
 import CommandDataInterface, { CommandType, PermissionLevel } from "@src/interfaces/commandData";
 import { db } from "@src/database/db";
-import { CallsWithNumbers } from "./callClient.old";
 import { fetchNumber, formatShardNumber, getOrCreateAccount, getUsername } from "./utils";
 import { getFixedT, TFunction } from "i18next";
 import { getCallByChannelOrEndIfASideDoesNotExist } from "./calls/db/get-by-channel/GetCallByChannelOrEndIfASideDoesNotExist";
 import { Numbers, Accounts, Mailbox } from "@src/database/generated";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 
 export type ChannelBasedInteraction = CommandInteraction|MessageComponentInteraction|ModalSubmitInteraction;
 

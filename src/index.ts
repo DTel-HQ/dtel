@@ -11,9 +11,9 @@ import { hangupInDb } from "./internals/calls/db/hangup-in-db/HangupInDb";
 import { updateCacheWithBlacklistItem } from "./redis/operations/blacklist/UpdateCacheWithBlacklistItem";
 
 // Main IPC process
-// process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
 if (process.env.NODE_ENV !== "production") {
-	process.env.NODE_OPTIONS = " --inspect=0 --expose-gc";
+	process.env.NODE_OPTIONS = `-r ts-node/register --no-warnings -r tsconfig-paths/register`;
+	process.env.NODE_OPTIONS += " --inspect=0 --expose-gc";
 }
 
 // process.env.TS_NODE_PROJECT = `${__dirname}/../tsconfig.json`;

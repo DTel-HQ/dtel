@@ -1,7 +1,7 @@
 import { Numbers } from "@src/database/generated";
 import config from "@src/config/config";
 import { PermissionLevel } from "@src/interfaces/commandData";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { isVIP } from "@src/internals/calls/notify-recipients/is-vip/isVIP";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";

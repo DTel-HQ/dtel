@@ -2,7 +2,7 @@ import * as target from "./EndMissedCallInDb";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { prismaMock } from "@src/mocks/prisma.test";
 import { deleteCallFromCache } from "@src/redis/operations/DeleteCallFromCache";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
 
 jest.mock("@src/redis/operations/DeleteCallFromCache");

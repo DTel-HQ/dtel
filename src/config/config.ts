@@ -28,7 +28,7 @@ export default {
 	messageCost: 2, // cost for messages sent with >message
 	pickupBonus: 25, // *611 calls
 	promoteCost: 100,
-	renewalRate: 500,
+	renewalRate: 250,
 	normalTransferRate: 0.85, // 15% fee
 	vipTransferRate: 0.95, // 5% fee
 	minTransfer: 50,

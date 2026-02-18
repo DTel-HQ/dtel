@@ -4,6 +4,11 @@ import { client, prepareClient } from "@src/instances/client";
 import { EmbedBuilder } from "discord.js";
 import config from "./config/config";
 import { winston } from "./instances/winston";
+import relativeTime from "dayjs/plugin/relativeTime";
+import dayjs from "dayjs";
+
+dayjs.extend(relativeTime);
+
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 initInternationalization();

@@ -1,5 +1,5 @@
 import { Numbers } from "@src/database/generated";
-import { CallsWithNumbers } from "@src/internals/callClient.old";
+import { CallsWithNumbers } from "@src/types/CallsWithNumbers";
 import { buildForwardedMessageOptions } from "@src/internals/calls/messages/utils/BuildForwardedMessageOptions";
 import { buildTestCall } from "@src/internals/calls/utils/build-test-call/BuildTestCall";
 import { buildTestNumber } from "@src/internals/calls/utils/build-test-number/BuildTestNumber";
