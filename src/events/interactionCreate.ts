@@ -277,7 +277,7 @@ export const interactionCreateHandler = async(client: DTelClient, _interaction: 
 		winston.error(`Error occurred whilst executing interaction for/from command: ${commandName!}`, err.stack);
 		await interaction.reply({
 			embeds: [client.errorEmbed(i18n.t("errors.unexpected", { lng: interaction.locale }))],
-		});
+		}).catch(() => null);
 	}
 };
 

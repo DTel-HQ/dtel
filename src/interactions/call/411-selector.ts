@@ -156,6 +156,11 @@ class FourOneOneSearch {
 		const numberOfEntries = await db.phonebook.count();
 		await interaction.deferUpdate();
 
+		if (!interaction.message.editable) {
+			await interaction.update("We can't seem to edit the original message for this menu. This likely means it was deleted. Please try again.").catch(() => null);
+			return;
+		}
+
 
 		const thisPageEntries = await db.phonebook.findMany({
 			orderBy: {
@@ -170,7 +175,11 @@ class FourOneOneSearch {
 
 		const payload = await this.generatePageMessage(numberOfEntries, thisPageEntries, page);
 
-		await interaction.message.edit(payload);
+		try {
+			await interaction.message!.edit(payload);
+		} catch {
+			await interaction.update("We can't seem to edit the original message for this menu. This likely means it was deleted. Please try again.").catch(() => null);
+		}
 	}
 
 	static generatePageMessage(numberOfEntries: number, thisPageEntries: Phonebook[], page: number, customIdPrefix = "call-411-search", clear = false): MessageEditOptions {
@@ -361,6 +370,10 @@ class FourOneOneManage {
 		if (interaction.message.interaction?.user.id != interaction.user.id) return this.wrongInteractionUserEmbed(interaction);
 
 		await interaction.deferUpdate();
+		if (!interaction.message.editable) {
+			await interaction.update("We can't seem to edit the original message for this menu. This likely means it was deleted. Please try again.").catch(() => null);
+			return;
+		}
 
 		const thisEntry = await db.numbers.findUnique({
 			where: {
@@ -413,10 +426,14 @@ class FourOneOneManage {
 			.setTitle("Manage your DTel Yellowbook")
 			.setDescription("Please select an option from the dropdown menu below.");
 
-		await interaction.message!.edit({
-			components: [actionRow],
-			embeds: [embed],
-		});
+		try {
+			await interaction.message!.edit({
+				components: [actionRow],
+				embeds: [embed],
+			});
+		} catch {
+			await interaction.update("We can't seem to edit the original message for this menu. This likely means it was deleted. Please try again.").catch(() => null);
+		}
 	}
 
 	static async handleAddInteraction(interaction: StringSelectMenuInteraction) {
