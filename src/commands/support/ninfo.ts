@@ -1,4 +1,4 @@
-import { DMChannel, GuildTextBasedChannel, APIEmbed, TextBasedChannel, User } from "discord.js";
+import { DMChannel, GuildTextBasedChannel, APIEmbed, User, Channel, PartialDMChannel, PartialGroupDMChannel } from "discord.js";
 import { NumbersWithGuilds } from "@src/interfaces/numbersWithGuilds";
 import Command from "@src/internals/commandProcessor";
 import { parseNumber } from "@src/internals/utils";
@@ -46,7 +46,7 @@ export default class NInfo extends Command {
 		};
 
 		// Get the channel details
-		const channel = await this.client.getChannel(number.channelID).catch(() => null) as TextBasedChannel;
+		const channel = await this.client.getChannel(number.channelID).catch(() => null);
 		if (!channel) {
 			await this.interaction.reply({
 				ephemeral: true,
@@ -65,61 +65,14 @@ export default class NInfo extends Command {
 			return;
 		}
 
-		let numberOwner: User;
-		let ownerStrikeCount: number;
-		let guildDescription = "";
-		let channelDescription = "";
+		const ownerInfo = await this.getOwnerInfo(channel, number);
 
-		// If this is a guild channel
-		// We know we can see the channel at this point, so we can definitely see both the guild and the owner
-		// If there is no guild, since we can see the channel we can see the user;
-		if (!channel.isDMBased()) {
-			const guild = await channel.guild.fetch();
-			ownerStrikeCount = await this.db.strikes.count({
-				where: {
-					offender: guild.ownerId,
-				},
-			}) || 0;
-
-			numberOwner = await this.client.getUser(guild.ownerId);
-
-			guildDescription = `${guild.name}\n\`${guild.id}\`\nWhitelisted: ${number.guild?.whitelisted ? "Yes" : "No"}`;
-			channelDescription = `#${(channel as GuildTextBasedChannel).name}\n\`${channel.id}\``;
-
-			let footerImage = this.client.user.displayAvatarURL();
-			if (guild.icon) {
-				footerImage = guild.iconURL()!;
-			}
-
-			embed.footer = {
-				icon_url: footerImage,
-				text: guild.name,
-			};
-		} else {
-			const dmChannel = channel as DMChannel;
-
-			numberOwner = await this.client.getUser(dmChannel.recipientId); // This should always be visible to us as we're in the server
-			ownerStrikeCount = await this.db.strikes.count({
-				where: {
-					offender: numberOwner.id,
-				},
-			}) || 0;
-
-			guildDescription = "DM Number";
-			channelDescription = `#*DM Channel*\n\`${channel.id}\``;
-
-			embed.footer = {
-				icon_url: numberOwner.displayAvatarURL(),
-				text: `${numberOwner.username}#${numberOwner.discriminator}`,
-			};
-		}
-
-		let ownerDesc = `${numberOwner.username}#${numberOwner.discriminator}\n\`${numberOwner.id}\``;
-		ownerDesc += `\nStrikes: ${ownerStrikeCount}`;
+		let ownerDesc = `${ownerInfo?.numberOwner.username}\n\`${ownerInfo?.numberOwner.id}\``;
+		ownerDesc += `\nStrikes: ${ownerInfo?.ownerStrikeCount ?? "Information not available"}`;
 
 		embed.fields = [{
 			name: "Channel",
-			value: channelDescription,
+			value: ownerInfo?.channelDescription ?? "Information not available",
 			inline: true,
 		}, {
 			name: "Owner",
@@ -127,7 +80,7 @@ export default class NInfo extends Command {
 			inline: true,
 		}, {
 			name: "Guild",
-			value: guildDescription,
+			value: ownerInfo?.guildDescription ?? "Information not available",
 			inline: true,
 		}, {
 			name: "VIP",
@@ -140,7 +93,7 @@ export default class NInfo extends Command {
 		},
 		{
 			name: "Owner Strikes",
-			value: ownerStrikeCount.toString(),
+			value: ownerInfo?.ownerStrikeCount.toString() ?? "Information not available",
 			inline: true,
 		},
 		{
@@ -152,5 +105,79 @@ export default class NInfo extends Command {
 		await this.interaction.reply({ embeds: [embed] });
 
 		// TODO: 2nd page extra info
+	}
+
+
+	async getOwnerInfo(channel: Channel, number: NumbersWithGuilds): Promise<OwnerInfo | undefined> {
+		if (!channel.isDMBased()) {
+			const guild = await this.client.getGuild(channel.guildId).catch(() => null);
+
+			if (!guild) return undefined;
+
+			const ownerStrikeCount = await this.db.strikes.count({
+				where: {
+					offender: guild.ownerId,
+				},
+			}) || 0;
+
+			const numberOwner = await this.client.getUser(guild.ownerId);
+
+			return {
+				numberOwner,
+				ownerStrikeCount,
+				guildDescription: `${guild.name}\n\`${guild.id}\`\nWhitelisted: ${number.guild?.whitelisted ? "Yes" : "No"}`,
+				channelDescription: `#${channel.name}\n\`${channel.id}\``,
+				footer: {
+					icon_url: guild.icon ? guild.iconURL()! : this.client.user.displayAvatarURL(),
+					text: guild.name,
+				},
+			};
+		} else {
+			const numberOwner = await this.determineDmOwner(channel).catch(() => null);
+			if (numberOwner === "group") {
+				return undefined;
+			}
+
+
+			if (!numberOwner) return undefined;
+
+			const ownerStrikeCount = await this.db.strikes.count({
+				where: {
+					offender: numberOwner.id,
+				},
+			}) || 0;
+
+			return {
+				numberOwner,
+				ownerStrikeCount,
+				guildDescription: "DM Number",
+				channelDescription: `#*DM Channel*\n\`${channel.id}\``,
+				footer: {
+					icon_url: numberOwner.displayAvatarURL(),
+					text: `${numberOwner.username}#${numberOwner.discriminator}`,
+				},
+			};
+		}
+	}
+
+
+	async determineDmOwner(channel: DMChannel | PartialDMChannel | PartialGroupDMChannel): Promise<User | "group"> {
+		const isGroupChannel = !("recipientId" in channel);
+		if (isGroupChannel) {
+			return "group";
+		}
+		return this.client.getUser(channel.recipientId);
+	}
+}
+
+
+interface OwnerInfo {
+	numberOwner: User;
+	ownerStrikeCount: number;
+	guildDescription: string;
+	channelDescription: string;
+	footer: {
+		icon_url: string;
+		text: string;
 	}
 }

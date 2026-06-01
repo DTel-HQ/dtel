@@ -21,6 +21,7 @@ export const client = new DTelClient({
 		// Privileged
 		"MessageContent",
 	],
+	partials: [],
 	makeCache: Options.cacheWithLimits({
 		...Options.DefaultMakeCacheSettings,
 		MessageManager: 1,
