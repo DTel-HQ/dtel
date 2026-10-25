@@ -45,7 +45,7 @@
   "dependencies": {
     "@prisma/client": "6.19.2",
     "dayjs": "^1.11.7",
-    "discord-api-types": "^0.37.67",
+    "discord-api-types": "^0.37.38",
     "discord.js": "14.27.0",
     "i18next": "^21.10.0",
     "node-schedule": "^2.1.1",

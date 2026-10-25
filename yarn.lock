@@ -2779,7 +2779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"discord-api-types@npm:^0.37.67":
+"discord-api-types@npm:^0.37.38":
   version: 0.37.120
   resolution: "discord-api-types@npm:0.37.120"
   checksum: bb9e2c7d35c94fedfd38d58b15969a73644ee9d6a593f0ddced3d1ba43e87b4696e66ce73c8775626bb7b8d02e6890c02d2bb4aca1a9b24f5f4c36b12c1beaa8
@@ -2862,7 +2862,7 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:^5.57.1"
     "@typescript-eslint/parser": "npm:^5.57.1"
     dayjs: "npm:^1.11.7"
-    discord-api-types: "npm:^0.37.67"
+    discord-api-types: "npm:^0.37.38"
     discord.js: "npm:14.27.0"
     esbuild: "npm:^0.27.3"
     eslint: "npm:^8.38.0"
