@@ -36,7 +36,7 @@
   },
   "homepage": "https://dtel.austinhuang.me",
   "engines": {
-    "node": ">=18"
+    "node": ">=22"
   },
   "nodemonConfig": {
     "delay": 100,
@@ -45,8 +45,8 @@
   "dependencies": {
     "@prisma/client": "6.19.2",
     "dayjs": "^1.11.7",
-    "discord-api-types": "^0.37.38",
-    "discord.js": "^14.11.0",
+    "discord-api-types": "^0.37.67",
+    "discord.js": "14.27.0",
     "i18next": "^21.10.0",
     "node-schedule": "^2.1.1",
     "redis": "^5.10.0",
